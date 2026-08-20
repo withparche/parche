@@ -18,7 +18,5 @@
     "astro-icon": "catalog:",
     "tailwindcss": "catalog:"
   },
-  "devDependencies": {
-    "@astrojs/node": "catalog:"
-  }
+  "devDependencies": {}
 }

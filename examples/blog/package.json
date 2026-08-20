@@ -23,7 +23,6 @@
     "tailwindcss": "catalog:"
   },
   "devDependencies": {
-    "@astrojs/node": "catalog:",
     "typescript": "^5.8.3"
   }
 }

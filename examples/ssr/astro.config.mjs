@@ -8,6 +8,8 @@ import createUI from '@parche/ui';
 
 export default defineConfig({
   site: 'https://example.com',
+  // Server output: every route is rendered per request (true SSR).
+  output: 'server',
   adapter: node({ mode: 'standalone' }),
   integrations: [
     parche({ parches: [createPrimitives(), createUI()], config: './src/parche.config.ts' }),

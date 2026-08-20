@@ -19,7 +19,5 @@
     "sharp": "catalog:",
     "tailwindcss": "catalog:"
   },
-  "devDependencies": {
-    "@astrojs/node": "catalog:"
-  }
+  "devDependencies": {}
 }
