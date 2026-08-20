@@ -15,4 +15,5 @@ pnpm --filter example-<name> dev
 | `markdown-pages` | Pages authored in Markdown — `sections` in frontmatter plus a prose body. |
 | `ssr` | Per-request server rendering (`prerender = false`) on the Node adapter. |
 | `import-widget` | Importing a widget directly into an `.astro` page via `parche:widgets/*`. |
-| `react` | A React island hydrated in the browser, next to a server-rendered widget. |
+| `react` | A React component registered as a Parche widget and used from JSON content. |
+| `shadcn` | Real shadcn/ui components (Button, Card, Input, Badge) themed by Parche's token bridge. |

@@ -1,0 +1,17 @@
+---
+import Showcase from '../components/Showcase.tsx';
+import Container from 'parche:primitives/Container';
+import Section from 'parche:primitives/Section';
+
+interface Props {
+  id?: string;
+}
+
+const { id } = Astro.props;
+---
+
+<Section {id}>
+  <Container>
+    <Showcase client:visible />
+  </Container>
+</Section>

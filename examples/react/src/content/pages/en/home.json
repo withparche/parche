@@ -1,0 +1,18 @@
+{
+  "title": "React widget",
+  "description": "A React component registered as a Parche widget and used from JSON content.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "tagline": "React",
+        "title": "A <span class='text-primary'>React widget</span> on the Parche system",
+        "subtitle": "The counter below is a React island wrapped as a Parche widget and registered via config. Content references it by name — like any built-in widget — and it hydrates in the browser."
+      }
+    },
+    {
+      "widget": "Counter",
+      "props": { "title": "Interactive, straight from JSON content", "start": 3 }
+    }
+  ]
+}

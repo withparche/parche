@@ -1,0 +1,22 @@
+---
+import Counter from '../components/Counter.tsx';
+import Container from 'parche:primitives/Container';
+import Section from 'parche:primitives/Section';
+
+interface Props {
+  id?: string;
+  title?: string;
+  start?: number;
+}
+
+const { id, title, start = 0 } = Astro.props;
+---
+
+<Section {id}>
+  <Container>
+    {title && <h2 class="type-h2 mb-8 text-center">{title}</h2>}
+    <div class="flex justify-center">
+      <Counter client:visible start={start} />
+    </div>
+  </Container>
+</Section>

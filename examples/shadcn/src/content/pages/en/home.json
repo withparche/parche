@@ -1,0 +1,15 @@
+{
+  "title": "shadcn/ui compatibility",
+  "description": "Drop in real shadcn/ui components; Parche themes them through its token bridge.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "tagline": "shadcn/ui",
+        "title": "Real shadcn components, <span class='text-primary'>themed by Parche</span>",
+        "subtitle": "The Button, Card, Input and Badge below are the actual shadcn/ui components (cva + Radix + the cn helper). Parche's bridge maps shadcn's CSS variables to its OKLCH tokens, so they inherit your theme — open the panel and switch."
+      }
+    },
+    { "widget": "ShadcnShowcase" }
+  ]
+}

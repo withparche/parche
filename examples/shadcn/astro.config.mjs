@@ -17,9 +17,16 @@ export default defineConfig({
       ui: createUI(),
       config: './src/parche.config.ts',
       routes: { pages: true },
-      // Register a React-backed widget. Content can now use "widget": "Counter".
-      overrides: {
-        'widgets:Counter': './src/widgets/CounterWidget.astro',
+      overrides: { 'widgets:ShadcnShowcase': './src/widgets/ShadcnWidget.astro' },
+      // Multiple themes so you can watch the shadcn components reskin.
+      themes: {
+        available: [
+          { label: 'Default', value: '' },
+          { label: 'Corporate', value: 'corporate' },
+          { label: 'Minimal', value: 'minimal' },
+          { label: 'Playful', value: 'playful' },
+        ],
+        showPanel: true,
       },
     }),
     react(),
