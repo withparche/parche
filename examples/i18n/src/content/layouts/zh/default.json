@@ -1,0 +1,10 @@
+{
+  "sections": [
+    {
+      "widget": "layout/Header",
+      "props": { "links": [{ "label": "首页", "href": "/zh" }] }
+    },
+    { "widget": "layout/Main" },
+    { "widget": "layout/Footer", "props": { "footNote": "由 Parche 构建。" } }
+  ]
+}

@@ -20,8 +20,8 @@ export default defineConfig({
     icon(),
   ],
   fonts: parcheFonts,
-  // Two locales; the default (en) is served without a prefix, es under /es.
-  i18n: { defaultLocale: 'en', locales: ['en', 'es'], routing: 'manual' },
+  // Three locales; the default (en) is served without a prefix, es under /es, zh under /zh.
+  i18n: { defaultLocale: 'en', locales: ['en', 'es', 'zh'], routing: 'manual' },
   image: { remotePatterns: [{ protocol: 'https' }] },
   vite: { plugins: [tailwindcss()] },
 });

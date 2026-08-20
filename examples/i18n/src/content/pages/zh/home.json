@@ -1,0 +1,14 @@
+{
+  "title": "来自 Parche 的问候",
+  "description": "一个使用 Parche 构建的极简多语言页面，中文版位于 /zh。",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "tagline": "i18n",
+        "title": "你好",
+        "subtitle": "此页面以简体中文提供，路径为 <code>/zh</code>。使用页首的语言切换器可返回英文或西班牙文。"
+      }
+    }
+  ]
+}
