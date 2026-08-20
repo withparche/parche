@@ -30,11 +30,13 @@ pnpm --filter <pkg> build
 
 ## Conventions
 
-- Package manager: pnpm workspaces. Node ESM (`"type": "module"`).
+- Package manager: pnpm workspaces. Node ESM (`"type": "module"`). Install relies on `minimumReleaseAge: 0` (in `pnpm-workspace.yaml`) so Astro 7's fresh native markdown binary resolves on Apple Silicon.
 - Components consume primitives via `parche:primitives/*`, never by importing `@parche/primitives` directly.
-- Widgets are registered in `packages/ui/src/index.ts`; keep names stable (page content references them).
+- Widgets are registered in `parches/ui/src/index.ts`; keep names stable (page content references them).
 - Docs, comments, and identifiers in English. Be concise.
 - Skills live in `.agents/skills/<name>/SKILL.md` (Agent Skills standard).
+- **Git:** commit locally with plain conventional messages. Do **not** `git push` and do **not** add AI co-author trailers — the maintainer controls pushes and authorship.
+- **Roadmap:** when something roadmap-worthy happens, follow [`.agents/skills/roadmap`](.agents/skills/roadmap/SKILL.md) — propose a `ROADMAP.md` entry and ask the maintainer to confirm before writing (never silently).
 
 ## Verify
 
