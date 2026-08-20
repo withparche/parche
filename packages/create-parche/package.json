@@ -13,7 +13,8 @@
   ],
   "scripts": {
     "dev": "tsx src/index.ts",
-    "build": "tsup"
+    "build": "tsup",
+    "prepack": "tsup"
   },
   "dependencies": {
     "@parche/cli": "workspace:*"

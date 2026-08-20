@@ -19,7 +19,8 @@
   ],
   "scripts": {
     "dev": "tsx src/index.ts",
-    "build": "tsup"
+    "build": "tsup",
+    "prepack": "tsup"
   },
   "dependencies": {
     "@clack/prompts": "^0.11.0",
