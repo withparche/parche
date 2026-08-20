@@ -7,12 +7,12 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "astro-icon": "^1.1.5"
+    "astro-icon": "catalog:"
   },
   "peerDependencies": {
-    "astro": "^6.0.0"
+    "astro": "catalog:"
   },
   "devDependencies": {
-    "astro": "^6.0.0"
+    "astro": "catalog:"
   }
 }

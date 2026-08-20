@@ -12,14 +12,14 @@
     "@parche/core": "workspace:*",
     "@parche/primitives": "workspace:*",
     "@parche/ui": "workspace:*",
-    "@iconify-json/tabler": "^1.2.32",
-    "@tailwindcss/vite": "^4.0.0",
-    "astro": "^6.0.0",
-    "astro-icon": "^1.1.5",
-    "sharp": "^0.35.3",
-    "tailwindcss": "^4.0.0"
+    "@iconify-json/tabler": "catalog:",
+    "@tailwindcss/vite": "catalog:",
+    "astro": "catalog:",
+    "astro-icon": "catalog:",
+    "sharp": "catalog:",
+    "tailwindcss": "catalog:"
   },
   "devDependencies": {
-    "@astrojs/node": "^10.0.3"
+    "@astrojs/node": "catalog:"
   }
 }
