@@ -7,6 +7,7 @@
     ".": "./src/integration/index.ts",
     "./types": "./src/integration/types.ts",
     "./config": "./src/types/config.ts",
+    "./fonts": "./src/config/fonts.ts",
     "./content": "./src/content/index.ts",
     "./schemas": "./src/content/schemas.ts"
   },

@@ -2,6 +2,7 @@
 import '../styles/base.css';
 import { ClientRouter } from 'astro:transitions';
 import Font from 'astro/components/Font.astro';
+import { parcheFontDefs } from '../config/font-variables.js';
 import type { ResolvedMetadata } from '../utils/metadata';
 import { buildRobotsContent, buildBreadcrumbs, buildJsonLdGraph } from '../utils/metadata';
 import type { SiteConfig } from '../types/config';
@@ -79,16 +80,8 @@ const article = metadata.ogType === 'article' ? metadata.article : undefined;
     {/* JSON-LD Structured Data (@graph) */}
     <script type="application/ld+json" set:html={jsonLdGraph} />
 
-    {/* Fonts: preload critical (Inter), async load others */}
-    <Font cssVariable="--font-sans" preload />
-    <Font cssVariable="--font-serif" />
-    <Font cssVariable="--font-mono" />
-    {/* Theme-specific fonts (loaded on demand by browser) */}
-    <Font cssVariable="--font-heading-alt" />
-    <Font cssVariable="--font-body-alt" />
-    <Font cssVariable="--font-rounded" />
-    <Font cssVariable="--font-tech" />
-    <Font cssVariable="--font-tech-body" />
+    {/* Fonts: driven by parcheFonts (single source of truth), never hardcoded here. */}
+    {parcheFontDefs.map((f) => <Font cssVariable={f.cssVariable} preload={f.preload} />)}
 
     {/* Theme init: runs before body renders to prevent flash */}
     <script is:inline>
