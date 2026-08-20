@@ -1,0 +1,26 @@
+{
+  "title": "{{siteName}}",
+  "description": "Built with Parche.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "tagline": "Parche",
+        "title": "Welcome to <span class='text-primary'>{{siteName}}</span>",
+        "subtitle": "This page is data — edit src/content/pages/en/home.json. Add widgets, swap the theme, ship."
+      }
+    },
+    {
+      "widget": "Features",
+      "props": {
+        "tagline": "Get started",
+        "title": "What's here",
+        "items": [
+          { "title": "Pages as data", "description": "Author pages as JSON sections rendered by Parche.", "icon": "tabler:file-code" },
+          { "title": "Primitives + widgets", "description": "A consistent design system out of the box.", "icon": "tabler:components" },
+          { "title": "Fast & SEO-ready", "description": "Astro performance, metadata and sitemaps built in.", "icon": "tabler:rocket" }
+        ]
+      }
+    }
+  ]
+}

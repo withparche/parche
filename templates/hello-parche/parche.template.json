@@ -1,0 +1,9 @@
+{
+  "name": "Hello Parche",
+  "type": "starter",
+  "description": "A minimal Parche starter: pages as data, primitives + widgets.",
+  "prompts": [
+    { "key": "siteName", "message": "Site name", "default": "My Parche Site" },
+    { "key": "packageName", "message": "Package name", "default": "my-parche-site" }
+  ]
+}

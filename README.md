@@ -4,6 +4,17 @@ Parche turns [Astro](https://astro.build) into a framework you build on — not 
 Pages are data (`sections: [{ widget, props }]`) rendered through a virtual-module registry,
 themed with an OKLCH token system, and extended with pluggable apps. AstroWind is its reference build.
 
+## Create a project
+
+```bash
+npm create parche@latest            # interactive
+parche astro new hello-parche my-app
+```
+
+`parche astro new [template] [dir]` scaffolds from the repo's `templates/`/`examples/`,
+a GitHub repo, or a local folder — adapting site/package names as it goes. See
+[packages/cli](packages/cli). (`generate` is reserved for AI/Narrans generation.)
+
 ## Packages
 
 | Package | Role |

@@ -1,0 +1,29 @@
+{
+  "name": "@parche/cli",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "The Parche CLI.",
+  "bin": { "parche": "./dist/index.js" },
+  "exports": {
+    "./scaffold": { "types": "./dist/lib/scaffold.d.ts", "default": "./dist/lib/scaffold.js" }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsup"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.11.0",
+    "citty": "^0.1.6",
+    "giget": "^2.0.0",
+    "nypm": "^0.6.0",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsup": "^8.5.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.8.3"
+  },
+  "engines": { "node": ">=20" }
+}
