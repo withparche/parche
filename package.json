@@ -6,5 +6,6 @@
     "dev": "pnpm --filter example-blog dev",
     "build": "pnpm --filter example-blog build",
     "preview": "pnpm --filter example-blog preview"
-  }
+  },
+  "packageManager": "pnpm@11.12.0"
 }

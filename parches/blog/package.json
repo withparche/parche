@@ -1,6 +1,6 @@
 {
   "name": "@parche/blog",
-  "version": "0.0.1",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "exports": {
@@ -17,5 +17,8 @@
   },
   "devDependencies": {
     "astro": "catalog:"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

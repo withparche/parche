@@ -1,10 +1,14 @@
 {
   "name": "create-parche",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "type": "module",
   "description": "Create a Parche project.",
-  "bin": { "create-parche": "./dist/index.js" },
-  "files": ["dist"],
+  "bin": {
+    "create-parche": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "tsx src/index.ts",
     "build": "tsup"
@@ -18,5 +22,8 @@
     "tsx": "^4.20.0",
     "typescript": "^5.8.3"
   },
-  "engines": { "node": ">=20" }
+  "engines": {
+    "node": ">=20"
+  },
+  "private": true
 }
