@@ -74,6 +74,12 @@ const THEMES_CONFIG_ID = 'parche:config/themes';
 const THEMES_CONFIG_VIRTUAL = '\0parche:config/themes';
 const STYLES_CONFIG_ID = 'parche:config/styles';
 const STYLES_CONFIG_VIRTUAL = '\0parche:config/styles';
+
+// Core's base.css is the Tailwind root (it has `@import "tailwindcss"`). We
+// append each parche's absolute @source globs into it at transform time —
+// Tailwind v4 only honors @source in the root's own cascade, and only absolute
+// paths reach sibling packages once installed from npm.
+const BASE_CSS_PATH = fileURLToPath(new URL('../styles/base.css', import.meta.url));
 const WIDGET_SCHEMAS_ID = 'parche:registry/widgetSchemas';
 const WIDGET_SCHEMAS_VIRTUAL = '\0parche:registry/widgetSchemas';
 const RESOLVERS_ID = 'parche:registry/resolvers';
@@ -184,6 +190,17 @@ export const showPanel = ${JSON.stringify(registry.showPanel)};
  */
 function generateStylesModule(registry: ResolvedRegistry): string {
   return registry.styleEntries.map((p) => `import ${JSON.stringify(p)};`).join('\n') + '\n';
+}
+
+/**
+ * Tailwind `@source` directives (absolute globs) for every parche's component
+ * files, appended into base.css so the classes those components use are
+ * generated — including when the parches are installed from npm, where relative
+ * @source paths can't reach sibling packages. Absolute paths come from each
+ * parche's factory.
+ */
+function generateSourceDirectives(registry: ResolvedRegistry): string {
+  return registry.contentGlobs.map((g) => `@source ${JSON.stringify(g)};`).join('\n');
 }
 
 /**
@@ -347,6 +364,17 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
     },
 
     load(id) {
+      // Feed Tailwind's root (core's base.css) with each parche's absolute
+      // @source globs, appended to the file's own content. Done in `load` (not
+      // `transform`) so @tailwindcss/vite compiles the augmented CSS regardless
+      // of plugin ordering. Absolute paths are the only ones that reach sibling
+      // packages once installed from npm.
+      if (registry.contentGlobs.length > 0 && id.split('?')[0] === BASE_CSS_PATH) {
+        const css = fs.readFileSync(BASE_CSS_PATH, 'utf-8');
+        this.addWatchFile(BASE_CSS_PATH);
+        return `${css}\n${generateSourceDirectives(registry)}\n`;
+      }
+
       if (id === WIDGET_MAP_VIRTUAL) return generateWidgetMapModule(registry);
       if (id === TEMPLATE_MAP_VIRTUAL) return generateTemplateMapModule(registry);
       if (id === I18N_CONFIG_VIRTUAL) return generateI18nConfigModule(registry);

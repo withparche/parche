@@ -80,10 +80,12 @@ export function createRegistry(
   const apps: ParcheManifest[] = [];
   const contributedStyles: string[] = [];
   const contributedThemes: Array<{ label: string; value: string }> = [];
+  const contentGlobs: string[] = [];
 
   for (const parche of parches) {
     if (parche.styles) contributedStyles.push(...parche.styles);
     if (parche.themes) contributedThemes.push(...parche.themes);
+    if (parche.content) contentGlobs.push(...parche.content);
     if (parche.primitives) {
       for (const [name, absPath] of Object.entries(parche.primitives)) {
         modules[`parche:primitives/${name}`] = absPath;
@@ -184,6 +186,7 @@ export function createRegistry(
     themes,
     showPanel,
     styleEntries,
+    contentGlobs,
     apps,
     resolvers,
   };

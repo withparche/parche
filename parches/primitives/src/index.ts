@@ -11,6 +11,8 @@ export default function createPrimitives(): ParcheManifest {
   const atom = (file: string) => path.resolve(dir, 'atoms', file);
   return {
     name: 'primitives',
+    // Let Tailwind scan these components' classes, even installed from npm.
+    content: [path.resolve(dir, '**/*.astro')],
     primitives: {
       Button: atom('Button.astro'),
       Container: atom('Container.astro'),

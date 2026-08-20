@@ -74,6 +74,14 @@ export interface ParcheManifest {
    * `value` is the `data-theme` attribute the theme's CSS is scoped to.
    */
   themes?: Array<{ label: string; value: string }>;
+  /**
+   * Absolute globs of this parche's own component files, so Tailwind scans them
+   * and generates the utility classes they use. A parche must contribute these
+   * for its classes to survive being installed from npm (relative `@source`
+   * paths can't reach sibling packages once published). Typically:
+   *   content: [path.resolve(dir, '**\/*.astro')]
+   */
+  content?: string[];
   /** Routes to inject */
   routes?: Array<{ pattern: string; entrypoint: string }>;
   /** App config exposed via virtual module parche:app/{name} */
@@ -176,6 +184,8 @@ export interface ResolvedRegistry {
   showPanel: boolean;
   /** Absolute CSS paths to import via parche:config/styles (parche-contributed + user entry) */
   styleEntries: string[];
+  /** Absolute globs of parche component files for Tailwind to scan (@source) */
+  contentGlobs: string[];
   /** Registered apps */
   apps: ParcheApp[];
   /** App resolvers — modules that export resolve() and getPaths() */

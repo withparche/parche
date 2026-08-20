@@ -81,6 +81,8 @@ export default function createBlog(config?: BlogConfig): ParcheManifest {
 
   return {
     name: 'blog',
+    // Let Tailwind scan the blog's route/template components, even from npm.
+    content: [path.resolve(srcDir, '**/*.astro')],
     templates: {
       'blog-post': templatePath('blog-post.astro'),
     },

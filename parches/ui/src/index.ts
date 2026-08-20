@@ -14,6 +14,8 @@ export default function createUI(): ParcheManifest {
   const tpl = (file: string) => path.resolve(dir, 'templates', file);
   return {
     name: 'ui',
+    // Let Tailwind scan these components' classes, even installed from npm.
+    content: [path.resolve(dir, '**/*.astro')],
     templates: {
       contact: tpl('contact.astro'),
       content: tpl('content.astro'),
