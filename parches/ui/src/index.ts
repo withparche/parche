@@ -10,9 +10,18 @@ import type { ParcheManifest } from '@parche/core';
 export default function createUI(): ParcheManifest {
   const dir = path.dirname(fileURLToPath(import.meta.url));
   const w = (file: string) => path.resolve(dir, 'widgets', file);
+  const layout = (file: string) => path.resolve(dir, 'layout', file);
+  const tpl = (file: string) => path.resolve(dir, 'templates', file);
   return {
     name: 'ui',
+    templates: {
+      contact: tpl('contact.astro'),
+      content: tpl('content.astro'),
+    },
     widgets: {
+      // Layout chrome (Header/Footer), consumed by page layouts
+      'layout/Header': layout('Header.astro'),
+      'layout/Footer': layout('Footer.astro'),
       // Section widgets
       Announcement: w('Announcement.astro'),
       Hero: w('Hero.astro'),

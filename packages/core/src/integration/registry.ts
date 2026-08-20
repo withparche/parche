@@ -21,9 +21,7 @@ const DEFAULT_THEMES = [
 
 /** Built-in core component registry */
 const CORE_MODULES: Record<string, string> = {
-  // Common components
-  'parche:components/Header': corePath('components/common/Header.astro'),
-  'parche:components/Footer': corePath('components/common/Footer.astro'),
+  // Theme / i18n engine controls (consumed by the ui parche's Header)
   'parche:components/ThemeToggle': corePath('components/common/ThemeToggle.astro'),
   'parche:components/ThemeSelector': corePath('components/common/ThemeSelector.astro'),
   'parche:components/OptimizedImage': corePath('components/common/OptimizedImage.astro'),
@@ -37,19 +35,12 @@ const CORE_MODULES: Record<string, string> = {
   'parche:DynamicRenderer': corePath('components/DynamicRenderer.astro'),
   'parche:LayoutRenderer': corePath('components/LayoutRenderer.astro'),
 
-  // Layout widgets (Header/Footer registered as widgets under layout/ namespace)
-  'parche:widgets/layout/Header': corePath('components/common/Header.astro'),
-  'parche:widgets/layout/Footer': corePath('components/common/Footer.astro'),
-
   // Utils (named exports)
   'parche:utils/metadata': corePath('utils/metadata.ts'),
   'parche:utils/i18n': corePath('utils/i18n.ts'),
   'parche:utils/layout': corePath('utils/layout.ts'),
-
-  // Built-in templates
-  'parche:templates/contact': corePath('templates/contact.astro'),
-  'parche:templates/content': corePath('templates/content.astro'),
-
+  // Note: layout/Header, layout/Footer and the contact/content templates are
+  // now provided by the ui parche — core no longer ships chrome or primitives.
 };
 
 /** Modules that use named exports instead of default export */
