@@ -13,8 +13,7 @@ export default defineConfig({
   adapter: node({ mode: 'standalone' }),
   integrations: [
     parche({
-      primitives: createPrimitives(),
-      ui: createUI(),
+      parches: [createPrimitives(), createUI()],
       config: './src/parche.config.ts',
       routes: { pages: true },
       overrides: { 'widgets:ShadcnShowcase': './src/widgets/ShadcnWidget.astro' },

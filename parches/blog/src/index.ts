@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import type { ParcheApp } from '@parche/core';
+import type { ParcheManifest } from '@parche/core';
 import type { BlogConfig } from './types.js';
 import { resolveBlogConfig, permalinkToRoutePattern } from './types.js';
 
@@ -34,7 +34,7 @@ function isRootLevelPermalink(permalink: string): boolean {
  *     }
  *   })] })
  */
-export default function createBlog(config?: BlogConfig): ParcheApp {
+export default function createBlog(config?: BlogConfig): ParcheManifest {
   const resolved = resolveBlogConfig(config);
   const srcDir = path.dirname(fileURLToPath(import.meta.url));
   const routePath = (...segments: string[]) => path.resolve(srcDir, 'routes', ...segments);
@@ -44,7 +44,7 @@ export default function createBlog(config?: BlogConfig): ParcheApp {
   const { permalinks } = resolved;
   const useResolver = isRootLevelPermalink(permalinks.post);
 
-  const routes: ParcheApp['routes'] = [
+  const routes: ParcheManifest['routes'] = [
     // Blog listing (paginated)
     { pattern: `${permalinkToRoutePattern(permalinks.listing)}/[...page]`, entrypoint: routePath('blog', '[...page].astro') },
     // Tag listing (paginated)
@@ -86,6 +86,19 @@ export default function createBlog(config?: BlogConfig): ParcheApp {
     },
     routes,
     config: resolved as unknown as Record<string, unknown>,
+    requires: {
+      primitives: ['Container', 'Section'],
+      widgets: [
+        'blog/AuthorCard',
+        'blog/BlogList',
+        'blog/BlogPostHeader',
+        'blog/Breadcrumbs',
+        'blog/RelatedPosts',
+        'blog/SeriesNav',
+        'blog/ShareButtons',
+        'blog/ToBlogLink',
+      ],
+    },
     ...(useResolver ? { resolver: { entrypoint: resolverPath } } : {}),
   };
 }

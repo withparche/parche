@@ -10,7 +10,7 @@ export default defineConfig({
   site: 'https://example.com',
   adapter: node({ mode: 'standalone' }),
   integrations: [
-    parche({ primitives: createPrimitives(), ui: createUI(), config: './src/parche.config.ts' }),
+    parche({ parches: [createPrimitives(), createUI()], config: './src/parche.config.ts' }),
     icon(),
   ],
   image: { remotePatterns: [{ protocol: 'https' }] },

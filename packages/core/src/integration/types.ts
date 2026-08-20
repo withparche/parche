@@ -41,10 +41,25 @@ export interface WidgetMeta {
   };
 }
 
-export interface ParcheApp {
-  /** Unique identifier (e.g. 'blog') */
+/** Capabilities a parche needs from the system (validated at setup). */
+export interface ParcheRequires {
+  /** Primitive names that must exist (parche:primitives/{name}) */
+  primitives?: string[];
+  /** Widget names that must exist (parche:widgets/{name}) */
+  widgets?: string[];
+}
+
+/**
+ * A parche (plugin). Contributes capabilities to the Parche host and declares
+ * what it requires. Primitive-packs, widget-packs and apps are all parches —
+ * they differ only in what they provide.
+ */
+export interface ParcheManifest {
+  /** Unique identifier (e.g. 'primitives', 'ui', 'blog') */
   name: string;
-  /** Widgets to register: virtual ID suffix → absolute path */
+  /** Primitives to register: name → absolute path (parche:primitives/{name}) */
+  primitives?: Record<string, string>;
+  /** Widgets to register: virtual ID suffix → absolute path (parche:widgets/{name}) */
   widgets?: Record<string, string>;
   /** Templates to register: virtual ID suffix → absolute path */
   templates?: Record<string, string>;
@@ -56,18 +71,21 @@ export interface ParcheApp {
   namedExportModules?: string[];
   /**
    * Content resolver for root-level routes.
-   * When an app's routes would conflict with the catch-all (e.g. /%slug%),
-   * the app registers a resolver instead. The catch-all calls it before
-   * trying to resolve as a page.
-   *
-   * The entrypoint must export:
+   * When routes would conflict with the catch-all (e.g. /%slug%), the parche
+   * registers a resolver instead; the catch-all calls it before treating a
+   * slug as a page. The entrypoint must export:
    *   resolve(slug, locale, opts) → { template, collection, entryId, props, metadata } | null
    *   getPaths(locales, defaultLocale, opts) → Array<{ params, props }>
    */
   resolver?: {
     entrypoint: string;
   };
+  /** What this parche needs the system to provide. */
+  requires?: ParcheRequires;
 }
+
+/** @deprecated Use ParcheManifest. Kept as an alias for existing app factories. */
+export type ParcheApp = ParcheManifest;
 
 export interface ParcheI18nConfig {
   /** Supported locales (e.g. ['en', 'es']) */
@@ -122,12 +140,8 @@ export interface ParcheUserConfig {
   overrides?: Record<string, string>;
   /** Path to user config file (default: './src/config.ts') */
   config?: string;
-  /** Primitives: foundational building blocks, registered as parche:primitives/* (name → path) */
-  primitives?: Record<string, string>;
-  /** UI library providing widgets (registered as parche:widgets/*) */
-  ui?: UIRegistry;
-  /** Pluggable apps (e.g. blog) — each app can register widgets, templates, routes, and config */
-  apps?: ParcheApp[];
+  /** Parches (plugins): primitive-packs, widget-packs and apps. Order = precedence. */
+  parches?: ParcheManifest[];
   /** Route injection config */
   routes?: ParcheRoutesConfig;
   /** Theme config */

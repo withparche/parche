@@ -13,9 +13,7 @@ export default defineConfig({
   adapter: node({ mode: 'standalone' }),
   integrations: [
     parche({
-      primitives: createPrimitives(),
-      ui: createUI(),
-      apps: [createBlog({ postsPerPage: 6, permalinks: { post: '/%slug%' } })],
+      parches: [createPrimitives(), createUI(), createBlog({ postsPerPage: 6, permalinks: { post: '/%slug%' } })],
       config: './src/parche.config.ts',
       routes: { pages: true },
     }),

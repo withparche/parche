@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import type { ParcheUserConfig, ResolvedRegistry } from './types.js';
+import type { ParcheUserConfig, ResolvedRegistry, ParcheManifest } from './types.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const coreDir = path.resolve(__dirname, '..');
@@ -80,17 +80,37 @@ export function createRegistry(
   const configPath = userConfig.config || './src/config.ts';
   modules['parche:config'] = path.resolve(rootDir, configPath);
 
-  // Register primitives (foundational building blocks) as parche:primitives/*
-  if (userConfig.primitives) {
-    for (const [name, absPath] of Object.entries(userConfig.primitives)) {
-      modules[`parche:primitives/${name}`] = absPath;
-    }
-  }
+  // Register parches (order = precedence: later wins). Each parche contributes
+  // primitives / widgets / templates / routes / config to the system.
+  const parches = userConfig.parches ?? [];
+  const providedPrimitives = new Set<string>();
+  const providedWidgets = new Set<string>();
+  const apps: ParcheManifest[] = [];
 
-  // Register widgets as parche:widgets/*
-  if (userConfig.ui) {
-    for (const [name, absPath] of Object.entries(userConfig.ui.widgets)) {
-      modules[`parche:widgets/${name}`] = absPath;
+  for (const parche of parches) {
+    if (parche.primitives) {
+      for (const [name, absPath] of Object.entries(parche.primitives)) {
+        modules[`parche:primitives/${name}`] = absPath;
+        providedPrimitives.add(name);
+      }
+    }
+    if (parche.widgets) {
+      for (const [name, absPath] of Object.entries(parche.widgets)) {
+        modules[`parche:widgets/${name}`] = absPath;
+        providedWidgets.add(name);
+      }
+    }
+    if (parche.templates) {
+      for (const [name, absPath] of Object.entries(parche.templates)) {
+        modules[`parche:templates/${name}`] = absPath;
+      }
+    }
+    if (parche.namedExportModules) {
+      for (const id of parche.namedExportModules) NAMED_EXPORT_MODULES.add(id);
+    }
+    // A parche that injects routes / resolves slugs / exposes config is an "app".
+    if (parche.routes || parche.resolver || parche.config) {
+      apps.push(parche);
     }
   }
 
@@ -108,24 +128,20 @@ export function createRegistry(
     }
   }
 
-  // Add app widgets and templates
-  const apps = userConfig.apps ?? [];
-  for (const app of apps) {
-    if (app.widgets) {
-      for (const [name, absPath] of Object.entries(app.widgets)) {
-        modules[`parche:widgets/${name}`] = absPath;
-      }
+  // Validate parche requirements (V1: capability presence).
+  const missing: string[] = [];
+  for (const parche of parches) {
+    for (const name of parche.requires?.primitives ?? []) {
+      if (!providedPrimitives.has(name)) missing.push(`"${parche.name}" requires primitive "${name}" (parche:primitives/${name})`);
     }
-    if (app.templates) {
-      for (const [name, absPath] of Object.entries(app.templates)) {
-        modules[`parche:templates/${name}`] = absPath;
-      }
+    for (const name of parche.requires?.widgets ?? []) {
+      if (!providedWidgets.has(name)) missing.push(`"${parche.name}" requires widget "${name}" (parche:widgets/${name})`);
     }
-    if (app.namedExportModules) {
-      for (const id of app.namedExportModules) {
-        NAMED_EXPORT_MODULES.add(id);
-      }
-    }
+  }
+  if (missing.length) {
+    throw new Error(
+      '[parche] Unsatisfied parche requirements — add a parche that provides them:\n  - ' + missing.join('\n  - '),
+    );
   }
 
   // Apply user overrides (these take priority)

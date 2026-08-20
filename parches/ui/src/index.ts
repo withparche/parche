@@ -1,17 +1,17 @@
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import type { UIRegistry } from '@parche/core/types';
+import type { ParcheManifest } from '@parche/core';
 
 /**
- * Parche UI: the widget library. Section widgets are authored in page content
- * (`sections: [{ widget, props }]`); blog widgets are consumed by @parche/blog.
- * Primitives live in @parche/primitives and are consumed via `parche:primitives/*`.
+ * The ui parche: the widget library. Section widgets are authored in page
+ * content (`sections: [{ widget, props }]`); blog widgets are consumed by the
+ * blog parche. Provides them as `parche:widgets/*`; requires primitives.
  */
-export default function createUI(): UIRegistry {
+export default function createUI(): ParcheManifest {
   const dir = path.dirname(fileURLToPath(import.meta.url));
   const w = (file: string) => path.resolve(dir, 'widgets', file);
   return {
-    atoms: {},
+    name: 'ui',
     widgets: {
       // Section widgets
       Announcement: w('Announcement.astro'),
@@ -34,7 +34,7 @@ export default function createUI(): UIRegistry {
       Note: w('Note.astro'),
       BlogLatestPosts: w('BlogLatestPosts.astro'),
       BlogHighlightedPosts: w('BlogHighlightedPosts.astro'),
-      // Blog presentational widgets (consumed by @parche/blog)
+      // Blog presentational widgets (consumed by the blog parche)
       'blog/AuthorCard': w('blog/AuthorCard.astro'),
       'blog/BlogList': w('blog/BlogList.astro'),
       'blog/BlogPostCard': w('blog/BlogPostCard.astro'),
@@ -49,6 +49,9 @@ export default function createUI(): UIRegistry {
       'blog/TOC': w('blog/TOC.astro'),
       'blog/TagCloud': w('blog/TagCloud.astro'),
       'blog/ToBlogLink': w('blog/ToBlogLink.astro'),
+    },
+    requires: {
+      primitives: ['Avatar', 'Container', 'Icon', 'Section', 'Tag'],
     },
   };
 }
