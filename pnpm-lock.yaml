@@ -279,6 +279,9 @@ importers:
       '@parche/primitives':
         specifier: workspace:*
         version: link:../../parches/primitives
+      '@parche/themes':
+        specifier: workspace:*
+        version: link:../../parches/themes
       '@parche/ui':
         specifier: workspace:*
         version: link:../../parches/ui
@@ -362,6 +365,9 @@ importers:
       '@parche/primitives':
         specifier: workspace:*
         version: link:../../parches/primitives
+      '@parche/themes':
+        specifier: workspace:*
+        version: link:../../parches/themes
       '@parche/ui':
         specifier: workspace:*
         version: link:../../parches/ui
@@ -475,6 +481,8 @@ importers:
       astro:
         specifier: 'catalog:'
         version: 7.2.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@22.20.1)(jiti@2.7.0)(tsx@4.23.12)
+
+  parches/themes: {}
 
   parches/ui:
     dependencies:

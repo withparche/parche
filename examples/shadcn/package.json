@@ -11,6 +11,7 @@
   "dependencies": {
     "@parche/core": "workspace:*",
     "@parche/primitives": "workspace:*",
+    "@parche/themes": "workspace:*",
     "@parche/ui": "workspace:*",
     "@astrojs/react": "catalog:",
     "@iconify-json/tabler": "catalog:",

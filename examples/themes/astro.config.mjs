@@ -5,25 +5,18 @@ import parche from '@parche/core';
 import { parcheFonts } from '@parche/core/fonts';
 import createPrimitives from '@parche/primitives';
 import createUI from '@parche/ui';
+import { corporate, minimal, playful, startup } from '@parche/themes';
 
 export default defineConfig({
   site: 'https://example.com',
   integrations: [
     parche({
-      parches: [createPrimitives(), createUI()],
+      // Import only the themes you want — each bundles its own CSS and adds
+      // itself to the switcher. The floating ThemePanel appears automatically
+      // when more than one theme (incl. the base "Default") is available.
+      parches: [createPrimitives(), createUI(), corporate(), minimal(), playful(), startup()],
       config: './src/parche.config.ts',
       routes: { pages: true },
-      // Multiple themes → the floating ThemePanel shows automatically.
-      themes: {
-        available: [
-          { label: 'Default', value: '' },
-          { label: 'Corporate', value: 'corporate' },
-          { label: 'Minimal', value: 'minimal' },
-          { label: 'Playful', value: 'playful' },
-          { label: 'Startup', value: 'startup' },
-        ],
-        showPanel: true,
-      },
     }),
     icon(),
   ],

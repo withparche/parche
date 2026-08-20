@@ -9,15 +9,16 @@ function corePath(...segments: string[]): string {
   return path.resolve(coreDir, ...segments);
 }
 
-/** Default themes available out of the box */
-const DEFAULT_THEMES = [
-  { label: 'Default', value: '' },
-  { label: 'Corporate', value: 'corporate' },
-  { label: 'Minimal', value: 'minimal' },
-  { label: 'Playful', value: 'playful' },
-  { label: 'Startup', value: 'startup' },
-  { label: 'Starter', value: 'starter' },
-];
+/** Keep the first entry per theme `value` (parche order = precedence). */
+function dedupeThemes(
+  themes: Array<{ label: string; value: string }>,
+): Array<{ label: string; value: string }> {
+  const seen = new Set<string>();
+  return themes.filter((t) => (seen.has(t.value) ? false : (seen.add(t.value), true)));
+}
+
+/** The always-present base look (no data-theme). Themes are added by parches. */
+const DEFAULT_THEME = { label: 'Default', value: '' };
 
 /** Built-in core component registry */
 const CORE_MODULES: Record<string, string> = {
@@ -77,8 +78,12 @@ export function createRegistry(
   const providedPrimitives = new Set<string>();
   const providedWidgets = new Set<string>();
   const apps: ParcheManifest[] = [];
+  const contributedStyles: string[] = [];
+  const contributedThemes: Array<{ label: string; value: string }> = [];
 
   for (const parche of parches) {
+    if (parche.styles) contributedStyles.push(...parche.styles);
+    if (parche.themes) contributedThemes.push(...parche.themes);
     if (parche.primitives) {
       for (const [name, absPath] of Object.entries(parche.primitives)) {
         modules[`parche:primitives/${name}`] = absPath;
@@ -152,15 +157,17 @@ export function createRegistry(
     defaultLocale: astroI18n?.defaultLocale ?? 'en',
   };
 
-  // Resolve themes config
-  const themes = userConfig.themes?.available ?? DEFAULT_THEMES;
+  // Resolve themes: the base look plus whatever the imported parches contribute.
+  // `themes.available` still overrides explicitly, for full manual control.
+  const themes = userConfig.themes?.available ?? dedupeThemes([DEFAULT_THEME, ...contributedThemes]);
   const showPanel = userConfig.themes?.showPanel ?? themes.length > 1;
 
-  // Resolve styles entry — user can provide their own CSS file
-  const stylesEntry = userConfig.styles?.entry
-    ? path.resolve(rootDir, userConfig.styles.entry)
-    : corePath('styles/themes/index.css');
-  modules['parche:config/styles'] = stylesEntry;
+  // Aggregate the CSS to bundle: what the parches contribute (e.g. themes) plus
+  // an optional user entry. A site ships only the CSS of the parches it imports.
+  const styleEntries = [...contributedStyles];
+  if (userConfig.styles?.entry) {
+    styleEntries.push(path.resolve(rootDir, userConfig.styles.entry));
+  }
 
   // Collect app resolvers
   const resolvers: Array<{ appName: string; entrypoint: string }> = [];
@@ -176,6 +183,7 @@ export function createRegistry(
     i18n,
     themes,
     showPanel,
+    styleEntries,
     apps,
     resolvers,
   };

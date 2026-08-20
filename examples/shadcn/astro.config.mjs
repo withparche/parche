@@ -6,25 +6,18 @@ import parche from '@parche/core';
 import { parcheFonts } from '@parche/core/fonts';
 import createPrimitives from '@parche/primitives';
 import createUI from '@parche/ui';
+import { corporate, minimal, playful } from '@parche/themes';
 
 export default defineConfig({
   site: 'https://example.com',
   integrations: [
     parche({
-      parches: [createPrimitives(), createUI()],
+      // Import the themes to showcase — watch the shadcn components reskin as
+      // you switch. Only these three themes' CSS is bundled.
+      parches: [createPrimitives(), createUI(), corporate(), minimal(), playful()],
       config: './src/parche.config.ts',
       routes: { pages: true },
       overrides: { 'widgets:ShadcnShowcase': './src/widgets/ShadcnWidget.astro' },
-      // Multiple themes so you can watch the shadcn components reskin.
-      themes: {
-        available: [
-          { label: 'Default', value: '' },
-          { label: 'Corporate', value: 'corporate' },
-          { label: 'Minimal', value: 'minimal' },
-          { label: 'Playful', value: 'playful' },
-        ],
-        showPanel: true,
-      },
     }),
     react(),
     icon(),

@@ -72,6 +72,8 @@ const I18N_CONFIG_ID = 'parche:config/i18n';
 const I18N_CONFIG_VIRTUAL = '\0parche:config/i18n';
 const THEMES_CONFIG_ID = 'parche:config/themes';
 const THEMES_CONFIG_VIRTUAL = '\0parche:config/themes';
+const STYLES_CONFIG_ID = 'parche:config/styles';
+const STYLES_CONFIG_VIRTUAL = '\0parche:config/styles';
 const WIDGET_SCHEMAS_ID = 'parche:registry/widgetSchemas';
 const WIDGET_SCHEMAS_VIRTUAL = '\0parche:registry/widgetSchemas';
 const RESOLVERS_ID = 'parche:registry/resolvers';
@@ -173,6 +175,15 @@ function generateThemesConfigModule(registry: ResolvedRegistry): string {
   return `export const themes = ${JSON.stringify(registry.themes)};
 export const showPanel = ${JSON.stringify(registry.showPanel)};
 `;
+}
+
+/**
+ * Generate the styles entry: side-effect CSS imports for every file the
+ * imported parches contribute (plus any user entry). Empty when none — the
+ * base look ships via BaseLayout's own base.css regardless.
+ */
+function generateStylesModule(registry: ResolvedRegistry): string {
+  return registry.styleEntries.map((p) => `import ${JSON.stringify(p)};`).join('\n') + '\n';
 }
 
 /**
@@ -325,6 +336,7 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
       if (id === TEMPLATE_MAP_ID) return TEMPLATE_MAP_VIRTUAL;
       if (id === I18N_CONFIG_ID) return I18N_CONFIG_VIRTUAL;
       if (id === THEMES_CONFIG_ID) return THEMES_CONFIG_VIRTUAL;
+      if (id === STYLES_CONFIG_ID) return STYLES_CONFIG_VIRTUAL;
 
       if (id === WIDGET_SCHEMAS_ID) return WIDGET_SCHEMAS_VIRTUAL;
       if (id === RESOLVERS_ID) return RESOLVERS_VIRTUAL;
@@ -339,6 +351,7 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
       if (id === TEMPLATE_MAP_VIRTUAL) return generateTemplateMapModule(registry);
       if (id === I18N_CONFIG_VIRTUAL) return generateI18nConfigModule(registry);
       if (id === THEMES_CONFIG_VIRTUAL) return generateThemesConfigModule(registry);
+      if (id === STYLES_CONFIG_VIRTUAL) return generateStylesModule(registry);
       if (id === RESOLVERS_VIRTUAL) return generateResolversModule(registry);
       if (id === WIDGET_SCHEMAS_VIRTUAL) {
         // Watch .props.ts and .defaults.json files for HMR

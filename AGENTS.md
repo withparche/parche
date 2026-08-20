@@ -14,6 +14,7 @@ through a virtual-module registry. AstroWind is the reference materialization.
   - `parches/primitives` — foundational components, exposed as `parche:primitives/*`.
   - `parches/ui` — widget library (`parche:widgets/*`).
   - `parches/blog` — app parche: routes, collections, RSS (`@parche/blog`).
+  - `parches/themes` — theme parches (`corporate`, `minimal`, …): each contributes its `[data-theme]` CSS + switcher entry, so a site bundles only the themes it imports.
 - `packages/cli` — `@parche/cli`, the `parche` command (`parche astro new`). Built with tsup.
 - `packages/create-parche` — the `npm create parche` entry (reuses the CLI's scaffolder).
 - `templates/*` — project starters consumed by the CLI (each may have a `parche.template.json`).

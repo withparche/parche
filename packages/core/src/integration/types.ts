@@ -63,6 +63,17 @@ export interface ParcheManifest {
   widgets?: Record<string, string>;
   /** Templates to register: virtual ID suffix → absolute path */
   templates?: Record<string, string>;
+  /**
+   * CSS files this parche contributes (absolute paths). Aggregated into the
+   * styles entry so a site bundles only the CSS of the parches it imports.
+   * A theme is just a parche that contributes its override CSS here.
+   */
+  styles?: string[];
+  /**
+   * Theme entries this parche adds to the switcher: { label, value }. The
+   * `value` is the `data-theme` attribute the theme's CSS is scoped to.
+   */
+  themes?: Array<{ label: string; value: string }>;
   /** Routes to inject */
   routes?: Array<{ pattern: string; entrypoint: string }>;
   /** App config exposed via virtual module parche:app/{name} */
@@ -115,9 +126,9 @@ export interface ParcheRoutesConfig {
 
 export interface ParcheStylesConfig {
   /**
-   * Path to a CSS file that gets imported by injected routes.
-   * Use this to load theme CSS files and any project-wide styles.
-   * Default: loads all built-in themes.
+   * Path to an extra CSS file imported by injected routes, on top of any CSS
+   * the parches contribute. Use it for project-wide styles.
+   * Default: nothing beyond what the imported parches (e.g. themes) provide.
    */
   entry?: string;
 }
@@ -163,6 +174,8 @@ export interface ResolvedRegistry {
   themes: Array<{ label: string; value: string }>;
   /** Whether to show the floating theme panel */
   showPanel: boolean;
+  /** Absolute CSS paths to import via parche:config/styles (parche-contributed + user entry) */
+  styleEntries: string[];
   /** Registered apps */
   apps: ParcheApp[];
   /** App resolvers — modules that export resolve() and getPaths() */
