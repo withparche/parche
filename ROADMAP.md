@@ -10,7 +10,7 @@ The first three months (much of it in the earlier `astrowind-v2` repo), iterated
 and tested into what is now `withparche/parche` **v0.3.0**.
 
 ### Foundation
-- OKLCH design system (`--ph-`/`--ds-` tokens) with `[data-theme]` overrides + a runtime theme switcher; example themes (corporate / minimal / playful / starter). Note: today all built-in themes are bundled — see "pluggable themes" below.
+- OKLCH design system (`--ph-`/`--ds-` tokens) with `[data-theme]` overrides + a runtime theme switcher.
 - Pages as data: `sections: [{ widget, props }]` rendered by `DynamicRenderer`.
 - Virtual-module registry (`parche:*`) generated at build.
 - i18n (manual routing, per-locale content), SEO (metadata, Open Graph, JSON-LD), sitemaps.
@@ -25,6 +25,7 @@ and tested into what is now `withparche/parche` **v0.3.0**.
 - `@parche/core` is the **host** (the only non-parche); everything else is a **parche**.
 - Unified config `parche({ parches: [...] })` with a `provides` / `requires` contract validated at setup.
 - Chrome (Header/Footer/templates) extracted from core → the ui parche; core is a pure engine.
+- Pluggable themes — a theme is a parche that contributes its CSS + switcher entry (`@parche/themes`: corporate / minimal / playful / startup / starter); a site bundles only the themes it imports.
 - Data-driven fonts (`parcheFonts`); honest example output modes (SSR vs static).
 
 ### Tooling & DX
@@ -39,7 +40,6 @@ and tested into what is now `withparche/parche` **v0.3.0**.
 - **Publish `@parche/*` to npm** — unblocks the CLI end-to-end for real users (today generated projects only install inside the monorepo).
 - V2 contract: **signature** validation (not just presence), reusing widgets' `.props.ts` Zod schemas.
 - Primitives hardening: real accessibility (focus / ARIA / keyboard) and tokenizing hardcoded colors (e.g. Badge's `bg-green-500`) so themes reskin everything.
-- **Pluggable themes** — make a theme a parche that contributes its CSS + switcher entry, so a site bundles only the themes it imports (today all built-in themes ship on every page, which is wasteful and not the right model).
 
 ## Later (v0.5+)
 
