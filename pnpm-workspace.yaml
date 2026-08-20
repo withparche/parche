@@ -23,14 +23,10 @@ catalog:
   "@iconify-json/lucide": ^1.2.98
   "@iconify-json/simple-icons": ^1.2.75
 
-# Adopt latest releases immediately (Astro 7's native markdown bindings are
-# recent). Disables pnpm's new-package cooldown for this repo.
+# pnpm's new-package cooldown was gating the latest satteri (Astro 7's markdown
+# engine) and falling back to an older release whose Apple-Silicon binary was
+# never published. Disable the cooldown so the latest published versions install.
 minimumReleaseAge: 0
-
-# satteri 0.10.4 (pulled in by Astro 7) shipped without an Apple-Silicon binary;
-# 0.10.5 restores it. Override until Astro bumps its markdown engine.
-overrides:
-  satteri: 0.10.5
 
 allowBuilds:
   es5-ext: true
