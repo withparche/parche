@@ -1,0 +1,14 @@
+{
+  "title": "Hola desde Parche",
+  "description": "Una página bilingüe mínima servida en español bajo /es.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "tagline": "i18n",
+        "title": "Hola",
+        "subtitle": "Esta página se sirve en español bajo <code>/es</code>. Usa el selector de idioma en la cabecera para volver al inglés."
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "title": "Hello from Parche",
+  "description": "A minimal bilingual page served in English at the root.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "tagline": "i18n",
+        "title": "Hello",
+        "subtitle": "This page is served in English at <code>/</code>. Use the language switcher in the header to jump to Spanish."
+      }
+    }
+  ]
+}
