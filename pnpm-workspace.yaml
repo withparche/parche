@@ -1,6 +1,6 @@
 packages:
   - "packages/*"
-  - "apps/*"
+  - "parches/*"
   - "examples/*"
 
 # Central version catalog. Packages reference these with "catalog:".

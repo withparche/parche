@@ -12,8 +12,8 @@
 /* Scan the framework's own component files so their utility classes are generated.
    A consuming app's own files are picked up by its Tailwind setup automatically. */
 @source "../../**/*.{astro,ts}";
-@source "../../../primitives/src/**/*.astro";
-@source "../../../ui/src/**/*.astro";
+@source "../../../../parches/primitives/src/**/*.astro";
+@source "../../../../parches/ui/src/**/*.astro";
 
 /* Dark mode via clase .dark en <html> */
 @custom-variant dark (&:where(.dark, .dark *));

@@ -62,22 +62,6 @@ importers:
 
   .: {}
 
-  apps/blog:
-    dependencies:
-      '@astrojs/rss':
-        specifier: 'catalog:'
-        version: 4.0.19
-      '@parche/core':
-        specifier: workspace:*
-        version: link:../../packages/core
-      zod:
-        specifier: 'catalog:'
-        version: 4.4.3
-    devDependencies:
-      astro:
-        specifier: 'catalog:'
-        version: 7.2.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(jiti@2.7.0)
-
   examples/blog:
     dependencies:
       '@iconify-json/lucide':
@@ -91,16 +75,16 @@ importers:
         version: 1.2.38
       '@parche/blog':
         specifier: workspace:*
-        version: link:../../apps/blog
+        version: link:../../parches/blog
       '@parche/core':
         specifier: workspace:*
         version: link:../../packages/core
       '@parche/primitives':
         specifier: workspace:*
-        version: link:../../packages/primitives
+        version: link:../../parches/primitives
       '@parche/ui':
         specifier: workspace:*
-        version: link:../../packages/ui
+        version: link:../../parches/ui
       '@tailwindcss/vite':
         specifier: 'catalog:'
         version: 4.3.3(vite@8.2.1(esbuild@0.28.2)(jiti@2.7.0))
@@ -134,10 +118,10 @@ importers:
         version: link:../../packages/core
       '@parche/primitives':
         specifier: workspace:*
-        version: link:../../packages/primitives
+        version: link:../../parches/primitives
       '@parche/ui':
         specifier: workspace:*
-        version: link:../../packages/ui
+        version: link:../../parches/ui
       '@tailwindcss/vite':
         specifier: 'catalog:'
         version: 4.3.3(vite@8.2.1(esbuild@0.28.2)(jiti@2.7.0))
@@ -168,10 +152,10 @@ importers:
         version: link:../../packages/core
       '@parche/primitives':
         specifier: workspace:*
-        version: link:../../packages/primitives
+        version: link:../../parches/primitives
       '@parche/ui':
         specifier: workspace:*
-        version: link:../../packages/ui
+        version: link:../../parches/ui
       '@tailwindcss/vite':
         specifier: 'catalog:'
         version: 4.3.3(vite@8.2.1(esbuild@0.28.2)(jiti@2.7.0))
@@ -202,10 +186,10 @@ importers:
         version: link:../../packages/core
       '@parche/primitives':
         specifier: workspace:*
-        version: link:../../packages/primitives
+        version: link:../../parches/primitives
       '@parche/ui':
         specifier: workspace:*
-        version: link:../../packages/ui
+        version: link:../../parches/ui
       '@tailwindcss/vite':
         specifier: 'catalog:'
         version: 4.3.3(vite@8.2.1(esbuild@0.28.2)(jiti@2.7.0))
@@ -233,10 +217,10 @@ importers:
         version: link:../../packages/core
       '@parche/primitives':
         specifier: workspace:*
-        version: link:../../packages/primitives
+        version: link:../../parches/primitives
       '@parche/ui':
         specifier: workspace:*
-        version: link:../../packages/ui
+        version: link:../../parches/ui
       '@tailwindcss/vite':
         specifier: 'catalog:'
         version: 4.3.3(vite@8.2.1(esbuild@0.28.2)(jiti@2.7.0))
@@ -270,10 +254,10 @@ importers:
         version: link:../../packages/core
       '@parche/primitives':
         specifier: workspace:*
-        version: link:../../packages/primitives
+        version: link:../../parches/primitives
       '@parche/ui':
         specifier: workspace:*
-        version: link:../../packages/ui
+        version: link:../../parches/ui
       '@tailwindcss/vite':
         specifier: 'catalog:'
         version: 4.3.3(vite@8.2.1(esbuild@0.28.2)(jiti@2.7.0))
@@ -316,10 +300,10 @@ importers:
         version: link:../../packages/core
       '@parche/primitives':
         specifier: workspace:*
-        version: link:../../packages/primitives
+        version: link:../../parches/primitives
       '@parche/ui':
         specifier: workspace:*
-        version: link:../../packages/ui
+        version: link:../../parches/ui
       '@radix-ui/react-slot':
         specifier: ^1.3.3
         version: 1.3.3(@types/react@19.2.18)(react@19.2.8)
@@ -371,10 +355,10 @@ importers:
         version: link:../../packages/core
       '@parche/primitives':
         specifier: workspace:*
-        version: link:../../packages/primitives
+        version: link:../../parches/primitives
       '@parche/ui':
         specifier: workspace:*
-        version: link:../../packages/ui
+        version: link:../../parches/ui
       '@tailwindcss/vite':
         specifier: 'catalog:'
         version: 4.3.3(vite@8.2.1(esbuild@0.28.2)(jiti@2.7.0))
@@ -402,10 +386,10 @@ importers:
         version: link:../../packages/core
       '@parche/primitives':
         specifier: workspace:*
-        version: link:../../packages/primitives
+        version: link:../../parches/primitives
       '@parche/ui':
         specifier: workspace:*
-        version: link:../../packages/ui
+        version: link:../../parches/ui
       '@tailwindcss/vite':
         specifier: 'catalog:'
         version: 4.3.3(vite@8.2.1(esbuild@0.28.2)(jiti@2.7.0))
@@ -445,7 +429,23 @@ importers:
         specifier: ^8.0.0
         version: 8.2.1(esbuild@0.28.2)(jiti@2.7.0)
 
-  packages/primitives:
+  parches/blog:
+    dependencies:
+      '@astrojs/rss':
+        specifier: 'catalog:'
+        version: 4.0.19
+      '@parche/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      zod:
+        specifier: 'catalog:'
+        version: 4.4.3
+    devDependencies:
+      astro:
+        specifier: 'catalog:'
+        version: 7.2.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(jiti@2.7.0)
+
+  parches/primitives:
     dependencies:
       astro-icon:
         specifier: 'catalog:'
@@ -455,11 +455,11 @@ importers:
         specifier: 'catalog:'
         version: 7.2.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(jiti@2.7.0)
 
-  packages/ui:
+  parches/ui:
     dependencies:
       '@parche/core':
         specifier: workspace:*
-        version: link:../core
+        version: link:../../packages/core
       tailwind-merge:
         specifier: 'catalog:'
         version: 3.6.0

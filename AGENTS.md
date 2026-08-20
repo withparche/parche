@@ -9,10 +9,11 @@ through a virtual-module registry. AstroWind is the reference materialization.
 
 ## Layout
 
-- `packages/core` — engine (integration, virtual modules `parche:*`, schemas, renderer, routing, i18n, tokens).
-- `packages/primitives` — foundational components, exposed as `parche:primitives/*`.
-- `packages/ui` — widget library (`parche:widgets/*`).
-- `apps/blog` — pluggable app (`@parche/blog`).
+- `packages/core` — the host: engine (integration, virtual modules `parche:*`, schemas, renderer, routing, i18n, tokens). The only non-parche.
+- `parches/*` — plugins ("parches"). Each provides primitives / widgets / routes and declares what it requires:
+  - `parches/primitives` — foundational components, exposed as `parche:primitives/*`.
+  - `parches/ui` — widget library (`parche:widgets/*`).
+  - `parches/blog` — app parche: routes, collections, RSS (`@parche/blog`).
 - `examples/*` — small per-feature demos.
 
 ## Commands
