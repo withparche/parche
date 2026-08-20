@@ -1,0 +1,67 @@
+---
+import { themes as configuredThemes } from 'parche:config/themes';
+
+interface ThemeOption {
+  label: string;
+  value: string;
+}
+
+interface Props {
+  /** Override the themes list from config */
+  themes?: ThemeOption[];
+}
+
+const { themes = configuredThemes } = Astro.props;
+---
+
+{themes.length > 1 && (
+  <theme-selector>
+    <div class="flex items-center gap-1 bg-surface border border-border rounded-lg p-0.5">
+      {themes.map((theme) => (
+        <button
+          type="button"
+          data-theme-value={theme.value}
+          class="px-2.5 py-1 text-xs font-medium rounded-md transition-colors cursor-pointer text-muted hover:text-heading"
+        >
+          {theme.label}
+        </button>
+      ))}
+    </div>
+  </theme-selector>
+)}
+
+<script>
+  class ThemeSelectorElement extends HTMLElement {
+    connectedCallback() {
+      const buttons = this.querySelectorAll<HTMLButtonElement>('[data-theme-value]');
+      const currentTheme = document.documentElement.getAttribute('data-theme') || '';
+
+      const updateActive = (active: string) => {
+        buttons.forEach((btn) => {
+          const isActive = btn.dataset.themeValue === active;
+          btn.classList.toggle('bg-primary', isActive);
+          btn.classList.toggle('text-white', isActive);
+          btn.classList.toggle('text-muted', !isActive);
+        });
+      };
+
+      updateActive(currentTheme);
+
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const value = btn.dataset.themeValue || '';
+          if (value) {
+            document.documentElement.setAttribute('data-theme', value);
+            localStorage.setItem('site-theme', value);
+          } else {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.removeItem('site-theme');
+          }
+          updateActive(value);
+        });
+      });
+    }
+  }
+
+  customElements.define('theme-selector', ThemeSelectorElement);
+</script>

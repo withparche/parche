@@ -1,0 +1,32 @@
+---
+import type { Props } from './Announcement.props';
+import Icon from 'parche:primitives/Icon';
+
+const { badge, title, description, href } = Astro.props as Props;
+
+const text = title || description;
+---
+
+<div class="bg-primary text-on-primary flex items-center gap-2 overflow-hidden px-4 py-2 text-sm">
+  {badge && (
+    <span class="type-label bg-surface text-heading shrink-0 rounded px-1.5 py-0.5 font-semibold">
+      {badge}
+    </span>
+  )}
+
+  {text && href ? (
+    <a href={href} class="type-body text-on-primary min-w-0 truncate font-medium hover:underline">
+      {text}
+    </a>
+  ) : text ? (
+    <span class="type-body text-on-primary min-w-0 truncate">
+      {text}
+    </span>
+  ) : null}
+
+  {href && !text && (
+    <a href={href} class="type-body text-on-primary ml-auto flex shrink-0 items-center gap-1 font-medium hover:underline">
+      <Icon name="tabler:arrow-right" class="h-4 w-4" />
+    </a>
+  )}
+</div>

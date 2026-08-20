@@ -1,0 +1,27 @@
+---
+import Container from 'parche:primitives/Container';
+import Section from 'parche:primitives/Section';
+
+interface Props {
+  data: {
+    title: string;
+    body?: string;
+  };
+}
+
+const { data } = Astro.props;
+const hasMarkdown = Astro.slots.has('default');
+---
+
+<Section>
+  <Container class="max-w-3xl">
+    <h1 class="type-h1 mb-8">{data.title}</h1>
+    {hasMarkdown ? (
+      <div class="prose">
+        <slot />
+      </div>
+    ) : data.body ? (
+      <div class="type-body text-muted space-y-6" set:html={data.body} />
+    ) : null}
+  </Container>
+</Section>

@@ -1,0 +1,58 @@
+{
+  "title": "Parche — build sites you don't just fork",
+  "description": "A minimal blog demo built with Parche: pages as data, rendered through a virtual-module registry.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "tagline": "Parche",
+        "title": "Build on Astro, <span class='text-primary'>don't just fork it</span>",
+        "subtitle": "Pages are data. Widgets are a registry. Themes are tokens. This demo is powered entirely by JSON content and the Parche integration.",
+        "actions": [
+          { "variant": "primary", "text": "Read the blog", "href": "/blog", "icon": "tabler:article" },
+          { "text": "GitHub", "href": "https://github.com/withparche/parche", "target": "_blank", "icon": "tabler:brand-github" }
+        ],
+        "image": { "src": "https://placehold.co/1200x680/6366f1/ffffff?text=Parche", "alt": "Parche" }
+      }
+    },
+    {
+      "widget": "Note",
+      "props": {
+        "title": "Philosophy:",
+        "description": "Simplicity, best practices and high performance."
+      }
+    },
+    {
+      "widget": "Features",
+      "wrapper": { "id": "features", "classes": { "container": "max-w-5xl" } },
+      "props": {
+        "tagline": "Features",
+        "title": "What Parche gives you",
+        "subtitle": "A small, coherent core you build on.",
+        "items": [
+          { "title": "Pages as data", "description": "Author pages as JSON/MD sections, rendered by DynamicRenderer.", "icon": "tabler:file-code" },
+          { "title": "Primitives + widgets", "description": "Foundational primitives consumed via parche:primitives/*, widgets via parche:widgets/*.", "icon": "tabler:components" },
+          { "title": "Pluggable apps", "description": "Drop in @parche/blog for routes, collections and RSS.", "icon": "tabler:plug" },
+          { "title": "OKLCH theming", "description": "A token system that reskins every widget by swapping variables.", "icon": "tabler:palette" },
+          { "title": "SSR or static", "description": "Runs on any adapter Astro supports. This demo uses the Node adapter.", "icon": "tabler:server" },
+          { "title": "SEO built in", "description": "Metadata, Open Graph, JSON-LD and sitemaps out of the box.", "icon": "tabler:rocket" }
+        ]
+      }
+    },
+    {
+      "widget": "Content",
+      "props": {
+        "isReversed": true,
+        "tagline": "Inside",
+        "title": "One engine, many outputs",
+        "content": "Parche is the framework; AstroWind is its reference materialization. The same engine drives local pages, blog posts and, later, niche themes.",
+        "items": [
+          { "title": "Virtual-module registry", "description": "Widgets and primitives resolve through parche:* modules." },
+          { "title": "Content-driven", "description": "Swap content sources without touching components." },
+          { "title": "Composable", "description": "Add apps and widgets as your site grows." }
+        ],
+        "image": { "src": "https://placehold.co/1000x680/0ea5e9/ffffff?text=Engine", "alt": "Engine" }
+      }
+    }
+  ]
+}

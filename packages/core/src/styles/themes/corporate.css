@@ -1,0 +1,85 @@
+/* =================================================================
+   Theme: Corporate — Brutalist / Monochrome
+   Overrides primitive + semantic tokens for a completely different
+   visual identity. No HTML changes required.
+   ================================================================= */
+
+/* ---------------------------------------------------------------
+   Geometry override — zero radius, no shadows
+   --------------------------------------------------------------- */
+:root:root[data-theme="corporate"] :is(*, *::before, *::after) {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* ---------------------------------------------------------------
+   Light mode
+   --------------------------------------------------------------- */
+:root[data-theme="corporate"] {
+  /* Primitive overrides — pure grayscale (chroma 0) */
+  --color-neutral-50:  oklch(0.985 0 0);
+  --color-neutral-100: oklch(0.96 0 0);
+  --color-neutral-200: oklch(0.92 0 0);
+  --color-neutral-300: oklch(0.87 0 0);
+  --color-neutral-400: oklch(0.7 0 0);
+  --color-neutral-500: oklch(0.55 0 0);
+  --color-neutral-600: oklch(0.45 0 0);
+  --color-neutral-700: oklch(0.37 0 0);
+  --color-neutral-800: oklch(0.27 0 0);
+  --color-neutral-900: oklch(0.2 0 0);
+  --color-neutral-950: oklch(0.13 0 0);
+
+  /* Primary = near-black for light, light gray for dark */
+  --color-primary-50:  oklch(0.97 0 0);
+  --color-primary-100: oklch(0.93 0 0);
+  --color-primary-200: oklch(0.87 0 0);
+  --color-primary-300: oklch(0.78 0 0);
+  --color-primary-400: oklch(0.65 0 0);
+  --color-primary-500: oklch(0.45 0 0);
+  --color-primary-600: oklch(0.2 0 0);
+  --color-primary-700: oklch(0.15 0 0);
+  --color-primary-800: oklch(0.12 0 0);
+  --color-primary-900: oklch(0.1 0 0);
+  --color-primary-950: oklch(0.05 0 0);
+
+  /* Semantic — light mode */
+  --ds-color-background:  oklch(1 0 0);
+  --ds-color-foreground:  oklch(0.05 0 0);
+  --ds-color-surface:     oklch(0.97 0 0);
+  --ds-color-primary:     oklch(0.13 0 0);
+  --ds-color-on-primary:  oklch(1 0 0);     /* white on near-black — excellent */
+  --ds-color-muted:       oklch(0.45 0 0);
+  --ds-color-border:      oklch(0.13 0 0);
+  --ds-color-heading:     oklch(0.05 0 0);
+  --ds-color-text:        oklch(0.25 0 0);
+  --ds-color-highlight:      oklch(0.13 0 0);
+
+  /* Typography overrides */
+  --ds-weight-h1:      900;
+  --ds-tracking-h1:    -0.04em;
+  --ds-weight-h2:      800;
+  --ds-tracking-h2:    -0.03em;
+  --ds-weight-h3:      700;
+  --ds-tracking-label: 0.2em;
+  --ds-weight-label:   700;
+  --ds-size-label:     0.7rem;
+
+  /* Font — geometric sans */
+  --font-sans: "Inter", "Helvetica Neue", Arial, ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ---------------------------------------------------------------
+   Dark mode
+   --------------------------------------------------------------- */
+:root[data-theme="corporate"].dark {
+  --ds-color-background:  oklch(0.05 0 0);
+  --ds-color-foreground:  oklch(0.97 0 0);
+  --ds-color-surface:     oklch(0.12 0 0);
+  --ds-color-primary:     oklch(0.85 0 0);
+  --ds-color-on-primary:  oklch(0.05 0 0);   /* near-black on light gray — ~14:1 */
+  --ds-color-muted:       oklch(0.55 0 0);
+  --ds-color-border:      oklch(0.85 0 0);
+  --ds-color-heading:     oklch(0.97 0 0);
+  --ds-color-text:        oklch(0.75 0 0);
+  --ds-color-highlight:      oklch(0.85 0 0);
+}

@@ -1,0 +1,61 @@
+---
+import { Image as AstroImage } from 'astro:assets';
+
+interface Props {
+  src: string | ImageMetadata;
+  alt: string;
+  width?: number;
+  height?: number;
+  ratio?: '1/1' | '4/3' | '16/9' | '3/2' | '21/9';
+  class?: string;
+  loading?: 'lazy' | 'eager';
+  [key: string]: any;
+}
+
+const {
+  src,
+  alt,
+  width = 800,
+  height,
+  ratio,
+  class: className = '',
+  loading = 'lazy',
+  ...rest
+} = Astro.props;
+
+const ratioMap: Record<string, string> = {
+  '1/1':  'aspect-square',
+  '4/3':  'aspect-[4/3]',
+  '16/9': 'aspect-video',
+  '3/2':  'aspect-[3/2]',
+  '21/9': 'aspect-[21/9]',
+};
+
+const isRemote = typeof src === 'string' && (src.startsWith('http') || src.startsWith('//'));
+const computedHeight = height ?? (ratio ? undefined : Math.round((width * 9) / 16));
+---
+
+<div class:list={[ratio && ratioMap[ratio], ratio && 'overflow-hidden', className]}>
+  {isRemote ? (
+    <img
+      src={src as string}
+      {alt}
+      {width}
+      height={computedHeight}
+      {loading}
+      decoding="async"
+      class={ratio ? 'size-full object-cover' : ''}
+      {...rest}
+    />
+  ) : (
+    <AstroImage
+      src={src as ImageMetadata}
+      {alt}
+      {width}
+      height={computedHeight ?? 450}
+      {loading}
+      class={ratio ? 'size-full object-cover' : ''}
+      {...rest}
+    />
+  )}
+</div>

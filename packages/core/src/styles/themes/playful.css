@@ -1,0 +1,96 @@
+/* =================================================================
+   Theme: Playful — Vibrant, rounded, energetic
+   Nunito throughout, purple primary, generous radius.
+   ================================================================= */
+
+/* ---------------------------------------------------------------
+   Light mode
+   --------------------------------------------------------------- */
+:root[data-theme="playful"] {
+  /* Neutral with slight purple tint */
+  --color-neutral-50:  oklch(0.985 0.005 300);
+  --color-neutral-100: oklch(0.965 0.01  300);
+  --color-neutral-200: oklch(0.925 0.015 300);
+  --color-neutral-300: oklch(0.87  0.02  300);
+  --color-neutral-400: oklch(0.7   0.03  300);
+  --color-neutral-500: oklch(0.55  0.035 300);
+  --color-neutral-600: oklch(0.45  0.035 300);
+  --color-neutral-700: oklch(0.37  0.03  300);
+  --color-neutral-800: oklch(0.27  0.025 300);
+  --color-neutral-900: oklch(0.2   0.02  300);
+  --color-neutral-950: oklch(0.13  0.015 300);
+
+  /* Primary — vibrant purple */
+  --color-primary-50:  oklch(0.97  0.02  300);
+  --color-primary-100: oklch(0.94  0.045 300);
+  --color-primary-200: oklch(0.89  0.085 300);
+  --color-primary-300: oklch(0.82  0.14  300);
+  --color-primary-400: oklch(0.72  0.19  300);
+  --color-primary-500: oklch(0.63  0.22  300);
+  --color-primary-600: oklch(0.55  0.24  300);
+  --color-primary-700: oklch(0.48  0.23  300);
+  --color-primary-800: oklch(0.42  0.19  300);
+  --color-primary-900: oklch(0.37  0.15  300);
+  --color-primary-950: oklch(0.25  0.12  300);
+
+  /* Semantic tokens */
+  --ds-color-background:  oklch(0.985 0.006 300);
+  --ds-color-foreground:  oklch(0.12  0.02  300);
+  --ds-color-surface:     oklch(1 0 0);
+  --ds-color-primary:     oklch(0.55  0.24  300);
+  --ds-color-on-primary:  oklch(1 0 0);               /* white on medium purple — ~5:1 */
+  --ds-color-muted:       oklch(0.55  0.03  300);
+  --ds-color-border:      oklch(0.92  0.02  300);
+  --ds-color-heading:     oklch(0.15  0.02  300);
+  --ds-color-text:        oklch(0.35  0.025 300);
+  --ds-color-highlight:      oklch(0.60 0.22  350);   /* hot pink */
+
+  /* Typography — rounded friendly font, bold & bouncy */
+  --ds-font-heading: var(--font-rounded, var(--font-sans));
+  --ds-font-body:    var(--font-rounded, var(--font-sans));
+
+  --ds-size-h1:        3.25rem;
+  --ds-weight-h1:      700;
+  --ds-tracking-h1:    -0.01em;
+  --ds-leading-h1:     1.2;
+
+  --ds-size-h2:        2.5rem;
+  --ds-weight-h2:      700;
+  --ds-tracking-h2:    -0.005em;
+  --ds-leading-h2:     1.25;
+
+  --ds-size-h3:        1.5rem;
+  --ds-weight-h3:      600;
+  --ds-tracking-h3:    0em;
+  --ds-leading-h3:     1.35;
+
+  --ds-size-body:      1.0625rem;
+  --ds-weight-body:    400;
+  --ds-leading-body:   1.7;
+
+  --ds-weight-label:   600;
+  --ds-tracking-label: 0.06em;
+  --ds-size-label:     0.8rem;
+}
+
+/* Playful: extra rounded corners, colored shadows */
+:root[data-theme="playful"] :is(*, *::before, *::after) {
+  border-radius: inherit;
+  --tw-shadow-color: oklch(0.55 0.15 300 / 0.08);
+}
+
+/* ---------------------------------------------------------------
+   Dark mode
+   --------------------------------------------------------------- */
+:root[data-theme="playful"].dark {
+  --ds-color-background:  oklch(0.1  0.015 300);
+  --ds-color-foreground:  oklch(0.95 0.01  300);
+  --ds-color-surface:     oklch(0.15 0.02  300);
+  --ds-color-primary:     oklch(0.72 0.19  300);
+  --ds-color-on-primary:  oklch(0.15 0.02  300);      /* dark purple on light purple — ~8:1 */
+  --ds-color-muted:       oklch(0.5  0.025 300);
+  --ds-color-border:      oklch(0.22 0.025 300);
+  --ds-color-heading:     oklch(0.95 0.01  300);
+  --ds-color-text:        oklch(0.7  0.015 300);
+  --ds-color-highlight:      oklch(0.72 0.20  350);   /* lighter hot pink */
+}

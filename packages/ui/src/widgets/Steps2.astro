@@ -1,0 +1,66 @@
+---
+import type { Props } from './Steps2.props';
+import LegacyHeadline from '../components/LegacyHeadline.astro';
+import Icon from 'parche:primitives/Icon';
+
+const {
+  title,
+  subtitle,
+  tagline,
+  items = [],
+  callToAction,
+  isReversed = false,
+} = Astro.props as Props;
+---
+
+<div class:list={['flex flex-col gap-8 md:gap-12 md:flex-row', { 'md:flex-row-reverse': isReversed }]}>
+  <!-- Headline + CTA column -->
+  <div class:list={['w-full lg:w-1/2', isReversed ? 'lg:ml-16 md:ml-8' : 'lg:mr-16 md:mr-8']}>
+    {(title || subtitle || tagline) && (
+      <LegacyHeadline
+        title={title}
+        subtitle={subtitle}
+        tagline={tagline}
+        classes={{ container: 'text-center md:text-left rtl:md:text-right mb-4 md:mb-8' }}
+      />
+    )}
+
+    {callToAction && callToAction.text && callToAction.href && (
+      <div class="text-center md:text-left rtl:md:text-right">
+        <a
+          href={callToAction.href}
+          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-primary text-on-primary type-label font-semibold hover:opacity-90 transition-opacity"
+        >
+          {callToAction.icon && <Icon name={callToAction.icon} class="w-4 h-4" />}
+          {callToAction.text}
+        </a>
+      </div>
+    )}
+  </div>
+
+  <!-- Steps list column -->
+  {items.length > 0 && (
+    <div class="w-full lg:w-1/2">
+      <ul class="space-y-10">
+        {items.map(({ title: itemTitle, description, icon }, index) => (
+          <li class="flex items-start gap-4">
+            <span class="flex w-16 h-16 shrink-0 items-center justify-center rounded-full bg-primary text-on-primary text-2xl font-bold">
+              {icon
+                ? <Icon name={icon} class="w-6 h-6" />
+                : index + 1
+              }
+            </span>
+            <div class="pt-1">
+              {itemTitle && (
+                <h3 class="type-label font-semibold text-heading mb-2" set:html={itemTitle} />
+              )}
+              {description && (
+                <p class="type-body text-muted" set:html={description} />
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+</div>

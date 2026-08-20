@@ -1,0 +1,65 @@
+---
+import { widgetMap } from 'parche:registry/widgets';
+import DynamicRenderer from 'parche:DynamicRenderer';
+
+interface WrapperConfig {
+  id?: string;
+  isDark?: boolean;
+  bg?: string;
+  classes?: Record<string, unknown>;
+  as?: string;
+}
+
+interface Section {
+  widget: string;
+  props?: Record<string, any>;
+  wrapper?: false | WrapperConfig;
+}
+
+interface Props {
+  layoutSections: Section[];
+  pageSections?: Section[];
+  PageTemplateComponent?: any;
+  pageData?: any;
+  PageMarkdownContent?: any;
+  pageTemplate?: string;
+  SectionWrapper?: any;
+  mainId?: string;
+}
+
+const {
+  layoutSections,
+  pageSections,
+  PageTemplateComponent,
+  pageData,
+  PageMarkdownContent,
+  pageTemplate = 'dynamic',
+  SectionWrapper: PreviewWrapper,
+  mainId,
+} = Astro.props;
+---
+
+{layoutSections.map((section) => {
+  if (section.widget === 'layout/Main') {
+    return (
+      <main id="main-content" class="flex-1">
+        <div id={mainId}>
+          {pageTemplate === 'dynamic' && pageSections && (
+            <DynamicRenderer sections={pageSections} Wrapper={PreviewWrapper} />
+          )}
+          {PageTemplateComponent && (
+            <PageTemplateComponent data={pageData}>
+              {PageMarkdownContent && <PageMarkdownContent />}
+            </PageTemplateComponent>
+          )}
+          <slot />
+        </div>
+      </main>
+    );
+  }
+
+  const Widget = widgetMap[section.widget];
+  if (!Widget) return null;
+
+  return <Widget {...(section.props ?? {})} />;
+})}

@@ -1,0 +1,144 @@
+---
+/**
+ * Blog latest posts grid — v1 BlogLatestPosts style.
+ * Fetches latest blog posts and renders them in a 4-column grid.
+ * Used on homepage sections.
+ */
+import { getCollection } from 'astro:content';
+import Container from 'parche:primitives/Container';
+import Section from 'parche:primitives/Section';
+
+interface Props {
+  title?: string;
+  linkText?: string;
+  linkUrl?: string;
+  information?: string;
+  count?: number;
+  id?: string;
+  class?: string;
+  background?: string;
+}
+
+const {
+  title = 'Latest Posts',
+  linkText = 'View all posts',
+  linkUrl = '/blog',
+  information,
+  count = 4,
+  id,
+  class: className = '',
+  background,
+} = Astro.props;
+
+// Fetch latest posts
+let posts: Array<{
+  title: string;
+  description?: string;
+  href: string;
+  image?: { src: string; alt: string };
+}> = [];
+
+try {
+  const allPosts = await getCollection('posts');
+  const sorted = allPosts
+    .filter((p: any) => !p.data.draft)
+    .sort((a: any, b: any) => {
+      const dateA = a.data.publishDate ? new Date(a.data.publishDate).getTime() : 0;
+      const dateB = b.data.publishDate ? new Date(b.data.publishDate).getTime() : 0;
+      return dateB - dateA;
+    })
+    .slice(0, count);
+
+  posts = sorted.map((post: any) => {
+    // Derive href from post slug (remove locale prefix)
+    const slug = post.data.urlSlug || post.id.split('/').pop()?.replace(/\.\w+$/, '') || post.id;
+    return {
+      title: post.data.title,
+      description: post.data.description ?? post.data.excerpt,
+      href: `/${slug}`,
+      image: post.data.image,
+    };
+  });
+} catch {
+  // Blog collection may not exist — widget renders nothing
+}
+---
+
+{posts.length > 0 && (
+  <Section {id} class={className} {background}>
+    <Container>
+      <div class="flex flex-col lg:justify-between lg:flex-row mb-8">
+        {title && (
+          <div class="md:max-w-sm">
+            <h2
+              class="text-3xl font-bold tracking-tight sm:text-4xl sm:leading-none group font-heading mb-2"
+              set:html={title}
+            />
+            {linkText && linkUrl && (
+              <a
+                class="text-muted dark:text-slate-400 hover:text-primary transition ease-in duration-200 block mb-6 lg:mb-0"
+                href={linkUrl}
+              >
+                {linkText} »
+              </a>
+            )}
+          </div>
+        )}
+
+        {information && (
+          <p
+            class="text-muted dark:text-slate-400 lg:text-sm lg:max-w-md"
+            set:html={information}
+          />
+        )}
+      </div>
+
+      <div class="grid gap-6 row-gap-5 md:grid-cols-2 lg:grid-cols-4 -mb-6">
+        {posts.map((post) => (
+          <article class="mb-6 transition">
+            {post.image && (
+              <div class="relative h-52 md:h-64 bg-gray-400 dark:bg-slate-700 rounded shadow-lg mb-6">
+                {post.href ? (
+                  <a href={post.href} class="block h-full">
+                    <img
+                      src={post.image.src}
+                      alt={post.image.alt || post.title}
+                      class="w-full h-full rounded shadow-lg bg-gray-400 dark:bg-slate-700 object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </a>
+                ) : (
+                  <img
+                    src={post.image.src}
+                    alt={post.image.alt || post.title}
+                    class="w-full h-full rounded shadow-lg bg-gray-400 dark:bg-slate-700 object-cover"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+              </div>
+            )}
+
+            <h3 class="text-xl sm:text-2xl font-bold leading-tight mb-2 font-heading dark:text-slate-300">
+              {post.href ? (
+                <a
+                  class="inline-block hover:text-primary dark:hover:text-blue-700 transition ease-in duration-200"
+                  href={post.href}
+                >
+                  {post.title}
+                </a>
+              ) : (
+                post.title
+              )}
+            </h3>
+
+            {post.description && (
+              <p class="text-muted dark:text-slate-400 text-lg">{post.description}</p>
+            )}
+          </article>
+        ))}
+      </div>
+    </Container>
+  </Section>
+)}

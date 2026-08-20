@@ -1,0 +1,39 @@
+---
+interface Props {
+  href: string;
+  variant?: 'underline' | 'arrow' | 'ghost';
+  external?: boolean;
+  class?: string;
+  [key: string]: any;
+}
+
+const {
+  href,
+  variant = 'underline',
+  external = false,
+  class: className = '',
+  ...rest
+} = Astro.props;
+
+const externalProps = external
+  ? { target: '_blank', rel: 'noopener noreferrer' }
+  : {};
+---
+
+<a
+  {href}
+  class:list={[
+    'inline-flex items-center gap-1 font-medium transition-colors no-underline',
+    variant === 'underline' && 'text-primary underline underline-offset-4 hover:opacity-75',
+    variant === 'arrow' && 'text-primary hover:opacity-75 group',
+    variant === 'ghost' && 'text-muted hover:text-heading',
+    className,
+  ]}
+  {...externalProps}
+  {...rest}
+>
+  <slot />
+  {variant === 'arrow' && (
+    <span class="transition-transform group-hover:translate-x-0.5" aria-hidden="true">→</span>
+  )}
+</a>

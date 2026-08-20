@@ -1,0 +1,66 @@
+---
+/**
+ * Simple prev/next pagination (v1 style).
+ * Shows "Newer posts" and "Older posts" navigation buttons.
+ */
+
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  baseUrl: string;
+  prevText?: string;
+  nextText?: string;
+  class?: string;
+}
+
+const {
+  currentPage,
+  totalPages,
+  baseUrl,
+  prevText = 'Newer posts',
+  nextText = 'Older posts',
+  class: className = '',
+} = Astro.props;
+
+const base = baseUrl.replace(/\/$/, '');
+const hasPrev = currentPage > 1;
+const hasNext = currentPage < totalPages;
+const prevUrl = hasPrev ? (currentPage - 1 === 1 ? base || '/' : `${base}/${currentPage - 1}`) : '';
+const nextUrl = hasNext ? `${base}/${currentPage + 1}` : '';
+---
+
+{(hasPrev || hasNext) && (
+  <div class:list={['container flex', className]}>
+    <div class="flex flex-row mx-auto container justify-between">
+      <a
+        href={prevUrl || undefined}
+        class:list={[
+          'inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+          hasPrev
+            ? 'text-heading hover:text-primary hover:bg-gray-100 dark:hover:bg-slate-800'
+            : 'invisible',
+        ]}
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+        <span>{prevText}</span>
+      </a>
+
+      <a
+        href={nextUrl || undefined}
+        class:list={[
+          'inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md transition-colors',
+          hasNext
+            ? 'text-heading hover:text-primary hover:bg-gray-100 dark:hover:bg-slate-800'
+            : 'invisible',
+        ]}
+      >
+        <span>{nextText}</span>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+  </div>
+)}

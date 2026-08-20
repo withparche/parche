@@ -1,0 +1,33 @@
+---
+import type { Props } from './FAQs.props';
+import LegacyHeadline from '../components/LegacyHeadline.astro';
+import Icon from 'parche:primitives/Icon';
+
+const { tagline, title, subtitle, items = [], columns = '2' } = Astro.props;
+---
+
+<LegacyHeadline tagline={tagline} title={title} subtitle={subtitle} />
+
+<dl
+  class:list={[
+    'grid gap-y-8 md:gap-y-10',
+    columns === '1' ? 'max-w-4xl mx-auto grid-cols-1' : 'grid-cols-1 md:grid-cols-2 md:gap-x-12',
+  ]}
+>
+  {items.map(({ title: question, description: answer, icon }) => (
+    <div class="flex gap-3">
+      <Icon
+        name={icon ?? 'tabler:chevron-right'}
+        class="flex-shrink-0 mt-1 w-6 h-6 text-primary"
+      />
+      <div>
+        {question && (
+          <dt class="type-body font-semibold text-heading mb-1" set:html={question} />
+        )}
+        {answer && (
+          <dd class="type-body text-muted" set:html={answer} />
+        )}
+      </div>
+    </div>
+  ))}
+</dl>

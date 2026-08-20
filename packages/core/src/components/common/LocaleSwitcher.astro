@@ -1,0 +1,168 @@
+---
+import { locales, defaultLocale } from 'parche:config/i18n';
+import { buildSlugMap, getAlternateUrls, resolvePageFromSlug } from 'parche:utils/i18n';
+
+// Only render when there are multiple locales configured
+const hasMultipleLocales = Array.isArray(locales) && locales.length > 1;
+
+let alternates: Array<{ locale: string; href: string; path: string }> = [];
+let hasAlternates = false;
+
+if (hasMultipleLocales) {
+  // Reverse-lookup the current page from the URL to find pageKey
+  const pathname = Astro.url.pathname.replace(/\/$/, '') || '';
+  const urlSlug = pathname.startsWith('/') ? pathname.slice(1) : pathname;
+
+  const resolved = await resolvePageFromSlug(urlSlug || undefined, defaultLocale);
+
+  if (resolved) {
+    const slugMap = await buildSlugMap();
+    alternates = getAlternateUrls(resolved.pageKey, slugMap, defaultLocale, Astro.site);
+    hasAlternates = alternates.length > 1;
+  }
+}
+
+const currentLocale = Astro.currentLocale || defaultLocale;
+
+/**
+ * Get the native display name for a locale using Intl.DisplayNames.
+ * e.g. 'es' → 'español', 'en' → 'English'
+ */
+function getLocaleName(locale: string): string {
+  try {
+    const display = new Intl.DisplayNames([locale], { type: 'language' });
+    const name = display.of(locale) || locale;
+    return name.charAt(0).toUpperCase() + name.slice(1);
+  } catch {
+    return locale.toUpperCase();
+  }
+}
+
+const currentName = getLocaleName(currentLocale);
+
+// Build full list of other locales, marking which ones have alternates
+const allOtherLocales = hasMultipleLocales
+  ? (locales as Array<string | { path: string; codes: string[] }>)
+      .map((l) => typeof l === 'string' ? l : l.codes[0])
+      .filter((l) => l !== currentLocale)
+      .map((locale) => {
+        const alt = alternates.find((a) => a.locale === locale);
+        return { locale, href: alt?.path, disabled: !alt };
+      })
+  : [];
+---
+
+{hasMultipleLocales && (
+  <div class="relative" data-locale-switcher>
+    <button
+      type="button"
+      class="inline-flex items-center gap-1.5 text-sm font-medium text-muted hover:text-heading transition-colors px-2 h-8 rounded-md hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer"
+      aria-expanded="false"
+      aria-haspopup="true"
+      aria-label={`Language: ${currentName}`}
+      data-locale-trigger
+    >
+      <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M2 12h20"></path>
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+      </svg>
+      {/* <span class="uppercase text-xs font-semibold">{currentLocale}</span> */}
+    </button>
+
+    <div
+      class="absolute right-0 top-full pt-1 opacity-0 invisible translate-y-1 transition-all duration-200 z-50"
+      role="menu"
+      data-locale-panel
+    >
+      <div class="bg-surface border border-border rounded-lg shadow-lg py-1 min-w-[150px]">
+        {/* Current locale (shown as active) */}
+        <div class="flex items-center justify-between px-3 py-2 text-sm font-medium text-heading bg-black/5 dark:bg-white/5">
+          <span>{currentName}</span>
+          <svg class="w-3.5 h-3.5 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+
+        {/* Other locales */}
+        {allOtherLocales.map((item) =>
+          item.disabled ? (
+            <span
+              class="flex items-center px-3 py-2 text-sm text-muted/40 cursor-default"
+              role="menuitem"
+              aria-disabled="true"
+            >
+              {getLocaleName(item.locale)}
+            </span>
+          ) : (
+            <a
+              href={item.href}
+              class="flex items-center px-3 py-2 text-sm text-muted hover:text-heading hover:bg-black/5 dark:hover:bg-white/5 transition-colors no-underline"
+              role="menuitem"
+              hreflang={item.locale}
+            >
+              {getLocaleName(item.locale)}
+            </a>
+          )
+        )}
+      </div>
+    </div>
+  </div>
+)}
+
+<script>
+  function initLocaleSwitchers() {
+    document.querySelectorAll('[data-locale-switcher]').forEach((switcher) => {
+      if ((switcher as any)._localeSwitcherInit) return;
+      (switcher as any)._localeSwitcherInit = true;
+
+      const trigger = switcher.querySelector('[data-locale-trigger]') as HTMLButtonElement;
+      const panel = switcher.querySelector('[data-locale-panel]') as HTMLElement;
+      if (!trigger || !panel) return;
+
+      let isOpen = false;
+
+      const open = () => {
+        isOpen = true;
+        trigger.setAttribute('aria-expanded', 'true');
+        panel.classList.remove('opacity-0', 'invisible', 'translate-y-1');
+        panel.classList.add('opacity-100', 'visible', 'translate-y-0');
+      };
+
+      const close = () => {
+        isOpen = false;
+        trigger.setAttribute('aria-expanded', 'false');
+        panel.classList.add('opacity-0', 'invisible', 'translate-y-1');
+        panel.classList.remove('opacity-100', 'visible', 'translate-y-0');
+      };
+
+      // Toggle on click
+      trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        isOpen ? close() : open();
+      });
+
+      // Prevent clicks inside the panel from closing it
+      panel.addEventListener('click', (e) => e.stopPropagation());
+
+      // Close on Escape
+      switcher.addEventListener('keydown', (e: Event) => {
+        const ke = e as KeyboardEvent;
+        if (ke.key === 'Escape' && isOpen) {
+          close();
+          trigger.focus();
+        }
+      });
+
+      // Close when clicking outside
+      document.addEventListener('click', (e) => {
+        if (isOpen && !switcher.contains(e.target as Node)) close();
+      });
+    });
+  }
+
+  // Run on initial load and after each client-side navigation
+  initLocaleSwitchers();
+  document.addEventListener('astro:page-load', initLocaleSwitchers);
+</script>

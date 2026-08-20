@@ -1,0 +1,70 @@
+---
+import type { Props } from './Steps.props';
+import LegacyHeadline from '../components/LegacyHeadline.astro';
+import Icon from 'parche:primitives/Icon';
+
+const { title, subtitle, tagline, items = [], image, isReversed = false } = Astro.props as Props;
+---
+
+<div class="max-w-5xl mx-auto">
+<div class:list={['flex flex-col gap-8 md:gap-12', { 'md:flex-row-reverse': isReversed }, { 'md:flex-row': image }]}>
+  <!-- Timeline column -->
+  <div class:list={['md:py-4 md:self-center', { 'md:basis-1/2': image }, { 'w-full': !image }]}>
+    {(title || subtitle || tagline) && (
+      <LegacyHeadline
+        title={title}
+        subtitle={subtitle}
+        tagline={tagline}
+        classes={{ container: 'text-left rtl:text-right mb-8' }}
+      />
+    )}
+
+    {items.length > 0 && (
+      <div>
+        {items.map(({ title: itemTitle, description, icon }, index) => (
+          <div class="flex">
+            <!-- Icon + connecting line -->
+            <div class="flex flex-col items-center mr-4 rtl:mr-0 rtl:ml-4">
+              <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 bg-primary border-primary text-on-primary shrink-0">
+                {icon
+                  ? <Icon name={icon} class="w-5 h-5" />
+                  : <span class="type-label font-bold">{index + 1}</span>
+                }
+              </div>
+              {index !== items.length - 1 && (
+                <div class="w-px flex-1 my-1 bg-border" />
+              )}
+            </div>
+
+            <!-- Content -->
+            <div class:list={['pt-1', { 'pb-8': index !== items.length - 1 }]}>
+              {itemTitle && (
+                <p class="text-xl font-bold text-heading" set:html={itemTitle} />
+              )}
+              {description && (
+                <p class="type-body text-muted mt-1" set:html={description} />
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+
+  <!-- Optional image column -->
+  {image && (
+    <div class="relative md:basis-1/2">
+      {typeof image === 'string'
+        ? <Fragment set:html={image} />
+        : (
+          <img
+            src={image.src}
+            alt={image.alt ?? ''}
+            class="w-full rounded-md shadow-lg object-cover object-top md:absolute md:inset-0 md:h-full bg-surface"
+          />
+        )
+      }
+    </div>
+  )}
+</div>
+</div>

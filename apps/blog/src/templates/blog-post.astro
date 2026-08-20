@@ -1,0 +1,89 @@
+---
+/**
+ * Blog post template — v1 SinglePost style.
+ * Structure: header (meta → title → excerpt → image) → prose content → tags + share → ToBlogLink
+ */
+import DynamicRenderer from 'parche:DynamicRenderer';
+import BlogPostHeader from 'parche:widgets/blog/BlogPostHeader';
+import ShareButtons from 'parche:widgets/blog/ShareButtons';
+import ToBlogLink from 'parche:widgets/blog/ToBlogLink';
+import blogConfig from 'parche:app/blog';
+import { resolveTaxonomyPermalink } from '../types.js';
+
+interface Props {
+  data: {
+    title: string;
+    description?: string;
+    publishDate: Date;
+    modifiedDate?: Date;
+    category?: string;
+    tags?: string[];
+    readingTime?: number;
+    image?: { src: string; alt: string; caption?: string };
+    authors?: string[];
+    authorName?: string;
+    sections?: { widget: string; props?: Record<string, unknown> }[];
+    [key: string]: unknown;
+  };
+  authorData?: { name: string; avatar?: { src: string; alt: string }; bio?: string; role?: string; social?: Record<string, string> }[];
+  permalinks?: Record<string, string>;
+}
+
+const { data, authorData = [], permalinks: routePermalinks } = Astro.props;
+const permalinks = routePermalinks ?? (blogConfig as any).permalinks;
+const hasSlot = Astro.slots.has('default');
+const pageUrl = Astro.url.href;
+---
+
+{data.sections && data.sections.length > 0 && (
+  <DynamicRenderer sections={data.sections} />
+)}
+
+<section class="py-8 sm:py-16 lg:py-20 mx-auto">
+  <article>
+    <BlogPostHeader
+      title={data.title}
+      description={data.description}
+      publishDate={data.publishDate}
+      category={data.category}
+      readingTime={data.readingTime}
+      image={data.image}
+      authors={authorData.map((a) => ({
+        name: a.name,
+        avatar: a.avatar,
+        href: resolveTaxonomyPermalink(permalinks.author, a.name.toLowerCase().replace(/\s+/g, '-')),
+      }))}
+      categoryHref={data.category ? resolveTaxonomyPermalink(permalinks.category, data.category) : undefined}
+    />
+
+    <div
+      class="mx-auto px-6 sm:px-6 max-w-3xl prose prose-md lg:prose-xl dark:prose-invert dark:prose-headings:text-slate-300 prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-headings:font-bold prose-a:text-primary dark:prose-a:text-blue-400 prose-img:rounded-md prose-img:shadow-lg mt-8 prose-headings:scroll-mt-[80px] prose-li:my-0"
+    >
+      {hasSlot ? <slot /> : null}
+    </div>
+
+    <div class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between flex-col sm:flex-row sm:items-center">
+      {data.tags && data.tags.length > 0 && (
+        <ul class="text-sm mr-5 rtl:mr-0 rtl:ml-5 mb-0">
+          {data.tags.map((tag) => (
+            <li class="bg-gray-100 dark:bg-slate-700 inline-block mr-2 rtl:mr-0 rtl:ml-2 max-sm:mb-2 py-0.5 px-2 lowercase font-medium">
+              <a
+                href={resolveTaxonomyPermalink(permalinks.tag, tag)}
+                class="text-muted dark:text-slate-300 hover:text-primary dark:hover:text-gray-200"
+              >
+                {tag}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+      <ShareButtons
+        url={pageUrl}
+        title={data.title}
+        class="max-sm:mt-5 text-gray-500 dark:text-slate-600"
+      />
+    </div>
+  </article>
+</section>
+
+<ToBlogLink href={permalinks.listing} />

@@ -1,0 +1,65 @@
+---
+/** Series navigation: shows all posts in a series with current highlighted. */
+
+interface SeriesPost {
+  title: string;
+  href: string;
+  order: number;
+}
+
+interface Props {
+  seriesName: string;
+  posts: SeriesPost[];
+  currentOrder: number;
+  class?: string;
+}
+
+const {
+  seriesName,
+  posts,
+  currentOrder,
+  class: className = '',
+} = Astro.props;
+
+const sorted = [...posts].sort((a, b) => a.order - b.order);
+const currentIndex = sorted.findIndex((p) => p.order === currentOrder);
+const prevPost = currentIndex > 0 ? sorted[currentIndex - 1] : null;
+const nextPost = currentIndex < sorted.length - 1 ? sorted[currentIndex + 1] : null;
+---
+
+<div class:list={['border border-border rounded-xl p-6', className]}>
+  <h3 class="font-semibold text-heading mb-1">Series: {seriesName}</h3>
+  <p class="text-sm text-muted mb-4">Part {currentOrder} of {sorted.length}</p>
+
+  <ol class="space-y-1.5 mb-6">
+    {sorted.map((post) => (
+      <li class:list={[
+        'text-sm rounded-lg px-3 py-1.5',
+        post.order === currentOrder
+          ? 'bg-primary/10 text-primary font-medium'
+          : 'text-muted',
+      ]}>
+        {post.order === currentOrder ? (
+          <span>{post.order}. {post.title}</span>
+        ) : (
+          <a href={post.href} class="hover:text-primary transition-colors">
+            {post.order}. {post.title}
+          </a>
+        )}
+      </li>
+    ))}
+  </ol>
+
+  <div class="flex justify-between gap-4">
+    {prevPost ? (
+      <a href={prevPost.href} class="text-sm text-muted hover:text-primary transition-colors">
+        &larr; Previous
+      </a>
+    ) : <span />}
+    {nextPost ? (
+      <a href={nextPost.href} class="text-sm text-muted hover:text-primary transition-colors">
+        Next &rarr;
+      </a>
+    ) : <span />}
+  </div>
+</div>

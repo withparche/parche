@@ -1,0 +1,44 @@
+---
+import 'parche:config/styles';
+import BaseLayout from 'parche:layouts/BaseLayout';
+import ThemePanel from 'parche:components/ThemePanel';
+import LayoutRenderer from 'parche:LayoutRenderer';
+import Container from 'parche:primitives/Container';
+import Section from 'parche:primitives/Section';
+import Button from 'parche:primitives/Button';
+import config from 'parche:config';
+import { showPanel } from 'parche:config/themes';
+import { defaultLocale } from 'parche:config/i18n';
+import { resolveMetadata } from 'parche:utils/metadata';
+import { resolveLayout } from 'parche:utils/layout';
+
+const locale = Astro.currentLocale || defaultLocale;
+const layoutSections = await resolveLayout('default', locale, defaultLocale);
+
+const metadata = resolveMetadata(
+  {
+    title: `Page Not Found — ${config.site.name}`,
+    description: "The page you're looking for doesn't exist.",
+    metadata: { noindex: true },
+  },
+  config,
+  { locale },
+);
+---
+
+<BaseLayout metadata={metadata} config={config} lang={locale}>
+  <LayoutRenderer layoutSections={layoutSections} pageTemplate="dynamic">
+    <Section>
+      <Container class="text-center">
+        <p class="text-8xl font-bold text-primary mb-4">404</p>
+        <h1 class="type-h1 mb-4">Page not found</h1>
+        <p class="type-body text-muted max-w-md mx-auto mb-8">
+          Sorry, the page you're looking for doesn't exist or has been moved.
+        </p>
+        <Button href="/">Back to Home</Button>
+      </Container>
+    </Section>
+  </LayoutRenderer>
+
+  {showPanel && <ThemePanel />}
+</BaseLayout>

@@ -1,0 +1,68 @@
+---
+import type { Props } from './Testimonials.props';
+import LegacyHeadline from '../components/LegacyHeadline.astro';
+
+const {
+  title,
+  subtitle,
+  tagline,
+  testimonials = [],
+  callToAction,
+} = Astro.props;
+---
+
+<LegacyHeadline {title} {subtitle} {tagline} />
+
+{testimonials.length > 0 && (
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {testimonials.map(({ title: cardTitle, testimonial, name, job, image }) => (
+      <div class="flex h-auto">
+        <div class="flex flex-col p-4 md:p-6 rounded-md bg-surface border border-border shadow-sm w-full">
+          {cardTitle && (
+            <h3 class="type-label text-heading font-medium pb-4">{cardTitle}</h3>
+          )}
+
+          {testimonial && (
+            <blockquote class="flex-auto">
+              <p class="type-body text-muted">"{testimonial}"</p>
+            </blockquote>
+          )}
+
+          <hr class="border-border my-4" />
+
+          <div class="flex items-center">
+            {image && (
+              <div class="h-10 w-10 rounded-full border border-border overflow-hidden shrink-0">
+                <img
+                  class="h-10 w-10 rounded-full object-cover"
+                  src={image.src}
+                  alt={image.alt ?? name ?? ''}
+                  width={40}
+                  height={40}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+            )}
+
+            <div class={`grow ${image ? 'ml-3' : ''}`}>
+              {name && <p class="type-body font-semibold text-heading">{name}</p>}
+              {job && <p class="type-label text-muted">{job}</p>}
+            </div>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+)}
+
+{callToAction?.text && callToAction?.href && (
+  <div class="flex justify-center mt-8 md:mt-12">
+    <a
+      href={callToAction.href}
+      class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-primary text-on-primary type-label font-medium hover:opacity-90 transition-opacity"
+    >
+      {callToAction.text}
+    </a>
+  </div>
+)}

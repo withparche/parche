@@ -1,0 +1,58 @@
+---
+import type { Props } from './Hero2.props';
+
+const {
+  title,
+  subtitle,
+  tagline,
+  content,
+  actions = [],
+  image,
+} = Astro.props;
+---
+
+<div class="py-12 md:py-20">
+  <div class="md:flex md:items-center md:gap-16">
+    <div class="md:basis-1/2 text-center md:text-left">
+      {tagline && (
+        <p class="type-label uppercase text-primary mb-2" set:html={tagline} />
+      )}
+      {title && (
+        <h1 class="type-h1 md:text-6xl mb-4" set:html={title} />
+      )}
+      {subtitle && (
+        <p class="type-body text-xl text-muted mb-6" set:html={subtitle} />
+      )}
+      {content && <div class="text-muted mb-6" set:html={content} />}
+      {actions.length > 0 && (
+        <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+          {actions.map((action) => (
+            <a
+              href={action.href}
+              target={action.target}
+              class:list={[
+                'inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold transition-colors',
+                action.variant === 'primary' && 'bg-primary text-on-primary hover:opacity-90',
+                action.variant === 'secondary' && 'bg-surface border border-border text-heading hover:bg-muted/10',
+                action.variant === 'link' && 'text-primary hover:underline',
+                (!action.variant || action.variant === 'tertiary') && 'bg-surface border border-border text-heading hover:bg-muted/10',
+              ]}
+            >
+              {action.text}
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+    {image && (
+      <div class="md:basis-1/2 mt-10 md:mt-0">
+        <img
+          src={typeof image === 'string' ? image : image.src}
+          alt={typeof image === 'string' ? '' : (image.alt || '')}
+          class="mx-auto rounded-md w-full max-w-[600px]"
+          loading="eager"
+        />
+      </div>
+    )}
+  </div>
+</div>

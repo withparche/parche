@@ -1,0 +1,96 @@
+---
+import { widgetMap } from 'parche:registry/widgets';
+import SectionWrapper from './SectionWrapper.astro';
+
+interface WrapperConfig {
+  id?: string;
+  isDark?: boolean;
+  bg?: string;
+  classes?: Record<string, unknown>;
+  as?: string;
+}
+
+interface Section {
+  widget: string;
+  props?: Record<string, any>;
+  wrapper?: false | WrapperConfig;
+}
+
+interface Props {
+  sections: Section[];
+  /** Optional Astro component that wraps each widget.
+   *  Receives `section` and `index` as props, renders the widget via <slot />. */
+  Wrapper?: any;
+}
+
+const { sections, Wrapper } = Astro.props;
+
+// ---- Image resolution: ~/assets/images/foo.png → optimized import ----
+const imageModules = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/images/**/*.{png,jpg,jpeg,gif,svg,webp,avif}',
+  { eager: true }
+);
+
+function resolveImage(src: string): string {
+  if (!src || !src.startsWith('@/assets/')) return src;
+  const fsPath = src.replace('@/', '/src/');
+  const meta = imageModules[fsPath]?.default;
+  return meta?.src ?? src;
+}
+
+/** Walk props and resolve any ~/assets/ image paths */
+function resolveProps(props: Record<string, any>): Record<string, any> {
+  const resolved = { ...props };
+  for (const [key, value] of Object.entries(resolved)) {
+    if (typeof value === 'string' && value.startsWith('@/assets/')) {
+      resolved[key] = resolveImage(value);
+    } else if (value && typeof value === 'object' && !Array.isArray(value) && 'src' in value && typeof value.src === 'string' && value.src.startsWith('@/assets/')) {
+      resolved[key] = { ...value, src: resolveImage(value.src) };
+    }
+  }
+  return resolved;
+}
+
+// Widgets that render full-bleed and manage their own padding — no wrapper by default
+const noWrapperWidgets = new Set(['Hero', 'Hero2', 'HeroText', 'Announcement', 'Note']);
+function widgetSkipsWrapper(name: string): boolean {
+  const key = name.includes('/') ? name.split('/').pop()! : name;
+  return noWrapperWidgets.has(key);
+}
+---
+
+{sections.map((section, index) => {
+  const Widget = widgetMap[section.widget];
+  if (!Widget) return null;
+
+  const props = resolveProps(section.props ?? {});
+
+  // Explicit wrapper config always wins. When omitted: Hero/Announcement skip, others get default wrapper.
+  const hasExplicitWrapper = section.wrapper !== undefined;
+  const useWrapper = hasExplicitWrapper
+    ? typeof section.wrapper === 'object' && section.wrapper !== null
+    : !widgetSkipsWrapper(section.widget);
+  const wrapperProps = typeof section.wrapper === 'object' && section.wrapper !== null ? section.wrapper : {};
+
+  if (Wrapper) {
+    return (
+      <Wrapper section={section} index={index}>
+        {useWrapper ? (
+          <SectionWrapper {...wrapperProps}>
+            <Widget {...props} />
+          </SectionWrapper>
+        ) : (
+          <Widget {...props} />
+        )}
+      </Wrapper>
+    );
+  }
+
+  return useWrapper ? (
+    <SectionWrapper {...wrapperProps}>
+      <Widget {...props} />
+    </SectionWrapper>
+  ) : (
+    <Widget {...props} />
+  );
+})}

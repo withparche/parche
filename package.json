@@ -1,0 +1,10 @@
+{
+  "name": "parche",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter example-blog dev",
+    "build": "pnpm --filter example-blog build",
+    "preview": "pnpm --filter example-blog preview"
+  }
+}

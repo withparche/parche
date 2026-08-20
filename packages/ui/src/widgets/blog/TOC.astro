@@ -1,0 +1,96 @@
+---
+/** Table of Contents sidebar widget with scroll tracking. */
+
+interface TOCItem {
+  depth: number;
+  text: string;
+  slug: string;
+  children: TOCItem[];
+}
+
+interface Props {
+  items: TOCItem[];
+  title?: string;
+  class?: string;
+}
+
+const {
+  items,
+  title = 'Table of Contents',
+  class: className = '',
+} = Astro.props;
+---
+
+{items.length > 0 && (
+  <nav aria-label="Table of contents" class:list={['text-sm', className]}>
+    <h2 class="font-semibold text-heading mb-3">{title}</h2>
+    <ul class="space-y-1.5 toc-list" id="toc-list">
+      {items.map((item) => (
+        <li>
+          <a
+            href={`#${item.slug}`}
+            class="block py-0.5 text-muted hover:text-primary transition-colors toc-link"
+            data-slug={item.slug}
+          >
+            {item.text}
+          </a>
+          {item.children.length > 0 && (
+            <ul class="ml-4 mt-1 space-y-1">
+              {item.children.map((child) => (
+                <li>
+                  <a
+                    href={`#${child.slug}`}
+                    class="block py-0.5 text-muted hover:text-primary transition-colors toc-link"
+                    data-slug={child.slug}
+                  >
+                    {child.text}
+                  </a>
+                  {child.children.length > 0 && (
+                    <ul class="ml-4 mt-1 space-y-1">
+                      {child.children.map((sub) => (
+                        <li>
+                          <a
+                            href={`#${sub.slug}`}
+                            class="block py-0.5 text-muted hover:text-primary transition-colors toc-link"
+                            data-slug={sub.slug}
+                          >
+                            {sub.text}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<script>
+  const tocLinks = document.querySelectorAll<HTMLAnchorElement>('.toc-link');
+  if (tocLinks.length > 0) {
+    const slugs = Array.from(tocLinks).map((a) => a.dataset.slug!);
+    const headings = slugs
+      .map((slug) => document.getElementById(slug))
+      .filter(Boolean) as HTMLElement[];
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            tocLinks.forEach((a) => a.classList.remove('text-primary', 'font-medium'));
+            const active = document.querySelector(`.toc-link[data-slug="${entry.target.id}"]`);
+            active?.classList.add('text-primary', 'font-medium');
+          }
+        }
+      },
+      { rootMargin: '-80px 0px -70% 0px' },
+    );
+
+    headings.forEach((h) => observer.observe(h));
+  }
+</script>

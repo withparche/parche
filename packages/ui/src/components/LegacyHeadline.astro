@@ -1,0 +1,46 @@
+---
+/**
+ * Headline block for legacy widgets.
+ * Renders tagline, title (h2), and subtitle with semantic token classes.
+ * Supports deep class overrides via `classes` Record.
+ */
+import { twMerge } from 'tailwind-merge';
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  tagline?: string;
+  classes?: Record<string, string>;
+}
+
+const { title, subtitle, tagline, classes = {} } = Astro.props;
+
+const {
+  container: containerClass = 'max-w-3xl',
+  title: titleClass = '',
+  subtitle: subtitleClass = '',
+} = classes;
+---
+
+{(title || subtitle || tagline) && (
+  <div class={twMerge('mb-8 md:mx-auto md:mb-12 text-center', containerClass)}>
+    {tagline && (
+      <p
+        class="text-base font-bold tracking-wide uppercase text-primary"
+        set:html={tagline}
+      />
+    )}
+    {title && (
+      <h2
+        class={twMerge('type-h2 text-heading', titleClass)}
+        set:html={title}
+      />
+    )}
+    {subtitle && (
+      <p
+        class={twMerge('mt-4 text-muted text-xl', subtitleClass)}
+        set:html={subtitle}
+      />
+    )}
+  </div>
+)}

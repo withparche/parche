@@ -1,0 +1,106 @@
+---
+/**
+ * Series overview page.
+ * Works in both static and SSR modes.
+ */
+import 'parche:config/styles';
+import BaseLayout from 'parche:layouts/BaseLayout';
+import LayoutRenderer from 'parche:LayoutRenderer';
+import { showPanel } from 'parche:config/themes';
+import ThemePanel from 'parche:components/ThemePanel';
+import Breadcrumbs from 'parche:widgets/blog/Breadcrumbs';
+import config from 'parche:config';
+import blogConfig from 'parche:app/blog';
+import { queryPostsBySeries, queryAllSeries } from '../../utils/blog-query.js';
+import { resolvePostPermalink } from '../../types.js';
+import { resolveLayout } from 'parche:utils/layout';
+import { defaultLocale } from 'parche:config/i18n';
+import Container from 'parche:primitives/Container';
+import Section from 'parche:primitives/Section';
+
+const cfg = blogConfig as any;
+const permalinks = cfg.permalinks;
+
+export async function getStaticPaths() {
+  const { queryAllSeries: qas } = await import('../../utils/blog-query.js');
+  const { locales, defaultLocale: dl } = await import('parche:config/i18n');
+  const allLocales: string[] = (locales as any) ?? [dl];
+  const isDev = import.meta.env.DEV;
+  const showDrafts = isDev && (blogConfig as any).showDraftsInDev;
+
+  // Collect all series names across all locales
+  const allNames = new Set<string>();
+  for (const locale of allLocales) {
+    const names = await qas(locale, showDrafts);
+    for (const name of names) allNames.add(name);
+  }
+
+  return [...allNames].map((name) => ({
+    params: { series: name.toLowerCase().replace(/\s+/g, '-') },
+    props: { seriesName: name },
+  }));
+}
+
+// --- Render-time ---
+const locale = Astro.currentLocale ?? defaultLocale;
+const seriesName = Astro.props.seriesName ?? Astro.params.series;
+const isDev = import.meta.env.DEV;
+const showDrafts = isDev && cfg.showDraftsInDev;
+
+const posts = await queryPostsBySeries({ seriesName, locale, showDrafts });
+const layoutSections = await resolveLayout('default', locale, defaultLocale);
+
+const metadata = {
+  title: `Series: ${seriesName} — ${config.site.name}`,
+  description: `All posts in the "${seriesName}" series`,
+  noindex: false,
+  nofollow: false,
+  ogType: 'website' as const,
+  twitterCard: 'summary_large_image' as const,
+};
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Blog', href: permalinks.listing },
+  { label: `Series: ${seriesName}` },
+];
+---
+
+<BaseLayout metadata={metadata} config={config} lang={locale}>
+  <LayoutRenderer layoutSections={layoutSections}>
+    <Section class="!py-4">
+      <Container class="max-w-4xl">
+        <Breadcrumbs items={breadcrumbs} />
+      </Container>
+    </Section>
+
+    <Section>
+      <Container class="max-w-4xl">
+        <h1 class="type-h1 mb-4">{seriesName}</h1>
+        <p class="type-body text-muted mb-8">{posts.length} posts in this series</p>
+
+        <ol class="space-y-4">
+          {posts.map((post: any, index: number) => (
+            <li class="flex gap-4 items-start p-4 rounded-xl border border-border hover:bg-surface transition-colors">
+              <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-sm">
+                {index + 1}
+              </span>
+              <div class="flex-1">
+                <a
+                  href={resolvePostPermalink(permalinks.post, post)}
+                  class="type-h4 text-heading hover:text-primary transition-colors"
+                >
+                  {post.data.title}
+                </a>
+                {post.data.description && (
+                  <p class="text-sm text-muted mt-1">{post.data.description}</p>
+                )}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </Container>
+    </Section>
+  </LayoutRenderer>
+  {showPanel && <ThemePanel />}
+</BaseLayout>

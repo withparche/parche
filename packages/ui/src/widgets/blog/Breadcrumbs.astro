@@ -1,0 +1,41 @@
+---
+/** Breadcrumb trail for blog pages. */
+
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+  class?: string;
+}
+
+const {
+  items,
+  class: className = '',
+} = Astro.props;
+---
+
+<nav aria-label="Breadcrumb" class:list={['text-sm text-muted', className]}>
+  <ol class="flex flex-wrap items-center gap-1.5">
+    {items.map((item, index) => (
+      <li class="flex items-center gap-1.5">
+        {index > 0 && (
+          <svg class="w-3.5 h-3.5 text-muted/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        )}
+        {item.href && index < items.length - 1 ? (
+          <a href={item.href} class="hover:text-primary transition-colors">
+            {item.label}
+          </a>
+        ) : (
+          <span class={index === items.length - 1 ? 'text-heading font-medium' : ''}>
+            {item.label}
+          </span>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>

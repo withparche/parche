@@ -1,0 +1,88 @@
+---
+import { twMerge } from 'tailwind-merge';
+import LegacyHeadline from '../components/LegacyHeadline.astro';
+import Icon from 'parche:primitives/Icon';
+import type { Props } from './Features3.props';
+
+const {
+  title,
+  subtitle,
+  tagline,
+  items = [],
+  columns = '2',
+  defaultIcon,
+  image,
+  isBeforeContent = false,
+  isAfterContent = false,
+} = Astro.props;
+
+const gridCols =
+  columns === '4'
+    ? 'lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2'
+    : columns === '3'
+      ? 'lg:grid-cols-3 sm:grid-cols-2'
+      : 'sm:grid-cols-2';
+
+const paddingClass = [
+  isBeforeContent ? 'pb-8 md:pb-10 lg:pb-12' : '',
+  isAfterContent ? 'pt-0' : '',
+].filter(Boolean).join(' ');
+---
+
+<div class={twMerge(paddingClass)}>
+  <LegacyHeadline {title} {subtitle} {tagline} />
+
+  {image && (
+    <div aria-hidden="true" class="aspect-w-16 aspect-h-7 mb-8">
+      {typeof image === 'string' ? (
+        <Fragment set:html={image} />
+      ) : (
+        <img
+          src={image.src}
+          alt={image.alt ?? ''}
+          class="w-full h-80 object-cover rounded-xl mx-auto bg-surface shadow-lg"
+          loading="lazy"
+          decoding="async"
+        />
+      )}
+    </div>
+  )}
+
+  {items.length > 0 && (
+    <div class={`grid mx-auto gap-6 md:gap-8 ${gridCols}`}>
+      {items.map((item) => {
+        const iconName = item.icon || defaultIcon;
+        return (
+          <div class="flex flex-row max-w-full sm:max-w-md">
+            {iconName && (
+              <div class="flex-shrink-0 mt-1 mr-4 rtl:ml-4 rtl:mr-0">
+                <Icon name={iconName} class="w-6 h-6 text-primary" />
+              </div>
+            )}
+            <div>
+              {item.title && (
+                <h3
+                  class="text-lg font-semibold text-heading"
+                  set:html={item.title}
+                />
+              )}
+              {item.description && (
+                <p
+                  class={twMerge('mt-0.5 text-muted type-body', item.title ? '' : '')}
+                  set:html={item.description}
+                />
+              )}
+              {item.callToAction?.text && (
+                <div class="mt-2">
+                  <a href={item.callToAction.href} class="text-primary font-semibold hover:underline">
+                    {item.callToAction.text}
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  )}
+</div>

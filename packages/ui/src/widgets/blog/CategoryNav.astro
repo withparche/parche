@@ -1,0 +1,56 @@
+---
+/** Category navigation widget. */
+import Container from 'parche:primitives/Container';
+import Section from 'parche:primitives/Section';
+
+interface CategoryItem {
+  name: string;
+  count: number;
+}
+
+interface Props {
+  title?: string;
+  categories: CategoryItem[];
+  basePath?: string;
+  activeCategory?: string;
+  id?: string;
+  class?: string;
+  background?: string;
+}
+
+const {
+  title = 'Categories',
+  categories,
+  basePath = 'blog',
+  activeCategory,
+  id,
+  class: className = '',
+  background,
+} = Astro.props;
+
+const sorted = [...categories].sort((a, b) => b.count - a.count);
+---
+
+<Section {id} class={className} {background}>
+  <Container>
+    {title && <h2 class="type-h3 mb-6">{title}</h2>}
+    <ul class="space-y-2">
+      {sorted.map((cat) => (
+        <li>
+          <a
+            href={`/${basePath}/category/${cat.name.toLowerCase()}`}
+            class:list={[
+              'flex items-center justify-between py-2 px-3 rounded-lg transition-colors',
+              activeCategory?.toLowerCase() === cat.name.toLowerCase()
+                ? 'bg-primary/10 text-primary font-medium'
+                : 'text-heading hover:bg-surface hover:text-primary',
+            ]}
+          >
+            <span>{cat.name}</span>
+            <span class="text-xs text-muted">{cat.count}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </Container>
+</Section>

@@ -1,0 +1,72 @@
+---
+/** Author bio card. */
+import Avatar from 'parche:primitives/Avatar';
+import Icon from 'parche:primitives/Icon';
+
+interface SocialLinks {
+  twitter?: string;
+  github?: string;
+  linkedin?: string;
+  mastodon?: string;
+  website?: string;
+}
+
+const socialIconMap: Record<string, string> = {
+  twitter: 'simple-icons:x',
+  github: 'simple-icons:github',
+  linkedin: 'simple-icons:linkedin',
+  mastodon: 'simple-icons:mastodon',
+  website: 'lucide:globe',
+};
+
+interface Props {
+  name: string;
+  bio?: string;
+  avatar?: { src: string; alt: string };
+  role?: string;
+  social?: SocialLinks;
+  class?: string;
+}
+
+const {
+  name,
+  bio,
+  avatar,
+  role,
+  social,
+  class: className = '',
+} = Astro.props;
+
+const socialLinks = Object.entries(social ?? {}).filter(([, url]) => url);
+---
+
+<div class:list={['flex items-start gap-4 p-6 rounded-xl border border-border bg-surface', className]}>
+  <Avatar
+    src={avatar?.src}
+    alt={avatar?.alt}
+    name={name}
+    size="lg"
+  />
+
+  <div class="flex-1 min-w-0">
+    <h3 class="font-semibold text-heading">{name}</h3>
+    {role && <p class="text-sm text-muted">{role}</p>}
+    {bio && <p class="mt-2 text-sm text-muted">{bio}</p>}
+
+    {socialLinks.length > 0 && (
+      <div class="flex gap-3 mt-3">
+        {socialLinks.map(([platform, url]) => (
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-muted hover:text-primary transition-colors"
+            aria-label={`${name} on ${platform}`}
+          >
+            <Icon name={socialIconMap[platform] ?? `lucide:${platform}`} class="w-4 h-4" />
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</div>

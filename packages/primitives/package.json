@@ -1,0 +1,18 @@
+{
+  "name": "@parche/primitives",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "astro-icon": "^1.1.5"
+  },
+  "peerDependencies": {
+    "astro": "^6.0.0"
+  },
+  "devDependencies": {
+    "astro": "^6.0.0"
+  }
+}

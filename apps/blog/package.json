@@ -1,0 +1,21 @@
+{
+  "name": "@parche/blog",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./content": "./src/content/index.ts"
+  },
+  "dependencies": {
+    "@parche/core": "workspace:*",
+    "@astrojs/rss": "^4.0.0",
+    "zod": "^4.3.6"
+  },
+  "peerDependencies": {
+    "astro": "^6.0.0"
+  },
+  "devDependencies": {
+    "astro": "^6.0.0"
+  }
+}

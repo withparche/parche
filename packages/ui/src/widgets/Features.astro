@@ -1,0 +1,70 @@
+---
+import { twMerge } from 'tailwind-merge';
+import LegacyHeadline from '../components/LegacyHeadline.astro';
+import Icon from 'parche:primitives/Icon';
+import type { Props } from './Features.props';
+
+const {
+  title,
+  subtitle,
+  tagline,
+  items = [],
+  columns = '2',
+  defaultIcon,
+} = Astro.props;
+
+const gridCols =
+  columns === '4'
+    ? 'lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2'
+    : columns === '3'
+      ? 'lg:grid-cols-3 sm:grid-cols-2'
+      : 'sm:grid-cols-2';
+---
+
+<LegacyHeadline {title} {subtitle} {tagline} />
+
+{items.length > 0 && (
+  <div class={`grid mx-auto gap-8 md:gap-y-12 ${gridCols}`}>
+    {items.map((item) => {
+      const iconName = item.icon || defaultIcon;
+      return (
+        <div class={twMerge('flex flex-row max-w-md', item.classes?.panel)}>
+          <div class="flex justify-center">
+            {iconName && (
+              <div class={twMerge(
+                'flex items-center justify-center rounded-full bg-primary text-on-primary w-10 h-10 p-2 md:w-12 md:h-12 md:p-3 mr-4 rtl:ml-4 rtl:mr-0',
+                item.classes?.icon,
+              )}>
+                <Icon name={iconName} class="size-full" />
+              </div>
+            )}
+          </div>
+          <div class="mt-0.5">
+            {item.title && (
+              <h3
+                class={twMerge('font-bold text-xl md:text-[1.3rem] text-heading', item.classes?.title)}
+                set:html={item.title}
+              />
+            )}
+            {item.description && (
+              <p
+                class={twMerge(
+                  `${item.title ? 'mt-3' : ''} text-muted type-body`,
+                  item.classes?.description,
+                )}
+                set:html={item.description}
+              />
+            )}
+            {item.callToAction?.text && (
+              <div class={`${item.title || item.description ? 'mt-3' : ''}`}>
+                <a href={item.callToAction.href} class="text-primary font-semibold hover:underline">
+                  {item.callToAction.text}
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    })}
+  </div>
+)}

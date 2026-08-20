@@ -1,0 +1,110 @@
+---
+/**
+ * Blog listing page with pagination.
+ * Works in both static (output: 'static') and SSR (output: 'server') modes.
+ *
+ * In static mode, getStaticPaths provides the set of valid page numbers.
+ * In SSR mode, getStaticPaths is ignored.
+ * In both cases, the actual locale-filtered query happens at render time.
+ */
+import 'parche:config/styles';
+import BaseLayout from 'parche:layouts/BaseLayout';
+import LayoutRenderer from 'parche:LayoutRenderer';
+import { showPanel } from 'parche:config/themes';
+import ThemePanel from 'parche:components/ThemePanel';
+import BlogList from 'parche:widgets/blog/BlogList';
+import config from 'parche:config';
+import blogConfig from 'parche:app/blog';
+import { queryBlogListing } from '../../utils/blog-query.js';
+import { calculateReadingTime } from '../../utils/reading-time.js';
+import { resolvePostPermalink, resolveTaxonomyPermalink } from '../../types.js';
+import { resolveLayout } from 'parche:utils/layout';
+import { defaultLocale } from 'parche:config/i18n';
+
+const cfg = blogConfig as any;
+const permalinks = cfg.permalinks;
+
+export async function getStaticPaths() {
+  // In static mode we need to enumerate all valid page numbers.
+  // We use the query utility which already handles locale filtering.
+  // Since the same entrypoint is shared by /blog/[...page] and /es/blog/[...page],
+  // and each locale may have a different number of pages, we compute the max.
+  const { queryBlogListing: qbl } = await import('../../utils/blog-query.js');
+  const { locales, defaultLocale: dl } = await import('parche:config/i18n');
+  const allLocales: string[] = (locales as any) ?? [dl];
+  const isDev = import.meta.env.DEV;
+  const showDrafts = isDev && (blogConfig as any).showDraftsInDev;
+  const pageSize = (blogConfig as any).postsPerPage ?? 12;
+
+  let maxPages = 1;
+  for (const locale of allLocales) {
+    const result = await qbl({ locale, page: 1, pageSize, showDrafts });
+    if (result.lastPage > maxPages) maxPages = result.lastPage;
+  }
+
+  // Page 1 is the index (undefined rest param), pages 2+ are explicit
+  const paths: { params: { page: string | undefined } }[] = [];
+  for (let i = 1; i <= maxPages; i++) {
+    paths.push({ params: { page: i === 1 ? undefined : String(i) } });
+  }
+  return paths;
+}
+
+// --- Render-time (both static & SSR) ---
+const locale = Astro.currentLocale ?? defaultLocale;
+const isDev = import.meta.env.DEV;
+const showDrafts = isDev && cfg.showDraftsInDev;
+const pageNum = parseInt(Astro.params.page ?? '') || 1;
+
+const page = await queryBlogListing({
+  locale,
+  page: pageNum,
+  pageSize: cfg.postsPerPage ?? 12,
+  showDrafts,
+  baseUrl: permalinks.listing,
+});
+
+const layoutSections = await resolveLayout('default', locale, defaultLocale);
+
+const posts = page.data.map((post: any) => {
+  const rt = cfg.readingTime
+    ? calculateReadingTime(post.body ?? '', cfg.wordsPerMinute)
+    : null;
+  return {
+    title: post.data.title,
+    description: post.data.description ?? post.data.excerpt,
+    href: resolvePostPermalink(permalinks.post, post),
+    image: post.data.image,
+    publishDate: post.data.publishDate,
+    category: post.data.category,
+    tags: post.data.tags,
+    readingTime: post.data.readingTime ?? rt?.minutes,
+    featured: post.data.featured,
+    draft: post.data.draft,
+    categoryHref: post.data.category ? resolveTaxonomyPermalink(permalinks.category, post.data.category) : undefined,
+    tagHrefs: post.data.tags?.map((t: string) => resolveTaxonomyPermalink(permalinks.tag, t)),
+  };
+});
+
+const metadata = {
+  title: `Blog — ${config.site.name}`,
+  description: config.site.description,
+  noindex: false,
+  nofollow: false,
+  ogType: 'website' as const,
+  twitterCard: 'summary_large_image' as const,
+};
+---
+
+<BaseLayout metadata={metadata} config={config} lang={locale}>
+  <LayoutRenderer layoutSections={layoutSections}>
+    <BlogList
+      title="Blog"
+      posts={posts}
+      currentPage={page.currentPage}
+      totalPages={page.lastPage}
+      baseUrl={permalinks.listing}
+    />
+  </LayoutRenderer>
+  {showPanel && <ThemePanel />}
+</BaseLayout>

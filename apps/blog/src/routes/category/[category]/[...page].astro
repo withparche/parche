@@ -1,0 +1,125 @@
+---
+/**
+ * Posts filtered by category, with pagination.
+ * Works in both static and SSR modes.
+ */
+import 'parche:config/styles';
+import BaseLayout from 'parche:layouts/BaseLayout';
+import LayoutRenderer from 'parche:LayoutRenderer';
+import { showPanel } from 'parche:config/themes';
+import ThemePanel from 'parche:components/ThemePanel';
+import BlogList from 'parche:widgets/blog/BlogList';
+import Breadcrumbs from 'parche:widgets/blog/Breadcrumbs';
+import config from 'parche:config';
+import blogConfig from 'parche:app/blog';
+import { queryPostsByCategory, queryAllCategories } from '../../../utils/blog-query.js';
+import { calculateReadingTime } from '../../../utils/reading-time.js';
+import { resolvePostPermalink, resolveTaxonomyPermalink } from '../../../types.js';
+import { resolveLayout } from 'parche:utils/layout';
+import { defaultLocale } from 'parche:config/i18n';
+import Container from 'parche:primitives/Container';
+import Section from 'parche:primitives/Section';
+
+const cfg = blogConfig as any;
+const permalinks = cfg.permalinks;
+
+export async function getStaticPaths() {
+  const { queryAllCategories: qac, queryPostsByCategory: qpc } = await import('../../../utils/blog-query.js');
+  const { locales, defaultLocale: dl } = await import('parche:config/i18n');
+  const allLocales: string[] = (locales as any) ?? [dl];
+  const isDev = import.meta.env.DEV;
+  const showDrafts = isDev && (blogConfig as any).showDraftsInDev;
+  const pageSize = (blogConfig as any).postsPerPage ?? 12;
+
+  const catMaxPages = new Map<string, number>();
+  for (const locale of allLocales) {
+    const cats = await qac(locale, showDrafts);
+    for (const [cat, count] of cats) {
+      const pages = Math.max(1, Math.ceil(count / pageSize));
+      const key = cat.toLowerCase();
+      catMaxPages.set(key, Math.max(catMaxPages.get(key) ?? 0, pages));
+    }
+  }
+
+  const paths: { params: { category: string; page: string | undefined } }[] = [];
+  for (const [category, maxPages] of catMaxPages) {
+    for (let i = 1; i <= maxPages; i++) {
+      paths.push({ params: { category, page: i === 1 ? undefined : String(i) } });
+    }
+  }
+  return paths;
+}
+
+// --- Render-time ---
+const locale = Astro.currentLocale ?? defaultLocale;
+const { category } = Astro.params;
+const isDev = import.meta.env.DEV;
+const showDrafts = isDev && cfg.showDraftsInDev;
+const pageNum = parseInt(Astro.params.page ?? '') || 1;
+const categoryBaseUrl = resolveTaxonomyPermalink(permalinks.category, category!);
+
+const page = await queryPostsByCategory({
+  category: category!,
+  locale,
+  page: pageNum,
+  pageSize: cfg.postsPerPage ?? 12,
+  showDrafts,
+  baseUrl: categoryBaseUrl,
+});
+
+const layoutSections = await resolveLayout('default', locale, defaultLocale);
+
+const posts = page.data.map((post: any) => {
+  const rt = cfg.readingTime
+    ? calculateReadingTime(post.body ?? '', cfg.wordsPerMinute)
+    : null;
+  return {
+    title: post.data.title,
+    description: post.data.description ?? post.data.excerpt,
+    href: resolvePostPermalink(permalinks.post, post),
+    image: post.data.image,
+    publishDate: post.data.publishDate,
+    category: post.data.category,
+    tags: post.data.tags,
+    readingTime: post.data.readingTime ?? rt?.minutes,
+    categoryHref: post.data.category ? resolveTaxonomyPermalink(permalinks.category, post.data.category) : undefined,
+    tagHrefs: post.data.tags?.map((t: string) => resolveTaxonomyPermalink(permalinks.tag, t)),
+  };
+});
+
+const displayCategory = category!.charAt(0).toUpperCase() + category!.slice(1);
+
+const metadata = {
+  title: `Category: ${displayCategory} — ${config.site.name}`,
+  description: `Posts in the "${displayCategory}" category`,
+  noindex: false,
+  nofollow: false,
+  ogType: 'website' as const,
+  twitterCard: 'summary_large_image' as const,
+};
+
+const breadcrumbs = [
+  { label: 'Home', href: '/' },
+  { label: 'Blog', href: permalinks.listing },
+  { label: displayCategory },
+];
+---
+
+<BaseLayout metadata={metadata} config={config} lang={locale}>
+  <LayoutRenderer layoutSections={layoutSections}>
+    <Section class="!py-4">
+      <Container class="max-w-6xl">
+        <Breadcrumbs items={breadcrumbs} />
+      </Container>
+    </Section>
+
+    <BlogList
+      title={displayCategory}
+      posts={posts}
+      currentPage={page.currentPage}
+      totalPages={page.lastPage}
+      baseUrl={categoryBaseUrl}
+    />
+  </LayoutRenderer>
+  {showPanel && <ThemePanel />}
+</BaseLayout>

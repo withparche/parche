@@ -1,0 +1,30 @@
+---
+/**
+ * "Back to Blog" navigation link — v1 style.
+ * Displays a chevron + text link back to the blog listing.
+ */
+
+interface Props {
+  href: string;
+  text?: string;
+  class?: string;
+}
+
+const {
+  href,
+  text = 'Back to Blog',
+  class: className = '',
+} = Astro.props;
+---
+
+<div class:list={['mx-auto px-6 sm:px-6 max-w-3xl pt-8 md:pt-4 pb-12 md:pb-20', className]}>
+  <a
+    href={href}
+    class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md text-heading hover:text-primary hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+  >
+    <svg class="w-5 h-5 mr-1 -ml-1.5 rtl:-mr-1.5 rtl:ml-1 rtl:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+    </svg>
+    {text}
+  </a>
+</div>

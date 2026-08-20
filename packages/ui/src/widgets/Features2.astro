@@ -1,0 +1,64 @@
+---
+import { twMerge } from 'tailwind-merge';
+import LegacyHeadline from '../components/LegacyHeadline.astro';
+import Icon from 'parche:primitives/Icon';
+import type { Props } from './Features2.props';
+
+const {
+  title,
+  subtitle,
+  tagline,
+  items = [],
+  columns = '3',
+  defaultIcon,
+} = Astro.props;
+
+const gridCols =
+  columns === '4'
+    ? 'lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2'
+    : columns === '3'
+      ? 'lg:grid-cols-3 sm:grid-cols-2'
+      : 'sm:grid-cols-2';
+---
+
+<LegacyHeadline {title} {subtitle} {tagline} />
+
+{items.length > 0 && (
+  <div class={`grid mx-auto gap-4 md:gap-6 ${gridCols}`}>
+    {items.map((item) => {
+      const iconName = item.icon || defaultIcon;
+      return (
+        <div class={twMerge(
+          'flex flex-col rounded-lg shadow-[0_4px_30px_rgba(0,0,0,0.1)] backdrop-blur border border-border bg-surface p-6',
+          item.classes?.panel,
+        )}>
+          {iconName && (
+            <Icon
+              name={iconName}
+              class={twMerge('w-12 h-12 mb-6 text-primary', item.classes?.icon)}
+            />
+          )}
+          {item.title && (
+            <h3
+              class={twMerge('font-bold text-xl md:text-[1.3rem] text-heading mb-2', item.classes?.title)}
+              set:html={item.title}
+            />
+          )}
+          {item.description && (
+            <p
+              class={twMerge('text-muted type-body grow', item.classes?.description)}
+              set:html={item.description}
+            />
+          )}
+          {item.callToAction?.text && (
+            <div class="mt-4">
+              <a href={item.callToAction.href} class="text-primary font-semibold hover:underline">
+                {item.callToAction.text}
+              </a>
+            </div>
+          )}
+        </div>
+      );
+    })}
+  </div>
+)}

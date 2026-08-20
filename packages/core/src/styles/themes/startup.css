@@ -1,0 +1,90 @@
+/* =================================================================
+   Theme: Startup — Modern, technical, Vercel/Linear aesthetic
+   Outfit headings, DM Sans body, tight tracking, cyan-blue primary.
+   ================================================================= */
+
+/* ---------------------------------------------------------------
+   Light mode
+   --------------------------------------------------------------- */
+:root[data-theme="startup"] {
+  /* Cool neutral */
+  --color-neutral-50:  oklch(0.984 0.003 240);
+  --color-neutral-100: oklch(0.965 0.006 240);
+  --color-neutral-200: oklch(0.925 0.01  240);
+  --color-neutral-300: oklch(0.865 0.018 240);
+  --color-neutral-400: oklch(0.7   0.03  240);
+  --color-neutral-500: oklch(0.55  0.035 240);
+  --color-neutral-600: oklch(0.45  0.035 240);
+  --color-neutral-700: oklch(0.37  0.03  240);
+  --color-neutral-800: oklch(0.27  0.025 240);
+  --color-neutral-900: oklch(0.2   0.022 240);
+  --color-neutral-950: oklch(0.12  0.018 240);
+
+  /* Primary — electric cyan-blue */
+  --color-primary-50:  oklch(0.97  0.02  210);
+  --color-primary-100: oklch(0.94  0.045 210);
+  --color-primary-200: oklch(0.89  0.085 210);
+  --color-primary-300: oklch(0.82  0.13  210);
+  --color-primary-400: oklch(0.73  0.17  210);
+  --color-primary-500: oklch(0.65  0.19  210);
+  --color-primary-600: oklch(0.58  0.2   210);
+  --color-primary-700: oklch(0.5   0.19  210);
+  --color-primary-800: oklch(0.43  0.16  210);
+  --color-primary-900: oklch(0.37  0.13  210);
+  --color-primary-950: oklch(0.25  0.1   210);
+
+  /* Semantic tokens */
+  --ds-color-background:  oklch(0.99 0.002 240);
+  --ds-color-foreground:  oklch(0.1  0.015 240);
+  --ds-color-surface:     oklch(1 0 0);
+  --ds-color-primary:     oklch(0.58 0.2   210);
+  --ds-color-on-primary:  oklch(1 0 0);               /* white on medium blue — ~4.6:1 */
+  --ds-color-muted:       oklch(0.55 0.025 240);
+  --ds-color-border:      oklch(0.92 0.01  240);
+  --ds-color-heading:     oklch(0.1  0.015 240);
+  --ds-color-text:        oklch(0.35 0.02  240);
+  --ds-color-highlight:      oklch(0.65 0.20  165);   /* teal/green */
+
+  /* Typography — geometric headings, clean tech body, compact sizes */
+  --ds-font-heading: var(--font-tech, var(--font-sans));
+  --ds-font-body:    var(--font-tech-body, var(--font-sans));
+
+  --ds-size-h1:        2.75rem;
+  --ds-weight-h1:      600;
+  --ds-tracking-h1:    0em;
+  --ds-leading-h1:     1.1;
+
+  --ds-size-h2:        2rem;
+  --ds-weight-h2:      600;
+  --ds-tracking-h2:    -0.03em;
+  --ds-leading-h2:     1.15;
+
+  --ds-size-h3:        1.375rem;
+  --ds-weight-h3:      600;
+  --ds-tracking-h3:    -0.02em;
+  --ds-leading-h3:     1.3;
+
+  --ds-size-body:      0.9375rem;
+  --ds-weight-body:    400;
+  --ds-leading-body:   1.6;
+
+  --ds-weight-label:   500;
+  --ds-tracking-label: 0.08em;
+  --ds-size-label:     0.6875rem;
+}
+
+/* ---------------------------------------------------------------
+   Dark mode — the "flagship" look for this theme
+   --------------------------------------------------------------- */
+:root[data-theme="startup"].dark {
+  --ds-color-background:  oklch(0.08 0.012 240);
+  --ds-color-foreground:  oklch(0.96 0.005 240);
+  --ds-color-surface:     oklch(0.12 0.015 240);
+  --ds-color-primary:     oklch(0.73 0.17  210);
+  --ds-color-on-primary:  oklch(0.1  0.015 210);      /* dark blue on light cyan — ~10:1 */
+  --ds-color-muted:       oklch(0.5  0.02  240);
+  --ds-color-border:      oklch(0.18 0.015 240);
+  --ds-color-heading:     oklch(0.96 0.005 240);
+  --ds-color-text:        oklch(0.68 0.012 240);
+  --ds-color-highlight:      oklch(0.75 0.17  165);   /* lighter teal */
+}

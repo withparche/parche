@@ -1,0 +1,152 @@
+---
+import { themes as configuredThemes } from 'parche:config/themes';
+
+interface ThemeOption {
+  label: string;
+  value: string;
+}
+
+interface Props {
+  themes?: ThemeOption[];
+}
+
+const { themes = configuredThemes } = Astro.props;
+---
+
+{themes.length > 1 && (
+  <theme-panel>
+    {/* Floating trigger button */}
+    <button
+      type="button"
+      data-panel-trigger
+      class="fixed bottom-5 right-5 z-50 w-11 h-11 rounded-full bg-surface border border-border shadow-lg flex items-center justify-center cursor-pointer hover:bg-primary hover:text-white hover:border-primary transition-all duration-200"
+      aria-label="Theme settings"
+    >
+      <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="13.5" cy="6.5" r="0.5" fill="currentColor"></circle>
+        <circle cx="17.5" cy="10.5" r="0.5" fill="currentColor"></circle>
+        <circle cx="8.5" cy="7.5" r="0.5" fill="currentColor"></circle>
+        <circle cx="6.5" cy="12.5" r="0.5" fill="currentColor"></circle>
+        <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2Z"></path>
+      </svg>
+    </button>
+
+    {/* Panel overlay */}
+    <div
+      data-panel-overlay
+      class="fixed inset-0 z-50 bg-black/10 hidden transition-opacity"
+    ></div>
+
+    {/* Panel content */}
+    <div
+      data-panel-content
+      class="fixed bottom-20 right-5 z-50 w-64 bg-surface border border-border rounded-xl shadow-2xl p-4 hidden transition-all duration-200 opacity-0 translate-y-2"
+    >
+      {/* Header */}
+      <div class="flex items-center justify-between mb-4">
+        <span class="type-caption font-semibold text-heading">Style</span>
+        <button
+          type="button"
+          data-panel-close
+          class="w-6 h-6 flex items-center justify-center rounded-md text-muted hover:text-heading hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+          aria-label="Close"
+        >
+          <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      {/* Theme grid */}
+      <div class="space-y-1">
+        {themes.map((theme) => (
+          <button
+            type="button"
+            data-theme-value={theme.value}
+            class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left cursor-pointer transition-colors text-muted hover:bg-neutral-100 dark:hover:bg-neutral-800"
+          >
+            <span
+              class="w-4 h-4 rounded-full border-2 border-border flex items-center justify-center shrink-0"
+              data-theme-radio
+            >
+              <span class="w-2 h-2 rounded-full bg-primary hidden" data-theme-dot></span>
+            </span>
+            <span class="type-caption">{theme.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </theme-panel>
+)}
+
+<script>
+  class ThemePanelElement extends HTMLElement {
+    private isOpen = false;
+
+    connectedCallback() {
+      const trigger = this.querySelector('[data-panel-trigger]') as HTMLElement;
+      const overlay = this.querySelector('[data-panel-overlay]') as HTMLElement;
+      const content = this.querySelector('[data-panel-content]') as HTMLElement;
+      const closeBtn = this.querySelector('[data-panel-close]') as HTMLElement;
+      const themeButtons = this.querySelectorAll<HTMLElement>('[data-theme-value]');
+
+      if (!trigger || !content) return;
+
+      // Toggle panel
+      const toggle = (open?: boolean) => {
+        this.isOpen = open ?? !this.isOpen;
+        if (this.isOpen) {
+          overlay?.classList.remove('hidden');
+          content.classList.remove('hidden');
+          requestAnimationFrame(() => {
+            content.classList.remove('opacity-0', 'translate-y-2');
+          });
+        } else {
+          content.classList.add('opacity-0', 'translate-y-2');
+          overlay?.classList.add('hidden');
+          setTimeout(() => content.classList.add('hidden'), 200);
+        }
+      };
+
+      trigger.addEventListener('click', () => toggle());
+      overlay?.addEventListener('click', () => toggle(false));
+      closeBtn?.addEventListener('click', () => toggle(false));
+
+      // Theme selection
+      const currentTheme = document.documentElement.getAttribute('data-theme') || '';
+      const updateTheme = (active: string) => {
+        themeButtons.forEach((btn) => {
+          const isActive = btn.dataset.themeValue === active;
+          const dot = btn.querySelector('[data-theme-dot]') as HTMLElement;
+          if (dot) dot.classList.toggle('hidden', !isActive);
+          btn.classList.toggle('text-heading', isActive);
+          btn.classList.toggle('bg-neutral-100', isActive);
+          btn.classList.toggle('text-muted', !isActive);
+        });
+      };
+      updateTheme(currentTheme);
+
+      themeButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const value = btn.dataset.themeValue || '';
+          if (value) {
+            document.documentElement.setAttribute('data-theme', value);
+            localStorage.setItem('site-theme', value);
+          } else {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.removeItem('site-theme');
+          }
+          updateTheme(value);
+        });
+      });
+
+      // Close on Escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && this.isOpen) toggle(false);
+      });
+    }
+  }
+
+  customElements.define('theme-panel', ThemePanelElement);
+</script>

@@ -1,0 +1,91 @@
+---
+import type { Props } from './Contact.props';
+import LegacyHeadline from '../components/LegacyHeadline.astro';
+
+const {
+  tagline,
+  title,
+  subtitle,
+  description,
+  inputs = [],
+  textarea,
+  disclaimer,
+  button,
+} = Astro.props;
+---
+
+<LegacyHeadline tagline={tagline} title={title} subtitle={subtitle} />
+
+{inputs.length > 0 && (
+  <div class="flex flex-col max-w-xl mx-auto rounded-lg bg-surface border border-border shadow p-4 sm:p-6 lg:p-8 w-full">
+    <form>
+      <div class="flex flex-col gap-4">
+        {inputs.map((input) => (
+          <div>
+            {input.label && (
+              <label
+                for={input.name}
+                class="type-label text-muted block mb-1"
+              >
+                {input.label}
+              </label>
+            )}
+            <input
+              type={input.type ?? 'text'}
+              id={input.name}
+              name={input.name}
+              placeholder={input.placeholder}
+              autocomplete={input.autocomplete}
+              class="w-full rounded-md border border-border bg-surface px-3 py-2 type-body text-heading placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
+        ))}
+
+        {textarea && (
+          <div>
+            {textarea.label && (
+              <label
+                for={textarea.name ?? 'textarea'}
+                class="type-label text-muted block mb-1"
+              >
+                {textarea.label}
+              </label>
+            )}
+            <textarea
+              id={textarea.name ?? 'textarea'}
+              name={textarea.name ?? 'textarea'}
+              placeholder={textarea.placeholder}
+              rows={textarea.rows ?? 4}
+              class="w-full rounded-md border border-border bg-surface px-3 py-2 type-body text-heading placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+            />
+          </div>
+        )}
+
+        {disclaimer && disclaimer.label && (
+          <div class="flex items-start gap-2">
+            <input
+              type="checkbox"
+              id="disclaimer"
+              name="disclaimer"
+              class="mt-1 h-4 w-4 rounded border-border accent-primary"
+            />
+            <label for="disclaimer" class="type-body text-muted" set:html={disclaimer.label} />
+          </div>
+        )}
+
+        <div>
+          <button
+            type="submit"
+            class="w-full rounded-md bg-primary px-6 py-3 type-label text-on-primary hover:opacity-90 transition-opacity"
+          >
+            {button ?? 'Send message'}
+          </button>
+        </div>
+
+        {description && (
+          <p class="text-center type-body text-muted" set:html={description} />
+        )}
+      </div>
+    </form>
+  </div>
+)}

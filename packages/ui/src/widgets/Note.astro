@@ -1,0 +1,14 @@
+---
+import Icon from 'parche:primitives/Icon';
+import type { Props } from './Note.props';
+
+const { icon = 'tabler:info-square', title, description } = Astro.props;
+---
+
+<div class="bg-[repeating-linear-gradient(135deg,_#e1e1e1_0,_#e1e1e1_1px,_transparent_0,_transparent_50%)] bg-[size:10px_10px] dark:bg-slate-800 px-4 sm:px-6 py-4 text-center not-prose">
+  <p>
+    <Icon name={icon} class="w-5 h-5 inline-block -mt-0.5 text-muted" />
+    {title && <span class="font-bold text-heading">{title}</span>}
+    {description && <span class="text-muted" set:html={description} />}
+  </p>
+</div>

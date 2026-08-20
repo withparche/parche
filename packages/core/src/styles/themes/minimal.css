@@ -1,0 +1,95 @@
+/* =================================================================
+   Theme: Minimal — Elegant, editorial, generous whitespace
+   Literata headings, Libre Franklin body, warm neutrals.
+   ================================================================= */
+
+/* ---------------------------------------------------------------
+   Light mode
+   --------------------------------------------------------------- */
+:root[data-theme="minimal"] {
+  /* Warm neutral primitives */
+  --color-neutral-50:  oklch(0.985 0.005 75);
+  --color-neutral-100: oklch(0.965 0.008 75);
+  --color-neutral-200: oklch(0.925 0.012 75);
+  --color-neutral-300: oklch(0.87  0.015 75);
+  --color-neutral-400: oklch(0.7   0.02  75);
+  --color-neutral-500: oklch(0.55  0.02  75);
+  --color-neutral-600: oklch(0.45  0.018 75);
+  --color-neutral-700: oklch(0.37  0.015 75);
+  --color-neutral-800: oklch(0.27  0.012 75);
+  --color-neutral-900: oklch(0.2   0.01  75);
+  --color-neutral-950: oklch(0.13  0.008 75);
+
+  /* Primary — deep warm gray, almost black */
+  --color-primary-50:  oklch(0.97 0.004 75);
+  --color-primary-100: oklch(0.93 0.008 75);
+  --color-primary-200: oklch(0.87 0.012 75);
+  --color-primary-300: oklch(0.78 0.015 75);
+  --color-primary-400: oklch(0.65 0.018 75);
+  --color-primary-500: oklch(0.45 0.015 75);
+  --color-primary-600: oklch(0.25 0.01  75);
+  --color-primary-700: oklch(0.2  0.008 75);
+  --color-primary-800: oklch(0.15 0.006 75);
+  --color-primary-900: oklch(0.12 0.005 75);
+  --color-primary-950: oklch(0.08 0.003 75);
+
+  /* Semantic tokens */
+  --ds-color-background:  oklch(0.99 0.003 75);
+  --ds-color-foreground:  oklch(0.1  0.008 75);
+  --ds-color-surface:     oklch(1 0 0);
+  --ds-color-primary:     oklch(0.25 0.01  75);
+  --ds-color-on-primary:  oklch(1 0 0);              /* white on near-black — excellent */
+  --ds-color-muted:       oklch(0.5  0.015 75);
+  --ds-color-border:      oklch(0.9  0.01  75);
+  --ds-color-heading:     oklch(0.1  0.008 75);
+  --ds-color-text:        oklch(0.3  0.012 75);
+  --ds-color-highlight:      oklch(0.55 0.12  45);    /* warm amber */
+
+  /* Typography — serif headings, clean sans body */
+  --ds-font-heading: var(--font-heading-alt, var(--font-serif));
+  --ds-font-body:    var(--font-body-alt, var(--font-sans));
+
+  --ds-size-h1:        3.75rem;
+  --ds-weight-h1:      700;
+  --ds-tracking-h1:    -0.015em;
+  --ds-leading-h1:     1.15;
+
+  --ds-size-h2:        2.75rem;
+  --ds-weight-h2:      700;
+  --ds-tracking-h2:    -0.01em;
+  --ds-leading-h2:     1.2;
+
+  --ds-size-h3:        1.625rem;
+  --ds-weight-h3:      400;
+  --ds-tracking-h3:    0em;
+  --ds-leading-h3:     1.35;
+
+  --ds-size-body:      1.125rem;
+  --ds-weight-body:    400;
+  --ds-leading-body:   1.8;
+
+  --ds-weight-label:   500;
+  --ds-tracking-label: 0.12em;
+  --ds-size-label:     0.7rem;
+}
+
+/* Minimal: softer borders, very subtle shadows */
+:root[data-theme="minimal"] :is(*, *::before, *::after) {
+  --tw-shadow: 0 1px 2px 0 oklch(0 0 0 / 0.03);
+}
+
+/* ---------------------------------------------------------------
+   Dark mode
+   --------------------------------------------------------------- */
+:root[data-theme="minimal"].dark {
+  --ds-color-background:  oklch(0.08 0.005 75);
+  --ds-color-foreground:  oklch(0.95 0.005 75);
+  --ds-color-surface:     oklch(0.12 0.005 75);
+  --ds-color-primary:     oklch(0.8  0.008 75);
+  --ds-color-on-primary:  oklch(0.08 0.003 75);       /* near-black on light warm — ~12:1 */
+  --ds-color-muted:       oklch(0.5  0.012 75);
+  --ds-color-border:      oklch(0.2  0.008 75);
+  --ds-color-heading:     oklch(0.95 0.005 75);
+  --ds-color-text:        oklch(0.7  0.008 75);
+  --ds-color-highlight:      oklch(0.70 0.10  45);    /* lighter warm amber */
+}

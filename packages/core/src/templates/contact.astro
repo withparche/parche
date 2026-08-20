@@ -1,0 +1,76 @@
+---
+import Container from 'parche:primitives/Container';
+import Section from 'parche:primitives/Section';
+import Button from 'parche:primitives/Button';
+
+interface Props {
+  data: {
+    formLabels: Record<string, string>;
+  };
+}
+
+const { data } = Astro.props;
+const labels = data.formLabels;
+---
+
+<Section>
+  <Container class="max-w-2xl">
+    <div class="text-center mb-12">
+      <p class="type-label text-primary mb-4">{labels.tagline}</p>
+      <h1 class="type-h1 mb-4" set:html={labels.heading} />
+      <p class="type-body text-muted">{labels.subtitle}</p>
+    </div>
+
+    <form class="space-y-6" data-astro-reload>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <label for="name" class="block type-caption font-medium text-heading mb-2">{labels.name}</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            class="w-full px-4 py-3 bg-surface border border-border rounded-lg text-text type-body focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors"
+            placeholder={labels.namePlaceholder}
+          />
+        </div>
+        <div>
+          <label for="email" class="block type-caption font-medium text-heading mb-2">{labels.email}</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            class="w-full px-4 py-3 bg-surface border border-border rounded-lg text-text type-body focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors"
+            placeholder={labels.emailPlaceholder}
+          />
+        </div>
+      </div>
+
+      <div>
+        <label for="subject" class="block type-caption font-medium text-heading mb-2">{labels.subject}</label>
+        <input
+          type="text"
+          id="subject"
+          name="subject"
+          class="w-full px-4 py-3 bg-surface border border-border rounded-lg text-text type-body focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors"
+          placeholder={labels.subjectPlaceholder}
+        />
+      </div>
+
+      <div>
+        <label for="message" class="block type-caption font-medium text-heading mb-2">{labels.message}</label>
+        <textarea
+          id="message"
+          name="message"
+          rows="5"
+          required
+          class="w-full px-4 py-3 bg-surface border border-border rounded-lg text-text type-body focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors resize-y"
+          placeholder={labels.messagePlaceholder}
+        ></textarea>
+      </div>
+
+      <Button class="w-full" type="submit">{labels.submit}</Button>
+    </form>
+  </Container>
+</Section>

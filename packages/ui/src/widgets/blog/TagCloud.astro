@@ -1,0 +1,50 @@
+---
+/** Tag cloud / list widget. */
+import Container from 'parche:primitives/Container';
+import Section from 'parche:primitives/Section';
+import Tag from 'parche:primitives/Tag';
+
+interface TagItem {
+  name: string;
+  count: number;
+}
+
+interface Props {
+  title?: string;
+  tags: TagItem[];
+  basePath?: string;
+  activeTag?: string;
+  id?: string;
+  class?: string;
+  background?: string;
+}
+
+const {
+  title = 'Tags',
+  tags,
+  basePath = 'blog',
+  activeTag,
+  id,
+  class: className = '',
+  background,
+} = Astro.props;
+
+const sorted = [...tags].sort((a, b) => b.count - a.count);
+---
+
+<Section {id} class={className} {background}>
+  <Container>
+    {title && <h2 class="type-h3 mb-6">{title}</h2>}
+    <div class="flex flex-wrap gap-2">
+      {sorted.map((tag) => (
+        <Tag
+          href={`/${basePath}/tag/${tag.name.toLowerCase()}`}
+          active={activeTag?.toLowerCase() === tag.name.toLowerCase()}
+        >
+          {tag.name}
+          <span class="ml-1 text-xs opacity-60">({tag.count})</span>
+        </Tag>
+      ))}
+    </div>
+  </Container>
+</Section>

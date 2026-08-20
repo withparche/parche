@@ -1,0 +1,27 @@
+---
+interface Props {
+  variant?: 'line' | 'dots' | 'gradient';
+  class?: string;
+}
+
+const { variant = 'line', class: className = '' } = Astro.props;
+---
+
+{variant === 'line' && (
+  <hr class:list={['border-t border-border', className]} />
+)}
+
+{variant === 'dots' && (
+  <div class:list={['flex items-center justify-center gap-1.5 py-2', className]}>
+    <span class="size-1 rounded-full bg-border"></span>
+    <span class="size-1 rounded-full bg-border"></span>
+    <span class="size-1 rounded-full bg-border"></span>
+  </div>
+)}
+
+{variant === 'gradient' && (
+  <div class:list={[
+    'h-px bg-gradient-to-r from-transparent via-border to-transparent',
+    className,
+  ]}></div>
+)}

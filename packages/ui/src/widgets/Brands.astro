@@ -1,0 +1,30 @@
+---
+import type { Props } from './Brands.props';
+import LegacyHeadline from '../components/LegacyHeadline.astro';
+import Icon from 'parche:primitives/Icon';
+
+const { tagline, title, subtitle, icons = [], images = [] } = Astro.props;
+---
+
+<LegacyHeadline tagline={tagline} title={title} subtitle={subtitle} />
+
+<div class="flex flex-wrap justify-center gap-x-6 sm:gap-x-12 lg:gap-x-24">
+  {icons.map((icon) => (
+    <Icon name={icon} class="py-3 lg:py-5 w-12 h-auto mx-auto sm:mx-0 text-muted" />
+  ))}
+  {images.map((image) =>
+    image.src && (
+      <div class="flex justify-center my-2 lg:my-4 py-1 px-3 rounded-md bg-surface border border-border">
+        <img
+          src={image.src}
+          alt={image.alt ?? ''}
+          class="max-h-12 w-auto object-contain"
+          width={120}
+          height={48}
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    )
+  )}
+</div>

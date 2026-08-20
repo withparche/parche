@@ -1,0 +1,9 @@
+{
+  "name": "Jane Doe",
+  "slug": "jane",
+  "bio": "Writes about Astro, design systems and shipping fast.",
+  "role": "Maintainer",
+  "avatar": { "src": "https://placehold.co/200x200/6366f1/ffffff?text=JD", "alt": "Jane Doe" },
+  "website": "https://example.com",
+  "social": { "github": "https://github.com/withparche" }
+}

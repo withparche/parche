@@ -1,0 +1,15 @@
+---
+interface Props {
+  class?: string;
+  as?: 'p' | 'span' | 'div';
+}
+
+const { class: className = '', as: Tag = 'p' } = Astro.props;
+---
+
+<Tag class:list={[
+  'type-label text-primary mb-3',
+  className,
+]}>
+  <slot />
+</Tag>

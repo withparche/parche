@@ -1,0 +1,24 @@
+---
+interface Props {
+  href?: string;
+  active?: boolean;
+  class?: string;
+}
+
+const { href, active = false, class: className = '' } = Astro.props;
+const Tag = href ? 'a' : 'span';
+---
+
+<Tag
+  href={href}
+  class:list={[
+    'inline-flex items-center rounded-md px-2.5 py-1 text-xs font-medium transition-colors no-underline',
+    active
+      ? 'bg-primary text-on-primary'
+      : 'bg-surface text-muted border border-border hover:border-primary/40 hover:text-heading',
+    href && 'cursor-pointer',
+    className,
+  ]}
+>
+  <slot />
+</Tag>

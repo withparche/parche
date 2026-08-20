@@ -1,0 +1,196 @@
+---
+/**
+ * Single blog post page.
+ * Works in both static (output: 'static') and SSR (output: 'server') modes.
+ *
+ * getStaticPaths enumerates all valid slugs across all locales.
+ * Render-time resolves the correct post for the current locale.
+ */
+import 'parche:config/styles';
+import BaseLayout from 'parche:layouts/BaseLayout';
+import LayoutRenderer from 'parche:LayoutRenderer';
+import { templateMap } from 'parche:registry/templates';
+import { showPanel } from 'parche:config/themes';
+import ThemePanel from 'parche:components/ThemePanel';
+import RelatedPosts from 'parche:widgets/blog/RelatedPosts';
+import SeriesNav from 'parche:widgets/blog/SeriesNav';
+import config from 'parche:config';
+import blogConfig from 'parche:app/blog';
+import { getCollection, getEntry, render } from 'astro:content';
+import { getPublishedPosts, getPostsBySeries, extractPostLocale } from '../../utils/post-helpers.js';
+import { querySinglePost } from '../../utils/blog-query.js';
+import { calculateReadingTime } from '../../utils/reading-time.js';
+import { findRelatedPosts } from '../../utils/related-posts.js';
+import { extractTOC } from '../../utils/toc.js';
+import { generateBlogPostingJsonLd, generateBreadcrumbJsonLd } from '../../utils/blog-metadata.js';
+import { resolvePostPermalink, resolveTaxonomyPermalink } from '../../types.js';
+import { resolveLayout } from 'parche:utils/layout';
+import { defaultLocale } from 'parche:config/i18n';
+
+const cfg = blogConfig as any;
+const permalinks = cfg.permalinks;
+
+export async function getStaticPaths() {
+  const { getPublishedPosts: gpp, extractPostLocale: epl } = await import('../../utils/post-helpers.js');
+  const { getCollection: gc } = await import('astro:content');
+  const allPosts = await gc('posts');
+  const isDev = import.meta.env.DEV;
+  const showDrafts = isDev && (blogConfig as any).showDraftsInDev;
+  const published = gpp(allPosts, showDrafts);
+
+  // Enumerate all valid slugs. Multiple locales may share the same slug.
+  // We deduplicate so each slug appears once in params.
+  const seen = new Set<string>();
+  const paths: { params: { slug: string } }[] = [];
+  for (const post of published) {
+    const { postKey } = epl(post.id);
+    const slug = post.data.urlSlug ?? postKey;
+    if (!seen.has(slug)) {
+      seen.add(slug);
+      paths.push({ params: { slug } });
+    }
+  }
+  return paths;
+}
+
+// --- Render-time (both static & SSR) ---
+const locale = Astro.currentLocale ?? defaultLocale;
+const isDev = import.meta.env.DEV;
+const showDrafts = isDev && cfg.showDraftsInDev;
+const { slug } = Astro.params;
+
+const { post, allPosts } = await querySinglePost({ slug: slug!, locale, showDrafts });
+
+if (!post) {
+  return Astro.redirect('/404');
+}
+
+const siteUrl = config.site.url || Astro.site?.href || '';
+
+// Render markdown
+const { Content } = await render(post);
+let renderedHtml = '';
+try {
+  const entry = await getEntry('posts', post.id);
+  if (entry) {
+    const rendered = await render(entry);
+    renderedHtml = (rendered as any).html ?? '';
+  }
+} catch { /* TOC will be empty if extraction fails */ }
+
+const tocItems = renderedHtml ? extractTOC(renderedHtml) : [];
+
+// Reading time
+const rt = cfg.readingTime
+  ? calculateReadingTime(post.body ?? '', cfg.wordsPerMinute)
+  : null;
+const readingTime = post.data.readingTime ?? rt?.minutes;
+
+// Resolve authors (try locale-prefixed ID first, then bare slug)
+const authorData: any[] = [];
+for (const authorSlug of post.data.authors) {
+  try {
+    const author = await getEntry('authors', `${locale}/${authorSlug}`)
+      ?? await getEntry('authors', authorSlug);
+    if (author) authorData.push(author.data);
+  } catch { /* author not found */ }
+}
+if (authorData.length === 0 && post.data.authorName) {
+  authorData.push({ name: post.data.authorName });
+}
+
+// Related posts (filtered to same locale)
+const localePosts = allPosts.filter((p) => extractPostLocale(p.id).locale === locale);
+const related = findRelatedPosts(post, localePosts, cfg.relatedPostsCount ?? 3);
+
+// Series navigation
+const seriesPosts = post.data.series
+  ? getPostsBySeries(allPosts, post.data.series.name, showDrafts, locale).map((p) => ({
+      title: p.data.title,
+      href: resolvePostPermalink(permalinks.post, p),
+      order: p.data.series!.order,
+    }))
+  : [];
+
+// Resolve layout & template
+const layoutSections = await resolveLayout(post.data.layout || 'default', locale, defaultLocale);
+const TemplateComponent = templateMap[post.data.template || 'blog-post'];
+
+// JSON-LD
+const base = siteUrl.replace(/\/$/, '');
+const pageUrl = `${base}${resolvePostPermalink(permalinks.post, post)}`;
+const blogPostingJsonLd = generateBlogPostingJsonLd({
+  post: { ...post.data, readingTime },
+  url: pageUrl,
+  siteUrl,
+  authorName: authorData[0]?.name,
+});
+const breadcrumbJsonLd = generateBreadcrumbJsonLd([
+  { name: 'Home', url: siteUrl || '/' },
+  { name: 'Blog', url: `${base}${permalinks.listing}` },
+  ...(post.data.category ? [{ name: post.data.category, url: `${base}${resolveTaxonomyPermalink(permalinks.category, post.data.category)}` }] : []),
+  { name: post.data.title, url: pageUrl },
+]);
+
+const metadata = {
+  title: `${post.data.metadata?.title ?? post.data.title} — ${config.site.name}`,
+  description: post.data.metadata?.description ?? post.data.description ?? post.data.excerpt,
+  canonical: post.data.metadata?.canonical,
+  noindex: post.data.metadata?.noindex ?? post.data.draft ?? false,
+  nofollow: post.data.metadata?.nofollow ?? false,
+  ogType: 'article' as const,
+  ogTitle: post.data.metadata?.ogTitle ?? post.data.title,
+  ogDescription: post.data.metadata?.ogDescription ?? post.data.description,
+  ogImage: post.data.metadata?.ogImage ?? post.data.image?.src,
+  twitterCard: post.data.metadata?.twitterCard ?? ('summary_large_image' as const),
+  article: {
+    author: authorData[0]?.name,
+    publishedDate: post.data.publishDate.toISOString(),
+    modifiedDate: post.data.modifiedDate?.toISOString(),
+    section: post.data.category,
+    tags: post.data.tags,
+  },
+  jsonLd: [blogPostingJsonLd, breadcrumbJsonLd],
+};
+
+const postData = { ...post.data, readingTime };
+---
+
+<BaseLayout metadata={metadata} config={config} lang={locale}>
+  <LayoutRenderer layoutSections={layoutSections}>
+    {TemplateComponent ? (
+      <TemplateComponent data={postData} authorData={authorData} tocItems={tocItems} permalinks={permalinks}>
+        <Content />
+      </TemplateComponent>
+    ) : (
+      <article class="prose max-w-4xl mx-auto py-16 px-4">
+        <Content />
+      </article>
+    )}
+
+    {post.data.series && seriesPosts.length > 1 && (
+      <div class="max-w-4xl mx-auto px-4 mb-8">
+        <SeriesNav
+          seriesName={post.data.series.name}
+          posts={seriesPosts}
+          currentOrder={post.data.series.order}
+        />
+      </div>
+    )}
+
+    {related.length > 0 && (
+      <RelatedPosts
+        posts={related.map((r) => ({
+          title: r.data.title,
+          description: r.data.description ?? r.data.excerpt,
+          href: resolvePostPermalink(permalinks.post, r),
+          image: r.data.image,
+          publishDate: r.data.publishDate,
+          category: r.data.category,
+          tags: r.data.tags,
+        }))}
+      />
+    )}
+  </LayoutRenderer>
+  {showPanel && <ThemePanel />}
+</BaseLayout>

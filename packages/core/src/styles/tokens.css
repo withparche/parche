@@ -1,0 +1,237 @@
+/* =================================================================
+   Capa 1: Tokens primitivos
+   Valores base como CSS custom properties (siempre disponibles).
+   Colores en OKLCH para wide gamut y consistencia perceptual.
+   ================================================================= */
+
+/* ---------------------------------------------------------------
+   Primitive values — always available as CSS vars
+   --------------------------------------------------------------- */
+:root {
+  /* Neutral (hue 260 — slate-blue tint, AstroWind v1 palette) */
+  --color-neutral-50:  oklch(0.985 0.002 260);
+  --color-neutral-100: oklch(0.965 0.005 260);
+  --color-neutral-200: oklch(0.925 0.008 260);
+  --color-neutral-300: oklch(0.860 0.014 260);
+  --color-neutral-400: oklch(0.700 0.025 260);
+  --color-neutral-500: oklch(0.550 0.025 260);
+  --color-neutral-600: oklch(0.450 0.025 260);
+  --color-neutral-700: oklch(0.370 0.020 260);
+  --color-neutral-800: oklch(0.250 0.025 260);
+  --color-neutral-900: oklch(0.180 0.030 260);
+  --color-neutral-950: oklch(0.100 0.040 260);
+
+  /* Primary (hue 260 — vivid blue, AstroWind v1: rgb(1 97 239)) */
+  --color-primary-50:  oklch(0.970 0.025 255);
+  --color-primary-100: oklch(0.940 0.050 255);
+  --color-primary-200: oklch(0.880 0.100 255);
+  --color-primary-300: oklch(0.780 0.155 255);
+  --color-primary-400: oklch(0.660 0.200 258);
+  --color-primary-500: oklch(0.560 0.220 260);
+  --color-primary-600: oklch(0.500 0.220 260);
+  --color-primary-700: oklch(0.430 0.190 260);
+  --color-primary-800: oklch(0.370 0.160 260);
+  --color-primary-900: oklch(0.310 0.130 260);
+  --color-primary-950: oklch(0.220 0.100 260);
+
+  /* Secondary (hue 280 — indigo/violet) */
+  --color-secondary-50:  oklch(0.97  0.014 280);
+  --color-secondary-100: oklch(0.943 0.029 280);
+  --color-secondary-200: oklch(0.894 0.055 280);
+  --color-secondary-300: oklch(0.821 0.098 280);
+  --color-secondary-400: oklch(0.714 0.163 280);
+  --color-secondary-500: oklch(0.627 0.21  280);
+  --color-secondary-600: oklch(0.558 0.233 280);
+  --color-secondary-700: oklch(0.496 0.224 280);
+  --color-secondary-800: oklch(0.432 0.187 280);
+  --color-secondary-900: oklch(0.381 0.143 280);
+  --color-secondary-950: oklch(0.271 0.116 280);
+
+  /* Accent (hue 85 — amber/yellow-green) */
+  --color-accent-50:  oklch(0.987 0.022 85);
+  --color-accent-100: oklch(0.968 0.047 85);
+  --color-accent-200: oklch(0.939 0.089 85);
+  --color-accent-300: oklch(0.897 0.138 85);
+  --color-accent-400: oklch(0.843 0.17  85);
+  --color-accent-500: oklch(0.776 0.174 85);
+  --color-accent-600: oklch(0.666 0.16  85);
+  --color-accent-700: oklch(0.555 0.13  85);
+  --color-accent-800: oklch(0.466 0.106 85);
+  --color-accent-900: oklch(0.398 0.086 85);
+  --color-accent-950: oklch(0.286 0.066 85);
+
+  /* Success (hue 145 — green) */
+  --color-success-50:  oklch(0.982 0.018 145);
+  --color-success-100: oklch(0.955 0.04  145);
+  --color-success-200: oklch(0.905 0.093 145);
+  --color-success-300: oklch(0.845 0.143 145);
+  --color-success-400: oklch(0.765 0.177 145);
+  --color-success-500: oklch(0.672 0.176 145);
+  --color-success-600: oklch(0.565 0.155 145);
+  --color-success-700: oklch(0.479 0.13  145);
+  --color-success-800: oklch(0.405 0.106 145);
+  --color-success-900: oklch(0.353 0.085 145);
+  --color-success-950: oklch(0.246 0.064 145);
+
+  /* Warning (hue 70 — orange/amber) */
+  --color-warning-50:  oklch(0.987 0.022 70);
+  --color-warning-100: oklch(0.962 0.054 70);
+  --color-warning-200: oklch(0.924 0.107 70);
+  --color-warning-300: oklch(0.879 0.15  70);
+  --color-warning-400: oklch(0.828 0.168 70);
+  --color-warning-500: oklch(0.769 0.163 70);
+  --color-warning-600: oklch(0.666 0.153 70);
+  --color-warning-700: oklch(0.555 0.128 70);
+  --color-warning-800: oklch(0.466 0.106 70);
+  --color-warning-900: oklch(0.398 0.086 70);
+  --color-warning-950: oklch(0.286 0.066 70);
+
+  /* Danger (hue 25 — red) */
+  --color-danger-50:  oklch(0.977 0.013 25);
+  --color-danger-100: oklch(0.946 0.033 25);
+  --color-danger-200: oklch(0.895 0.064 25);
+  --color-danger-300: oklch(0.832 0.111 25);
+  --color-danger-400: oklch(0.744 0.16  25);
+  --color-danger-500: oklch(0.655 0.195 25);
+  --color-danger-600: oklch(0.577 0.215 25);
+  --color-danger-700: oklch(0.505 0.206 25);
+  --color-danger-800: oklch(0.444 0.177 25);
+  --color-danger-900: oklch(0.396 0.141 25);
+  --color-danger-950: oklch(0.278 0.109 25);
+}
+
+/* ---------------------------------------------------------------
+   Bridge primitives into Tailwind utility classes via @theme inline.
+   Generates: bg-primary-500, text-neutral-700, border-danger-300, etc.
+   --------------------------------------------------------------- */
+@theme inline {
+  /* Neutral */
+  --color-neutral-50:  var(--color-neutral-50);
+  --color-neutral-100: var(--color-neutral-100);
+  --color-neutral-200: var(--color-neutral-200);
+  --color-neutral-300: var(--color-neutral-300);
+  --color-neutral-400: var(--color-neutral-400);
+  --color-neutral-500: var(--color-neutral-500);
+  --color-neutral-600: var(--color-neutral-600);
+  --color-neutral-700: var(--color-neutral-700);
+  --color-neutral-800: var(--color-neutral-800);
+  --color-neutral-900: var(--color-neutral-900);
+  --color-neutral-950: var(--color-neutral-950);
+
+  /* Primary */
+  --color-primary-50:  var(--color-primary-50);
+  --color-primary-100: var(--color-primary-100);
+  --color-primary-200: var(--color-primary-200);
+  --color-primary-300: var(--color-primary-300);
+  --color-primary-400: var(--color-primary-400);
+  --color-primary-500: var(--color-primary-500);
+  --color-primary-600: var(--color-primary-600);
+  --color-primary-700: var(--color-primary-700);
+  --color-primary-800: var(--color-primary-800);
+  --color-primary-900: var(--color-primary-900);
+  --color-primary-950: var(--color-primary-950);
+
+  /* Secondary */
+  --color-secondary-50:  var(--color-secondary-50);
+  --color-secondary-100: var(--color-secondary-100);
+  --color-secondary-200: var(--color-secondary-200);
+  --color-secondary-300: var(--color-secondary-300);
+  --color-secondary-400: var(--color-secondary-400);
+  --color-secondary-500: var(--color-secondary-500);
+  --color-secondary-600: var(--color-secondary-600);
+  --color-secondary-700: var(--color-secondary-700);
+  --color-secondary-800: var(--color-secondary-800);
+  --color-secondary-900: var(--color-secondary-900);
+  --color-secondary-950: var(--color-secondary-950);
+
+  /* Accent */
+  --color-accent-50:  var(--color-accent-50);
+  --color-accent-100: var(--color-accent-100);
+  --color-accent-200: var(--color-accent-200);
+  --color-accent-300: var(--color-accent-300);
+  --color-accent-400: var(--color-accent-400);
+  --color-accent-500: var(--color-accent-500);
+  --color-accent-600: var(--color-accent-600);
+  --color-accent-700: var(--color-accent-700);
+  --color-accent-800: var(--color-accent-800);
+  --color-accent-900: var(--color-accent-900);
+  --color-accent-950: var(--color-accent-950);
+
+  /* Success */
+  --color-success-50:  var(--color-success-50);
+  --color-success-100: var(--color-success-100);
+  --color-success-200: var(--color-success-200);
+  --color-success-300: var(--color-success-300);
+  --color-success-400: var(--color-success-400);
+  --color-success-500: var(--color-success-500);
+  --color-success-600: var(--color-success-600);
+  --color-success-700: var(--color-success-700);
+  --color-success-800: var(--color-success-800);
+  --color-success-900: var(--color-success-900);
+  --color-success-950: var(--color-success-950);
+
+  /* Warning */
+  --color-warning-50:  var(--color-warning-50);
+  --color-warning-100: var(--color-warning-100);
+  --color-warning-200: var(--color-warning-200);
+  --color-warning-300: var(--color-warning-300);
+  --color-warning-400: var(--color-warning-400);
+  --color-warning-500: var(--color-warning-500);
+  --color-warning-600: var(--color-warning-600);
+  --color-warning-700: var(--color-warning-700);
+  --color-warning-800: var(--color-warning-800);
+  --color-warning-900: var(--color-warning-900);
+  --color-warning-950: var(--color-warning-950);
+
+  /* Danger */
+  --color-danger-50:  var(--color-danger-50);
+  --color-danger-100: var(--color-danger-100);
+  --color-danger-200: var(--color-danger-200);
+  --color-danger-300: var(--color-danger-300);
+  --color-danger-400: var(--color-danger-400);
+  --color-danger-500: var(--color-danger-500);
+  --color-danger-600: var(--color-danger-600);
+  --color-danger-700: var(--color-danger-700);
+  --color-danger-800: var(--color-danger-800);
+  --color-danger-900: var(--color-danger-900);
+  --color-danger-950: var(--color-danger-950);
+}
+
+/* ---------------------------------------------------------------
+   Non-color tokens — these don't need multi-tenant override,
+   so @theme is fine (Tailwind keeps them if used in utilities).
+   --------------------------------------------------------------- */
+@theme inline {
+  /* Typography — values managed by Astro's fonts config (astro.config.mjs).
+     @theme inline bridges them as Tailwind utilities (font-sans, etc.)
+     without overriding the Astro-generated @font-face values. */
+  --font-sans:        var(--font-sans);
+  --font-serif:       var(--font-serif);
+  --font-mono:        var(--font-mono);
+  --font-heading-alt: var(--font-heading-alt);
+  --font-body-alt:    var(--font-body-alt);
+  --font-rounded:     var(--font-rounded);
+  --font-tech:        var(--font-tech);
+  --font-tech-body:   var(--font-tech-body);
+  --font-inter:       var(--font-inter);
+}
+
+@theme {
+
+  /* Border radius */
+  --radius-xs:   0.25rem;
+  --radius-sm:   0.375rem;
+  --radius-md:   0.5rem;
+  --radius-lg:   0.75rem;
+  --radius-xl:   1rem;
+  --radius-2xl:  1.5rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-xs:  0 1px 2px 0 oklch(0 0 0 / 0.05);
+  --shadow-sm:  0 1px 3px 0 oklch(0 0 0 / 0.1), 0 1px 2px -1px oklch(0 0 0 / 0.1);
+  --shadow-md:  0 4px 6px -1px oklch(0 0 0 / 0.1), 0 2px 4px -2px oklch(0 0 0 / 0.1);
+  --shadow-lg:  0 10px 15px -3px oklch(0 0 0 / 0.1), 0 4px 6px -4px oklch(0 0 0 / 0.1);
+  --shadow-xl:  0 20px 25px -5px oklch(0 0 0 / 0.1), 0 8px 10px -6px oklch(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px oklch(0 0 0 / 0.25);
+}

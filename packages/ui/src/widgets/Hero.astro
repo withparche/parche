@@ -1,0 +1,61 @@
+---
+import LegacyHeadline from '../components/LegacyHeadline.astro';
+import type { Props } from './Hero.props';
+
+const {
+  title,
+  subtitle,
+  tagline,
+  content,
+  actions = [],
+  image,
+} = Astro.props;
+---
+
+<div class="py-12 md:py-20">
+  <div class="text-center pb-10 md:pb-16 max-w-5xl mx-auto">
+    {tagline && (
+      <p class="type-label uppercase text-primary mb-2" set:html={tagline} />
+    )}
+    {title && (
+      <div class="max-w-4xl mx-auto">
+        <h1 class="type-h1 mb-6" set:html={title} />
+      </div>
+    )}
+    <div class="max-w-3xl mx-auto">
+      {subtitle && (
+        <p class="type-body text-xl text-muted mb-8" set:html={subtitle} />
+      )}
+      {actions.length > 0 && (
+        <div class="max-w-xs sm:max-w-md m-auto flex flex-nowrap flex-col sm:flex-row sm:justify-center gap-4">
+          {actions.map((action) => (
+            <a
+              href={action.href}
+              target={action.target}
+              class:list={[
+                'inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold transition-colors w-full sm:w-auto',
+                action.variant === 'primary' && 'bg-primary text-on-primary hover:opacity-90',
+                action.variant === 'secondary' && 'bg-surface border border-border text-heading hover:bg-muted/10',
+                action.variant === 'link' && 'text-primary hover:underline',
+                (!action.variant || action.variant === 'tertiary') && 'bg-surface border border-border text-heading hover:bg-muted/10',
+              ]}
+            >
+              {action.text}
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+    {content && <div class="mt-6" set:html={content} />}
+  </div>
+  {image && (
+    <div class="relative m-auto max-w-5xl">
+      <img
+        src={typeof image === 'string' ? image : image.src}
+        alt={typeof image === 'string' ? '' : (image.alt || '')}
+        class="mx-auto rounded-md w-full"
+        loading="eager"
+      />
+    </div>
+  )}
+</div>

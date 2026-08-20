@@ -1,0 +1,661 @@
+---
+import Icon from 'parche:primitives/Icon';
+import Button from 'parche:primitives/Button';
+import ThemeToggle from 'parche:components/ThemeToggle';
+import LocaleSwitcher from 'parche:components/LocaleSwitcher';
+
+interface NavLink {
+  label: string;
+  href: string;
+  icon?: string;
+  description?: string;
+}
+
+interface NavGroup {
+  title?: string;
+  links: NavLink[];
+}
+
+interface MegaMenu {
+  columns?: number;
+  featured?: {
+    title: string;
+    description?: string;
+    image?: string;
+    href: string;
+  };
+  footer?: string;
+}
+
+interface HeaderLink {
+  label: string;
+  href?: string;
+  children?: NavGroup[];
+  mega?: MegaMenu;
+}
+
+interface HeaderAction {
+  label: string;
+  href: string;
+  variant?: 'primary' | 'secondary' | 'ghost';
+  icon?: string;
+}
+
+interface Announcement {
+  text: string;
+  href?: string;
+  icon?: string;
+  dismissible?: boolean;
+  aside?: string;
+  class?: string;
+}
+
+type Logo = string | { src: string; alt?: string; width?: number; height?: number };
+
+interface Props {
+  links?: HeaderLink[];
+  actions?: HeaderAction[];
+  logo?: Logo;
+  announcement?: Announcement;
+}
+
+const { links = [], actions = [], logo = 'AstroWind', announcement } = Astro.props;
+
+const homeHref = Astro.currentLocale && Astro.currentLocale !== 'en' ? `/${Astro.currentLocale}` : '/';
+const isLogoText = typeof logo === 'string';
+
+function linkType(link: HeaderLink): 'link' | 'dropdown' | 'mega' {
+  if (!link.children?.length) return 'link';
+  return link.mega ? 'mega' : 'dropdown';
+}
+
+---
+
+<!-- Skip to content (accessibility) -->
+<a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-white focus:rounded-md focus:outline-none">
+  Skip to content
+</a>
+
+<!-- Announcement bar -->
+{announcement && (
+  <div class:list={["text-sm relative", announcement.class || "bg-neutral-900 text-white dark:bg-surface dark:text-heading dark:border-b dark:border-border"]} data-announcement>
+    <div class="relative flex items-center py-2 px-3">
+      {(announcement.dismissible !== false) && (
+        <button
+          type="button"
+          class="shrink-0 p-1 opacity-60 hover:opacity-100 transition-opacity cursor-pointer"
+          aria-label="Dismiss announcement"
+          data-announcement-dismiss
+        >
+          <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      )}
+      <div class="ml-1">
+        {announcement.href ? (
+          <a href={announcement.href} class="hover:underline no-underline transition-colors">
+            {announcement.icon && <Icon name={announcement.icon} class="w-4 h-4 inline-block mr-1.5 -mt-0.5" />}
+            <span set:html={announcement.text} />
+          </a>
+        ) : (
+          <span>
+            {announcement.icon && <Icon name={announcement.icon} class="w-4 h-4 inline-block mr-1.5 -mt-0.5" />}
+            <span set:html={announcement.text} />
+          </span>
+        )}
+      </div>
+      {announcement.aside && (
+        <span class="absolute right-4 top-1/2 -translate-y-1/2 hidden md:block" set:html={announcement.aside} />
+      )}
+    </div>
+  </div>
+)}
+
+<header
+  class="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-lg transition-shadow duration-300"
+  data-header
+  transition:animate="none"
+>
+  <div class="mx-auto max-w-6xl flex items-center justify-between px-4 md:px-6 h-[4.75rem]">
+    <!-- Logo -->
+    <a href={homeHref} class="no-underline hover:opacity-80 transition-opacity shrink-0">
+      {isLogoText ? (
+        <span class="type-h3 text-heading">{logo}</span>
+      ) : (
+        <img
+          src={(logo as any).src}
+          alt={(logo as any).alt || 'Logo'}
+          width={(logo as any).width}
+          height={(logo as any).height}
+          class="h-8 w-auto"
+        />
+      )}
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="hidden md:flex flex-1 items-center justify-center gap-1" aria-label="Main navigation">
+      {links.map((link) => {
+        const type = linkType(link);
+
+        if (type === 'link') {
+          return (
+            <a
+              href={link.href}
+              class="text-[0.938rem] font-medium text-muted hover:text-heading transition-colors no-underline px-3 py-2 rounded-md hover:bg-black/5 dark:hover:bg-white/5"
+            >
+              {link.label}
+            </a>
+          );
+        }
+
+        // Dropdown or Mega
+        const isMega = type === 'mega';
+        const megaCols = link.mega?.columns ?? 3;
+
+        return (
+          <div class:list={[isMega ? 'static' : 'relative']} data-dropdown>
+            <button
+              type="button"
+              class="inline-flex items-center gap-1 text-[0.938rem] font-medium text-muted hover:text-heading transition-colors px-3 py-2 rounded-md hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer"
+              aria-expanded="false"
+              aria-haspopup="true"
+              data-dropdown-trigger
+            >
+              {link.label}
+              <svg class="w-3.5 h-3.5 transition-transform duration-200" data-chevron xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+
+            {!isMega ? (
+              /* ---- Simple Dropdown ---- */
+              <div
+                class="absolute left-0 top-full pt-2 opacity-0 invisible translate-y-1 transition-all duration-200 z-50"
+                role="menu"
+                data-dropdown-panel
+              >
+                <div class="bg-surface border border-border rounded-lg shadow-lg py-2 min-w-[220px]">
+                  {(link.children ?? []).map((group) => (
+                    <div>
+                      {group.title && (
+                        <div class="px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-muted/60">{group.title}</div>
+                      )}
+                      {group.links.map((item) => (
+                        <a
+                          href={item.href}
+                          class="flex items-center gap-3 px-4 py-2 text-sm text-muted hover:text-heading hover:bg-black/5 dark:hover:bg-white/5 transition-colors no-underline"
+                          role="menuitem"
+                        >
+                          {item.icon && <Icon name={item.icon} class="w-4 h-4 shrink-0 text-muted/60" />}
+                          <div>
+                            <div class="font-medium">{item.label}</div>
+                            {item.description && <div class="text-xs text-muted/60 mt-0.5">{item.description}</div>}
+                          </div>
+                        </a>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              /* ---- Mega Menu ---- */
+              <div
+                class="absolute left-0 right-0 top-full opacity-0 invisible translate-y-1 transition-all duration-200 z-50"
+                role="menu"
+                data-dropdown-panel
+                data-mega
+              >
+                <div class="bg-surface border-t border-border shadow-lg">
+                  <div class="mx-auto max-w-6xl px-6 py-6">
+                    <div class="flex gap-8">
+                      {/* Link columns */}
+                      <div class:list={[
+                        'flex-1 grid gap-x-8 gap-y-6',
+                        megaCols === 1 && 'grid-cols-1',
+                        megaCols === 2 && 'grid-cols-2',
+                        megaCols === 3 && 'grid-cols-3',
+                        megaCols === 4 && 'grid-cols-4',
+                      ]}>
+                        {(link.children ?? []).map((group) => (
+                          <div>
+                            {group.title && (
+                              <div class="text-xs font-semibold uppercase tracking-wider text-muted/60 mb-3">{group.title}</div>
+                            )}
+                            <ul class="space-y-1">
+                              {group.links.map((item) => (
+                                <li>
+                                  <a
+                                    href={item.href}
+                                    class="group flex items-start gap-3 p-2 -mx-2 rounded-md hover:bg-black/5 dark:hover:bg-white/5 transition-colors no-underline"
+                                    role="menuitem"
+                                  >
+                                    {item.icon && (
+                                      <span class="mt-0.5 flex items-center justify-center w-8 h-8 rounded-md bg-primary/10 text-primary shrink-0">
+                                        <Icon name={item.icon} class="w-4 h-4" />
+                                      </span>
+                                    )}
+                                    <div>
+                                      <div class="text-sm font-medium text-heading group-hover:text-primary transition-colors">{item.label}</div>
+                                      {item.description && <div class="text-xs text-muted/60 mt-0.5 leading-relaxed">{item.description}</div>}
+                                    </div>
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Featured card */}
+                      {link.mega?.featured && (
+                        <div class="w-64 shrink-0">
+                          <a href={link.mega.featured.href} class="block rounded-lg overflow-hidden border border-border hover:border-primary/30 transition-colors no-underline group">
+                            {link.mega.featured.image && (
+                              <img
+                                src={link.mega.featured.image}
+                                alt=""
+                                class="w-full h-36 object-cover"
+                                loading="lazy"
+                              />
+                            )}
+                            <div class="p-4">
+                              <div class="text-sm font-semibold text-heading group-hover:text-primary transition-colors">{link.mega.featured.title}</div>
+                              {link.mega.featured.description && (
+                                <div class="text-xs text-muted/60 mt-1 leading-relaxed">{link.mega.featured.description}</div>
+                              )}
+                            </div>
+                          </a>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Mega footer */}
+                    {link.mega?.footer && (
+                      <div class="mt-6 pt-4 border-t border-border text-sm text-muted">
+                        <Fragment set:html={link.mega.footer} />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </nav>
+
+    <!-- Desktop actions -->
+    <div class="hidden md:flex items-center gap-2">
+      <ThemeToggle />
+      <LocaleSwitcher />
+      {actions.length > 0 && (
+        <div class="flex items-center gap-2 ml-5">
+          {actions.map((action) => (
+            <Button href={action.href} variant={action.variant || 'primary'} size="sm" class="px-4 py-2.5">
+              {action.icon && <Icon name={action.icon} class="w-4 h-4" />}
+              {action.label}
+            </Button>
+          ))}
+        </div>
+      )}
+    </div>
+
+    <!-- Mobile menu toggle -->
+    <parche-mobile-menu>
+      <button
+        type="button"
+        class="md:hidden flex items-center justify-center w-10 h-10 text-muted hover:text-heading transition-colors cursor-pointer"
+        data-menu-toggle
+        aria-label="Toggle menu"
+        aria-expanded="false"
+      >
+        <svg data-icon="open" class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+        <svg data-icon="close" class="w-6 h-6 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- Mobile menu panel -->
+      <div
+        data-menu-panel
+        class="fixed left-0 right-0 top-[4.75rem] z-40 bg-surface border-t border-border translate-y-[-100%] invisible transition-[transform,visibility] duration-300 ease-out md:hidden overflow-y-auto"
+        style="height: calc(100vh - 4.75rem); height: calc(100dvh - 4.75rem);"
+      >
+        <nav class="flex flex-col px-6 py-6 gap-0" aria-label="Mobile navigation">
+          {links.map((link) => {
+            const type = linkType(link);
+
+            if (type === 'link') {
+              return (
+                <a
+                  href={link.href}
+                  class="text-lg font-medium text-muted hover:text-heading py-3 border-b border-border transition-colors no-underline"
+                  data-menu-link
+                >
+                  {link.label}
+                </a>
+              );
+            }
+
+            // Mobile accordion for dropdown / mega
+            return (
+              <div class="border-b border-border" data-mobile-accordion>
+                <button
+                  type="button"
+                  class="flex items-center justify-between w-full text-lg font-medium text-muted hover:text-heading py-3 transition-colors cursor-pointer"
+                  aria-expanded="false"
+                  data-accordion-trigger
+                >
+                  <span>{link.label}</span>
+                  <svg class="w-4 h-4 transition-transform duration-200" data-accordion-chevron xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+
+                <div class="hidden pb-3" data-accordion-panel>
+                  {(link.children ?? []).map((group) => (
+                    <div class="mb-2">
+                      {group.title && (
+                        <div class="text-xs font-semibold uppercase tracking-wider text-muted/60 px-3 py-1.5">{group.title}</div>
+                      )}
+                      {group.links.map((item) => (
+                        <a
+                          href={item.href}
+                          class="flex items-center gap-3 px-3 py-2 text-base text-muted hover:text-heading transition-colors no-underline"
+                          data-menu-link
+                        >
+                          {item.icon && <Icon name={item.icon} class="w-4 h-4 shrink-0 text-muted/60" />}
+                          <span>{item.label}</span>
+                        </a>
+                      ))}
+                    </div>
+                  ))}
+
+                  {/* Mobile featured card (compact) */}
+                  {link.mega?.featured && (
+                    <a
+                      href={link.mega.featured.href}
+                      class="flex items-center gap-3 mx-3 mt-2 p-3 rounded-lg bg-black/5 dark:bg-white/5 no-underline"
+                      data-menu-link
+                    >
+                      {link.mega.featured.image && (
+                        <img src={link.mega.featured.image} alt="" class="w-12 h-12 rounded object-cover" loading="lazy" />
+                      )}
+                      <div>
+                        <div class="text-sm font-semibold text-heading">{link.mega.featured.title}</div>
+                        {link.mega.featured.description && (
+                          <div class="text-xs text-muted/60 mt-0.5">{link.mega.featured.description}</div>
+                        )}
+                      </div>
+                    </a>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </nav>
+
+        {/* Mobile actions */}
+        {actions.length > 0 && (
+          <div class="flex flex-col gap-2 px-6 pt-4">
+            {actions.map((action) => (
+              <Button href={action.href} variant={action.variant || 'primary'} size="md" class="w-full" data-menu-link>
+                {action.icon && <Icon name={action.icon} class="w-4 h-4" />}
+                {action.label}
+              </Button>
+            ))}
+          </div>
+        )}
+
+        <div class="flex items-center gap-3 px-6 pt-4">
+          <LocaleSwitcher />
+          <ThemeToggle />
+        </div>
+      </div>
+    </parche-mobile-menu>
+  </div>
+</header>
+
+<script>
+  // ---- Scroll shadow ----
+  const header = document.querySelector('[data-header]') as HTMLElement;
+  if (header) {
+    const sentinel = document.createElement('div');
+    sentinel.style.cssText = 'position:absolute;top:0;left:0;right:0;height:1px;pointer-events:none;';
+    header.parentElement?.insertBefore(sentinel, header);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        header.classList.toggle('shadow-md', !entry.isIntersecting);
+        header.classList.toggle('border-transparent', !entry.isIntersecting);
+      },
+      { threshold: [1] }
+    );
+    observer.observe(sentinel);
+  }
+
+  // ---- Announcement dismiss ----
+  const dismissBtn = document.querySelector('[data-announcement-dismiss]');
+  if (dismissBtn) {
+    dismissBtn.addEventListener('click', () => {
+      const bar = dismissBtn.closest('[data-announcement]') as HTMLElement;
+      if (bar) {
+        bar.style.height = bar.offsetHeight + 'px';
+        bar.offsetHeight; // force reflow
+        bar.style.transition = 'height 0.3s ease, opacity 0.3s ease';
+        bar.style.height = '0';
+        bar.style.opacity = '0';
+        bar.style.overflow = 'hidden';
+        bar.addEventListener('transitionend', () => bar.remove(), { once: true });
+      }
+    });
+  }
+
+  // ---- Desktop dropdowns ----
+  class ParcheDropdown {
+    static init() {
+      document.querySelectorAll('[data-dropdown]').forEach((dropdown) => {
+        // Prevent double-init on same element
+        if ((dropdown as any)._parcheInit) return;
+        (dropdown as any)._parcheInit = true;
+
+        const trigger = dropdown.querySelector('[data-dropdown-trigger]') as HTMLButtonElement;
+        const panel = dropdown.querySelector('[data-dropdown-panel]') as HTMLElement;
+        const chevron = dropdown.querySelector('[data-chevron]') as HTMLElement;
+        if (!trigger || !panel) return;
+
+        let isOpen = false;
+        let closeTimeout: ReturnType<typeof setTimeout>;
+
+        const open = () => {
+          clearTimeout(closeTimeout);
+          // Close all others first
+          document.querySelectorAll('[data-dropdown]').forEach((other) => {
+            if (other !== dropdown) {
+              const otherTrigger = other.querySelector('[data-dropdown-trigger]') as HTMLButtonElement;
+              const otherPanel = other.querySelector('[data-dropdown-panel]') as HTMLElement;
+              const otherChevron = other.querySelector('[data-chevron]') as HTMLElement;
+              if (otherTrigger && otherPanel) {
+                otherTrigger.setAttribute('aria-expanded', 'false');
+                otherPanel.classList.add('opacity-0', 'invisible', 'translate-y-1');
+                otherPanel.classList.remove('opacity-100', 'visible', 'translate-y-0');
+                otherChevron?.classList.remove('rotate-180');
+              }
+            }
+          });
+
+          isOpen = true;
+          trigger.setAttribute('aria-expanded', 'true');
+          panel.classList.remove('opacity-0', 'invisible', 'translate-y-1');
+          panel.classList.add('opacity-100', 'visible', 'translate-y-0');
+          chevron?.classList.add('rotate-180');
+        };
+
+        const close = () => {
+          isOpen = false;
+          trigger.setAttribute('aria-expanded', 'false');
+          panel.classList.add('opacity-0', 'invisible', 'translate-y-1');
+          panel.classList.remove('opacity-100', 'visible', 'translate-y-0');
+          chevron?.classList.remove('rotate-180');
+        };
+
+        const delayedClose = () => {
+          closeTimeout = setTimeout(close, 150);
+        };
+
+        // Click to toggle
+        trigger.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          isOpen ? close() : open();
+        });
+
+        // Stop propagation on panel clicks
+        panel.addEventListener('click', (e) => {
+          e.stopPropagation();
+        });
+
+        // Hover open/close (desktop)
+        const isMega = panel.hasAttribute('data-mega');
+
+        if (isMega) {
+          trigger.addEventListener('mouseenter', open);
+          panel.addEventListener('mouseenter', () => clearTimeout(closeTimeout));
+          trigger.addEventListener('mouseleave', delayedClose);
+          panel.addEventListener('mouseleave', delayedClose);
+        } else {
+          dropdown.addEventListener('mouseenter', open);
+          dropdown.addEventListener('mouseleave', delayedClose);
+        }
+
+        // Keyboard: Escape, arrows
+        dropdown.addEventListener('keydown', (e: Event) => {
+          const ke = e as KeyboardEvent;
+          if (ke.key === 'Escape' && isOpen) {
+            close();
+            trigger.focus();
+          }
+          if (ke.key === 'ArrowDown' && !isOpen) {
+            ke.preventDefault();
+            open();
+            (panel.querySelector('a') as HTMLAnchorElement)?.focus();
+          }
+          if (isOpen && (ke.key === 'ArrowDown' || ke.key === 'ArrowUp')) {
+            ke.preventDefault();
+            const items = Array.from(panel.querySelectorAll('a')) as HTMLAnchorElement[];
+            const idx = items.indexOf(document.activeElement as HTMLAnchorElement);
+            const next = ke.key === 'ArrowDown'
+              ? (idx < items.length - 1 ? idx + 1 : 0)
+              : (idx > 0 ? idx - 1 : items.length - 1);
+            items[next]?.focus();
+          }
+        });
+
+        // Close on focus outside
+        dropdown.addEventListener('focusout', (e: Event) => {
+          const fe = e as FocusEvent;
+          if (!dropdown.contains(fe.relatedTarget as Node)) {
+            close();
+          }
+        });
+      });
+
+      // Close all on click outside
+      document.addEventListener('click', (e) => {
+        document.querySelectorAll('[data-dropdown]').forEach((dropdown) => {
+          if (!dropdown.contains(e.target as Node)) {
+            const trigger = dropdown.querySelector('[data-dropdown-trigger]') as HTMLButtonElement;
+            const panel = dropdown.querySelector('[data-dropdown-panel]') as HTMLElement;
+            const chevron = dropdown.querySelector('[data-chevron]') as HTMLElement;
+            if (trigger && panel) {
+              trigger.setAttribute('aria-expanded', 'false');
+              panel.classList.add('opacity-0', 'invisible', 'translate-y-1');
+              panel.classList.remove('opacity-100', 'visible', 'translate-y-0');
+              chevron?.classList.remove('rotate-180');
+            }
+          }
+        });
+      });
+    }
+  }
+
+  // ---- Mobile menu + accordions ----
+  class ParcheMobileMenu extends HTMLElement {
+    connectedCallback() {
+      const toggle = this.querySelector('[data-menu-toggle]') as HTMLButtonElement;
+      const panel = this.querySelector('[data-menu-panel]') as HTMLElement;
+      const iconOpen = this.querySelector('[data-icon="open"]') as HTMLElement;
+      const iconClose = this.querySelector('[data-icon="close"]') as HTMLElement;
+      const links = this.querySelectorAll('[data-menu-link]');
+
+      if (!toggle || !panel) return;
+
+      let isOpen = false;
+
+      const setOpen = (open: boolean) => {
+        isOpen = open;
+        toggle.setAttribute('aria-expanded', String(open));
+        iconOpen.classList.toggle('hidden', open);
+        iconClose.classList.toggle('hidden', !open);
+
+        if (open) {
+          panel.classList.remove('translate-y-[-100%]', 'invisible');
+          panel.classList.add('translate-y-0', 'visible');
+          document.body.style.overflow = 'hidden';
+        } else {
+          panel.classList.add('translate-y-[-100%]', 'invisible');
+          panel.classList.remove('translate-y-0', 'visible');
+          document.body.style.overflow = '';
+        }
+      };
+
+      toggle.addEventListener('click', () => setOpen(!isOpen));
+
+      links.forEach((link) => {
+        link.addEventListener('click', () => setOpen(false));
+      });
+
+      // Accordions
+      this.querySelectorAll('[data-mobile-accordion]').forEach((accordion) => {
+        const accTrigger = accordion.querySelector('[data-accordion-trigger]') as HTMLButtonElement;
+        const accPanel = accordion.querySelector('[data-accordion-panel]') as HTMLElement;
+        const accChevron = accordion.querySelector('[data-accordion-chevron]') as HTMLElement;
+
+        if (!accTrigger || !accPanel) return;
+
+        accTrigger.addEventListener('click', () => {
+          const expanded = accTrigger.getAttribute('aria-expanded') === 'true';
+          accTrigger.setAttribute('aria-expanded', String(!expanded));
+          accPanel.classList.toggle('hidden', expanded);
+          accChevron?.classList.toggle('rotate-180', !expanded);
+        });
+      });
+
+      document.addEventListener('click', (e) => {
+        if (isOpen && !this.contains(e.target as Node)) {
+          setOpen(false);
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (isOpen && e.key === 'Escape') {
+          setOpen(false);
+          toggle.focus();
+        }
+      });
+    }
+  }
+
+  customElements.define('parche-mobile-menu', ParcheMobileMenu);
+
+  // Init dropdowns
+  ParcheDropdown.init();
+  document.addEventListener('astro:after-swap', () => ParcheDropdown.init());
+</script>

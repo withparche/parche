@@ -1,0 +1,20 @@
+{
+  "name": "@parche/ui",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@parche/core": "workspace:*",
+    "tailwind-merge": "^3.0.0",
+    "zod": "^4.3.6"
+  },
+  "peerDependencies": {
+    "astro": "^6.0.0"
+  },
+  "devDependencies": {
+    "astro": "^6.0.0"
+  }
+}

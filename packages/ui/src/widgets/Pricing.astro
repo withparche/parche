@@ -1,0 +1,79 @@
+---
+import LegacyHeadline from '../components/LegacyHeadline.astro';
+import Icon from 'parche:primitives/Icon';
+import type { Props } from './Pricing.props';
+
+const { title, subtitle, tagline, prices = [] } = Astro.props;
+---
+
+<LegacyHeadline {title} {subtitle} {tagline} />
+
+{prices.length > 0 && (
+  <div class="flex items-stretch justify-center">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {prices.map(({ title, subtitle, price, period, items = [], callToAction, hasRibbon = false, ribbonTitle }) => (
+        price && period && (
+          <div class="relative mx-auto flex w-full max-w-sm flex-col justify-between rounded-lg border border-border bg-surface px-6 py-8 text-center shadow">
+            {hasRibbon && ribbonTitle && (
+              <div class="absolute right-[-5px] top-[-5px] z-[1] h-[100px] w-[100px] overflow-hidden text-right">
+                <span class="absolute right-[-21px] top-[19px] block w-full rotate-45 bg-primary px-0 py-1 text-center text-[10px] font-bold uppercase leading-5 text-on-primary shadow-[0_3px_10px_-5px_rgba(0,0,0,0.3)]">
+                  {ribbonTitle}
+                </span>
+              </div>
+            )}
+
+            <div class="px-2 py-0">
+              {title && (
+                <h3 class="type-label mb-2 text-center uppercase tracking-wider text-heading">
+                  {title}
+                </h3>
+              )}
+              {subtitle && (
+                <p class="type-body text-muted">{subtitle}</p>
+              )}
+
+              <div class="my-8">
+                <div class="mb-1 flex items-center justify-center text-center">
+                  <span class="text-5xl text-heading">$</span>
+                  <span class="text-6xl font-extrabold text-heading">{price}</span>
+                </div>
+                <span class="type-body lowercase text-muted">{period}</span>
+              </div>
+
+              {items.length > 0 && (
+                <ul class="my-8 space-y-2 text-left md:my-10">
+                  {items.map(({ description, icon }) =>
+                    description && (
+                      <li class="mb-1.5 flex items-start space-x-3 leading-7">
+                        <div class="mt-1 flex-shrink-0 rounded-full bg-primary p-1 text-on-primary">
+                          <Icon name={icon ?? 'tabler:check'} class="h-3 w-3" />
+                        </div>
+                        <span class="type-body text-heading">{description}</span>
+                      </li>
+                    )
+                  )}
+                </ul>
+              )}
+            </div>
+
+            {callToAction?.href && callToAction?.text && (
+              <div class="flex justify-center">
+                <a
+                  href={callToAction.href}
+                  class:list={[
+                    'inline-block rounded-lg px-6 py-3 text-sm font-semibold transition-colors',
+                    hasRibbon
+                      ? 'bg-primary text-on-primary hover:opacity-90'
+                      : 'border border-border bg-surface text-heading hover:bg-primary hover:text-on-primary hover:border-primary',
+                  ]}
+                >
+                  {callToAction.text}
+                </a>
+              </div>
+            )}
+          </div>
+        )
+      ))}
+    </div>
+  </div>
+)}

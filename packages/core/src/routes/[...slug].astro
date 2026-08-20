@@ -1,0 +1,216 @@
+---
+import 'parche:config/styles';
+import BaseLayout from 'parche:layouts/BaseLayout';
+import ThemePanel from 'parche:components/ThemePanel';
+import LayoutRenderer from 'parche:LayoutRenderer';
+import config from 'parche:config';
+import { templateMap } from 'parche:registry/templates';
+import { widgetMap } from 'parche:registry/widgets';
+import { defaultLocale } from 'parche:config/i18n';
+import { showPanel } from 'parche:config/themes';
+import { resolveContent, getResolverPaths } from 'parche:registry/resolvers';
+import { getEntry, render } from 'astro:content';
+import {
+  buildSlugMap,
+  getAlternateUrls,
+  resolvePageFromSlug,
+} from 'parche:utils/i18n';
+import { resolveMetadata } from 'parche:utils/metadata';
+import { resolveLayout } from 'parche:utils/layout';
+
+export async function getStaticPaths() {
+  const slugMap = await buildSlugMap();
+
+  const pagePaths = slugMap.map((entry) => {
+    const { locale, pageKey, slug, data, entryId } = entry;
+
+    let urlSlug: string | undefined;
+    if (pageKey === 'home') {
+      urlSlug = locale === defaultLocale ? undefined : locale;
+    } else if (locale === defaultLocale) {
+      urlSlug = slug;
+    } else {
+      urlSlug = `${locale}/${slug}`;
+    }
+
+    return {
+      params: { slug: urlSlug },
+      props: { pageData: data, locale, pageKey, entryId },
+    };
+  });
+
+  // Add paths from app resolvers (e.g. blog posts at root level)
+  const { locales } = await import('parche:config/i18n');
+  const isDev = import.meta.env.DEV;
+  const resolverPaths = await getResolverPaths(locales, defaultLocale, { showDrafts: isDev });
+
+  return [...pagePaths, ...resolverPaths];
+}
+
+// ---- Render-time ----
+// Determine what we're rendering: app content (via resolver) or page content.
+let mode: 'resolver' | 'page' = 'page';
+let resolvedApp: Awaited<ReturnType<typeof resolveContent>> = null;
+
+// Page-mode variables
+let pageData: any;
+let locale: string = Astro.currentLocale ?? defaultLocale;
+let pageKey: string = '';
+let entryId: string = '';
+let alternates: { locale: string; href: string }[] = [];
+
+const isDev = import.meta.env.DEV;
+
+if (Astro.props.fromResolver) {
+  // Static mode — this path came from a resolver's getPaths()
+  resolvedApp = await resolveContent(Astro.params.slug!, locale, {
+    showDrafts: isDev,
+    siteUrl: config.site.url || Astro.site?.href || '',
+    siteName: config.site.name,
+  });
+  if (resolvedApp) {
+    mode = 'resolver';
+  } else {
+    return Astro.redirect('/404');
+  }
+} else if (Astro.props.pageData) {
+  // Static mode — page data provided by getStaticPaths
+  ({ pageData, locale, pageKey, entryId } = Astro.props);
+} else {
+  // SSR mode — try resolvers first, then pages
+  resolvedApp = await resolveContent(Astro.params.slug ?? '', locale, {
+    showDrafts: isDev,
+    siteUrl: config.site.url || Astro.site?.href || '',
+    siteName: config.site.name,
+  });
+
+  if (resolvedApp) {
+    mode = 'resolver';
+  } else {
+    const resolved = await resolvePageFromSlug(Astro.params.slug, defaultLocale);
+    if (!resolved) {
+      return Astro.redirect('/404');
+    }
+    ({ pageData, locale, pageKey } = resolved);
+    entryId = resolved.entryId;
+  }
+}
+
+// ---- Resolver mode: app-provided content (e.g. blog post) ----
+let AppTemplate: any = null;
+let AppContent: any = null;
+let appMetadata: any = null;
+let appExtras: any = {};
+const RelatedPosts = widgetMap['blog/RelatedPosts'];
+const SeriesNav = widgetMap['blog/SeriesNav'];
+
+if (mode === 'resolver' && resolvedApp) {
+  AppTemplate = templateMap[resolvedApp.template];
+  appMetadata = resolvedApp.metadata;
+  appExtras = resolvedApp.extras;
+
+  try {
+    const entry = await getEntry(resolvedApp.collection as any, resolvedApp.entryId as any);
+    if (entry) {
+      const { Content } = await render(entry);
+      AppContent = Content;
+    }
+  } catch { /* non-renderable entry */ }
+}
+
+// ---- Page mode: standard page content ----
+let pageMetadata: any = null;
+let pageTemplate: string = 'dynamic';
+let PageTemplateComponent: any = null;
+let PageMarkdownContent: any = null;
+let pageLayoutName: string = 'default';
+
+if (mode === 'page' && pageData) {
+  const slugMap = await buildSlugMap();
+  alternates = getAlternateUrls(pageKey, slugMap, defaultLocale, Astro.site);
+  pageTemplate = pageData.template || 'dynamic';
+
+  const resolved = resolveMetadata(pageData, config, { locale });
+  resolved.title = pageKey === 'home'
+    ? config.site.name
+    : `${resolved.title} — ${config.site.name}`;
+  pageMetadata = resolved;
+
+  PageTemplateComponent = pageTemplate !== 'dynamic' ? templateMap[pageTemplate] : null;
+
+  const pageEntry = await getEntry('pages', entryId);
+  if (pageEntry) {
+    try {
+      const { Content } = await render(pageEntry);
+      PageMarkdownContent = Content;
+    } catch {
+      // JSON entries don't support render()
+    }
+  }
+  pageLayoutName = pageData.layout || 'default';
+}
+
+const metadata = mode === 'resolver' ? appMetadata : pageMetadata;
+const layoutName = mode === 'resolver'
+  ? (resolvedApp?.layout || 'default')
+  : pageLayoutName;
+const layoutSections = await resolveLayout(layoutName, locale, defaultLocale);
+---
+
+<BaseLayout metadata={metadata} config={config} lang={locale}>
+  {mode === 'page' && alternates.length > 0 && (
+    <Fragment slot="head">
+      {alternates.map((alt) => (
+        <link rel="alternate" hreflang={alt.locale} href={alt.href} />
+      ))}
+      <link
+        rel="alternate"
+        hreflang="x-default"
+        href={alternates.find((a) => a.locale === defaultLocale)?.href}
+      />
+    </Fragment>
+  )}
+
+  {mode === 'resolver' && resolvedApp ? (
+    <LayoutRenderer
+      layoutSections={layoutSections}
+      pageTemplate="dynamic"
+    >
+      {AppTemplate ? (
+        <AppTemplate {...resolvedApp.templateProps}>
+          {AppContent && <AppContent />}
+        </AppTemplate>
+      ) : (
+        <article class="prose max-w-4xl mx-auto py-16 px-4">
+          {AppContent && <AppContent />}
+        </article>
+      )}
+
+      {appExtras.seriesNav && SeriesNav && (
+        <div class="max-w-4xl mx-auto px-4 mb-8">
+          <SeriesNav
+            seriesName={appExtras.seriesNav.seriesName}
+            posts={appExtras.seriesNav.posts}
+            currentOrder={appExtras.seriesNav.currentOrder}
+          />
+        </div>
+      )}
+
+      {appExtras.relatedPosts && RelatedPosts && (
+        <RelatedPosts posts={appExtras.relatedPosts} />
+      )}
+    </LayoutRenderer>
+  ) : (
+    <LayoutRenderer
+      layoutSections={layoutSections}
+      pageSections={pageData?.sections}
+      pageTemplate={pageTemplate}
+      PageTemplateComponent={PageTemplateComponent}
+      pageData={pageData}
+      PageMarkdownContent={PageMarkdownContent}
+    />
+
+  )}
+
+  {showPanel && <ThemePanel />}
+</BaseLayout>
