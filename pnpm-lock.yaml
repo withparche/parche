@@ -104,37 +104,6 @@ importers:
         specifier: ^10.0.3
         version: 10.1.4(astro@6.4.8(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.4))
 
-  examples/dynamic-widgets:
-    dependencies:
-      '@iconify-json/tabler':
-        specifier: ^1.2.32
-        version: 1.2.38
-      '@parche/core':
-        specifier: workspace:*
-        version: link:../../packages/core
-      '@parche/primitives':
-        specifier: workspace:*
-        version: link:../../packages/primitives
-      '@parche/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
-      '@tailwindcss/vite':
-        specifier: ^4.0.0
-        version: 4.3.3(vite@7.3.6(jiti@2.7.0)(lightningcss@1.32.0))
-      astro:
-        specifier: ^6.0.0
-        version: 6.4.8(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.4)
-      astro-icon:
-        specifier: ^1.1.5
-        version: 1.2.0
-      tailwindcss:
-        specifier: ^4.0.0
-        version: 4.3.3
-    devDependencies:
-      '@astrojs/node':
-        specifier: ^10.0.3
-        version: 10.1.4(astro@6.4.8(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.4))
-
   examples/i18n:
     dependencies:
       '@iconify-json/tabler':
@@ -161,6 +130,37 @@ importers:
       sharp:
         specifier: ^0.35.3
         version: 0.35.3
+      tailwindcss:
+        specifier: ^4.0.0
+        version: 4.3.3
+    devDependencies:
+      '@astrojs/node':
+        specifier: ^10.0.3
+        version: 10.1.4(astro@6.4.8(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.4))
+
+  examples/import-widget:
+    dependencies:
+      '@iconify-json/tabler':
+        specifier: ^1.2.32
+        version: 1.2.38
+      '@parche/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@parche/primitives':
+        specifier: workspace:*
+        version: link:../../packages/primitives
+      '@parche/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
+      '@tailwindcss/vite':
+        specifier: ^4.0.0
+        version: 4.3.3(vite@7.3.6(jiti@2.7.0)(lightningcss@1.32.0))
+      astro:
+        specifier: ^6.0.0
+        version: 6.4.8(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.62.4)
+      astro-icon:
+        specifier: ^1.1.5
+        version: 1.2.0
       tailwindcss:
         specifier: ^4.0.0
         version: 4.3.3
