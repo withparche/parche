@@ -1,7 +1,6 @@
 {
   "name": "@parche/primitives",
-  "version": "0.3.0",
-  "private": true,
+  "version": "0.3.0-alpha.0",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
@@ -17,5 +16,31 @@
   },
   "engines": {
     "node": ">=20"
-  }
+  },
+  "description": "Parche primitives: token-driven, foundational building blocks.",
+  "license": "MIT",
+  "author": "Arthelokyo",
+  "homepage": "https://github.com/withparche/parche#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/withparche/parche.git",
+    "directory": "parches/primitives"
+  },
+  "bugs": {
+    "url": "https://github.com/withparche/parche/issues"
+  },
+  "keywords": [
+    "astro",
+    "parche",
+    "primitives",
+    "components"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ]
 }

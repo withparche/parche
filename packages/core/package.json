@@ -1,7 +1,6 @@
 {
   "name": "@parche/core",
-  "version": "0.3.0",
-  "private": true,
+  "version": "0.3.0-alpha.0",
   "type": "module",
   "exports": {
     ".": "./src/integration/index.ts",
@@ -26,5 +25,31 @@
   },
   "engines": {
     "node": ">=20"
-  }
+  },
+  "description": "The Parche host: the engine that turns data-driven content into Astro pages.",
+  "license": "MIT",
+  "author": "Arthelokyo",
+  "homepage": "https://github.com/withparche/parche#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/withparche/parche.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/withparche/parche/issues"
+  },
+  "keywords": [
+    "astro",
+    "parche",
+    "framework",
+    "design-system"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ]
 }

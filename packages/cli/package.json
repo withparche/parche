@@ -1,6 +1,6 @@
 {
   "name": "@parche/cli",
-  "version": "0.3.0",
+  "version": "0.3.0-alpha.0",
   "type": "module",
   "description": "The Parche CLI.",
   "bin": {
@@ -13,7 +13,9 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "dev": "tsx src/index.ts",
@@ -35,5 +37,24 @@
   "engines": {
     "node": ">=20"
   },
-  "private": true
+  "license": "MIT",
+  "author": "Arthelokyo",
+  "homepage": "https://github.com/withparche/parche#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/withparche/parche.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/withparche/parche/issues"
+  },
+  "keywords": [
+    "astro",
+    "parche",
+    "cli",
+    "scaffolding"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }
