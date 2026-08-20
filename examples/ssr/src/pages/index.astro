@@ -1,0 +1,30 @@
+---
+export const prerender = false;
+
+import '@parche/core/styles';
+import Content from 'parche:widgets/Content';
+
+const now = new Date().toISOString();
+const ua = Astro.request.headers.get('user-agent') ?? 'unknown';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SSR — Parche</title>
+  </head>
+  <body>
+    <Content
+      tagline="SSR"
+      title="Rendered on the server"
+      content="This page is server-rendered on every request (prerender = false) via the Node adapter. Reload and the timestamp below changes."
+    />
+    <div class="mx-auto max-w-3xl px-4 pb-16">
+      <p class="text-muted">Server time at render: <strong class="text-heading">{now}</strong></p>
+      <p class="mt-4 text-muted">User agent, read from the request on the server:</p>
+      <pre class="mt-2 overflow-x-auto rounded-lg border border-border bg-surface p-4 text-sm">{ua}</pre>
+    </div>
+  </body>
+</html>

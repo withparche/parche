@@ -1,0 +1,26 @@
+---
+import '@parche/core/styles';
+import Hero from 'parche:widgets/Hero';
+import Content from 'parche:widgets/Content';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dynamic widgets — Parche</title>
+  </head>
+  <body>
+    <Hero
+      tagline="Direct import"
+      title="Widgets, imported in code"
+      subtitle="These widgets come from <code>parche:widgets/*</code>, imported straight into this .astro page — not authored as JSON content."
+    />
+    <Content
+      tagline="Composable"
+      title="Use any widget anywhere"
+      content="Every registered widget resolves through its virtual module. Import it and pass props like any Astro component."
+    />
+  </body>
+</html>

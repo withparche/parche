@@ -1,0 +1,40 @@
+{
+  "title": "Themes — one design system, many looks",
+  "description": "Switch themes with the floating panel and watch every widget reskin via OKLCH tokens.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "tagline": "Design system",
+        "title": "One system, <span class='text-primary'>many looks</span>",
+        "subtitle": "Open the theme panel (bottom-right) and switch between Corporate, Minimal, Playful and Startup. Every widget below reskins from the same OKLCH token layer — no per-widget theming.",
+        "actions": [
+          { "variant": "primary", "text": "Primary action", "href": "#" },
+          { "text": "Secondary", "href": "#" }
+        ]
+      }
+    },
+    {
+      "widget": "Features",
+      "wrapper": { "id": "features" },
+      "props": {
+        "tagline": "Tokens",
+        "title": "Themed by variables",
+        "subtitle": "Colors, radii, surfaces and typography all resolve from tokens.",
+        "items": [
+          { "title": "Primary & surfaces", "description": "Buttons, links and accents follow --ph color tokens.", "icon": "tabler:palette" },
+          { "title": "Radii & spacing", "description": "Rounded corners and rhythm come from the token scale.", "icon": "tabler:border-radius" },
+          { "title": "Dark mode", "description": "Each theme ships coherent light and dark variants.", "icon": "tabler:moon" }
+        ]
+      }
+    },
+    {
+      "widget": "Content",
+      "props": {
+        "tagline": "How it works",
+        "title": "Three token layers",
+        "content": "Primitive values feed semantic tokens, which themes override. Swap a theme and the whole page follows — the components never change."
+      }
+    }
+  ]
+}

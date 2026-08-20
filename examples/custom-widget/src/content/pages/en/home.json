@@ -1,0 +1,22 @@
+{
+  "title": "Custom widget",
+  "description": "Register a project-local widget and use it like any built-in.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "tagline": "Extend",
+        "title": "Bring your <span class='text-primary'>own widgets</span>",
+        "subtitle": "The Callout below is defined in this project (src/widgets/Callout.astro) and registered via config. Content references it by name, exactly like a built-in widget."
+      }
+    },
+    {
+      "widget": "Callout",
+      "props": {
+        "title": "This is a project widget",
+        "text": "It consumes a Parche primitive (Icon) and the design-system tokens, so it themes and styles consistently with everything else.",
+        "icon": "tabler:puzzle"
+      }
+    }
+  ]
+}

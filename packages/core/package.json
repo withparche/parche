@@ -8,6 +8,7 @@
     "./types": "./src/integration/types.ts",
     "./config": "./src/types/config.ts",
     "./fonts": "./src/config/fonts.ts",
+    "./styles": "./src/styles/base.css",
     "./content": "./src/content/index.ts",
     "./schemas": "./src/content/schemas.ts"
   },

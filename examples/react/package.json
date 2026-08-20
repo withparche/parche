@@ -1,0 +1,25 @@
+{
+  "name": "example-react",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": { "dev": "astro dev", "build": "astro build", "preview": "astro preview" },
+  "dependencies": {
+    "@parche/core": "workspace:*",
+    "@parche/primitives": "workspace:*",
+    "@parche/ui": "workspace:*",
+    "@astrojs/react": "^5.0.1",
+    "@iconify-json/tabler": "^1.2.32",
+    "@tailwindcss/vite": "^4.0.0",
+    "astro": "^6.0.0",
+    "astro-icon": "^1.1.5",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "tailwindcss": "^4.0.0"
+  },
+  "devDependencies": {
+    "@astrojs/node": "^10.0.3",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3"
+  }
+}

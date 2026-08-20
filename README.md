@@ -13,7 +13,7 @@ themed with an OKLCH token system, and extended with pluggable apps. AstroWind i
 | `@parche/ui` | Widget library (section widgets + blog widgets). |
 | `@parche/blog` | Pluggable blog app: routes, collections, RSS, taxonomies. |
 
-`examples/` holds small demos, one per feature (blog, i18n, SSR, React island, dynamic widgets).
+`examples/` holds small single-feature demos — see [examples/README.md](examples/README.md).
 
 ## Develop
 
