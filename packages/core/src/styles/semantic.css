@@ -28,7 +28,9 @@
   /* Color roles — AstroWind v1 defaults */
   --ds-color-background:  oklch(1 0 0);
   --ds-color-foreground:  oklch(0.07 0.01 260);
-  --ds-color-surface:     oklch(1 0 0);
+  /* Subtly off-white so `surface` bands/cards read as distinct from the page
+     background (they were both pure white → alternating bands were invisible). */
+  --ds-color-surface:     oklch(0.975 0.004 264);
   --ds-color-primary:     oklch(0.500 0.220 260);   /* brand blue — same as dark, so primary is consistent across modes */
   --ds-color-on-primary:  oklch(1 0 0);
   --ds-color-muted:       oklch(0.55 0.02 264.42);
@@ -84,7 +86,7 @@
 .dark {
   --ds-color-background:  oklch(0.100 0.040 260);   /* v1 dark navy: rgb(3 6 32) */
   --ds-color-foreground:  oklch(0.960 0.005 260);
-  --ds-color-surface:     oklch(0.140 0.040 260);
+  --ds-color-surface:     oklch(0.155 0.038 260);   /* lifted a touch so bands/cards separate from the page */
   --ds-color-primary:     oklch(0.500 0.220 260);   /* same blue in dark */
   --ds-color-on-primary:  oklch(1 0 0);
   --ds-color-muted:       oklch(0.55 0.015 260);
