@@ -1,21 +1,25 @@
 ---
 /**
- * A section heading + a block of prose. For an About/bio paragraph in the
- * single-column resume style. Left-aligned, narrow column.
+ * A section heading + a block of prose (About/bio). Full-bleed section (the
+ * DynamicRenderer wrapper handles the section + background); content sits in a
+ * narrower container. Override the width with `classes.container` (raw Tailwind).
  */
+import { twMerge } from 'tailwind-merge';
+
 interface Props {
   tagline?: string;
   title?: string;
   content?: string;
+  classes?: Record<string, string>;
 }
 
-const { tagline, title, content } = Astro.props as Props;
+const { tagline, title, content, classes = {} } = Astro.props as Props;
 ---
 
-<section class="mx-auto w-full max-w-3xl px-6 pt-14">
+<div class={twMerge('mx-auto max-w-3xl', classes.container)}>
   {tagline && <p class="mb-1.5 text-base font-medium text-primary">{tagline}</p>}
   {title && <h2 class="text-2xl font-bold text-heading">{title}</h2>}
   {content && (
     <div class="prose prose-neutral mt-4 max-w-none text-lg text-muted leading-relaxed" set:html={content} />
   )}
-</section>
+</div>

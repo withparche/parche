@@ -1,21 +1,23 @@
 ---
 /**
- * Compact resume-style hero: name + one-line bio on the left, a round avatar on
- * the right. Built for a single narrow column (portfolio templates).
+ * Compact resume-style hero: name + bio on the left, a round avatar on the
+ * right. Full-bleed section (wrapper handles it) with an optional fixed dot-grid
+ * page background; content sits in a narrower container (override with
+ * `classes.container`).
  */
+import { twMerge } from 'tailwind-merge';
 import type { ImageMetadata } from 'astro';
 
 interface Props {
   name?: string;
-  /** Small role/tagline line above or below the name (optional). */
   tagline?: string;
   bio?: string;
   avatar?: { src?: string | ImageMetadata; alt?: string };
-  /** Fixed dot-grid page background (magicui-style). Default on. */
   dots?: boolean;
+  classes?: Record<string, string>;
 }
 
-const { name, tagline, bio, avatar, dots = true } = Astro.props as Props;
+const { name, tagline, bio, avatar, dots = true, classes = {} } = Astro.props as Props;
 const avatarSrc = typeof avatar?.src === 'string' ? avatar?.src : avatar?.src?.src;
 ---
 
@@ -27,7 +29,7 @@ const avatarSrc = typeof avatar?.src === 'string' ? avatar?.src : avatar?.src?.s
   ></div>
 )}
 
-<section class="mx-auto w-full max-w-3xl px-6 pt-16 md:pt-24">
+<div class={twMerge('mx-auto max-w-3xl', classes.container)}>
   <div class="flex items-center justify-between gap-8">
     <div class="min-w-0 flex-1">
       {tagline && <p class="mb-1.5 text-base font-medium text-primary">{tagline}</p>}
@@ -43,4 +45,4 @@ const avatarSrc = typeof avatar?.src === 'string' ? avatar?.src : avatar?.src?.s
       />
     )}
   </div>
-</section>
+</div>

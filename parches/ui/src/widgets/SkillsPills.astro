@@ -1,17 +1,21 @@
 ---
 /**
- * A row of skill pills. Single narrow column, resume style.
+ * A row of skill pills. Full-bleed section (wrapper handles it); content in a
+ * narrower container, overridable via `classes.container`.
  */
+import { twMerge } from 'tailwind-merge';
+
 interface Props {
   tagline?: string;
   title?: string;
   skills?: string[];
+  classes?: Record<string, string>;
 }
 
-const { tagline, title, skills = [] } = Astro.props as Props;
+const { tagline, title, skills = [], classes = {} } = Astro.props as Props;
 ---
 
-<section class="mx-auto w-full max-w-3xl px-6 pt-14">
+<div class={twMerge('mx-auto max-w-3xl', classes.container)}>
   {tagline && <p class="mb-1.5 text-base font-medium text-primary">{tagline}</p>}
   {title && <h2 class="text-2xl font-bold text-heading">{title}</h2>}
   {skills.length > 0 && (
@@ -21,4 +25,4 @@ const { tagline, title, skills = [] } = Astro.props as Props;
       ))}
     </div>
   )}
-</section>
+</div>

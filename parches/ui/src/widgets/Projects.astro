@@ -4,14 +4,16 @@
  * title + date, description, tag chips and links (Website / Source / Case study).
  * Rendered in the single narrow column (resume style).
  */
+import { twMerge } from 'tailwind-merge';
 import Icon from 'parche:primitives/Icon';
 import type { Props } from './Projects.props';
 
 const { tagline, title, subtitle, columns = '2', projects = [] } = Astro.props as Props;
 const colClass = columns === '3' ? 'sm:grid-cols-3' : 'sm:grid-cols-2';
+const containerClass = (Astro.props as { classes?: Record<string, string> }).classes?.container;
 ---
 
-<section class="mx-auto w-full max-w-3xl px-6 pt-14">
+<div class={twMerge('mx-auto max-w-3xl', containerClass)}>
   <div class="mx-auto max-w-xl text-center">
     {tagline && <span class="inline-block rounded-lg bg-primary px-3 py-1 text-sm font-medium text-on-primary">{tagline}</span>}
     {title && <h2 class="mt-4 text-3xl font-bold tracking-tight text-heading sm:text-4xl">{title}</h2>}
@@ -68,4 +70,4 @@ const colClass = columns === '3' ? 'sm:grid-cols-3' : 'sm:grid-cols-2';
       ))}
     </div>
   )}
-</section>
+</div>

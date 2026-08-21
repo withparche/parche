@@ -1,10 +1,13 @@
 ---
 /**
  * Resume-style list. `variant: 'list'` renders compact rows (logo + title +
- * subtitle, dates on the right) — for Work Experience / Education.
- * `variant: 'timeline'` renders a vertical timeline (dot + date + description) —
- * for Hackathons / Awards. Single narrow column.
+ * subtitle, dates on the right) — Work Experience / Education. `variant:
+ * 'timeline'` renders a vertical timeline — Hackathons / Awards.
+ * Full-bleed section (wrapper handles it); content in a narrower container,
+ * overridable via `classes.container`.
  */
+import { twMerge } from 'tailwind-merge';
+
 interface Item {
   title?: string;
   subtitle?: string;
@@ -21,13 +24,14 @@ interface Props {
   subtitle?: string;
   variant?: 'list' | 'timeline';
   items?: Item[];
+  classes?: Record<string, string>;
 }
 
-const { tagline, title, subtitle, variant = 'list', items = [] } = Astro.props as Props;
+const { tagline, title, subtitle, variant = 'list', items = [], classes = {} } = Astro.props as Props;
 const initials = (s?: string) => (s ?? '').trim().charAt(0).toUpperCase();
 ---
 
-<section class="mx-auto w-full max-w-3xl px-6 pt-14">
+<div class={twMerge('mx-auto max-w-3xl', classes.container)}>
   {tagline && <p class="mb-1.5 text-base font-medium text-primary">{tagline}</p>}
   {title && <h2 class="text-2xl font-bold text-heading">{title}</h2>}
   {subtitle && <p class="mt-2 text-muted">{subtitle}</p>}
@@ -64,4 +68,4 @@ const initials = (s?: string) => (s ?? '').trim().charAt(0).toUpperCase();
       ))}
     </div>
   )}
-</section>
+</div>

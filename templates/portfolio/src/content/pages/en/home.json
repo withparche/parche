@@ -3,9 +3,7 @@
   "description": "Product designer and developer crafting calm, useful software. Selected work, experience and ways to get in touch.",
   "sections": [
     {
-      "widget": "ProfileHero",
-      "wrapper": false,
-      "props": {
+      "widget": "ProfileHero",      "props": {
         "name": "Hi, I'm Alex",
         "tagline": "Product Designer & Developer",
         "bio": "I design and build calm, useful software. Currently focused on developer tools and design systems.",
@@ -13,17 +11,13 @@
       }
     },
     {
-      "widget": "Prose",
-      "wrapper": false,
-      "props": {
+      "widget": "Prose",      "props": {
         "title": "About",
         "content": "<p>For the last 8 years I've helped startups turn fuzzy ideas into products people actually enjoy using. I move comfortably between Figma and the codebase, which means fewer things get lost in translation. I care about the job the user is hiring the product to do — and about shipping.</p>"
       }
     },
     {
-      "widget": "ResumeList",
-      "wrapper": false,
-      "props": {
+      "widget": "ResumeList",      "props": {
         "title": "Work Experience",
         "variant": "list",
         "items": [
@@ -35,9 +29,7 @@
       }
     },
     {
-      "widget": "ResumeList",
-      "wrapper": false,
-      "props": {
+      "widget": "ResumeList",      "props": {
         "title": "Education",
         "variant": "list",
         "items": [
@@ -47,17 +39,13 @@
       }
     },
     {
-      "widget": "SkillsPills",
-      "wrapper": false,
-      "props": {
+      "widget": "SkillsPills",      "props": {
         "title": "Skills",
         "skills": ["Figma", "Design Systems", "TypeScript", "Astro", "React", "Tailwind CSS", "Node.js", "Prototyping", "Accessibility", "Brand"]
       }
     },
     {
-      "widget": "Projects",
-      "wrapper": false,
-      "props": {
+      "widget": "Projects",      "props": {
         "tagline": "My Projects",
         "title": "Check out my latest work",
         "subtitle": "A few projects I'm proud of — from design systems to full products.",
@@ -110,9 +98,7 @@
       }
     },
     {
-      "widget": "ResumeList",
-      "wrapper": false,
-      "props": {
+      "widget": "ResumeList",      "props": {
         "title": "Hackathons",
         "subtitle": "I like building things fast, with good people.",
         "variant": "timeline",
@@ -124,9 +110,7 @@
       }
     },
     {
-      "widget": "Prose",
-      "wrapper": false,
-      "props": {
+      "widget": "Prose",      "props": {
         "tagline": "Contact",
         "title": "Get in touch",
         "content": "<p>I'm open to select freelance and full-time work. The best way to reach me is by email at <a href='mailto:hello@example.com' class='text-primary hover:underline'>hello@example.com</a> — or find me on the socials.</p>"
