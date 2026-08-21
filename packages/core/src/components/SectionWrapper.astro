@@ -1,8 +1,11 @@
 ---
 /**
  * Default section wrapper used by DynamicRenderer.
- * Provides: configurable HTML tag, background layer, isDark per-widget,
- * responsive container with padding, and class overrides via twMerge.
+ * Provides: configurable HTML tag, a raw-HTML background layer, isDark per-widget,
+ * a responsive container, and class overrides via twMerge.
+ *
+ * Section rhythm/backgrounds are authored as raw HTML via `bg` in page content —
+ * a gradient div, an inline SVG (dots/grid), a glow, whatever the section needs.
  */
 import type { HTMLTag } from 'astro/types';
 import { twMerge } from 'tailwind-merge';
@@ -10,40 +13,32 @@ import { twMerge } from 'tailwind-merge';
 interface Props {
   id?: string;
   isDark?: boolean;
-  /** Subtle tokenized background band (bg-surface) — ergonomic section rhythm. */
-  surface?: boolean;
-  /** Raw HTML background layer (for gradients/patterns). Takes precedence. */
+  /** Raw HTML background layer (a div, gradient, inline SVG, pattern…). */
   bg?: string;
   classes?: Record<string, unknown>;
   as?: string;
 }
 
-const { id, isDark = false, surface = false, bg, classes = {}, as = 'section' } = Astro.props;
+const { id, isDark = false, bg, classes = {}, as = 'section' } = Astro.props;
 
 const Tag = as as HTMLTag;
 const containerClass = (classes.container as string) ?? '';
 ---
 
-<Tag
-  class:list={['relative not-prose scroll-mt-[72px]', { 'bg-surface': surface && !bg && !isDark }]}
-  {...id ? { id } : {}}
->
+<Tag class="relative not-prose scroll-mt-[72px]" {...id ? { id } : {}}>
   {bg && (
-    <div class="absolute inset-0 pointer-events-none -z-[1]" aria-hidden="true">
+    <div class="absolute inset-0 pointer-events-none -z-[1] overflow-hidden" aria-hidden="true">
       <Fragment set:html={bg} />
     </div>
   )}
   {isDark && !bg && (
     <div class="absolute inset-0 pointer-events-none -z-[1]" aria-hidden="true">
-      <div class="absolute inset-0 bg-neutral-900 dark:bg-transparent" />
+      <div class="absolute inset-0 bg-neutral-900 dark:bg-transparent"></div>
     </div>
   )}
   <div
     class:list={[
-      twMerge(
-        'relative mx-auto max-w-7xl px-4 md:px-6 py-12 md:py-16 lg:py-20',
-        containerClass,
-      ),
+      twMerge('relative mx-auto max-w-7xl px-4 md:px-6 py-12 md:py-16 lg:py-20', containerClass),
       { dark: isDark },
     ]}
   >

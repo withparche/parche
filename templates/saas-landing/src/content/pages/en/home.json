@@ -25,7 +25,6 @@
     },
     {
       "widget": "Brands",
-      "wrapper": { "surface": true },
       "props": {
         "title": "Trusted by fast-moving teams",
         "icons": [
@@ -58,7 +57,6 @@
     },
     {
       "widget": "Content",
-      "wrapper": { "surface": true },
       "props": {
         "tagline": "Built for focus",
         "title": "A calm home for deep work",
@@ -75,6 +73,7 @@
     },
     {
       "widget": "Stats",
+      "wrapper": { "bg": "<div style='position:absolute;inset:0;background:#f1f5f9'></div><svg width='100%' height='100%' xmlns='http://www.w3.org/2000/svg' style='position:absolute;inset:0'><pattern id='dots' width='18' height='18' patternUnits='userSpaceOnUse'><circle cx='2' cy='2' r='1.6' fill='#94a3b8'/></pattern><rect width='100%' height='100%' fill='url(#dots)'/></svg>" },
       "props": {
         "title": "Teams get more done with Parche",
         "stats": [
@@ -165,7 +164,7 @@
     },
     {
       "widget": "FAQs",
-      "wrapper": { "id": "faq", "surface": true },
+      "wrapper": { "id": "faq" },
       "props": {
         "tagline": "FAQ",
         "title": "Questions, answered",

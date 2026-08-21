@@ -38,19 +38,18 @@ has rhythm; one that reads `grid → grid → grid` does not.
 Any wrapped section takes a `wrapper` object — this is how you add rhythm without
 touching widgets:
 
-- `wrapper: { surface: true }` — a subtle tokenized `bg-surface` band. Alternate
-  plain / surface bands down the page so sections don't blur together.
-  **Caveat:** cards (Pricing, Testimonials, CTA) also use `bg-surface`, so a card
-  on a `surface` band shares its color and only its border/shadow separates it.
-  Put `surface` on card-less sections (Brands, Content, FAQ, Stats); keep
-  card-heavy sections on the plain background so the cards pop. (A proper
-  page / band / elevated-card 3-level scale is a design-token-cycle item.)
-- `wrapper: { isDark: true }` — a dark band for emphasis (e.g. a testimonials or
-  CTA break).
+- `wrapper: { bg: "<html>" }` — **the main rhythm tool.** A raw-HTML background
+  layer authored right in the page JSON: a gradient div, a glow, an inline SVG
+  dot/grid pattern — whatever the section needs. It renders behind the content,
+  clipped to the section. Example (a dot pattern):
+  `"bg": "<svg width='100%' height='100%' style='position:absolute;inset:0'><pattern id='p' width='22' height='22' patternUnits='userSpaceOnUse'><circle cx='2' cy='2' r='1.3' fill='#e2e8f0'/></pattern><rect width='100%' height='100%' fill='url(#p)'/></svg>"`.
 - `wrapper: { id: "pricing" }` — anchor target; the section gets the id (with
   sticky-header scroll offset), so nav links like `#pricing` work.
-- `wrapper: { bg: "<html>" }` — a raw-HTML background layer (gradients/patterns).
+- `wrapper: { isDark: true }` — a dark band for emphasis (e.g. a CTA break).
 - `wrapper: { classes: { container: "..." }, as: "aside" }` — spacing/tag overrides.
+
+Vary the `bg` between sections (a glow on the hero-area, dots on one band, a
+gradient on another, plain in between) so the page doesn't read flat.
 
 Note: full-bleed widgets (Hero, Announcement, Hero2, HeroText, Note) **skip the
 wrapper**, so `wrapper` knobs (incl. `id`) don't apply to them.
