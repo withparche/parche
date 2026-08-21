@@ -5,28 +5,30 @@ import Icon from 'parche:primitives/Icon';
 const { badge, title, description, href } = Astro.props as Props;
 
 const text = title || description;
+const Tag = href ? 'a' : 'div';
 ---
 
-<div class="bg-primary text-on-primary flex items-center gap-2 overflow-hidden px-4 py-2 text-sm">
-  {badge && (
-    <span class="type-label bg-surface text-heading shrink-0 rounded px-1.5 py-0.5 font-semibold">
-      {badge}
-    </span>
-  )}
+<div class="bg-primary text-on-primary px-4 py-2.5 text-sm">
+  <Tag
+    {...href ? { href } : {}}
+    class:list={[
+      'mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-2.5 gap-y-1 text-center',
+      href && 'group',
+    ]}
+  >
+    {badge && (
+      <span class="bg-surface text-heading shrink-0 rounded px-2 py-0.5 text-xs font-semibold uppercase tracking-wide">
+        {badge}
+      </span>
+    )}
 
-  {text && href ? (
-    <a href={href} class="type-body text-on-primary min-w-0 truncate font-medium hover:underline">
-      {text}
-    </a>
-  ) : text ? (
-    <span class="type-body text-on-primary min-w-0 truncate">
-      {text}
-    </span>
-  ) : null}
+    {text && <span class="font-medium">{text}</span>}
 
-  {href && !text && (
-    <a href={href} class="type-body text-on-primary ml-auto flex shrink-0 items-center gap-1 font-medium hover:underline">
-      <Icon name="tabler:arrow-right" class="h-4 w-4" />
-    </a>
-  )}
+    {href && (
+      <Icon
+        name="tabler:arrow-right"
+        class="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5"
+      />
+    )}
+  </Tag>
 </div>
