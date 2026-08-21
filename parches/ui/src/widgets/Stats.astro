@@ -12,7 +12,7 @@ const { title, subtitle, tagline, stats = [] } = Astro.props;
   stats.length > 0 && (
     <>
       <parche-counter>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center py-24">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {stats.map(({ amount, title, icon }) => (
             <div>
               {icon && (
