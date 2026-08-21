@@ -39,7 +39,7 @@
     },
     {
       "widget": "Features",
-      "wrapper": { "id": "features" },
+      "wrapper": { "id": "features", "bg": "<div style='position:absolute;inset:0;background:linear-gradient(180deg, rgba(100,116,139,0.06), transparent 60%)'></div>" },
       "props": {
         "tagline": "Features",
         "title": "Everything your team needs, in one place",
@@ -73,7 +73,7 @@
     },
     {
       "widget": "Stats",
-      "wrapper": { "bg": "<div style='position:absolute;inset:0;background:#f1f5f9'></div><svg width='100%' height='100%' xmlns='http://www.w3.org/2000/svg' style='position:absolute;inset:0'><pattern id='dots' width='18' height='18' patternUnits='userSpaceOnUse'><circle cx='2' cy='2' r='1.6' fill='#94a3b8'/></pattern><rect width='100%' height='100%' fill='url(#dots)'/></svg>" },
+      "wrapper": { "bg": "<div style='position:absolute;inset:0;background:radial-gradient(80% 120% at 50% 0%, rgba(59,110,246,0.07), transparent 70%)'></div>" },
       "props": {
         "title": "Teams get more done with Parche",
         "stats": [
@@ -100,7 +100,7 @@
     },
     {
       "widget": "Pricing",
-      "wrapper": { "id": "pricing" },
+      "wrapper": { "id": "pricing", "bg": "<div style='position:absolute;inset:0;background:linear-gradient(180deg, transparent 40%, rgba(100,116,139,0.06))'></div>" },
       "props": {
         "tagline": "Pricing",
         "title": "Simple pricing that scales with you",
@@ -179,6 +179,7 @@
     },
     {
       "widget": "CallToAction",
+      "wrapper": { "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>" },
       "props": {
         "title": "Bring calm to how your team works",
         "subtitle": "Join 12,000+ teams shipping better work with Parche. Free to start, no credit card required.",
