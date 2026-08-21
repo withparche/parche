@@ -10,18 +10,24 @@ import { twMerge } from 'tailwind-merge';
 interface Props {
   id?: string;
   isDark?: boolean;
+  /** Subtle tokenized background band (bg-surface) — ergonomic section rhythm. */
+  surface?: boolean;
+  /** Raw HTML background layer (for gradients/patterns). Takes precedence. */
   bg?: string;
   classes?: Record<string, unknown>;
   as?: string;
 }
 
-const { id, isDark = false, bg, classes = {}, as = 'section' } = Astro.props;
+const { id, isDark = false, surface = false, bg, classes = {}, as = 'section' } = Astro.props;
 
 const Tag = as as HTMLTag;
 const containerClass = (classes.container as string) ?? '';
 ---
 
-<Tag class="relative not-prose scroll-mt-[72px]" {...id ? { id } : {}}>
+<Tag
+  class:list={['relative not-prose scroll-mt-[72px]', { 'bg-surface': surface && !bg && !isDark }]}
+  {...id ? { id } : {}}
+>
   {bg && (
     <div class="absolute inset-0 pointer-events-none -z-[1]" aria-hidden="true">
       <Fragment set:html={bg} />

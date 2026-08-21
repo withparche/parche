@@ -50,7 +50,7 @@ interface Announcement {
   class?: string;
 }
 
-type Logo = string | { src: string; alt?: string; width?: number; height?: number };
+type Logo = string | { src?: string; alt?: string; width?: number; height?: number; text?: string };
 
 interface Props {
   links?: HeaderLink[];
@@ -62,7 +62,10 @@ interface Props {
 const { links = [], actions = [], logo = 'AstroWind', announcement } = Astro.props;
 
 const homeHref = Astro.currentLocale && Astro.currentLocale !== 'en' ? `/${Astro.currentLocale}` : '/';
-const isLogoText = typeof logo === 'string';
+// A logo can be a bare string (wordmark), an object with `src` (image), or an
+// object with `text` (wordmark). Falls back to a text mark, never a broken img.
+const logoSrc = typeof logo === 'object' ? logo.src : undefined;
+const logoText = typeof logo === 'string' ? logo : logo.text;
 
 function linkType(link: HeaderLink): 'link' | 'dropdown' | 'mega' {
   if (!link.children?.length) return 'link';
@@ -121,16 +124,16 @@ function linkType(link: HeaderLink): 'link' | 'dropdown' | 'mega' {
   <div class="mx-auto max-w-6xl flex items-center justify-between px-4 md:px-6 h-[4.75rem]">
     <!-- Logo -->
     <a href={homeHref} class="no-underline hover:opacity-80 transition-opacity shrink-0">
-      {isLogoText ? (
-        <span class="type-h3 text-heading">{logo}</span>
-      ) : (
+      {logoSrc ? (
         <img
-          src={(logo as any).src}
-          alt={(logo as any).alt || 'Logo'}
-          width={(logo as any).width}
-          height={(logo as any).height}
+          src={logoSrc}
+          alt={(typeof logo === 'object' && logo.alt) || logoText || 'Logo'}
+          width={typeof logo === 'object' ? logo.width : undefined}
+          height={typeof logo === 'object' ? logo.height : undefined}
           class="h-8 w-auto"
         />
+      ) : (
+        <span class="type-h3 text-heading">{logoText || 'Logo'}</span>
       )}
     </a>
 

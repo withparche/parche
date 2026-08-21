@@ -11,48 +11,47 @@ stats, steps, pricing, testimonials, FAQ, CTA) as SSR (`output: 'server'`).
 The page renders end-to-end; these are where the system fought back.
 
 ### Widgets
-- **[high] Pricing can't express a "Custom / Contact us" tier.** `Pricing.astro`
-  renders a plan only when it has **both** `price` and `period` (line ~14) and
-  hardcodes a `$` prefix (line ~36). An Enterprise tier (`price: "Custom"`, no
-  period) is **silently dropped**. Custom/enterprise pricing is a standard SaaS
-  pattern. Fix: make `period` optional, drop the hardcoded `$` (or make currency
-  a prop), allow a non-numeric price + an optional "contact" CTA.
-- **[med] Header logo has no text/wordmark option.** Passing `logo: { text }`
-  shows a broken `[Logo]` image — the Header only supports an image `src`. Every
-  brand needs at least a wordmark. Fix: support a text/wordmark logo (and/or fall
-  back to the site name).
-- **[med] No in-page anchor navigation.** Nav links (`#features`, `#pricing`)
-  don't scroll — widgets emit no matching `id`, and there's no easy way to anchor
-  a section from page data. Fix: let a section set an `id` (via wrapper or a
-  widget prop) so anchor nav and "jump to pricing" work.
-- **[med] No design knobs for rhythm.** Couldn't alternate section
-  backgrounds/tone/spacing — every section shares one flat background, so a long
-  landing reads monotonous. Landings need alternating surfaces and spacing
-  control. Fix: expose background/tone/spacing knobs (ties into design tokens).
-- **[med] Inline Button duplication (confirmed in use).** Hero/CTA action buttons
-  render duplicated inline classes instead of the Button primitive — so button
-  styling can't be themed/standardized. Fix: route widget actions through the
-  Button primitive.
+- **[FIXED] Pricing couldn't express a "Custom / Contact us" tier.** It required
+  both `price` and `period` and hardcoded `$`, silently dropping the tier. Fix:
+  `period`/currency optional; a numeric price shows the currency, non-numeric
+  doesn't. Added a plan **`type: 'custom'`** that renders a graceful contact-us
+  card (modest `text-3xl` price + a `description` note) instead of jamming a word
+  into the giant numeric slot. `Pricing.astro`, `Pricing.props.ts`.
+- **[FIXED] Header logo had no text/wordmark option.** `{ text }` now works and
+  the Header never renders a broken `<img>` (falls back to a text mark).
+  `Header.astro`.
+- **[FIXED] No in-page anchor navigation.** Confirmed it already works via
+  `wrapper: { id }` (SectionWrapper renders the id + `scroll-mt`). The template now
+  uses `#features/#how/#pricing/#faq`. (Caveat: no-wrapper widgets like Hero skip
+  the wrapper.)
+- **[FIXED] No design knobs for rhythm.** Confirmed `wrapper` already exposes
+  `id/isDark/bg/classes/as`; added an ergonomic **`surface`** knob (tokenized
+  `bg-surface` band) so sections can alternate without raw HTML. Template now
+  alternates surface bands. `SectionWrapper.astro`, `DynamicRenderer.astro`.
+- **[FIXED] Inline Button duplication + no focus-visible + icons ignored.** A
+  shared `components/Action.astro` now centralizes variant styling, adds
+  `focus-visible` rings, and renders the action `icon`. Wired into Hero, Hero2,
+  HeroText, CallToAction. (Pricing keeps its own per-tier CTA style.)
 
 ### Core / SSR
 - **[info] SSR catch-all now exercised.** Under `output: 'server'` the data-driven
   `[...slug]` renders on-demand per request (router warns it's dynamic) — the
   previously-untested path works. Per-request cost not yet measured (see the
-  exploration's `buildSlugMap`×2 / JSON-LD hotspots).
-- **[med] Images require a local assets pipeline.** Couldn't easily add hero /
-  feature images without `@/assets` files; data-driven remote images are unclear.
-  `resolveProps` also doesn't resolve images nested in arrays (feature icons,
-  testimonial avatars). Fix: document/enable remote + array image handling.
+  exploration's `buildSlugMap`×2 / JSON-LD hotspots). _(perf: later cycle.)_
+- **[FIXED] Images nested in arrays weren't resolved.** `resolveProps` is now
+  recursive (`resolveDeep`), resolving `@/assets/` at any depth (feature icons,
+  testimonial avatars, galleries). Comment/alias mismatch also corrected.
+  `DynamicRenderer.astro`. _(Local-assets-vs-remote docs still pending.)_
 
 ### Tokens / visual
-- **[low] Default renders in dark mode.** No obvious per-template control to pin a
-  default theme (light vs dark vs a named theme). Fix: a `defaultTheme` option.
-- **[good] Primary-token fix works.** The light-primary bug fix is visible —
-  primary blue renders consistently in the hero span and buttons.
+- **[deferred-low] Default renders in dark mode.** No per-template control to pin
+  a default theme. Fix later: a `defaultTheme` option.
+- **[good] Primary-token fix works.** Primary blue renders consistently.
 
 ### A11y
-- **[todo] Verify focus-visible on CTAs** — the exploration flagged missing
-  `focus-visible` outside Header/Footer; confirm on this template's CTAs.
+- **[FIXED] focus-visible on CTAs** — added via the shared `Action` component
+  (ring on keyboard focus). Primitive-level a11y (Button/Link/Tag) is still the
+  primitives-cycle job.
 
 ## From T2 — Personal portfolio (`templates/portfolio`)
 _(pending — next template in this cycle)_

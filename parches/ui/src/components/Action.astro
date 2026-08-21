@@ -1,0 +1,45 @@
+---
+/**
+ * Shared call-to-action link used by widgets (Hero, CallToAction, …).
+ * Centralizes variant styling, focus-visible a11y and icon rendering so button
+ * markup isn't duplicated across widgets.
+ */
+import Icon from 'parche:primitives/Icon';
+
+interface ActionData {
+  variant?: 'primary' | 'secondary' | 'tertiary' | 'link';
+  text?: string;
+  href?: string;
+  target?: string;
+  icon?: string;
+}
+
+interface Props {
+  action: ActionData;
+  class?: string;
+}
+
+const { action, class: className = '' } = Astro.props;
+const { variant = 'primary', text, href, target, icon } = action;
+const rel = target === '_blank' ? 'noopener noreferrer' : undefined;
+---
+
+{(text || icon) && (
+  <a
+    href={href}
+    target={target}
+    rel={rel}
+    class:list={[
+      'inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold transition-colors',
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+      variant === 'primary' && 'bg-primary text-on-primary hover:opacity-90',
+      variant === 'secondary' && 'bg-surface border border-border text-heading hover:bg-muted/10',
+      variant === 'link' && 'text-primary hover:underline',
+      variant === 'tertiary' && 'bg-surface border border-border text-heading hover:bg-muted/10',
+      className,
+    ]}
+  >
+    {text}
+    {icon && <Icon name={icon} class="h-4 w-4" />}
+  </a>
+)}

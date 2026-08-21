@@ -5,6 +5,7 @@ import SectionWrapper from './SectionWrapper.astro';
 interface WrapperConfig {
   id?: string;
   isDark?: boolean;
+  surface?: boolean;
   bg?: string;
   classes?: Record<string, unknown>;
   as?: string;
@@ -25,7 +26,7 @@ interface Props {
 
 const { sections, Wrapper } = Astro.props;
 
-// ---- Image resolution: ~/assets/images/foo.png → optimized import ----
+// ---- Image resolution: @/assets/images/foo.png → optimized import ----
 const imageModules = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/images/**/*.{png,jpg,jpeg,gif,svg,webp,avif}',
   { eager: true }
@@ -38,17 +39,21 @@ function resolveImage(src: string): string {
   return meta?.src ?? src;
 }
 
-/** Walk props and resolve any ~/assets/ image paths */
-function resolveProps(props: Record<string, any>): Record<string, any> {
-  const resolved = { ...props };
-  for (const [key, value] of Object.entries(resolved)) {
-    if (typeof value === 'string' && value.startsWith('@/assets/')) {
-      resolved[key] = resolveImage(value);
-    } else if (value && typeof value === 'object' && !Array.isArray(value) && 'src' in value && typeof value.src === 'string' && value.src.startsWith('@/assets/')) {
-      resolved[key] = { ...value, src: resolveImage(value.src) };
-    }
+/** Recursively resolve any @/assets/ image path — at any depth, including
+ *  strings nested inside arrays (feature icons, testimonial avatars, galleries). */
+function resolveDeep(value: any): any {
+  if (typeof value === 'string') return resolveImage(value);
+  if (Array.isArray(value)) return value.map(resolveDeep);
+  if (value && typeof value === 'object') {
+    const out: Record<string, any> = {};
+    for (const [k, v] of Object.entries(value)) out[k] = resolveDeep(v);
+    return out;
   }
-  return resolved;
+  return value;
+}
+
+function resolveProps(props: Record<string, any>): Record<string, any> {
+  return resolveDeep(props);
 }
 
 // Widgets that render full-bleed and manage their own padding — no wrapper by default

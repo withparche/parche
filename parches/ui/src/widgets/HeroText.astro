@@ -1,4 +1,5 @@
 ---
+import Action from '../components/Action.astro';
 import type { Props } from './HeroText.props';
 
 const {
@@ -26,20 +27,10 @@ const {
     {(callToAction?.text || callToAction2?.text) && (
       <div class="max-w-xs sm:max-w-md m-auto flex flex-nowrap flex-col sm:flex-row sm:justify-center gap-4">
         {callToAction?.text && (
-          <a
-            href={callToAction.href}
-            class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold bg-primary text-on-primary hover:opacity-90 w-full sm:w-auto"
-          >
-            {callToAction.text}
-          </a>
+          <Action action={{ ...callToAction, variant: 'primary' }} class="w-full sm:w-auto" />
         )}
         {callToAction2?.text && (
-          <a
-            href={callToAction2.href}
-            class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold bg-surface border border-border text-heading hover:bg-muted/10 w-full sm:w-auto"
-          >
-            {callToAction2.text}
-          </a>
+          <Action action={{ ...callToAction2, variant: 'secondary' }} class="w-full sm:w-auto" />
         )}
       </div>
     )}

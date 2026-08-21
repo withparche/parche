@@ -25,6 +25,7 @@
     },
     {
       "widget": "Brands",
+      "wrapper": { "surface": true },
       "props": {
         "title": "Trusted by fast-moving teams",
         "icons": [
@@ -39,6 +40,7 @@
     },
     {
       "widget": "Features",
+      "wrapper": { "id": "features" },
       "props": {
         "tagline": "Features",
         "title": "Everything your team needs, in one place",
@@ -56,6 +58,7 @@
     },
     {
       "widget": "Content",
+      "wrapper": { "surface": true },
       "props": {
         "tagline": "Built for focus",
         "title": "A calm home for deep work",
@@ -83,6 +86,7 @@
     },
     {
       "widget": "Steps",
+      "wrapper": { "id": "how", "surface": true },
       "props": {
         "tagline": "How it works",
         "title": "Up and running in an afternoon",
@@ -95,6 +99,7 @@
     },
     {
       "widget": "Pricing",
+      "wrapper": { "id": "pricing" },
       "props": {
         "tagline": "Pricing",
         "title": "Simple pricing that scales with you",
@@ -130,7 +135,9 @@
           {
             "title": "Enterprise",
             "subtitle": "For organizations at scale",
+            "type": "custom",
             "price": "Custom",
+            "description": "Volume pricing tailored to your organization.",
             "items": [
               { "description": "SSO & SCIM" },
               { "description": "Advanced permissions" },
@@ -144,6 +151,7 @@
     },
     {
       "widget": "Testimonials",
+      "wrapper": { "surface": true },
       "props": {
         "tagline": "Loved by teams",
         "title": "Don't take our word for it",
@@ -156,6 +164,7 @@
     },
     {
       "widget": "FAQs",
+      "wrapper": { "id": "faq" },
       "props": {
         "tagline": "FAQ",
         "title": "Questions, answered",

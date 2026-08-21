@@ -11,8 +11,10 @@ const pricePlan = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
   description: z.string().optional().meta({ input: 'textarea' }),
-  price: z.string().optional().meta({ placeholder: '29' }),
-  period: z.string().optional().meta({ placeholder: '/ month' }),
+  type: z.enum(['standard', 'custom']).default('standard').meta({ help: '"custom" renders a graceful contact-us card instead of a numeric price' }),
+  price: z.string().optional().meta({ placeholder: '29', help: 'Numeric price for standard plans; ignored for a custom tier' }),
+  currency: z.string().optional().meta({ placeholder: '$', help: 'Currency symbol shown before a numeric price' }),
+  period: z.string().optional().meta({ placeholder: '/ month', help: 'Optional — omit for custom/contact tiers' }),
   items: z.array(pricingItem).default([]),
   callToAction: z.object({
     text: z.string().optional().meta({ placeholder: 'Get started' }),

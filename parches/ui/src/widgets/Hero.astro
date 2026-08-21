@@ -1,5 +1,6 @@
 ---
 import LegacyHeadline from '../components/LegacyHeadline.astro';
+import Action from '../components/Action.astro';
 import type { Props } from './Hero.props';
 
 const {
@@ -29,19 +30,7 @@ const {
       {actions.length > 0 && (
         <div class="max-w-xs sm:max-w-md m-auto flex flex-nowrap flex-col sm:flex-row sm:justify-center gap-4">
           {actions.map((action) => (
-            <a
-              href={action.href}
-              target={action.target}
-              class:list={[
-                'inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold transition-colors w-full sm:w-auto',
-                action.variant === 'primary' && 'bg-primary text-on-primary hover:opacity-90',
-                action.variant === 'secondary' && 'bg-surface border border-border text-heading hover:bg-muted/10',
-                action.variant === 'link' && 'text-primary hover:underline',
-                (!action.variant || action.variant === 'tertiary') && 'bg-surface border border-border text-heading hover:bg-muted/10',
-              ]}
-            >
-              {action.text}
-            </a>
+            <Action action={action} class="w-full sm:w-auto" />
           ))}
         </div>
       )}
