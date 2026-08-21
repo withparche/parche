@@ -1,0 +1,63 @@
+{
+  "sections": [
+    {
+      "widget": "layout/Header",
+      "props": {
+        "logo": { "text": "Flowbase", "href": "/" },
+        "links": [
+          { "label": "Features", "href": "#features" },
+          { "label": "How it works", "href": "#how" },
+          { "label": "Pricing", "href": "#pricing" },
+          { "label": "FAQ", "href": "#faq" }
+        ],
+        "actions": [
+          { "label": "Sign in", "href": "#", "variant": "ghost" },
+          { "label": "Start free", "href": "#pricing", "variant": "primary", "icon": "tabler:arrow-right" }
+        ]
+      }
+    },
+    { "widget": "layout/Main" },
+    {
+      "widget": "layout/Footer",
+      "props": {
+        "siteName": "Flowbase",
+        "columns": [
+          {
+            "title": "Product",
+            "links": [
+              { "label": "Features", "href": "#features" },
+              { "label": "Pricing", "href": "#pricing" },
+              { "label": "Changelog", "href": "#" },
+              { "label": "Roadmap", "href": "#" }
+            ]
+          },
+          {
+            "title": "Company",
+            "links": [
+              { "label": "About", "href": "#" },
+              { "label": "Blog", "href": "#" },
+              { "label": "Careers", "href": "#" },
+              { "label": "Contact", "href": "#" }
+            ]
+          },
+          {
+            "title": "Resources",
+            "links": [
+              { "label": "Docs", "href": "#" },
+              { "label": "API", "href": "#" },
+              { "label": "Status", "href": "#" },
+              { "label": "Support", "href": "#" }
+            ]
+          }
+        ],
+        "socialLinks": [
+          { "label": "X", "href": "#", "icon": "tabler:brand-x" },
+          { "label": "GitHub", "href": "#", "icon": "tabler:brand-github" },
+          { "label": "LinkedIn", "href": "#", "icon": "tabler:brand-linkedin" }
+        ],
+        "copyright": "© 2026 Flowbase, Inc. All rights reserved.",
+        "footNote": "Built with Parche."
+      }
+    }
+  ]
+}

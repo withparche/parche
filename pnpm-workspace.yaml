@@ -2,6 +2,10 @@ packages:
   - "packages/*"
   - "parches/*"
   - "examples/*"
+  # Dev templates (workspace:* linked for fast iteration). hello-parche is a
+  # CLI-served starter with a placeholder name, so it's excluded from the workspace.
+  - "templates/*"
+  - "!templates/hello-parche"
 
 # Central version catalog. Packages reference these with "catalog:".
 catalog:

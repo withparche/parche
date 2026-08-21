@@ -1,0 +1,183 @@
+{
+  "title": "Flowbase — Plan, track and ship your work",
+  "description": "The all-in-one workspace to plan, track and ship your work. Docs, tasks and roadmaps in one fast, calm place.",
+  "sections": [
+    {
+      "widget": "Announcement",
+      "props": {
+        "badge": "New",
+        "title": "Flowbase 2.0 is here",
+        "description": "Automations, AI summaries and a faster board view.",
+        "href": "#"
+      }
+    },
+    {
+      "widget": "Hero",
+      "props": {
+        "tagline": "Work, organized",
+        "title": "Ship your best work, <span class='text-primary'>without the chaos</span>",
+        "subtitle": "Flowbase brings your docs, tasks and roadmaps into one fast, calm workspace — so your team spends less time managing tools and more time building.",
+        "actions": [
+          { "variant": "primary", "text": "Start free", "href": "#pricing", "icon": "tabler:arrow-right" },
+          { "variant": "secondary", "text": "Book a demo", "href": "#", "icon": "tabler:calendar" }
+        ]
+      }
+    },
+    {
+      "widget": "Brands",
+      "props": {
+        "title": "Trusted by fast-moving teams",
+        "icons": [
+          "tabler:brand-vercel",
+          "tabler:brand-github",
+          "tabler:brand-figma",
+          "tabler:brand-slack",
+          "tabler:brand-notion",
+          "tabler:brand-stripe"
+        ]
+      }
+    },
+    {
+      "widget": "Features",
+      "props": {
+        "tagline": "Features",
+        "title": "Everything your team needs, in one place",
+        "subtitle": "Stop stitching five tools together. Flowbase replaces the busywork with one connected workspace.",
+        "columns": "3",
+        "items": [
+          { "title": "Boards & tasks", "description": "Plan sprints on flexible boards, with sub-tasks, dependencies and custom fields.", "icon": "tabler:layout-kanban" },
+          { "title": "Docs that link", "description": "Write specs and notes that stay connected to the work they describe.", "icon": "tabler:file-text" },
+          { "title": "Roadmaps", "description": "Turn strategy into timelines your whole company can follow.", "icon": "tabler:map" },
+          { "title": "Automations", "description": "Automate the repetitive steps — assignments, status changes, reminders.", "icon": "tabler:bolt" },
+          { "title": "AI summaries", "description": "Catch up on any project with a one-click summary of what changed.", "icon": "tabler:sparkles" },
+          { "title": "Integrations", "description": "Connect GitHub, Slack, Figma and 40+ tools your team already uses.", "icon": "tabler:plug" }
+        ]
+      }
+    },
+    {
+      "widget": "Content",
+      "props": {
+        "tagline": "Built for focus",
+        "title": "A calm home for deep work",
+        "subtitle": "Flowbase gets out of your way. Fast keyboard-first navigation, a quiet interface, and everything one shortcut away.",
+        "columns": "1",
+        "items": [
+          { "title": "Command palette", "description": "Jump to any project, doc or task in milliseconds." },
+          { "title": "Offline-first", "description": "Keep working on the train; changes sync when you're back." },
+          { "title": "Fine-grained permissions", "description": "Share the right thing with the right people, safely." }
+        ],
+        "callToAction": { "text": "See the product tour", "href": "#", "icon": "tabler:player-play" }
+      }
+    },
+    {
+      "widget": "Stats",
+      "props": {
+        "title": "Teams get more done with Flowbase",
+        "stats": [
+          { "amount": "12k+", "title": "Teams onboarded", "icon": "tabler:users-group" },
+          { "amount": "38%", "title": "Less time in meetings", "icon": "tabler:clock" },
+          { "amount": "4.9/5", "title": "Average rating", "icon": "tabler:star" },
+          { "amount": "99.98%", "title": "Uptime", "icon": "tabler:server-bolt" }
+        ]
+      }
+    },
+    {
+      "widget": "Steps",
+      "props": {
+        "tagline": "How it works",
+        "title": "Up and running in an afternoon",
+        "items": [
+          { "title": "Import your work", "description": "Bring tasks and docs over from Jira, Trello or Notion in a couple of clicks." },
+          { "title": "Invite your team", "description": "Set up spaces and permissions, and get everyone in the same place." },
+          { "title": "Ship", "description": "Plan, track and release — with automations doing the busywork." }
+        ]
+      }
+    },
+    {
+      "widget": "Pricing",
+      "props": {
+        "tagline": "Pricing",
+        "title": "Simple pricing that scales with you",
+        "subtitle": "Start free. Upgrade when your team grows. Cancel anytime.",
+        "prices": [
+          {
+            "title": "Free",
+            "subtitle": "For individuals getting started",
+            "price": "0",
+            "period": "/ month",
+            "items": [
+              { "description": "Up to 3 projects" },
+              { "description": "Unlimited docs" },
+              { "description": "Community support" }
+            ],
+            "callToAction": { "text": "Get started", "href": "#" }
+          },
+          {
+            "title": "Team",
+            "subtitle": "For growing teams",
+            "price": "12",
+            "period": "/ user / month",
+            "hasRibbon": true,
+            "ribbonTitle": "Popular",
+            "items": [
+              { "description": "Unlimited projects" },
+              { "description": "Automations & roadmaps" },
+              { "description": "40+ integrations" },
+              { "description": "Priority support" }
+            ],
+            "callToAction": { "text": "Start free trial", "href": "#" }
+          },
+          {
+            "title": "Enterprise",
+            "subtitle": "For organizations at scale",
+            "price": "Custom",
+            "items": [
+              { "description": "SSO & SCIM" },
+              { "description": "Advanced permissions" },
+              { "description": "Dedicated success manager" },
+              { "description": "99.99% uptime SLA" }
+            ],
+            "callToAction": { "text": "Contact sales", "href": "#" }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Testimonials",
+      "props": {
+        "tagline": "Loved by teams",
+        "title": "Don't take our word for it",
+        "testimonials": [
+          { "testimonial": "We replaced three tools with Flowbase and cut our weekly sync in half. It just feels calmer.", "name": "Ana Ruiz", "job": "Head of Product, Northwind" },
+          { "testimonial": "The roadmaps finally gave leadership a view they trust, without me exporting spreadsheets every week.", "name": "Marcus Lee", "job": "Eng Manager, Loop" },
+          { "testimonial": "Setup took an afternoon and the team never looked back. The automations alone pay for it.", "name": "Priya Nair", "job": "Ops Lead, Cedar" }
+        ]
+      }
+    },
+    {
+      "widget": "FAQs",
+      "props": {
+        "tagline": "FAQ",
+        "title": "Questions, answered",
+        "columns": "2",
+        "items": [
+          { "title": "Can I try it before paying?", "description": "Yes — the Free plan is genuinely free forever, and every paid plan includes a 14-day trial." },
+          { "title": "Can I import my existing data?", "description": "Flowbase imports from Jira, Trello, Asana and Notion, keeping your structure intact." },
+          { "title": "Is my data secure?", "description": "Data is encrypted in transit and at rest. Enterprise adds SSO, SCIM and audit logs." },
+          { "title": "Do you offer discounts?", "description": "We offer discounts for non-profits, students and annual billing." }
+        ]
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "props": {
+        "title": "Bring calm to how your team works",
+        "subtitle": "Join 12,000+ teams shipping better work with Flowbase. Free to start, no credit card required.",
+        "actions": [
+          { "variant": "primary", "text": "Start free", "href": "#", "icon": "tabler:arrow-right" },
+          { "variant": "secondary", "text": "Talk to sales", "href": "#" }
+        ]
+      }
+    }
+  ]
+}

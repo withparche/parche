@@ -500,6 +500,43 @@ importers:
         specifier: 'catalog:'
         version: 7.2.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@22.20.1)(jiti@2.7.0)(tsx@4.23.12)
 
+  templates/saas-landing:
+    dependencies:
+      '@iconify-json/tabler':
+        specifier: ^1.2.38
+        version: 1.2.38
+      '@parche/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@parche/primitives':
+        specifier: workspace:*
+        version: link:../../parches/primitives
+      '@parche/themes':
+        specifier: workspace:*
+        version: link:../../parches/themes
+      '@parche/ui':
+        specifier: workspace:*
+        version: link:../../parches/ui
+      '@tailwindcss/vite':
+        specifier: 'catalog:'
+        version: 4.3.3(vite@8.2.1(@types/node@22.20.1)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.12))
+      astro:
+        specifier: 'catalog:'
+        version: 7.2.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@22.20.1)(jiti@2.7.0)(tsx@4.23.12)
+      astro-icon:
+        specifier: 'catalog:'
+        version: 1.2.0
+      sharp:
+        specifier: 'catalog:'
+        version: 0.35.3(@types/node@22.20.1)
+      tailwindcss:
+        specifier: 'catalog:'
+        version: 4.3.3
+    devDependencies:
+      '@astrojs/node':
+        specifier: 'catalog:'
+        version: 11.1.4(astro@7.2.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@22.20.1)(jiti@2.7.0)(tsx@4.23.12))
+
 packages:
 
   '@antfu/install-pkg@1.1.0':
