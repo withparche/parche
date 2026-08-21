@@ -63,7 +63,9 @@
         "tagline": "Built for focus",
         "title": "A calm home for deep work",
         "subtitle": "Parche gets out of your way. Fast keyboard-first navigation, a quiet interface, and everything one shortcut away.",
-        "columns": "3",
+        "isReversed": true,
+        "image": { "src": "@/assets/images/showcase.svg", "alt": "Parche dashboard" },
+        "columns": "1",
         "items": [
           { "title": "Command palette", "description": "Jump to any project, doc or task in milliseconds." },
           { "title": "Offline-first", "description": "Keep working on the train; changes sync when you're back." },
@@ -85,10 +87,11 @@
     },
     {
       "widget": "Steps",
-      "wrapper": { "id": "how", "surface": true },
+      "wrapper": { "id": "how" },
       "props": {
         "tagline": "How it works",
         "title": "Up and running in an afternoon",
+        "image": { "src": "@/assets/images/workflow.svg", "alt": "Parche workflow board" },
         "items": [
           { "title": "Import your work", "description": "Bring tasks and docs over from Jira, Trello or Notion in a couple of clicks." },
           { "title": "Invite your team", "description": "Set up spaces and permissions, and get everyone in the same place." },

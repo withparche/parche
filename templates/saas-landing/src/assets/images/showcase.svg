@@ -1,0 +1,46 @@
+<svg width="900" height="900" viewBox="0 0 900 900" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Product screenshot placeholder">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="900" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#eef2ff"/>
+      <stop offset="1" stop-color="#dbeafe"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#3b6ef6"/>
+      <stop offset="1" stop-color="#1e40af"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="900" rx="24" fill="url(#bg)"/>
+  <!-- app window -->
+  <rect x="90" y="120" width="720" height="660" rx="20" fill="#ffffff" opacity="0.96"/>
+  <!-- title bar -->
+  <rect x="90" y="120" width="720" height="56" rx="20" fill="#f1f5f9"/>
+  <circle cx="128" cy="148" r="7" fill="#cbd5e1"/>
+  <circle cx="152" cy="148" r="7" fill="#cbd5e1"/>
+  <circle cx="176" cy="148" r="7" fill="#cbd5e1"/>
+  <!-- sidebar -->
+  <rect x="90" y="176" width="180" height="604" fill="#f8fafc"/>
+  <rect x="116" y="212" width="128" height="16" rx="8" fill="url(#accent)"/>
+  <rect x="116" y="252" width="110" height="12" rx="6" fill="#cbd5e1"/>
+  <rect x="116" y="284" width="120" height="12" rx="6" fill="#cbd5e1"/>
+  <rect x="116" y="316" width="96" height="12" rx="6" fill="#cbd5e1"/>
+  <rect x="116" y="348" width="112" height="12" rx="6" fill="#cbd5e1"/>
+  <!-- content cards -->
+  <rect x="300" y="212" width="230" height="120" rx="14" fill="#eff6ff"/>
+  <rect x="554" y="212" width="230" height="120" rx="14" fill="#eff6ff"/>
+  <rect x="324" y="240" width="90" height="14" rx="7" fill="url(#accent)"/>
+  <rect x="324" y="270" width="150" height="10" rx="5" fill="#bfdbfe"/>
+  <rect x="578" y="240" width="90" height="14" rx="7" fill="url(#accent)"/>
+  <rect x="578" y="270" width="150" height="10" rx="5" fill="#bfdbfe"/>
+  <!-- table / list -->
+  <rect x="300" y="360" width="484" height="380" rx="14" fill="#f8fafc"/>
+  <rect x="324" y="392" width="180" height="14" rx="7" fill="#94a3b8"/>
+  <g fill="#e2e8f0">
+    <rect x="324" y="432" width="436" height="14" rx="7"/>
+    <rect x="324" y="472" width="436" height="14" rx="7"/>
+    <rect x="324" y="512" width="436" height="14" rx="7"/>
+    <rect x="324" y="552" width="360" height="14" rx="7"/>
+    <rect x="324" y="592" width="400" height="14" rx="7"/>
+    <rect x="324" y="632" width="300" height="14" rx="7"/>
+  </g>
+  <rect x="640" y="384" width="120" height="30" rx="15" fill="url(#accent)"/>
+</svg>
