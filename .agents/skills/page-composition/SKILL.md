@@ -39,20 +39,39 @@ Any wrapped section takes a `wrapper` object — this is how you add rhythm with
 touching widgets:
 
 - `wrapper: { bg: "<html>" }` — **the main rhythm tool.** A raw-HTML background
-  layer authored right in the page JSON: a gradient div, a glow, an inline SVG
-  dot/grid pattern — whatever the section needs. It renders behind the content,
-  clipped to the section. Example (a dot pattern):
-  `"bg": "<svg width='100%' height='100%' style='position:absolute;inset:0'><pattern id='p' width='22' height='22' patternUnits='userSpaceOnUse'><circle cx='2' cy='2' r='1.3' fill='#e2e8f0'/></pattern><rect width='100%' height='100%' fill='url(#p)'/></svg>"`.
+  layer authored right in the page JSON (a gradient div, a glow, an inline SVG
+  pattern), rendered behind the content and clipped to the section. See
+  *Backgrounds* below — there's a right and a wrong way to use it.
 - `wrapper: { id: "pricing" }` — anchor target; the section gets the id (with
   sticky-header scroll offset), so nav links like `#pricing` work.
 - `wrapper: { isDark: true }` — a dark band for emphasis (e.g. a CTA break).
 - `wrapper: { classes: { container: "..." }, as: "aside" }` — spacing/tag overrides.
 
-Vary the `bg` between sections (a glow on the hero-area, dots on one band, a
-gradient on another, plain in between) so the page doesn't read flat.
-
 Note: full-bleed widgets (Hero, Announcement, Hero2, HeroText, Note) **skip the
 wrapper**, so `wrapper` knobs (incl. `id`) don't apply to them.
+
+## Backgrounds — intentional & subtle
+
+`bg` is powerful and easy to abuse. Rules learned the hard way:
+
+- **Reason, not decoration.** Every backgrounded section should have a *why*: a
+  soft brand wash behind the metrics (they read as a highlight), a faint tint on
+  the pricing band (a distinct "decision zone"), a glow rising into the final CTA
+  (draws the eye to the action). If you can't say why, leave it plain.
+- **Alternate plain / accented / plain.** Backgrounds are for rhythm, so most
+  sections stay plain and only some carry an accent. Don't paint every section.
+- **Use semi-transparent `rgba` overlays, not solid colors.** An overlay layers
+  over whatever's behind it, so it works in **light and dark** without theming.
+  `background: rgba(100,116,139,0.06)` (a whisper of slate) reads as a subtle band
+  on white *and* a subtle lift on dark. Solid colors only work in one mode.
+- **Soft gradients beat flat bands.** `linear-gradient(180deg, rgba(...0.06),
+  transparent 60%)` or a `radial-gradient` wash looks refined; a flat block looks
+  cheap.
+- **Calibrate the alpha.** Too subtle (≈0.02) is invisible; too strong / flat is
+  crude. Tints land around `0.05–0.08`, glows around `0.08–0.14`.
+
+Example — a brand wash and a glow:
+`"bg": "<div style='position:absolute;inset:0;background:radial-gradient(80% 120% at 50% 0%, rgba(59,110,246,0.07), transparent 70%)'></div>"`
 
 ## Widget-specific guidance
 
@@ -79,8 +98,14 @@ wrapper**, so `wrapper` knobs (incl. `id`) don't apply to them.
 - **Forcing non-numeric into a numeric slot.** Don't put "Custom" where a price
   goes at display size — use `type: "custom"`.
 - **Composed type classes over inherited color.** `.type-*` classes set their own
-  `color`, overriding an inherited `text-on-primary` — a number on a colored chip
-  goes low-contrast. Use plain text utilities inside colored chips.
+  `color`, overriding an inherited `text-on-primary`/`text-heading` — a number on a
+  colored chip, or a badge, goes low-contrast. Use plain text utilities (e.g.
+  `text-xs font-semibold`) inside colored chips/badges, not `.type-label`.
+- **Lopsided full-width bars.** A full-bleed bar (announcement, notice) with its
+  content left-aligned leaves the whole right side empty and reads unbalanced.
+  Center the content (badge + text + arrow) within a `max-w` row.
+- **Backgrounds without reason / too crude.** See *Backgrounds*: no arbitrary
+  patterns "just because", no flat cheap bands, no invisible-subtle or heavy tints.
 
 ## Assets
 
@@ -91,6 +116,8 @@ arrays). Prefer local placeholders over remote URLs in a shipped template.
 
 ## A serviceable SaaS-landing skeleton
 
-`Announcement → Hero → Brands(surface) → Features(grid) → Content(asymmetric,
-image) → Stats → Steps(timeline, image) → Pricing(id) → Testimonials(surface) →
-FAQs(id) → CTA`. Adapt per goal; the point is the alternation, not this exact list.
+`Announcement(centered) → Hero → Brands → Features(grid, faint tint) →
+Content(asymmetric, image) → Stats(brand wash) → Steps(timeline, image) →
+Pricing(id, faint tint) → Testimonials → FAQs(id) → CTA(glow)`. Plain sections
+between the accented ones. Adapt per goal; the point is the alternation and the
+*reason* for each accent, not this exact list.
