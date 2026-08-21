@@ -33,14 +33,15 @@ const colClass =
 
   <div class="mx-auto max-w-7xl p-4 md:px-8">
     <div class={`md:flex ${isReversed ? 'md:flex-row-reverse' : ''} md:gap-16`}>
-      <!-- Text / items column -->
-      <div class="md:basis-1/2 self-center">
+      <!-- Text / items column. Full width when there's no image, so items fill
+           the space (a balanced grid) instead of leaving an empty right half. -->
+      <div class:list={['self-center', image ? 'md:basis-1/2' : 'w-full']}>
         {content && (
           <div class="mb-12 text-lg text-muted" set:html={content} />
         )}
 
         {callToAction?.href && (
-          <div class="mt-[-40px] mb-8 text-primary">
+          <div class="mb-8 text-primary">
             <a
               href={callToAction.href}
               class="inline-flex items-center gap-1 text-primary hover:underline"
