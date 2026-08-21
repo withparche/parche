@@ -1,0 +1,35 @@
+{
+  "sections": [
+    {
+      "widget": "layout/Header",
+      "props": {
+        "logo": { "text": "Alex Rivera", "href": "/" },
+        "links": [
+          { "label": "Work", "href": "#work" },
+          { "label": "About", "href": "#about" },
+          { "label": "Experience", "href": "#experience" },
+          { "label": "Contact", "href": "#contact" }
+        ],
+        "actions": [
+          { "label": "Résumé", "href": "#", "variant": "ghost", "icon": "tabler:download" },
+          { "label": "Get in touch", "href": "#contact", "variant": "primary" }
+        ]
+      }
+    },
+    { "widget": "layout/Main" },
+    {
+      "widget": "layout/Footer",
+      "props": {
+        "siteName": "Alex Rivera",
+        "socialLinks": [
+          { "label": "GitHub", "href": "#", "icon": "tabler:brand-github" },
+          { "label": "X", "href": "#", "icon": "tabler:brand-x" },
+          { "label": "LinkedIn", "href": "#", "icon": "tabler:brand-linkedin" },
+          { "label": "Email", "href": "#", "icon": "tabler:mail" }
+        ],
+        "copyright": "© 2026 Alex Rivera. Built with Parche.",
+        "footNote": "Designed & built with care."
+      }
+    }
+  ]
+}

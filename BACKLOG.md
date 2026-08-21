@@ -67,4 +67,34 @@ The page renders end-to-end; these are where the system fought back.
   vary rhythm without relying only on presence/absence of an image.
 
 ## From T2 — Personal portfolio (`templates/portfolio`)
-_(pending — next template in this cycle)_
+
+Built a full developer/designer portfolio (hero, brands, about, skills, two
+featured projects, experience timeline, stats, testimonials, contact CTA) as
+static output, reusing existing widgets + the page-composition skill (asymmetric
+sections, intentional subtle backgrounds). It renders well, but portfolio-shaped
+content exposed real gaps:
+
+### Widgets — the new territory
+- **[high] No Projects / gallery grid widget.** A portfolio's core section is a
+  grid of project *cards* (thumbnail + title + tags + link), and there is none.
+  Worked around it with two `Content` blocks (asymmetric, one image each) for
+  *featured* work — fine for 2–3 highlights, wrong for a grid of many. Need a
+  `Projects`/`Gallery` widget: responsive card grid, image, title, blurb, tag
+  chips, link. **The biggest T2 finding.**
+- **[med] Steps can't choose its layout.** Steps renders a horizontal step grid
+  when it has no image and a vertical timeline when it does. An **experience /
+  work-history timeline** wants the *vertical* form but has no image — so today
+  you can't get a vertical timeline without inventing an image. Need a `layout`/
+  `variant` prop (timeline vs grid) independent of whether an image is present.
+- **[low] Project metadata wants chips, not a list.** Role/Year/tech rendered as
+  a plain items list; project meta reads better as `Tag`/`Badge` chips. No widget
+  path for that yet.
+- **[low] Repeated section tagline.** Two featured-work `Content` blocks each
+  repeat the "Selected work" tagline (no single section header for a multi-item
+  group) — a symptom of the missing Projects widget.
+
+### Reuse that worked
+- HeroText, Brands, Content (asymmetric about + featured work), Stats (metrics),
+  Testimonials (recommendations), CallToAction (contact) all repurposed cleanly.
+- The skill's rhythm held up: asymmetric About/work, subtle tints on Skills &
+  Experience, a brand wash on Stats, a glow on the contact CTA.

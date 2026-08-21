@@ -1,0 +1,144 @@
+{
+  "title": "Alex Rivera — Product Designer & Developer",
+  "description": "Product designer and developer crafting calm, useful software. Selected work, experience and ways to get in touch.",
+  "sections": [
+    {
+      "widget": "HeroText",
+      "props": {
+        "tagline": "Product designer & developer",
+        "title": "Hi, I'm Alex — I design and build <span class='text-primary'>calm, useful software</span>",
+        "subtitle": "For the last 8 years I've helped startups turn fuzzy ideas into products people actually enjoy using. Currently focused on developer tools and design systems.",
+        "callToAction": { "text": "See my work", "href": "#work", "icon": "tabler:arrow-down" },
+        "callToAction2": { "text": "Get in touch", "href": "#contact" }
+      }
+    },
+    {
+      "widget": "Brands",
+      "props": {
+        "title": "Trusted by teams at",
+        "icons": [
+          "tabler:brand-vercel",
+          "tabler:brand-github",
+          "tabler:brand-stripe",
+          "tabler:brand-figma",
+          "tabler:brand-slack"
+        ]
+      }
+    },
+    {
+      "widget": "Content",
+      "wrapper": { "id": "about" },
+      "props": {
+        "tagline": "About",
+        "title": "Design and engineering, one brain",
+        "subtitle": "I move comfortably between Figma and the codebase, which means fewer things get lost in translation.",
+        "isReversed": true,
+        "image": { "src": "@/assets/images/portrait.svg", "alt": "Alex Rivera" },
+        "columns": "1",
+        "items": [
+          { "title": "Design systems", "description": "I build the tokens, components and docs so teams ship consistently." },
+          { "title": "Frontend engineering", "description": "TypeScript, Astro, React — accessible, fast, maintainable." },
+          { "title": "Product thinking", "description": "I care about the job the user is hiring the product to do." }
+        ]
+      }
+    },
+    {
+      "widget": "Features",
+      "wrapper": { "bg": "<div style='position:absolute;inset:0;background:linear-gradient(180deg, rgba(100,116,139,0.06), transparent 60%)'></div>" },
+      "props": {
+        "tagline": "What I do",
+        "title": "Ways I can help",
+        "columns": "3",
+        "items": [
+          { "title": "Product design", "description": "Research, flows, wireframes and polished UI that ships.", "icon": "tabler:layout-2" },
+          { "title": "Design systems", "description": "Scalable tokens, components and guidelines teams love.", "icon": "tabler:components" },
+          { "title": "Frontend", "description": "Accessible, performant interfaces in modern frameworks.", "icon": "tabler:code" },
+          { "title": "Prototyping", "description": "Interactive prototypes to validate ideas before you build.", "icon": "tabler:click" },
+          { "title": "Brand & identity", "description": "Logos, type and visual language with a point of view.", "icon": "tabler:palette" },
+          { "title": "Consulting", "description": "Audits and hands-on help to level up your product & process.", "icon": "tabler:messages" }
+        ]
+      }
+    },
+    {
+      "widget": "Content",
+      "wrapper": { "id": "work" },
+      "props": {
+        "tagline": "Selected work",
+        "title": "Nimbus — a calmer inbox",
+        "subtitle": "Reimagined email triage for a productivity startup. I led design and built the front end; support tickets dropped 30% after launch.",
+        "image": { "src": "@/assets/images/work1.svg", "alt": "Nimbus case study" },
+        "columns": "1",
+        "items": [
+          { "title": "Role", "description": "Lead product designer & frontend" },
+          { "title": "Year", "description": "2025 · Nimbus Labs" }
+        ],
+        "callToAction": { "text": "Read the case study", "href": "#", "icon": "tabler:arrow-right" }
+      }
+    },
+    {
+      "widget": "Content",
+      "props": {
+        "tagline": "Selected work",
+        "title": "Orbit — a design system for scale",
+        "subtitle": "Built a cross-platform design system adopted by 40+ engineers, cutting UI build time roughly in half.",
+        "isReversed": true,
+        "image": { "src": "@/assets/images/work2.svg", "alt": "Orbit case study" },
+        "columns": "1",
+        "items": [
+          { "title": "Role", "description": "Design systems lead" },
+          { "title": "Year", "description": "2024 · Orbit Inc." }
+        ],
+        "callToAction": { "text": "Read the case study", "href": "#", "icon": "tabler:arrow-right" }
+      }
+    },
+    {
+      "widget": "Steps",
+      "wrapper": { "id": "experience", "bg": "<div style='position:absolute;inset:0;background:linear-gradient(180deg, rgba(100,116,139,0.05), transparent 55%)'></div>" },
+      "props": {
+        "tagline": "Experience",
+        "title": "Where I've worked",
+        "items": [
+          { "title": "Lead Product Designer · Nimbus Labs", "description": "2023 — present. Design + frontend for the flagship inbox product.", "icon": "tabler:briefcase" },
+          { "title": "Design Systems Lead · Orbit Inc.", "description": "2021 — 2023. Built and scaled the cross-platform design system.", "icon": "tabler:stack-2" },
+          { "title": "Product Designer · Cedar", "description": "2018 — 2021. Shipped the mobile app and marketing site from scratch.", "icon": "tabler:sparkles" }
+        ]
+      }
+    },
+    {
+      "widget": "Stats",
+      "wrapper": { "bg": "<div style='position:absolute;inset:0;background:radial-gradient(80% 120% at 50% 0%, rgba(59,110,246,0.07), transparent 70%)'></div>" },
+      "props": {
+        "stats": [
+          { "amount": "8+", "title": "Years experience", "icon": "tabler:clock" },
+          { "amount": "40+", "title": "Projects shipped", "icon": "tabler:rocket" },
+          { "amount": "12", "title": "Happy clients", "icon": "tabler:heart" },
+          { "amount": "3", "title": "Design awards", "icon": "tabler:award" }
+        ]
+      }
+    },
+    {
+      "widget": "Testimonials",
+      "props": {
+        "tagline": "Kind words",
+        "title": "What people say",
+        "testimonials": [
+          { "testimonial": "Alex is the rare designer who can also ship the code. Our velocity doubled.", "name": "Ana Ruiz", "job": "CTO, Nimbus Labs" },
+          { "testimonial": "The design system Alex built is still the backbone of everything we make.", "name": "Marcus Lee", "job": "Head of Eng, Orbit" },
+          { "testimonial": "Thoughtful, fast, and genuinely nice to work with. Would hire again in a heartbeat.", "name": "Priya Nair", "job": "Founder, Cedar" }
+        ]
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "wrapper": { "id": "contact", "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>" },
+      "props": {
+        "title": "Let's build something calm and useful",
+        "subtitle": "I'm open to select freelance and full-time work. Tell me what you're working on.",
+        "actions": [
+          { "variant": "primary", "text": "Get in touch", "href": "#", "icon": "tabler:mail" },
+          { "variant": "secondary", "text": "Download résumé", "href": "#", "icon": "tabler:download" }
+        ]
+      }
+    }
+  ]
+}

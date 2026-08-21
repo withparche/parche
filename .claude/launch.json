@@ -1,12 +1,7 @@
 {
   "version": "0.0.1",
   "configurations": [
-    {
-      "name": "template-saas",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--filter", "template-saas", "dev", "--port", "4321"],
-      "port": 4321,
-      "autoPort": false
-    }
+    { "name": "template-saas", "runtimeExecutable": "pnpm", "runtimeArgs": ["--filter", "template-saas", "dev", "--port", "4321"], "port": 4321, "autoPort": false },
+    { "name": "template-portfolio", "runtimeExecutable": "pnpm", "runtimeArgs": ["--filter", "template-portfolio", "dev", "--port", "4323"], "port": 4323, "autoPort": false }
   ]
 }
