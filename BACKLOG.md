@@ -53,5 +53,18 @@ The page renders end-to-end; these are where the system fought back.
   (ring on keyboard focus). Primitive-level a11y (Button/Link/Tag) is still the
   primitives-cycle job.
 
+### Design rhythm / variety
+- **[FIXED-template] Every section read the same (centered heading + grid).** The
+  page lacked rhythm. Insight: rhythm comes from the *template author* combining
+  layouts, not from the widgets alone — the widgets already support asymmetric
+  variants (Steps timeline+image, Content text+image, `isReversed`) plus `surface`
+  bands. Fix: gave Content/Steps local placeholder images so they become
+  asymmetric two-column sections. Templates should ship **local placeholder
+  assets** (swappable), not remote URLs.
+- **[widgets-v2, deferred] More layout variants per widget.** Bigger lever for
+  variety: several widgets have only one layout. The widgets-v2 pass should add
+  variant options (e.g. Features bento/split, testimonials masonry) so a page can
+  vary rhythm without relying only on presence/absence of an image.
+
 ## From T2 — Personal portfolio (`templates/portfolio`)
 _(pending — next template in this cycle)_
