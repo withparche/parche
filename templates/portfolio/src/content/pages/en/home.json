@@ -3,141 +3,133 @@
   "description": "Product designer and developer crafting calm, useful software. Selected work, experience and ways to get in touch.",
   "sections": [
     {
-      "widget": "HeroText",
+      "widget": "ProfileHero",
+      "wrapper": false,
       "props": {
-        "tagline": "Product designer & developer",
-        "title": "Hi, I'm Alex — I design and build <span class='text-primary'>calm, useful software</span>",
-        "subtitle": "For the last 8 years I've helped startups turn fuzzy ideas into products people actually enjoy using. Currently focused on developer tools and design systems.",
-        "callToAction": { "text": "See my work", "href": "#work", "icon": "tabler:arrow-down" },
-        "callToAction2": { "text": "Get in touch", "href": "#contact" }
+        "name": "Hi, I'm Alex",
+        "tagline": "Product Designer & Developer",
+        "bio": "I design and build calm, useful software. Currently focused on developer tools and design systems.",
+        "avatar": { "src": "@/assets/images/portrait.svg", "alt": "Alex Rivera" }
       }
     },
     {
-      "widget": "Brands",
+      "widget": "Prose",
+      "wrapper": false,
       "props": {
-        "title": "Trusted by teams at",
-        "icons": [
-          "tabler:brand-vercel",
-          "tabler:brand-github",
-          "tabler:brand-stripe",
-          "tabler:brand-figma",
-          "tabler:brand-slack"
-        ]
+        "title": "About",
+        "content": "<p>For the last 8 years I've helped startups turn fuzzy ideas into products people actually enjoy using. I move comfortably between Figma and the codebase, which means fewer things get lost in translation. I care about the job the user is hiring the product to do — and about shipping.</p>"
       }
     },
     {
-      "widget": "Content",
-      "wrapper": { "id": "about" },
+      "widget": "ResumeList",
+      "wrapper": false,
       "props": {
-        "tagline": "About",
-        "title": "Design and engineering, one brain",
-        "subtitle": "I move comfortably between Figma and the codebase, which means fewer things get lost in translation.",
-        "isReversed": true,
-        "image": { "src": "@/assets/images/portrait.svg", "alt": "Alex Rivera" },
-        "columns": "1",
+        "title": "Work Experience",
+        "variant": "list",
         "items": [
-          { "title": "Design systems", "description": "I build the tokens, components and docs so teams ship consistently." },
-          { "title": "Frontend engineering", "description": "TypeScript, Astro, React — accessible, fast, maintainable." },
-          { "title": "Product thinking", "description": "I care about the job the user is hiring the product to do." }
+          { "title": "Nimbus Labs", "subtitle": "Lead Product Designer", "meta": "2023 - Present" },
+          { "title": "Orbit Inc.", "subtitle": "Design Systems Lead", "meta": "2021 - 2023" },
+          { "title": "Cedar", "subtitle": "Product Designer", "meta": "2018 - 2021" },
+          { "title": "Freelance", "subtitle": "Designer & Developer", "meta": "2016 - 2018" }
         ]
       }
     },
     {
-      "widget": "Features",
-      "wrapper": { "bg": "<div style='position:absolute;inset:0;background:linear-gradient(180deg, rgba(100,116,139,0.06), transparent 60%)'></div>" },
+      "widget": "ResumeList",
+      "wrapper": false,
       "props": {
-        "tagline": "What I do",
-        "title": "Ways I can help",
-        "columns": "3",
+        "title": "Education",
+        "variant": "list",
         "items": [
-          { "title": "Product design", "description": "Research, flows, wireframes and polished UI that ships.", "icon": "tabler:layout-2" },
-          { "title": "Design systems", "description": "Scalable tokens, components and guidelines teams love.", "icon": "tabler:components" },
-          { "title": "Frontend", "description": "Accessible, performant interfaces in modern frameworks.", "icon": "tabler:code" },
-          { "title": "Prototyping", "description": "Interactive prototypes to validate ideas before you build.", "icon": "tabler:click" },
-          { "title": "Brand & identity", "description": "Logos, type and visual language with a point of view.", "icon": "tabler:palette" },
-          { "title": "Consulting", "description": "Audits and hands-on help to level up your product & process.", "icon": "tabler:messages" }
+          { "title": "University of the Arts", "subtitle": "BFA, Interaction Design", "meta": "2012 - 2016" },
+          { "title": "Recurse Center", "subtitle": "Programming retreat", "meta": "2017" }
         ]
       }
     },
     {
-      "widget": "Content",
-      "wrapper": { "id": "work" },
+      "widget": "SkillsPills",
+      "wrapper": false,
       "props": {
-        "tagline": "Selected work",
-        "title": "Nimbus — a calmer inbox",
-        "subtitle": "Reimagined email triage for a productivity startup. I led design and built the front end; support tickets dropped 30% after launch.",
-        "image": { "src": "@/assets/images/work1.svg", "alt": "Nimbus case study" },
-        "columns": "1",
+        "title": "Skills",
+        "skills": ["Figma", "Design Systems", "TypeScript", "Astro", "React", "Tailwind CSS", "Node.js", "Prototyping", "Accessibility", "Brand"]
+      }
+    },
+    {
+      "widget": "Projects",
+      "wrapper": false,
+      "props": {
+        "tagline": "My Projects",
+        "title": "Check out my latest work",
+        "subtitle": "A few projects I'm proud of — from design systems to full products.",
+        "columns": "2",
+        "projects": [
+          {
+            "title": "Nimbus",
+            "date": "2025",
+            "description": "Reimagined email triage for a productivity startup. Led design and built the front end.",
+            "image": { "src": "@/assets/images/work1.svg", "alt": "Nimbus" },
+            "tags": ["Product Design", "Astro", "TypeScript"],
+            "links": [
+              { "label": "Website", "href": "#", "icon": "tabler:world" },
+              { "label": "Source", "href": "#", "icon": "tabler:brand-github" }
+            ]
+          },
+          {
+            "title": "Orbit",
+            "date": "2024",
+            "description": "A cross-platform design system adopted by 40+ engineers, cutting UI build time in half.",
+            "image": { "src": "@/assets/images/work2.svg", "alt": "Orbit" },
+            "tags": ["Design System", "React", "Docs"],
+            "links": [
+              { "label": "Website", "href": "#", "icon": "tabler:world" },
+              { "label": "Source", "href": "#", "icon": "tabler:brand-github" }
+            ]
+          },
+          {
+            "title": "Sunbeam",
+            "date": "2023",
+            "description": "A friendly budgeting app with a warm, approachable visual language.",
+            "image": { "src": "@/assets/images/work3.svg", "alt": "Sunbeam" },
+            "tags": ["Mobile", "Brand", "Figma"],
+            "links": [
+              { "label": "Website", "href": "#", "icon": "tabler:world" }
+            ]
+          },
+          {
+            "title": "Trailhead",
+            "date": "2022",
+            "description": "An analytics dashboard turning messy data into clear, actionable charts.",
+            "image": { "src": "@/assets/images/work4.svg", "alt": "Trailhead" },
+            "tags": ["Data Viz", "TypeScript", "D3"],
+            "links": [
+              { "label": "Website", "href": "#", "icon": "tabler:world" },
+              { "label": "Source", "href": "#", "icon": "tabler:brand-github" }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "widget": "ResumeList",
+      "wrapper": false,
+      "props": {
+        "title": "Hackathons",
+        "subtitle": "I like building things fast, with good people.",
+        "variant": "timeline",
         "items": [
-          { "title": "Role", "description": "Lead product designer & frontend" },
-          { "title": "Year", "description": "2025 · Nimbus Labs" }
-        ],
-        "callToAction": { "text": "Read the case study", "href": "#", "icon": "tabler:arrow-right" }
-      }
-    },
-    {
-      "widget": "Content",
-      "props": {
-        "tagline": "Selected work",
-        "title": "Orbit — a design system for scale",
-        "subtitle": "Built a cross-platform design system adopted by 40+ engineers, cutting UI build time roughly in half.",
-        "isReversed": true,
-        "image": { "src": "@/assets/images/work2.svg", "alt": "Orbit case study" },
-        "columns": "1",
-        "items": [
-          { "title": "Role", "description": "Design systems lead" },
-          { "title": "Year", "description": "2024 · Orbit Inc." }
-        ],
-        "callToAction": { "text": "Read the case study", "href": "#", "icon": "tabler:arrow-right" }
-      }
-    },
-    {
-      "widget": "Steps",
-      "wrapper": { "id": "experience", "bg": "<div style='position:absolute;inset:0;background:linear-gradient(180deg, rgba(100,116,139,0.05), transparent 55%)'></div>" },
-      "props": {
-        "tagline": "Experience",
-        "title": "Where I've worked",
-        "items": [
-          { "title": "Lead Product Designer · Nimbus Labs", "description": "2023 — present. Design + frontend for the flagship inbox product.", "icon": "tabler:briefcase" },
-          { "title": "Design Systems Lead · Orbit Inc.", "description": "2021 — 2023. Built and scaled the cross-platform design system.", "icon": "tabler:stack-2" },
-          { "title": "Product Designer · Cedar", "description": "2018 — 2021. Shipped the mobile app and marketing site from scratch.", "icon": "tabler:sparkles" }
+          { "meta": "Nov 2023", "title": "Hack the North", "location": "Waterloo, ON", "description": "Built an AR bedtime-story app for kids in 36 hours. Top 10 finalist." },
+          { "meta": "Mar 2023", "title": "SFHacks", "location": "San Francisco, CA", "description": "A real-time campus events app for students. Best design award." },
+          { "meta": "Sep 2022", "title": "DeveloperWeek", "location": "Remote", "description": "A tool that aggregates crypto sentiment from social media." }
         ]
       }
     },
     {
-      "widget": "Stats",
-      "wrapper": { "bg": "<div style='position:absolute;inset:0;background:radial-gradient(80% 120% at 50% 0%, rgba(59,110,246,0.07), transparent 70%)'></div>" },
+      "widget": "Prose",
+      "wrapper": false,
       "props": {
-        "stats": [
-          { "amount": "8+", "title": "Years experience", "icon": "tabler:clock" },
-          { "amount": "40+", "title": "Projects shipped", "icon": "tabler:rocket" },
-          { "amount": "12", "title": "Happy clients", "icon": "tabler:heart" },
-          { "amount": "3", "title": "Design awards", "icon": "tabler:award" }
-        ]
-      }
-    },
-    {
-      "widget": "Testimonials",
-      "props": {
-        "tagline": "Kind words",
-        "title": "What people say",
-        "testimonials": [
-          { "testimonial": "Alex is the rare designer who can also ship the code. Our velocity doubled.", "name": "Ana Ruiz", "job": "CTO, Nimbus Labs" },
-          { "testimonial": "The design system Alex built is still the backbone of everything we make.", "name": "Marcus Lee", "job": "Head of Eng, Orbit" },
-          { "testimonial": "Thoughtful, fast, and genuinely nice to work with. Would hire again in a heartbeat.", "name": "Priya Nair", "job": "Founder, Cedar" }
-        ]
-      }
-    },
-    {
-      "widget": "CallToAction",
-      "wrapper": { "id": "contact", "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>" },
-      "props": {
-        "title": "Let's build something calm and useful",
-        "subtitle": "I'm open to select freelance and full-time work. Tell me what you're working on.",
-        "actions": [
-          { "variant": "primary", "text": "Get in touch", "href": "#", "icon": "tabler:mail" },
-          { "variant": "secondary", "text": "Download résumé", "href": "#", "icon": "tabler:download" }
-        ]
+        "tagline": "Contact",
+        "title": "Get in touch",
+        "content": "<p>I'm open to select freelance and full-time work. The best way to reach me is by email at <a href='mailto:hello@example.com' class='text-primary hover:underline'>hello@example.com</a> — or find me on the socials.</p>"
       }
     }
   ]

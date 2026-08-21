@@ -1,0 +1,24 @@
+---
+/**
+ * A row of skill pills. Single narrow column, resume style.
+ */
+interface Props {
+  tagline?: string;
+  title?: string;
+  skills?: string[];
+}
+
+const { tagline, title, skills = [] } = Astro.props as Props;
+---
+
+<section class="mx-auto w-full max-w-3xl px-6 pt-14">
+  {tagline && <p class="mb-1.5 text-base font-medium text-primary">{tagline}</p>}
+  {title && <h2 class="text-2xl font-bold text-heading">{title}</h2>}
+  {skills.length > 0 && (
+    <div class="mt-4 flex flex-wrap gap-2">
+      {skills.map((s) => (
+        <span class="rounded-md bg-primary px-3 py-1 text-sm font-medium text-on-primary">{s}</span>
+      ))}
+    </div>
+  )}
+</section>

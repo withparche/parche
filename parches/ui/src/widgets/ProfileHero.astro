@@ -1,0 +1,46 @@
+---
+/**
+ * Compact resume-style hero: name + one-line bio on the left, a round avatar on
+ * the right. Built for a single narrow column (portfolio templates).
+ */
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  name?: string;
+  /** Small role/tagline line above or below the name (optional). */
+  tagline?: string;
+  bio?: string;
+  avatar?: { src?: string | ImageMetadata; alt?: string };
+  /** Fixed dot-grid page background (magicui-style). Default on. */
+  dots?: boolean;
+}
+
+const { name, tagline, bio, avatar, dots = true } = Astro.props as Props;
+const avatarSrc = typeof avatar?.src === 'string' ? avatar?.src : avatar?.src?.src;
+---
+
+{dots && (
+  <div
+    class="pointer-events-none fixed inset-0 -z-10"
+    aria-hidden="true"
+    style="background-image:radial-gradient(rgba(120,120,140,0.16) 1px, transparent 1px);background-size:22px 22px;-webkit-mask-image:radial-gradient(ellipse 100% 60% at 50% 0%, #000 40%, transparent 100%);mask-image:radial-gradient(ellipse 100% 60% at 50% 0%, #000 40%, transparent 100%)"
+  ></div>
+)}
+
+<section class="mx-auto w-full max-w-3xl px-6 pt-16 md:pt-24">
+  <div class="flex items-center justify-between gap-8">
+    <div class="min-w-0 flex-1">
+      {tagline && <p class="mb-1.5 text-base font-medium text-primary">{tagline}</p>}
+      {name && <h1 class="text-5xl font-bold tracking-tight text-heading sm:text-6xl">{name}</h1>}
+      {bio && <p class="mt-4 max-w-lg text-lg text-muted">{bio}</p>}
+    </div>
+    {avatarSrc && (
+      <img
+        src={avatarSrc}
+        alt={avatar?.alt ?? name ?? ''}
+        class="size-28 shrink-0 rounded-full border border-border object-cover sm:size-32"
+        loading="eager"
+      />
+    )}
+  </div>
+</section>

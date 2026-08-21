@@ -1,0 +1,22 @@
+<svg width="1000" height="750" viewBox="0 0 1000 750" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Project thumbnail placeholder">
+  <defs>
+    <linearGradient id="w3" x1="0" y1="0" x2="1000" y2="750" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fef3c7"/><stop offset="1" stop-color="#fde68a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1000" height="750" rx="20" fill="url(#w3)"/>
+  <rect x="120" y="120" width="760" height="90" rx="14" fill="#ffffff"/>
+  <circle cx="175" cy="165" r="24" fill="#f59e0b"/>
+  <rect x="220" y="150" width="260" height="14" rx="7" fill="#78350f"/>
+  <rect x="220" y="176" width="180" height="10" rx="5" fill="#d97706"/>
+  <g fill="#ffffff">
+    <rect x="120" y="250" width="360" height="180" rx="14"/>
+    <rect x="520" y="250" width="360" height="180" rx="14"/>
+    <rect x="120" y="470" width="760" height="150" rx="14"/>
+  </g>
+  <rect x="150" y="290" width="120" height="80" rx="10" fill="#fcd34d"/>
+  <rect x="290" y="300" width="150" height="12" rx="6" fill="#92400e"/>
+  <rect x="290" y="330" width="110" height="10" rx="5" fill="#d97706"/>
+  <rect x="150" y="510" width="200" height="16" rx="8" fill="#92400e"/>
+  <rect x="150" y="545" width="500" height="12" rx="6" fill="#d97706"/>
+</svg>

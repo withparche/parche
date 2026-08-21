@@ -33,6 +33,12 @@ export default function createUI(): ParcheManifest {
       Features2: w('Features2.astro'),
       Features3: w('Features3.astro'),
       Content: w('Content.astro'),
+      Projects: w('Projects.astro'),
+      // Portfolio (resume-style, single narrow column)
+      ProfileHero: w('ProfileHero.astro'),
+      Prose: w('Prose.astro'),
+      ResumeList: w('ResumeList.astro'),
+      SkillsPills: w('SkillsPills.astro'),
       CallToAction: w('CallToAction.astro'),
       Stats: w('Stats.astro'),
       Testimonials: w('Testimonials.astro'),

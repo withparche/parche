@@ -1,0 +1,21 @@
+---
+/**
+ * A section heading + a block of prose. For an About/bio paragraph in the
+ * single-column resume style. Left-aligned, narrow column.
+ */
+interface Props {
+  tagline?: string;
+  title?: string;
+  content?: string;
+}
+
+const { tagline, title, content } = Astro.props as Props;
+---
+
+<section class="mx-auto w-full max-w-3xl px-6 pt-14">
+  {tagline && <p class="mb-1.5 text-base font-medium text-primary">{tagline}</p>}
+  {title && <h2 class="text-2xl font-bold text-heading">{title}</h2>}
+  {content && (
+    <div class="prose prose-neutral mt-4 max-w-none text-lg text-muted leading-relaxed" set:html={content} />
+  )}
+</section>

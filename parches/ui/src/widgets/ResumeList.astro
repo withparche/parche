@@ -1,0 +1,67 @@
+---
+/**
+ * Resume-style list. `variant: 'list'` renders compact rows (logo + title +
+ * subtitle, dates on the right) — for Work Experience / Education.
+ * `variant: 'timeline'` renders a vertical timeline (dot + date + description) —
+ * for Hackathons / Awards. Single narrow column.
+ */
+interface Item {
+  title?: string;
+  subtitle?: string;
+  meta?: string;
+  location?: string;
+  description?: string;
+  logo?: { src?: string; alt?: string };
+  href?: string;
+}
+
+interface Props {
+  tagline?: string;
+  title?: string;
+  subtitle?: string;
+  variant?: 'list' | 'timeline';
+  items?: Item[];
+}
+
+const { tagline, title, subtitle, variant = 'list', items = [] } = Astro.props as Props;
+const initials = (s?: string) => (s ?? '').trim().charAt(0).toUpperCase();
+---
+
+<section class="mx-auto w-full max-w-3xl px-6 pt-14">
+  {tagline && <p class="mb-1.5 text-base font-medium text-primary">{tagline}</p>}
+  {title && <h2 class="text-2xl font-bold text-heading">{title}</h2>}
+  {subtitle && <p class="mt-2 text-muted">{subtitle}</p>}
+
+  {variant === 'timeline' ? (
+    <ol class="relative mt-6 border-l border-border pl-6">
+      {items.map((it) => (
+        <li class="relative pb-8 last:pb-0">
+          <span class="absolute -left-[calc(1.5rem+1px)] mt-1 flex size-3 -translate-x-1/2 items-center justify-center rounded-full bg-primary ring-4 ring-background"></span>
+          {it.meta && <p class="text-sm font-medium text-muted">{it.meta}</p>}
+          {it.title && <p class="mt-0.5 text-lg font-semibold text-heading">{it.title}</p>}
+          {it.location && <p class="text-sm text-muted">{it.location}</p>}
+          {it.description && <p class="mt-1 text-muted leading-relaxed">{it.description}</p>}
+        </li>
+      ))}
+    </ol>
+  ) : (
+    <div class="mt-6 flex flex-col gap-6">
+      {items.map((it) => (
+        <div class="flex items-center gap-4">
+          <div class="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-surface font-semibold text-muted">
+            {it.logo?.src
+              ? <img src={it.logo.src} alt={it.logo.alt ?? it.title ?? ''} class="size-full object-cover" />
+              : initials(it.title)}
+          </div>
+          <div class="min-w-0 flex-1">
+            <div class="flex items-baseline justify-between gap-3">
+              {it.title && <p class="truncate text-lg font-semibold text-heading">{it.title}</p>}
+              {it.meta && <p class="shrink-0 text-sm text-muted">{it.meta}</p>}
+            </div>
+            {it.subtitle && <p class="text-muted">{it.subtitle}</p>}
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+</section>
