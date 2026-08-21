@@ -106,6 +106,12 @@ const SeriesNav = widgetMap['blog/SeriesNav'];
 
 if (mode === 'resolver' && resolvedApp) {
   AppTemplate = templateMap[resolvedApp.template];
+  if (import.meta.env.DEV && resolvedApp.template && !AppTemplate) {
+    console.warn(
+      `[parche] Unknown template "${resolvedApp.template}" requested by a resolver — ` +
+      `not registered by any parche. Falling back to a bare <article>.`,
+    );
+  }
   appMetadata = resolvedApp.metadata;
   appExtras = resolvedApp.extras;
 
@@ -137,6 +143,12 @@ if (mode === 'page' && pageData) {
   pageMetadata = resolved;
 
   PageTemplateComponent = pageTemplate !== 'dynamic' ? templateMap[pageTemplate] : null;
+  if (import.meta.env.DEV && pageTemplate !== 'dynamic' && !PageTemplateComponent) {
+    console.warn(
+      `[parche] Unknown template "${pageTemplate}" set on page "${pageKey}" — ` +
+      `not registered by any parche. The page will render without it.`,
+    );
+  }
 
   const pageEntry = await getEntry('pages', entryId);
   if (pageEntry) {

@@ -10,7 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [20, 22]
+        # pnpm 11.12 needs Node >=22.13 (uses node:sqlite). Node 20 crashes at
+        # setup with ERR_UNKNOWN_BUILTIN_MODULE. Consumers can still run the
+        # published packages on Node >=20; this is only our dev/CI toolchain.
+        node: [22, 24]
     steps:
       - uses: actions/checkout@v4
 

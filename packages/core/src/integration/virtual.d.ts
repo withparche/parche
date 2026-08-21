@@ -58,17 +58,8 @@ declare module 'parche:layouts/BaseLayout' {
   export default Component;
 }
 
-// Components
-declare module 'parche:components/Header' {
-  const Component: typeof import('../components/common/Header.astro').default;
-  export default Component;
-}
-
-declare module 'parche:components/Footer' {
-  const Component: typeof import('../components/common/Footer.astro').default;
-  export default Component;
-}
-
+// Components (core-owned; Header/Footer now live in the ui parche as
+// parche:widgets/layout/*)
 declare module 'parche:components/ThemeToggle' {
   const Component: typeof import('../components/common/ThemeToggle.astro').default;
   export default Component;
@@ -103,199 +94,23 @@ declare module 'parche:utils/i18n' {
   export * from '../utils/i18n.js';
 }
 
-// Templates
-declare module 'parche:templates/contact' {
+// Templates — provided by parches; names aren't known to core, so declare
+// the namespace generically.
+declare module 'parche:templates/*' {
   const Component: import('astro').AstroComponentFactory;
   export default Component;
 }
 
-declare module 'parche:templates/content' {
+// Primitives — provided by parches; names aren't known to core, so declare
+// the namespace generically.
+declare module 'parche:primitives/*' {
   const Component: import('astro').AstroComponentFactory;
   export default Component;
 }
 
-// Atoms
-declare module 'parche:primitives/Button' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-declare module 'parche:primitives/Container' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-declare module 'parche:primitives/Section' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-declare module 'parche:primitives/Icon' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-declare module 'parche:primitives/Badge' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-declare module 'parche:primitives/Eyebrow' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-declare module 'parche:primitives/Avatar' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-declare module 'parche:primitives/Divider' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-declare module 'parche:primitives/Tag' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-declare module 'parche:primitives/Link' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-declare module 'parche:primitives/Image' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-// Widgets — Hero
-declare module 'parche:widgets/hero/Hero' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-declare module 'parche:widgets/hero/HeroFullscreen' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-// Widgets — Features
-declare module 'parche:widgets/features/Features' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-declare module 'parche:widgets/features/FeaturesList' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-declare module 'parche:widgets/features/FeaturesBento' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-// Widgets — Stats
-declare module 'parche:widgets/stats/Stats' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-// Widgets — Steps
-declare module 'parche:widgets/steps/Steps' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-declare module 'parche:widgets/steps/StepsHorizontal' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-// Widgets — Content
-declare module 'parche:widgets/content/Content' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-// Widgets — Pricing
-declare module 'parche:widgets/pricing/Pricing' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-declare module 'parche:widgets/pricing/PricingTable' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-// Widgets — Testimonials
-declare module 'parche:widgets/testimonials/Testimonials' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-declare module 'parche:widgets/testimonials/TestimonialsCarousel' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-declare module 'parche:widgets/testimonials/TestimonialsMasonry' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-// Widgets — Brands / Logos
-declare module 'parche:widgets/brands/Brands' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-declare module 'parche:widgets/brands/LogoWallMarquee' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-// Widgets — FAQ
-declare module 'parche:widgets/faq/FAQs' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-// Widgets — Call to Action
-declare module 'parche:widgets/call-to-action/CallToAction' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-// Widgets — Team
-declare module 'parche:widgets/team/Team' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-// Widgets — Contact
-declare module 'parche:widgets/contact/Contact' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-// Widgets — Subscribe
-declare module 'parche:widgets/subscribe/Subscribe' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-// Widgets — Gallery
-declare module 'parche:widgets/gallery/Gallery' {
-  const Component: import('astro').AstroComponentFactory;
-  export default Component;
-}
-
-// Widgets — Announce
-declare module 'parche:widgets/announce/Announce' {
+// Widgets — provided by parches; names aren't known to core, so declare
+// the namespace generically. Matches nested keys like widgets/hero/Hero.
+declare module 'parche:widgets/*' {
   const Component: import('astro').AstroComponentFactory;
   export default Component;
 }

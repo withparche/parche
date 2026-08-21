@@ -343,6 +343,22 @@ export async function getResolverPaths(locales, defaultLocale, opts) {
 `;
 }
 
+/**
+ * Is this the core base.css (the Tailwind root we inject @source into)?
+ * Compares by realpath so a symlinked path (pnpm's isolated layout) still
+ * matches — otherwise a mismatch would silently drop every parche's classes.
+ * A consuming app's own base.css has a different realpath and won't match.
+ */
+function isCoreBaseCss(file: string): boolean {
+  if (file === BASE_CSS_PATH) return true;
+  if (!file.endsWith('base.css')) return false;
+  try {
+    return fs.realpathSync(file) === fs.realpathSync(BASE_CSS_PATH);
+  } catch {
+    return false;
+  }
+}
+
 export function vitePluginParche(registry: ResolvedRegistry): Plugin {
   return {
     name: 'vite-plugin-parche',
@@ -369,7 +385,7 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
       // `transform`) so @tailwindcss/vite compiles the augmented CSS regardless
       // of plugin ordering. Absolute paths are the only ones that reach sibling
       // packages once installed from npm.
-      if (registry.contentGlobs.length > 0 && id.split('?')[0] === BASE_CSS_PATH) {
+      if (registry.contentGlobs.length > 0 && isCoreBaseCss(id.split('?')[0])) {
         const css = fs.readFileSync(BASE_CSS_PATH, 'utf-8');
         this.addWatchFile(BASE_CSS_PATH);
         return `${css}\n${generateSourceDirectives(registry)}\n`;

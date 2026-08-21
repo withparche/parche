@@ -61,7 +61,23 @@ function widgetSkipsWrapper(name: string): boolean {
 
 {sections.map((section, index) => {
   const Widget = widgetMap[section.widget];
-  if (!Widget) return null;
+  if (!Widget) {
+    if (import.meta.env.DEV) {
+      console.warn(
+        `[parche] Unknown widget "${section.widget}" — not registered by any parche. ` +
+        `Check the widget name or that a parche provides it.`,
+      );
+      return (
+        <div
+          data-parche-missing-widget={section.widget}
+          style="margin:.5rem;padding:.75rem 1rem;border:2px dashed #dc2626;border-radius:.5rem;background:#fef2f2;color:#991b1b;font:14px/1.5 ui-monospace,SFMono-Regular,monospace"
+        >
+          ⚠ Parche: unknown widget <strong>{section.widget}</strong> — not registered by any parche.
+        </div>
+      );
+    }
+    return null;
+  }
 
   const props = resolveProps(section.props ?? {});
 

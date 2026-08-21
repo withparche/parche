@@ -59,7 +59,23 @@ const {
   }
 
   const Widget = widgetMap[section.widget];
-  if (!Widget) return null;
+  if (!Widget) {
+    if (import.meta.env.DEV) {
+      console.warn(
+        `[parche] Unknown layout widget "${section.widget}" — not registered by any parche. ` +
+        `Check the layout definition or the parche providing this widget.`,
+      );
+      return (
+        <div
+          data-parche-missing-widget={section.widget}
+          style="margin:.5rem;padding:.75rem 1rem;border:2px dashed #dc2626;border-radius:.5rem;background:#fef2f2;color:#991b1b;font:14px/1.5 ui-monospace,SFMono-Regular,monospace"
+        >
+          ⚠ Parche: unknown layout widget <strong>{section.widget}</strong> — not registered by any parche.
+        </div>
+      );
+    }
+    return null;
+  }
 
   return <Widget {...(section.props ?? {})} />;
 })}
