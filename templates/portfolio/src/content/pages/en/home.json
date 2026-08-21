@@ -3,7 +3,9 @@
   "description": "Product designer and developer crafting calm, useful software. Selected work, experience and ways to get in touch.",
   "sections": [
     {
-      "widget": "ProfileHero",      "props": {
+      "widget": "ProfileHero",
+      "wrapper": { "classes": { "container": "pt-16 pb-6 md:pt-16 md:pb-6 lg:pt-20 lg:pb-6" } },
+      "props": {
         "name": "Hi, I'm Alex",
         "tagline": "Product Designer & Developer",
         "bio": "I design and build calm, useful software. Currently focused on developer tools and design systems.",
@@ -11,13 +13,17 @@
       }
     },
     {
-      "widget": "Prose",      "props": {
+      "widget": "Prose",
+      "wrapper": { "classes": { "container": "py-6 md:py-6 lg:py-6" } },
+      "props": {
         "title": "About",
         "content": "<p>For the last 8 years I've helped startups turn fuzzy ideas into products people actually enjoy using. I move comfortably between Figma and the codebase, which means fewer things get lost in translation. I care about the job the user is hiring the product to do — and about shipping.</p>"
       }
     },
     {
-      "widget": "ResumeList",      "props": {
+      "widget": "ResumeList",
+      "wrapper": { "classes": { "container": "py-6 md:py-6 lg:py-6" } },
+      "props": {
         "title": "Work Experience",
         "variant": "list",
         "items": [
@@ -29,7 +35,9 @@
       }
     },
     {
-      "widget": "ResumeList",      "props": {
+      "widget": "ResumeList",
+      "wrapper": { "classes": { "container": "py-6 md:py-6 lg:py-6" } },
+      "props": {
         "title": "Education",
         "variant": "list",
         "items": [
@@ -39,13 +47,27 @@
       }
     },
     {
-      "widget": "SkillsPills",      "props": {
+      "widget": "SkillsPills",
+      "wrapper": { "classes": { "container": "py-6 md:py-6 lg:py-6" } },
+      "props": {
         "title": "Skills",
-        "skills": ["Figma", "Design Systems", "TypeScript", "Astro", "React", "Tailwind CSS", "Node.js", "Prototyping", "Accessibility", "Brand"]
+        "skills": [
+          { "name": "Figma", "icon": "tabler:brand-figma" },
+          "Design Systems",
+          { "name": "TypeScript", "icon": "tabler:brand-typescript" },
+          { "name": "React", "icon": "tabler:brand-react" },
+          { "name": "Tailwind CSS", "icon": "tabler:brand-tailwind" },
+          { "name": "Node.js", "icon": "tabler:brand-nodejs" },
+          "Prototyping",
+          "Accessibility",
+          "Brand"
+        ]
       }
     },
     {
-      "widget": "Projects",      "props": {
+      "widget": "Projects",
+      "wrapper": { "classes": { "container": "py-6 md:py-6 lg:py-6" } },
+      "props": {
         "tagline": "My Projects",
         "title": "Check out my latest work",
         "subtitle": "A few projects I'm proud of — from design systems to full products.",
@@ -98,7 +120,34 @@
       }
     },
     {
-      "widget": "ResumeList",      "props": {
+      "widget": "Stats",
+      "wrapper": { "classes": { "container": "max-w-3xl py-6 md:py-6 lg:py-6" } },
+      "props": {
+        "stats": [
+          { "amount": "8+", "title": "Years experience", "icon": "tabler:clock" },
+          { "amount": "40+", "title": "Projects shipped", "icon": "tabler:rocket" },
+          { "amount": "12", "title": "Happy clients", "icon": "tabler:heart" },
+          { "amount": "3", "title": "Design awards", "icon": "tabler:award" }
+        ]
+      }
+    },
+    {
+      "widget": "Testimonials",
+      "wrapper": { "classes": { "container": "max-w-4xl py-6 md:py-6 lg:py-6" } },
+      "props": {
+        "tagline": "Kind words",
+        "title": "What people say",
+        "testimonials": [
+          { "testimonial": "Alex is the rare designer who can also ship the code. Our velocity doubled.", "name": "Ana Ruiz", "job": "CTO, Nimbus Labs" },
+          { "testimonial": "The design system Alex built is still the backbone of everything we make.", "name": "Marcus Lee", "job": "Head of Eng, Orbit" },
+          { "testimonial": "Thoughtful, fast, and genuinely nice to work with. Would hire again in a heartbeat.", "name": "Priya Nair", "job": "Founder, Cedar" }
+        ]
+      }
+    },
+    {
+      "widget": "ResumeList",
+      "wrapper": { "classes": { "container": "py-6 md:py-6 lg:py-6" } },
+      "props": {
         "title": "Hackathons",
         "subtitle": "I like building things fast, with good people.",
         "variant": "timeline",
@@ -110,7 +159,9 @@
       }
     },
     {
-      "widget": "Prose",      "props": {
+      "widget": "Prose",
+      "wrapper": { "classes": { "container": "pt-6 pb-16 md:pt-6 md:pb-16 lg:pt-6 lg:pb-20" } },
+      "props": {
         "tagline": "Contact",
         "title": "Get in touch",
         "content": "<p>I'm open to select freelance and full-time work. The best way to reach me is by email at <a href='mailto:hello@example.com' class='text-primary hover:underline'>hello@example.com</a> — or find me on the socials.</p>"

@@ -1,18 +1,23 @@
 ---
 /**
- * A row of skill pills. Full-bleed section (wrapper handles it); content in a
- * narrower container, overridable via `classes.container`.
+ * A row of skill pills. Each skill is a string or `{ name, icon?, image? }`.
+ * Neutral pill style by default. Full-bleed section (wrapper handles it);
+ * content in a narrower container, overridable via `classes.container`.
  */
 import { twMerge } from 'tailwind-merge';
+import Icon from 'parche:primitives/Icon';
+
+type Skill = string | { name?: string; icon?: string; image?: { src?: string; alt?: string } };
 
 interface Props {
   tagline?: string;
   title?: string;
-  skills?: string[];
+  skills?: Skill[];
   classes?: Record<string, string>;
 }
 
 const { tagline, title, skills = [], classes = {} } = Astro.props as Props;
+const norm = (s: Skill) => (typeof s === 'string' ? { name: s } : s);
 ---
 
 <div class={twMerge('mx-auto max-w-3xl', classes.container)}>
@@ -20,9 +25,16 @@ const { tagline, title, skills = [], classes = {} } = Astro.props as Props;
   {title && <h2 class="text-2xl font-bold text-heading">{title}</h2>}
   {skills.length > 0 && (
     <div class="mt-4 flex flex-wrap gap-2">
-      {skills.map((s) => (
-        <span class="rounded-md bg-primary px-3 py-1 text-sm font-medium text-on-primary">{s}</span>
-      ))}
+      {skills.map((s) => {
+        const { name, icon, image } = norm(s);
+        return (
+          <span class="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-2.5 py-1 text-sm font-medium text-heading">
+            {icon && <Icon name={icon} class="h-4 w-4 text-muted" />}
+            {image?.src && <img src={image.src} alt={image.alt ?? name ?? ''} class="h-4 w-4 rounded-sm object-contain" />}
+            {name}
+          </span>
+        );
+      })}
     </div>
   )}
 </div>
