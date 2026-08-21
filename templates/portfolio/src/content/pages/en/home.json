@@ -121,7 +121,7 @@
     },
     {
       "widget": "Stats",
-      "wrapper": { "classes": { "container": "max-w-3xl py-6 md:py-6 lg:py-6" } },
+      "wrapper": { "classes": { "container": "max-w-5xl py-8 md:py-8 lg:py-8" } },
       "props": {
         "stats": [
           { "amount": "8+", "title": "Years experience", "icon": "tabler:clock" },
@@ -133,7 +133,7 @@
     },
     {
       "widget": "Testimonials",
-      "wrapper": { "classes": { "container": "max-w-4xl py-6 md:py-6 lg:py-6" } },
+      "wrapper": { "classes": { "container": "max-w-5xl py-8 md:py-8 lg:py-8" } },
       "props": {
         "tagline": "Kind words",
         "title": "What people say",
