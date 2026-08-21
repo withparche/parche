@@ -3,7 +3,7 @@
     {
       "widget": "layout/Header",
       "props": {
-        "logo": { "text": "Flowbase", "href": "/" },
+        "logo": { "text": "Parche", "href": "/" },
         "links": [
           { "label": "Features", "href": "#features" },
           { "label": "How it works", "href": "#how" },
@@ -20,7 +20,7 @@
     {
       "widget": "layout/Footer",
       "props": {
-        "siteName": "Flowbase",
+        "siteName": "Parche",
         "columns": [
           {
             "title": "Product",
@@ -55,7 +55,7 @@
           { "label": "GitHub", "href": "#", "icon": "tabler:brand-github" },
           { "label": "LinkedIn", "href": "#", "icon": "tabler:brand-linkedin" }
         ],
-        "copyright": "© 2026 Flowbase, Inc. All rights reserved.",
+        "copyright": "© 2026 Parche, Inc. All rights reserved.",
         "footNote": "Built with Parche."
       }
     }
