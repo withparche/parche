@@ -197,7 +197,7 @@ export interface ParcheUserConfig {
   /** Override any component using namespaced keys: 'widgets:hero:Hero', 'primitives:Button', etc.
    *  Values are paths to .astro component files. */
   overrides?: Record<string, string>;
-  /** Path to user config file (default: './src/config.ts') */
+  /** Path to user config file (default: './parche.config.ts', at project root) */
   config?: string;
   /** Parches (plugins): primitive-packs, widget-packs and apps. Order = precedence. */
   parches?: ParcheManifest[];

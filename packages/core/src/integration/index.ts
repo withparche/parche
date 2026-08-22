@@ -259,7 +259,7 @@ export default function parche(userConfig: ParcheUserConfig = {}): AstroIntegrat
  *
  *   • Inline — pass `site` (and optionally metadata/seo/organization). The site
  *     identity is served as `parche:config`; no separate file needed.
- *   • Separate file — omit `site` and pass `config: './src/parche.config.ts'`.
+ *   • Separate file — omit `site` and pass `config: './parche.config.ts'`.
  *     The parches stay in astro.config; everything else lives in that file
  *     (authored with `defineConfig` from `@parche/core/config`), exactly as with
  *     `parche()`. Its own `seo.allowAICrawlers` still applies to robots.txt.
