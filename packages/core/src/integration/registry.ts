@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import type { ParcheUserConfig, ResolvedRegistry, ParcheManifest } from './types.js';
@@ -44,12 +45,13 @@ const CORE_MODULES: Record<string, string> = {
   // now provided by the ui parche — core no longer ships chrome or primitives.
 };
 
-/** Modules that use named exports instead of default export */
-const NAMED_EXPORT_MODULES = new Set([
+/** Core modules that use named exports instead of default export. Frozen default —
+ *  each createRegistry call gets its own Set seeded from this (never mutate this). */
+const BASE_NAMED_EXPORTS: readonly string[] = [
   'parche:utils/metadata',
   'parche:utils/i18n',
   'parche:utils/layout',
-]);
+];
 
 /**
  * Convert an override key ('widgets:hero:Hero') to a virtual module ID ('parche:widgets/hero/Hero')
@@ -72,6 +74,27 @@ export function createRegistry(
   const configPath = userConfig.config || './src/config.ts';
   modules['parche:config'] = path.resolve(rootDir, configPath);
 
+  // Modules that use named exports — instance-local, seeded from the frozen base
+  // so registrations don't bleed between createRegistry calls in one process.
+  const namedExportModules = new Set<string>(BASE_NAMED_EXPORTS);
+
+  // Surface silent last-wins collisions and bad parche paths with attribution,
+  // instead of an opaque "Unknown virtual module" / ESM error much later.
+  const collisions: string[] = [];
+  const badPaths: string[] = [];
+  const setModule = (parcheName: string, kind: string, virtualId: string, absPath: string) => {
+    if (!path.isAbsolute(absPath)) {
+      badPaths.push(`"${parcheName}" ${kind} "${virtualId}" → not an absolute path: ${absPath}`);
+    } else if (!fs.existsSync(absPath)) {
+      badPaths.push(`"${parcheName}" ${kind} "${virtualId}" → file not found: ${absPath}`);
+    }
+    const prev = modules[virtualId];
+    if (prev && prev !== absPath) {
+      collisions.push(`${virtualId} — "${parcheName}" overwrites ${prev}`);
+    }
+    modules[virtualId] = absPath;
+  };
+
   // Register parches (order = precedence: later wins). Each parche contributes
   // primitives / widgets / templates / routes / config to the system.
   const parches = userConfig.parches ?? [];
@@ -88,28 +111,38 @@ export function createRegistry(
     if (parche.content) contentGlobs.push(...parche.content);
     if (parche.primitives) {
       for (const [name, absPath] of Object.entries(parche.primitives)) {
-        modules[`parche:primitives/${name}`] = absPath;
+        setModule(parche.name, 'primitive', `parche:primitives/${name}`, absPath);
         providedPrimitives.add(name);
       }
     }
     if (parche.widgets) {
       for (const [name, absPath] of Object.entries(parche.widgets)) {
-        modules[`parche:widgets/${name}`] = absPath;
+        setModule(parche.name, 'widget', `parche:widgets/${name}`, absPath);
         providedWidgets.add(name);
       }
     }
     if (parche.templates) {
       for (const [name, absPath] of Object.entries(parche.templates)) {
-        modules[`parche:templates/${name}`] = absPath;
+        setModule(parche.name, 'template', `parche:templates/${name}`, absPath);
       }
     }
     if (parche.namedExportModules) {
-      for (const id of parche.namedExportModules) NAMED_EXPORT_MODULES.add(id);
+      for (const id of parche.namedExportModules) namedExportModules.add(id);
     }
     // A parche that injects routes / resolves slugs / exposes config is an "app".
     if (parche.routes || parche.resolver || parche.config) {
       apps.push(parche);
     }
+  }
+
+  if (badPaths.length) {
+    console.warn('[parche] Parche path problems (these modules will fail to load):\n  - ' + badPaths.join('\n  - '));
+  }
+  if (collisions.length) {
+    console.warn(
+      '[parche] Duplicate registrations — the last parche wins. If this is intentional, use `overrides` to make it explicit:\n  - ' +
+        collisions.join('\n  - '),
+    );
   }
 
   // Add user-defined templates
@@ -181,7 +214,7 @@ export function createRegistry(
 
   return {
     modules,
-    namedExportModules: NAMED_EXPORT_MODULES,
+    namedExportModules,
     i18n,
     themes,
     showPanel,

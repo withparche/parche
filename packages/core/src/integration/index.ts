@@ -2,9 +2,52 @@ import type { AstroIntegration } from 'astro';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import fs from 'node:fs';
+import { z } from 'zod';
 import { vitePluginParche } from './vite-plugin-parche.js';
 import { createRegistry } from './registry.js';
 import type { ParcheUserConfig, UIRegistry, ParcheApp, ParcheManifest, ParcheRequires } from './types.js';
+
+// Shape validation for the `parche({ ... })` options. `.strict()` turns a typo'd
+// option name (e.g. `parchez`) or a malformed value into a friendly error at
+// config time, instead of a deep, cryptic Vite failure later. The `parches`
+// array holds manifests (validated structurally by the registry), so it's `any`.
+const userConfigSchema = z
+  .object({
+    overrides: z.record(z.string(), z.string()).optional(),
+    config: z.string().optional(),
+    parches: z.array(z.any()).optional(),
+    routes: z
+      .object({
+        pages: z.boolean().optional(),
+        templates: z.record(z.string(), z.string()).optional(),
+        layouts: z.record(z.string(), z.string()).optional(),
+        catchAllRoute: z.string().optional(),
+        notFoundRoute: z.string().optional(),
+        middleware: z.string().optional(),
+      })
+      .strict()
+      .optional(),
+    themes: z
+      .object({
+        available: z.array(z.object({ label: z.string(), value: z.string() })).optional(),
+        showPanel: z.boolean().optional(),
+      })
+      .strict()
+      .optional(),
+    styles: z.object({ entry: z.string().optional() }).strict().optional(),
+    seo: z.object({ allowAICrawlers: z.boolean().optional() }).strict().optional(),
+  })
+  .strict();
+
+function validateUserConfig(userConfig: ParcheUserConfig): void {
+  const result = userConfigSchema.safeParse(userConfig);
+  if (!result.success) {
+    const issues = result.error.issues
+      .map((i) => `  - ${i.path.join('.') || '(root)'}: ${i.message}`)
+      .join('\n');
+    throw new Error(`[parche] Invalid parche() options:\n${issues}`);
+  }
+}
 
 export default function parche(userConfig: ParcheUserConfig = {}): AstroIntegration {
   let resolvedSiteUrl = '';
@@ -12,6 +55,7 @@ export default function parche(userConfig: ParcheUserConfig = {}): AstroIntegrat
     name: 'parche',
     hooks: {
       'astro:config:setup': ({ updateConfig, config, injectRoute, addMiddleware }) => {
+        validateUserConfig(userConfig);
         resolvedSiteUrl = config.site ?? '';
         const rootDir = fileURLToPath(config.root);
         const resolvedRegistry = createRegistry(userConfig, rootDir, config.i18n);

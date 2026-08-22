@@ -235,8 +235,7 @@ function humanLabel(name: string): string {
  */
 function generateWidgetSchemasModule(registry: ResolvedRegistry): string {
   const imports: string[] = [`import { z } from ${JSON.stringify(resolveFromCore('zod'))};`];
-  const schemaEntries: string[] = [];
-  const metaEntries: string[] = [];
+  const statements: string[] = [];
   let index = 0;
 
   for (const [virtualId, filePath] of Object.entries(registry.modules)) {
@@ -253,46 +252,50 @@ function generateWidgetSchemasModule(registry: ResolvedRegistry): string {
     const variants = loadWidgetDefaults(filePath);
     const variantsJson = JSON.stringify(variants ?? [{ props: {} }]);
     const defaultPropsJson = JSON.stringify(variants?.[0]?.props ?? {});
+    const keyJson = JSON.stringify(key);
 
     if (hasProps) {
-      const varName = `p${index}`;
-      imports.push(`import { schema as ${varName}_s, meta as ${varName}_m } from ${JSON.stringify(propsPath)};`);
-
-      schemaEntries.push(`  ${JSON.stringify(key)}: z.toJSONSchema(${varName}_s)`);
-
-      metaEntries.push(`  ${JSON.stringify(key)}: {
-    label: ${varName}_m?.widget?.label ?? ${JSON.stringify(humanLabel(key))},
-    category: ${varName}_m?.widget?.category ?? ${JSON.stringify(extractWidgetCategory(virtualId))},
-    description: ${varName}_m?.widget?.description ?? '',
-    icon: ${varName}_m?.widget?.icon ?? '',
-    defaultProps: ${defaultPropsJson},
-    defaultVariants: ${variantsJson},
-    ui: ${varName}_m?.ui ?? {},
-  }`);
+      // Namespace import: a `.props.ts` missing `schema` or `meta` no longer
+      // fails the whole module (it would with a named import). Each widget's
+      // schema serialization is isolated in a try/catch so one bad/incompatible
+      // schema (e.g. Zod v3, or a construct toJSONSchema can't serialize) is
+      // skipped with a warning instead of killing the entire builder palette.
+      const m = `p${index}`;
+      imports.push(`import * as ${m} from ${JSON.stringify(propsPath)};`);
+      statements.push(
+        `if (${m}.schema) { try { widgetSchemas[${keyJson}] = z.toJSONSchema(${m}.schema); } ` +
+        `catch (e) { console.warn(${JSON.stringify(`[parche] Skipped JSON Schema for widget "${key}": `)} + ((e && e.message) || e)); } }`,
+      );
+      statements.push(`widgetMeta[${keyJson}] = {
+  label: ${m}.meta?.widget?.label ?? ${JSON.stringify(humanLabel(key))},
+  category: ${m}.meta?.widget?.category ?? ${JSON.stringify(extractWidgetCategory(virtualId))},
+  description: ${m}.meta?.widget?.description ?? '',
+  icon: ${m}.meta?.widget?.icon ?? '',
+  defaultProps: ${defaultPropsJson},
+  defaultVariants: ${variantsJson},
+  ui: ${m}.meta?.ui ?? {},
+};`);
       index++;
     } else {
       // No .props.ts — basic meta only, no schema
-      metaEntries.push(`  ${JSON.stringify(key)}: {
-    label: ${JSON.stringify(humanLabel(key))},
-    category: ${JSON.stringify(extractWidgetCategory(virtualId))},
-    description: '',
-    icon: '',
-    defaultProps: ${defaultPropsJson},
-    defaultVariants: ${variantsJson},
-    ui: {},
-  }`);
+      statements.push(`widgetMeta[${keyJson}] = {
+  label: ${JSON.stringify(humanLabel(key))},
+  category: ${JSON.stringify(extractWidgetCategory(virtualId))},
+  description: '',
+  icon: '',
+  defaultProps: ${defaultPropsJson},
+  defaultVariants: ${variantsJson},
+  ui: {},
+};`);
     }
   }
 
   return `${imports.join('\n')}
 
-export const widgetSchemas = {
-${schemaEntries.join(',\n')}
-};
+export const widgetSchemas = {};
+export const widgetMeta = {};
 
-export const widgetMeta = {
-${metaEntries.join(',\n')}
-};
+${statements.join('\n')}
 `;
 }
 

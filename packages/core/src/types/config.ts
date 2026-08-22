@@ -60,7 +60,8 @@ export const siteConfigSchema = z.object({
     defaultRobots: defaultRobotsSchema,
     defaultOgType: z.enum(['website', 'article', 'product', 'profile']).default('website'),
     defaultTwitterCard: z.enum(['summary', 'summary_large_image', 'player', 'app']).default('summary_large_image'),
-    allowAICrawlers: z.boolean().default(true),
+    // Note: AI-crawler policy for robots.txt is the `parche({ seo: { allowAICrawlers } })`
+    // integration option, not a SiteConfig field — kept there so it's a single home.
     preconnect: z.array(z.string()).default([]),
   }).default({}),
 
@@ -77,22 +78,13 @@ export const siteConfigSchema = z.object({
     contactPoint: contactPointSchema.optional(),
   }).default({}),
 
-  header: z.object({
-    logo: z.string().optional(),
-    links: z.array(linkSchema).default([]),
-    actions: z.array(actionSchema).default([]),
-  }).default({}),
-
-  footer: z.object({
-    columns: z.array(footerColumnSchema).default([]),
-    copyright: z.string().default(''),
-    socialLinks: z.array(linkSchema).default([]),
-  }).default({}),
-
-  theme: z.object({
-    name: z.string().default(''),
-    darkMode: z.boolean().default(true),
-  }).default({}),
+  // Note: header/footer nav and theme are NOT configured here.
+  // - Chrome (header/footer) is authored in the `layouts` content collection
+  //   (see content/schemas.ts navigationSchema) and passed to the layout widgets.
+  // - Theming is driven by imported theme parches + the `[data-theme]` switcher,
+  //   not by a config flag.
+  // These fields used to live here but were consumed by nothing (a silent trap),
+  // so they were removed. Setting them is now a type error, on purpose.
 });
 
 export type SiteConfig = z.infer<typeof siteConfigSchema>;

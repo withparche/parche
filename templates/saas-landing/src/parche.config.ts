@@ -7,5 +7,5 @@ export default defineConfig({
     url: 'https://example.com',
     defaultLanguage: 'en',
   },
-  theme: { darkMode: true },
+
 });
