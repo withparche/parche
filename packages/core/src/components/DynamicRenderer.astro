@@ -27,27 +27,73 @@ interface Props {
 const { sections, Wrapper } = Astro.props;
 
 // ---- Image resolution: @/assets/images/foo.png → optimized import ----
-const imageModules = import.meta.glob<{ default: ImageMetadata }>(
+// Lazy glob: a loader exists for every image, but a module (and its build-time
+// optimization) is only produced for the ones actually referenced. We collect
+// just the paths these sections use, resolve them once, then substitute
+// synchronously during render.
+const imageLoaders = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/images/**/*.{png,jpg,jpeg,gif,svg,webp,avif}',
-  { eager: true }
+);
+
+/** Plain objects/arrays are the only things we recurse into — Dates, class
+ *  instances, etc. are left untouched (and never hold image paths). */
+function isPlainObject(v: any): boolean {
+  if (v === null || typeof v !== 'object') return false;
+  const proto = Object.getPrototypeOf(v);
+  return proto === Object.prototype || proto === null;
+}
+
+/** Gather every '@/assets/…' string used anywhere in the section props. */
+function collectAssetPaths(value: any, acc: Set<string>): void {
+  if (typeof value === 'string') {
+    if (value.startsWith('@/assets/')) acc.add(value);
+  } else if (Array.isArray(value)) {
+    for (const v of value) collectAssetPaths(v, acc);
+  } else if (isPlainObject(value)) {
+    for (const v of Object.values(value)) collectAssetPaths(v, acc);
+  }
+}
+
+const assetPaths = new Set<string>();
+for (const section of sections) collectAssetPaths(section.props ?? {}, assetPaths);
+
+const resolvedImages = new Map<string, string>();
+await Promise.all(
+  [...assetPaths].map(async (src) => {
+    const loader = imageLoaders[src.replace('@/', '/src/')];
+    if (loader) {
+      const mod = await loader();
+      resolvedImages.set(src, mod.default.src);
+    }
+  }),
 );
 
 function resolveImage(src: string): string {
-  if (!src || !src.startsWith('@/assets/')) return src;
-  const fsPath = src.replace('@/', '/src/');
-  const meta = imageModules[fsPath]?.default;
-  return meta?.src ?? src;
+  return resolvedImages.get(src) ?? src;
 }
 
-/** Recursively resolve any @/assets/ image path — at any depth, including
- *  strings nested inside arrays (feature icons, testimonial avatars, galleries). */
+/** Substitute resolved image paths at any depth, reusing every subtree that
+ *  didn't change so props with no images are passed through, not deep-cloned. */
 function resolveDeep(value: any): any {
   if (typeof value === 'string') return resolveImage(value);
-  if (Array.isArray(value)) return value.map(resolveDeep);
-  if (value && typeof value === 'object') {
+  if (Array.isArray(value)) {
+    let changed = false;
+    const out = value.map((v) => {
+      const r = resolveDeep(v);
+      if (r !== v) changed = true;
+      return r;
+    });
+    return changed ? out : value;
+  }
+  if (isPlainObject(value)) {
+    let changed = false;
     const out: Record<string, any> = {};
-    for (const [k, v] of Object.entries(value)) out[k] = resolveDeep(v);
-    return out;
+    for (const [k, v] of Object.entries(value)) {
+      const r = resolveDeep(v);
+      if (r !== v) changed = true;
+      out[k] = r;
+    }
+    return changed ? out : value;
   }
   return value;
 }

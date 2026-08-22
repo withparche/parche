@@ -10,7 +10,7 @@
  *   getPaths(locales, defaultLocale, opts) — enumerate all post slugs for static mode
  */
 import { getCollection, getEntry } from 'astro:content';
-import { getPublishedPosts, getPostsBySeries, extractPostLocale } from './utils/post-helpers.js';
+import { getPublishedPosts, extractPostLocale } from './utils/post-helpers.js';
 import { querySinglePost } from './utils/blog-query.js';
 import { calculateReadingTime } from './utils/reading-time.js';
 import { findRelatedPosts } from './utils/related-posts.js';
@@ -95,17 +95,20 @@ export async function resolve(
     authorData.push({ name: post.data.authorName });
   }
 
-  // Related posts
-  const localePosts = allPosts.filter((p) => extractPostLocale(p.id).locale === locale);
-  const related = findRelatedPosts(post, localePosts, cfg.relatedPostsCount ?? 3);
+  // `allPosts` from querySinglePost is already published + locale-filtered +
+  // sorted, so related/series reuse it directly — no extra passes over posts.
+  const related = findRelatedPosts(post, allPosts, cfg.relatedPostsCount ?? 3);
 
-  // Series navigation
+  // Series navigation — filter the already-prepared set by series and reorder.
   const seriesPosts = post.data.series
-    ? getPostsBySeries(allPosts, post.data.series.name, opts.showDrafts, locale).map((p) => ({
-        title: p.data.title,
-        href: resolvePostPermalink(permalinks.post, p),
-        order: p.data.series!.order,
-      }))
+    ? allPosts
+        .filter((p) => p.data.series?.name === post.data.series!.name)
+        .sort((a, b) => a.data.series!.order - b.data.series!.order)
+        .map((p) => ({
+          title: p.data.title,
+          href: resolvePostPermalink(permalinks.post, p),
+          order: p.data.series!.order,
+        }))
     : [];
 
   // JSON-LD
