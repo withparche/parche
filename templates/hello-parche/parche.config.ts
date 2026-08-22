@@ -1,5 +1,7 @@
 import { defineConfig } from '@parche/core/config';
 
+// Site identity for the whole project. The parches live in astro.config.mjs;
+// everything else is configured here.
 export default defineConfig({
   site: {
     name: '{{siteName}}',
@@ -7,5 +9,4 @@ export default defineConfig({
     url: 'https://example.com',
     defaultLanguage: 'en',
   },
-
 });

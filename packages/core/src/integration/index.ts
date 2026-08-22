@@ -5,7 +5,63 @@ import fs from 'node:fs';
 import { z } from 'zod';
 import { vitePluginParche } from './vite-plugin-parche.js';
 import { createRegistry } from './registry.js';
-import type { ParcheUserConfig, UIRegistry, ParcheApp, ParcheManifest, ParcheRequires } from './types.js';
+import { siteConfigSchema, type SiteConfig } from '../types/config.js';
+import type { ParcheUserConfig, ParchePreset, ParcheSeoConfig, UIRegistry, ParcheApp, ParcheManifest, ParcheRequires } from './types.js';
+
+// ---------------------------------------------------------------------------
+// Preset composition (`extends`)
+// ---------------------------------------------------------------------------
+
+function isPlainObject(v: unknown): v is Record<string, unknown> {
+  return v !== null && typeof v === 'object' && !Array.isArray(v);
+}
+
+/**
+ * Deep-merge two config fragments. Objects merge recursively; primitives and
+ * arrays are replaced by the override (last wins) — except `parches`, which the
+ * caller concatenates. `undefined` on the override never clobbers the base.
+ */
+function deepMerge<T>(base: T, over: T): T {
+  if (over === undefined) return base;
+  if (isPlainObject(base) && isPlainObject(over)) {
+    const out: Record<string, unknown> = { ...base };
+    for (const key of Object.keys(over)) {
+      out[key] = deepMerge((base as Record<string, unknown>)[key], (over as Record<string, unknown>)[key]);
+    }
+    return out as T;
+  }
+  return over;
+}
+
+/** Merge an override config onto a base, concatenating `parches` (base first). */
+function mergeConfig(base: ParchePreset, over: ParchePreset): ParchePreset {
+  const merged = deepMerge(base, over);
+  const baseParches = base.parches ?? [];
+  const overParches = over.parches ?? [];
+  if (baseParches.length || overParches.length) {
+    merged.parches = [...baseParches, ...overParches];
+  }
+  return merged;
+}
+
+/**
+ * Identity helper that types and freezes a reusable config fragment for
+ * `extends`. Authoring a preset through it gets you inference and a clear
+ * boundary; it does no work beyond returning the object.
+ */
+export function parchePreset(preset: ParchePreset): ParchePreset {
+  return preset;
+}
+
+/** Fold a config's `extends` chain into a single flat config (presets first). */
+function resolveExtends(userConfig: ParcheUserConfig): ParcheUserConfig {
+  if (!userConfig.extends) return userConfig;
+  const presets = Array.isArray(userConfig.extends) ? userConfig.extends : [userConfig.extends];
+  let base: ParchePreset = {};
+  for (const preset of presets) base = mergeConfig(base, preset);
+  const { extends: _drop, ...rest } = userConfig;
+  return mergeConfig(base, rest) as ParcheUserConfig;
+}
 
 // Shape validation for the `parche({ ... })` options. `.strict()` turns a typo'd
 // option name (e.g. `parchez`) or a malformed value into a friendly error at
@@ -49,16 +105,73 @@ function validateUserConfig(userConfig: ParcheUserConfig): void {
   }
 }
 
-export default function parche(userConfig: ParcheUserConfig = {}): AstroIntegration {
+// ---------------------------------------------------------------------------
+// Unified config (`defineParche`)
+// ---------------------------------------------------------------------------
+
+/** Runtime context passed to the function form of `defineParche`. */
+export interface ParcheConfigContext {
+  /** Astro command driving this run. */
+  command: 'dev' | 'build' | 'preview' | 'sync';
+  /** Convenience alias: 'development' for dev, 'production' otherwise. */
+  mode: 'development' | 'production';
+  /** Environment variables, for env-based / white-label branching. */
+  env: Record<string, string | undefined>;
+  /** Tenant id from PARCHE_TENANT (multi-tenant / white-label), if set. */
+  tenant: string | undefined;
+}
+
+type SiteConfigInput = Parameters<typeof siteConfigSchema.parse>[0];
+
+/**
+ * The unified Parche config: the integration options (parches, routes, themes,
+ * styles, overrides, extends) fused with the site identity that used to live in
+ * a separate `parche.config.ts`. One validated object, one home per concern.
+ * `seo` carries both the site SEO fields and the build-time `allowAICrawlers`.
+ */
+export type ParcheConfig = Omit<ParcheUserConfig, 'config' | 'seo'> &
+  Omit<SiteConfigInput, 'seo'> & {
+    seo?: (SiteConfigInput extends { seo?: infer S } ? S : never) & ParcheSeoConfig;
+  };
+
+/** `defineParche` accepts a config object or a function of the runtime context. */
+export type ParcheConfigInput = ParcheConfig | ((ctx: ParcheConfigContext) => ParcheConfig);
+
+interface PreparedConfig {
+  /** Integration options only (site data stripped), extends already folded. */
+  userConfig: ParcheUserConfig;
+  /** Inline site config (defineParche path). */
+  inlineSiteConfig?: SiteConfig;
+  /** robots.txt AI-crawler policy. */
+  allowAICrawlers: boolean;
+}
+
+/**
+ * Shared integration body. `prepare` turns the runtime context into the resolved
+ * options both entry points need; everything downstream (registry, route
+ * injection, robots.txt) is identical whether you used `parche()` or
+ * `defineParche()`.
+ */
+function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig): AstroIntegration {
   let resolvedSiteUrl = '';
+  let allowAICrawlers = true;
   return {
     name: 'parche',
     hooks: {
-      'astro:config:setup': ({ updateConfig, config, injectRoute, addMiddleware }) => {
-        validateUserConfig(userConfig);
+      'astro:config:setup': ({ command, updateConfig, config, injectRoute, addMiddleware }) => {
+        const ctx: ParcheConfigContext = {
+          command,
+          mode: command === 'dev' ? 'development' : 'production',
+          env: process.env,
+          tenant: process.env.PARCHE_TENANT,
+        };
+        const prepared = prepare(ctx);
+        const resolved = prepared.userConfig;
+        allowAICrawlers = prepared.allowAICrawlers;
+        validateUserConfig(resolved);
         resolvedSiteUrl = config.site ?? '';
         const rootDir = fileURLToPath(config.root);
-        const resolvedRegistry = createRegistry(userConfig, rootDir, config.i18n);
+        const resolvedRegistry = createRegistry(resolved, rootDir, config.i18n, prepared.inlineSiteConfig);
 
         // Resolve @core/* alias for backward compatibility with widget internal imports
         const coreDir = path.resolve(
@@ -69,24 +182,24 @@ export default function parche(userConfig: ParcheUserConfig = {}): AstroIntegrat
         const routesDir = path.resolve(coreDir, 'routes');
 
         // Inject routes only when explicitly enabled via routes.pages: true
-        if (userConfig.routes?.pages) {
+        if (resolved.routes?.pages) {
           // Catch-all page route
           injectRoute({
             pattern: '[...slug]',
-            entrypoint: userConfig.routes?.catchAllRoute
+            entrypoint: resolved.routes?.catchAllRoute
               ?? path.resolve(routesDir, '[...slug].astro'),
           });
 
           // 404 page
           injectRoute({
             pattern: '404',
-            entrypoint: userConfig.routes?.notFoundRoute
+            entrypoint: resolved.routes?.notFoundRoute
               ?? path.resolve(routesDir, '404.astro'),
           });
 
           // Middleware for i18n locale resolution
           addMiddleware({
-            entrypoint: userConfig.routes?.middleware
+            entrypoint: resolved.routes?.middleware
               ?? path.resolve(routesDir, 'middleware.ts'),
             order: 'pre',
           });
@@ -122,11 +235,62 @@ export default function parche(userConfig: ParcheUserConfig = {}): AstroIntegrat
       },
 
       'astro:build:done': ({ dir }) => {
-        const allowAICrawlers = userConfig.seo?.allowAICrawlers ?? true;
         processRobotsTxt(dir, resolvedSiteUrl, allowAICrawlers);
       },
     },
   };
+}
+
+/**
+ * Split config (v0): pass integration options here and keep site identity in a
+ * separate `parche.config.ts` referenced via `config`. Kept for back-compat;
+ * new projects should prefer `defineParche` (one unified, validated object).
+ */
+export default function parche(userConfig: ParcheUserConfig = {}): AstroIntegration {
+  return createIntegration(() => {
+    const resolved = resolveExtends(userConfig);
+    return { userConfig: resolved, allowAICrawlers: resolved.seo?.allowAICrawlers ?? true };
+  });
+}
+
+/**
+ * Unified config entry. One object carries the integration options and, if you
+ * want, the site identity — validated together. Two equally supported styles:
+ *
+ *   • Inline — pass `site` (and optionally metadata/seo/organization). The site
+ *     identity is served as `parche:config`; no separate file needed.
+ *   • Separate file — omit `site` and pass `config: './src/parche.config.ts'`.
+ *     The parches stay in astro.config; everything else lives in that file
+ *     (authored with `defineConfig` from `@parche/core/config`), exactly as with
+ *     `parche()`. Its own `seo.allowAICrawlers` still applies to robots.txt.
+ *
+ * Accepts a function of the runtime context for env-based / conditional /
+ * multi-tenant setups.
+ */
+export function defineParche(input: ParcheConfigInput): AstroIntegration {
+  return createIntegration((ctx) => {
+    const cfg = typeof input === 'function' ? input(ctx) : input;
+    // Fold `extends` first (a preset may seed site data or parches), then split
+    // the site identity out of the integration options.
+    const merged = resolveExtends(cfg as unknown as ParcheUserConfig) as unknown as ParcheConfig;
+    const { site, metadata, seo, organization, config: configPath, ...rest } =
+      merged as ParcheConfig & { config?: string };
+    const userOpts = rest as ParcheUserConfig;
+    const { allowAICrawlers = true, ...siteSeo } = (seo ?? {}) as Record<string, unknown>;
+
+    if (site) {
+      // Inline mode: validate + serve the site identity as parche:config.
+      const inlineSiteConfig = siteConfigSchema.parse({ site, metadata, seo: siteSeo, organization });
+      return { userConfig: userOpts, inlineSiteConfig, allowAICrawlers: allowAICrawlers as boolean };
+    }
+
+    // Separate-file mode: site identity comes from `config` (or the default
+    // ./src/config.ts). Only robots policy is read from defineParche's seo here.
+    return {
+      userConfig: { ...userOpts, config: configPath },
+      allowAICrawlers: allowAICrawlers as boolean,
+    };
+  });
 }
 
 const ROBOTS_MARKER = '# === PARCHE:AUTO-GENERATED';
@@ -197,4 +361,4 @@ function buildAutoGeneratedRobots(siteUrl: string, allowAICrawlers: boolean): st
   return lines.join('\n');
 }
 
-export type { ParcheUserConfig, UIRegistry, ParcheApp, ParcheManifest, ParcheRequires };
+export type { ParcheUserConfig, ParchePreset, UIRegistry, ParcheApp, ParcheManifest, ParcheRequires };

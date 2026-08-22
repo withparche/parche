@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import type { ParcheUserConfig, ResolvedRegistry, ParcheManifest } from './types.js';
+import type { SiteConfig } from '../types/config.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const coreDir = path.resolve(__dirname, '..');
@@ -20,6 +21,45 @@ function dedupeThemes(
 
 /** The always-present base look (no data-theme). Themes are added by parches. */
 const DEFAULT_THEME = { label: 'Default', value: '' };
+
+/** Parse "1.2.3" (ignoring build/prerelease suffix) into a numeric tuple. */
+function parseVersion(v: string): [number, number, number] | null {
+  const m = /^(\d+)\.(\d+)\.(\d+)/.exec(v.trim().replace(/^v/, ''));
+  return m ? [Number(m[1]), Number(m[2]), Number(m[3])] : null;
+}
+
+function cmpVersion(a: [number, number, number], b: [number, number, number]): number {
+  return a[0] - b[0] || a[1] - b[1] || a[2] - b[2];
+}
+
+/**
+ * Minimal semver range check for peer requirements: `*`/``/`latest` = any;
+ * caret `^x.y.z` (npm semantics, incl. 0.x pinning); tilde `~x.y.z`;
+ * `>=x.y.z`; anything else is treated as an exact match.
+ */
+function satisfiesVersion(actual: string, range: string): boolean {
+  const r = range.trim();
+  if (!r || r === '*' || r === 'latest') return true;
+  const a = parseVersion(actual);
+  if (!a) return false;
+  if (r.startsWith('>=')) {
+    const b = parseVersion(r.slice(2));
+    return !!b && cmpVersion(a, b) >= 0;
+  }
+  if (r.startsWith('^')) {
+    const b = parseVersion(r.slice(1));
+    if (!b || cmpVersion(a, b) < 0) return false;
+    if (b[0] > 0) return a[0] === b[0];
+    if (b[1] > 0) return a[0] === 0 && a[1] === b[1];
+    return a[0] === 0 && a[1] === 0 && a[2] === b[2];
+  }
+  if (r.startsWith('~')) {
+    const b = parseVersion(r.slice(1));
+    return !!b && a[0] === b[0] && a[1] === b[1] && cmpVersion(a, b) >= 0;
+  }
+  const b = parseVersion(r);
+  return !!b && cmpVersion(a, b) === 0;
+}
 
 /** Built-in core component registry */
 const CORE_MODULES: Record<string, string> = {
@@ -67,12 +107,16 @@ export function createRegistry(
   userConfig: ParcheUserConfig,
   rootDir: string,
   astroI18n?: { locales?: Array<string | { path: string; codes: string[] }>; defaultLocale?: string },
+  inlineSiteConfig?: SiteConfig,
 ): ResolvedRegistry {
   const modules: Record<string, string> = { ...CORE_MODULES };
 
-  // Add config module
-  const configPath = userConfig.config || './src/config.ts';
-  modules['parche:config'] = path.resolve(rootDir, configPath);
+  // Site config: `defineParche` passes it inline (served as parche:config by the
+  // vite plugin); `parche()` points parche:config at the user's config file.
+  if (!inlineSiteConfig) {
+    const configPath = userConfig.config || './src/config.ts';
+    modules['parche:config'] = path.resolve(rootDir, configPath);
+  }
 
   // Modules that use named exports — instance-local, seeded from the frozen base
   // so registrations don't bleed between createRegistry calls in one process.
@@ -100,6 +144,7 @@ export function createRegistry(
   const parches = userConfig.parches ?? [];
   const providedPrimitives = new Set<string>();
   const providedWidgets = new Set<string>();
+  const providedTemplates = new Set<string>();
   const apps: ParcheManifest[] = [];
   const contributedStyles: string[] = [];
   const contributedThemes: Array<{ label: string; value: string }> = [];
@@ -126,6 +171,7 @@ export function createRegistry(
     if (parche.templates) {
       for (const [name, absPath] of Object.entries(parche.templates)) {
         setModule(parche.name, 'template', `parche:templates/${name}`, absPath);
+        providedTemplates.add(name);
       }
     }
     if (parche.namedExportModules) {
@@ -151,6 +197,7 @@ export function createRegistry(
   if (userConfig.routes?.templates) {
     for (const [name, userPath] of Object.entries(userConfig.routes.templates)) {
       modules[`parche:templates/${name}`] = path.resolve(rootDir, userPath);
+      providedTemplates.add(name);
     }
   }
 
@@ -161,14 +208,45 @@ export function createRegistry(
     }
   }
 
-  // Validate parche requirements (V1: capability presence).
+  // Validate parche requirements (V2: presence of every capability, plus
+  // peer-parche version ranges). Structural widget-prop checks run where the
+  // schemas are available (widgetSchemas generation), not here.
+  const providedThemes = new Set<string>(['', ...contributedThemes.map((t) => t.value)]);
+  const parcheVersions = new Map<string, string | undefined>(parches.map((p) => [p.name, p.version]));
+
   const missing: string[] = [];
+  const widgetPropRequirements: Array<{ from: string; name: string; props: string[] }> = [];
   for (const parche of parches) {
-    for (const name of parche.requires?.primitives ?? []) {
+    const req = parche.requires;
+    if (!req) continue;
+    for (const name of req.primitives ?? []) {
       if (!providedPrimitives.has(name)) missing.push(`"${parche.name}" requires primitive "${name}" (parche:primitives/${name})`);
     }
-    for (const name of parche.requires?.widgets ?? []) {
-      if (!providedWidgets.has(name)) missing.push(`"${parche.name}" requires widget "${name}" (parche:widgets/${name})`);
+    for (const w of req.widgets ?? []) {
+      const name = typeof w === 'string' ? w : w.name;
+      if (!providedWidgets.has(name)) {
+        missing.push(`"${parche.name}" requires widget "${name}" (parche:widgets/${name})`);
+      } else if (typeof w === 'object' && w.props?.length) {
+        widgetPropRequirements.push({ from: parche.name, name, props: w.props });
+      }
+    }
+    for (const name of req.templates ?? []) {
+      if (!providedTemplates.has(name)) missing.push(`"${parche.name}" requires template "${name}" (parche:templates/${name})`);
+    }
+    for (const value of req.themes ?? []) {
+      if (!providedThemes.has(value)) missing.push(`"${parche.name}" requires theme "${value}"`);
+    }
+    for (const dep of req.parches ?? []) {
+      if (!parcheVersions.has(dep.name)) {
+        missing.push(`"${parche.name}" requires parche "${dep.name}"${dep.version ? ` (${dep.version})` : ''} — not imported`);
+      } else if (dep.version) {
+        const actual = parcheVersions.get(dep.name);
+        if (!actual) {
+          missing.push(`"${parche.name}" requires "${dep.name}@${dep.version}" but "${dep.name}" declares no version`);
+        } else if (!satisfiesVersion(actual, dep.version)) {
+          missing.push(`"${parche.name}" requires "${dep.name}@${dep.version}" but found ${actual}`);
+        }
+      }
     }
   }
   if (missing.length) {
@@ -218,6 +296,8 @@ export function createRegistry(
     modules,
     namedExportModules,
     fullBleedWidgets,
+    widgetPropRequirements,
+    inlineSiteConfig,
     i18n,
     themes,
     showPanel,

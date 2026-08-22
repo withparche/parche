@@ -303,12 +303,31 @@ function generateWidgetSchemasModule(registry: ResolvedRegistry): string {
     }
   }
 
+  // Structural requirements (V2): warn when a requiring parche expects a prop
+  // the provider's schema doesn't expose. Runs where the schemas exist (this
+  // module), so it fires for builder/dev; presence + versions are gated earlier
+  // in createRegistry for every build.
+  const requirementChecks = registry.widgetPropRequirements.map((r) => {
+    const nameJson = JSON.stringify(r.name);
+    const fromJson = JSON.stringify(r.from);
+    const propsJson = JSON.stringify(r.props);
+    return `{
+  const __s = widgetSchemas[${nameJson}];
+  if (__s && __s.properties) {
+    const __missing = ${propsJson}.filter((p) => !(p in __s.properties));
+    if (__missing.length) console.warn(${JSON.stringify(`[parche] ${r.from} requires widget "${r.name}" to expose prop(s): `)} + __missing.join(', ') + ${JSON.stringify(` — provider "${r.name}" schema does not.`)});
+  }
+}`;
+  });
+
   return `${imports.join('\n')}
 
 export const widgetSchemas = {};
 export const widgetMeta = {};
 
 ${statements.join('\n')}
+
+${requirementChecks.join('\n')}
 `;
 }
 
@@ -406,6 +425,13 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
         const css = fs.readFileSync(BASE_CSS_PATH, 'utf-8');
         this.addWatchFile(BASE_CSS_PATH);
         return `${css}\n${generateSourceDirectives(registry)}\n`;
+      }
+
+      // Inline site config (defineParche) — serve the validated object directly
+      // instead of re-exporting a user file. Must come before the generic
+      // module resolution, which has no file path for parche:config here.
+      if (id === '\0parche:config' && registry.inlineSiteConfig) {
+        return `export default ${JSON.stringify(registry.inlineSiteConfig)};\n`;
       }
 
       if (id === WIDGET_MAP_VIRTUAL) return generateWidgetMapModule(registry);

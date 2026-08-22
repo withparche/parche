@@ -41,12 +41,34 @@ export interface WidgetMeta {
   };
 }
 
-/** Capabilities a parche needs from the system (validated at setup). */
+/** A required widget: a bare name checks presence; the object form also asserts
+ *  the provider exposes the named props (structural, checked where schemas exist). */
+export type WidgetRequirement = string | { name: string; props?: string[] };
+
+/** A required peer parche, optionally constrained to a version range
+ *  (exact `1.2.3`, caret `^1.2.0`, tilde `~1.2.0`, or `>=1.2.0`; `*`/omitted = any). */
+export interface ParcheRequirement {
+  name: string;
+  version?: string;
+}
+
+/**
+ * Capabilities a parche needs from the system, validated at setup (V2). Presence
+ * of every named capability is checked and fails the build with attribution;
+ * peer-parche versions are range-checked; widget prop requirements are checked
+ * structurally where the schemas are available.
+ */
 export interface ParcheRequires {
   /** Primitive names that must exist (parche:primitives/{name}) */
   primitives?: string[];
-  /** Widget names that must exist (parche:widgets/{name}) */
-  widgets?: string[];
+  /** Widgets that must exist — bare name, or { name, props } for a structural check */
+  widgets?: WidgetRequirement[];
+  /** Template names that must exist (parche:templates/{name}) */
+  templates?: string[];
+  /** Theme values that must be present in the switcher */
+  themes?: string[];
+  /** Peer parches that must be imported, optionally within a version range */
+  parches?: ParcheRequirement[];
 }
 
 /**
@@ -57,6 +79,8 @@ export interface ParcheRequires {
 export interface ParcheManifest {
   /** Unique identifier (e.g. 'primitives', 'ui', 'blog') */
   name: string;
+  /** Semver of this parche, used to satisfy peers' `requires.parches` ranges. */
+  version?: string;
   /** Primitives to register: name → absolute path (parche:primitives/{name}) */
   primitives?: Record<string, string>;
   /** Widgets to register: virtual ID suffix → absolute path (parche:widgets/{name}) */
@@ -162,6 +186,14 @@ export interface ParcheSeoConfig {
 }
 
 export interface ParcheUserConfig {
+  /**
+   * Inherit from one or more shared presets (a company base, a monorepo root).
+   * Presets are deep-merged left-to-right, then this config is merged on top —
+   * this config wins on every leaf. `parches` are the exception: they are
+   * concatenated (preset parches first, so a local parche can override them,
+   * since later-in-the-array wins). Build presets with `parchePreset(...)`.
+   */
+  extends?: ParchePreset | ParchePreset[];
   /** Override any component using namespaced keys: 'widgets:hero:Hero', 'primitives:Button', etc.
    *  Values are paths to .astro component files. */
   overrides?: Record<string, string>;
@@ -179,6 +211,14 @@ export interface ParcheUserConfig {
   seo?: ParcheSeoConfig;
 }
 
+/**
+ * A reusable, partial Parche config that others `extends`. Every field is
+ * optional; whatever it sets becomes the base an extending config overrides.
+ * (`extends` itself doesn't nest — resolve a chain by extending the preset that
+ * already extends its own base.)
+ */
+export type ParchePreset = Omit<ParcheUserConfig, 'extends'>;
+
 export interface ResolvedRegistry {
   /** Map of virtual module ID → absolute file path */
   modules: Record<string, string>;
@@ -186,6 +226,12 @@ export interface ResolvedRegistry {
   namedExportModules: Set<string>;
   /** Widget keys that render full-bleed (skip the default SectionWrapper) */
   fullBleedWidgets: string[];
+  /** Structural widget requirements: prop names a requiring parche expects the
+   *  provider to expose. Checked against the generated schemas (builder-time). */
+  widgetPropRequirements: Array<{ from: string; name: string; props: string[] }>;
+  /** Inline site config (defineParche); when set, the plugin serves it as
+   *  parche:config instead of re-exporting a user config file. */
+  inlineSiteConfig?: import('../types/config.js').SiteConfig;
   /** Resolved i18n config */
   i18n: ParcheI18nConfig;
   /** Resolved themes config */
