@@ -104,11 +104,13 @@ export function createRegistry(
   const contributedStyles: string[] = [];
   const contributedThemes: Array<{ label: string; value: string }> = [];
   const contentGlobs: string[] = [];
+  const fullBleedWidgets: string[] = [];
 
   for (const parche of parches) {
     if (parche.styles) contributedStyles.push(...parche.styles);
     if (parche.themes) contributedThemes.push(...parche.themes);
     if (parche.content) contentGlobs.push(...parche.content);
+    if (parche.fullBleed) fullBleedWidgets.push(...parche.fullBleed);
     if (parche.primitives) {
       for (const [name, absPath] of Object.entries(parche.primitives)) {
         setModule(parche.name, 'primitive', `parche:primitives/${name}`, absPath);
@@ -215,6 +217,7 @@ export function createRegistry(
   return {
     modules,
     namedExportModules,
+    fullBleedWidgets,
     i18n,
     themes,
     showPanel,

@@ -3,9 +3,9 @@ import 'parche:config/styles';
 import BaseLayout from 'parche:layouts/BaseLayout';
 import ThemePanel from 'parche:components/ThemePanel';
 import LayoutRenderer from 'parche:LayoutRenderer';
+import DynamicRenderer from 'parche:DynamicRenderer';
 import config from 'parche:config';
 import { templateMap } from 'parche:registry/templates';
-import { widgetMap } from 'parche:registry/widgets';
 import { defaultLocale } from 'parche:config/i18n';
 import { showPanel } from 'parche:config/themes';
 import { resolveContent, getResolverPaths } from 'parche:registry/resolvers';
@@ -101,8 +101,6 @@ let AppTemplate: any = null;
 let AppContent: any = null;
 let appMetadata: any = null;
 let appExtras: any = {};
-const RelatedPosts = widgetMap['blog/RelatedPosts'];
-const SeriesNav = widgetMap['blog/SeriesNav'];
 
 if (mode === 'resolver' && resolvedApp) {
   AppTemplate = templateMap[resolvedApp.template];
@@ -198,18 +196,8 @@ const layoutSections = await resolveLayout(layoutName, locale, defaultLocale);
         </article>
       )}
 
-      {appExtras.seriesNav && SeriesNav && (
-        <div class="max-w-4xl mx-auto px-4 mb-8">
-          <SeriesNav
-            seriesName={appExtras.seriesNav.seriesName}
-            posts={appExtras.seriesNav.posts}
-            currentOrder={appExtras.seriesNav.currentOrder}
-          />
-        </div>
-      )}
-
-      {appExtras.relatedPosts && RelatedPosts && (
-        <RelatedPosts posts={appExtras.relatedPosts} />
+      {appExtras.sections?.length > 0 && (
+        <DynamicRenderer sections={appExtras.sections} />
       )}
     </LayoutRenderer>
   ) : (

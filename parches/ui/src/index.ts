@@ -67,6 +67,9 @@ export default function createUI(): ParcheManifest {
       'blog/TagCloud': w('blog/TagCloud.astro'),
       'blog/ToBlogLink': w('blog/ToBlogLink.astro'),
     },
+    // Widgets that render edge-to-edge and manage their own padding. Core reads
+    // this instead of a hardcoded list, so any parche's widgets can opt in.
+    fullBleed: ['Hero', 'Hero2', 'HeroText', 'Announcement', 'Note'],
     requires: {
       primitives: ['Avatar', 'Container', 'Icon', 'Section', 'Tag'],
     },

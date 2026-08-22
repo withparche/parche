@@ -1,5 +1,6 @@
 ---
 import { widgetMap } from 'parche:registry/widgets';
+import { fullBleedWidgets } from 'parche:config/layout';
 import SectionWrapper from './SectionWrapper.astro';
 
 interface WrapperConfig {
@@ -55,11 +56,15 @@ function resolveProps(props: Record<string, any>): Record<string, any> {
   return resolveDeep(props);
 }
 
-// Widgets that render full-bleed and manage their own padding — no wrapper by default
-const noWrapperWidgets = new Set(['Hero', 'Hero2', 'HeroText', 'Announcement', 'Note']);
+// Widgets that render full-bleed and manage their own padding — no wrapper by
+// default. The list is contributed by the parches (manifest `fullBleed`), not
+// hardcoded here; core knows no widget names. Match the key as registered, or
+// its short form (a parche may register `hero/Hero` while declaring `Hero`).
+const noWrapperWidgets = new Set(fullBleedWidgets);
 function widgetSkipsWrapper(name: string): boolean {
-  const key = name.includes('/') ? name.split('/').pop()! : name;
-  return noWrapperWidgets.has(key);
+  if (noWrapperWidgets.has(name)) return true;
+  const short = name.includes('/') ? name.split('/').pop()! : name;
+  return noWrapperWidgets.has(short);
 }
 ---
 

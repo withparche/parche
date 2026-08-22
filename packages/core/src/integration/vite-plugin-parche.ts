@@ -74,6 +74,8 @@ const THEMES_CONFIG_ID = 'parche:config/themes';
 const THEMES_CONFIG_VIRTUAL = '\0parche:config/themes';
 const STYLES_CONFIG_ID = 'parche:config/styles';
 const STYLES_CONFIG_VIRTUAL = '\0parche:config/styles';
+const LAYOUT_CONFIG_ID = 'parche:config/layout';
+const LAYOUT_CONFIG_VIRTUAL = '\0parche:config/layout';
 
 // Core's base.css is the Tailwind root (it has `@import "tailwindcss"`). We
 // append each parche's absolute @source globs into it at transform time —
@@ -181,6 +183,17 @@ function generateThemesConfigModule(registry: ResolvedRegistry): string {
   return `export const themes = ${JSON.stringify(registry.themes)};
 export const showPanel = ${JSON.stringify(registry.showPanel)};
 `;
+}
+
+/**
+ * Generate a JS module that exports layout hints the render path needs — the
+ * set of widget keys that render full-bleed (no default SectionWrapper). Kept as
+ * a plain static array so DynamicRenderer imports zero widget schemas/components
+ * for this decision. Which widgets are full-bleed is declared by the parches, not
+ * hardcoded in core.
+ */
+function generateLayoutConfigModule(registry: ResolvedRegistry): string {
+  return `export const fullBleedWidgets = ${JSON.stringify(registry.fullBleedWidgets)};\n`;
 }
 
 /**
@@ -373,6 +386,7 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
       if (id === I18N_CONFIG_ID) return I18N_CONFIG_VIRTUAL;
       if (id === THEMES_CONFIG_ID) return THEMES_CONFIG_VIRTUAL;
       if (id === STYLES_CONFIG_ID) return STYLES_CONFIG_VIRTUAL;
+      if (id === LAYOUT_CONFIG_ID) return LAYOUT_CONFIG_VIRTUAL;
 
       if (id === WIDGET_SCHEMAS_ID) return WIDGET_SCHEMAS_VIRTUAL;
       if (id === RESOLVERS_ID) return RESOLVERS_VIRTUAL;
@@ -399,6 +413,7 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
       if (id === I18N_CONFIG_VIRTUAL) return generateI18nConfigModule(registry);
       if (id === THEMES_CONFIG_VIRTUAL) return generateThemesConfigModule(registry);
       if (id === STYLES_CONFIG_VIRTUAL) return generateStylesModule(registry);
+      if (id === LAYOUT_CONFIG_VIRTUAL) return generateLayoutConfigModule(registry);
       if (id === RESOLVERS_VIRTUAL) return generateResolversModule(registry);
       if (id === WIDGET_SCHEMAS_VIRTUAL) {
         // Watch .props.ts and .defaults.json files for HMR

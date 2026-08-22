@@ -61,6 +61,14 @@ export interface ParcheManifest {
   primitives?: Record<string, string>;
   /** Widgets to register: virtual ID suffix → absolute path (parche:widgets/{name}) */
   widgets?: Record<string, string>;
+  /**
+   * Widget keys (as registered in `widgets`) that render full-bleed and manage
+   * their own padding — DynamicRenderer skips the default SectionWrapper for them
+   * unless a section sets `wrapper` explicitly. Declared here (statically) rather
+   * than in each widget's `.props.ts` so the render path never imports schemas.
+   * Core no longer hardcodes any widget names.
+   */
+  fullBleed?: string[];
   /** Templates to register: virtual ID suffix → absolute path */
   templates?: Record<string, string>;
   /**
@@ -176,6 +184,8 @@ export interface ResolvedRegistry {
   modules: Record<string, string>;
   /** Set of virtual IDs that use named exports (export *) instead of default */
   namedExportModules: Set<string>;
+  /** Widget keys that render full-bleed (skip the default SectionWrapper) */
+  fullBleedWidgets: string[];
   /** Resolved i18n config */
   i18n: ParcheI18nConfig;
   /** Resolved themes config */

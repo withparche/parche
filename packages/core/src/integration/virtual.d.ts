@@ -31,8 +31,11 @@ declare module 'parche:registry/resolvers' {
     templateProps: Record<string, any>;
     metadata: Record<string, any>;
     extras: {
-      seriesNav?: { seriesName: string; posts: any[]; currentOrder: number };
-      relatedPosts?: any[];
+      sections: Array<{
+        widget: string;
+        props?: Record<string, any>;
+        wrapper?: false | { classes?: Record<string, unknown>; [key: string]: unknown };
+      }>;
     };
   } | null>;
   export function getResolverPaths(
@@ -50,6 +53,11 @@ declare module 'parche:config/i18n' {
 declare module 'parche:config/themes' {
   export const themes: Array<{ label: string; value: string }>;
   export const showPanel: boolean;
+}
+
+declare module 'parche:config/layout' {
+  /** Widget keys that render full-bleed (skip the default SectionWrapper). */
+  export const fullBleedWidgets: string[];
 }
 
 // Layouts

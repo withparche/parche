@@ -37,10 +37,17 @@ interface ResolvedPost {
   templateProps: Record<string, any>;
   /** Resolved metadata for BaseLayout */
   metadata: Record<string, any>;
-  /** Additional components to render after the template (related posts, series nav) */
+  /**
+   * Generic trailing sections the core route renders (via DynamicRenderer) after
+   * the post body — related posts, series nav, etc. The blog parche owns the
+   * widget names and props; core renders them by name and knows none of them.
+   */
   extras: {
-    seriesNav?: { seriesName: string; posts: any[]; currentOrder: number };
-    relatedPosts?: any[];
+    sections: Array<{
+      widget: string;
+      props?: Record<string, any>;
+      wrapper?: false | { classes?: Record<string, unknown>; [key: string]: unknown };
+    }>;
   };
 }
 
@@ -124,6 +131,40 @@ export async function resolve(
 
   const postData = { ...post.data, readingTime };
 
+  // Trailing sections as generic { widget, props, wrapper } — the blog parche
+  // decides the widgets and their layout; the core route just renders them.
+  const seriesNav =
+    post.data.series && seriesPosts.length > 1
+      ? { seriesName: post.data.series.name, posts: seriesPosts, currentOrder: post.data.series.order }
+      : null;
+  const relatedPosts =
+    related.length > 0
+      ? related.map((r) => ({
+          title: r.data.title,
+          description: r.data.description ?? r.data.excerpt,
+          href: resolvePostPermalink(permalinks.post, r),
+          image: r.data.image,
+          publishDate: r.data.publishDate,
+          category: r.data.category,
+          tags: r.data.tags,
+        }))
+      : null;
+
+  const extraSections: ResolvedPost['extras']['sections'] = [];
+  if (seriesNav) {
+    extraSections.push({
+      widget: 'blog/SeriesNav',
+      props: seriesNav,
+      // Center in a narrow column with no vertical padding (matches the prior
+      // hand-wrapped markup); py-0 across breakpoints beats the wrapper default.
+      wrapper: { classes: { container: 'max-w-4xl py-0 md:py-0 lg:py-0 mb-8' } },
+    });
+  }
+  if (relatedPosts) {
+    // RelatedPosts renders its own full-width Section/Container — no wrapper.
+    extraSections.push({ widget: 'blog/RelatedPosts', props: { posts: relatedPosts }, wrapper: false });
+  }
+
   return {
     template: post.data.template || 'blog-post',
     layout: post.data.layout || 'default',
@@ -155,24 +196,7 @@ export async function resolve(
       },
       jsonLd: [blogPostingJsonLd, breadcrumbJsonLd],
     },
-    extras: {
-      seriesNav:
-        post.data.series && seriesPosts.length > 1
-          ? { seriesName: post.data.series.name, posts: seriesPosts, currentOrder: post.data.series.order }
-          : undefined,
-      relatedPosts:
-        related.length > 0
-          ? related.map((r) => ({
-              title: r.data.title,
-              description: r.data.description ?? r.data.excerpt,
-              href: resolvePostPermalink(permalinks.post, r),
-              image: r.data.image,
-              publishDate: r.data.publishDate,
-              category: r.data.category,
-              tags: r.data.tags,
-            }))
-          : undefined,
-    },
+    extras: { sections: extraSections },
   };
 }
 
