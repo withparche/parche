@@ -1,7 +1,34 @@
 import path from 'node:path';
 import fs from 'node:fs';
 import { pathToFileURL } from 'node:url';
+import { siteConfigSchema } from '../types/config.js';
 import type { SiteConfig } from '../types/config.js';
+
+/**
+ * Extensions the site config may use, in probe order.
+ *
+ * JSON is a first-class option on purpose: the whole file is plain data, so a
+ * git-based CMS can edit the site's identity, its metadata defaults and its
+ * translations without anyone touching TypeScript. That is also why nothing in
+ * this config may be a function — it has to survive a round trip through JSON.
+ */
+const CONFIG_EXTENSIONS = ['.ts', '.json', '.mjs', '.js'] as const;
+
+/** Find the site config file, honouring an explicit path or probing for one. */
+export function resolveSiteConfigPath(
+  rootDir: string,
+  configPath: string | undefined,
+): string | null {
+  if (configPath) {
+    const absolute = path.resolve(rootDir, configPath);
+    return fs.existsSync(absolute) ? absolute : null;
+  }
+  for (const ext of CONFIG_EXTENSIONS) {
+    const candidate = path.resolve(rootDir, `parche.config${ext}`);
+    if (fs.existsSync(candidate)) return candidate;
+  }
+  return null;
+}
 
 /**
  * Read the site config file at integration setup, when there is one.
@@ -35,10 +62,15 @@ export async function tryLoadSiteConfig(
   rootDir: string,
   configPath: string | undefined,
 ): Promise<SiteConfig | null> {
-  if (!configPath) return null;
+  const absolute = resolveSiteConfigPath(rootDir, configPath);
+  if (!absolute) return null;
 
-  const absolute = path.resolve(rootDir, configPath);
-  if (!fs.existsSync(absolute)) return null;
+  // JSON carries no defineConfig call, so nothing has applied the schema to it.
+  // Parsing here is what gives a CMS-authored file the same defaults and the
+  // same validation errors a TypeScript one gets.
+  if (absolute.endsWith('.json')) {
+    return siteConfigSchema.parse(JSON.parse(fs.readFileSync(absolute, 'utf8'))) as SiteConfig;
+  }
 
   try {
     const mod = await nodeImport(pathToFileURL(absolute).href);

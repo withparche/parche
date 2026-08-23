@@ -21,11 +21,15 @@ const verificationSchema = z.object({
   pinterest: z.string().optional(),
 }).default({});
 
+// `.prefault` rather than `.default`: a Zod default is handed back untouched, so
+// `.default({})` would skip the inner defaults and leave an absent block empty —
+// while a block written as `{}` got them. Same config, different output depending
+// on whether the key was there at all.
 const defaultRobotsSchema = z.object({
   maxSnippet: z.number().default(-1),
   maxImagePreview: z.enum(['none', 'standard', 'large']).default('large'),
   maxVideoPreview: z.number().default(-1),
-}).default({});
+}).prefault({});
 
 const addressSchema = z.object({
   street: z.string().optional(),
@@ -128,7 +132,7 @@ export const siteConfigSchema = z.object({
         .default({}),
     })
     .strict()
-    .default({ translations: {} }),
+    .prefault({}),
 
   /**
    * The site-wide metadata a page falls back to when it declares none.
@@ -168,8 +172,8 @@ export const siteConfigSchema = z.object({
         address: addressSchema.optional(),
         contactPoint: contactPointSchema.optional(),
       })
-      .default({}),
-  }).default({}),
+      .optional(),
+  }).prefault({}),
 
   // Note: header/footer nav and theme are NOT configured here.
   // - Chrome (header/footer) is authored in the `layouts` content collection

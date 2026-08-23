@@ -1,7 +1,7 @@
 import type { AstroIntegration } from 'astro';
 import { fileURLToPath } from 'node:url';
 import { resolveSiteUrl, resolveI18n } from '../utils/site.js';
-import { tryLoadSiteConfig } from './load-site-config.js';
+import { tryLoadSiteConfig, resolveSiteConfigPath } from './load-site-config.js';
 import path from 'node:path';
 import fs from 'node:fs';
 import { z } from 'zod';
@@ -179,9 +179,19 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
         // Inline mode hands us the site config directly; separate-file mode needs
         // it read from disk, since the virtual module resolves far too late.
         const rootDirEarly = fileURLToPath(config.root);
+        const configFile = resolveSiteConfigPath(rootDirEarly, resolved.config);
         const siteConfig =
-          prepared.inlineSiteConfig ??
-          (await tryLoadSiteConfig(rootDirEarly, resolved.config ?? './parche.config.ts'));
+          prepared.inlineSiteConfig ?? (await tryLoadSiteConfig(rootDirEarly, resolved.config));
+        if (configFile) {
+          // Pin the probed file so the registry does not fall back to a .ts path
+          // that may not exist — the config can just as well be parche.config.json.
+          resolved.config = path.relative(rootDirEarly, configFile) || undefined;
+        }
+        // A JSON config has no defineConfig call to apply the schema, so serve the
+        // validated object rather than the raw file: consumers must see the same
+        // defaults whichever format the site chose.
+        const servedSiteConfig =
+          prepared.inlineSiteConfig ?? (configFile?.endsWith('.json') ? siteConfig ?? undefined : undefined);
         const parcheSiteUrl = (siteConfig as any)?.site;
         resolvedSiteUrl = resolveSiteUrl(config.site ? String(config.site) : undefined, parcheSiteUrl);
         if (!config.site && parcheSiteUrl) {
@@ -194,7 +204,7 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
           updateConfig({ i18n: parcheI18n });
         }
         const rootDir = fileURLToPath(config.root);
-        const resolvedRegistry = createRegistry(resolved, rootDir, parcheI18n ?? config.i18n, prepared.inlineSiteConfig);
+        const resolvedRegistry = createRegistry(resolved, rootDir, parcheI18n ?? config.i18n, servedSiteConfig);
 
         // Resolve @core/* alias for backward compatibility with widget internal imports
         const coreDir = path.resolve(

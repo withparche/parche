@@ -129,7 +129,12 @@ test('satisfiesVersion: caret / tilde / >= / exact / prerelease / *', () => {
 test('defineConfig: accepts a valid site config and applies defaults', () => {
   const cfg = defineConfig({ brand: { name: 'Acme' } });
   assert.equal(cfg.brand.name, 'Acme');
-  assert.deepEqual(cfg.metadata, {}); // default
+  // The defaults are filled in even though `metadata` was never written — an
+  // absent block and one written as `{}` must resolve to the same thing.
+  assert.equal(cfg.metadata.defaultOgType, 'website');
+  assert.equal(cfg.metadata.defaultTwitterCard, 'summary_large_image');
+  assert.deepEqual(cfg.metadata.preconnect, []);
+  assert.equal(cfg.metadata.organization, undefined); // opt-in
 });
 
 test('defineConfig: a removed/typo top-level key (e.g. theme) throws, not silently dropped', () => {
