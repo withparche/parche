@@ -16,7 +16,8 @@ import { queryPostsByTag, queryAllTags } from '../../../utils/blog-query.js';
 import { calculateReadingTime } from '../../../utils/reading-time.js';
 import { resolvePostPermalink, resolveTaxonomyPermalink, localizePath } from '../../../types.js';
 import { resolveLayout } from 'parche:utils/layout';
-import { defaultLocale } from 'parche:config/i18n';
+import { defaultLocale, locales } from 'parche:config/i18n';
+import { getRouteAlternates, toAbsolute } from '../../../utils/alternates.js';
 import { resolveAssets } from 'parche:utils/assets';
 import { resolveLabels, format } from '../../../labels.js';
 import Container from 'parche:primitives/Container';
@@ -80,6 +81,19 @@ if (page.data.length === 0 || pageNum > page.lastPage) {
 }
 
 const labels = resolveLabels(cfg.labels, locale, defaultLocale);
+// A tag only exists in a locale if some post there carries it.
+const alternates = toAbsolute(
+  await getRouteAlternates({
+    path: resolveTaxonomyPermalink(permalinks.tag, tag!),
+    locales: locales as string[],
+    defaultLocale,
+    hasContent: async (l) =>
+      (await queryPostsByTag({ tag: tag!, locale: l, page: 1, pageSize: 1, showDrafts })).total > 0,
+  }),
+  Astro.site,
+);
+Astro.locals.parche = { ...(Astro.locals.parche ?? {}), locale, alternates };
+
 const layoutSections = await resolveLayout('default', locale, defaultLocale);
 
 const posts = await resolveAssets(page.data.map((post: any) => {
@@ -119,6 +133,14 @@ const breadcrumbs = [
 ---
 
 <BaseLayout metadata={metadata} config={config} lang={locale}>
+  {alternates.length > 1 && (
+    <Fragment slot="head">
+      {alternates.map((alt) => (
+        <link rel="alternate" hreflang={alt.locale} href={alt.href} />
+      ))}
+      <link rel="alternate" hreflang="x-default" href={alternates.find((a) => a.locale === defaultLocale)?.href} />
+    </Fragment>
+  )}
   <LayoutRenderer layoutSections={layoutSections}>
     <Section class="!py-4">
       <Container class="max-w-6xl">

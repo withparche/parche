@@ -9,17 +9,33 @@ let alternates: Array<{ locale: string; href: string; path: string }> = [];
 let hasAlternates = false;
 
 if (hasMultipleLocales) {
-  // Reverse-lookup the current page from the URL to find pageKey
-  const pathname = Astro.url.pathname.replace(/\/$/, '') || '';
-  const urlSlug = pathname.startsWith('/') ? pathname.slice(1) : pathname;
+  // The route may already know this URL's translations — a blog post's are
+  // derived from the posts collection, which this component cannot see. Those
+  // win, because only the route that rendered the content can pair it.
+  const provided = (Astro.locals as any)?.parche?.alternates as
+    | Array<{ locale: string; href: string; path?: string }>
+    | undefined;
 
-  const resolved = await resolvePageFromSlug(urlSlug || undefined, defaultLocale);
+  if (provided?.length) {
+    alternates = provided.map((alt) => ({
+      locale: alt.locale,
+      href: alt.href,
+      path: alt.path ?? new URL(alt.href, 'http://localhost').pathname,
+    }));
+  } else {
+    // Otherwise reverse-lookup the current page from the URL to find its pageKey.
+    const pathname = Astro.url.pathname.replace(/\/$/, '') || '';
+    const urlSlug = pathname.startsWith('/') ? pathname.slice(1) : pathname;
 
-  if (resolved) {
-    const slugMap = await buildSlugMap();
-    alternates = getAlternateUrls(resolved.pageKey, slugMap, defaultLocale, Astro.site);
-    hasAlternates = alternates.length > 1;
+    const resolved = await resolvePageFromSlug(urlSlug || undefined, defaultLocale);
+
+    if (resolved) {
+      const slugMap = await buildSlugMap();
+      alternates = getAlternateUrls(resolved.pageKey, slugMap, defaultLocale, Astro.site);
+    }
   }
+
+  hasAlternates = alternates.length > 1;
 }
 
 const currentLocale = Astro.currentLocale || defaultLocale;

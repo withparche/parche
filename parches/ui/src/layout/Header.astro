@@ -57,9 +57,19 @@ interface Props {
   actions?: HeaderAction[];
   logo?: Logo;
   announcement?: Announcement;
+  /**
+   * Where the desktop navigation sits between the logo and the actions.
+   * 'center' (default) keeps it in the middle; 'left' tucks it beside the logo;
+   * 'right' pushes it next to the actions — useful on landing pages, where a
+   * short menu centred in a wide bar reads as stranded.
+   */
+  position?: 'left' | 'center' | 'right';
 }
 
-const { links = [], actions = [], logo = 'AstroWind', announcement } = Astro.props;
+const { links = [], actions = [], logo = 'AstroWind', announcement, position = 'center' } = Astro.props;
+
+const navJustify =
+  position === 'left' ? 'justify-start' : position === 'right' ? 'justify-end' : 'justify-center';
 
 const homeHref = Astro.currentLocale && Astro.currentLocale !== 'en' ? `/${Astro.currentLocale}` : '/';
 // A logo can be a bare string (wordmark), an object with `src` (image), or an
@@ -138,7 +148,7 @@ function linkType(link: HeaderLink): 'link' | 'dropdown' | 'mega' {
     </a>
 
     <!-- Desktop nav -->
-    <nav class="hidden md:flex flex-1 items-center justify-center gap-1" aria-label="Main navigation">
+    <nav class={`hidden md:flex flex-1 items-center ${navJustify} gap-1`} aria-label="Main navigation">
       {links.map((link) => {
         const type = linkType(link);
 
