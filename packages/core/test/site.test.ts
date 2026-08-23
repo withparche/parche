@@ -59,6 +59,16 @@ test('i18n: nothing to do when only Astro declares it', () => {
   assert.equal(resolveI18n({ defaultLocale: 'en', locales: ['en'] }, { locales: {} }), null);
 });
 
+test('i18n: overrides alongside an Astro declaration are not a conflict', () => {
+  // The per-locale site identity has to live in the Parche config — Astro has no
+  // equivalent — so its presence must never read as a double declaration.
+  const out = resolveI18n(
+    { defaultLocale: 'en', locales: ['en', 'es'] },
+    { locales: { es: { site: { description: 'Una plantilla.' } } } },
+  );
+  assert.equal(out, null);
+});
+
 test('i18n: a Parche-only declaration is handed to Astro', () => {
   const out = resolveI18n(undefined, { defaultLocale: 'en', locales: { en: {}, es: {} } });
   assert.deepEqual(out, { defaultLocale: 'en', locales: ['en', 'es'], routing: 'manual' });
@@ -74,9 +84,26 @@ test('i18n: routing is forced to manual, since Parche resolves URLs itself', () 
   assert.equal(resolveI18n(undefined, { defaultLocale: 'en', locales: { en: {} } })?.routing, 'manual');
 });
 
-test('i18n: declaring it on both sides is an error', () => {
+test('i18n: only defaultLocale can conflict, and it errors naming both', () => {
   assert.throws(
-    () => resolveI18n({ defaultLocale: 'en', locales: ['en'] }, { defaultLocale: 'es', locales: { es: {} } }),
-    /declared twice/,
+    () => resolveI18n({ defaultLocale: 'en', locales: ['en'] }, { defaultLocale: 'es' }),
+    (err: Error) => {
+      assert.match(err.message, /default locale is declared twice/);
+      assert.match(err.message, /astro\.config/);
+      return true;
+    },
   );
+});
+
+test('i18n: an override for a locale Astro does not list is warned about', () => {
+  const warnings: string[] = [];
+  const original = console.warn;
+  console.warn = (...args: unknown[]) => warnings.push(args.join(' '));
+  try {
+    resolveI18n({ defaultLocale: 'en', locales: ['en', 'es'] }, { locales: { fr: {} } });
+  } finally {
+    console.warn = original;
+  }
+  assert.equal(warnings.length, 1);
+  assert.match(warnings[0], /"fr"/);
 });

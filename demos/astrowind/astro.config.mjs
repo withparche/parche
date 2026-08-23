@@ -15,7 +15,6 @@ import { blogLabels } from './src/blog-labels.js';
 // than a curated slice: 20 pages, three layouts, a blog with taxonomies, and a
 // visual identity of its own. Findings go to BACKLOG.md.
 export default defineConfig({
-  site: 'https://astrowind.example.com',
   integrations: [
     parche({
       parches: [

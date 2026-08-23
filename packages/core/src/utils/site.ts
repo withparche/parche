@@ -48,11 +48,21 @@ export function resolveSiteUrl(astroSite: string | undefined, parcheUrl: string 
 /**
  * Resolve the i18n setup from the two places it can be declared.
  *
- * Same rule as the site URL: Astro's `i18n` block and Parche's are two ways to
- * say the same thing, and saying it twice leaves no source of truth. Parche's
- * `i18n.locales` is a map keyed by locale code, so it declares which languages
- * exist as well as what each overrides; the array Astro wants is derived from
- * its keys.
+ * `i18n.locales` in the Parche config plays two roles depending on who declares
+ * the languages, and only one of them can conflict with Astro:
+ *
+ *   - **Overrides.** Its entries always carry the per-locale site identity, and
+ *     that belongs in the Parche config no matter what — Astro has no concept of
+ *     it. So the map existing is never, by itself, a double declaration.
+ *   - **Declaration.** When Astro has no i18n block, the map's keys are also the
+ *     list of languages, and Parche hands them to Astro.
+ *
+ * `defaultLocale` is the one value that genuinely exists on both sides, so that
+ * is what the conflict rule is about:
+ *
+ *   Astro only        → Astro's
+ *   Parche only       → Parche's, written into Astro
+ *   both              → an error naming both places
  *
  * Returns the i18n config to hand to Astro, or null when Astro already has it.
  */
@@ -61,18 +71,34 @@ export function resolveI18n(
   parcheI18n: { defaultLocale?: string; locales?: Record<string, unknown> } | undefined,
 ): { defaultLocale: string; locales: string[]; routing: 'manual' } | null {
   const parcheLocales = Object.keys(parcheI18n?.locales ?? {});
-  const parcheDeclares = Boolean(parcheI18n?.defaultLocale) || parcheLocales.length > 0;
-
-  if (!parcheDeclares) return null;
 
   if (astroI18n) {
-    throw new Error(
-      '[parche] Internationalization is declared twice: in astro.config (i18n) and in the ' +
-        'Parche config (i18n.defaultLocale / i18n.locales). Keep one of them — Parche reads ' +
-        "Astro's when only that is set, and writes its own into Astro when only Parche declares it. " +
-        'Per-locale overrides such as `i18n.locales.es.site` always belong in the Parche config.',
+    if (parcheI18n?.defaultLocale) {
+      throw new Error(
+        `[parche] The default locale is declared twice: "${astroI18n.defaultLocale}" in ` +
+          `astro.config (i18n.defaultLocale) and "${parcheI18n.defaultLocale}" in the Parche ` +
+          'config. Keep one of them — per-locale overrides such as `i18n.locales.es.site` stay ' +
+          'in the Parche config either way, since Astro has no equivalent.',
+      );
+    }
+
+    // Astro owns the language list; warn about an override for a locale it does
+    // not have, which would otherwise apply to nothing and look like a no-op.
+    const astroCodes = (astroI18n.locales ?? []).map((l: any) =>
+      typeof l === 'string' ? l : l?.codes?.[0],
     );
+    for (const code of parcheLocales) {
+      if (astroCodes.length > 0 && !astroCodes.includes(code)) {
+        console.warn(
+          `[parche] i18n.locales has an entry for "${code}", which astro.config does not list. ` +
+            'Its overrides will never be used.',
+        );
+      }
+    }
+    return null;
   }
+
+  if (!parcheI18n?.defaultLocale && parcheLocales.length === 0) return null;
 
   const defaultLocale = parcheI18n?.defaultLocale ?? parcheLocales[0] ?? 'en';
   const locales = parcheLocales.length > 0 ? parcheLocales : [defaultLocale];

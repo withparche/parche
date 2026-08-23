@@ -11,7 +11,6 @@ import createUI from '@parche/ui';
 // data-driven catch-all/DynamicRenderer per request. Swap to static by
 // removing `output`/`adapter` if the site doesn't need per-request rendering.
 export default defineConfig({
-  site: 'https://example.com',
   output: 'server',
   adapter: node({ mode: 'standalone' }),
   integrations: [

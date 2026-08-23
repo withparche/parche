@@ -8,7 +8,6 @@ import createUI from '@parche/ui';
 import { corporate, minimal, playful, startup } from '@parche/themes';
 
 export default defineConfig({
-  site: 'https://example.com',
   integrations: [
     parche({
       // Import only the themes you want — each bundles its own CSS and adds

@@ -9,7 +9,6 @@ import createUI from '@parche/ui';
 import { corporate, minimal, playful } from '@parche/themes';
 
 export default defineConfig({
-  site: 'https://example.com',
   integrations: [
     parche({
       // Import the themes to showcase — watch the shadcn components reskin as

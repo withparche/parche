@@ -8,7 +8,6 @@ import createUI from '@parche/ui';
 
 // Personal portfolio — static output (SSG). No adapter needed.
 export default defineConfig({
-  site: 'https://example.com',
   integrations: [
     // Parches here; the site identity is configured in ./parche.config.ts.
     parche({

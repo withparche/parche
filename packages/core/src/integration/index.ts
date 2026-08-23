@@ -1,6 +1,7 @@
 import type { AstroIntegration } from 'astro';
 import { fileURLToPath } from 'node:url';
 import { resolveSiteUrl, resolveI18n } from '../utils/site.js';
+import { tryLoadSiteConfig } from './load-site-config.js';
 import path from 'node:path';
 import fs from 'node:fs';
 import { z } from 'zod';
@@ -160,7 +161,7 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
   return {
     name: 'parche',
     hooks: {
-      'astro:config:setup': ({ command, updateConfig, config, injectRoute, addMiddleware }) => {
+      'astro:config:setup': async ({ command, updateConfig, config, injectRoute, addMiddleware }) => {
         const ctx: ParcheConfigContext = {
           command,
           mode: command === 'dev' ? 'development' : 'production',
@@ -175,14 +176,20 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
         // In inline mode we can see Parche's at setup, so the conflict fails
         // fast and a Parche-only declaration is pushed into Astro, which needs
         // `site` for canonicals, Open Graph and the sitemap.
-        const parcheSiteUrl = prepared.inlineSiteConfig?.site?.url;
+        // Inline mode hands us the site config directly; separate-file mode needs
+        // it read from disk, since the virtual module resolves far too late.
+        const rootDirEarly = fileURLToPath(config.root);
+        const siteConfig =
+          prepared.inlineSiteConfig ??
+          (await tryLoadSiteConfig(rootDirEarly, resolved.config ?? './parche.config.ts'));
+        const parcheSiteUrl = siteConfig?.site?.url;
         resolvedSiteUrl = resolveSiteUrl(config.site ? String(config.site) : undefined, parcheSiteUrl);
         if (!config.site && parcheSiteUrl) {
           updateConfig({ site: parcheSiteUrl });
         }
 
         // Same rule for i18n: one declaration, either side.
-        const parcheI18n = resolveI18n(config.i18n, (prepared.inlineSiteConfig as any)?.i18n);
+        const parcheI18n = resolveI18n(config.i18n, (siteConfig as any)?.i18n);
         if (parcheI18n) {
           updateConfig({ i18n: parcheI18n });
         }

@@ -7,7 +7,6 @@ import createPrimitives from '@parche/primitives';
 import createUI from '@parche/ui';
 
 export default defineConfig({
-  site: 'https://example.com',
   integrations: [
     parche({
       parches: [createPrimitives(), createUI()],

@@ -8,7 +8,6 @@ import createPrimitives from '@parche/primitives';
 import createUI from '@parche/ui';
 
 export default defineConfig({
-  site: 'https://example.com',
   adapter: node({ mode: 'standalone' }),
   integrations: [
     // Parches here; the site identity is configured in ./parche.config.ts.

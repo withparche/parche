@@ -8,7 +8,6 @@ import createUI from '@parche/ui';
 import createBlog from '@parche/blog';
 
 export default defineConfig({
-  site: 'https://example.com',
   integrations: [
     parche({
       parches: [createPrimitives(), createUI(), createBlog({ postsPerPage: 6, permalinks: { post: '/%slug%' } })],
