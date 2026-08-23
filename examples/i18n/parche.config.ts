@@ -5,6 +5,5 @@ export default defineConfig({
     name: 'Parche i18n Example',
     description: 'A minimal bilingual demo built with Parche.',
     url: 'https://example.com',
-    defaultLanguage: 'en',
   },
 });

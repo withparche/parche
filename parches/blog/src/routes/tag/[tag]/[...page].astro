@@ -17,6 +17,7 @@ import { calculateReadingTime } from '../../../utils/reading-time.js';
 import { resolvePostPermalink, resolveTaxonomyPermalink, localizePath } from '../../../types.js';
 import { resolveLayout } from 'parche:utils/layout';
 import { defaultLocale, locales } from 'parche:config/i18n';
+import { localizeSiteConfig } from 'parche:utils/site';
 import { getRouteAlternates, toAbsolute } from '../../../utils/alternates.js';
 import { resolveTerm, resolveSlug, createTaxonomyResolver } from '../../../utils/taxonomy.js';
 import { resolveAssets } from 'parche:utils/assets';
@@ -95,6 +96,7 @@ if (page.data.length === 0 || pageNum > page.lastPage) {
   return Astro.redirect('/404');
 }
 
+const site = localizeSiteConfig(config, locale);
 const labels = resolveLabels(cfg.labels, locale, defaultLocale);
 // A tag only exists in a locale if some post there carries it.
 const alternates = toAbsolute(
@@ -136,7 +138,7 @@ const posts = await resolveAssets(page.data.map((post: any) => {
 const displayTag = term.title;
 
 const metadata = {
-  title: `${format(labels.tagTitle, { value: displayTag })} — ${config.site.name}`,
+  title: `${format(labels.tagTitle, { value: displayTag })} — ${site.site.name}`,
   description: term.description ?? format(labels.tagDescription, { value: displayTag }),
   noindex: false,
   nofollow: false,
@@ -151,7 +153,7 @@ const breadcrumbs = [
 ];
 ---
 
-<BaseLayout metadata={metadata} config={config} lang={locale}>
+<BaseLayout metadata={metadata} config={site} lang={locale}>
   {alternates.length > 1 && (
     <Fragment slot="head">
       {alternates.map((alt) => (

@@ -7,6 +7,7 @@ import DynamicRenderer from 'parche:DynamicRenderer';
 import config from 'parche:config';
 import { templateMap } from 'parche:registry/templates';
 import { defaultLocale, locales } from 'parche:config/i18n';
+import { localizeSiteConfig } from 'parche:utils/site';
 import { showPanel } from 'parche:config/themes';
 import { resolveContent, getResolverPaths } from 'parche:registry/resolvers';
 import { getEntry, render } from 'astro:content';
@@ -194,6 +195,10 @@ if (mode === 'resolver' && resolvedApp?.alternates?.length) {
 // layout chrome and has no other way to reach route-level data).
 Astro.locals.parche = { ...(Astro.locals.parche ?? {}), locale, alternates };
 
+// Site-wide identity can be translated too; routes without frontmatter fall back
+// to it, so it has to be localized before the metadata is assembled.
+const siteConfig = localizeSiteConfig(config, locale);
+
 const metadata = mode === 'resolver' ? appMetadata : pageMetadata;
 const layoutName = mode === 'resolver'
   ? (resolvedApp?.layout || 'default')
@@ -201,7 +206,7 @@ const layoutName = mode === 'resolver'
 const layoutSections = await resolveLayout(layoutName, locale, defaultLocale);
 ---
 
-<BaseLayout metadata={metadata} config={config} lang={locale}>
+<BaseLayout metadata={metadata} config={siteConfig} lang={locale}>
   {alternates.length > 1 && (
     <Fragment slot="head">
       {alternates.map((alt) => (

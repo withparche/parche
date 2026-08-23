@@ -5,6 +5,5 @@ export default defineConfig({
     name: 'Parche markdown-pages Example',
     description: 'A minimal Parche demo.',
     url: 'https://example.com',
-    defaultLanguage: 'en',
   },
 });

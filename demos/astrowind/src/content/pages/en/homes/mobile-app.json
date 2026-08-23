@@ -23,7 +23,7 @@
           }
         ],
         "image": {
-          "src": "@/assets/images/app-preview.svg",
+          "src": "https://images.unsplash.com/photo-1512361436605-a484bdb34b5f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
           "alt": "App screenshot"
         }
       }
@@ -73,7 +73,7 @@
           }
         ],
         "image": {
-          "src": "@/assets/images/workspace.svg",
+          "src": "https://images.unsplash.com/photo-1521517407911-565264e7d82d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80",
           "alt": "Capture"
         }
       }

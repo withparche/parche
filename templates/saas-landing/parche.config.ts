@@ -7,6 +7,5 @@ export default defineConfig({
     name: 'Parche',
     description: 'The all-in-one workspace to plan, track and ship your work.',
     url: 'https://example.com',
-    defaultLanguage: 'en',
   },
 });

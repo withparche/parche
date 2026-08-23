@@ -44,7 +44,7 @@
               "featured": {
                 "title": "See the pricing",
                 "description": "Three plans, no hidden costs. Start free and move up when you outgrow it.",
-                "image": "@/assets/images/workspace.svg",
+                "image": "@/assets/images/hero-image.png",
                 "href": "/pricing"
               },
               "footer": "Looking for something else? <a class=\"text-primary hover:underline\" href=\"/contact\">Ask us directly</a>."

@@ -10,9 +10,6 @@ authors:
   - jane
 authorName: Jane Doe
 featured: false
-image:
-  src: "@/assets/images/post-3.svg"
-  alt: "Markdown elements demo post"
 ---
 
 ## Why this matters

@@ -11,7 +11,7 @@ authors:
 authorName: Jane Doe
 featured: false
 image:
-  src: "@/assets/images/post-2.svg"
+  src: "@/assets/images/default.png"
   alt: "Designing with tokens instead of classes"
 ---
 

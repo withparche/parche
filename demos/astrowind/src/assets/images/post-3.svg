@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675" role="img" aria-label="Article cover placeholder">
-  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eef2ff"/><stop offset="1" stop-color="#dbeafe"/></linearGradient></defs>
-  <rect width="1200" height="675" rx="18" fill="url(#g)"/>
-  <circle cx="384" cy="229" r="94" fill="#3b6ef6" opacity="0.5"/>
-  <path d="M0 675 L420 303 L744 526 L960 405 L1200 675 Z" fill="#3b6ef6" opacity="0.35"/>
-  <path d="M0 675 L336 418 L660 675 Z" fill="#3b6ef6" opacity="0.25"/>
-</svg>

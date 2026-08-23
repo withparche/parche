@@ -16,7 +16,7 @@
           }
         ],
         "image": {
-          "src": "@/assets/images/workspace.svg",
+          "src": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80",
           "alt": "Trabajando"
         }
       }
@@ -78,7 +78,7 @@
           }
         ],
         "image": {
-          "src": "@/assets/images/blueprint.svg",
+          "src": "https://images.unsplash.com/photo-1552664688-cf412ec27db2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
           "alt": "Método de trabajo"
         }
       }
@@ -104,7 +104,7 @@
           }
         ],
         "image": {
-          "src": "@/assets/images/growth.svg",
+          "src": "https://images.unsplash.com/photo-1618835962148-cf177563c6c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=930&q=80",
           "alt": "Autonomía"
         }
       }

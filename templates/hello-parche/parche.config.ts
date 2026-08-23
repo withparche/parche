@@ -7,6 +7,5 @@ export default defineConfig({
     name: '{{siteName}}',
     description: 'Built with Parche.',
     url: 'https://example.com',
-    defaultLanguage: 'en',
   },
 });

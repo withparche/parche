@@ -46,7 +46,6 @@ export const siteConfigSchema = z.object({
     name: z.string(),
     description: z.string().default(''),
     url: z.string().url().optional(),
-    defaultLanguage: z.string().default('en'),
     logo: z.string().optional(),
   }),
 
@@ -54,6 +53,69 @@ export const siteConfigSchema = z.object({
     ogImage: z.string().optional(),
     twitterHandle: z.string().optional(),
   }).default({}),
+
+  /**
+   * Internationalization of the site identity.
+   *
+   * Astro's own `i18n` block owns routing — which locales exist and how URLs are
+   * shaped — and Parche reads its locales from there rather than restating them.
+   * What Astro deliberately leaves out is translation: its documentation says
+   * metadata and content are the developer's job. This is that missing half.
+   *
+   * Each locale entry mirrors the shape it overrides and is merged over the
+   * top-level values, which remain the default. Declare only what differs:
+   *
+   *   i18n: {
+   *     defaultLocale: 'en',
+   *     locales: {
+   *       en: {},
+   *       es: { site: { description: 'Una plantilla gratuita…' } },
+   *     },
+   *   }
+   *
+   * The keys are the locale codes, so this map declares which languages exist
+   * as well as what each one overrides — Astro's `locales` array is derived
+   * from them when Parche is the one declaring them.
+   *
+   * Pages translate their own title and description in frontmatter; this covers
+   * the site-wide fallbacks used by routes that have none — the blog listing,
+   * taxonomy pages, RSS channels and the Open Graph defaults.
+   */
+  i18n: z
+    .object({
+      /**
+       * The default locale, mirroring Astro's `i18n.defaultLocale`.
+       *
+       * Declare it in one place only: Parche uses Astro's when Astro declares
+       * it, writes its own into Astro when only Parche does, and errors when
+       * both do — otherwise neither is the source of truth.
+       */
+      defaultLocale: z.string().optional(),
+      locales: z
+        .record(
+          z.string(),
+          z.object({
+            site: z
+              .object({
+                name: z.string().optional(),
+                description: z.string().optional(),
+                logo: z.string().optional(),
+              })
+              .strict()
+              .optional(),
+            metadata: z
+              .object({
+                ogImage: z.string().optional(),
+                twitterHandle: z.string().optional(),
+              })
+              .strict()
+              .optional(),
+          }).strict(),
+        )
+        .default({}),
+    })
+    .strict()
+    .default({ locales: {} }),
 
   seo: z.object({
     verification: verificationSchema,

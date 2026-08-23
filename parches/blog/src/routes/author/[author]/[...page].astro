@@ -19,6 +19,7 @@ import { calculateReadingTime } from '../../../utils/reading-time.js';
 import { resolvePostPermalink, resolveTaxonomyPermalink, localizePath } from '../../../types.js';
 import { resolveLayout } from 'parche:utils/layout';
 import { defaultLocale, locales } from 'parche:config/i18n';
+import { localizeSiteConfig } from 'parche:utils/site';
 import { getRouteAlternates, toAbsolute } from '../../../utils/alternates.js';
 import { resolveAssets } from 'parche:utils/assets';
 import { createTaxonomyResolver } from '../../../utils/taxonomy.js';
@@ -105,6 +106,7 @@ if (page.data.length === 0 || pageNum > page.lastPage) {
   return Astro.redirect('/404');
 }
 
+const site = localizeSiteConfig(config, locale);
 const labels = resolveLabels(cfg.labels, locale, defaultLocale);
 const resolvedAuthor = await resolveAssets(authorData);
 // An author page only exists in a locale where they have published something.
@@ -145,7 +147,7 @@ const posts = await resolveAssets(page.data.map((post: any) => {
 }));
 
 const metadata = {
-  title: `${authorData.name} — ${config.site.name}`,
+  title: `${authorData.name} — ${site.site.name}`,
   description: authorData.bio ?? format(labels.authorTitle, { value: authorData.name }),
   noindex: false,
   nofollow: false,
@@ -160,7 +162,7 @@ const breadcrumbs = [
 ];
 ---
 
-<BaseLayout metadata={metadata} config={config} lang={locale}>
+<BaseLayout metadata={metadata} config={site} lang={locale}>
   {alternates.length > 1 && (
     <Fragment slot="head">
       {alternates.map((alt) => (

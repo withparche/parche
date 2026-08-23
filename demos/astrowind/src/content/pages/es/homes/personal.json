@@ -21,7 +21,7 @@
           }
         ],
         "image": {
-          "src": "@/assets/images/portrait.svg",
+          "src": "https://images.unsplash.com/photo-1491349174775-aaafddd81942?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
           "alt": "Retrato"
         }
       }
@@ -48,7 +48,7 @@
           }
         ],
         "image": {
-          "src": "@/assets/images/team.svg",
+          "src": "https://images.unsplash.com/photo-1554151228-14d9def656e4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=772&q=80",
           "alt": "Trabajando"
         }
       }
@@ -75,7 +75,7 @@
           }
         ],
         "image": {
-          "src": "@/assets/images/steps.svg",
+          "src": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
           "alt": "Proceso"
         }
       }

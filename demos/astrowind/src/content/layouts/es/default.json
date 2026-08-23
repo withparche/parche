@@ -44,7 +44,7 @@
               "featured": {
                 "title": "Mira los precios",
                 "description": "Tres planes, sin costes ocultos. Empieza gratis y sube cuando se te quede pequeño.",
-                "image": "@/assets/images/workspace.svg",
+                "image": "@/assets/images/hero-image.png",
                 "href": "/es/precios"
               },
               "footer": "¿Buscas otra cosa? <a class=\"text-primary hover:underline\" href=\"/es/contacto\">Pregúntanos directamente</a>."

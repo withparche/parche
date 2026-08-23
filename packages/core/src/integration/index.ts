@@ -1,5 +1,6 @@
 import type { AstroIntegration } from 'astro';
 import { fileURLToPath } from 'node:url';
+import { resolveSiteUrl, resolveI18n } from '../utils/site.js';
 import path from 'node:path';
 import fs from 'node:fs';
 import { z } from 'zod';
@@ -170,9 +171,23 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
         const resolved = prepared.userConfig;
         allowAICrawlers = prepared.allowAICrawlers;
         validateUserConfig(resolved);
-        resolvedSiteUrl = config.site ?? '';
+        // The site URL may live in either config; it must not live in both.
+        // In inline mode we can see Parche's at setup, so the conflict fails
+        // fast and a Parche-only declaration is pushed into Astro, which needs
+        // `site` for canonicals, Open Graph and the sitemap.
+        const parcheSiteUrl = prepared.inlineSiteConfig?.site?.url;
+        resolvedSiteUrl = resolveSiteUrl(config.site ? String(config.site) : undefined, parcheSiteUrl);
+        if (!config.site && parcheSiteUrl) {
+          updateConfig({ site: parcheSiteUrl });
+        }
+
+        // Same rule for i18n: one declaration, either side.
+        const parcheI18n = resolveI18n(config.i18n, (prepared.inlineSiteConfig as any)?.i18n);
+        if (parcheI18n) {
+          updateConfig({ i18n: parcheI18n });
+        }
         const rootDir = fileURLToPath(config.root);
-        const resolvedRegistry = createRegistry(resolved, rootDir, config.i18n, prepared.inlineSiteConfig);
+        const resolvedRegistry = createRegistry(resolved, rootDir, parcheI18n ?? config.i18n, prepared.inlineSiteConfig);
 
         // Resolve @core/* alias for backward compatibility with widget internal imports
         const coreDir = path.resolve(

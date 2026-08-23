@@ -8,6 +8,5 @@ export default defineConfig({
     name: 'Alex Rivera',
     description: 'Product designer & developer crafting calm, useful software.',
     url: 'https://example.com',
-    defaultLanguage: 'en',
   },
 });

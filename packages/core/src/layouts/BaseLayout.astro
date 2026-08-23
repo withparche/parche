@@ -7,6 +7,7 @@ import type { ResolvedMetadata } from '../utils/metadata';
 import { buildRobotsContent, buildBreadcrumbs, buildJsonLdGraph } from '../utils/metadata';
 import type { SiteConfig } from '../types/config';
 import { defaultTheme } from 'parche:config/themes';
+import { resolveAssets } from '../utils/assets.js';
 
 interface Props {
   metadata: ResolvedMetadata;
@@ -19,9 +20,13 @@ const { metadata, config, lang } = Astro.props;
 const locale = lang ?? metadata.locale ?? 'en';
 const canonicalURL = metadata.canonical
   || (Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname);
-const ogImageURL = metadata.ogImage && Astro.site
-  ? new URL(metadata.ogImage, Astro.site).href
-  : metadata.ogImage;
+// The share image can come from a page's frontmatter or the site config, and
+// neither passes through DynamicRenderer — resolve '@/assets/…' before it is
+// turned into an absolute URL, or the origin gets prefixed onto a raw path.
+const ogImage = await resolveAssets(metadata.ogImage);
+const ogImageURL = ogImage && Astro.site
+  ? new URL(ogImage, Astro.site).href
+  : ogImage;
 
 const robotsContent = buildRobotsContent(metadata);
 const siteUrl = Astro.site?.href ?? config.site.url ?? '';

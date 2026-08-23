@@ -25,7 +25,7 @@ test('empty config: parche:config points at the default root file, no fullBleed'
 });
 
 test('inline site config: parche:config is served inline, not from a file', () => {
-  const site = { site: { name: 'X', description: '', defaultLanguage: 'en' } } as any;
+  const site = { site: { name: 'X', description: '' } } as any;
   const reg = createRegistry({ parches: [] }, ROOT, undefined, site);
   assert.equal(reg.modules['parche:config'], undefined);
   assert.equal(reg.inlineSiteConfig, site);

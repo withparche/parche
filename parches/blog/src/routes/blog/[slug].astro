@@ -26,6 +26,7 @@ import { generateBlogPostingJsonLd, generateBreadcrumbJsonLd } from '../../utils
 import { resolvePostPermalink, resolveTaxonomyPermalink, localizePath } from '../../types.js';
 import { resolveLayout } from 'parche:utils/layout';
 import { defaultLocale } from 'parche:config/i18n';
+import { localizeSiteConfig } from 'parche:utils/site';
 import { resolveAssets } from 'parche:utils/assets';
 import { resolveLabels } from '../../labels.js';
 import { createTaxonomyResolver } from '../../utils/taxonomy.js';
@@ -58,6 +59,7 @@ export async function getStaticPaths() {
 
 // --- Render-time (both static & SSR) ---
 const locale = Astro.currentLocale ?? defaultLocale;
+const site = localizeSiteConfig(config, locale);
 const labels = resolveLabels(cfg.labels, locale, defaultLocale);
 const tax = await createTaxonomyResolver(locale);
 const isDev = import.meta.env.DEV;
@@ -143,7 +145,7 @@ const breadcrumbJsonLd = generateBreadcrumbJsonLd([
 ]);
 
 const metadata = {
-  title: `${post.data.metadata?.title ?? post.data.title} — ${config.site.name}`,
+  title: `${post.data.metadata?.title ?? post.data.title} — ${site.site.name}`,
   description: post.data.metadata?.description ?? post.data.description ?? post.data.excerpt,
   canonical: post.data.metadata?.canonical,
   noindex: post.data.metadata?.noindex ?? post.data.draft ?? false,
@@ -166,7 +168,7 @@ const metadata = {
 const postData = { ...post.data, readingTime };
 ---
 
-<BaseLayout metadata={metadata} config={config} lang={locale}>
+<BaseLayout metadata={metadata} config={site} lang={locale}>
   <LayoutRenderer layoutSections={layoutSections}>
     {TemplateComponent ? (
       <TemplateComponent data={postData} authorData={authorData} tocItems={tocItems} permalinks={permalinks}>

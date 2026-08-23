@@ -15,7 +15,8 @@ export async function GET(context: APIContext) {
   const i18nModule = await import('parche:config/i18n');
   const locale = context.currentLocale ?? i18nModule.defaultLocale;
   const published = getPublishedPosts(allPosts, false, locale);
-  const config = configModule.default;
+  const { localizeSiteConfig } = await import('parche:utils/site');
+  const config = localizeSiteConfig(configModule.default, locale);
   const blogConfig = blogConfigModule.default;
 
   const permalinks = blogConfig.permalinks;

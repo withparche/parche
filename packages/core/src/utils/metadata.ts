@@ -61,7 +61,7 @@ export function resolveMetadata(
     article: meta?.article,
     jsonLd: meta?.jsonLd,
     siteName: config.site.name,
-    locale: options.locale ?? config.site.defaultLanguage ?? 'en',
+    locale: options.locale ?? 'en',
   };
 }
 

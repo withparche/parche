@@ -11,7 +11,7 @@ authors:
 authorName: Mark Rivera
 featured: false
 image:
-  src: "@/assets/images/post-1.svg"
+  src: "@/assets/images/default.png"
   alt: "Why page speed still matters"
 ---
 

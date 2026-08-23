@@ -15,6 +15,7 @@ import { queryPostsBySeries, queryAllSeries } from '../../utils/blog-query.js';
 import { resolvePostPermalink, localizePath } from '../../types.js';
 import { resolveLayout } from 'parche:utils/layout';
 import { defaultLocale } from 'parche:config/i18n';
+import { localizeSiteConfig } from 'parche:utils/site';
 import { resolveAssets } from 'parche:utils/assets';
 import { resolveLabels, format } from '../../labels.js';
 import Container from 'parche:primitives/Container';
@@ -57,11 +58,12 @@ if (posts.length === 0) {
   return Astro.redirect('/404');
 }
 
+const site = localizeSiteConfig(config, locale);
 const labels = resolveLabels(cfg.labels, locale, defaultLocale);
 const layoutSections = await resolveLayout('default', locale, defaultLocale);
 
 const metadata = {
-  title: `${format(labels.seriesTitle, { value: seriesName })} — ${config.site.name}`,
+  title: `${format(labels.seriesTitle, { value: seriesName })} — ${site.site.name}`,
   description: format(labels.seriesDescription, { value: seriesName }),
   noindex: false,
   nofollow: false,
@@ -76,7 +78,7 @@ const breadcrumbs = [
 ];
 ---
 
-<BaseLayout metadata={metadata} config={config} lang={locale}>
+<BaseLayout metadata={metadata} config={site} lang={locale}>
   <LayoutRenderer layoutSections={layoutSections}>
     <Section class="!py-4">
       <Container class="max-w-4xl">

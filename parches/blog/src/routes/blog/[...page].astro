@@ -20,6 +20,7 @@ import { calculateReadingTime } from '../../utils/reading-time.js';
 import { resolvePostPermalink, resolveTaxonomyPermalink, localizePath } from '../../types.js';
 import { resolveLayout } from 'parche:utils/layout';
 import { defaultLocale, locales } from 'parche:config/i18n';
+import { localizeSiteConfig } from 'parche:utils/site';
 import { getRouteAlternates, toAbsolute } from '../../utils/alternates.js';
 import { resolveAssets } from 'parche:utils/assets';
 import { createTaxonomyResolver } from '../../utils/taxonomy.js';
@@ -77,6 +78,7 @@ if (pageNum > page.lastPage) {
   return Astro.redirect('/404');
 }
 
+const site = localizeSiteConfig(config, locale);
 const labels = resolveLabels(cfg.labels, locale, defaultLocale);
 // Translations of this route: the listing exists under every locale that has posts.
 const alternates = toAbsolute(
@@ -118,8 +120,8 @@ const posts = await resolveAssets(page.data.map((post: any) => {
 }));
 
 const metadata = {
-  title: `${labels.listingTitle} — ${config.site.name}`,
-  description: config.site.description,
+  title: `${labels.listingTitle} — ${site.site.name}`,
+  description: site.site.description,
   noindex: false,
   nofollow: false,
   ogType: 'website' as const,
@@ -127,7 +129,7 @@ const metadata = {
 };
 ---
 
-<BaseLayout metadata={metadata} config={config} lang={locale}>
+<BaseLayout metadata={metadata} config={site} lang={locale}>
   {alternates.length > 1 && (
     <Fragment slot="head">
       {alternates.map((alt) => (

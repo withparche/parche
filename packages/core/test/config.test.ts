@@ -20,7 +20,7 @@ const CTX: ParcheConfigContext = {
 
 test('prepareParcheConfig: inline mode serves the validated site config', () => {
   const prepared = prepareParcheConfig(
-    { site: { name: 'Acme', description: 'x', defaultLanguage: 'en' }, parches: [{ name: 'ui' }] },
+    { site: { name: 'Acme', description: 'x' }, parches: [{ name: 'ui' }] },
     CTX,
   );
   assert.equal(prepared.inlineSiteConfig?.site.name, 'Acme');
@@ -42,7 +42,7 @@ test('prepareParcheConfig: separate-file mode passes the config path, no inline'
 test('prepareParcheConfig: function form receives ctx and its result is used', () => {
   const prepared = prepareParcheConfig(
     (ctx) => ({
-      site: { name: 'T', description: '', url: ctx.env.SITE_URL ?? 'https://fallback', defaultLanguage: 'en' },
+      site: { name: 'T', description: '', url: ctx.env.SITE_URL ?? 'https://fallback' },
       parches: [],
     }),
     { ...CTX, env: { SITE_URL: 'https://from-env' } },
@@ -128,7 +128,6 @@ test('satisfiesVersion: caret / tilde / >= / exact / prerelease / *', () => {
 test('defineConfig: accepts a valid site config and applies defaults', () => {
   const cfg = defineConfig({ site: { name: 'Acme' } });
   assert.equal(cfg.site.name, 'Acme');
-  assert.equal(cfg.site.defaultLanguage, 'en'); // default
   assert.deepEqual(cfg.metadata, {}); // default
 });
 

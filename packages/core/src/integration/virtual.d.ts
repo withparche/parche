@@ -148,6 +148,11 @@ declare module 'parche:utils/assets' {
   export function resolveAssets<T>(value: T): Promise<T>;
 }
 
+declare module 'parche:utils/site' {
+  /** Apply a locale's overrides to the site config. */
+  export function localizeSiteConfig<T>(config: T, locale: string): T;
+}
+
 declare module 'parche:utils/layout' {
   interface Section {
     widget: string;
