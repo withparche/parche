@@ -65,7 +65,8 @@
   --ds-size-label:     0.7rem;
 
   /* Font — geometric sans */
-  --font-sans: "Inter", "Helvetica Neue", Arial, ui-sans-serif, system-ui, sans-serif;
+  /* Inter arrives through the theme's manifest, which is what actually loads it;
+     naming it here only ever picked up a locally-installed copy. */
 }
 
 /* ---------------------------------------------------------------

@@ -206,14 +206,7 @@
      @theme inline bridges them as Tailwind utilities (font-sans, etc.)
      without overriding the Astro-generated @font-face values. */
   --font-sans:        var(--font-sans);
-  --font-serif:       var(--font-serif);
   --font-mono:        var(--font-mono);
-  --font-heading-alt: var(--font-heading-alt);
-  --font-body-alt:    var(--font-body-alt);
-  --font-rounded:     var(--font-rounded);
-  --font-tech:        var(--font-tech);
-  --font-tech-body:   var(--font-tech-body);
-  --font-inter:       var(--font-inter);
 }
 
 @theme {

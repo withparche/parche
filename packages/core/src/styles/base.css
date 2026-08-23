@@ -33,7 +33,9 @@
   }
 
   body {
-    font-family: var(--font-sans);
+    /* Core ships no web font — a typeface belongs to a theme. The fallback is
+       what a project with no theme renders in, and it costs no download. */
+    font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
     background-color: var(--color-background);
     color: var(--color-text);
     transition: background-color 0.2s ease, color 0.2s ease;
@@ -193,7 +195,7 @@
     }
 
     & code {
-      font-family: var(--font-mono);
+      font-family: var(--font-mono, ui-monospace, SFMono-Regular, monospace);
       font-size: 0.875em;
       background-color: var(--color-surface);
       padding: 0.125em 0.375em;

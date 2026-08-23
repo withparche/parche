@@ -1,33 +1,27 @@
+/**
+ * The shape of a web font, as plain data.
+ *
+ * Core defines the shape and nothing else: it ships no fonts. A typeface is part
+ * of a visual identity, so it belongs to whoever owns that identity — a theme
+ * parche declares its fonts in its manifest, and a site can declare or override
+ * them in `parche.config.ts`. Both are data, so a JSON config carries them and a
+ * CMS can edit them.
+ *
+ * What core does provide is the fallback chain in `base.css`, so a project with
+ * no theme renders in the system stack instead of downloading anything.
+ */
 export interface ParcheFontDef {
+  /** The CSS variable this font fills, e.g. '--font-sans'. */
   cssVariable: string;
+  /** Family name at the provider, e.g. 'Inter'. */
   name: string;
   weights: number[];
   fallbacks: string[];
+  /** Preload the first file. Worth it for the family above the fold, only. */
   preload?: boolean;
 }
 
-const sans = ['ui-sans-serif', 'system-ui', 'sans-serif'];
-const serif = ['ui-serif', 'Georgia', 'serif'];
-const mono = ['ui-monospace', 'SFMono-Regular', 'monospace'];
-
-/**
- * The base set: only the families core's own stylesheets read.
- *
- * A font is a download, so the default is the minimum that makes the base look
- * work — `--font-sans` for body and headings, `--font-mono` for code. Anything
- * else is a design decision, and design decisions belong to a theme: a theme
- * parche contributes its own fonts through its manifest, and a site can add or
- * replace any of them from `parche.config.ts`. Later contributors win per
- * `cssVariable`.
- *
- * This used to be eight families filling variables nothing consumed, while the
- * one two themes actually asked for was not among them.
- */
-export const parcheFontDefs: ParcheFontDef[] = [
-  { cssVariable: '--font-sans', name: 'Geist', weights: [400, 500, 600, 700], fallbacks: sans, preload: true },
-  { cssVariable: '--font-mono', name: 'JetBrains Mono', weights: [400], fallbacks: mono },
-];
-
-export { sans, serif, mono };
-
-export const parcheFontVariables = parcheFontDefs.map((f) => f.cssVariable);
+/** Fallback stacks, exported so a theme can reuse them rather than retype them. */
+export const sans = ['ui-sans-serif', 'system-ui', 'sans-serif'];
+export const serif = ['ui-serif', 'Georgia', 'serif'];
+export const mono = ['ui-monospace', 'SFMono-Regular', 'monospace'];

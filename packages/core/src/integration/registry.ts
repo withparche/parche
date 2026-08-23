@@ -1,7 +1,6 @@
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { parcheFontDefs } from '../config/font-variables.js';
 import type { ParcheUserConfig, ResolvedRegistry, ParcheManifest } from './types.js';
 import type { SiteConfig } from '../types/config.js';
 
@@ -294,11 +293,12 @@ export function createRegistry(
 
   // Aggregate the CSS to bundle: what the parches contribute (e.g. themes) plus
   // an optional user entry. A site ships only the CSS of the parches it imports.
-  // Fonts: the base set, then whatever the parches (typically themes) ask for,
-  // then the site's own. Later wins per cssVariable, so a theme can replace the
-  // default sans and a site can replace the theme's.
+  // Fonts: whatever the parches (typically themes) ask for, then the site's own.
+  // Core contributes none — a typeface belongs to a visual identity, so a project
+  // with no theme downloads nothing and renders in the system stack. Later wins
+  // per cssVariable, so a site can replace a theme's choice.
   const fontsByVariable = new Map<string, any>();
-  for (const font of [...parcheFontDefs, ...contributedFonts, ...(inlineSiteConfig as any)?.fonts ?? []]) {
+  for (const font of [...contributedFonts, ...(inlineSiteConfig as any)?.fonts ?? []]) {
     fontsByVariable.set(font.cssVariable, font);
   }
   const fonts = [...fontsByVariable.values()];

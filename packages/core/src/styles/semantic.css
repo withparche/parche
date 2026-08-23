@@ -38,8 +38,8 @@
   --ds-color-highlight:   oklch(0.420 0.270 295);  /* v1 accent purple: rgb(109 40 217) */
 
   /* Typography — Inter everywhere, matching v1 sizes */
-  --ds-font-heading: var(--font-sans);
-  --ds-font-body:    var(--font-sans);
+  --ds-font-heading: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  --ds-font-body:    var(--font-sans, ui-sans-serif, system-ui, sans-serif);
 
   /* Typography — H1 */
   --ds-size-h1:     3.75rem;    /* 60px — matches v1 */

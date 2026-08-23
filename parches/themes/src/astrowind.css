@@ -75,9 +75,10 @@
   --ds-color-highlight: var(--color-accent-500);
 
   /* --- Typography — Inter for every role, tight headings ---------- */
-  --ds-font-heading: var(--font-inter, 'Inter', ui-sans-serif, system-ui, sans-serif);
-  --ds-font-body: var(--font-inter, 'Inter', ui-sans-serif, system-ui, sans-serif);
-  --font-sans: var(--font-inter, 'Inter', ui-sans-serif, system-ui, sans-serif);
+  /* The theme's manifest loads Inter into --font-sans, so both roles just read
+     it. Naming a family here would name one the loader never fetched. */
+  --ds-font-heading: var(--font-sans);
+  --ds-font-body: var(--font-sans);
 
   --ds-weight-h1: 700;
   --ds-tracking-h1: -0.035em;
