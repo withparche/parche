@@ -89,12 +89,14 @@ export async function scaffold(opts: ScaffoldOptions): Promise<void> {
 
   // 6. install + git
   const pm = opts.pm ?? detectPM();
+  let installed = opts.install === false ? null : false;
   if (opts.install !== false) {
     const s2 = spinner();
     s2.start(`Installing dependencies (${pm})`);
     try {
       await installDeps(target, pm);
       s2.stop('Installed dependencies');
+      installed = true;
     } catch (err) {
       s2.stop(pc.yellow('Skipped install — run it yourself'));
       note(err instanceof Error ? err.message : String(err), 'install');
@@ -104,6 +106,18 @@ export async function scaffold(opts: ScaffoldOptions): Promise<void> {
 
   // 7. next steps
   const rel = relative(process.cwd(), target) || '.';
-  note(`${pc.cyan('cd')} ${rel}\n${pc.cyan(`${pm} dev`)}`, 'Next steps');
-  outro(`${pc.green('Done!')} Happy building with Parche.`);
+  // npm needs `run` for a script; the others take the name directly.
+  const dev = pm === 'npm' ? 'npm run dev' : `${pm} dev`;
+  const install = pm === 'npm' ? 'npm install' : `${pm} install`;
+  const steps = [`${pc.cyan('cd')} ${rel}`];
+  if (installed === false) steps.push(pc.cyan(install));
+  steps.push(pc.cyan(dev));
+  note(steps.join('\n'), 'Next steps');
+
+  // Saying "Done!" after a step failed is how a broken project looks finished.
+  outro(
+    installed === false
+      ? `${pc.yellow('Done, with one step left.')} Install the dependencies and you are set.`
+      : `${pc.green('Done!')} Happy building with Parche.`,
+  );
 }

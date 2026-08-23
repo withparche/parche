@@ -1,4 +1,5 @@
 import { cp } from 'node:fs/promises';
+import { existsSync, readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { homedir } from 'node:os';
 import { downloadTemplate } from 'giget';
@@ -26,10 +27,27 @@ export async function fetchTemplate(
         dir: target,
         forceClean: opts.force,
       });
+
+      // giget resolves the repository, not the subdirectory: asking for a path
+      // that does not exist downloads the tarball, extracts nothing and reports
+      // success. Without this check the scaffolder carries on over an empty
+      // directory and still tells the user everything went well.
+      if (!existsSync(target) || readdirSync(target).length === 0) {
+        throw new Error(`\`${spec}\` resolved to nothing`);
+      }
       return;
     } catch (err) {
       lastErr = err;
     }
   }
-  throw lastErr;
+
+  // Every source failed. The likeliest cause is a template name that does not
+  // exist — often because the two positional arguments were given the other way
+  // round — so say that rather than surfacing the last HTTP error alone.
+  const tried = specs.map((s) => `  ${s}`).join('\n');
+  throw new Error(
+    `Could not fetch a template. Tried:\n${tried}\n\n` +
+      `Usage: parche astro new [template] [directory] — template first.\n` +
+      `Last error: ${lastErr instanceof Error ? lastErr.message : String(lastErr)}`,
+  );
 }
