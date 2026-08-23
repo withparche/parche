@@ -276,6 +276,14 @@ export function createRegistry(
   // `themes.available` still overrides explicitly, for full manual control.
   const themes = userConfig.themes?.available ?? dedupeThemes([DEFAULT_THEME, ...contributedThemes]);
   const showPanel = userConfig.themes?.showPanel ?? themes.length > 1;
+  const defaultTheme = userConfig.themes?.default;
+  if (defaultTheme && !themes.some((t) => t.value === defaultTheme)) {
+    throw new Error(
+      `[parche] themes.default is "${defaultTheme}", which no imported parche provides. ` +
+        `Available: ${themes.map((t) => t.value || '(base)').join(', ')}. ` +
+        `Import the theme parche that contributes it, or list it in themes.available.`,
+    );
+  }
 
   // Aggregate the CSS to bundle: what the parches contribute (e.g. themes) plus
   // an optional user entry. A site ships only the CSS of the parches it imports.
@@ -301,6 +309,7 @@ export function createRegistry(
     i18n,
     themes,
     showPanel,
+    defaultTheme,
     styleEntries,
     contentGlobs,
     apps,

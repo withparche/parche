@@ -5,6 +5,7 @@
  * Falls back to latest posts if no postIds provided.
  */
 import { getCollection } from 'astro:content';
+import { getBlogLinkContext, postHref, postLocale, localizePath } from '../lib/blog-links.js';
 import Container from 'parche:primitives/Container';
 import Section from 'parche:primitives/Section';
 
@@ -22,7 +23,7 @@ interface Props {
 const {
   title,
   linkText = 'View all posts',
-  linkUrl = '/blog',
+  linkUrl,
   information,
   postIds = [],
   id,
@@ -31,6 +32,7 @@ const {
 } = Astro.props;
 
 // Fetch posts — by ID if specified, otherwise latest
+let resolvedLinkUrl = linkUrl ?? '/blog';
 let posts: Array<{
   title: string;
   description?: string;
@@ -39,19 +41,27 @@ let posts: Array<{
 }> = [];
 
 try {
+  const { postPattern, listing, defaultLocale } = await getBlogLinkContext();
+  const locale = Astro.currentLocale ?? defaultLocale;
+  resolvedLinkUrl = linkUrl ?? localizePath(listing, locale, defaultLocale);
+
   const allPosts = await getCollection('posts');
   const nonDraft = allPosts.filter((p: any) => !p.data.draft);
+  const localePosts = nonDraft.filter((p: any) => postLocale(p.id, defaultLocale) === locale);
 
   let selected: typeof allPosts;
 
   if (postIds.length > 0) {
-    // Find posts matching the given IDs, preserve order
+    // Find posts matching the given IDs, preserve order. A bare key resolves to
+    // this locale's copy; a fully-qualified id (e.g. 'es/mi-post') still wins.
+    const match = (pool: typeof allPosts, pid: string) =>
+      pool.find((p: any) => p.id === pid || p.id.endsWith(`/${pid}`) || p.data.urlSlug === pid);
     selected = postIds
-      .map((pid) => nonDraft.find((p: any) => p.id === pid || p.id.endsWith(`/${pid}`) || p.data.urlSlug === pid))
+      .map((pid) => match(localePosts, pid) ?? match(nonDraft, pid))
       .filter(Boolean) as typeof allPosts;
   } else {
-    // Fallback: latest 4 posts
-    selected = nonDraft
+    // Fallback: this locale's latest 4 posts
+    selected = localePosts
       .sort((a: any, b: any) => {
         const dateA = a.data.publishDate ? new Date(a.data.publishDate).getTime() : 0;
         const dateB = b.data.publishDate ? new Date(b.data.publishDate).getTime() : 0;
@@ -60,15 +70,13 @@ try {
       .slice(0, 4);
   }
 
-  posts = selected.map((post: any) => {
-    const slug = post.data.urlSlug || post.id.split('/').pop()?.replace(/\.\w+$/, '') || post.id;
-    return {
-      title: post.data.title,
-      description: post.data.description ?? post.data.excerpt,
-      href: `/${slug}`,
-      image: post.data.image,
-    };
-  });
+  posts = selected.map((post: any) => ({
+    title: post.data.title,
+    description: post.data.description ?? post.data.excerpt,
+    // Honour the configured permalink pattern instead of assuming a root-level slug.
+    href: postHref(postPattern, post, locale, defaultLocale),
+    image: post.data.image,
+  }));
 } catch {
   // Blog collection may not exist — widget renders nothing
 }
@@ -84,10 +92,10 @@ try {
               class="text-3xl font-bold tracking-tight sm:text-4xl sm:leading-none group font-heading mb-2"
               set:html={title}
             />
-            {linkText && linkUrl && (
+            {linkText && resolvedLinkUrl && (
               <a
                 class="text-muted dark:text-slate-400 hover:text-primary transition ease-in duration-200 block mb-6 lg:mb-0"
-                href={linkUrl}
+                href={resolvedLinkUrl}
               >
                 {linkText} »
               </a>

@@ -16,7 +16,7 @@ import { calculateReadingTime } from './utils/reading-time.js';
 import { findRelatedPosts } from './utils/related-posts.js';
 import { extractTOC } from './utils/toc.js';
 import { generateBlogPostingJsonLd, generateBreadcrumbJsonLd } from './utils/blog-metadata.js';
-import { resolvePostPermalink, resolveTaxonomyPermalink } from './types.js';
+import { resolvePostPermalink, resolveTaxonomyPermalink, localizePath } from './types.js';
 
 interface ResolveOptions {
   showDrafts?: boolean;
@@ -64,6 +64,9 @@ export async function resolve(
   const blogConfigModule = await import('parche:app/blog');
   const cfg = blogConfigModule.default as any;
   const permalinks = cfg.permalinks;
+  const { defaultLocale } = await import('parche:config/i18n');
+  const { resolveLabels } = await import('./labels.js');
+  const labels = resolveLabels(cfg.labels, locale, defaultLocale);
 
   const { post, allPosts } = await querySinglePost({
     slug,
@@ -106,7 +109,7 @@ export async function resolve(
         .sort((a, b) => a.data.series!.order - b.data.series!.order)
         .map((p) => ({
           title: p.data.title,
-          href: resolvePostPermalink(permalinks.post, p),
+          href: resolvePostPermalink(permalinks.post, p, locale, defaultLocale),
           order: p.data.series!.order,
         }))
     : [];
@@ -115,7 +118,7 @@ export async function resolve(
   const siteUrl = opts.siteUrl ?? '';
   const siteName = opts.siteName ?? '';
   const base = siteUrl.replace(/\/$/, '');
-  const pageUrl = `${base}${resolvePostPermalink(permalinks.post, post)}`;
+  const pageUrl = `${base}${resolvePostPermalink(permalinks.post, post, locale, defaultLocale)}`;
 
   const blogPostingJsonLd = generateBlogPostingJsonLd({
     post: { ...post.data, readingTime },
@@ -124,10 +127,10 @@ export async function resolve(
     authorName: authorData[0]?.name,
   });
   const breadcrumbJsonLd = generateBreadcrumbJsonLd([
-    { name: 'Home', url: siteUrl || '/' },
-    { name: 'Blog', url: `${base}${permalinks.listing}` },
+    { name: labels.home, url: `${base}${localizePath('/', locale, defaultLocale)}` || '/' },
+    { name: labels.blog, url: `${base}${localizePath(permalinks.listing, locale, defaultLocale)}` },
     ...(post.data.category
-      ? [{ name: post.data.category, url: `${base}${resolveTaxonomyPermalink(permalinks.category, post.data.category)}` }]
+      ? [{ name: post.data.category, url: `${base}${resolveTaxonomyPermalink(permalinks.category, post.data.category, locale, defaultLocale)}` }]
       : []),
     { name: post.data.title, url: pageUrl },
   ]);
@@ -145,7 +148,7 @@ export async function resolve(
       ? related.map((r) => ({
           title: r.data.title,
           description: r.data.description ?? r.data.excerpt,
-          href: resolvePostPermalink(permalinks.post, r),
+          href: resolvePostPermalink(permalinks.post, r, locale, defaultLocale),
           image: r.data.image,
           publishDate: r.data.publishDate,
           category: r.data.category,
@@ -211,18 +214,38 @@ export async function getPaths(
   defaultLocale: string,
   opts: { showDrafts?: boolean } = {},
 ) {
+  const blogConfigModule = await import('parche:app/blog');
+  const permalinks = (blogConfigModule.default as any).permalinks;
+
   const allPosts = await getCollection('posts');
   const published = getPublishedPosts(allPosts, opts.showDrafts);
 
   const seen = new Set<string>();
-  const paths: Array<{ params: { slug: string }; props: { fromResolver: true } }> = [];
+  const paths: Array<{
+    params: { slug: string };
+    props: { fromResolver: true; resolverSlug: string; resolverLocale: string };
+  }> = [];
 
   for (const post of published) {
-    const { postKey } = extractPostLocale(post.id);
-    const slug = post.data.urlSlug ?? postKey;
+    const { locale, postKey } = extractPostLocale(post.id, defaultLocale);
+    // A post whose first id segment isn't a configured locale has no locale dir;
+    // treat it as the default locale rather than inventing a bogus prefix.
+    const postLocale = locales.includes(locale) ? locale : defaultLocale;
+
+    // Reuse the permalink resolver so the generated paths and the links rendered
+    // elsewhere can never disagree. Params are path-relative, so drop the slash.
+    const slug = resolvePostPermalink(permalinks.post, post, postLocale, defaultLocale).replace(/^\//, '');
+
+    // Dedupe on the localized path: two locales sharing a post key no longer
+    // collide, because only one of them is unprefixed.
     if (!seen.has(slug)) {
       seen.add(slug);
-      paths.push({ params: { slug }, props: { fromResolver: true } });
+      // Carry the lookup key and locale explicitly: the URL may contain date
+      // segments (e.g. /2026/03/my-post) that the post lookup must not see.
+      paths.push({
+        params: { slug },
+        props: { fromResolver: true, resolverSlug: post.data.urlSlug ?? postKey, resolverLocale: postLocale },
+      });
     }
   }
 

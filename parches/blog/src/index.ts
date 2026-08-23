@@ -5,7 +5,9 @@ import type { BlogConfig } from './types.js';
 import { resolveBlogConfig, permalinkToRoutePattern } from './types.js';
 
 export type { BlogConfig } from './types.js';
-export { resolvePostPermalink, resolveTaxonomyPermalink } from './types.js';
+export { resolvePostPermalink, resolveTaxonomyPermalink, localizePath } from './types.js';
+export { DEFAULT_LABELS, resolveLabels, format } from './labels.js';
+export type { BlogLabels, BlogLabelsConfig } from './labels.js';
 
 /**
  * Check if a post permalink pattern produces a route that could conflict

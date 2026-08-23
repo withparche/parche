@@ -8,6 +8,11 @@ interface SeriesPost {
 }
 
 interface Props {
+  /** Localizable strings. `{current}`/`{total}` are substituted in `partText`. */
+  seriesLabel?: string;
+  partText?: string;
+  prevText?: string;
+  nextText?: string;
   seriesName: string;
   posts: SeriesPost[];
   currentOrder: number;
@@ -15,6 +20,10 @@ interface Props {
 }
 
 const {
+  seriesLabel = 'Series:',
+  partText = 'Part {current} of {total}',
+  prevText = 'Previous',
+  nextText = 'Next',
   seriesName,
   posts,
   currentOrder,
@@ -28,8 +37,8 @@ const nextPost = currentIndex < sorted.length - 1 ? sorted[currentIndex + 1] : n
 ---
 
 <div class:list={['border border-border rounded-xl p-6', className]}>
-  <h3 class="font-semibold text-heading mb-1">Series: {seriesName}</h3>
-  <p class="text-sm text-muted mb-4">Part {currentOrder} of {sorted.length}</p>
+  <h3 class="font-semibold text-heading mb-1">{seriesLabel} {seriesName}</h3>
+  <p class="text-sm text-muted mb-4">{partText.replace('{current}', String(currentOrder)).replace('{total}', String(sorted.length))}</p>
 
   <ol class="space-y-1.5 mb-6">
     {sorted.map((post) => (
@@ -53,12 +62,12 @@ const nextPost = currentIndex < sorted.length - 1 ? sorted[currentIndex + 1] : n
   <div class="flex justify-between gap-4">
     {prevPost ? (
       <a href={prevPost.href} class="text-sm text-muted hover:text-primary transition-colors">
-        &larr; Previous
+        &larr; {prevText}
       </a>
     ) : <span />}
     {nextPost ? (
       <a href={nextPost.href} class="text-sm text-muted hover:text-primary transition-colors">
-        Next &rarr;
+        {nextText} &rarr;
       </a>
     ) : <span />}
   </div>

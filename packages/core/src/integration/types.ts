@@ -178,6 +178,13 @@ export interface ParcheThemesConfig {
   available?: Array<{ label: string; value: string }>;
   /** Show the floating theme panel. Default: true when multiple themes are available */
   showPanel?: boolean;
+  /**
+   * Theme applied on first paint, as the `data-theme` attribute rendered on
+   * `<html>` by the server. Without it a first-time visitor always sees the base
+   * look, because the switcher only reads localStorage on the client. A visitor's
+   * own stored choice still wins. Default: none (base look).
+   */
+  default?: string;
 }
 
 export interface ParcheSeoConfig {
@@ -236,6 +243,8 @@ export interface ResolvedRegistry {
   i18n: ParcheI18nConfig;
   /** Resolved themes config */
   themes: Array<{ label: string; value: string }>;
+  /** Theme rendered server-side on <html data-theme>, before any client script. */
+  defaultTheme?: string;
   /** Whether to show the floating theme panel */
   showPanel: boolean;
   /** Absolute CSS paths to import via parche:config/styles (parche-contributed + user entry) */

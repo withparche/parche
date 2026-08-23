@@ -61,6 +61,8 @@ declare module 'parche:config/i18n' {
 declare module 'parche:config/themes' {
   export const themes: Array<{ label: string; value: string }>;
   export const showPanel: boolean;
+  /** Theme rendered server-side on <html data-theme>, or null for the base look. */
+  export const defaultTheme: string | null;
 }
 
 declare module 'parche:config/layout' {

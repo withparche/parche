@@ -17,9 +17,10 @@ import config from 'parche:config';
 import blogConfig from 'parche:app/blog';
 import { queryBlogListing } from '../../utils/blog-query.js';
 import { calculateReadingTime } from '../../utils/reading-time.js';
-import { resolvePostPermalink, resolveTaxonomyPermalink } from '../../types.js';
+import { resolvePostPermalink, resolveTaxonomyPermalink, localizePath } from '../../types.js';
 import { resolveLayout } from 'parche:utils/layout';
 import { defaultLocale } from 'parche:config/i18n';
+import { resolveLabels, format } from '../../labels.js';
 
 const cfg = blogConfig as any;
 const permalinks = cfg.permalinks;
@@ -61,9 +62,19 @@ const page = await queryBlogListing({
   page: pageNum,
   pageSize: cfg.postsPerPage ?? 12,
   showDrafts,
-  baseUrl: permalinks.listing,
+  baseUrl: localizePath(permalinks.listing, locale, defaultLocale),
 });
 
+
+// The entrypoint is shared by /blog and /<locale>/blog, and Astro caches
+// getStaticPaths per component — so the generated path set is the union across
+// locales. Anything absent in *this* locale is sent to 404 here instead of being
+// rendered as an empty, indexable page.
+if (page.data.length === 0 && pageNum > 1) {
+  return Astro.redirect('/404');
+}
+
+const labels = resolveLabels(cfg.labels, locale, defaultLocale);
 const layoutSections = await resolveLayout('default', locale, defaultLocale);
 
 const posts = page.data.map((post: any) => {
@@ -73,7 +84,7 @@ const posts = page.data.map((post: any) => {
   return {
     title: post.data.title,
     description: post.data.description ?? post.data.excerpt,
-    href: resolvePostPermalink(permalinks.post, post),
+    href: resolvePostPermalink(permalinks.post, post, locale, defaultLocale),
     image: post.data.image,
     publishDate: post.data.publishDate,
     category: post.data.category,
@@ -81,13 +92,13 @@ const posts = page.data.map((post: any) => {
     readingTime: post.data.readingTime ?? rt?.minutes,
     featured: post.data.featured,
     draft: post.data.draft,
-    categoryHref: post.data.category ? resolveTaxonomyPermalink(permalinks.category, post.data.category) : undefined,
-    tagHrefs: post.data.tags?.map((t: string) => resolveTaxonomyPermalink(permalinks.tag, t)),
+    categoryHref: post.data.category ? resolveTaxonomyPermalink(permalinks.category, post.data.category, locale, defaultLocale) : undefined,
+    tagHrefs: post.data.tags?.map((t: string) => resolveTaxonomyPermalink(permalinks.tag, t, locale, defaultLocale)),
   };
 });
 
 const metadata = {
-  title: `Blog — ${config.site.name}`,
+  title: `${labels.listingTitle} — ${config.site.name}`,
   description: config.site.description,
   noindex: false,
   nofollow: false,
@@ -99,11 +110,15 @@ const metadata = {
 <BaseLayout metadata={metadata} config={config} lang={locale}>
   <LayoutRenderer layoutSections={layoutSections}>
     <BlogList
-      title="Blog"
+      title={labels.listingTitle}
       posts={posts}
       currentPage={page.currentPage}
       totalPages={page.lastPage}
-      baseUrl={permalinks.listing}
+      baseUrl={localizePath(permalinks.listing, locale, defaultLocale)}
+      emptyText={labels.emptyState}
+      readingTimeText={labels.readingTime}
+      prevText={labels.newerPosts}
+      nextText={labels.olderPosts}
     />
   </LayoutRenderer>
   {showPanel && <ThemePanel />}

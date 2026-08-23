@@ -28,6 +28,8 @@
  *   category: '/blog/category/%category%'         → /blog/category/tutorials
  *   listing:  '/blog'                             → /blog
  */
+import type { BlogLabelsConfig } from './labels.js';
+
 export interface BlogPermalinks {
   /** Blog listing page. Default: '/blog' */
   listing?: string;
@@ -84,6 +86,11 @@ export interface BlogConfig {
   series?: boolean;
   /** Date format string. Default: 'MMMM d, yyyy' */
   dateFormat?: string;
+  /**
+   * UI strings keyed by locale, e.g. `{ es: { listingTitle: 'Blog' } }`.
+   * Anything omitted falls back to the English defaults. See ./labels.ts.
+   */
+  labels?: BlogLabelsConfig;
 }
 
 export interface ResolvedPermalinks {
@@ -106,6 +113,7 @@ export interface ResolvedBlogConfig {
   rss: boolean;
   series: boolean;
   dateFormat: string;
+  labels: BlogLabelsConfig;
 }
 
 export function resolveBlogConfig(config?: BlogConfig): ResolvedBlogConfig {
@@ -129,12 +137,22 @@ export function resolveBlogConfig(config?: BlogConfig): ResolvedBlogConfig {
     rss: config?.rss ?? true,
     series: config?.series ?? false,
     dateFormat: config?.dateFormat ?? 'MMMM d, yyyy',
+    labels: config?.labels ?? {},
   };
 }
 
 /** Slugify a string for URL usage. */
 function slugify(str: string): string {
-  return str.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').trim();
+  return str
+    // Decompose accented letters, then drop the combining marks, so "Guías" becomes
+    // "guias" rather than "gus" — \w is ASCII-only and would otherwise delete them.
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '');
 }
 
 /** Extract the post key (without locale prefix) from a content entry ID. */
@@ -143,15 +161,27 @@ function postKeyFromId(id: string): string {
   return slashIdx !== -1 ? id.slice(slashIdx + 1) : id;
 }
 
+/**
+ * Prefix a resolved path with the locale segment, unless it is the default locale.
+ * Parche never prefixes the default locale (see core's expectedSlugFor), so this
+ * mirrors that rule for every link the blog generates.
+ */
+export function localizePath(path: string, locale?: string, defaultLocale?: string): string {
+  if (!locale || !defaultLocale || locale === defaultLocale) return path;
+  return `/${locale}${path.startsWith('/') ? path : `/${path}`}`;
+}
+
 /** Resolve a post permalink from pattern + post data. */
 export function resolvePostPermalink(
   pattern: string,
   post: { id: string; data: { urlSlug?: string; publishDate: Date; category?: string; authors?: string[] } },
+  locale?: string,
+  defaultLocale?: string,
 ): string {
   const d = post.data.publishDate;
   const pad = (n: number) => String(n).padStart(2, '0');
 
-  return pattern
+  const path = pattern
     .replace(/%slug%/g, post.data.urlSlug ?? postKeyFromId(post.id))
     .replace(/%year%/g, String(d.getFullYear()))
     .replace(/%month%/g, pad(d.getMonth() + 1))
@@ -161,15 +191,24 @@ export function resolvePostPermalink(
     .replace(/%second%/g, pad(d.getSeconds()))
     .replace(/%category%/g, post.data.category ? slugify(post.data.category) : 'uncategorized')
     .replace(/%author%/g, post.data.authors?.[0] ? slugify(post.data.authors[0]) : 'anonymous');
+
+  return localizePath(path, locale, defaultLocale);
 }
 
 /** Resolve a taxonomy permalink (tag, category, author, series). */
-export function resolveTaxonomyPermalink(pattern: string, value: string): string {
-  return pattern
+export function resolveTaxonomyPermalink(
+  pattern: string,
+  value: string,
+  locale?: string,
+  defaultLocale?: string,
+): string {
+  const path = pattern
     .replace(/%tag%/g, value.toLowerCase())
     .replace(/%category%/g, value.toLowerCase())
     .replace(/%author%/g, value.toLowerCase())
     .replace(/%series%/g, value.toLowerCase().replace(/\s+/g, '-'));
+
+  return localizePath(path, locale, defaultLocale);
 }
 
 /**

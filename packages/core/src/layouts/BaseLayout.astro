@@ -6,6 +6,7 @@ import { parcheFontDefs } from '../config/font-variables.js';
 import type { ResolvedMetadata } from '../utils/metadata';
 import { buildRobotsContent, buildBreadcrumbs, buildJsonLdGraph } from '../utils/metadata';
 import type { SiteConfig } from '../types/config';
+import { defaultTheme } from 'parche:config/themes';
 
 interface Props {
   metadata: ResolvedMetadata;
@@ -33,7 +34,7 @@ const twitterHandle = config.metadata?.twitterHandle;
 const article = metadata.ogType === 'article' ? metadata.article : undefined;
 ---
 
-<html lang={locale}>
+<html lang={locale} data-theme={defaultTheme || undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -91,9 +92,13 @@ const article = metadata.ogType === 'article' ? metadata.article : undefined;
         if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
           d.classList.add('dark');
         }
+        // The server may already have rendered data-theme (themes.default), so a
+        // first paint is correct with no script. A visitor's own choice wins, and
+        // choosing the base look ('') must clear the attribute, not be ignored.
         var siteTheme = localStorage.getItem('site-theme');
-        if (siteTheme) {
-          d.setAttribute('data-theme', siteTheme);
+        if (siteTheme !== null) {
+          if (siteTheme) d.setAttribute('data-theme', siteTheme);
+          else d.removeAttribute('data-theme');
         }
 
         // Preserve theme state across View Transitions

@@ -16,9 +16,10 @@ import blogConfig from 'parche:app/blog';
 import { getCollection, getEntry } from 'astro:content';
 import { queryPostsByAuthor } from '../../../utils/blog-query.js';
 import { calculateReadingTime } from '../../../utils/reading-time.js';
-import { resolvePostPermalink, resolveTaxonomyPermalink } from '../../../types.js';
+import { resolvePostPermalink, resolveTaxonomyPermalink, localizePath } from '../../../types.js';
 import { resolveLayout } from 'parche:utils/layout';
 import { defaultLocale } from 'parche:config/i18n';
+import { resolveLabels, format } from '../../../labels.js';
 import { extractPostLocale } from '../../../utils/post-helpers.js';
 import Container from 'parche:primitives/Container';
 import Section from 'parche:primitives/Section';
@@ -73,7 +74,7 @@ const { author } = Astro.params;
 const isDev = import.meta.env.DEV;
 const showDrafts = isDev && cfg.showDraftsInDev;
 const pageNum = parseInt(Astro.params.page ?? '') || 1;
-const authorBaseUrl = resolveTaxonomyPermalink(permalinks.author, author!);
+const authorBaseUrl = resolveTaxonomyPermalink(permalinks.author, author!, locale, defaultLocale);
 
 const page = await queryPostsByAuthor({
   authorKey: author!,
@@ -92,6 +93,16 @@ try {
   if (authorEntry) authorData = authorEntry.data;
 } catch { /* fallback to slug as name */ }
 
+
+// The entrypoint is shared by /author and /<locale>/author, and Astro caches
+// getStaticPaths per component — so the generated path set is the union across
+// locales. Anything absent in *this* locale is sent to 404 here instead of being
+// rendered as an empty, indexable page.
+if (page.data.length === 0) {
+  return Astro.redirect('/404');
+}
+
+const labels = resolveLabels(cfg.labels, locale, defaultLocale);
 const layoutSections = await resolveLayout('default', locale, defaultLocale);
 
 const posts = page.data.map((post: any) => {
@@ -101,20 +112,20 @@ const posts = page.data.map((post: any) => {
   return {
     title: post.data.title,
     description: post.data.description ?? post.data.excerpt,
-    href: resolvePostPermalink(permalinks.post, post),
+    href: resolvePostPermalink(permalinks.post, post, locale, defaultLocale),
     image: post.data.image,
     publishDate: post.data.publishDate,
     category: post.data.category,
     tags: post.data.tags,
     readingTime: post.data.readingTime ?? rt?.minutes,
-    categoryHref: post.data.category ? resolveTaxonomyPermalink(permalinks.category, post.data.category) : undefined,
-    tagHrefs: post.data.tags?.map((t: string) => resolveTaxonomyPermalink(permalinks.tag, t)),
+    categoryHref: post.data.category ? resolveTaxonomyPermalink(permalinks.category, post.data.category, locale, defaultLocale) : undefined,
+    tagHrefs: post.data.tags?.map((t: string) => resolveTaxonomyPermalink(permalinks.tag, t, locale, defaultLocale)),
   };
 });
 
 const metadata = {
   title: `${authorData.name} — ${config.site.name}`,
-  description: authorData.bio ?? `Posts by ${authorData.name}`,
+  description: authorData.bio ?? format(labels.authorTitle, { value: authorData.name }),
   noindex: false,
   nofollow: false,
   ogType: 'profile' as const,
@@ -122,8 +133,8 @@ const metadata = {
 };
 
 const breadcrumbs = [
-  { label: 'Home', href: '/' },
-  { label: 'Blog', href: permalinks.listing },
+  { label: labels.home, href: localizePath('/', locale, defaultLocale) },
+  { label: labels.blog, href: localizePath(permalinks.listing, locale, defaultLocale) },
   { label: authorData.name },
 ];
 ---
@@ -149,11 +160,15 @@ const breadcrumbs = [
     </Section>
 
     <BlogList
-      title={`Posts by ${authorData.name}`}
+      title={format(labels.authorTitle, { value: authorData.name })}
       posts={posts}
       currentPage={page.currentPage}
       totalPages={page.lastPage}
       baseUrl={authorBaseUrl}
+      emptyText={labels.emptyState}
+      readingTimeText={labels.readingTime}
+      prevText={labels.newerPosts}
+      nextText={labels.olderPosts}
     />
   </LayoutRenderer>
   {showPanel && <ThemePanel />}

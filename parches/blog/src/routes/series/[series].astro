@@ -12,9 +12,10 @@ import Breadcrumbs from 'parche:widgets/blog/Breadcrumbs';
 import config from 'parche:config';
 import blogConfig from 'parche:app/blog';
 import { queryPostsBySeries, queryAllSeries } from '../../utils/blog-query.js';
-import { resolvePostPermalink } from '../../types.js';
+import { resolvePostPermalink, localizePath } from '../../types.js';
 import { resolveLayout } from 'parche:utils/layout';
 import { defaultLocale } from 'parche:config/i18n';
+import { resolveLabels, format } from '../../labels.js';
 import Container from 'parche:primitives/Container';
 import Section from 'parche:primitives/Section';
 
@@ -48,11 +49,19 @@ const isDev = import.meta.env.DEV;
 const showDrafts = isDev && cfg.showDraftsInDev;
 
 const posts = await queryPostsBySeries({ seriesName, locale, showDrafts });
+
+// Series names are unioned across locales in getStaticPaths (shared entrypoint),
+// so a series that has no posts in *this* locale must 404 rather than render empty.
+if (posts.length === 0) {
+  return Astro.redirect('/404');
+}
+
+const labels = resolveLabels(cfg.labels, locale, defaultLocale);
 const layoutSections = await resolveLayout('default', locale, defaultLocale);
 
 const metadata = {
-  title: `Series: ${seriesName} — ${config.site.name}`,
-  description: `All posts in the "${seriesName}" series`,
+  title: `${format(labels.seriesTitle, { value: seriesName })} — ${config.site.name}`,
+  description: format(labels.seriesDescription, { value: seriesName }),
   noindex: false,
   nofollow: false,
   ogType: 'website' as const,
@@ -60,9 +69,9 @@ const metadata = {
 };
 
 const breadcrumbs = [
-  { label: 'Home', href: '/' },
-  { label: 'Blog', href: permalinks.listing },
-  { label: `Series: ${seriesName}` },
+  { label: labels.home, href: localizePath('/', locale, defaultLocale) },
+  { label: labels.blog, href: localizePath(permalinks.listing, locale, defaultLocale) },
+  { label: format(labels.seriesTitle, { value: seriesName }) },
 ];
 ---
 
@@ -77,7 +86,7 @@ const breadcrumbs = [
     <Section>
       <Container class="max-w-4xl">
         <h1 class="type-h1 mb-4">{seriesName}</h1>
-        <p class="type-body text-muted mb-8">{posts.length} posts in this series</p>
+        <p class="type-body text-muted mb-8">{format(labels.seriesCount, { count: posts.length })}</p>
 
         <ol class="space-y-4">
           {posts.map((post: any, index: number) => (
@@ -87,7 +96,7 @@ const breadcrumbs = [
               </span>
               <div class="flex-1">
                 <a
-                  href={resolvePostPermalink(permalinks.post, post)}
+                  href={resolvePostPermalink(permalinks.post, post, locale, defaultLocale)}
                   class="type-h4 text-heading hover:text-primary transition-colors"
                 >
                   {post.data.title}

@@ -5,6 +5,7 @@
  * Used on homepage sections.
  */
 import { getCollection } from 'astro:content';
+import { getBlogLinkContext, postHref, postLocale, localizePath } from '../lib/blog-links.js';
 import Container from 'parche:primitives/Container';
 import Section from 'parche:primitives/Section';
 
@@ -22,7 +23,7 @@ interface Props {
 const {
   title = 'Latest Posts',
   linkText = 'View all posts',
-  linkUrl = '/blog',
+  linkUrl,
   information,
   count = 4,
   id,
@@ -31,6 +32,7 @@ const {
 } = Astro.props;
 
 // Fetch latest posts
+let resolvedLinkUrl = linkUrl ?? '/blog';
 let posts: Array<{
   title: string;
   description?: string;
@@ -39,8 +41,14 @@ let posts: Array<{
 }> = [];
 
 try {
+  const { postPattern, listing, defaultLocale } = await getBlogLinkContext();
+  const locale = Astro.currentLocale ?? defaultLocale;
+  resolvedLinkUrl = linkUrl ?? localizePath(listing, locale, defaultLocale);
+
   const allPosts = await getCollection('posts');
   const sorted = allPosts
+    // Only this locale's posts — otherwise a Spanish page lists English posts.
+    .filter((p: any) => postLocale(p.id, defaultLocale) === locale)
     .filter((p: any) => !p.data.draft)
     .sort((a: any, b: any) => {
       const dateA = a.data.publishDate ? new Date(a.data.publishDate).getTime() : 0;
@@ -49,16 +57,13 @@ try {
     })
     .slice(0, count);
 
-  posts = sorted.map((post: any) => {
-    // Derive href from post slug (remove locale prefix)
-    const slug = post.data.urlSlug || post.id.split('/').pop()?.replace(/\.\w+$/, '') || post.id;
-    return {
-      title: post.data.title,
-      description: post.data.description ?? post.data.excerpt,
-      href: `/${slug}`,
-      image: post.data.image,
-    };
-  });
+  posts = sorted.map((post: any) => ({
+    title: post.data.title,
+    description: post.data.description ?? post.data.excerpt,
+    // Honour the configured permalink pattern instead of assuming a root-level slug.
+    href: postHref(postPattern, post, locale, defaultLocale),
+    image: post.data.image,
+  }));
 } catch {
   // Blog collection may not exist — widget renders nothing
 }
@@ -74,10 +79,10 @@ try {
               class="text-3xl font-bold tracking-tight sm:text-4xl sm:leading-none group font-heading mb-2"
               set:html={title}
             />
-            {linkText && linkUrl && (
+            {linkText && resolvedLinkUrl && (
               <a
                 class="text-muted dark:text-slate-400 hover:text-primary transition ease-in duration-200 block mb-6 lg:mb-0"
-                href={linkUrl}
+                href={resolvedLinkUrl}
               >
                 {linkText} »
               </a>

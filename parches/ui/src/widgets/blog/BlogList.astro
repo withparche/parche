@@ -31,6 +31,12 @@ interface Props {
   currentPage?: number;
   totalPages?: number;
   baseUrl?: string;
+  /** Localizable UI strings. Defaults are English; the blog parche passes the
+   *  site's per-locale labels. */
+  emptyText?: string;
+  readingTimeText?: string;
+  prevText?: string;
+  nextText?: string;
   id?: string;
   class?: string;
 }
@@ -43,6 +49,10 @@ const {
   currentPage,
   totalPages,
   baseUrl,
+  emptyText = 'No posts found.',
+  readingTimeText,
+  prevText,
+  nextText,
   id,
   class: className = '',
 } = Astro.props;
@@ -64,20 +74,20 @@ const isGrid = variant === 'grid';
     isGrid ? (
       <div class="grid gap-6 row-gap-5 md:grid-cols-2 lg:grid-cols-3 -mb-6">
         {posts.map((post) => (
-          <BlogPostCardGrid {...post} />
+          <BlogPostCardGrid readingTimeText={readingTimeText} {...post} />
         ))}
       </div>
     ) : (
       <ul>
         {posts.map((post) => (
           <li class="mb-12 md:mb-20">
-            <BlogPostCard {...post} />
+            <BlogPostCard readingTimeText={readingTimeText} {...post} />
           </li>
         ))}
       </ul>
     )
   ) : (
-    <p class="text-center text-muted text-lg">No posts found.</p>
+    <p class="text-center text-muted text-lg">{emptyText}</p>
   )}
 
   {currentPage && totalPages && totalPages > 1 && baseUrl && (
@@ -85,6 +95,8 @@ const isGrid = variant === 'grid';
       currentPage={currentPage}
       totalPages={totalPages}
       baseUrl={baseUrl}
+      prevText={prevText}
+      nextText={nextText}
     />
   )}
 </section>

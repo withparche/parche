@@ -174,3 +174,48 @@ test('requires: structural widget props are recorded for the schema check', () =
     ]);
   });
 });
+
+// --- themes.default (server-rendered data-theme) ---
+
+/** A theme parche contributes its CSS plus a switcher entry. */
+const themeParche = (value: string, label = value) => ({
+  name: `theme-${value}`,
+  styles: [`/tmp/${value}.css`],
+  themes: [{ label, value }],
+});
+
+test('themes.default: absent by default, so the base look renders', () => {
+  const reg = createRegistry({ parches: [] }, ROOT);
+  assert.equal(reg.defaultTheme, undefined);
+});
+
+test('themes.default: a value contributed by a parche is accepted', () => {
+  const reg = createRegistry(
+    { parches: [themeParche('astrowind', 'AstroWind')], themes: { default: 'astrowind' } } as any,
+    ROOT,
+  );
+  assert.equal(reg.defaultTheme, 'astrowind');
+  assert.ok(reg.themes.some((t) => t.value === 'astrowind'));
+});
+
+test('themes.default: an unprovided value fails fast, naming what is available', () => {
+  assert.throws(
+    () => createRegistry({ parches: [themeParche('minimal')], themes: { default: 'astrowind' } } as any, ROOT),
+    (err: Error) => {
+      assert.match(err.message, /themes\.default is "astrowind"/);
+      assert.match(err.message, /minimal/);
+      return true;
+    },
+  );
+});
+
+test('themes.default: themes.available can declare the value without a parche', () => {
+  const reg = createRegistry(
+    {
+      parches: [],
+      themes: { available: [{ label: 'AstroWind', value: 'astrowind' }], default: 'astrowind' },
+    } as any,
+    ROOT,
+  );
+  assert.equal(reg.defaultTheme, 'astrowind');
+});

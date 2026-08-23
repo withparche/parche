@@ -6,7 +6,7 @@ import LayoutRenderer from 'parche:LayoutRenderer';
 import DynamicRenderer from 'parche:DynamicRenderer';
 import config from 'parche:config';
 import { templateMap } from 'parche:registry/templates';
-import { defaultLocale } from 'parche:config/i18n';
+import { defaultLocale, locales } from 'parche:config/i18n';
 import { showPanel } from 'parche:config/themes';
 import { resolveContent, getResolverPaths } from 'parche:registry/resolvers';
 import { getEntry, render } from 'astro:content';
@@ -40,11 +40,25 @@ export async function getStaticPaths() {
   });
 
   // Add paths from app resolvers (e.g. blog posts at root level)
-  const { locales } = await import('parche:config/i18n');
   const isDev = import.meta.env.DEV;
   const resolverPaths = await getResolverPaths(locales, defaultLocale, { showDrafts: isDev });
 
   return [...pagePaths, ...resolverPaths];
+}
+
+/**
+ * Split a leading locale segment off a slug. Resolver-backed URLs are prefixed
+ * for non-default locales (e.g. 'es/mi-post'), and the app that resolves them
+ * expects the bare key plus the locale, not the prefixed path.
+ */
+function splitLocale(slug: string | undefined): { locale: string; rest: string } {
+  if (!slug) return { locale: defaultLocale, rest: '' };
+  const idx = slug.indexOf('/');
+  const head = idx === -1 ? slug : slug.slice(0, idx);
+  if (head !== defaultLocale && locales.includes(head)) {
+    return { locale: head, rest: idx === -1 ? '' : slug.slice(idx + 1) };
+  }
+  return { locale: defaultLocale, rest: slug };
 }
 
 // ---- Render-time ----
@@ -62,8 +76,12 @@ let alternates: { locale: string; href: string }[] = [];
 const isDev = import.meta.env.DEV;
 
 if (Astro.props.fromResolver) {
-  // Static mode — this path came from a resolver's getPaths()
-  resolvedApp = await resolveContent(Astro.params.slug!, locale, {
+  // Static mode — this path came from a resolver's getPaths(), which supplies the
+  // lookup key and locale explicitly (the URL may carry a locale prefix and/or
+  // date segments that the lookup must not see).
+  const fromProps = splitLocale(Astro.params.slug);
+  locale = Astro.props.resolverLocale ?? fromProps.locale;
+  resolvedApp = await resolveContent(Astro.props.resolverSlug ?? fromProps.rest, locale, {
     showDrafts: isDev,
     siteUrl: config.site.url || Astro.site?.href || '',
     siteName: config.site.name,
@@ -77,8 +95,11 @@ if (Astro.props.fromResolver) {
   // Static mode — page data provided by getStaticPaths
   ({ pageData, locale, pageKey, entryId } = Astro.props);
 } else {
-  // SSR mode — try resolvers first, then pages
-  resolvedApp = await resolveContent(Astro.params.slug ?? '', locale, {
+  // SSR mode — try resolvers first, then pages. The locale prefix is part of the
+  // URL here, so peel it off before asking the app to resolve the content.
+  const fromUrl = splitLocale(Astro.params.slug);
+  locale = fromUrl.locale;
+  resolvedApp = await resolveContent(fromUrl.rest, locale, {
     showDrafts: isDev,
     siteUrl: config.site.url || Astro.site?.href || '',
     siteName: config.site.name,

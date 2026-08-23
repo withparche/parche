@@ -87,6 +87,7 @@ const userConfigSchema = z
       .object({
         available: z.array(z.object({ label: z.string(), value: z.string() })).optional(),
         showPanel: z.boolean().optional(),
+        default: z.string().optional(),
       })
       .strict()
       .optional(),

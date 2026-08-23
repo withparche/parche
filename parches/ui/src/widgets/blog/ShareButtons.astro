@@ -5,6 +5,8 @@
  */
 
 interface Props {
+  /** Leading label, e.g. 'Share:'. */
+  shareText?: string;
   url: string;
   title: string;
   description?: string;
@@ -12,6 +14,7 @@ interface Props {
 }
 
 const {
+  shareText = 'Share:',
   url,
   title,
   class: className = 'inline-block',
@@ -19,7 +22,7 @@ const {
 ---
 
 <div class={className}>
-  <span class="align-super font-bold text-slate-500 dark:text-slate-400">Share:</span>
+  <span class="align-super font-bold text-slate-500 dark:text-slate-400">{shareText}</span>
   <button
     class="ml-2 rtl:ml-0 rtl:mr-2"
     title="Twitter Share"

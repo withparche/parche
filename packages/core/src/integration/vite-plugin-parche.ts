@@ -195,6 +195,7 @@ export const defaultLocale = ${JSON.stringify(registry.i18n.defaultLocale)};
 function generateThemesConfigModule(registry: ResolvedRegistry): string {
   return `export const themes = ${JSON.stringify(registry.themes)};
 export const showPanel = ${JSON.stringify(registry.showPanel)};
+export const defaultTheme = ${JSON.stringify(registry.defaultTheme ?? null)};
 `;
 }
 
