@@ -15,12 +15,6 @@ catalogs:
     '@astrojs/rss':
       specifier: ^4.0.19
       version: 4.0.19
-    '@iconify-json/lucide':
-      specifier: ^1.2.98
-      version: 1.2.124
-    '@iconify-json/simple-icons':
-      specifier: ^1.2.75
-      version: 1.2.93
     '@iconify-json/tabler':
       specifier: ^1.2.38
       version: 1.2.38
@@ -68,9 +62,6 @@ importers:
 
   demos/astrowind:
     dependencies:
-      '@iconify-json/simple-icons':
-        specifier: ^1.2.75
-        version: 1.2.93
       '@iconify-json/tabler':
         specifier: ^1.2.38
         version: 1.2.38
@@ -107,12 +98,6 @@ importers:
 
   examples/blog:
     dependencies:
-      '@iconify-json/lucide':
-        specifier: 'catalog:'
-        version: 1.2.124
-      '@iconify-json/simple-icons':
-        specifier: 'catalog:'
-        version: 1.2.93
       '@iconify-json/tabler':
         specifier: 'catalog:'
         version: 1.2.38
@@ -539,6 +524,9 @@ importers:
         specifier: 'catalog:'
         version: 4.4.3
     devDependencies:
+      '@iconify-json/tabler':
+        specifier: 'catalog:'
+        version: 1.2.38
       astro:
         specifier: 'catalog:'
         version: 7.2.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@22.20.1)(jiti@2.7.0)(tsx@4.23.12)
@@ -1221,12 +1209,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
-
-  '@iconify-json/lucide@1.2.124':
-    resolution: {integrity: sha512-mO6JyBVNER7uXEkW2bXiN9Rrm6w91IXxwnNmIMbu2KZX0ZPcVZH1xDUTw94pryxESUIpBhinkOUIZIav+TA9ng==}
-
-  '@iconify-json/simple-icons@1.2.93':
-    resolution: {integrity: sha512-/XhANjfGYOuqvSR3TmUnkQkINvQ4GVjVuukvymRbxtVFBvIq/yiXJqCDycKcQPT401OYT9H2vIY6ihAlz1QIAw==}
 
   '@iconify-json/tabler@1.2.38':
     resolution: {integrity: sha512-9v6ooRU/bKOK/Whv4w2aiK5gBnfCV9Ei+uD1iDDeLu2b+EnF3G3ZKkRKWEOOLG8bJyfKn6XEia6gUQ9oO7cF+Q==}
@@ -3558,14 +3540,6 @@ snapshots:
 
   '@esbuild/win32-x64@0.28.2':
     optional: true
-
-  '@iconify-json/lucide@1.2.124':
-    dependencies:
-      '@iconify/types': 2.0.0
-
-  '@iconify-json/simple-icons@1.2.93':
-    dependencies:
-      '@iconify/types': 2.0.0
 
   '@iconify-json/tabler@1.2.38':
     dependencies:

@@ -11,10 +11,17 @@
     "zod": "catalog:"
   },
   "peerDependencies": {
-    "astro": "catalog:"
+    "astro": "catalog:",
+    "@iconify-json/tabler": "*"
+  },
+  "peerDependenciesMeta": {
+    "@iconify-json/tabler": {
+      "optional": true
+    }
   },
   "devDependencies": {
-    "astro": "catalog:"
+    "astro": "catalog:",
+    "@iconify-json/tabler": "catalog:"
   },
   "engines": {
     "node": ">=20"

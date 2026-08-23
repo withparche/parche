@@ -13,8 +13,6 @@
     "@parche/core": "workspace:*",
     "@parche/primitives": "workspace:*",
     "@parche/ui": "workspace:*",
-    "@iconify-json/lucide": "catalog:",
-    "@iconify-json/simple-icons": "catalog:",
     "@iconify-json/tabler": "catalog:",
     "@tailwindcss/vite": "catalog:",
     "astro": "catalog:",

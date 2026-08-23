@@ -11,12 +11,17 @@ interface SocialLinks {
   website?: string;
 }
 
+// Tabler, like every other default in this package. Two reasons not to mix sets
+// here: it was the only widget pulling `simple-icons` and `lucide` into a
+// consumer's install, and simple-icons drops brands on trademark request — it
+// has already removed `linkedin` and `x`, so refreshing that range would blank
+// these links with no build error.
 const socialIconMap: Record<string, string> = {
-  twitter: 'simple-icons:x',
-  github: 'simple-icons:github',
-  linkedin: 'simple-icons:linkedin',
-  mastodon: 'simple-icons:mastodon',
-  website: 'lucide:globe',
+  twitter: 'tabler:brand-x',
+  github: 'tabler:brand-github',
+  linkedin: 'tabler:brand-linkedin',
+  mastodon: 'tabler:brand-mastodon',
+  website: 'tabler:world',
 };
 
 interface Props {

@@ -14,14 +14,12 @@ export default defineConfig({
     parche({ parches: [createPrimitives(), createUI()], config: './parche.config.ts' }),
     // Scoped icon set (SSR). Parche is data-driven: widgets receive icon `name`s
     // from JSON content, so the names are dynamic and astro-icon can't tree-shake
-    // by scanning code. Without `include` it bundles the ENTIRE tabler/lucide/
-    // simple-icons sets (~2 MB) resident in the SSR server process. List exactly
-    // the icons this demo's content + widgets use; add here when you use a new one.
+    // by scanning code. Without `include` it bundles the ENTIRE tabler set
+    // (~2 MB) resident in the SSR server process. List exactly the icons this
+    // demo's content + widgets use; add here when you use a new one.
     icon({
       include: {
-        lucide: ['globe'],
-        'simple-icons': ['github', 'linkedin', 'mastodon', 'x'],
-        tabler: ['align-center', 'arrow-right', 'article', 'bookmark', 'brand-github', 'building', 'cards', 'chart-bar', 'check', 'chevron-right', 'click', 'credit-card', 'external-link', 'help-circle', 'info-circle', 'info-square', 'layout-grid', 'layout-list', 'layout-rows', 'layout-sidebar', 'layout-sidebar-right', 'list-check', 'list-numbers', 'mail', 'message-circle', 'speakerphone'],
+        tabler: ['align-center', 'arrow-right', 'article', 'bookmark', 'brand-github', 'brand-linkedin', 'brand-mastodon', 'brand-x', 'building', 'cards', 'chart-bar', 'check', 'chevron-right', 'click', 'credit-card', 'external-link', 'help-circle', 'info-circle', 'info-square', 'layout-grid', 'layout-list', 'layout-rows', 'layout-sidebar', 'layout-sidebar-right', 'list-check', 'list-numbers', 'mail', 'message-circle', 'speakerphone', 'world'],
       },
     }),
   ],

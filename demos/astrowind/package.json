@@ -9,7 +9,6 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "@iconify-json/simple-icons": "^1.2.75",
     "@iconify-json/tabler": "^1.2.38",
     "@parche/blog": "workspace:*",
     "@parche/core": "workspace:*",
