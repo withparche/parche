@@ -11,6 +11,28 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
 
 ## [Unreleased]
 
+## [0.5.1] — 2026-08-23
+
+Found by installing 0.5.0 from npm as a new user would, which is the one thing the
+test suite cannot do for itself.
+
+### Fixed
+
+- **The scaffolder reported success when nothing had been scaffolded** (`5ce6c99`).
+  Getting the template name wrong — easy, since the first positional argument is the
+  template and the second the directory — left an empty project and still printed
+  "Done! Happy building with Parche.". giget resolves the repository rather than the
+  subdirectory, so a path that does not exist downloads the tarball, extracts nothing
+  and reports success; `npm install` then failed for the missing `package.json` and
+  the run still ended green. The fetch now checks the target actually received files,
+  and when every source fails it lists what it tried and reminds the reader that the
+  template comes first.
+- **"Next steps" suggested `npm dev`** (`5ce6c99`), which is not a command. It uses
+  `npm run dev` for npm and the bare form for the others, and puts the install step
+  back in the list when that was what failed.
+- **A failed install still ended in "Done!"** (`5ce6c99`). It now says one step is
+  left.
+
 ## [0.5.0] — 2026-08-23
 
 The release that came out of rebuilding AstroWind on Parche as a real bilingual
@@ -467,7 +489,8 @@ templates shipped in core, and were extracted to the ui parche later (`4af1d90`)
 of the bootstrap — this project was built to be worked on with coding agents from the
 first commit.
 
-[Unreleased]: https://github.com/withparche/parche/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/withparche/parche/compare/v0.5.1...HEAD
+[0.5.1]: https://github.com/withparche/parche/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/withparche/parche/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/withparche/parche/compare/v0.3.0-alpha.0...v0.4.0
 [0.3.0-alpha.0]: https://github.com/withparche/parche/releases/tag/v0.3.0-alpha.0
