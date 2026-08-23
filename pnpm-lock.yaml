@@ -549,13 +549,13 @@ importers:
         specifier: ^1.2.38
         version: 1.2.38
       '@parche/core':
-        specifier: ^0.5.0
+        specifier: ^0.5.1
         version: link:../../packages/core
       '@parche/primitives':
-        specifier: ^0.5.0
+        specifier: ^0.5.1
         version: link:../../parches/primitives
       '@parche/ui':
-        specifier: ^0.5.0
+        specifier: ^0.5.1
         version: link:../../parches/ui
       '@tailwindcss/vite':
         specifier: ^4.3.3

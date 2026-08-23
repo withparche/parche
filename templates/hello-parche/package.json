@@ -9,9 +9,9 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "@parche/core": "^0.5.0",
-    "@parche/primitives": "^0.5.0",
-    "@parche/ui": "^0.5.0",
+    "@parche/core": "^0.5.1",
+    "@parche/primitives": "^0.5.1",
+    "@parche/ui": "^0.5.1",
     "@iconify-json/tabler": "^1.2.38",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.2.4",

@@ -32,6 +32,11 @@ jobs:
       - name: Unit tests (@parche/core)
         run: pnpm run test:unit
 
+      # Templates pin concrete versions — they cannot use catalog: — so this is
+      # what keeps the catalog in charge of them rather than letting them drift.
+      - name: Template dependencies in step with the catalog
+        run: pnpm run templates:check
+
       - name: Build all (packages, examples, templates)
         run: pnpm -r build
 

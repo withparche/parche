@@ -9,7 +9,9 @@
     "test": "pnpm run test:unit && pnpm run test:build",
     "test:unit": "node --import tsx --test packages/core/test/*.test.ts packages/cli/test/*.test.ts parches/blog/test/*.test.ts",
     "test:build": "pnpm -r build && node test/assert-dist.mjs",
-    "test:starter": "node test/build-starter.mjs"
+    "test:starter": "node test/build-starter.mjs",
+    "templates:sync": "node scripts/sync-template-deps.mjs",
+    "templates:check": "node scripts/sync-template-deps.mjs --check"
   },
   "packageManager": "pnpm@11.12.0",
   "devDependencies": {
