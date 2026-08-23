@@ -1,7 +1,7 @@
 import { defineConfig } from '@parche/core/config';
 
 // Separate-file mode: the parches stay in astro.config.mjs; the whole site
-// identity is configured here. Referenced from defineParche({ config: … }).
+// identity is configured here. Referenced from parche({ config: … }).
 export default defineConfig({
   site: {
     name: 'Parche',

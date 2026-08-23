@@ -111,8 +111,8 @@ export function createRegistry(
 ): ResolvedRegistry {
   const modules: Record<string, string> = { ...CORE_MODULES };
 
-  // Site config: `defineParche` passes it inline (served as parche:config by the
-  // vite plugin); `parche()` points parche:config at the user's config file.
+  // Site config: `parche({ site })` passes it inline (served as parche:config by
+  // the vite plugin); otherwise parche:config points at the user's config file.
   if (!inlineSiteConfig) {
     const configPath = userConfig.config || './parche.config.ts';
     modules['parche:config'] = path.resolve(rootDir, configPath);

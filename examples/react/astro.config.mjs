@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import icon from 'astro-icon';
 import react from '@astrojs/react';
-import { defineParche } from '@parche/core';
+import parche from '@parche/core';
 import { parcheFonts } from '@parche/core/fonts';
 import createPrimitives from '@parche/primitives';
 import createUI from '@parche/ui';
@@ -10,7 +10,7 @@ import createUI from '@parche/ui';
 export default defineConfig({
   site: 'https://example.com',
   integrations: [
-    defineParche({
+    parche({
       parches: [createPrimitives(), createUI()],
       config: './parche.config.ts',
       routes: { pages: true },

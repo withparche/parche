@@ -106,10 +106,10 @@ function validateUserConfig(userConfig: ParcheUserConfig): void {
 }
 
 // ---------------------------------------------------------------------------
-// Unified config (`defineParche`)
+// Config resolution
 // ---------------------------------------------------------------------------
 
-/** Runtime context passed to the function form of `defineParche`. */
+/** Runtime context passed to the function form of `parche()`. */
 export interface ParcheConfigContext {
   /** Astro command driving this run. */
   command: 'dev' | 'build' | 'preview' | 'sync';
@@ -124,23 +124,24 @@ export interface ParcheConfigContext {
 type SiteConfigInput = Parameters<typeof siteConfigSchema.parse>[0];
 
 /**
- * The unified Parche config: the integration options (parches, routes, themes,
- * styles, overrides, extends) fused with the site identity that used to live in
- * a separate `parche.config.ts`. One validated object, one home per concern.
- * `seo` carries both the site SEO fields and the build-time `allowAICrawlers`.
+ * The Parche config object: integration options (parches, routes, themes,
+ * styles, overrides, extends) plus, optionally, the site identity inline. Omit
+ * the site fields and point `config` at a separate file instead — both styles
+ * are equally supported. `seo` carries the site SEO fields and the build-time
+ * `allowAICrawlers`.
  */
-export type ParcheConfig = Omit<ParcheUserConfig, 'config' | 'seo'> &
-  Omit<SiteConfigInput, 'seo'> & {
+export type ParcheConfig = Omit<ParcheUserConfig, 'seo'> &
+  Partial<Omit<SiteConfigInput, 'seo'>> & {
     seo?: (SiteConfigInput extends { seo?: infer S } ? S : never) & ParcheSeoConfig;
   };
 
-/** `defineParche` accepts a config object or a function of the runtime context. */
+/** `parche()` accepts a config object or a function of the runtime context. */
 export type ParcheConfigInput = ParcheConfig | ((ctx: ParcheConfigContext) => ParcheConfig);
 
 interface PreparedConfig {
   /** Integration options only (site data stripped), extends already folded. */
   userConfig: ParcheUserConfig;
-  /** Inline site config (defineParche path). */
+  /** Inline site config, when the site identity was given inline. */
   inlineSiteConfig?: SiteConfig;
   /** robots.txt AI-crawler policy. */
   allowAICrawlers: boolean;
@@ -148,9 +149,8 @@ interface PreparedConfig {
 
 /**
  * Shared integration body. `prepare` turns the runtime context into the resolved
- * options both entry points need; everything downstream (registry, route
- * injection, robots.txt) is identical whether you used `parche()` or
- * `defineParche()`.
+ * options; everything downstream (registry, route injection, robots.txt) is
+ * identical regardless of how the config was authored.
  */
 function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig): AstroIntegration {
   let resolvedSiteUrl = '';
@@ -242,32 +242,28 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
 }
 
 /**
- * Split config (v0): pass integration options here and keep site identity in a
- * separate `parche.config.ts` referenced via `config`. Kept for back-compat;
- * new projects should prefer `defineParche` (one unified, validated object).
- */
-export default function parche(userConfig: ParcheUserConfig = {}): AstroIntegration {
-  return createIntegration(() => {
-    const resolved = resolveExtends(userConfig);
-    return { userConfig: resolved, allowAICrawlers: resolved.seo?.allowAICrawlers ?? true };
-  });
-}
-
-/**
- * Unified config entry. One object carries the integration options and, if you
- * want, the site identity — validated together. Two equally supported styles:
+ * The Parche Astro integration. One entry, two equally supported styles for the
+ * site identity:
  *
- *   • Inline — pass `site` (and optionally metadata/seo/organization). The site
- *     identity is served as `parche:config`; no separate file needed.
- *   • Separate file — omit `site` and pass `config: './parche.config.ts'`.
- *     The parches stay in astro.config; everything else lives in that file
- *     (authored with `defineConfig` from `@parche/core/config`), exactly as with
- *     `parche()`. Its own `seo.allowAICrawlers` still applies to robots.txt.
+ *   • Inline — pass `site` (and optionally metadata/seo/organization) right here.
+ *     It's validated and served as `parche:config`; no separate file needed.
+ *   • Separate file — omit `site` and point `config` at a file (default
+ *     `./parche.config.ts` at the project root). The parches stay in
+ *     astro.config; everything else lives in that file (authored with
+ *     `defineConfig` from `@parche/core/config`).
  *
- * Accepts a function of the runtime context for env-based / conditional /
- * multi-tenant setups.
+ * The argument may also be a function of the runtime context
+ * (`(ctx) => config`) for env-based / conditional / multi-tenant setups, and any
+ * config may `extends` a `parchePreset(...)`.
+ *
+ * @example
+ * // astro.config.mjs
+ * import parche from '@parche/core';
+ * export default defineConfig({
+ *   integrations: [parche({ parches: [createUI()], config: './parche.config.ts', routes: { pages: true } })],
+ * });
  */
-export function defineParche(input: ParcheConfigInput): AstroIntegration {
+export default function parche(input: ParcheConfigInput = {}): AstroIntegration {
   return createIntegration((ctx) => {
     const cfg = typeof input === 'function' ? input(ctx) : input;
     // Fold `extends` first (a preset may seed site data or parches), then split
@@ -285,7 +281,7 @@ export function defineParche(input: ParcheConfigInput): AstroIntegration {
     }
 
     // Separate-file mode: site identity comes from `config` (or the default
-    // ./src/config.ts). Only robots policy is read from defineParche's seo here.
+    // ./parche.config.ts). Only the robots policy is read from seo here.
     return {
       userConfig: { ...userOpts, config: configPath },
       allowAICrawlers: allowAICrawlers as boolean,

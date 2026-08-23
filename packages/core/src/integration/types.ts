@@ -229,7 +229,7 @@ export interface ResolvedRegistry {
   /** Structural widget requirements: prop names a requiring parche expects the
    *  provider to expose. Checked against the generated schemas (builder-time). */
   widgetPropRequirements: Array<{ from: string; name: string; props: string[] }>;
-  /** Inline site config (defineParche); when set, the plugin serves it as
+  /** Inline site config (parche({ site })); when set, the plugin serves it as
    *  parche:config instead of re-exporting a user config file. */
   inlineSiteConfig?: import('../types/config.js').SiteConfig;
   /** Resolved i18n config */

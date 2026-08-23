@@ -427,7 +427,7 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
         return `${css}\n${generateSourceDirectives(registry)}\n`;
       }
 
-      // Inline site config (defineParche) — serve the validated object directly
+      // Inline site config (parche({ site })) — serve the validated object directly
       // instead of re-exporting a user file. Must come before the generic
       // module resolution, which has no file path for parche:config here.
       if (id === '\0parche:config' && registry.inlineSiteConfig) {
