@@ -58,6 +58,11 @@ declare module 'parche:config/i18n' {
   export const defaultLocale: string;
 }
 
+declare module 'parche:config/fonts' {
+  /** The resolved font set: core's base, each parche's, then the site's. */
+  export const fonts: Array<{ cssVariable: string; name: string; weights: number[]; fallbacks: string[]; preload?: boolean }>;
+}
+
 declare module 'parche:config/themes' {
   export const themes: Array<{ label: string; value: string }>;
   export const showPanel: boolean;

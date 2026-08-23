@@ -135,6 +135,36 @@ export const siteConfigSchema = z.object({
     .prefault({}),
 
   /**
+   * Web fonts, as data.
+   *
+   * Astro's `fonts` needs a provider object, which is code and therefore cannot
+   * come from a CMS-authored JSON file. Declaring them here keeps the config
+   * serialisable — Parche builds the provider and hands the result to Astro,
+   * under the same one-declaration rule as `site` and `i18n`.
+   *
+   * A site that declares none keeps Parche's default set. A site that declares
+   * some gets exactly those: the point is that a template using one typeface
+   * should not ship eight.
+   */
+  fonts: z
+    .array(
+      z.object({
+        /** Family name at the provider, e.g. 'Inter'. */
+        name: z.string(),
+        /** The CSS variable it fills, e.g. '--font-sans'. */
+        cssVariable: z.string(),
+        weights: z.array(z.number()).default([400, 700]),
+        fallbacks: z.array(z.string()).default(['ui-sans-serif', 'system-ui', 'sans-serif']),
+        /** Preload the first file. Worth it for the family above the fold, only. */
+        preload: z.boolean().default(false),
+        /** Only Google is wired today; the field exists so adding one is not a
+         *  breaking change. */
+        provider: z.literal('google').default('google'),
+      }),
+    )
+    .optional(),
+
+  /**
    * The site-wide metadata a page falls back to when it declares none.
    *
    * Deliberately the same name as a page's own `metadata`, because it is the

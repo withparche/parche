@@ -11,19 +11,23 @@ const serif = ['ui-serif', 'Georgia', 'serif'];
 const mono = ['ui-monospace', 'SFMono-Regular', 'monospace'];
 
 /**
- * Single source of truth for Parche's font set. BaseLayout renders a <Font>
- * for each entry; the `parcheFonts` config helper builds the astro.config array
- * from the same list, so the two never drift.
+ * The base set: only the families core's own stylesheets read.
+ *
+ * A font is a download, so the default is the minimum that makes the base look
+ * work — `--font-sans` for body and headings, `--font-mono` for code. Anything
+ * else is a design decision, and design decisions belong to a theme: a theme
+ * parche contributes its own fonts through its manifest, and a site can add or
+ * replace any of them from `parche.config.ts`. Later contributors win per
+ * `cssVariable`.
+ *
+ * This used to be eight families filling variables nothing consumed, while the
+ * one two themes actually asked for was not among them.
  */
 export const parcheFontDefs: ParcheFontDef[] = [
   { cssVariable: '--font-sans', name: 'Geist', weights: [400, 500, 600, 700], fallbacks: sans, preload: true },
-  { cssVariable: '--font-serif', name: 'Lora', weights: [400, 700], fallbacks: serif },
   { cssVariable: '--font-mono', name: 'JetBrains Mono', weights: [400], fallbacks: mono },
-  { cssVariable: '--font-heading-alt', name: 'Literata', weights: [400, 700], fallbacks: serif },
-  { cssVariable: '--font-body-alt', name: 'Libre Franklin', weights: [400, 500, 600, 700], fallbacks: sans },
-  { cssVariable: '--font-rounded', name: 'Nunito', weights: [400, 500, 600, 700], fallbacks: sans },
-  { cssVariable: '--font-tech', name: 'Schibsted Grotesk', weights: [400, 500, 600, 700], fallbacks: sans },
-  { cssVariable: '--font-tech-body', name: 'DM Sans', weights: [400, 500, 600, 700], fallbacks: sans },
 ];
+
+export { sans, serif, mono };
 
 export const parcheFontVariables = parcheFontDefs.map((f) => f.cssVariable);

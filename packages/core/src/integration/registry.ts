@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { parcheFontDefs } from '../config/font-variables.js';
 import type { ParcheUserConfig, ResolvedRegistry, ParcheManifest } from './types.js';
 import type { SiteConfig } from '../types/config.js';
 
@@ -151,12 +152,14 @@ export function createRegistry(
   const providedTemplates = new Set<string>();
   const apps: ParcheManifest[] = [];
   const contributedStyles: string[] = [];
+  const contributedFonts: any[] = [];
   const contributedThemes: Array<{ label: string; value: string }> = [];
   const contentGlobs: string[] = [];
   const fullBleedWidgets: string[] = [];
 
   for (const parche of parches) {
     if (parche.styles) contributedStyles.push(...parche.styles);
+    if (parche.fonts) contributedFonts.push(...parche.fonts);
     if (parche.themes) contributedThemes.push(...parche.themes);
     if (parche.content) contentGlobs.push(...parche.content);
     if (parche.fullBleed) fullBleedWidgets.push(...parche.fullBleed);
@@ -291,6 +294,15 @@ export function createRegistry(
 
   // Aggregate the CSS to bundle: what the parches contribute (e.g. themes) plus
   // an optional user entry. A site ships only the CSS of the parches it imports.
+  // Fonts: the base set, then whatever the parches (typically themes) ask for,
+  // then the site's own. Later wins per cssVariable, so a theme can replace the
+  // default sans and a site can replace the theme's.
+  const fontsByVariable = new Map<string, any>();
+  for (const font of [...parcheFontDefs, ...contributedFonts, ...(inlineSiteConfig as any)?.fonts ?? []]) {
+    fontsByVariable.set(font.cssVariable, font);
+  }
+  const fonts = [...fontsByVariable.values()];
+
   const styleEntries = [...contributedStyles];
   if (userConfig.styles?.entry) {
     styleEntries.push(path.resolve(rootDir, userConfig.styles.entry));
@@ -314,6 +326,7 @@ export function createRegistry(
     themes,
     showPanel,
     defaultTheme,
+    fonts,
     styleEntries,
     contentGlobs,
     apps,

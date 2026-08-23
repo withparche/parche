@@ -1,6 +1,7 @@
 import type { AstroIntegration } from 'astro';
 import { fileURLToPath } from 'node:url';
 import { resolveSiteUrl, resolveI18n } from '../utils/site.js';
+import { toAstroFonts } from '../config/fonts.js';
 import { tryLoadSiteConfig, resolveSiteConfigPath } from './load-site-config.js';
 import path from 'node:path';
 import fs from 'node:fs';
@@ -205,6 +206,15 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
         }
         const rootDir = fileURLToPath(config.root);
         const resolvedRegistry = createRegistry(resolved, rootDir, parcheI18n ?? config.i18n, servedSiteConfig);
+
+        // Fonts are data in the config and manifests; Astro needs provider
+        // objects, which is code — so Parche builds them here. Same rule as the
+        // rest: if the project already set `fonts` in astro.config, that wins and
+        // Parche stays out of the way.
+        if (!config.fonts?.length && resolvedRegistry.fonts.length > 0) {
+          updateConfig({ fonts: toAstroFonts(resolvedRegistry.fonts) });
+        }
+
 
         // Resolve @core/* alias for backward compatibility with widget internal imports
         const coreDir = path.resolve(

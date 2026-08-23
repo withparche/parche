@@ -70,6 +70,8 @@ const TEMPLATE_MAP_ID = 'parche:registry/templates';
 const TEMPLATE_MAP_VIRTUAL = '\0parche:registry/templates';
 const I18N_CONFIG_ID = 'parche:config/i18n';
 const I18N_CONFIG_VIRTUAL = '\0parche:config/i18n';
+const FONTS_CONFIG_ID = 'parche:config/fonts';
+const FONTS_CONFIG_VIRTUAL = '\0parche:config/fonts';
 const THEMES_CONFIG_ID = 'parche:config/themes';
 const THEMES_CONFIG_VIRTUAL = '\0parche:config/themes';
 const STYLES_CONFIG_ID = 'parche:config/styles';
@@ -417,6 +419,7 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
       if (id === WIDGET_MAP_ID) return WIDGET_MAP_VIRTUAL;
       if (id === TEMPLATE_MAP_ID) return TEMPLATE_MAP_VIRTUAL;
       if (id === I18N_CONFIG_ID) return I18N_CONFIG_VIRTUAL;
+      if (id === FONTS_CONFIG_ID) return FONTS_CONFIG_VIRTUAL;
       if (id === THEMES_CONFIG_ID) return THEMES_CONFIG_VIRTUAL;
       if (id === STYLES_CONFIG_ID) return STYLES_CONFIG_VIRTUAL;
       if (id === LAYOUT_CONFIG_ID) return LAYOUT_CONFIG_VIRTUAL;
@@ -451,6 +454,7 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
       if (id === WIDGET_MAP_VIRTUAL) return generateWidgetMapModule(registry);
       if (id === TEMPLATE_MAP_VIRTUAL) return generateTemplateMapModule(registry);
       if (id === I18N_CONFIG_VIRTUAL) return generateI18nConfigModule(registry);
+      if (id === FONTS_CONFIG_VIRTUAL) return `export const fonts = ${JSON.stringify(registry.fonts)};\n`;
       if (id === THEMES_CONFIG_VIRTUAL) return generateThemesConfigModule(registry);
       if (id === STYLES_CONFIG_VIRTUAL) return generateStylesModule(registry);
       if (id === LAYOUT_CONFIG_VIRTUAL) return generateLayoutConfigModule(registry);

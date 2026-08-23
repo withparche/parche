@@ -245,6 +245,8 @@ export interface ResolvedRegistry {
   themes: Array<{ label: string; value: string }>;
   /** Theme rendered server-side on <html data-theme>, before any client script. */
   defaultTheme?: string;
+  /** Resolved font set: core's base, plus each parche's, plus the site's. */
+  fonts: import('../config/font-variables.js').ParcheFontDef[];
   /** Whether to show the floating theme panel */
   showPanel: boolean;
   /** Absolute CSS paths to import via parche:config/styles (parche-contributed + user entry) */
