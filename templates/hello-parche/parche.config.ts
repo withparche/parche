@@ -5,7 +5,7 @@ import { defineConfig } from '@parche/core/config';
 export default defineConfig({
   site: 'https://example.com',
   brand: {
-    name: '{{siteName}}',
+    name: 'Hello Parche',
     description: 'Built with Parche.',
   },
 });

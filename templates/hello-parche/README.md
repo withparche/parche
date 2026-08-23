@@ -1,4 +1,4 @@
-# {{siteName}}
+# Hello Parche
 
 Built with [Parche](https://github.com/withparche/parche).
 

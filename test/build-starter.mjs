@@ -1,8 +1,10 @@
 // Starter smoke: scaffold `hello-parche` via the CLI (as real users do), build
-// the scaffolded copy against the LOCAL packages, and assert its dist. This is
-// the only coverage for the starter — it can't build in place (the `{{ }}`
-// placeholders make it invalid, hence its workspace exclusion). Heavy (installs),
-// so it's a separate script meant for CI. Run from the repo root.
+// the scaffolded copy against the LOCAL packages, and assert its dist.
+//
+// The template is a working project in its own right — no placeholders — so the
+// interesting question is no longer "did substitution happen" but "did the
+// rename take", and that the result still builds. Heavy (installs), so it's a
+// separate script meant for CI. Run from the repo root.
 import { execSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
@@ -27,14 +29,18 @@ rmSync(SMOKE, { recursive: true, force: true });
 
 let failure = null;
 try {
-  // 1. Scaffold from the local template (replaces {{ }} placeholders).
+  // 1. Scaffold from the local template (the CLI renames it as it goes).
   run(`node packages/cli/dist/index.js astro new ./templates/hello-parche ${SMOKE} --no-install --no-git --yes`);
 
-  // 2. Structural checks: placeholders gone, root config in place, manifest removed.
-  const leftover = execSync(`grep -rl '{{' ${SMOKE} || true`).toString().trim();
-  if (leftover) failure = `unreplaced placeholders in:\n${leftover}`;
+  // 2. Structural checks: the rename took, and the config is where it belongs.
+  // The template's own identity must be gone — that is what the CLI adds over
+  // `npm create astro`, which copies the template verbatim and works fine too.
+  const stale = execSync(`grep -rl 'Hello Parche\\|hello-parche' ${SMOKE} --exclude-dir=node_modules || true`)
+    .toString()
+    .trim();
+  if (stale) failure = `template name not renamed in:\n${stale}`;
   else if (!existsSync(join(SMOKE, 'parche.config.ts'))) failure = 'parche.config.ts missing at project root';
-  else if (existsSync(join(SMOKE, 'parche.template.json'))) failure = 'parche.template.json not removed';
+
 
   if (!failure) {
     // 3. Point @parche/* at the local workspace packages, then install + build.

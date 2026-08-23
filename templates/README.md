@@ -1,30 +1,30 @@
 # Templates
 
-Curated Parche project starters, consumed by the CLI:
+Curated Parche project starters.
 
 ```bash
-parche astro new hello-parche my-app
-# or
-npm create parche@latest
+npm create parche@latest              # interactive
+parche astro new hello-parche my-app  # or name one directly
 ```
 
 ## Convention
 
-Each template may include a `parche.template.json` describing what the CLI asks
-and adapts:
+**A template is a working project, not a stencil.** It ships real values — no
+placeholders — so it builds as it stands, and the official Astro path works
+without knowing anything about Parche:
 
-```jsonc
-{
-  "name": "Hello Parche",
-  "type": "starter",
-  "description": "...",
-  "prompts": [
-    { "key": "siteName", "message": "Site name", "default": "My Parche Site" },
-    { "key": "packageName", "message": "Package name", "default": "my-parche-site" }
-  ]
-}
+```bash
+npm create astro@latest -- --template withparche/parche/templates/hello-parche
 ```
 
-Template files use `{{siteName}}` / `{{packageName}}` placeholders. The CLI
-prompts, replaces them, patches `package.json` name, deletes the manifest, and
-installs — leaving a ready-to-run project.
+That copies the template verbatim: you get a site called whatever the template is
+called. `parche astro new` does the same and then renames it, which is the only
+difference between the two.
+
+The rename works by replacing the template's own identity, so a template must
+keep **`package.json` `name` as the slug of its `brand.name`** — `hello-parche`
+and `Hello Parche`. Nothing else is required, and nothing else is adapted.
+
+Content should not repeat the site's name: it lives in `brand.name` and the
+header reads it from there. Duplicating it into a page is what made placeholders
+seem necessary in the first place.

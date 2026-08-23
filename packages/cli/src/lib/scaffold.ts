@@ -4,7 +4,7 @@ import { intro, outro, text, select, confirm, isCancel, cancel, spinner, note } 
 import pc from 'picocolors';
 import { resolveSource } from './resolve-source.js';
 import { fetchTemplate } from './fetch-template.js';
-import { readManifest, runPrompts, applyValues } from './template.js';
+import { runPrompts, adaptProject } from './template.js';
 import { detectPM, installDeps, gitInit, type PM } from './install.js';
 
 export type { PM } from './install.js';
@@ -80,12 +80,20 @@ export async function scaffold(opts: ScaffoldOptions): Promise<void> {
   }
   s1.stop('Fetched template');
 
-  // 4. prompts (from the template's manifest)
-  const values = await runPrompts(readManifest(target), { projectName, yes: !!opts.yes });
-  if (values === null) return bail();
+  // 4. what should it be called
+  const names = await runPrompts({ projectName, yes: !!opts.yes });
+  if (names === null) return bail();
 
-  // 5. adapt
-  applyValues(target, values, projectName);
+  // 5. adapt — an enhancement, not a requirement: a template is already a
+  // working project, so a failed rename leaves it usable under its own name.
+  const renamed = adaptProject(target, names);
+  if (!renamed) {
+    note(
+      `Could not read the template's package.json, so the project keeps the ` +
+        `template's name. Rename it in package.json and parche.config.ts.`,
+      'rename',
+    );
+  }
 
   // 6. install + git
   const pm = opts.pm ?? detectPM();
