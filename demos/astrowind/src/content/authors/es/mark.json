@@ -1,0 +1,12 @@
+{
+  "name": "Mark Rivera",
+  "role": "Desarrollador front-end",
+  "bio": "Le importan el peso de la página, la accesibilidad y cuidar los detalles.",
+  "avatar": {
+    "src": "@/assets/images/portrait.svg",
+    "alt": "Mark Rivera"
+  },
+  "social": {
+    "github": "markrivera"
+  }
+}

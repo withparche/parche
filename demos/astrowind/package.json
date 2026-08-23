@@ -1,0 +1,25 @@
+{
+  "name": "demo-astrowind",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@iconify-json/simple-icons": "^1.2.75",
+    "@iconify-json/tabler": "^1.2.38",
+    "@parche/blog": "workspace:*",
+    "@parche/core": "workspace:*",
+    "@parche/primitives": "workspace:*",
+    "@parche/themes": "workspace:*",
+    "@parche/ui": "workspace:*",
+    "@tailwindcss/vite": "catalog:",
+    "astro": "catalog:",
+    "astro-icon": "catalog:",
+    "sharp": "catalog:",
+    "tailwindcss": "catalog:"
+  }
+}

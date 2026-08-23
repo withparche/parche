@@ -1,0 +1,174 @@
+{
+  "title": "AstroWind — Plantilla gratuita para crear webs con Astro + Tailwind CSS",
+  "description": "Una plantilla gratuita, personalizable y lista para producción para Astro 7 + Tailwind CSS v4. Válida para startups, pequeños negocios, webs SaaS, porfolios profesionales, webs de marketing, landings y blogs.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "title": "Plantilla gratuita para <span class='hidden xl:inline'>crear webs con</span> <span class='text-highlight'>Astro 7</span> + Tailwind CSS",
+        "subtitle": "<span class='hidden sm:inline'><span class='font-semibold'>AstroWind</span> es una plantilla gratuita, personalizable y lista para producción para Astro 7 + Tailwind CSS v4.</span> Pensada para startups, pequeños negocios, webs SaaS, porfolios profesionales, webs de marketing, landings y blogs.",
+        "actions": [
+          { "variant": "primary", "text": "Descargar plantilla", "href": "https://github.com/arthelokyo/astrowind", "target": "_blank", "icon": "tabler:download" },
+          { "variant": "secondary", "text": "Saber más", "href": "#features" }
+        ],
+        "image": { "src": "@/assets/images/hero.svg", "alt": "Imagen principal de AstroWind" }
+      }
+    },
+    {
+      "widget": "Note",
+      "props": {
+        "title": "Filosofía:",
+        "description": "Sencillez, buenas prácticas y alto rendimiento"
+      }
+    },
+    {
+      "widget": "Features",
+      "wrapper": { "id": "features" },
+      "props": {
+        "tagline": "Características",
+        "title": "Qué incluye AstroWind",
+        "subtitle": "Una de las plantillas más completas y cuidadas del mercado. El tema de Astro con más estrellas y forks en 2022, 2023, 2024 y 2025.",
+        "columns": "3",
+        "items": [
+          { "title": "Astro + Tailwind CSS, integrados", "description": "Dos grandes frameworks trabajando juntos sin fricción: productividad, rendimiento y versatilidad. Ahora con Tailwind CSS v4.", "icon": "tabler:brand-tailwind" },
+          { "title": "Componentes listos para usar", "description": "Widgets hechos con Tailwind CSS v4, listos para webs de marketing, SaaS, blogs, perfiles personales y pequeños negocios.", "icon": "tabler:components" },
+          { "title": "Buenas prácticas", "description": "Webs seguras, eficientes y fáciles de usar, que ofrecen una gran experiencia y valor duradero.", "icon": "tabler:list-check" },
+          { "title": "Velocidad de carga excelente", "description": "Una buena velocidad de carga mejora el posicionamiento orgánico, la experiencia de uso y la conversión.", "icon": "tabler:rocket" },
+          { "title": "Optimización para buscadores (SEO)", "description": "El SEO aumenta la visibilidad de una web, atrae tráfico orgánico y le permite llegar a más público.", "icon": "tabler:arrows-right-left" },
+          { "title": "Abierta a ideas y contribuciones", "description": "Una cultura abierta a nuevas ideas y contribuciones es clave para la innovación, la colaboración y una experiencia viva.", "icon": "tabler:bulb" }
+        ]
+      }
+    },
+    {
+      "widget": "Content",
+      "wrapper": { "bg": "<div style='position:absolute;inset:0;background:linear-gradient(180deg, rgba(59,110,246,0.06), transparent 65%)'></div>" },
+      "props": {
+        "isReversed": true,
+        "tagline": "Por dentro",
+        "title": "El plano de AstroWind: diversión y funcionalidad",
+        "content": "<h3 class='text-2xl font-bold tracking-tight sm:text-3xl mb-2'>Construido sobre bases modernas</h3>Gana ventaja competitiva incorporando las mejores prácticas del sector.",
+        "columns": "1",
+        "items": [
+          { "title": "Construida sobre Astro 7", "description": "Aprovecha el rendimiento y las facilidades para desarrolladores de este generador de sitios estáticos." },
+          { "title": "Estilada con Tailwind CSS v4", "description": "Diseño rápido y estilos coherentes con el framework CSS de utilidades más extendido." },
+          { "title": "Compatible entre navegadores", "description": "Tu web se ve y funciona igual en los distintos navegadores, con una experiencia uniforme para todo el mundo." }
+        ],
+        "image": { "src": "@/assets/images/blueprint.svg", "alt": "Plano de la plantilla" }
+      }
+    },
+    {
+      "widget": "Content",
+      "props": {
+        "isAfterContent": true,
+        "content": "Haz que tu presencia online te represente de verdad.",
+        "columns": "1",
+        "items": [
+          { "title": "Personalización a fondo", "description": "Adapta la plantilla a la identidad y las necesidades de tu marca sin esfuerzo: tu web se distingue y tú ganas tiempo." },
+          { "title": "Múltiples composiciones", "description": "Explora distintas maquetaciones hasta dar con la que mejor presenta tu contenido y facilita la navegación." },
+          { "title": "Diseño totalmente adaptable", "description": "Rendimiento óptimo en cualquier dispositivo y tamaño de pantalla, con una experiencia coherente." },
+          { "title": "Integración de medios", "description": "Incorpora imágenes, vídeos y otros elementos multimedia que refuercen tu contenido y enganchen a quien te visita." }
+        ],
+        "image": { "src": "@/assets/images/customization.svg", "alt": "Opciones de personalización" }
+      }
+    },
+    {
+      "widget": "Content",
+      "props": {
+        "isReversed": true,
+        "isAfterContent": true,
+        "content": "Pensada para crecer y para durar.",
+        "columns": "1",
+        "items": [
+          { "title": "Más interacción", "description": "Capta a tu audiencia con elementos interactivos, navegación clara y composiciones atractivas que invitan a quedarse." },
+          { "title": "Mejora continua", "description": "Mantén tu web al día con las últimas tendencias y tecnologías gracias a actualizaciones periódicas." },
+          { "title": "Ahorro de tiempo y recursos", "description": "Sáltate el proceso de construir una web desde cero y publica antes con AstroWind." },
+          { "title": "Comunidad detrás", "description": "Únete a la comunidad de AstroWind: ideas, recursos y ayuda para que nunca estés solo en el camino." }
+        ],
+        "image": { "src": "@/assets/images/growth.svg", "alt": "Crecimiento y éxito" }
+      }
+    },
+    {
+      "widget": "Steps",
+      "wrapper": { "id": "how" },
+      "props": {
+        "title": "Pon en marcha la web que quieres, en muy poco tiempo.",
+        "items": [
+          { "title": "Paso 1: <span class='font-medium'>Descarga</span>", "description": "Empieza en GitHub. Haz un fork de la plantilla o pulsa «Use this template». El lienzo te espera, listo para tu obra digital.", "icon": "tabler:package" },
+          { "title": "Paso 2: <span class='font-medium'>Añade contenido</span>", "description": "Vuelca tu visión. Añade imágenes, textos y todo lo que dé vida a tu espacio digital. El contenido es lo que cuenta tu historia: hazlo memorable.", "icon": "tabler:letter-case" },
+          { "title": "Paso 3: <span class='font-medium'>Ajusta los estilos</span>", "description": "Dale tu toque. Ajusta colores, tipografías y composiciones hasta que encaje. El cuidado en el diseño se nota al usarla.", "icon": "tabler:paint" },
+          { "title": "¡Listo!", "icon": "tabler:check" }
+        ],
+        "image": { "src": "@/assets/images/steps.svg", "alt": "Pasos de configuración" }
+      }
+    },
+    {
+      "widget": "Features2",
+      "wrapper": { "bg": "<div style='position:absolute;inset:0;background:linear-gradient(180deg, rgba(59,110,246,0.05), transparent 70%)'></div>" },
+      "props": {
+        "tagline": "Componentes",
+        "title": "Los widgets más usados",
+        "subtitle": "Componentes de uso frecuente para construir webs con Tailwind CSS v4.",
+        "columns": "3",
+        "items": [
+          { "title": "Cabeceras", "description": "¿Has conducido alguna vez sin GPS? Pues eso: las webs necesitan cabecera para orientarse.", "icon": "tabler:layout-navbar" },
+          { "title": "Heros", "description": "Imagina el aterrizaje de un superhéroe. Épico, ¿verdad? Eso hace un Hero: entrar por la puerta grande.", "icon": "tabler:photo" },
+          { "title": "Características", "description": "Donde la web saca pecho y enseña sus superpoderes. Aquí no hay que reprimirse.", "icon": "tabler:checkbox" },
+          { "title": "Contenido", "description": "El fondo del asunto; sin él solo estarías mirando escaparates. El contenido manda.", "icon": "tabler:file-text" },
+          { "title": "Llamada a la acción", "description": "Ese amigo entusiasta que insiste con «¡venga, hazlo!». Pues eso es este botón.", "icon": "tabler:speakerphone" },
+          { "title": "Precios", "description": "La carta de postres del mundo web. Opciones tentadoras, ¿podrás resistirte?", "icon": "tabler:currency-dollar" },
+          { "title": "Testimonios", "description": "El rincón del cotilleo. Aquí otros visitantes cuentan los detalles jugosos.", "icon": "tabler:quote" },
+          { "title": "Contacto", "description": "Como un buzón, pero más rápido. Escribe, pregunta o manda un saludo virtual.", "icon": "tabler:mail" },
+          { "title": "Pies de página", "description": "Los créditos de la película, pero con huevos de pascua escondidos. A buscar.", "icon": "tabler:layout-bottombar" }
+        ]
+      }
+    },
+    {
+      "widget": "BlogLatestPosts",
+      "props": {
+        "title": "Más contenido en nuestro blog",
+        "information": "El blog sirve para publicar la documentación de AstroWind. Cada artículo es un paso más para dominar la creación de webs con Astro 7 + Tailwind CSS v4."
+      }
+    },
+    {
+      "widget": "FAQs",
+      "wrapper": { "id": "faq" },
+      "props": {
+        "tagline": "Preguntas frecuentes",
+        "title": "Preguntas frecuentes",
+        "subtitle": "Repasa estas preguntas para entender qué ofrece AstroWind y cómo puede ayudarte en tu día a día desarrollando.",
+        "columns": "2",
+        "items": [
+          { "title": "¿Por qué AstroWind?", "description": "Porque te da un punto de partida listo para producción en lugar de una página en blanco: valores por defecto sensatos, componentes reales y una estructura que aguanta más allá de la demo." },
+          { "title": "¿Qué necesito para empezar?", "description": "Node y un gestor de paquetes. Clona la plantilla, instala las dependencias y en menos de un minuto tienes la web funcionando." },
+          { "title": "¿Cómo instalo la plantilla de Astro + Tailwind CSS?", "description": "Haz un fork del repositorio o úsalo como plantilla en GitHub, y después ejecuta la instalación con el gestor de paquetes que prefieras." },
+          { "title": "¿Puedo usarla en un proyecto comercial?", "description": "Sí. La plantilla tiene licencia MIT, así que puedes usarla tanto en proyectos personales como comerciales." },
+          { "title": "¿Cómo personalizo el diseño?", "description": "Los colores, las tipografías y los espaciados vienen de tokens de diseño. Cambia los tokens y todos los componentes se adaptan: no hace falta tocar cada widget." },
+          { "title": "¿Dónde pido ayuda?", "description": "Abre una issue o una discusión en GitHub. La comunidad está activa y la documentación vive en este mismo blog." }
+        ]
+      }
+    },
+    {
+      "widget": "Stats",
+      "wrapper": { "bg": "<div style='position:absolute;inset:0;background:radial-gradient(80% 120% at 50% 0%, rgba(59,110,246,0.07), transparent 70%)'></div>" },
+      "props": {
+        "stats": [
+          { "title": "Descargas", "amount": "132K" },
+          { "title": "Estrellas", "amount": "24,8K" },
+          { "title": "Forks", "amount": "10,3K" },
+          { "title": "Usuarios", "amount": "48,4K" }
+        ]
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "wrapper": { "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>" },
+      "props": {
+        "title": "Astro&nbsp;+&nbsp;<span class='sm:whitespace-nowrap'>Tailwind CSS</span>",
+        "subtitle": "Sorpréndete con estos números enormes y completamente inventados. ¡No pierdas más tiempo!",
+        "actions": [
+          { "variant": "primary", "text": "Descargar plantilla", "href": "https://github.com/arthelokyo/astrowind", "target": "_blank", "icon": "tabler:download" }
+        ]
+      }
+    }
+  ]
+}

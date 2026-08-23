@@ -9,6 +9,7 @@ const ROOT = process.cwd();
 
 // Baselines measured on a good build; thresholds leave a small margin.
 const PROJECTS = {
+  'demos/astrowind': { kind: 'static', clientJsMax: 24_000 },
   'examples/blog': { kind: 'static', clientJsMax: 24_000 },
   'examples/custom-widget': { kind: 'static', clientJsMax: 24_000 },
   'examples/i18n': { kind: 'static', clientJsMax: 24_000 },

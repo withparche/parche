@@ -1,0 +1,115 @@
+/* =================================================================
+   Theme: AstroWind — the reference materialization
+   Recreates AstroWind v2's visual identity on Parche's token system:
+   its vivid blue, near-black ink on white, the deep navy dark mode,
+   Inter throughout, and pill-shaped controls.
+
+   Source values (AstroWind's CustomStyles.astro), converted to OKLCH:
+     --aw-color-primary        rgb(1 97 239)     → oklch(0.540 0.227 260.6)
+     --aw-color-secondary      rgb(1 84 207)     → oklch(0.487 0.203 260.4)
+     --aw-color-accent         rgb(109 40 217)   → oklch(0.491 0.241 292.6)
+     --aw-color-text-default   rgb(16 16 16)     → oklch(0.173 0 90)
+     --aw-color-bg-page-dark   rgb(3 6 32)       → oklch(0.140 0.056 269.5)
+   ================================================================= */
+
+/* ---------------------------------------------------------------
+   Geometry — AstroWind's controls are pills, not rounded rectangles.
+   --radius-* is plain @theme (not @theme inline), so it cannot be
+   re-var'd per theme; the buttons are targeted directly instead.
+   --------------------------------------------------------------- */
+:root[data-theme='astrowind'] :is(a, button)[class*='rounded-'] {
+  border-radius: 9999px;
+}
+
+:root[data-theme='astrowind'] {
+  /* --- Primitive ramps ------------------------------------------- */
+
+  /* Primary — AstroWind blue, hue 260.6 */
+  --color-primary-50: oklch(0.97 0.02 260.6);
+  --color-primary-100: oklch(0.935 0.045 260.6);
+  --color-primary-200: oklch(0.875 0.095 260.6);
+  --color-primary-300: oklch(0.79 0.15 260.6);
+  --color-primary-400: oklch(0.665 0.196 260.6);
+  --color-primary-500: oklch(0.54 0.227 260.6);
+  --color-primary-600: oklch(0.487 0.203 260.4);
+  --color-primary-700: oklch(0.425 0.175 260.4);
+  --color-primary-800: oklch(0.355 0.142 260.4);
+  --color-primary-900: oklch(0.29 0.112 260.4);
+  --color-primary-950: oklch(0.2 0.078 260.4);
+
+  /* Secondary — the darker blue AstroWind hovers into */
+  --color-secondary-500: oklch(0.487 0.203 260.4);
+  --color-secondary-600: oklch(0.425 0.175 260.4);
+  --color-secondary-700: oklch(0.365 0.148 260.4);
+
+  /* Accent — the violet used for emphasised words in headings */
+  --color-accent-400: oklch(0.585 0.232 292.6);
+  --color-accent-500: oklch(0.491 0.241 292.6);
+  --color-accent-600: oklch(0.43 0.221 292.6);
+
+  /* Neutral — navy-tinted, so surfaces sit next to the dark page colour */
+  --color-neutral-50: oklch(0.985 0.003 265);
+  --color-neutral-100: oklch(0.965 0.006 265);
+  --color-neutral-200: oklch(0.925 0.01 265);
+  --color-neutral-300: oklch(0.86 0.016 265);
+  --color-neutral-400: oklch(0.7 0.028 265);
+  --color-neutral-500: oklch(0.55 0.03 265);
+  --color-neutral-600: oklch(0.45 0.032 265);
+  --color-neutral-700: oklch(0.35 0.036 267);
+  --color-neutral-800: oklch(0.245 0.042 269);
+  --color-neutral-900: oklch(0.185 0.05 269.5);
+  --color-neutral-950: oklch(0.14 0.056 269.5);
+
+  /* --- Semantic roles — light mode -------------------------------- */
+  --ds-color-background: oklch(1 0 0);
+  --ds-color-foreground: oklch(0.173 0 90);
+  --ds-color-surface: var(--color-neutral-50);
+  --ds-color-primary: var(--color-primary-500);
+  --ds-color-on-primary: oklch(1 0 0);
+  /* AstroWind's muted text is the body colour at 66% — matched here as a
+     lightened opaque value, so it stays legible over any surface. */
+  --ds-color-muted: oklch(0.505 0.008 265);
+  --ds-color-border: var(--color-neutral-300);
+  --ds-color-heading: oklch(0 0 0);
+  --ds-color-text: oklch(0.173 0 90);
+  --ds-color-highlight: var(--color-accent-500);
+
+  /* --- Typography — Inter for every role, tight headings ---------- */
+  --ds-font-heading: var(--font-inter, 'Inter', ui-sans-serif, system-ui, sans-serif);
+  --ds-font-body: var(--font-inter, 'Inter', ui-sans-serif, system-ui, sans-serif);
+  --font-sans: var(--font-inter, 'Inter', ui-sans-serif, system-ui, sans-serif);
+
+  --ds-weight-h1: 700;
+  --ds-tracking-h1: -0.035em;
+  --ds-leading-h1: 1.05;
+  --ds-weight-h2: 700;
+  --ds-tracking-h2: -0.03em;
+  --ds-weight-h3: 600;
+  --ds-tracking-h3: -0.015em;
+  --ds-leading-body: 1.7;
+}
+
+/* ---------------------------------------------------------------
+   Dark mode — the deep navy page, near-white ink. Only the roles
+   change; the ramps above are shared.
+   --------------------------------------------------------------- */
+:root[data-theme='astrowind'].dark {
+  --ds-color-background: oklch(0.14 0.056 269.5);
+  --ds-color-foreground: oklch(0.941 0.016 257.2);
+  --ds-color-surface: oklch(0.185 0.05 269.5);
+  --ds-color-primary: var(--color-primary-500);
+  --ds-color-on-primary: oklch(1 0 0);
+  --ds-color-muted: oklch(0.68 0.02 260);
+  --ds-color-border: oklch(0.29 0.045 269);
+  --ds-color-heading: oklch(0.978 0.001 197);
+  --ds-color-text: oklch(0.941 0.016 257.2);
+  --ds-color-highlight: oklch(0.65 0.2 292.6);
+}
+
+/* AstroWind tints the selection rather than using the browser default. */
+:root[data-theme='astrowind'] ::selection {
+  background-color: oklch(0.875 0.095 260.6);
+}
+:root[data-theme='astrowind'].dark ::selection {
+  background-color: oklch(0.29 0.112 260.4);
+}

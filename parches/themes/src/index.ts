@@ -20,6 +20,7 @@ function theme(name: string, label: string): ParcheManifest {
   };
 }
 
+export const astrowind = (): ParcheManifest => theme('astrowind', 'AstroWind');
 export const corporate = (): ParcheManifest => theme('corporate', 'Corporate');
 export const minimal = (): ParcheManifest => theme('minimal', 'Minimal');
 export const playful = (): ParcheManifest => theme('playful', 'Playful');

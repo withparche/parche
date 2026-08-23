@@ -1,0 +1,43 @@
+{
+  "sections": [
+    {
+      "widget": "layout/Header",
+      "props": {
+        "logo": { "text": "AstroWind", "href": "/" },
+        "links": [
+          {
+            "label": "Landing",
+            "children": [
+              {
+                "links": [
+                  { "label": "Lead Generation", "href": "/landing/lead-generation" },
+                  { "label": "Long-form Sales", "href": "/landing/sales" },
+                  { "label": "Click-Through", "href": "/landing/click-through" },
+                  { "label": "Product Details", "href": "/landing/product" },
+                  { "label": "Coming Soon", "href": "/landing/pre-launch" },
+                  { "label": "Subscription", "href": "/landing/subscription" }
+                ]
+              }
+            ]
+          }
+        ],
+        "actions": [
+          { "label": "Download", "href": "https://github.com/arthelokyo/astrowind", "variant": "primary" }
+        ]
+      }
+    },
+    { "widget": "layout/Main" },
+    {
+      "widget": "layout/Footer",
+      "props": {
+        "siteName": "AstroWind",
+        "columns": [],
+        "secondaryLinks": [
+          { "label": "Terms", "href": "/terms" },
+          { "label": "Privacy policy", "href": "/privacy" }
+        ],
+        "footNote": "Made by <a class=\"text-primary hover:underline\" href=\"https://github.com/arthelokyo\">arthelokyo</a>."
+      }
+    }
+  ]
+}

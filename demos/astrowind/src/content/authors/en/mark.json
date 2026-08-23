@@ -1,0 +1,12 @@
+{
+  "name": "Mark Rivera",
+  "role": "Front-end engineer",
+  "bio": "Cares about page weight, accessibility and getting the details right.",
+  "avatar": {
+    "src": "@/assets/images/portrait.svg",
+    "alt": "Mark Rivera"
+  },
+  "social": {
+    "github": "markrivera"
+  }
+}

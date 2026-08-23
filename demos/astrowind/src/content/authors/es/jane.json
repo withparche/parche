@@ -1,0 +1,13 @@
+{
+  "name": "Jane Doe",
+  "role": "Mantenedora principal",
+  "bio": "Escribe sobre Astro, sistemas de diseño y la parte menos glamurosa de publicar webs.",
+  "avatar": {
+    "src": "@/assets/images/portrait.svg",
+    "alt": "Jane Doe"
+  },
+  "social": {
+    "github": "janedoe",
+    "twitter": "janedoe"
+  }
+}

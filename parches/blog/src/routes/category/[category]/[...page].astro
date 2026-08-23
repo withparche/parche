@@ -73,7 +73,7 @@ const page = await queryPostsByCategory({
 // getStaticPaths per component — so the generated path set is the union across
 // locales. Anything absent in *this* locale is sent to 404 here instead of being
 // rendered as an empty, indexable page.
-if (page.data.length === 0) {
+if (page.data.length === 0 || pageNum > page.lastPage) {
   return Astro.redirect('/404');
 }
 

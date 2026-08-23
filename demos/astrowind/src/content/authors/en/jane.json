@@ -1,0 +1,13 @@
+{
+  "name": "Jane Doe",
+  "role": "Core maintainer",
+  "bio": "Writes about Astro, design systems and the unglamorous parts of shipping websites.",
+  "avatar": {
+    "src": "@/assets/images/portrait.svg",
+    "alt": "Jane Doe"
+  },
+  "social": {
+    "github": "janedoe",
+    "twitter": "janedoe"
+  }
+}
