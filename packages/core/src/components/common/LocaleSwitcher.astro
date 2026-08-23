@@ -56,14 +56,25 @@ function getLocaleName(locale: string): string {
 
 const currentName = getLocaleName(currentLocale);
 
-// Build full list of other locales, marking which ones have alternates
-const allOtherLocales = hasMultipleLocales
+/**
+ * Every configured locale, in the order the project declared them.
+ *
+ * The current one stays in its own position rather than being pinned to the top:
+ * a list that reorders itself depending on which language you are reading is
+ * disorienting, because the entry you want moves.
+ */
+const allLocales = hasMultipleLocales
   ? (locales as Array<string | { path: string; codes: string[] }>)
-      .map((l) => typeof l === 'string' ? l : l.codes[0])
-      .filter((l) => l !== currentLocale)
+      .map((l) => (typeof l === 'string' ? l : l.codes[0]))
       .map((locale) => {
         const alt = alternates.find((a) => a.locale === locale);
-        return { locale, href: alt?.path, disabled: !alt };
+        return {
+          locale,
+          href: alt?.path,
+          current: locale === currentLocale,
+          // No translation of this page exists — shown, but not offered.
+          disabled: locale !== currentLocale && !alt,
+        };
       })
   : [];
 ---
@@ -92,17 +103,20 @@ const allOtherLocales = hasMultipleLocales
       data-locale-panel
     >
       <div class="bg-surface border border-border rounded-lg shadow-lg py-1 min-w-[150px]">
-        {/* Current locale (shown as active) */}
-        <div class="flex items-center justify-between px-3 py-2 text-sm font-medium text-heading bg-black/5 dark:bg-white/5">
-          <span>{currentName}</span>
-          <svg class="w-3.5 h-3.5 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-        </div>
-
-        {/* Other locales */}
-        {allOtherLocales.map((item) =>
-          item.disabled ? (
+        {/* Every locale, in configured order — the current one marked in place */}
+        {allLocales.map((item) =>
+          item.current ? (
+            <div
+              class="flex items-center justify-between px-3 py-2 text-sm font-medium text-heading bg-black/5 dark:bg-white/5"
+              role="menuitem"
+              aria-current="true"
+            >
+              <span>{getLocaleName(item.locale)}</span>
+              <svg class="w-3.5 h-3.5 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          ) : item.disabled ? (
             <span
               class="flex items-center px-3 py-2 text-sm text-muted/40 cursor-default"
               role="menuitem"
