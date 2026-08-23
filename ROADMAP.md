@@ -4,7 +4,7 @@ Where Parche is going. What has already shipped lives in
 [CHANGELOG.md](./CHANGELOG.md); limits found by building real templates live in
 [BACKLOG.md](./BACKLOG.md).
 
-**Status:** `0.4.0` cut · pre-1.0, the public API is not stable · kept current,
+**Status:** `0.5.0` cut · pre-1.0, the public API is not stable · kept current,
 confirm-first (see [How this is maintained](#how-this-is-maintained)).
 
 ## Where we are
@@ -13,15 +13,16 @@ The architecture has settled. `@parche/core` is a pure engine — the host — a
 everything else is a **parche** declaring what it provides and requires, composed
 through a single `parche({ parches: [...] })` entry with preset/`extends` support.
 Pages are data (`sections: [{ widget, props }]`) rendered through the virtual-module
-registry. All seven packages are versioned together at `0.4.0`, three templates and
-nine examples build in CI, and there is now a regression net (51 unit tests +
-build-smoke + a starter scaffold-build).
+registry. All seven packages are versioned together at `0.5.0`, three templates,
+nine examples and a full bilingual demo build in CI, and there is a regression net
+(106 unit tests + build-smoke + a starter scaffold-build).
 
-What is *not* settled: the widget layer. Two templates built end-to-end (SaaS
-landing, portfolio) showed the engine holds and the widget library is what runs out
-of road first — which is what v0.5 goes after.
+0.5.0 came out of porting AstroWind: the config surface was reshaped to mirror
+Astro and to stay serialisable for a CMS, and the blog became locale-aware end to
+end. What is *not* settled remains the widget layer — and, now visibly, the
+configuration story itself, which has changed shape twice in two releases.
 
-## Next: v0.5 — trustworthy contracts, credible components
+## Next: v0.6 — trustworthy contracts, credible components
 
 **Goal:** a site author can rely on the parche contract catching real mistakes, and
 on the components being accessible and themeable.
@@ -34,18 +35,18 @@ on the components being accessible and themeable.
       interaction — no primitive relies on the shared `Action` wrapper for its a11y.
 - [ ] No hardcoded colors in primitives or widgets (e.g. Badge's `bg-green-500`), so
       a theme parche reskins everything.
-- [ ] `0.4.0` published to npm — including `@parche/cli`, which still serves `0.0.1`
-      there while every other package shipped `0.3.0-alpha.0`.
+- [ ] `0.5.0` published to npm, with the config migration documented in the
+      changelog — it is the second breaking change to `parche.config.ts` in two
+      releases, so the next one should be the last before the shape is frozen.
 
 **Also in scope**
 
-- [ ] A `Projects` / `Gallery` widget: responsive card grid with image, title, blurb,
-      tag chips and link — the largest gap the portfolio template exposed
-      (BACKLOG T2, high).
 - [ ] `Steps` chooses its layout (`timeline` vs `grid`) independently of whether an
-      image is present (BACKLOG T2, med).
+      image is present (BACKLOG T2/T3, med).
+- [ ] Every widget routes its CTA through the shared `Action` component — four do
+      today, the rest hand-roll the markup (BACKLOG T3, med).
 
-## v0.6 — variety and reach
+## v0.7 — variety and reach
 
 - Widget spec V2: variants as separate components, the dual human/AI schema, and more
   layout variants per widget so a page can vary rhythm without relying on the
@@ -53,8 +54,6 @@ on the components being accessible and themeable.
 - `parche astro add <widget|parche>`.
 - Community templates repo (`withparche/templates`).
 - A documentation site.
-- `defaultTheme` per site/template — today a page renders in dark mode with no way to
-  pin a default (BACKLOG T1, deferred-low).
 - Measure the per-request SSR cost now that the catch-all is exercised under
   `output: 'server'` (BACKLOG T1, info).
 

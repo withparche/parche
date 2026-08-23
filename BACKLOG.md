@@ -106,54 +106,57 @@ a blog with taxonomies and its own theme, 94 built URLs. The first bilingual sit
 this repo, and the first port with an original to compare against — so a gap could
 not be dodged by redesigning the section around it.
 
-This cycle found nine defects and fixed seven of them; **what was fixed is recorded
-in [`CHANGELOG.md`](./CHANGELOG.md)**, not here. Two of the seven had nothing to do
-with translations and affected every user: an out-of-range page number silently
-served a duplicate of page one, and a Markdown page lost its entire body unless it
-named a template. What remains open is below.
+The cycle found **nineteen defects and fixed seventeen**; what was fixed is recorded
+in [`CHANGELOG.md`](./CHANGELOG.md), not here. Two observations are worth keeping,
+because they say something about where the gaps come from:
 
-### i18n — the gaps that survive
+- **Most were not about translations.** An out-of-range page number served a
+  duplicate of page one with a 200; a Markdown page lost its entire body unless it
+  named a template; every hero in the repo sat flush against the viewport edge; a
+  Zod default skipped its own nested defaults. All of those had been shipping.
+- **A port finds what a design does not.** T1 and T2 were free to redesign around a
+  limitation. With an original to match, a gap has to be closed.
 
-- **[high] The locale switcher is dead on every blog route.** `LocaleSwitcher`
-  recovers the current page through `resolvePageFromSlug`, which only queries the
-  `pages` collection. On `/blog`, a post, or any taxonomy page the lookup returns
-  nothing, so every other locale renders as a disabled `<span aria-disabled="true">`.
-  Verified in the built output. A visitor who lands on an article cannot switch
-  language at all — which is most of the traffic a blog gets. Needs a fallback that
-  swaps the locale segment of the current path when the pages lookup misses.
-- **[high] No hreflang outside `pages`.** Emission is guarded by `mode === 'page'` in
-  the catch-all, and the blog's own routes never import `getAlternateUrls`. Measured:
-  one `<link rel="alternate">` on `/about`, zero on `/blog`, zero on a post. Search
-  engines cannot pair the translations of any article, which is the one place the
-  pairing matters most.
-- **[med] Site metadata is not per-locale.** `site.description` in `parche.config.ts`
-  is a single global string, so `/es/blog` serves the English description in its
-  `<meta name="description">` and in the RSS channel. The same applies to `site.name`
-  and the Open Graph defaults.
-- **[low] Posts cannot be linked as translations.** A post's locale is positional (the
-  first id segment) and there is no `translationKey`, so `en/hello.md` and
-  `es/hola.md` are unrelated as far as the system is concerned. Pages solve this with
-  `pageKey` + `urlSlug`; posts have no equivalent, which is also what blocks hreflang
-  for articles above.
-- **[low] `<html>` carries no `dir` attribute.** The blog widgets already ship RTL
-  classes (`rtl:mr-0 rtl:ml-2`) that can never activate, so the support is decorative.
+What remains open is below.
 
-### Taxonomy and content
+### Still open
 
-- **[med] Taxonomy slugs are raw lowercased names.** A tag "Diseño Web" produces
-  `/blog/tag/diseño web`. It is internally consistent — `getStaticPaths`, the
-  permalink resolver and the matcher all use the same raw value, so links resolve —
-  but the URLs are ugly and encode badly. Fixing it means slugifying in all three
-  places at once; changing only the permalink would break the match. Note the post
-  permalink's own `%category%` was fixed this cycle and does transliterate.
-- **[low] `dateFormat` is dead config.** Declared in three lines of
-  `parches/blog/src/types.ts` and read by nothing. Either wire it or drop it; today
-  passing it does nothing at all, silently.
+- **[low] `<html dir>` is derived, but nothing verifies RTL end to end.** The
+  attribute is emitted now, so the `rtl:` utilities in the blog widgets can finally
+  match — but no project in the repo uses a right-to-left locale, so the layout has
+  never actually been seen in that direction. It is support that compiles, not
+  support that is known to work.
+- **[med] Two container widths coexist.** Chrome (header, footer) uses `max-w-6xl`
+  while page sections use `max-w-7xl`, so a hero's headline is slightly wider than
+  the logo above it. Heroes follow the section width deliberately, to line up with
+  the Features and Content blocks beneath them. Whether the two should converge is a
+  design decision, not a bug.
+- **[low] Seven `--font-*` variables were removed, and nothing replaces them.**
+  `--font-serif`, `--font-rounded`, `--font-tech` and friends had no provider and no
+  consumer once fonts moved to themes. A theme that wants a second family declares
+  its own variable alongside its font — but no theme does yet, so the pattern is
+  untested.
+- **[low] `parche.config.json` is supported but unused.** The JSON path is tested and
+  produces byte-identical output to the TypeScript one, yet no project in the repo
+  ships a JSON config, so the CMS story it exists for has never been exercised end
+  to end.
+
+### Widgets — the territory T3 did not close
+
+- **[med] `Steps` still cannot choose its layout.** Carried over from T2: it renders a
+  horizontal grid without an image and a vertical timeline with one, so a work-history
+  timeline has to invent an image to get the shape it wants.
+- **[med] Only four widgets use the shared `Action` component.** Hero, Hero2, HeroText
+  and CallToAction route their CTAs through it and get the focus ring and icon
+  handling; Content, Steps, Pricing and Projects hand-roll their own markup. The
+  inconsistency shows up as buttons that look almost the same.
+- **[low] `LegacyWrapper.astro` is imported by nothing.** Dead since chrome moved to
+  the ui parche.
 
 ### Corrections to earlier entries
 
 - **T2's `[high]` "No Projects / gallery grid widget" is resolved.** `Projects` exists,
   is registered at `parches/ui/src/index.ts:36` and the portfolio template uses it.
-  The entry above predates the portfolio widget suite.
+  The entry predates the portfolio widget suite.
 - **T1's `[deferred-low]` "Default renders in dark mode / no `defaultTheme`" is
   resolved** by `themes.default`, which renders `data-theme` server-side.

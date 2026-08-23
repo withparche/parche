@@ -11,6 +11,18 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
 
 ## [Unreleased]
 
+## [0.5.0] — 2026-08-23
+
+The release that came out of rebuilding AstroWind on Parche as a real bilingual
+site. Porting something with an original to compare against turned out to be a
+much harsher test than designing a template freely: it found nineteen defects,
+several of which had nothing to do with translations and had been shipping since
+before 0.4.0.
+
+The config surface is **reshaped and breaking** — it now mirrors Astro where
+Astro already has an opinion, and holds only serialisable data so a git-based CMS
+can edit it. See [Migrating](#migrating-from-040).
+
 ### Added
 
 - **`themes.default`** (`e58102c`) — the theme rendered on `<html data-theme>` by the
@@ -29,12 +41,50 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   (en/es): 20 pages, three layouts, a blog with taxonomies, 94 built URLs. The repo
   gains a `demos/` workspace glob for full sites that are bigger than an example and
   are not CLI-served starters.
+- **A `taxonomies` collection** (`785ca8d`) — one entry per locale where a category or
+  tag can declare its title, slug, description and image. A term that is *not*
+  declared behaves exactly as before, so adding the collection changes nothing until
+  something is declared.
+- **`i18n.translations`** (`7a1bf3f`, `ef2ef6e`) — per-locale overrides of the site's
+  own identity and metadata. Astro's i18n is routing only; its documentation puts
+  translating metadata on the developer, and this is that half. Until now a Spanish
+  blog listing served the English site description.
+- **`parche.config.json`** (`fe3f331`) — the site config can be JSON, probed for
+  alongside `.ts`/`.mjs`/`.js`, read and validated at setup. This is what makes the
+  config editable by a git-based CMS, and it is why nothing in it may be a function.
+- **`fonts` on a parche manifest and in the site config** (`3ff3d46`) — web fonts as
+  data. A theme declares the typeface its design calls for; a site can add or replace
+  any of them.
+- **`dateFormat` as `Intl.DateTimeFormatOptions`** (`4db1052`) — the option existed and
+  was read by nothing. Rather than implement the token template it advertised, it now
+  takes Intl options: the option picks the style, the locale picks the word order.
+- **`dir` on `<html>`** (`ee3cdc7`), derived from the locale with `Intl`. The blog
+  widgets already carried `rtl:` utilities that could never activate.
+- **A `position` prop on `layout/Header`** (`3486ef6`) — `'left' | 'center' | 'right'`,
+  default unchanged. A short menu centred in a wide bar reads as stranded on a landing.
 
 ### Changed
 
+- **The site config mirrors Astro where Astro has an opinion** (`ef2ef6e`). `site` is
+  now the origin — same name and type as Astro's — `base` joins it, the identity moved
+  to `brand`, and `metadata` absorbed the old `seo` block and the top-level
+  `organization`. `metadata` is deliberately the same name a page uses, because it is
+  the same thing one level up: the defaults a page inherits.
+- **A config value has one home** (`7a1bf3f`, `a6cb404`). The site URL and the i18n
+  setup can each be declared in astro.config or in the Parche config; declaring one in
+  both is now an error naming both places, and a Parche-only declaration is fed to
+  Astro. Previously Astro's silently won.
 - **Blog permalink resolvers take a locale** (`e58102c`). `resolvePostPermalink` and
   `resolveTaxonomyPermalink` gained optional `locale`/`defaultLocale` parameters and
   prefix through a new exported `localizePath`. Existing calls keep working unchanged.
+- **Core ships no web fonts** (`3ff3d46`, `093441f`). It provided a fixed set every
+  project imported by hand, so each site downloaded the same eight families whatever it
+  looked like — sixteen files, filling nine CSS variables of which core's own
+  stylesheets read two. A typeface belongs to a visual identity, so themes carry it
+  now. Core provides the fallback chain instead, which costs no download. Measured:
+  projects with a theme download two files, projects without one download none.
+- **The language switcher keeps one order** (`a997535`). It pinned the current locale to
+  the top, so the list reordered itself depending on the page you were on.
 
 ### Fixed
 
@@ -70,6 +120,85 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
 - **Series and related-post labels leaked English** (`45b542d`) on translated posts
   served through the resolver: the extras were pushed by widget name with no strings
   attached, and the catch-all cannot know they hold user-facing text.
+- **`@/assets/…` only resolved inside the section renderer** (`33133e8`, `785ca8d`).
+  Post images rendered as the literal path and 404'd, while the related-posts
+  thumbnails on the same page resolved — because those travel through DynamicRenderer
+  and frontmatter does not. The resolution is now a shared utility called at every
+  boundary content enters the render tree: post data, listing cards, author avatars,
+  the two homepage blog widgets, the layout chrome (a logo or mega-menu image was as
+  broken) and the share image. Ordering matters in the resolver: JSON-LD prefixes the
+  site origin onto `image.src`, after which the path is unrecognisable.
+- **Full-bleed widgets had no horizontal container** (`aa1f0bf`). Hero, Hero2 and
+  HeroText set vertical padding only, and skipping SectionWrapper is what supplied the
+  rest — so their copy sat flush against the viewport edge in every project in the
+  repo. Centred copy read as "wide"; Hero2's left-aligned copy made it obvious.
+- **Translated posts were invisible to each other** (`3486ef6`). Two posts pair by file
+  name once the locale directory is stripped, exactly as pages pair by `pageKey`, and
+  the machinery already existed — nothing used it. Posts now emit hreflang and the
+  language switcher works on blog routes, where it had been greyed out on every page.
+- **Author links pointed at pages that were never built** (`785ca8d`). The post template
+  derived them from the display name (`jane-doe`) while the author route generates
+  paths from the entry key (`jane`).
+- **A Zod `.default({})` skipped its own nested defaults** (`fe3f331`). An absent
+  `metadata.defaultRobots` stayed empty while one written as `{}` was filled in, so the
+  same site emitted `index, follow` or the full directive set depending on whether a
+  key happened to be present. `.prefault` parses the default.
+- **Every site emitted a schema.org Organization node** (`fe3f331`) built from the brand
+  name, declared or not, because its default was truthy. It is opt-in now.
+- **Both themes named a font that was never loaded** (`093441f`). `astrowind.css` read
+  `var(--font-inter)` and `corporate.css` named `"Inter"` as a literal, and neither was
+  in the font set — so the typeface each theme was designed around silently fell back
+  to a system font.
+
+### Migrating from 0.4.0
+
+**1. The site config changed shape.** What was one `site` object is now four keys:
+
+```ts
+// before
+export default defineConfig({
+  site: { name: 'Acme', description: '…', url: 'https://acme.com', defaultLanguage: 'en' },
+  metadata: { ogImage: '/og.png', twitterHandle: '@acme' },
+  seo: { preconnect: ['https://fonts.gstatic.com'] },
+  organization: { type: 'Organization', name: 'Acme' },
+});
+
+// after
+export default defineConfig({
+  site: 'https://acme.com',
+  brand: { name: 'Acme', description: '…' },
+  metadata: {
+    ogImage: '/og.png',
+    twitterHandle: '@acme',
+    preconnect: ['https://fonts.gstatic.com'],
+    organization: { type: 'Organization', name: 'Acme' },
+  },
+});
+```
+
+`defaultLanguage` is gone — Astro already calls it `i18n.defaultLocale`, and it is
+read from there.
+
+**2. Declare the site URL and i18n in one place, not two.** If `astro.config` sets
+`site` and the Parche config sets `site`, the build now stops with an error naming
+both. Keep whichever you prefer: Parche reads Astro's when only Astro has it, and
+feeds its own to Astro when only Parche does.
+
+**3. Remove `fonts: parcheFonts` and its import.** `@parche/core/fonts` no longer
+exists. A project with no theme now renders in the system font stack and downloads
+nothing; to keep a web font, import a theme that declares one or declare it yourself:
+
+```ts
+// parche.config.ts
+fonts: [{ name: 'Inter', cssVariable: '--font-sans', weights: [400, 700], preload: true }],
+```
+
+**4. If you passed `dateFormat`, change its type.** It took a token string that
+nothing read; it now takes `Intl.DateTimeFormatOptions`
+(`{ year: 'numeric', month: 'long', day: 'numeric' }`).
+
+**5. Declared taxonomy terms change URL.** Only if you add the new `taxonomies`
+collection — an undeclared term keeps the URL it had.
 
 ## [0.4.0] — 2026-08-23
 
@@ -338,6 +467,7 @@ templates shipped in core, and were extracted to the ui parche later (`4af1d90`)
 of the bootstrap — this project was built to be worked on with coding agents from the
 first commit.
 
-[Unreleased]: https://github.com/withparche/parche/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/withparche/parche/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/withparche/parche/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/withparche/parche/compare/v0.3.0-alpha.0...v0.4.0
 [0.3.0-alpha.0]: https://github.com/withparche/parche/releases/tag/v0.3.0-alpha.0
