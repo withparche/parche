@@ -11,6 +11,66 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
 
 ## [Unreleased]
 
+### Added
+
+- **`themes.default`** (`e58102c`) — the theme rendered on `<html data-theme>` by the
+  server. Until now a theme was only applied from `localStorage`, so a first-time
+  visitor never saw the site's own theme. Validated at config time against the themes
+  the imported parches provide; a visitor's stored choice still wins.
+- **`createBlog({ labels })`** (`e58102c`) — blog UI strings as data, keyed by locale,
+  falling back to the default locale and then to English. Mirrors the contact
+  template's `formLabels`; no translation runtime. Around forty strings that were
+  baked into routes and widgets are now translatable, including the route-level ones
+  (page titles, breadcrumbs, "Tag: X") that a site previously could not reach at all.
+- **The `astrowind` theme** (`45b542d`) — AstroWind's identity as a theme parche: its
+  blue, near-black ink on white and deep navy dark mode, converted from
+  `CustomStyles.astro`'s rgb values to OKLCH, plus Inter and pill-shaped controls.
+- **`demos/astrowind`** (`45b542d`, `12ba031`) — AstroWind rebuilt on Parche, bilingual
+  (en/es): 20 pages, three layouts, a blog with taxonomies, 94 built URLs. The repo
+  gains a `demos/` workspace glob for full sites that are bigger than an example and
+  are not CLI-served starters.
+
+### Changed
+
+- **Blog permalink resolvers take a locale** (`e58102c`). `resolvePostPermalink` and
+  `resolveTaxonomyPermalink` gained optional `locale`/`defaultLocale` parameters and
+  prefix through a new exported `localizePath`. Existing calls keep working unchanged.
+
+### Fixed
+
+- **Blog links dropped the locale prefix** (`e58102c`). Post, tag, category and author
+  hrefs, pagination base URLs, the post template's links, RSS item links and JSON-LD
+  breadcrumbs all pointed at the default locale, so a translated visitor was returned
+  to the default language on the first click. Breadcrumb "Home" no longer links to the
+  default locale's homepage from a translated page either.
+- **An out-of-range page served a duplicate** (`45b542d`). `paginateArray` clamps the
+  requested page back into range, so `/blog/99` returned page 1 with a 200 — indexable
+  duplicate content, with or without translations. Listing and taxonomy routes now
+  compare the requested page against the last one and 404 instead.
+- **Locale-absent listings rendered empty and indexable** (`e58102c`). `getStaticPaths`
+  takes the union across locales because Astro caches it per component and every locale
+  shares the entrypoint; pages and taxonomies with nothing in the current locale now
+  404 rather than rendering an empty page with `noindex: false`.
+- **`BlogLatestPosts` and `BlogHighlightedPosts` ignored locale and permalinks**
+  (`e58102c`). Both queried the whole posts collection unfiltered and hardcoded
+  `/${slug}` hrefs, so every link was a 404 under the default `/blog/%slug%` pattern.
+  No example or template used them, which is why it went unnoticed.
+- **Posts 404'd outside the default locale with a root-level permalink** (`e58102c`).
+  `resolver.getPaths` received `locales` and `defaultLocale` and referenced neither,
+  emitting unprefixed paths deduped by key — so a shared slug made only the default
+  locale reachable. Paths are now built through the permalink resolver, and the
+  catch-all peels the locale prefix off the slug in both static and SSR.
+- **Markdown page bodies were silently dropped** (`12ba031`) unless the page also named
+  a template, because `LayoutRenderer` only rendered them inside a template component.
+  This also repairs `examples/markdown-pages`, whose own body advertises the feature
+  while its built HTML contained none of it.
+- **Post dates always formatted as `en-US`** (`e58102c`) in the three post widgets.
+- **`slugify` deleted accented characters** (`e58102c`) rather than transliterating
+  them — `\w` is ASCII-only, so a category "Guías Prácticas" became `guas-prcticas`.
+- **Series and related-post labels leaked English** (`45b542d`) on translated posts
+  served through the resolver: the extras were pushed by widget name with no strings
+  attached, and the catch-all cannot know they hold user-facing text.
+
 ## [0.4.0] — 2026-08-23
 
 The release that makes Parche verifiable. It adds the first regression net (51 unit

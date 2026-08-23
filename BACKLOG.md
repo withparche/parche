@@ -98,3 +98,62 @@ content exposed real gaps:
   Testimonials (recommendations), CallToAction (contact) all repurposed cleanly.
 - The skill's rhythm held up: asymmetric About/work, subtle tints on Skills &
   Experience, a brand wash on Stats, a glow on the contact CTA.
+
+## From T3 — AstroWind port (`demos/astrowind`)
+
+Rebuilt AstroWind end to end on Parche, bilingual (en/es): 20 pages, three layouts,
+a blog with taxonomies and its own theme, 94 built URLs. The first bilingual site in
+this repo, and the first port with an original to compare against — so a gap could
+not be dodged by redesigning the section around it.
+
+This cycle found nine defects and fixed seven of them; **what was fixed is recorded
+in [`CHANGELOG.md`](./CHANGELOG.md)**, not here. Two of the seven had nothing to do
+with translations and affected every user: an out-of-range page number silently
+served a duplicate of page one, and a Markdown page lost its entire body unless it
+named a template. What remains open is below.
+
+### i18n — the gaps that survive
+
+- **[high] The locale switcher is dead on every blog route.** `LocaleSwitcher`
+  recovers the current page through `resolvePageFromSlug`, which only queries the
+  `pages` collection. On `/blog`, a post, or any taxonomy page the lookup returns
+  nothing, so every other locale renders as a disabled `<span aria-disabled="true">`.
+  Verified in the built output. A visitor who lands on an article cannot switch
+  language at all — which is most of the traffic a blog gets. Needs a fallback that
+  swaps the locale segment of the current path when the pages lookup misses.
+- **[high] No hreflang outside `pages`.** Emission is guarded by `mode === 'page'` in
+  the catch-all, and the blog's own routes never import `getAlternateUrls`. Measured:
+  one `<link rel="alternate">` on `/about`, zero on `/blog`, zero on a post. Search
+  engines cannot pair the translations of any article, which is the one place the
+  pairing matters most.
+- **[med] Site metadata is not per-locale.** `site.description` in `parche.config.ts`
+  is a single global string, so `/es/blog` serves the English description in its
+  `<meta name="description">` and in the RSS channel. The same applies to `site.name`
+  and the Open Graph defaults.
+- **[low] Posts cannot be linked as translations.** A post's locale is positional (the
+  first id segment) and there is no `translationKey`, so `en/hello.md` and
+  `es/hola.md` are unrelated as far as the system is concerned. Pages solve this with
+  `pageKey` + `urlSlug`; posts have no equivalent, which is also what blocks hreflang
+  for articles above.
+- **[low] `<html>` carries no `dir` attribute.** The blog widgets already ship RTL
+  classes (`rtl:mr-0 rtl:ml-2`) that can never activate, so the support is decorative.
+
+### Taxonomy and content
+
+- **[med] Taxonomy slugs are raw lowercased names.** A tag "Diseño Web" produces
+  `/blog/tag/diseño web`. It is internally consistent — `getStaticPaths`, the
+  permalink resolver and the matcher all use the same raw value, so links resolve —
+  but the URLs are ugly and encode badly. Fixing it means slugifying in all three
+  places at once; changing only the permalink would break the match. Note the post
+  permalink's own `%category%` was fixed this cycle and does transliterate.
+- **[low] `dateFormat` is dead config.** Declared in three lines of
+  `parches/blog/src/types.ts` and read by nothing. Either wire it or drop it; today
+  passing it does nothing at all, silently.
+
+### Corrections to earlier entries
+
+- **T2's `[high]` "No Projects / gallery grid widget" is resolved.** `Projects` exists,
+  is registered at `parches/ui/src/index.ts:36` and the portfolio template uses it.
+  The entry above predates the portfolio widget suite.
+- **T1's `[deferred-low]` "Default renders in dark mode / no `defaultTheme`" is
+  resolved** by `themes.default`, which renders `data-theme` server-side.
