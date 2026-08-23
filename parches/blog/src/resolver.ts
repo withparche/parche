@@ -10,7 +10,7 @@
  *   getPaths(locales, defaultLocale, opts) — enumerate all post slugs for static mode
  */
 import { getCollection, getEntry } from 'astro:content';
-import { getPublishedPosts, extractPostLocale } from './utils/post-helpers.js';
+import { getPublishedPosts, extractPostLocale, getPostAlternates } from './utils/post-helpers.js';
 import { querySinglePost } from './utils/blog-query.js';
 import { calculateReadingTime } from './utils/reading-time.js';
 import { findRelatedPosts } from './utils/related-posts.js';
@@ -49,6 +49,12 @@ interface ResolvedPost {
       wrapper?: false | { classes?: Record<string, unknown>; [key: string]: unknown };
     }>;
   };
+  /**
+   * This post's translations, one per locale that actually has one. Core emits
+   * them as hreflang and feeds the language switcher; it has no way to work them
+   * out itself, because the pairing rule belongs to the app that owns the content.
+   */
+  alternates: Array<{ locale: string; path: string }>;
 }
 
 /**
@@ -120,8 +126,14 @@ export async function resolve(
   const base = siteUrl.replace(/\/$/, '');
   const pageUrl = `${base}${resolvePostPermalink(permalinks.post, post, locale, defaultLocale)}`;
 
+  // Resolve '@/assets/…' before anything derives a URL from it: JSON-LD prefixes
+  // the site origin onto image.src, and after that the path is no longer
+  // recognisable as an asset reference.
+  const { resolveAssets } = await import('parche:utils/assets');
+  const postData = await resolveAssets({ ...post.data, readingTime });
+
   const blogPostingJsonLd = generateBlogPostingJsonLd({
-    post: { ...post.data, readingTime },
+    post: postData,
     url: pageUrl,
     siteUrl,
     authorName: authorData[0]?.name,
@@ -135,7 +147,6 @@ export async function resolve(
     { name: post.data.title, url: pageUrl },
   ]);
 
-  const postData = { ...post.data, readingTime };
 
   // Trailing sections as generic { widget, props, wrapper } — the blog parche
   // decides the widgets and their layout; the core route just renders them.
@@ -183,18 +194,27 @@ export async function resolve(
     });
   }
 
+  // Translations of this post: same file name under a different locale directory.
+  const { postKey: currentKey } = extractPostLocale(post.id, defaultLocale);
+  const alternates = getPostAlternates(await getCollection('posts'), currentKey, defaultLocale, opts.showDrafts)
+    .map(({ locale: altLocale, post: altPost }) => ({
+      locale: altLocale,
+      path: resolvePostPermalink(permalinks.post, altPost, altLocale, defaultLocale),
+    }));
+
   return {
+    alternates,
     template: post.data.template || 'blog-post',
     layout: post.data.layout || 'default',
     collection: 'posts',
     entryId: post.id,
-    templateProps: {
+    templateProps: await resolveAssets({
       data: postData,
       authorData,
       tocItems: [], // TOC gets resolved by catch-all after rendering
       permalinks,
-    },
-    metadata: {
+    }),
+    metadata: await resolveAssets({
       title: `${post.data.metadata?.title ?? post.data.title} — ${siteName}`,
       description: post.data.metadata?.description ?? post.data.description ?? post.data.excerpt,
       canonical: post.data.metadata?.canonical,
@@ -203,7 +223,7 @@ export async function resolve(
       ogType: 'article' as const,
       ogTitle: post.data.metadata?.ogTitle ?? post.data.title,
       ogDescription: post.data.metadata?.ogDescription ?? post.data.description,
-      ogImage: post.data.metadata?.ogImage ?? post.data.image?.src,
+      ogImage: post.data.metadata?.ogImage ?? postData.image?.src,
       twitterCard: post.data.metadata?.twitterCard ?? ('summary_large_image' as const),
       article: {
         author: authorData[0]?.name,
@@ -213,7 +233,7 @@ export async function resolve(
         tags: post.data.tags,
       },
       jsonLd: [blogPostingJsonLd, breadcrumbJsonLd],
-    },
+    }),
     extras: { sections: extraSections },
   };
 }

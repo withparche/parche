@@ -81,6 +81,7 @@ const CORE_MODULES: Record<string, string> = {
   'parche:utils/metadata': corePath('utils/metadata.ts'),
   'parche:utils/i18n': corePath('utils/i18n.ts'),
   'parche:utils/layout': corePath('utils/layout.ts'),
+  'parche:utils/assets': corePath('utils/assets.ts'),
   // Note: layout/Header, layout/Footer and the contact/content templates are
   // now provided by the ui parche — core no longer ships chrome or primitives.
 };
@@ -91,6 +92,7 @@ const BASE_NAMED_EXPORTS: readonly string[] = [
   'parche:utils/metadata',
   'parche:utils/i18n',
   'parche:utils/layout',
+  'parche:utils/assets',
 ];
 
 /**

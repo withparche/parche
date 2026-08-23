@@ -26,6 +26,7 @@ import { generateBlogPostingJsonLd, generateBreadcrumbJsonLd } from '../../utils
 import { resolvePostPermalink, resolveTaxonomyPermalink, localizePath } from '../../types.js';
 import { resolveLayout } from 'parche:utils/layout';
 import { defaultLocale } from 'parche:config/i18n';
+import { resolveAssets } from 'parche:utils/assets';
 import { resolveLabels } from '../../labels.js';
 
 const cfg = blogConfig as any;

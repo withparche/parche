@@ -143,6 +143,11 @@ declare module 'parche:LayoutRenderer' {
   export default Component;
 }
 
+declare module 'parche:utils/assets' {
+  /** Replace every `@/assets/…` string at any depth with its built asset URL. */
+  export function resolveAssets<T>(value: T): Promise<T>;
+}
+
 declare module 'parche:utils/layout' {
   interface Section {
     widget: string;

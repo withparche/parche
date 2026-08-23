@@ -1,18 +1,19 @@
 ---
-title: "Empezar una web con AstroWind, Astro y Tailwind CSS"
-excerpt: "Arranca tu proyecto con AstroWind: Astro y Tailwind CSS para una web rápida y accesible."
-publishDate: "2026-08-12T00:00:00Z"
-category: "Tutoriales"
+urlSlug: dominar-las-landing-pages
+title: "Dominar las landing pages: guía práctica"
+excerpt: "¿Has pulsado un anuncio y acabado en una página que claramente quería algo de ti? Eso es una landing."
+publishDate: "2026-06-15T00:00:00Z"
+category: "Guias"
 tags:
-  - astro
-  - tailwind-css
+  - landing-pages
+  - front-end
 authors:
-  - jane
-authorName: Jane Doe
-featured: true
+  - mark
+authorName: Mark Rivera
+featured: false
 image:
   src: "@/assets/images/post-1.svg"
-  alt: "Empezar una web con AstroWind, Astro y Tailwind CSS"
+  alt: "Dominar las landing pages: guía práctica"
 ---
 
 ## Por qué importa

@@ -181,6 +181,19 @@ if (mode === 'page' && pageData) {
   pageLayoutName = pageData.layout || 'default';
 }
 
+// Resolver-backed content (e.g. a blog post) knows its own translations; core
+// cannot derive them, because the pairing rule belongs to the app.
+if (mode === 'resolver' && resolvedApp?.alternates?.length) {
+  alternates = resolvedApp.alternates.map((alt: { locale: string; path: string }) => ({
+    locale: alt.locale,
+    href: Astro.site ? new URL(alt.path, Astro.site).href : alt.path,
+  }));
+}
+
+// Expose them to the component tree (the language switcher lives inside the
+// layout chrome and has no other way to reach route-level data).
+Astro.locals.parche = { ...(Astro.locals.parche ?? {}), locale, alternates };
+
 const metadata = mode === 'resolver' ? appMetadata : pageMetadata;
 const layoutName = mode === 'resolver'
   ? (resolvedApp?.layout || 'default')
@@ -189,7 +202,7 @@ const layoutSections = await resolveLayout(layoutName, locale, defaultLocale);
 ---
 
 <BaseLayout metadata={metadata} config={config} lang={locale}>
-  {mode === 'page' && alternates.length > 0 && (
+  {alternates.length > 1 && (
     <Fragment slot="head">
       {alternates.map((alt) => (
         <link rel="alternate" hreflang={alt.locale} href={alt.href} />

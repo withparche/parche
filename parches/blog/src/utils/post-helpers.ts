@@ -107,3 +107,28 @@ export function getAllSeries(posts: Post[], showDrafts = false, locale?: string)
   }
   return [...series];
 }
+
+/**
+ * Find a post's translations.
+ *
+ * Two posts are translations of each other when their file names match once the
+ * locale directory is stripped — `en/hello.md` and `es/hello.md` share the post
+ * key `hello`. The URL still differs per locale, because each file can carry its
+ * own `urlSlug`. This is the same rule pages use with `pageKey`.
+ *
+ * Returns one entry per locale that actually has a published translation, so a
+ * caller can emit hreflang or drive a language switcher without guessing.
+ */
+export function getPostAlternates(
+  posts: Post[],
+  postKey: string,
+  defaultLocale = 'en',
+  showDrafts = false,
+): Array<{ locale: string; post: Post }> {
+  const out: Array<{ locale: string; post: Post }> = [];
+  for (const post of getPublishedPosts(posts, showDrafts)) {
+    const { locale, postKey: key } = extractPostLocale(post.id, defaultLocale);
+    if (key === postKey) out.push({ locale, post });
+  }
+  return out;
+}

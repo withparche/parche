@@ -1,18 +1,19 @@
 ---
-title: "Recursos útiles para crear webs"
-excerpt: "Una lista breve y con criterio de las herramientas y referencias que merecen tu tiempo."
-publishDate: "2026-05-28T00:00:00Z"
-category: "Recursos"
+urlSlug: empezar-web-con-astro-y-tailwind
+title: "Empezar una web con AstroWind, Astro y Tailwind CSS"
+excerpt: "Arranca tu proyecto con AstroWind: Astro y Tailwind CSS para una web rápida y accesible."
+publishDate: "2026-08-12T00:00:00Z"
+category: "Tutoriales"
 tags:
-  - resources
-  - front-end
+  - astro
+  - tailwind-css
 authors:
   - jane
 authorName: Jane Doe
-featured: false
+featured: true
 image:
-  src: "@/assets/images/post-2.svg"
-  alt: "Recursos útiles para crear webs"
+  src: "@/assets/images/post-1.svg"
+  alt: "Empezar una web con AstroWind, Astro y Tailwind CSS"
 ---
 
 ## Por qué importa

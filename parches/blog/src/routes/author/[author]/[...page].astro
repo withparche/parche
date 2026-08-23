@@ -19,6 +19,7 @@ import { calculateReadingTime } from '../../../utils/reading-time.js';
 import { resolvePostPermalink, resolveTaxonomyPermalink, localizePath } from '../../../types.js';
 import { resolveLayout } from 'parche:utils/layout';
 import { defaultLocale } from 'parche:config/i18n';
+import { resolveAssets } from 'parche:utils/assets';
 import { resolveLabels, format } from '../../../labels.js';
 import { extractPostLocale } from '../../../utils/post-helpers.js';
 import Container from 'parche:primitives/Container';
@@ -103,9 +104,10 @@ if (page.data.length === 0 || pageNum > page.lastPage) {
 }
 
 const labels = resolveLabels(cfg.labels, locale, defaultLocale);
+const resolvedAuthor = await resolveAssets(authorData);
 const layoutSections = await resolveLayout('default', locale, defaultLocale);
 
-const posts = page.data.map((post: any) => {
+const posts = await resolveAssets(page.data.map((post: any) => {
   const rt = cfg.readingTime
     ? calculateReadingTime(post.body ?? '', cfg.wordsPerMinute)
     : null;
@@ -121,7 +123,7 @@ const posts = page.data.map((post: any) => {
     categoryHref: post.data.category ? resolveTaxonomyPermalink(permalinks.category, post.data.category, locale, defaultLocale) : undefined,
     tagHrefs: post.data.tags?.map((t: string) => resolveTaxonomyPermalink(permalinks.tag, t, locale, defaultLocale)),
   };
-});
+}));
 
 const metadata = {
   title: `${authorData.name} — ${config.site.name}`,
@@ -152,7 +154,7 @@ const breadcrumbs = [
         <AuthorCard
           name={authorData.name}
           bio={authorData.bio}
-          avatar={authorData.avatar}
+          avatar={resolvedAuthor.avatar}
           role={authorData.role}
           social={authorData.social}
         />

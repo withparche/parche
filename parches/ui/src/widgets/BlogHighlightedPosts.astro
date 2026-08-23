@@ -5,6 +5,7 @@
  * Falls back to latest posts if no postIds provided.
  */
 import { getCollection } from 'astro:content';
+import { resolveAssets } from 'parche:utils/assets';
 import { getBlogLinkContext, postHref, postLocale, localizePath } from '../lib/blog-links.js';
 import Container from 'parche:primitives/Container';
 import Section from 'parche:primitives/Section';
@@ -70,13 +71,13 @@ try {
       .slice(0, 4);
   }
 
-  posts = selected.map((post: any) => ({
+  posts = await resolveAssets(selected.map((post: any) => ({
     title: post.data.title,
     description: post.data.description ?? post.data.excerpt,
     // Honour the configured permalink pattern instead of assuming a root-level slug.
     href: postHref(postPattern, post, locale, defaultLocale),
     image: post.data.image,
-  }));
+  })));
 } catch {
   // Blog collection may not exist — widget renders nothing
 }

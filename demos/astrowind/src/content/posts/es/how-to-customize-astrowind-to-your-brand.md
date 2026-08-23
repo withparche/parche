@@ -1,19 +1,19 @@
 ---
-title: "AstroWind en profundidad"
-excerpt: "Es fácil de arrancar, pero por dentro pasan muchas cosas. Esta es la visita guiada."
-publishDate: "2026-07-17T00:00:00Z"
-category: "Documentacion"
+urlSlug: personalizar-astrowind-a-tu-marca
+title: "Cómo adaptar AstroWind a tu marca"
+excerpt: "Los colores, la tipografía y los espaciados salen de tokens. Cambia los tokens, no los componentes."
+publishDate: "2026-07-02T00:00:00Z"
+category: "Tutoriales"
 tags:
-  - astro
+  - design
   - tailwind-css
-  - front-end
 authors:
-  - jane
-authorName: Jane Doe
-featured: true
+  - mark
+authorName: Mark Rivera
+featured: false
 image:
-  src: "@/assets/images/post-2.svg"
-  alt: "AstroWind en profundidad"
+  src: "@/assets/images/post-3.svg"
+  alt: "Cómo adaptar AstroWind a tu marca"
 ---
 
 ## Por qué importa

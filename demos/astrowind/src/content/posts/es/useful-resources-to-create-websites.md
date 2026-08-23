@@ -1,18 +1,19 @@
 ---
-title: "Dominar las landing pages: guía práctica"
-excerpt: "¿Has pulsado un anuncio y acabado en una página que claramente quería algo de ti? Eso es una landing."
-publishDate: "2026-06-15T00:00:00Z"
-category: "Guias"
+urlSlug: recursos-utiles-para-crear-webs
+title: "Recursos útiles para crear webs"
+excerpt: "Una lista breve y con criterio de las herramientas y referencias que merecen tu tiempo."
+publishDate: "2026-05-28T00:00:00Z"
+category: "Recursos"
 tags:
-  - landing-pages
+  - resources
   - front-end
 authors:
-  - mark
-authorName: Mark Rivera
+  - jane
+authorName: Jane Doe
 featured: false
 image:
-  src: "@/assets/images/post-1.svg"
-  alt: "Dominar las landing pages: guía práctica"
+  src: "@/assets/images/post-2.svg"
+  alt: "Recursos útiles para crear webs"
 ---
 
 ## Por qué importa
