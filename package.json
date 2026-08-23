@@ -5,7 +5,14 @@
   "scripts": {
     "dev": "pnpm --filter example-blog dev",
     "build": "pnpm --filter example-blog build",
-    "preview": "pnpm --filter example-blog preview"
+    "preview": "pnpm --filter example-blog preview",
+    "test": "pnpm run test:unit && pnpm run test:build",
+    "test:unit": "node --import tsx --test packages/core/test/*.test.ts",
+    "test:build": "pnpm -r build && node test/assert-dist.mjs",
+    "test:starter": "node test/build-starter.mjs"
   },
-  "packageManager": "pnpm@11.12.0"
+  "packageManager": "pnpm@11.12.0",
+  "devDependencies": {
+    "tsx": "^4.23.12"
+  }
 }

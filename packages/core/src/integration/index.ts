@@ -54,7 +54,7 @@ export function parchePreset(preset: ParchePreset): ParchePreset {
 }
 
 /** Fold a config's `extends` chain into a single flat config (presets first). */
-function resolveExtends(userConfig: ParcheUserConfig): ParcheUserConfig {
+export function resolveExtends(userConfig: ParcheUserConfig): ParcheUserConfig {
   if (!userConfig.extends) return userConfig;
   const presets = Array.isArray(userConfig.extends) ? userConfig.extends : [userConfig.extends];
   let base: ParchePreset = {};
@@ -264,29 +264,40 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
  * });
  */
 export default function parche(input: ParcheConfigInput = {}): AstroIntegration {
-  return createIntegration((ctx) => {
-    const cfg = typeof input === 'function' ? input(ctx) : input;
-    // Fold `extends` first (a preset may seed site data or parches), then split
-    // the site identity out of the integration options.
-    const merged = resolveExtends(cfg as unknown as ParcheUserConfig) as unknown as ParcheConfig;
-    const { site, metadata, seo, organization, config: configPath, ...rest } =
-      merged as ParcheConfig & { config?: string };
-    const userOpts = rest as ParcheUserConfig;
-    const { allowAICrawlers = true, ...siteSeo } = (seo ?? {}) as Record<string, unknown>;
+  return createIntegration((ctx) => prepareParcheConfig(input, ctx));
+}
 
-    if (site) {
-      // Inline mode: validate + serve the site identity as parche:config.
-      const inlineSiteConfig = siteConfigSchema.parse({ site, metadata, seo: siteSeo, organization });
-      return { userConfig: userOpts, inlineSiteConfig, allowAICrawlers: allowAICrawlers as boolean };
-    }
+/**
+ * Resolve a config input (object or function) into the pieces the integration
+ * needs: the integration options, an optional inline site config, and the
+ * robots policy. Pure — exported for testing. Folds `extends`, splits the site
+ * identity out of the options, and picks inline vs separate-file mode.
+ */
+export function prepareParcheConfig(
+  input: ParcheConfigInput,
+  ctx: ParcheConfigContext,
+): PreparedConfig {
+  const cfg = typeof input === 'function' ? input(ctx) : input;
+  // Fold `extends` first (a preset may seed site data or parches), then split
+  // the site identity out of the integration options.
+  const merged = resolveExtends(cfg as unknown as ParcheUserConfig) as unknown as ParcheConfig;
+  const { site, metadata, seo, organization, config: configPath, ...rest } =
+    merged as ParcheConfig & { config?: string };
+  const userOpts = rest as ParcheUserConfig;
+  const { allowAICrawlers = true, ...siteSeo } = (seo ?? {}) as Record<string, unknown>;
 
-    // Separate-file mode: site identity comes from `config` (or the default
-    // ./parche.config.ts). Only the robots policy is read from seo here.
-    return {
-      userConfig: { ...userOpts, config: configPath },
-      allowAICrawlers: allowAICrawlers as boolean,
-    };
-  });
+  if (site) {
+    // Inline mode: validate + serve the site identity as parche:config.
+    const inlineSiteConfig = siteConfigSchema.parse({ site, metadata, seo: siteSeo, organization });
+    return { userConfig: userOpts, inlineSiteConfig, allowAICrawlers: allowAICrawlers as boolean };
+  }
+
+  // Separate-file mode: site identity comes from `config` (or the default
+  // ./parche.config.ts). Only the robots policy is read from seo here.
+  return {
+    userConfig: { ...userOpts, config: configPath },
+    allowAICrawlers: allowAICrawlers as boolean,
+  };
 }
 
 const ROBOTS_MARKER = '# === PARCHE:AUTO-GENERATED';

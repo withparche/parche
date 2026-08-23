@@ -35,9 +35,9 @@ function cmpVersion(a: [number, number, number], b: [number, number, number]): n
 /**
  * Minimal semver range check for peer requirements: `*`/``/`latest` = any;
  * caret `^x.y.z` (npm semantics, incl. 0.x pinning); tilde `~x.y.z`;
- * `>=x.y.z`; anything else is treated as an exact match.
+ * `>=x.y.z`; anything else is treated as an exact match. Exported for testing.
  */
-function satisfiesVersion(actual: string, range: string): boolean {
+export function satisfiesVersion(actual: string, range: string): boolean {
   const r = range.trim();
   if (!r || r === '*' || r === 'latest') return true;
   const a = parseVersion(actual);
