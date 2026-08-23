@@ -7,6 +7,7 @@ import {
   type ParcheConfigContext,
 } from '../src/integration/index.ts';
 import { satisfiesVersion } from '../src/integration/registry.ts';
+import { defineConfig } from '../src/types/config.ts';
 
 const CTX: ParcheConfigContext = {
   command: 'build',
@@ -120,4 +121,20 @@ test('satisfiesVersion: caret / tilde / >= / exact / prerelease / *', () => {
   for (const [actual, range, expected] of cases) {
     assert.equal(satisfiesVersion(actual, range), expected, `${actual} satisfies ${range}?`);
   }
+});
+
+// --- defineConfig (site config): strict, applies defaults ------------------
+
+test('defineConfig: accepts a valid site config and applies defaults', () => {
+  const cfg = defineConfig({ site: { name: 'Acme' } });
+  assert.equal(cfg.site.name, 'Acme');
+  assert.equal(cfg.site.defaultLanguage, 'en'); // default
+  assert.deepEqual(cfg.metadata, {}); // default
+});
+
+test('defineConfig: a removed/typo top-level key (e.g. theme) throws, not silently dropped', () => {
+  assert.throws(
+    () => defineConfig({ site: { name: 'Acme' }, theme: { darkMode: true } } as any),
+    /theme|Unrecognized|not allowed|strict/i,
+  );
 });

@@ -85,7 +85,10 @@ export const siteConfigSchema = z.object({
   //   not by a config flag.
   // These fields used to live here but were consumed by nothing (a silent trap),
   // so they were removed. Setting them is now a type error, on purpose.
-});
+}).strict();
+// `.strict()` so a stray/typo'd top-level key (e.g. the old `theme`, `header`,
+// `footer`) fails at build with a clear message instead of being silently
+// dropped by Zod — matching `userConfigSchema` in the integration.
 
 export type SiteConfig = z.infer<typeof siteConfigSchema>;
 

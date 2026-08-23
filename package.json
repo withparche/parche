@@ -7,7 +7,7 @@
     "build": "pnpm --filter example-blog build",
     "preview": "pnpm --filter example-blog preview",
     "test": "pnpm run test:unit && pnpm run test:build",
-    "test:unit": "node --import tsx --test packages/core/test/*.test.ts",
+    "test:unit": "node --import tsx --test packages/core/test/*.test.ts packages/cli/test/*.test.ts parches/blog/test/*.test.ts",
     "test:build": "pnpm -r build && node test/assert-dist.mjs",
     "test:starter": "node test/build-starter.mjs"
   },
