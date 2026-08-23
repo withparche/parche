@@ -1,5 +1,5 @@
 ---
-import { widgetMap } from 'parche:registry/widgets';
+import { loadWidgets } from 'parche:registry/widgets';
 import DynamicRenderer from 'parche:DynamicRenderer';
 
 interface WrapperConfig {
@@ -37,6 +37,10 @@ const {
   SectionWrapper: PreviewWrapper,
   mainId,
 } = Astro.props;
+
+// Load only the layout widgets this layout references ('layout/Main' is a
+// synthetic marker with no loader — skipped). Lazy catalog.
+const widgets = await loadWidgets(layoutSections.map((s) => s.widget));
 ---
 
 {layoutSections.map((section) => {
@@ -58,7 +62,7 @@ const {
     );
   }
 
-  const Widget = widgetMap[section.widget];
+  const Widget = widgets[section.widget];
   if (!Widget) {
     if (import.meta.env.DEV) {
       console.warn(

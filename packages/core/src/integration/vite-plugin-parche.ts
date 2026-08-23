@@ -115,28 +115,41 @@ function extractTemplateKey(virtualId: string): string {
 }
 
 /**
- * Generate a JS module that exports the widget map.
+ * Generate the widget catalog as LAZY loaders. Each widget is a `() => import()`
+ * so Vite code-splits it into its own chunk, loaded only when a rendered section
+ * references it — the SSR server never holds the whole catalog resident. Renderers
+ * call `loadWidgets(keys)` in their (async) frontmatter to resolve just the
+ * components a page uses before rendering synchronously.
  */
 function generateWidgetMapModule(registry: ResolvedRegistry): string {
-  const entries: { varName: string; key: string; importPath: string }[] = [];
-  let index = 0;
+  const entries: { key: string; importPath: string }[] = [];
 
   for (const virtualId of Object.keys(registry.modules)) {
     if (virtualId.startsWith('parche:widgets/') || virtualId.startsWith('parche:primitives/')) {
-      const key = extractWidgetKey(virtualId);
-      entries.push({ varName: `W${index}`, key, importPath: virtualId });
-      index++;
+      entries.push({ key: extractWidgetKey(virtualId), importPath: virtualId });
     }
   }
 
-  const imports = entries.map((e) => `import ${e.varName} from '${e.importPath}';`).join('\n');
-  const mapEntries = entries.map((e) => `  '${e.key}': ${e.varName},`).join('\n');
+  const loaderEntries = entries
+    .map((e) => `  ${JSON.stringify(e.key)}: () => import(${JSON.stringify(e.importPath)}),`)
+    .join('\n');
 
-  return `${imports}
-
-export const widgetMap = {
-${mapEntries}
+  return `export const widgetLoaders = {
+${loaderEntries}
 };
+
+/** Resolve the given widget keys (deduped) to their components. Keys with no
+ *  loader (e.g. the synthetic 'layout/Main') are skipped. */
+export async function loadWidgets(keys) {
+  const out = {};
+  await Promise.all(
+    [...new Set(keys)].map(async (key) => {
+      const loader = widgetLoaders[key];
+      if (loader) out[key] = (await loader()).default;
+    }),
+  );
+  return out;
+}
 `;
 }
 

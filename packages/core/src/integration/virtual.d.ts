@@ -11,7 +11,15 @@ declare module 'parche:config/styles' {}
 
 // Generated maps
 declare module 'parche:registry/widgets' {
-  export const widgetMap: Record<string, import('astro').AstroComponentFactory>;
+  /** Lazy widget catalog: key → dynamic import of the component. */
+  export const widgetLoaders: Record<
+    string,
+    () => Promise<{ default: import('astro').AstroComponentFactory }>
+  >;
+  /** Resolve the given widget keys (deduped) to their components. */
+  export function loadWidgets(
+    keys: string[],
+  ): Promise<Record<string, import('astro').AstroComponentFactory>>;
 }
 
 declare module 'parche:registry/templates' {
