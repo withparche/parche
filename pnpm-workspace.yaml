@@ -1,14 +1,20 @@
+# Link a workspace package whenever its version satisfies the declared range.
+# This is what lets a template declare a published range — so it installs
+# anywhere, which is what `npm create astro -- --template …` needs — while CI
+# still builds it against the code in the PR. Off by default since pnpm 8.
+linkWorkspacePackages: true
+
 packages:
   - "packages/*"
   - "parches/*"
   - "examples/*"
   # Full-site demos: bigger than an example, not a CLI-served starter.
   - "demos/*"
-  # Dev templates (workspace:* linked for fast iteration). hello-parche is
-  # excluded because it depends on the published packages by range, as a
-  # standalone starter must — not because it is invalid; it builds as it stands.
+  # Templates declare published ranges so they install anywhere — that is what
+  # makes `npm create astro -- --template <repo>/templates/<name>` work. Inside
+  # the repo, pnpm.overrides in the root package.json redirects those ranges to
+  # the local packages, so CI builds every template against the code in the PR.
   - "templates/*"
-  - "!templates/hello-parche"
 
 # Central version catalog. Packages reference these with "catalog:".
 catalog:
