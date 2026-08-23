@@ -12,6 +12,9 @@ interface AuthorInfo {
 interface Props {
   /** Reading-time template, `{minutes}` substituted. Default: English. */
   readingTimeText?: string;
+  /** How the date is rendered. Options for Intl.DateTimeFormat — the locale
+   *  still decides word order; this decides the style. */
+  dateFormat?: Intl.DateTimeFormatOptions;
   title: string;
   description?: string;
   publishDate: Date;
@@ -29,6 +32,7 @@ interface Props {
 
 const {
   readingTimeText = '{minutes} min read',
+  dateFormat = { year: 'numeric', month: 'short', day: 'numeric' },
   title,
   description,
   publishDate,
@@ -43,11 +47,7 @@ const {
 
 // Format in the page's locale — a Spanish page must not read "Aug 23, 2026".
 const dateLocale = Astro.currentLocale ?? 'en-US';
-const formattedDate = publishDate.toLocaleDateString(dateLocale, {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-});
+const formattedDate = publishDate.toLocaleDateString(dateLocale, dateFormat);
 ---
 
 <header {id} class:list={[className]}>

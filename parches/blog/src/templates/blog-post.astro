@@ -49,6 +49,7 @@ const pageUrl = Astro.url.href;
   <article>
     <BlogPostHeader
       readingTimeText={labels.readingTime}
+      dateFormat={(blogConfig as any).dateFormat}
       title={data.title}
       description={data.description}
       publishDate={data.publishDate}

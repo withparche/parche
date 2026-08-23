@@ -84,8 +84,19 @@ export interface BlogConfig {
   rss?: boolean;
   /** Enable series/collections. Default: false */
   series?: boolean;
-  /** Date format string. Default: 'MMMM d, yyyy' */
-  dateFormat?: string;
+  /**
+   * How post dates are rendered, as options for `Intl.DateTimeFormat`.
+   *
+   * Not a token template like 'MMMM d, yyyy': that would bake English word order
+   * into the config, since the same date reads "9 de marzo de 2026" in Spanish —
+   * different order, and a connective. `Intl` already knows that for every
+   * language, so this chooses the *style* and lets the locale choose the shape.
+   *
+   * Plain data, so a JSON config carries it and a CMS can edit it.
+   *
+   * Default: `{ year: 'numeric', month: 'short', day: 'numeric' }`.
+   */
+  dateFormat?: Intl.DateTimeFormatOptions;
   /**
    * UI strings keyed by locale, e.g. `{ es: { listingTitle: 'Blog' } }`.
    * Anything omitted falls back to the English defaults. See ./labels.ts.
@@ -112,7 +123,7 @@ export interface ResolvedBlogConfig {
   showDraftsInDev: boolean;
   rss: boolean;
   series: boolean;
-  dateFormat: string;
+  dateFormat: Intl.DateTimeFormatOptions;
   labels: BlogLabelsConfig;
 }
 
@@ -136,7 +147,9 @@ export function resolveBlogConfig(config?: BlogConfig): ResolvedBlogConfig {
     showDraftsInDev: config?.showDraftsInDev ?? true,
     rss: config?.rss ?? true,
     series: config?.series ?? false,
-    dateFormat: config?.dateFormat ?? 'MMMM d, yyyy',
+    // The default is what the widgets already rendered, so nothing shifts until
+    // a site asks it to.
+    dateFormat: config?.dateFormat ?? { year: 'numeric', month: 'short', day: 'numeric' },
     labels: config?.labels ?? {},
   };
 }
