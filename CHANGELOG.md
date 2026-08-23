@@ -11,6 +11,53 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
 
 ## [Unreleased]
 
+## [0.6.0] — 2026-08-23
+
+A template is a working project now, not a stencil. Only `@parche/cli` and
+`create-parche` changed, but the change is **breaking for anyone who wrote a
+template following the previous convention** — see
+[Migrating](#migrating-from-051).
+
+Most of this cycle's work is not in this release at all: the templates
+themselves are private, so their fixes reach people through GitHub rather than
+npm.
+
+### Changed
+
+- **Templates are adapted by renaming, not by substitution** (`66c4714`).
+  `{{placeholders}}` and `parche.template.json` are gone. A template ships real
+  values and builds as it stands, which is what makes the official Astro path
+  work — `npm create astro@latest -- --template <repo>/templates/<name>` copies
+  it verbatim and produces a running site. `parche astro new` does the same and
+  then renames it, and if the rename fails the project is still usable.
+
+  The rename replaces the template's own identity, read from its package.json:
+  `name` is the old slug and its title-cased form the old display name. Matching
+  structure instead — a regex for `name:\s*'…'` — would have to guess where in a
+  config the site name lives and would break whenever that shape moved.
+
+### Fixed
+
+- **Templates that could not be installed anywhere but here** (`6c0ccd2`).
+  `portfolio` and `saas-landing` declared `workspace:*` and `catalog:`, protocols
+  only pnpm understands inside a workspace, so `npm install` failed with
+  EUNSUPPORTEDPROTOCOL before reading a file. Not published — a template is
+  private — but it is what a user downloading one hits.
+
+### Migrating from 0.5.1
+
+Only affects you if you maintain your own Parche template.
+
+**Drop `parche.template.json` and the `{{placeholders}}`.** Put real values in
+their place: the site name in `brand.name`, the package name in `package.json`.
+The CLI renames a project by replacing those two strings, so the only convention
+left is that **`package.json` `name` is the slug of `brand.name`** — `my-template`
+and `My Template`.
+
+Content should not repeat the site's name. It lives in `brand.name` and the
+header reads it from there; duplicating it into a page is what made substitution
+look necessary in the first place.
+
 ## [0.5.1] — 2026-08-23
 
 Found by installing 0.5.0 from npm as a new user would, which is the one thing the
@@ -489,7 +536,8 @@ templates shipped in core, and were extracted to the ui parche later (`4af1d90`)
 of the bootstrap — this project was built to be worked on with coding agents from the
 first commit.
 
-[Unreleased]: https://github.com/withparche/parche/compare/v0.5.1...HEAD
+[Unreleased]: https://github.com/withparche/parche/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/withparche/parche/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/withparche/parche/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/withparche/parche/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/withparche/parche/compare/v0.3.0-alpha.0...v0.4.0

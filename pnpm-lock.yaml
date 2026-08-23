@@ -549,13 +549,13 @@ importers:
         specifier: ^1.2.38
         version: 1.2.38
       '@parche/core':
-        specifier: ^0.5.1
+        specifier: ^0.6.0
         version: link:../../packages/core
       '@parche/primitives':
-        specifier: ^0.5.1
+        specifier: ^0.6.0
         version: link:../../parches/primitives
       '@parche/ui':
-        specifier: ^0.5.1
+        specifier: ^0.6.0
         version: link:../../parches/ui
       '@tailwindcss/vite':
         specifier: ^4.3.3
@@ -583,13 +583,13 @@ importers:
         specifier: ^1.2.38
         version: 1.2.38
       '@parche/core':
-        specifier: ^0.5.1
+        specifier: ^0.6.0
         version: link:../../packages/core
       '@parche/primitives':
-        specifier: ^0.5.1
+        specifier: ^0.6.0
         version: link:../../parches/primitives
       '@parche/ui':
-        specifier: ^0.5.1
+        specifier: ^0.6.0
         version: link:../../parches/ui
       '@tailwindcss/vite':
         specifier: ^4.3.3
@@ -613,16 +613,16 @@ importers:
         specifier: ^1.2.38
         version: 1.2.38
       '@parche/core':
-        specifier: ^0.5.1
+        specifier: ^0.6.0
         version: link:../../packages/core
       '@parche/primitives':
-        specifier: ^0.5.1
+        specifier: ^0.6.0
         version: link:../../parches/primitives
       '@parche/themes':
-        specifier: ^0.5.1
+        specifier: ^0.6.0
         version: link:../../parches/themes
       '@parche/ui':
-        specifier: ^0.5.1
+        specifier: ^0.6.0
         version: link:../../parches/ui
       '@tailwindcss/vite':
         specifier: ^4.3.3
