@@ -1,0 +1,143 @@
+{
+  "title": "About us",
+  "description": "Who builds AstroWind, how it is made and what it is for.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "title": "About us",
+        "subtitle": "We build the starting point we wished we had: a template that survives contact with real content, real translations and real deadlines.",
+        "image": {
+          "src": "@/assets/images/team.svg",
+          "alt": "The team"
+        }
+      }
+    },
+    {
+      "widget": "Stats",
+      "wrapper": {
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(80% 120% at 50% 0%, rgba(59,110,246,0.07), transparent 70%)'></div>"
+      },
+      "props": {
+        "stats": [
+          {
+            "title": "Contributors",
+            "amount": "180"
+          },
+          {
+            "title": "Releases",
+            "amount": "64"
+          },
+          {
+            "title": "Sites built",
+            "amount": "48.4K"
+          },
+          {
+            "title": "Years running",
+            "amount": "4"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Features3",
+      "props": {
+        "title": "Our values",
+        "subtitle": "What we optimise for when the two options both look reasonable.",
+        "columns": "3",
+        "items": [
+          {
+            "title": "Clarity over cleverness",
+            "description": "A component someone can read in a minute beats one that saves five lines.",
+            "icon": "tabler:eye"
+          },
+          {
+            "title": "Defaults that hold",
+            "description": "The out-of-the-box result should be good enough to ship, not a starting point you must fix.",
+            "icon": "tabler:adjustments"
+          },
+          {
+            "title": "No hidden costs",
+            "description": "No tracking, no phoning home, no runtime you did not ask for.",
+            "icon": "tabler:shield-check"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Features3",
+      "props": {
+        "title": "Our achievements",
+        "subtitle": "Milestones worth remembering.",
+        "columns": "3",
+        "isAfterContent": true,
+        "items": [
+          {
+            "title": "Most forked Astro theme",
+            "description": "Four years running, which says more about the community than about us.",
+            "icon": "tabler:award"
+          },
+          {
+            "title": "Zero JavaScript by default",
+            "description": "Every page ships as HTML and CSS unless you explicitly opt into an island.",
+            "icon": "tabler:bolt"
+          },
+          {
+            "title": "Accessible by construction",
+            "description": "Focus states, landmarks and contrast are part of the components, not an afterthought.",
+            "icon": "tabler:accessible"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Steps2",
+      "props": {
+        "title": "How we work",
+        "subtitle": "The loop we repeat, release after release.",
+        "items": [
+          {
+            "title": "Build something real",
+            "description": "Every feature starts as a page we actually need, not as an abstraction we imagine someone will want.",
+            "icon": "tabler:hammer"
+          },
+          {
+            "title": "Find where it breaks",
+            "description": "We keep a backlog of the limits real pages hit. Nothing speculative goes in it.",
+            "icon": "tabler:bug"
+          },
+          {
+            "title": "Fix the cause",
+            "description": "Then we fix the framework rather than working around it in the page.",
+            "icon": "tabler:tool"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Features2",
+      "props": {
+        "title": "Get in touch",
+        "subtitle": "Where to find us.",
+        "columns": "3",
+        "items": [
+          {
+            "title": "GitHub",
+            "description": "Issues, discussions and pull requests. The fastest route to a maintainer.",
+            "icon": "tabler:brand-github"
+          },
+          {
+            "title": "Email",
+            "description": "For anything that does not belong in public. We answer within two working days.",
+            "icon": "tabler:mail"
+          },
+          {
+            "title": "Community",
+            "description": "Ask questions and share what you have built with other people using the template.",
+            "icon": "tabler:users"
+          }
+        ]
+      }
+    }
+  ]
+}

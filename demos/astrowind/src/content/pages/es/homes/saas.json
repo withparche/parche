@@ -1,0 +1,263 @@
+{
+  "title": "SaaS",
+  "layout": "default",
+  "description": "Una home de producto SaaS: propuesta, funciones, precios y preguntas.",
+  "sections": [
+    {
+      "widget": "Hero2",
+      "props": {
+        "tagline": "SaaS",
+        "title": "El sitio donde tu equipo <span class='text-highlight'>deja de perseguir</span> el trabajo",
+        "subtitle": "Planifica, sigue y publica desde un mismo lugar. Menos herramientas, menos reuniones, más cosas terminadas.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Empezar gratis",
+            "href": "#pricing",
+            "icon": "tabler:arrow-right"
+          },
+          {
+            "variant": "secondary",
+            "text": "Ver demo",
+            "href": "/es/contacto"
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/hero.svg",
+          "alt": "Producto"
+        }
+      }
+    },
+    {
+      "widget": "Brands",
+      "props": {
+        "title": "Equipos que ya lo usan",
+        "icons": [
+          "tabler:brand-github",
+          "tabler:brand-figma",
+          "tabler:brand-slack",
+          "tabler:brand-notion",
+          "tabler:brand-stripe",
+          "tabler:brand-vercel"
+        ]
+      }
+    },
+    {
+      "widget": "Features",
+      "wrapper": {
+        "id": "features"
+      },
+      "props": {
+        "tagline": "Características",
+        "title": "Todo lo que necesita tu equipo",
+        "subtitle": "Deja de coser cinco herramientas. Aquí el trabajo, los documentos y el plan viven juntos.",
+        "columns": "3",
+        "items": [
+          {
+            "title": "Tableros y tareas",
+            "description": "Planifica sprints en tableros flexibles, con subtareas y campos propios.",
+            "icon": "tabler:layout-kanban"
+          },
+          {
+            "title": "Documentos enlazados",
+            "description": "Escribe especificaciones que siguen conectadas al trabajo que describen.",
+            "icon": "tabler:file-text"
+          },
+          {
+            "title": "Hojas de ruta",
+            "description": "Convierte la estrategia en un calendario que toda la empresa entiende.",
+            "icon": "tabler:map"
+          },
+          {
+            "title": "Automatizaciones",
+            "description": "Automatiza los pasos repetitivos: asignaciones, estados, recordatorios.",
+            "icon": "tabler:bolt"
+          },
+          {
+            "title": "Resúmenes",
+            "description": "Ponte al día de cualquier proyecto con un resumen de lo que ha cambiado.",
+            "icon": "tabler:sparkles"
+          },
+          {
+            "title": "Integraciones",
+            "description": "Conecta las herramientas que tu equipo ya usa a diario.",
+            "icon": "tabler:plug"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Content",
+      "wrapper": {
+        "bg": "<div style='position:absolute;inset:0;background:linear-gradient(180deg, rgba(59,110,246,0.06), transparent 65%)'></div>"
+      },
+      "props": {
+        "isReversed": true,
+        "columns": "1",
+        "tagline": "Enfoque",
+        "title": "Un sitio tranquilo para trabajar",
+        "content": "Navegación rápida desde el teclado, una interfaz sin ruido y todo a un atajo de distancia.",
+        "items": [
+          {
+            "title": "Paleta de comandos",
+            "description": "Salta a cualquier proyecto, documento o tarea en milisegundos."
+          },
+          {
+            "title": "Funciona sin conexión",
+            "description": "Sigue trabajando en el tren; los cambios se sincronizan al volver."
+          },
+          {
+            "title": "Permisos precisos",
+            "description": "Comparte lo justo con quien toca, sin sustos."
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/app-preview.svg",
+          "alt": "Interfaz"
+        }
+      }
+    },
+    {
+      "widget": "Pricing",
+      "wrapper": {
+        "id": "pricing",
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(80% 120% at 50% 0%, rgba(59,110,246,0.07), transparent 70%)'></div>"
+      },
+      "props": {
+        "tagline": "Precios",
+        "title": "Precios que crecen contigo",
+        "prices": [
+          {
+            "title": "Gratis",
+            "subtitle": "Para empezar",
+            "price": "0",
+            "currency": "$",
+            "period": "al mes",
+            "items": [
+              {
+                "description": "Hasta 3 proyectos"
+              },
+              {
+                "description": "Documentos ilimitados"
+              },
+              {
+                "description": "Soporte de la comunidad"
+              }
+            ],
+            "callToAction": {
+              "text": "Empezar",
+              "href": "#"
+            }
+          },
+          {
+            "title": "Equipo",
+            "subtitle": "Para equipos que crecen",
+            "price": "12",
+            "currency": "$",
+            "period": "por persona y mes",
+            "hasRibbon": true,
+            "ribbonTitle": "Popular",
+            "items": [
+              {
+                "description": "Proyectos ilimitados"
+              },
+              {
+                "description": "Automatizaciones y hojas de ruta"
+              },
+              {
+                "description": "Integraciones"
+              },
+              {
+                "description": "Soporte prioritario"
+              }
+            ],
+            "callToAction": {
+              "text": "Probar gratis",
+              "href": "#"
+            }
+          },
+          {
+            "title": "Corporativo",
+            "subtitle": "Para organizaciones grandes",
+            "type": "custom",
+            "description": "Precio a medida según volumen.",
+            "items": [
+              {
+                "description": "SSO y SCIM"
+              },
+              {
+                "description": "Permisos avanzados"
+              },
+              {
+                "description": "Gestor de cuenta"
+              }
+            ],
+            "callToAction": {
+              "text": "Hablar con ventas",
+              "href": "/es/contacto"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "FAQs",
+      "wrapper": {
+        "id": "faq"
+      },
+      "props": {
+        "tagline": "Preguntas frecuentes",
+        "title": "Preguntas, resueltas",
+        "columns": "2",
+        "items": [
+          {
+            "title": "¿Puedo probarlo antes?",
+            "description": "Sí, el plan gratuito lo es de verdad y los de pago incluyen catorce días de prueba."
+          },
+          {
+            "title": "¿Puedo importar mis datos?",
+            "description": "Importamos desde las herramientas habituales conservando tu estructura."
+          },
+          {
+            "title": "¿Están seguros mis datos?",
+            "description": "Cifrado en tránsito y en reposo. El plan corporativo añade SSO y registros de auditoría."
+          },
+          {
+            "title": "¿Hay descuentos?",
+            "description": "Para entidades sin ánimo de lucro, estudiantes y pago anual."
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Steps2",
+      "props": {
+        "title": "En marcha en una tarde",
+        "items": [
+          {
+            "title": "Importa tu trabajo",
+            "description": "Trae tareas y documentos en un par de clics.",
+            "icon": "tabler:download"
+          },
+          {
+            "title": "Invita a tu equipo",
+            "description": "Crea espacios y permisos, y reúne a todo el mundo.",
+            "icon": "tabler:users"
+          },
+          {
+            "title": "Publica",
+            "description": "Planifica, sigue y entrega con las automatizaciones haciendo lo aburrido.",
+            "icon": "tabler:rocket"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "BlogLatestPosts",
+      "props": {
+        "title": "Del blog"
+      }
+    }
+  ],
+  "urlSlug": "inicios/saas"
+}

@@ -1,0 +1,79 @@
+{
+  "title": "Contacto",
+  "description": "Escríbenos: leemos todo lo que llega.",
+  "sections": [
+    {
+      "widget": "HeroText",
+      "props": {
+        "tagline": "Contacto",
+        "title": "Hablemos",
+        "subtitle": "Cuéntanos qué estás construyendo y en qué te has atascado. Respondemos en un plazo de dos días laborables."
+      }
+    },
+    {
+      "widget": "Contact",
+      "props": {
+        "title": "Envíanos un mensaje",
+        "subtitle": "Rellena el formulario y te contestamos por correo.",
+        "inputs": [
+          {
+            "type": "text",
+            "name": "name",
+            "label": "Nombre",
+            "placeholder": "Ada Lovelace",
+            "autocomplete": "name"
+          },
+          {
+            "type": "email",
+            "name": "email",
+            "label": "Correo electrónico",
+            "placeholder": "ada@example.com",
+            "autocomplete": "email"
+          },
+          {
+            "type": "text",
+            "name": "subject",
+            "label": "Asunto",
+            "placeholder": "¿En qué podemos ayudarte?"
+          }
+        ],
+        "textarea": {
+          "label": "Mensaje",
+          "name": "message",
+          "rows": 5,
+          "placeholder": "Cuéntanos los detalles…"
+        },
+        "disclaimer": {
+          "label": "Al enviar aceptas que guardemos tu mensaje para poder responderte."
+        },
+        "button": "Enviar mensaje"
+      }
+    },
+    {
+      "widget": "Features2",
+      "props": {
+        "title": "Otras vías",
+        "subtitle": "Si el formulario no es lo tuyo.",
+        "columns": "3",
+        "items": [
+          {
+            "title": "Soporte",
+            "description": "Problemas técnicos y comportamientos raros. Incluye la versión y cómo reproducirlo.",
+            "icon": "tabler:lifebuoy"
+          },
+          {
+            "title": "Ventas",
+            "description": "Precios, facturación y planes para equipos grandes.",
+            "icon": "tabler:receipt"
+          },
+          {
+            "title": "Prensa",
+            "description": "Materiales de marca, logotipos y datos del proyecto.",
+            "icon": "tabler:news"
+          }
+        ]
+      }
+    }
+  ],
+  "urlSlug": "contacto"
+}

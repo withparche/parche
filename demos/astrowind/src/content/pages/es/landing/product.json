@@ -1,0 +1,52 @@
+{
+  "title": "Ver especificaciones",
+  "layout": "landing",
+  "description": "Especificaciones, materiales y las limitaciones, dichas con honestidad. Todo lo que preguntarías en una tienda.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "tagline": "Ver especificaciones",
+        "title": "Los <span class='text-highlight'>detalles</span> que marcan la diferencia",
+        "subtitle": "Especificaciones, materiales y las limitaciones, dichas con honestidad. Todo lo que preguntarías en una tienda.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Añadir al carrito",
+            "href": "#cta",
+            "icon": "tabler:arrow-right"
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/hero.svg",
+          "alt": "Ver especificaciones"
+        }
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "wrapper": {
+        "id": "cta",
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
+      },
+      "props": {
+        "title": "Añadir al carrito",
+        "subtitle": "Lleva menos de un minuto y probarlo no cuesta nada.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Añadir al carrito",
+            "href": "#",
+            "icon": "tabler:arrow-right"
+          },
+          {
+            "variant": "secondary",
+            "text": "Hacer una pregunta",
+            "href": "/es/contacto"
+          }
+        ]
+      }
+    }
+  ],
+  "urlSlug": "landing/producto"
+}

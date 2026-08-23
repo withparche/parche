@@ -1,0 +1,159 @@
+{
+  "title": "Startup",
+  "description": "A startup home: traction, proof and a clear next step.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "tagline": "Seed stage",
+        "title": "We turn <span class='text-highlight'>messy ideas</span> into working products",
+        "subtitle": "A small team, shipping weekly, with customers in the room from day one.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "See the product",
+            "href": "#features",
+            "icon": "tabler:arrow-right"
+          },
+          {
+            "variant": "secondary",
+            "text": "Read the blog",
+            "href": "/blog"
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/hero.svg",
+          "alt": "Product"
+        }
+      }
+    },
+    {
+      "widget": "Features2",
+      "wrapper": {
+        "id": "features"
+      },
+      "props": {
+        "tagline": "What we do",
+        "title": "Three things, done properly",
+        "columns": "3",
+        "items": [
+          {
+            "title": "Research",
+            "description": "We talk to the people who will use it before we build anything.",
+            "icon": "tabler:search"
+          },
+          {
+            "title": "Design",
+            "description": "Interfaces that explain themselves, with no manual required.",
+            "icon": "tabler:palette"
+          },
+          {
+            "title": "Engineering",
+            "description": "Small releases, measured, reversible.",
+            "icon": "tabler:code"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Stats",
+      "wrapper": {
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(80% 120% at 50% 0%, rgba(59,110,246,0.07), transparent 70%)'></div>"
+      },
+      "props": {
+        "stats": [
+          {
+            "title": "Weekly users",
+            "amount": "12K"
+          },
+          {
+            "title": "Retention",
+            "amount": "94%"
+          },
+          {
+            "title": "Releases",
+            "amount": "312"
+          },
+          {
+            "title": "Team",
+            "amount": "9"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Brands",
+      "props": {
+        "title": "Backed by",
+        "icons": [
+          "tabler:brand-ycombinator",
+          "tabler:brand-github",
+          "tabler:brand-stripe",
+          "tabler:brand-vercel"
+        ]
+      }
+    },
+    {
+      "widget": "Features3",
+      "props": {
+        "title": "Why teams switch",
+        "columns": "3",
+        "items": [
+          {
+            "title": "It is fast",
+            "description": "Pages load before you notice they were loading.",
+            "icon": "tabler:bolt"
+          },
+          {
+            "title": "It is honest",
+            "description": "No dark patterns, no lock-in, no surprise invoices.",
+            "icon": "tabler:shield-check"
+          },
+          {
+            "title": "It is supported",
+            "description": "A human answers, usually the one who wrote the code.",
+            "icon": "tabler:message"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "FAQs",
+      "wrapper": {
+        "id": "faq"
+      },
+      "props": {
+        "title": "Common questions",
+        "columns": "2",
+        "items": [
+          {
+            "title": "Are you hiring?",
+            "description": "Occasionally. Write to us with something you have built."
+          },
+          {
+            "title": "Where are you based?",
+            "description": "Distributed across four time zones, with two meetings a week."
+          }
+        ]
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "wrapper": {
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
+      },
+      "props": {
+        "title": "Come and see it",
+        "subtitle": "Fifteen minutes, no slides.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Book a call",
+            "href": "/contact",
+            "icon": "tabler:calendar"
+          }
+        ]
+      }
+    }
+  ]
+}

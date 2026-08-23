@@ -1,0 +1,151 @@
+{
+  "title": "Personal",
+  "description": "Una home más sobria y editorial para una sola persona.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "title": "Hola, soy Alex y construyo <span class='text-highlight'>software tranquilo</span>",
+        "subtitle": "Quince años de front-end, casi siempre en cosas que debían cargar rápido y poder leerse sin barreras.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Leer el blog",
+            "href": "/es/blog",
+            "icon": "tabler:arrow-right"
+          },
+          {
+            "variant": "secondary",
+            "text": "Escríbeme",
+            "href": "/es/contacto"
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/portrait.svg",
+          "alt": "Retrato"
+        }
+      }
+    },
+    {
+      "widget": "Content",
+      "props": {
+        "columns": "1",
+        "tagline": "Sobre mí",
+        "title": "A qué me dedico",
+        "content": "Ayudo a equipos a hacer webs que siguen siendo rápidas después del tercer rediseño.",
+        "items": [
+          {
+            "title": "Rendimiento",
+            "description": "Medir primero y luego quitar; casi siempre JavaScript."
+          },
+          {
+            "title": "Accesibilidad",
+            "description": "Teclado, contraste y semántica, desde el principio."
+          },
+          {
+            "title": "Sistemas de diseño",
+            "description": "Tokens que aguantan entre equipos y a lo largo de los años."
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/team.svg",
+          "alt": "Trabajando"
+        }
+      }
+    },
+    {
+      "widget": "Steps",
+      "props": {
+        "title": "Cómo suele ir un proyecto",
+        "items": [
+          {
+            "title": "Una llamada",
+            "description": "Media hora para ver si soy la persona adecuada.",
+            "icon": "tabler:phone"
+          },
+          {
+            "title": "Una auditoría corta",
+            "description": "Un informe escrito que te quedas, sigamos o no.",
+            "icon": "tabler:report"
+          },
+          {
+            "title": "El trabajo",
+            "description": "Semanal, visible, y decidiendo tú las prioridades.",
+            "icon": "tabler:hammer"
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/steps.svg",
+          "alt": "Proceso"
+        }
+      }
+    },
+    {
+      "widget": "Features3",
+      "props": {
+        "title": "Trabajos destacados",
+        "columns": "3",
+        "items": [
+          {
+            "title": "Un medio digital",
+            "description": "Reducimos dos tercios del peso sin tocar el diseño.",
+            "icon": "tabler:news"
+          },
+          {
+            "title": "El sistema de diseño de un banco",
+            "description": "Tokens y documentación para cuarenta equipos de producto.",
+            "icon": "tabler:building-bank"
+          },
+          {
+            "title": "Esta plantilla",
+            "description": "Mantenida en abierto desde 2022.",
+            "icon": "tabler:brand-github"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Testimonials",
+      "props": {
+        "title": "Lo que dicen",
+        "testimonials": [
+          {
+            "testimonial": "Alex nos dejó un sistema que podíamos seguir usando, algo menos común de lo que debería.",
+            "name": "Ana Ruiz",
+            "job": "Directora de producto"
+          },
+          {
+            "testimonial": "Directo, rápido y sin ningún apego a su propio código.",
+            "name": "Marcus Lee",
+            "job": "Responsable de ingeniería"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "BlogLatestPosts",
+      "props": {
+        "title": "Escritos recientes"
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "wrapper": {
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
+      },
+      "props": {
+        "title": "¿Estás con algo?",
+        "subtitle": "Cuéntamelo. Respondo todos los correos.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Saluda",
+            "href": "/es/contacto",
+            "icon": "tabler:mail"
+          }
+        ]
+      }
+    }
+  ],
+  "urlSlug": "inicios/personal"
+}

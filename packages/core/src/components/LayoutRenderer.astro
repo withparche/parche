@@ -51,6 +51,14 @@ const widgets = await loadWidgets(layoutSections.map((s) => s.widget));
           {pageTemplate === 'dynamic' && pageSections && (
             <DynamicRenderer sections={pageSections} Wrapper={PreviewWrapper} />
           )}
+          {/* A Markdown page's body renders after its sections. Without this it
+              was silently dropped unless the page also named a template — so a
+              .md page with frontmatter sections lost all of its prose. */}
+          {pageTemplate === 'dynamic' && PageMarkdownContent && (
+            <div class="mx-auto max-w-4xl px-4 md:px-6 pb-12 md:pb-16 prose">
+              <PageMarkdownContent />
+            </div>
+          )}
           {PageTemplateComponent && (
             <PageTemplateComponent data={pageData}>
               {PageMarkdownContent && <PageMarkdownContent />}

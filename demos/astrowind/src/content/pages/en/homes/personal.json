@@ -1,0 +1,150 @@
+{
+  "title": "Personal",
+  "description": "A quieter, editorial home for one person.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "title": "Hi, I'm Alex — I build <span class='text-highlight'>calm software</span>",
+        "subtitle": "Fifteen years of front-end work, mostly on things that had to load fast and be read by everyone.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Read the blog",
+            "href": "/blog",
+            "icon": "tabler:arrow-right"
+          },
+          {
+            "variant": "secondary",
+            "text": "Get in touch",
+            "href": "/contact"
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/portrait.svg",
+          "alt": "Portrait"
+        }
+      }
+    },
+    {
+      "widget": "Content",
+      "props": {
+        "columns": "1",
+        "tagline": "About",
+        "title": "What I actually do",
+        "content": "I help teams make websites that stay fast after the third redesign.",
+        "items": [
+          {
+            "title": "Performance",
+            "description": "Measuring first, then removing — usually JavaScript."
+          },
+          {
+            "title": "Accessibility",
+            "description": "Keyboard, contrast and semantics, from the start."
+          },
+          {
+            "title": "Design systems",
+            "description": "Tokens that hold across teams and years."
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/team.svg",
+          "alt": "Working"
+        }
+      }
+    },
+    {
+      "widget": "Steps",
+      "props": {
+        "title": "How a project usually goes",
+        "items": [
+          {
+            "title": "A call",
+            "description": "Half an hour to see whether I am the right person.",
+            "icon": "tabler:phone"
+          },
+          {
+            "title": "A short audit",
+            "description": "A written report you keep, whether we continue or not.",
+            "icon": "tabler:report"
+          },
+          {
+            "title": "The work",
+            "description": "Weekly, visible, with you deciding the priorities.",
+            "icon": "tabler:hammer"
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/steps.svg",
+          "alt": "Process"
+        }
+      }
+    },
+    {
+      "widget": "Features3",
+      "props": {
+        "title": "Selected work",
+        "columns": "3",
+        "items": [
+          {
+            "title": "A news site",
+            "description": "Cut the page weight by two thirds without touching the design.",
+            "icon": "tabler:news"
+          },
+          {
+            "title": "A bank's design system",
+            "description": "Tokens and docs for forty product teams.",
+            "icon": "tabler:building-bank"
+          },
+          {
+            "title": "This template",
+            "description": "Maintained in the open since 2022.",
+            "icon": "tabler:brand-github"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Testimonials",
+      "props": {
+        "title": "Kind words",
+        "testimonials": [
+          {
+            "testimonial": "Alex left us with a system we could keep using, which is rarer than it should be.",
+            "name": "Ana Ruiz",
+            "job": "Head of Product"
+          },
+          {
+            "testimonial": "Direct, fast and never precious about their own code.",
+            "name": "Marcus Lee",
+            "job": "Eng Manager"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "BlogLatestPosts",
+      "props": {
+        "title": "Recent writing"
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "wrapper": {
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
+      },
+      "props": {
+        "title": "Working on something?",
+        "subtitle": "Tell me about it. I answer every email.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Say hello",
+            "href": "/contact",
+            "icon": "tabler:mail"
+          }
+        ]
+      }
+    }
+  ]
+}

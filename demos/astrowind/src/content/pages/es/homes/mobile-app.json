@@ -1,0 +1,169 @@
+{
+  "title": "App móvil",
+  "description": "Una home de app móvil: capturas, insignias de tienda y pruebas.",
+  "sections": [
+    {
+      "widget": "Hero2",
+      "props": {
+        "tagline": "Móvil",
+        "title": "Tu día, <span class='text-highlight'>en el bolsillo</span>",
+        "subtitle": "Planifica, captura y revisa desde donde estés. Funciona sin conexión y sincroniza al volver.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "App Store",
+            "href": "#",
+            "icon": "tabler:brand-apple"
+          },
+          {
+            "variant": "secondary",
+            "text": "Google Play",
+            "href": "#",
+            "icon": "tabler:brand-google-play"
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/app-preview.svg",
+          "alt": "Captura de la app"
+        }
+      }
+    },
+    {
+      "widget": "Features3",
+      "props": {
+        "title": "Pensada para el móvil, no encogida para caber",
+        "columns": "3",
+        "items": [
+          {
+            "title": "Sin conexión primero",
+            "description": "Todo funciona en el metro y sincroniza después.",
+            "icon": "tabler:wifi-off"
+          },
+          {
+            "title": "A una mano",
+            "description": "Cada acción principal queda al alcance del pulgar.",
+            "icon": "tabler:hand-click"
+          },
+          {
+            "title": "Cuida la batería",
+            "description": "Sin sondeos en segundo plano ni bloqueos de suspensión.",
+            "icon": "tabler:battery-charging"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Content",
+      "wrapper": {
+        "bg": "<div style='position:absolute;inset:0;background:linear-gradient(180deg, rgba(59,110,246,0.06), transparent 65%)'></div>"
+      },
+      "props": {
+        "isReversed": true,
+        "columns": "1",
+        "title": "Captura ahora, organiza después",
+        "content": "La nota más rápida es la que no tuviste que archivar.",
+        "items": [
+          {
+            "title": "Captura rápida",
+            "description": "Un toque desde la pantalla de bloqueo."
+          },
+          {
+            "title": "Bandeja inteligente",
+            "description": "Todo cae en un mismo sitio hasta que lo clasificas."
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/workspace.svg",
+          "alt": "Captura"
+        }
+      }
+    },
+    {
+      "widget": "Stats",
+      "wrapper": {
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(80% 120% at 50% 0%, rgba(59,110,246,0.07), transparent 70%)'></div>"
+      },
+      "props": {
+        "stats": [
+          {
+            "title": "Descargas",
+            "amount": "480K"
+          },
+          {
+            "title": "Valoración",
+            "amount": "4.8"
+          },
+          {
+            "title": "Países",
+            "amount": "38"
+          },
+          {
+            "title": "Sin fallos",
+            "amount": "99.9%"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Testimonials",
+      "props": {
+        "title": "Desde las tiendas",
+        "testimonials": [
+          {
+            "testimonial": "La única app que he mantenido en la pantalla de inicio más de un mes.",
+            "name": "Ana Ruiz",
+            "job": "Diseñadora"
+          },
+          {
+            "testimonial": "Funciona en el tren, que es justo para lo que la compré.",
+            "name": "Marcus Lee",
+            "job": "Consultor"
+          },
+          {
+            "testimonial": "Rápida, silenciosa y nunca me pide que la valore.",
+            "name": "Priya Nair",
+            "job": "Ingeniera"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "FAQs",
+      "wrapper": {
+        "id": "faq"
+      },
+      "props": {
+        "title": "Antes de descargarla",
+        "columns": "2",
+        "items": [
+          {
+            "title": "¿Es gratis?",
+            "description": "La app básica es gratuita. La suscripción desbloquea la sincronización entre dispositivos."
+          },
+          {
+            "title": "¿Qué versiones admite?",
+            "description": "Las tres últimas versiones principales de cada plataforma."
+          }
+        ]
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "wrapper": {
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
+      },
+      "props": {
+        "title": "Descarga la app",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Descargar",
+            "href": "#",
+            "icon": "tabler:download"
+          }
+        ]
+      }
+    }
+  ],
+  "urlSlug": "inicios/app-movil"
+}

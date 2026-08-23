@@ -1,0 +1,52 @@
+{
+  "title": "Ver la oferta",
+  "layout": "landing",
+  "description": "Sin menús ni distracciones. Lee la oferta y decide.",
+  "sections": [
+    {
+      "widget": "Hero2",
+      "props": {
+        "tagline": "Ver la oferta",
+        "title": "Una decisión, <span class='text-highlight'>un botón</span>",
+        "subtitle": "Sin menús ni distracciones. Lee la oferta y decide.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Continuar",
+            "href": "#cta",
+            "icon": "tabler:arrow-right"
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/hero.svg",
+          "alt": "Ver la oferta"
+        }
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "wrapper": {
+        "id": "cta",
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
+      },
+      "props": {
+        "title": "Continuar",
+        "subtitle": "Lleva menos de un minuto y probarlo no cuesta nada.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Continuar",
+            "href": "#",
+            "icon": "tabler:arrow-right"
+          },
+          {
+            "variant": "secondary",
+            "text": "Hacer una pregunta",
+            "href": "/es/contacto"
+          }
+        ]
+      }
+    }
+  ],
+  "urlSlug": "landing/click-through"
+}

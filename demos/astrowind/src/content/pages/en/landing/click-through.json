@@ -1,0 +1,51 @@
+{
+  "title": "See the offer",
+  "layout": "landing",
+  "description": "No menus, no distractions. Read the offer and decide.",
+  "sections": [
+    {
+      "widget": "Hero2",
+      "props": {
+        "tagline": "See the offer",
+        "title": "One decision, <span class='text-highlight'>one button</span>",
+        "subtitle": "No menus, no distractions. Read the offer and decide.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Continue",
+            "href": "#cta",
+            "icon": "tabler:arrow-right"
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/hero.svg",
+          "alt": "See the offer"
+        }
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "wrapper": {
+        "id": "cta",
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
+      },
+      "props": {
+        "title": "Continue",
+        "subtitle": "It takes less than a minute and costs nothing to try.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Continue",
+            "href": "#",
+            "icon": "tabler:arrow-right"
+          },
+          {
+            "variant": "secondary",
+            "text": "Ask a question",
+            "href": "/contact"
+          }
+        ]
+      }
+    }
+  ]
+}

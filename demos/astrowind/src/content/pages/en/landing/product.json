@@ -1,0 +1,51 @@
+{
+  "title": "See specifications",
+  "layout": "landing",
+  "description": "Specifications, materials and the honest limitations. Everything you would ask in a shop.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "tagline": "See specifications",
+        "title": "The <span class='text-highlight'>details</span> that make the difference",
+        "subtitle": "Specifications, materials and the honest limitations. Everything you would ask in a shop.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Add to basket",
+            "href": "#cta",
+            "icon": "tabler:arrow-right"
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/hero.svg",
+          "alt": "See specifications"
+        }
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "wrapper": {
+        "id": "cta",
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
+      },
+      "props": {
+        "title": "Add to basket",
+        "subtitle": "It takes less than a minute and costs nothing to try.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Add to basket",
+            "href": "#",
+            "icon": "tabler:arrow-right"
+          },
+          {
+            "variant": "secondary",
+            "text": "Ask a question",
+            "href": "/contact"
+          }
+        ]
+      }
+    }
+  ]
+}

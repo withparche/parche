@@ -1,0 +1,144 @@
+{
+  "title": "Quiénes somos",
+  "urlSlug": "sobre-nosotros",
+  "description": "Quién construye AstroWind, cómo se hace y para qué sirve.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "title": "Quiénes somos",
+        "subtitle": "Construimos el punto de partida que nos habría gustado tener: una plantilla que aguanta el contacto con contenido real, traducciones reales y plazos reales.",
+        "image": {
+          "src": "@/assets/images/team.svg",
+          "alt": "El equipo"
+        }
+      }
+    },
+    {
+      "widget": "Stats",
+      "wrapper": {
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(80% 120% at 50% 0%, rgba(59,110,246,0.07), transparent 70%)'></div>"
+      },
+      "props": {
+        "stats": [
+          {
+            "title": "Personas que contribuyen",
+            "amount": "180"
+          },
+          {
+            "title": "Versiones publicadas",
+            "amount": "64"
+          },
+          {
+            "title": "Webs creadas",
+            "amount": "48,4K"
+          },
+          {
+            "title": "Años en marcha",
+            "amount": "4"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Features3",
+      "props": {
+        "title": "Nuestros valores",
+        "subtitle": "Qué priorizamos cuando las dos opciones parecen razonables.",
+        "columns": "3",
+        "items": [
+          {
+            "title": "Claridad antes que ingenio",
+            "description": "Un componente que se lee en un minuto vale más que otro que ahorra cinco líneas.",
+            "icon": "tabler:eye"
+          },
+          {
+            "title": "Valores por defecto que aguantan",
+            "description": "Lo que sale de fábrica debe poder publicarse tal cual, no ser un punto de partida a corregir.",
+            "icon": "tabler:adjustments"
+          },
+          {
+            "title": "Sin costes ocultos",
+            "description": "Sin rastreo, sin llamadas a casa, sin código en el navegador que no hayas pedido.",
+            "icon": "tabler:shield-check"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Features3",
+      "props": {
+        "title": "Nuestros logros",
+        "subtitle": "Hitos que merece la pena recordar.",
+        "columns": "3",
+        "isAfterContent": true,
+        "items": [
+          {
+            "title": "El tema de Astro con más forks",
+            "description": "Cuatro años seguidos, algo que dice más de la comunidad que de nosotros.",
+            "icon": "tabler:award"
+          },
+          {
+            "title": "Cero JavaScript por defecto",
+            "description": "Cada página se sirve como HTML y CSS salvo que pidas explícitamente una isla interactiva.",
+            "icon": "tabler:bolt"
+          },
+          {
+            "title": "Accesible desde el diseño",
+            "description": "El foco, las regiones y el contraste forman parte de los componentes, no son un añadido posterior.",
+            "icon": "tabler:accessible"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Steps2",
+      "props": {
+        "title": "Cómo trabajamos",
+        "subtitle": "El ciclo que repetimos versión tras versión.",
+        "items": [
+          {
+            "title": "Construir algo real",
+            "description": "Cada función nace de una página que necesitamos de verdad, no de una abstracción que imaginamos que alguien querrá.",
+            "icon": "tabler:hammer"
+          },
+          {
+            "title": "Ver dónde se rompe",
+            "description": "Mantenemos un registro de los límites que encuentran las páginas reales. Nada especulativo entra ahí.",
+            "icon": "tabler:bug"
+          },
+          {
+            "title": "Arreglar la causa",
+            "description": "Y entonces corregimos el framework en lugar de esquivarlo desde la página.",
+            "icon": "tabler:tool"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Features2",
+      "props": {
+        "title": "Habla con nosotros",
+        "subtitle": "Dónde encontrarnos.",
+        "columns": "3",
+        "items": [
+          {
+            "title": "GitHub",
+            "description": "Issues, discusiones y pull requests. La vía más rápida para llegar a quien mantiene el proyecto.",
+            "icon": "tabler:brand-github"
+          },
+          {
+            "title": "Correo",
+            "description": "Para lo que no debe ir en público. Respondemos en un plazo de dos días laborables.",
+            "icon": "tabler:mail"
+          },
+          {
+            "title": "Comunidad",
+            "description": "Pregunta y comparte lo que has construido con otras personas que usan la plantilla.",
+            "icon": "tabler:users"
+          }
+        ]
+      }
+    }
+  ]
+}

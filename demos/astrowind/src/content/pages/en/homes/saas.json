@@ -1,0 +1,262 @@
+{
+  "title": "SaaS",
+  "layout": "default",
+  "description": "A SaaS product home: proposition, features, pricing and questions.",
+  "sections": [
+    {
+      "widget": "Hero2",
+      "props": {
+        "tagline": "SaaS",
+        "title": "Where your team <span class='text-highlight'>stops chasing</span> the work",
+        "subtitle": "Plan, track and ship from one place. Fewer tools, fewer meetings, more things finished.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Start free",
+            "href": "#pricing",
+            "icon": "tabler:arrow-right"
+          },
+          {
+            "variant": "secondary",
+            "text": "Book a demo",
+            "href": "/contact"
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/hero.svg",
+          "alt": "Product"
+        }
+      }
+    },
+    {
+      "widget": "Brands",
+      "props": {
+        "title": "Teams already using it",
+        "icons": [
+          "tabler:brand-github",
+          "tabler:brand-figma",
+          "tabler:brand-slack",
+          "tabler:brand-notion",
+          "tabler:brand-stripe",
+          "tabler:brand-vercel"
+        ]
+      }
+    },
+    {
+      "widget": "Features",
+      "wrapper": {
+        "id": "features"
+      },
+      "props": {
+        "tagline": "Features",
+        "title": "Everything your team needs",
+        "subtitle": "Stop stitching five tools together. Work, docs and the plan live together here.",
+        "columns": "3",
+        "items": [
+          {
+            "title": "Boards and tasks",
+            "description": "Plan sprints on flexible boards, with sub-tasks and custom fields.",
+            "icon": "tabler:layout-kanban"
+          },
+          {
+            "title": "Docs that link",
+            "description": "Write specs that stay connected to the work they describe.",
+            "icon": "tabler:file-text"
+          },
+          {
+            "title": "Roadmaps",
+            "description": "Turn strategy into a timeline the whole company can follow.",
+            "icon": "tabler:map"
+          },
+          {
+            "title": "Automations",
+            "description": "Automate the repetitive steps: assignments, statuses, reminders.",
+            "icon": "tabler:bolt"
+          },
+          {
+            "title": "Summaries",
+            "description": "Catch up on any project with a summary of what changed.",
+            "icon": "tabler:sparkles"
+          },
+          {
+            "title": "Integrations",
+            "description": "Connect the tools your team already uses every day.",
+            "icon": "tabler:plug"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Content",
+      "wrapper": {
+        "bg": "<div style='position:absolute;inset:0;background:linear-gradient(180deg, rgba(59,110,246,0.06), transparent 65%)'></div>"
+      },
+      "props": {
+        "isReversed": true,
+        "columns": "1",
+        "tagline": "Focus",
+        "title": "A calm home for real work",
+        "content": "Fast keyboard-first navigation, a quiet interface, everything one shortcut away.",
+        "items": [
+          {
+            "title": "Command palette",
+            "description": "Jump to any project, doc or task in milliseconds."
+          },
+          {
+            "title": "Offline-first",
+            "description": "Keep working on the train; changes sync when you are back."
+          },
+          {
+            "title": "Fine-grained permissions",
+            "description": "Share the right thing with the right people, safely."
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/app-preview.svg",
+          "alt": "Interface"
+        }
+      }
+    },
+    {
+      "widget": "Pricing",
+      "wrapper": {
+        "id": "pricing",
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(80% 120% at 50% 0%, rgba(59,110,246,0.07), transparent 70%)'></div>"
+      },
+      "props": {
+        "tagline": "Pricing",
+        "title": "Pricing that scales with you",
+        "prices": [
+          {
+            "title": "Free",
+            "subtitle": "To get started",
+            "price": "0",
+            "currency": "$",
+            "period": "per month",
+            "items": [
+              {
+                "description": "Up to 3 projects"
+              },
+              {
+                "description": "Unlimited docs"
+              },
+              {
+                "description": "Community support"
+              }
+            ],
+            "callToAction": {
+              "text": "Get started",
+              "href": "#"
+            }
+          },
+          {
+            "title": "Team",
+            "subtitle": "For growing teams",
+            "price": "12",
+            "currency": "$",
+            "period": "per user / month",
+            "hasRibbon": true,
+            "ribbonTitle": "Popular",
+            "items": [
+              {
+                "description": "Unlimited projects"
+              },
+              {
+                "description": "Automations and roadmaps"
+              },
+              {
+                "description": "Integrations"
+              },
+              {
+                "description": "Priority support"
+              }
+            ],
+            "callToAction": {
+              "text": "Start free trial",
+              "href": "#"
+            }
+          },
+          {
+            "title": "Enterprise",
+            "subtitle": "For organizations at scale",
+            "type": "custom",
+            "description": "Volume pricing tailored to your organization.",
+            "items": [
+              {
+                "description": "SSO y SCIM"
+              },
+              {
+                "description": "Advanced permissions"
+              },
+              {
+                "description": "Dedicated success manager"
+              }
+            ],
+            "callToAction": {
+              "text": "Contact sales",
+              "href": "/contact"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "FAQs",
+      "wrapper": {
+        "id": "faq"
+      },
+      "props": {
+        "tagline": "FAQs",
+        "title": "Questions, answered",
+        "columns": "2",
+        "items": [
+          {
+            "title": "Can I try it first?",
+            "description": "Yes — the free plan is genuinely free, and paid plans include a fourteen-day trial."
+          },
+          {
+            "title": "Can I import my data?",
+            "description": "We import from the usual tools, keeping your structure intact."
+          },
+          {
+            "title": "Is my data secure?",
+            "description": "Encrypted in transit and at rest. Enterprise adds SSO and audit logs."
+          },
+          {
+            "title": "Do you offer discounts?",
+            "description": "For non-profits, students and annual billing."
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Steps2",
+      "props": {
+        "title": "Up and running in an afternoon",
+        "items": [
+          {
+            "title": "Import your work",
+            "description": "Bring tasks and docs over in a couple of clicks.",
+            "icon": "tabler:download"
+          },
+          {
+            "title": "Invite your team",
+            "description": "Set up spaces and permissions, and get everyone in one place.",
+            "icon": "tabler:users"
+          },
+          {
+            "title": "Ship",
+            "description": "Plan, track and release, with automations doing the busywork.",
+            "icon": "tabler:rocket"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "BlogLatestPosts",
+      "props": {
+        "title": "From the blog"
+      }
+    }
+  ]
+}

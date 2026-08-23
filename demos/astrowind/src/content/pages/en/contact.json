@@ -1,0 +1,78 @@
+{
+  "title": "Contact",
+  "description": "Write to us — we read everything that comes in.",
+  "sections": [
+    {
+      "widget": "HeroText",
+      "props": {
+        "tagline": "Contact",
+        "title": "Let's talk",
+        "subtitle": "Tell us what you are building and where you are stuck. We answer within two working days."
+      }
+    },
+    {
+      "widget": "Contact",
+      "props": {
+        "title": "Send us a message",
+        "subtitle": "Fill in the form and we will reply by email.",
+        "inputs": [
+          {
+            "type": "text",
+            "name": "name",
+            "label": "Name",
+            "placeholder": "Ada Lovelace",
+            "autocomplete": "name"
+          },
+          {
+            "type": "email",
+            "name": "email",
+            "label": "Email",
+            "placeholder": "ada@example.com",
+            "autocomplete": "email"
+          },
+          {
+            "type": "text",
+            "name": "subject",
+            "label": "Subject",
+            "placeholder": "How can we help?"
+          }
+        ],
+        "textarea": {
+          "label": "Message",
+          "name": "message",
+          "rows": 5,
+          "placeholder": "Tell us the details…"
+        },
+        "disclaimer": {
+          "label": "By sending this you agree that we store your message so we can reply."
+        },
+        "button": "Send message"
+      }
+    },
+    {
+      "widget": "Features2",
+      "props": {
+        "title": "Other channels",
+        "subtitle": "If a form is not your thing.",
+        "columns": "3",
+        "items": [
+          {
+            "title": "Support",
+            "description": "Technical problems and odd behaviour. Include the version and how to reproduce it.",
+            "icon": "tabler:lifebuoy"
+          },
+          {
+            "title": "Sales",
+            "description": "Pricing, invoicing and plans for larger teams.",
+            "icon": "tabler:receipt"
+          },
+          {
+            "title": "Press",
+            "description": "Brand assets, logos and project facts.",
+            "icon": "tabler:news"
+          }
+        ]
+      }
+    }
+  ]
+}

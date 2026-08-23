@@ -1,0 +1,51 @@
+{
+  "title": "Read the full story",
+  "layout": "landing",
+  "description": "Take your time. This page covers what the product does, who it is for and where it will not help you.",
+  "sections": [
+    {
+      "widget": "Hero2",
+      "props": {
+        "tagline": "Read the full story",
+        "title": "Everything you need, <span class='text-highlight'>explained properly</span>",
+        "subtitle": "Take your time. This page covers what the product does, who it is for and where it will not help you.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Buy now",
+            "href": "#cta",
+            "icon": "tabler:arrow-right"
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/hero.svg",
+          "alt": "Read the full story"
+        }
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "wrapper": {
+        "id": "cta",
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
+      },
+      "props": {
+        "title": "Buy now",
+        "subtitle": "It takes less than a minute and costs nothing to try.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Buy now",
+            "href": "#",
+            "icon": "tabler:arrow-right"
+          },
+          {
+            "variant": "secondary",
+            "text": "Ask a question",
+            "href": "/contact"
+          }
+        ]
+      }
+    }
+  ]
+}

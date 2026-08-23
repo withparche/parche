@@ -1,0 +1,52 @@
+{
+  "title": "Suscribirme",
+  "layout": "landing",
+  "description": "Un correo, los jueves, con lo que aprendimos construyendo software esa semana. Te das de baja en un clic.",
+  "sections": [
+    {
+      "widget": "Hero2",
+      "props": {
+        "tagline": "Suscribirme",
+        "title": "Cosas buenas, <span class='text-highlight'>cada semana</span>",
+        "subtitle": "Un correo, los jueves, con lo que aprendimos construyendo software esa semana. Te das de baja en un clic.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Suscribirme",
+            "href": "#cta",
+            "icon": "tabler:arrow-right"
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/hero.svg",
+          "alt": "Suscribirme"
+        }
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "wrapper": {
+        "id": "cta",
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
+      },
+      "props": {
+        "title": "Suscribirme",
+        "subtitle": "Lleva menos de un minuto y probarlo no cuesta nada.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Suscribirme",
+            "href": "#",
+            "icon": "tabler:arrow-right"
+          },
+          {
+            "variant": "secondary",
+            "text": "Hacer una pregunta",
+            "href": "/es/contacto"
+          }
+        ]
+      }
+    }
+  ],
+  "urlSlug": "landing/suscripcion"
+}

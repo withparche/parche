@@ -1,0 +1,160 @@
+{
+  "title": "Startup",
+  "description": "Una home de startup: tracción, pruebas y un siguiente paso claro.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "tagline": "Fase seed",
+        "title": "Convertimos <span class='text-highlight'>ideas desordenadas</span> en productos que funcionan",
+        "subtitle": "Un equipo pequeño que publica cada semana, con clientes en la sala desde el primer día.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Ver el producto",
+            "href": "#features",
+            "icon": "tabler:arrow-right"
+          },
+          {
+            "variant": "secondary",
+            "text": "Leer el blog",
+            "href": "/es/blog"
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/hero.svg",
+          "alt": "Producto"
+        }
+      }
+    },
+    {
+      "widget": "Features2",
+      "wrapper": {
+        "id": "features"
+      },
+      "props": {
+        "tagline": "Qué hacemos",
+        "title": "Tres cosas, bien hechas",
+        "columns": "3",
+        "items": [
+          {
+            "title": "Investigación",
+            "description": "Hablamos con quien lo va a usar antes de construir nada.",
+            "icon": "tabler:search"
+          },
+          {
+            "title": "Diseño",
+            "description": "Interfaces que se explican solas, sin manual.",
+            "icon": "tabler:palette"
+          },
+          {
+            "title": "Ingeniería",
+            "description": "Entregas pequeñas, medidas y reversibles.",
+            "icon": "tabler:code"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Stats",
+      "wrapper": {
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(80% 120% at 50% 0%, rgba(59,110,246,0.07), transparent 70%)'></div>"
+      },
+      "props": {
+        "stats": [
+          {
+            "title": "Usuarios semanales",
+            "amount": "12K"
+          },
+          {
+            "title": "Retención",
+            "amount": "94%"
+          },
+          {
+            "title": "Entregas",
+            "amount": "312"
+          },
+          {
+            "title": "Equipo",
+            "amount": "9"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Brands",
+      "props": {
+        "title": "Con el apoyo de",
+        "icons": [
+          "tabler:brand-ycombinator",
+          "tabler:brand-github",
+          "tabler:brand-stripe",
+          "tabler:brand-vercel"
+        ]
+      }
+    },
+    {
+      "widget": "Features3",
+      "props": {
+        "title": "Por qué se cambian",
+        "columns": "3",
+        "items": [
+          {
+            "title": "Es rápido",
+            "description": "Las páginas cargan antes de que te des cuenta.",
+            "icon": "tabler:bolt"
+          },
+          {
+            "title": "Es honesto",
+            "description": "Sin patrones oscuros, sin ataduras, sin facturas sorpresa.",
+            "icon": "tabler:shield-check"
+          },
+          {
+            "title": "Tiene soporte",
+            "description": "Responde una persona, normalmente quien escribió el código.",
+            "icon": "tabler:message"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "FAQs",
+      "wrapper": {
+        "id": "faq"
+      },
+      "props": {
+        "title": "Preguntas habituales",
+        "columns": "2",
+        "items": [
+          {
+            "title": "¿Estáis contratando?",
+            "description": "De vez en cuando. Escríbenos con algo que hayas construido."
+          },
+          {
+            "title": "¿Dónde estáis?",
+            "description": "Repartidos en cuatro husos horarios, con dos reuniones por semana."
+          }
+        ]
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "wrapper": {
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
+      },
+      "props": {
+        "title": "Ven a verlo",
+        "subtitle": "Quince minutos, sin diapositivas.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Reservar una llamada",
+            "href": "/es/contacto",
+            "icon": "tabler:calendar"
+          }
+        ]
+      }
+    }
+  ],
+  "urlSlug": "inicios/startup"
+}

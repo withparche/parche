@@ -1,0 +1,219 @@
+{
+  "title": "Pricing",
+  "description": "Simple, transparent pricing. Choose the plan that fits how you work and change it whenever you need to.",
+  "sections": [
+    {
+      "widget": "HeroText",
+      "props": {
+        "tagline": "Pricing",
+        "title": "Stellar pricing for every journey",
+        "subtitle": "Choose the plan that aligns with your goals. Change or cancel it whenever you want."
+      }
+    },
+    {
+      "widget": "Pricing",
+      "wrapper": {
+        "id": "pricing",
+        "bg": "<div style='position:absolute;inset:0;background:linear-gradient(180deg, transparent 40%, rgba(100,116,139,0.06))'></div>"
+      },
+      "props": {
+        "title": "Our prices",
+        "subtitle": "Only pay for what you need.",
+        "prices": [
+          {
+            "title": "Basic",
+            "subtitle": "Best for personal projects",
+            "price": "29",
+            "currency": "$",
+            "period": "per month",
+            "items": [
+              {
+                "description": "One project"
+              },
+              {
+                "description": "Community support"
+              },
+              {
+                "description": "All core widgets"
+              },
+              {
+                "description": "Monthly updates"
+              }
+            ],
+            "callToAction": {
+              "text": "Get started",
+              "href": "#"
+            }
+          },
+          {
+            "title": "Standard",
+            "subtitle": "Best for small teams",
+            "price": "69",
+            "currency": "$",
+            "period": "per month",
+            "items": [
+              {
+                "description": "Up to ten projects"
+              },
+              {
+                "description": "Priority email support"
+              },
+              {
+                "description": "All widgets and themes"
+              },
+              {
+                "description": "Shared design tokens"
+              },
+              {
+                "description": "Weekly updates"
+              }
+            ],
+            "callToAction": {
+              "text": "Get started",
+              "href": "#"
+            },
+            "hasRibbon": true,
+            "ribbonTitle": "Popular"
+          },
+          {
+            "title": "Premium",
+            "subtitle": "Best for companies",
+            "price": "199",
+            "currency": "$",
+            "period": "per month",
+            "items": [
+              {
+                "description": "Unlimited projects"
+              },
+              {
+                "description": "Dedicated support channel"
+              },
+              {
+                "description": "Custom theme development"
+              },
+              {
+                "description": "Onboarding session"
+              }
+            ],
+            "callToAction": {
+              "text": "Get started",
+              "href": "#"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Features3",
+      "props": {
+        "title": "Price-related features",
+        "subtitle": "What every plan includes, regardless of size.",
+        "columns": "2",
+        "items": [
+          {
+            "title": "Tiered plans",
+            "description": "Pick the tier that matches your budget and requirements — and move between them without migrating anything.",
+            "icon": "tabler:stairs"
+          },
+          {
+            "title": "Transparent pricing",
+            "description": "The price you see is the price you pay. No hidden costs, no surprise charges at renewal.",
+            "icon": "tabler:flip-vertical"
+          },
+          {
+            "title": "No lock-in",
+            "description": "Your content is plain files in your repository. Leaving is a git clone away.",
+            "icon": "tabler:lock-open"
+          },
+          {
+            "title": "Volume discounts",
+            "description": "Annual billing and non-profit or student status both reduce the price.",
+            "icon": "tabler:discount"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Steps",
+      "wrapper": {
+        "id": "how"
+      },
+      "props": {
+        "title": "From choosing a plan to a live site",
+        "items": [
+          {
+            "title": "Pick a plan",
+            "description": "Start on Basic if you are unsure. Upgrading later keeps everything you have already built.",
+            "icon": "tabler:number-1"
+          },
+          {
+            "title": "Set up your site",
+            "description": "Clone the template, change the tokens to your brand and write your content as data.",
+            "icon": "tabler:number-2"
+          },
+          {
+            "title": "Publish",
+            "description": "Build once and deploy the static output anywhere, or run it as a server when you need per-request rendering.",
+            "icon": "tabler:number-3"
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/workspace.svg",
+          "alt": "Setting up a site"
+        }
+      }
+    },
+    {
+      "widget": "FAQs",
+      "wrapper": {
+        "id": "faq"
+      },
+      "props": {
+        "tagline": "FAQs",
+        "title": "Pricing questions, answered",
+        "columns": "2",
+        "items": [
+          {
+            "title": "Can I try it before paying?",
+            "description": "Yes. Every plan includes a fourteen-day trial and no card is required to start."
+          },
+          {
+            "title": "What happens if I outgrow my plan?",
+            "description": "Move to the next tier at any time. Everything you have built carries over untouched."
+          },
+          {
+            "title": "Do you offer refunds?",
+            "description": "If the first month does not work out, write to us and we refund it in full."
+          },
+          {
+            "title": "Can I pay annually?",
+            "description": "Yes, and annual billing is cheaper than paying month to month."
+          }
+        ]
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "wrapper": {
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
+      },
+      "props": {
+        "title": "Still deciding?",
+        "subtitle": "Start on the free trial and see how far you get in an afternoon.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Start free trial",
+            "href": "#pricing",
+            "icon": "tabler:arrow-right"
+          },
+          {
+            "variant": "secondary",
+            "text": "Talk to us",
+            "href": "/contact"
+          }
+        ]
+      }
+    }
+  ]
+}

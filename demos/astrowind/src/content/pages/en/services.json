@@ -1,0 +1,155 @@
+{
+  "title": "Services",
+  "description": "What we do for you when the template alone is not enough.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "title": "Services that get your site <span class='text-highlight'>live</span>",
+        "subtitle": "From a two-hour review to a full redesign. We pick the smallest scope that solves your problem.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Request a quote",
+            "href": "/contact",
+            "icon": "tabler:arrow-right"
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/workspace.svg",
+          "alt": "Working"
+        }
+      }
+    },
+    {
+      "widget": "Features2",
+      "props": {
+        "tagline": "Services",
+        "title": "What we offer",
+        "subtitle": "Four ways to work together, from the lightest to the most involved.",
+        "columns": "2",
+        "items": [
+          {
+            "title": "Technical review",
+            "description": "Two hours over your current site: performance, accessibility and SEO, with an actionable report.",
+            "icon": "tabler:zoom-check"
+          },
+          {
+            "title": "Setup",
+            "description": "We install the template, adapt it to your brand and leave you publishing within a week.",
+            "icon": "tabler:rocket"
+          },
+          {
+            "title": "Custom theme",
+            "description": "Your identity turned into tokens, so every component inherits it with no exceptions.",
+            "icon": "tabler:palette"
+          },
+          {
+            "title": "Ongoing support",
+            "description": "A direct channel and regular reviews while your team learns the system.",
+            "icon": "tabler:heart-handshake"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Content",
+      "wrapper": {
+        "bg": "<div style='position:absolute;inset:0;background:linear-gradient(180deg, rgba(59,110,246,0.06), transparent 65%)'></div>"
+      },
+      "props": {
+        "isReversed": true,
+        "columns": "1",
+        "tagline": "Method",
+        "title": "We start from the problem, not the design",
+        "content": "Before touching a colour we want to know who you are speaking to and what should happen when someone lands on the page.",
+        "items": [
+          {
+            "title": "Understand",
+            "description": "A short session to pin down the goal and the real constraints."
+          },
+          {
+            "title": "Build",
+            "description": "Short iterations with something visible at the end of each."
+          },
+          {
+            "title": "Hand over",
+            "description": "You keep control: the content is files in your repository."
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/blueprint.svg",
+          "alt": "Working method"
+        }
+      }
+    },
+    {
+      "widget": "Content",
+      "props": {
+        "isAfterContent": true,
+        "columns": "1",
+        "content": "And when we are done, you are not dependent on us.",
+        "items": [
+          {
+            "title": "No hidden dependencies",
+            "description": "Everything we use is open and documented."
+          },
+          {
+            "title": "Documentation included",
+            "description": "We write down how to change each thing, not just what we did."
+          },
+          {
+            "title": "Team training",
+            "description": "A final session so your team can carry on unaided."
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/growth.svg",
+          "alt": "Autonomy"
+        }
+      }
+    },
+    {
+      "widget": "Testimonials",
+      "props": {
+        "tagline": "Clients",
+        "title": "What they say",
+        "testimonials": [
+          {
+            "testimonial": "They delivered a faster site than the one we had and, for the first time, we understand how to change it.",
+            "name": "Ana Ruiz",
+            "job": "Head of Product, Northwind"
+          },
+          {
+            "testimonial": "The technical review alone was worth what the whole project cost.",
+            "name": "Marcus Lee",
+            "job": "Eng Manager, Loop"
+          },
+          {
+            "testimonial": "Translating the site into two languages stopped being a problem the day we migrated.",
+            "name": "Priya Nair",
+            "job": "Ops Lead, Cedar"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "wrapper": {
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
+      },
+      "props": {
+        "title": "Shall we start?",
+        "subtitle": "Tell us about the project and we will say within a day whether we can help.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Get in touch",
+            "href": "/contact",
+            "icon": "tabler:arrow-right"
+          }
+        ]
+      }
+    }
+  ]
+}

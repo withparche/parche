@@ -1,0 +1,220 @@
+{
+  "title": "Precios",
+  "description": "Precios claros y sencillos. Elige el plan que encaja con tu forma de trabajar y cámbialo cuando lo necesites.",
+  "sections": [
+    {
+      "widget": "HeroText",
+      "props": {
+        "tagline": "Precios",
+        "title": "Precios estelares para cada trayecto",
+        "subtitle": "Elige el plan que encaja con tus objetivos. Cámbialo o cancélalo cuando quieras."
+      }
+    },
+    {
+      "widget": "Pricing",
+      "wrapper": {
+        "id": "pricing",
+        "bg": "<div style='position:absolute;inset:0;background:linear-gradient(180deg, transparent 40%, rgba(100,116,139,0.06))'></div>"
+      },
+      "props": {
+        "title": "Nuestros precios",
+        "subtitle": "Paga solo por lo que necesitas.",
+        "prices": [
+          {
+            "title": "Básico",
+            "subtitle": "Ideal para proyectos personales",
+            "price": "29",
+            "currency": "$",
+            "period": "al mes",
+            "items": [
+              {
+                "description": "Un proyecto"
+              },
+              {
+                "description": "Soporte de la comunidad"
+              },
+              {
+                "description": "Todos los widgets básicos"
+              },
+              {
+                "description": "Actualizaciones mensuales"
+              }
+            ],
+            "callToAction": {
+              "text": "Empezar",
+              "href": "#"
+            }
+          },
+          {
+            "title": "Estándar",
+            "subtitle": "Ideal para equipos pequeños",
+            "price": "69",
+            "currency": "$",
+            "period": "al mes",
+            "items": [
+              {
+                "description": "Hasta diez proyectos"
+              },
+              {
+                "description": "Soporte prioritario por correo"
+              },
+              {
+                "description": "Todos los widgets y temas"
+              },
+              {
+                "description": "Tokens de diseño compartidos"
+              },
+              {
+                "description": "Actualizaciones semanales"
+              }
+            ],
+            "callToAction": {
+              "text": "Empezar",
+              "href": "#"
+            },
+            "hasRibbon": true,
+            "ribbonTitle": "Popular"
+          },
+          {
+            "title": "Premium",
+            "subtitle": "Ideal para empresas",
+            "price": "199",
+            "currency": "$",
+            "period": "al mes",
+            "items": [
+              {
+                "description": "Proyectos ilimitados"
+              },
+              {
+                "description": "Canal de soporte dedicado"
+              },
+              {
+                "description": "Desarrollo de tema a medida"
+              },
+              {
+                "description": "Sesión de puesta en marcha"
+              }
+            ],
+            "callToAction": {
+              "text": "Empezar",
+              "href": "#"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Features3",
+      "props": {
+        "title": "Qué incluye el precio",
+        "subtitle": "Lo que llevan todos los planes, sea cual sea su tamaño.",
+        "columns": "2",
+        "items": [
+          {
+            "title": "Planes por niveles",
+            "description": "Escoge el nivel que encaja con tu presupuesto y tus necesidades, y muévete entre ellos sin migrar nada.",
+            "icon": "tabler:stairs"
+          },
+          {
+            "title": "Precios transparentes",
+            "description": "El precio que ves es el que pagas. Sin costes ocultos ni sorpresas en la renovación.",
+            "icon": "tabler:flip-vertical"
+          },
+          {
+            "title": "Sin ataduras",
+            "description": "Tu contenido son ficheros de texto en tu repositorio. Marcharte es un git clone.",
+            "icon": "tabler:lock-open"
+          },
+          {
+            "title": "Descuentos por volumen",
+            "description": "La facturación anual y las tarifas para estudiantes y entidades sin ánimo de lucro reducen el precio.",
+            "icon": "tabler:discount"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Steps",
+      "wrapper": {
+        "id": "how"
+      },
+      "props": {
+        "title": "Del plan elegido a la web publicada",
+        "items": [
+          {
+            "title": "Elige un plan",
+            "description": "Si dudas, empieza por el Básico. Subir de nivel más adelante conserva todo lo que ya has hecho.",
+            "icon": "tabler:number-1"
+          },
+          {
+            "title": "Monta tu web",
+            "description": "Clona la plantilla, ajusta los tokens a tu marca y escribe tu contenido como datos.",
+            "icon": "tabler:number-2"
+          },
+          {
+            "title": "Publica",
+            "description": "Compila una vez y despliega la salida estática donde quieras, o sírvela como servidor si necesitas render por petición.",
+            "icon": "tabler:number-3"
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/workspace.svg",
+          "alt": "Montando una web"
+        }
+      }
+    },
+    {
+      "widget": "FAQs",
+      "wrapper": {
+        "id": "faq"
+      },
+      "props": {
+        "tagline": "Preguntas frecuentes",
+        "title": "Dudas sobre precios, resueltas",
+        "columns": "2",
+        "items": [
+          {
+            "title": "¿Puedo probarlo antes de pagar?",
+            "description": "Sí. Todos los planes incluyen catorce días de prueba y no hace falta tarjeta para empezar."
+          },
+          {
+            "title": "¿Y si se me queda pequeño el plan?",
+            "description": "Pasa al siguiente nivel cuando quieras. Todo lo que has construido se mantiene intacto."
+          },
+          {
+            "title": "¿Devolvéis el dinero?",
+            "description": "Si el primer mes no sale bien, escríbenos y te lo devolvemos íntegro."
+          },
+          {
+            "title": "¿Puedo pagar de forma anual?",
+            "description": "Sí, y la facturación anual sale más barata que la mensual."
+          }
+        ]
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "wrapper": {
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
+      },
+      "props": {
+        "title": "¿Aún lo estás pensando?",
+        "subtitle": "Empieza la prueba gratuita y mira hasta dónde llegas en una tarde.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Empezar prueba",
+            "href": "#pricing",
+            "icon": "tabler:arrow-right"
+          },
+          {
+            "variant": "secondary",
+            "text": "Hablar con nosotros",
+            "href": "/es/contacto"
+          }
+        ]
+      }
+    }
+  ],
+  "urlSlug": "precios"
+}

@@ -1,0 +1,156 @@
+{
+  "title": "Servicios",
+  "description": "Lo que hacemos por ti cuando la plantilla sola no llega.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "title": "Servicios que ponen tu web <span class='text-highlight'>en marcha</span>",
+        "subtitle": "Desde una revisión de dos horas hasta un rediseño completo. Elegimos el alcance más pequeño que resuelve tu problema.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Pedir presupuesto",
+            "href": "/es/contacto",
+            "icon": "tabler:arrow-right"
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/workspace.svg",
+          "alt": "Trabajando"
+        }
+      }
+    },
+    {
+      "widget": "Features2",
+      "props": {
+        "tagline": "Servicios",
+        "title": "Qué ofrecemos",
+        "subtitle": "Cuatro formas de trabajar juntos, de la más ligera a la más completa.",
+        "columns": "2",
+        "items": [
+          {
+            "title": "Revisión técnica",
+            "description": "Dos horas sobre tu web actual: rendimiento, accesibilidad y SEO, con un informe accionable.",
+            "icon": "tabler:zoom-check"
+          },
+          {
+            "title": "Puesta en marcha",
+            "description": "Instalamos la plantilla, la adaptamos a tu marca y te dejamos publicando en una semana.",
+            "icon": "tabler:rocket"
+          },
+          {
+            "title": "Tema a medida",
+            "description": "Tu identidad convertida en tokens, para que cada componente la herede sin excepciones.",
+            "icon": "tabler:palette"
+          },
+          {
+            "title": "Acompañamiento",
+            "description": "Un canal directo y revisiones periódicas mientras tu equipo aprende el sistema.",
+            "icon": "tabler:heart-handshake"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Content",
+      "wrapper": {
+        "bg": "<div style='position:absolute;inset:0;background:linear-gradient(180deg, rgba(59,110,246,0.06), transparent 65%)'></div>"
+      },
+      "props": {
+        "isReversed": true,
+        "columns": "1",
+        "tagline": "Método",
+        "title": "Empezamos por el problema, no por el diseño",
+        "content": "Antes de tocar un color queremos saber a quién le hablas y qué debe pasar cuando alguien llega a la página.",
+        "items": [
+          {
+            "title": "Entender",
+            "description": "Una sesión corta para acotar el objetivo y los límites reales."
+          },
+          {
+            "title": "Construir",
+            "description": "Iteraciones cortas con algo visible al final de cada una."
+          },
+          {
+            "title": "Entregar",
+            "description": "Te dejamos el control: el contenido son ficheros en tu repositorio."
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/blueprint.svg",
+          "alt": "Método de trabajo"
+        }
+      }
+    },
+    {
+      "widget": "Content",
+      "props": {
+        "isAfterContent": true,
+        "columns": "1",
+        "content": "Y cuando terminamos, no dependes de nosotros.",
+        "items": [
+          {
+            "title": "Sin dependencias ocultas",
+            "description": "Todo lo que usamos es abierto y está documentado."
+          },
+          {
+            "title": "Documentación incluida",
+            "description": "Dejamos escrito cómo se cambia cada cosa, no solo qué hicimos."
+          },
+          {
+            "title": "Formación al equipo",
+            "description": "Una sesión final para que tu equipo pueda seguir sin ayuda."
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/growth.svg",
+          "alt": "Autonomía"
+        }
+      }
+    },
+    {
+      "widget": "Testimonials",
+      "props": {
+        "tagline": "Clientes",
+        "title": "Lo que dicen",
+        "testimonials": [
+          {
+            "testimonial": "Nos entregaron una web más rápida que la anterior y, por primera vez, entendemos cómo cambiarla.",
+            "name": "Ana Ruiz",
+            "job": "Directora de producto, Northwind"
+          },
+          {
+            "testimonial": "La revisión técnica valió por sí sola lo que costó el proyecto entero.",
+            "name": "Marcus Lee",
+            "job": "Responsable de ingeniería, Loop"
+          },
+          {
+            "testimonial": "Traducir la web a dos idiomas dejó de ser un problema el día que migramos.",
+            "name": "Priya Nair",
+            "job": "Responsable de operaciones, Cedar"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "wrapper": {
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
+      },
+      "props": {
+        "title": "¿Empezamos?",
+        "subtitle": "Cuéntanos el proyecto y te decimos en un día si podemos ayudarte.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Contactar",
+            "href": "/es/contacto",
+            "icon": "tabler:arrow-right"
+          }
+        ]
+      }
+    }
+  ],
+  "urlSlug": "servicios"
+}

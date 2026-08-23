@@ -1,0 +1,168 @@
+{
+  "title": "Mobile App",
+  "description": "A mobile app home: screenshots, store badges and proof.",
+  "sections": [
+    {
+      "widget": "Hero2",
+      "props": {
+        "tagline": "Mobile",
+        "title": "Your day, <span class='text-highlight'>in your pocket</span>",
+        "subtitle": "Plan, capture and review from anywhere. It works offline and syncs when you are back.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "App Store",
+            "href": "#",
+            "icon": "tabler:brand-apple"
+          },
+          {
+            "variant": "secondary",
+            "text": "Google Play",
+            "href": "#",
+            "icon": "tabler:brand-google-play"
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/app-preview.svg",
+          "alt": "App screenshot"
+        }
+      }
+    },
+    {
+      "widget": "Features3",
+      "props": {
+        "title": "Built for the phone, not shrunk to fit",
+        "columns": "3",
+        "items": [
+          {
+            "title": "Offline first",
+            "description": "Everything works on the underground and syncs later.",
+            "icon": "tabler:wifi-off"
+          },
+          {
+            "title": "One-handed",
+            "description": "Every primary action sits within thumb reach.",
+            "icon": "tabler:hand-click"
+          },
+          {
+            "title": "Battery aware",
+            "description": "No background polling, no wake locks, no drain.",
+            "icon": "tabler:battery-charging"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Content",
+      "wrapper": {
+        "bg": "<div style='position:absolute;inset:0;background:linear-gradient(180deg, rgba(59,110,246,0.06), transparent 65%)'></div>"
+      },
+      "props": {
+        "isReversed": true,
+        "columns": "1",
+        "title": "Capture now, organise later",
+        "content": "The fastest note is the one you never had to file.",
+        "items": [
+          {
+            "title": "Quick capture",
+            "description": "One tap from the lock screen."
+          },
+          {
+            "title": "Smart inbox",
+            "description": "Everything lands in one place until you triage it."
+          }
+        ],
+        "image": {
+          "src": "@/assets/images/workspace.svg",
+          "alt": "Capture"
+        }
+      }
+    },
+    {
+      "widget": "Stats",
+      "wrapper": {
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(80% 120% at 50% 0%, rgba(59,110,246,0.07), transparent 70%)'></div>"
+      },
+      "props": {
+        "stats": [
+          {
+            "title": "Downloads",
+            "amount": "480K"
+          },
+          {
+            "title": "Rating",
+            "amount": "4.8"
+          },
+          {
+            "title": "Countries",
+            "amount": "38"
+          },
+          {
+            "title": "Crash-free",
+            "amount": "99.9%"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Testimonials",
+      "props": {
+        "title": "From the stores",
+        "testimonials": [
+          {
+            "testimonial": "The only app I have kept on my home screen for more than a month.",
+            "name": "Ana Ruiz",
+            "job": "Designer"
+          },
+          {
+            "testimonial": "It works on the train, which is the whole reason I bought it.",
+            "name": "Marcus Lee",
+            "job": "Consultant"
+          },
+          {
+            "testimonial": "Fast, quiet and it never asks me to rate it.",
+            "name": "Priya Nair",
+            "job": "Engineer"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "FAQs",
+      "wrapper": {
+        "id": "faq"
+      },
+      "props": {
+        "title": "Before you download",
+        "columns": "2",
+        "items": [
+          {
+            "title": "Is it free?",
+            "description": "The core app is free. A subscription unlocks sync across devices."
+          },
+          {
+            "title": "Which versions are supported?",
+            "description": "The last three major releases of each platform."
+          }
+        ]
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "wrapper": {
+        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
+      },
+      "props": {
+        "title": "Get the app",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Download",
+            "href": "#",
+            "icon": "tabler:download"
+          }
+        ]
+      }
+    }
+  ]
+}
