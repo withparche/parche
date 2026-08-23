@@ -28,6 +28,7 @@ import { resolveLayout } from 'parche:utils/layout';
 import { defaultLocale } from 'parche:config/i18n';
 import { resolveAssets } from 'parche:utils/assets';
 import { resolveLabels } from '../../labels.js';
+import { createTaxonomyResolver } from '../../utils/taxonomy.js';
 
 const cfg = blogConfig as any;
 const permalinks = cfg.permalinks;
@@ -58,6 +59,7 @@ export async function getStaticPaths() {
 // --- Render-time (both static & SSR) ---
 const locale = Astro.currentLocale ?? defaultLocale;
 const labels = resolveLabels(cfg.labels, locale, defaultLocale);
+const tax = await createTaxonomyResolver(locale);
 const isDev = import.meta.env.DEV;
 const showDrafts = isDev && cfg.showDraftsInDev;
 const { slug } = Astro.params;
@@ -95,7 +97,12 @@ for (const authorSlug of post.data.authors) {
   try {
     const author = await getEntry('authors', `${locale}/${authorSlug}`)
       ?? await getEntry('authors', authorSlug);
-    if (author) authorData.push(author.data);
+    if (author) {
+      // The author route generates its paths from the entry key (or an explicit
+      // `slug`), so links must use that — not a slugified display name.
+      const key = author.id.includes('/') ? author.id.slice(author.id.indexOf('/') + 1) : author.id;
+      authorData.push({ ...author.data, slug: (author.data as any).slug ?? key });
+    }
   } catch { /* author not found */ }
 }
 if (authorData.length === 0 && post.data.authorName) {
@@ -131,7 +138,7 @@ const blogPostingJsonLd = generateBlogPostingJsonLd({
 const breadcrumbJsonLd = generateBreadcrumbJsonLd([
   { name: labels.home, url: `${base}${localizePath('/', locale, defaultLocale)}` || '/' },
   { name: labels.blog, url: `${base}${localizePath(permalinks.listing, locale, defaultLocale)}` },
-  ...(post.data.category ? [{ name: post.data.category, url: `${base}${resolveTaxonomyPermalink(permalinks.category, post.data.category, locale, defaultLocale)}` }] : []),
+  ...(post.data.category ? [{ name: post.data.category, url: `${base}${resolveTaxonomyPermalink(permalinks.category, tax.slugFor('categories', post.data.category), locale, defaultLocale)}` }] : []),
   { name: post.data.title, url: pageUrl },
 ]);
 

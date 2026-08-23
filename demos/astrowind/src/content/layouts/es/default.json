@@ -3,33 +3,114 @@
     {
       "widget": "layout/Header",
       "props": {
-        "logo": { "text": "AstroWind", "href": "/es" },
+        "logo": {
+          "text": "AstroWind",
+          "href": "/es"
+        },
         "links": [
           {
             "label": "Inicios",
             "children": [
               {
                 "links": [
-                  { "label": "SaaS", "href": "/es/inicios/saas", "description": "Página de producto con precios" },
-                  { "label": "Startup", "href": "/es/inicios/startup", "description": "Métricas, marcas y prueba social" },
-                  { "label": "App móvil", "href": "/es/inicios/app-movil", "description": "Insignias de tienda y capturas" },
-                  { "label": "Personal", "href": "/es/inicios/personal", "description": "Un inicio más sobrio y editorial" }
+                  {
+                    "label": "SaaS",
+                    "href": "/es/inicios/saas",
+                    "description": "Página de producto con precios"
+                  },
+                  {
+                    "label": "Startup",
+                    "href": "/es/inicios/startup",
+                    "description": "Métricas, marcas y prueba social"
+                  },
+                  {
+                    "label": "App móvil",
+                    "href": "/es/inicios/app-movil",
+                    "description": "Insignias de tienda y capturas"
+                  },
+                  {
+                    "label": "Personal",
+                    "href": "/es/inicios/personal",
+                    "description": "Un inicio más sobrio y editorial"
+                  }
                 ]
               }
             ]
           },
           {
             "label": "Páginas",
+            "mega": {
+              "columns": 3,
+              "featured": {
+                "title": "Mira los precios",
+                "description": "Tres planes, sin costes ocultos. Empieza gratis y sube cuando se te quede pequeño.",
+                "image": "@/assets/images/workspace.svg",
+                "href": "/es/precios"
+              },
+              "footer": "¿Buscas otra cosa? <a class=\"text-primary hover:underline\" href=\"/es/contacto\">Pregúntanos directamente</a>."
+            },
             "children": [
               {
+                "title": "Compañía",
                 "links": [
-                  { "label": "Características (ancla)", "href": "/es#features" },
-                  { "label": "Servicios", "href": "/es/servicios" },
-                  { "label": "Precios", "href": "/es/precios" },
-                  { "label": "Quiénes somos", "href": "/es/sobre-nosotros" },
-                  { "label": "Contacto", "href": "/es/contacto" },
-                  { "label": "Términos", "href": "/es/terminos" },
-                  { "label": "Privacidad", "href": "/es/privacidad" }
+                  {
+                    "label": "Quiénes somos",
+                    "href": "/es/sobre-nosotros",
+                    "icon": "tabler:users",
+                    "description": "Quién lo construye y cómo"
+                  },
+                  {
+                    "label": "Servicios",
+                    "href": "/es/servicios",
+                    "icon": "tabler:briefcase",
+                    "description": "Qué hacemos por ti"
+                  },
+                  {
+                    "label": "Contacto",
+                    "href": "/es/contacto",
+                    "icon": "tabler:mail",
+                    "description": "Respondemos en dos días"
+                  }
+                ]
+              },
+              {
+                "title": "Producto",
+                "links": [
+                  {
+                    "label": "Características",
+                    "href": "/es#features",
+                    "icon": "tabler:sparkles",
+                    "description": "Qué incluye AstroWind"
+                  },
+                  {
+                    "label": "Precios",
+                    "href": "/es/precios",
+                    "icon": "tabler:currency-dollar",
+                    "description": "Planes y qué llevan"
+                  },
+                  {
+                    "label": "Blog",
+                    "href": "/es/blog",
+                    "icon": "tabler:news",
+                    "description": "Guías y documentación"
+                  }
+                ]
+              },
+              {
+                "title": "Legal",
+                "links": [
+                  {
+                    "label": "Términos",
+                    "href": "/es/terminos",
+                    "icon": "tabler:file-text",
+                    "description": "La licencia y la letra pequeña"
+                  },
+                  {
+                    "label": "Privacidad",
+                    "href": "/es/privacidad",
+                    "icon": "tabler:shield-lock",
+                    "description": "Qué recogemos: muy poco"
+                  }
                 ]
               }
             ]
@@ -39,12 +120,30 @@
             "children": [
               {
                 "links": [
-                  { "label": "Captación de leads", "href": "/es/landing/captacion" },
-                  { "label": "Venta larga", "href": "/es/landing/ventas" },
-                  { "label": "Click-through", "href": "/es/landing/click-through" },
-                  { "label": "Detalle de producto", "href": "/es/landing/producto" },
-                  { "label": "Próximamente", "href": "/es/landing/proximamente" },
-                  { "label": "Suscripción", "href": "/es/landing/suscripcion" }
+                  {
+                    "label": "Captación de leads",
+                    "href": "/es/landing/captacion"
+                  },
+                  {
+                    "label": "Venta larga",
+                    "href": "/es/landing/ventas"
+                  },
+                  {
+                    "label": "Click-through",
+                    "href": "/es/landing/click-through"
+                  },
+                  {
+                    "label": "Detalle de producto",
+                    "href": "/es/landing/producto"
+                  },
+                  {
+                    "label": "Próximamente",
+                    "href": "/es/landing/proximamente"
+                  },
+                  {
+                    "label": "Suscripción",
+                    "href": "/es/landing/suscripcion"
+                  }
                 ]
               }
             ]
@@ -54,17 +153,33 @@
             "children": [
               {
                 "links": [
-                  { "label": "Listado del blog", "href": "/es/blog" },
-                  { "label": "Artículo", "href": "/es/empezar-web-con-astro-y-tailwind" },
-                  { "label": "Página de categoría", "href": "/es/blog/category/tutoriales" },
-                  { "label": "Página de etiqueta", "href": "/es/blog/tag/astro" }
+                  {
+                    "label": "Listado del blog",
+                    "href": "/es/blog"
+                  },
+                  {
+                    "label": "Artículo",
+                    "href": "/es/empezar-web-con-astro-y-tailwind"
+                  },
+                  {
+                    "label": "Página de categoría",
+                    "href": "/es/blog/category/tutoriales"
+                  },
+                  {
+                    "label": "Página de etiqueta",
+                    "href": "/es/blog/tag/astro"
+                  }
                 ]
               }
             ]
           }
         ],
         "actions": [
-          { "label": "Descargar", "href": "https://github.com/arthelokyo/astrowind", "variant": "primary" }
+          {
+            "label": "Descargar",
+            "href": "https://github.com/arthelokyo/astrowind",
+            "variant": "primary"
+          }
         ],
         "announcement": {
           "text": "AstroWind 2.0 ya está aquí — <strong>Astro 7</strong> + Tailwind CSS v4.",
@@ -73,7 +188,9 @@
         }
       }
     },
-    { "widget": "layout/Main" },
+    {
+      "widget": "layout/Main"
+    },
     {
       "widget": "layout/Footer",
       "props": {
@@ -82,45 +199,108 @@
           {
             "title": "Producto",
             "links": [
-              { "label": "Características", "href": "/es#features" },
-              { "label": "Seguridad", "href": "#" },
-              { "label": "Equipo", "href": "#" },
-              { "label": "Empresas", "href": "#" },
-              { "label": "Precios", "href": "/es/precios" }
+              {
+                "label": "Características",
+                "href": "/es#features"
+              },
+              {
+                "label": "Seguridad",
+                "href": "#"
+              },
+              {
+                "label": "Equipo",
+                "href": "#"
+              },
+              {
+                "label": "Empresas",
+                "href": "#"
+              },
+              {
+                "label": "Precios",
+                "href": "/es/precios"
+              }
             ]
           },
           {
             "title": "Plataforma",
             "links": [
-              { "label": "API para desarrolladores", "href": "#" },
-              { "label": "Partners", "href": "#" },
-              { "label": "Integraciones", "href": "#" },
-              { "label": "Estado del servicio", "href": "#" }
+              {
+                "label": "API para desarrolladores",
+                "href": "#"
+              },
+              {
+                "label": "Partners",
+                "href": "#"
+              },
+              {
+                "label": "Integraciones",
+                "href": "#"
+              },
+              {
+                "label": "Estado del servicio",
+                "href": "#"
+              }
             ]
           },
           {
             "title": "Soporte",
             "links": [
-              { "label": "Documentación", "href": "#" },
-              { "label": "Comunidad", "href": "#" },
-              { "label": "Contacto", "href": "/es/contacto" },
-              { "label": "Blog", "href": "/es/blog" }
+              {
+                "label": "Documentación",
+                "href": "#"
+              },
+              {
+                "label": "Comunidad",
+                "href": "#"
+              },
+              {
+                "label": "Contacto",
+                "href": "/es/contacto"
+              },
+              {
+                "label": "Blog",
+                "href": "/es/blog"
+              }
             ]
           },
           {
             "title": "Compañía",
             "links": [
-              { "label": "Quiénes somos", "href": "/es/sobre-nosotros" },
-              { "label": "Servicios", "href": "/es/servicios" },
-              { "label": "Términos", "href": "/es/terminos" },
-              { "label": "Privacidad", "href": "/es/privacidad" }
+              {
+                "label": "Quiénes somos",
+                "href": "/es/sobre-nosotros"
+              },
+              {
+                "label": "Servicios",
+                "href": "/es/servicios"
+              },
+              {
+                "label": "Términos",
+                "href": "/es/terminos"
+              },
+              {
+                "label": "Privacidad",
+                "href": "/es/privacidad"
+              }
             ]
           }
         ],
         "socialLinks": [
-          { "label": "RSS", "href": "/es/rss.xml", "icon": "tabler:rss" },
-          { "label": "X", "href": "https://twitter.com/arthelokyo", "icon": "tabler:brand-x" },
-          { "label": "GitHub", "href": "https://github.com/arthelokyo/astrowind", "icon": "tabler:brand-github" }
+          {
+            "label": "RSS",
+            "href": "/es/rss.xml",
+            "icon": "tabler:rss"
+          },
+          {
+            "label": "X",
+            "href": "https://twitter.com/arthelokyo",
+            "icon": "tabler:brand-x"
+          },
+          {
+            "label": "GitHub",
+            "href": "https://github.com/arthelokyo/astrowind",
+            "icon": "tabler:brand-github"
+          }
         ],
         "footNote": "Hecho por <a class=\"text-primary hover:underline\" href=\"https://github.com/arthelokyo\">arthelokyo</a> · Todos los derechos reservados."
       }

@@ -1,9 +1,9 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
-import { postSchema, authorSchema } from './schemas.js';
+import { postSchema, authorSchema, taxonomySchema } from './schemas.js';
 
-export { postSchema, authorSchema } from './schemas.js';
-export type { PostEntry, AuthorEntry } from './schemas.js';
+export { postSchema, authorSchema, taxonomySchema, taxonomyTermSchema } from './schemas.js';
+export type { PostEntry, AuthorEntry, TaxonomyEntry, TaxonomyTerm } from './schemas.js';
 
 /**
  * Create blog content collections.
@@ -17,8 +17,10 @@ export type { PostEntry, AuthorEntry } from './schemas.js';
 export function createBlogCollections(options?: {
   postSchema?: import('zod').ZodType;
   authorSchema?: import('zod').ZodType;
+  taxonomySchema?: import('zod').ZodType;
   postsBase?: string;
   authorsBase?: string;
+  taxonomiesBase?: string;
 }) {
   return {
     posts: defineCollection({
@@ -34,6 +36,15 @@ export function createBlogCollections(options?: {
         base: options?.authorsBase ?? './src/content/authors',
       }),
       schema: options?.authorSchema ?? authorSchema,
+    }),
+    // One flat entry per locale (en.json, es.json) — a term is a couple of
+    // fields, so a file each would be noise.
+    taxonomies: defineCollection({
+      loader: glob({
+        pattern: '*.{json,yaml,yml}',
+        base: options?.taxonomiesBase ?? './src/content/taxonomies',
+      }),
+      schema: options?.taxonomySchema ?? taxonomySchema,
     }),
   };
 }

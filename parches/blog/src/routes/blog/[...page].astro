@@ -22,6 +22,7 @@ import { resolveLayout } from 'parche:utils/layout';
 import { defaultLocale, locales } from 'parche:config/i18n';
 import { getRouteAlternates, toAbsolute } from '../../utils/alternates.js';
 import { resolveAssets } from 'parche:utils/assets';
+import { createTaxonomyResolver } from '../../utils/taxonomy.js';
 import { resolveLabels, format } from '../../labels.js';
 
 const cfg = blogConfig as any;
@@ -90,6 +91,7 @@ const alternates = toAbsolute(
 );
 Astro.locals.parche = { ...(Astro.locals.parche ?? {}), locale, alternates };
 
+const tax = await createTaxonomyResolver(locale);
 const layoutSections = await resolveLayout('default', locale, defaultLocale);
 
 const posts = await resolveAssets(page.data.map((post: any) => {
@@ -107,8 +109,11 @@ const posts = await resolveAssets(page.data.map((post: any) => {
     readingTime: post.data.readingTime ?? rt?.minutes,
     featured: post.data.featured,
     draft: post.data.draft,
-    categoryHref: post.data.category ? resolveTaxonomyPermalink(permalinks.category, post.data.category, locale, defaultLocale) : undefined,
-    tagHrefs: post.data.tags?.map((t: string) => resolveTaxonomyPermalink(permalinks.tag, t, locale, defaultLocale)),
+    categoryHref: post.data.category
+      ? resolveTaxonomyPermalink(permalinks.category, tax.slugFor('categories', post.data.category), locale, defaultLocale)
+      : undefined,
+    tagHrefs: post.data.tags?.map((t: string) =>
+      resolveTaxonomyPermalink(permalinks.tag, tax.slugFor('tags', t), locale, defaultLocale)),
   };
 }));
 

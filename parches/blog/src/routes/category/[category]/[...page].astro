@@ -18,6 +18,7 @@ import { resolvePostPermalink, resolveTaxonomyPermalink, localizePath } from '..
 import { resolveLayout } from 'parche:utils/layout';
 import { defaultLocale, locales } from 'parche:config/i18n';
 import { getRouteAlternates, toAbsolute } from '../../../utils/alternates.js';
+import { resolveTerm, resolveSlug, createTaxonomyResolver } from '../../../utils/taxonomy.js';
 import { resolveAssets } from 'parche:utils/assets';
 import { resolveLabels, format } from '../../../labels.js';
 import Container from 'parche:primitives/Container';
@@ -59,10 +60,17 @@ const { category } = Astro.params;
 const isDev = import.meta.env.DEV;
 const showDrafts = isDev && cfg.showDraftsInDev;
 const pageNum = parseInt(Astro.params.page ?? '') || 1;
-const categoryBaseUrl = resolveTaxonomyPermalink(permalinks.category, category!, locale, defaultLocale);
+const tax = await createTaxonomyResolver(locale);
+const knownCategories = [...(await queryAllCategories(locale, showDrafts)).keys()];
+const term = await resolveSlug('categories', category!, locale, knownCategories);
+if (!term) {
+  return Astro.redirect('/404');
+}
+
+const categoryBaseUrl = resolveTaxonomyPermalink(permalinks.category, term.slug, locale, defaultLocale);
 
 const page = await queryPostsByCategory({
-  category: category!,
+  category: term.key,
   locale,
   page: pageNum,
   pageSize: cfg.postsPerPage ?? 12,
@@ -83,11 +91,12 @@ const labels = resolveLabels(cfg.labels, locale, defaultLocale);
 // A category only exists in a locale if some post there uses it.
 const alternates = toAbsolute(
   await getRouteAlternates({
-    path: resolveTaxonomyPermalink(permalinks.category, category!),
+    pathFor: async (l) =>
+      resolveTaxonomyPermalink(permalinks.category, (await resolveTerm('categories', term.key, l)).slug),
     locales: locales as string[],
     defaultLocale,
     hasContent: async (l) =>
-      (await queryPostsByCategory({ category: category!, locale: l, page: 1, pageSize: 1, showDrafts })).total > 0,
+      (await queryPostsByCategory({ category: term.key, locale: l, page: 1, pageSize: 1, showDrafts })).total > 0,
   }),
   Astro.site,
 );
@@ -108,16 +117,19 @@ const posts = await resolveAssets(page.data.map((post: any) => {
     category: post.data.category,
     tags: post.data.tags,
     readingTime: post.data.readingTime ?? rt?.minutes,
-    categoryHref: post.data.category ? resolveTaxonomyPermalink(permalinks.category, post.data.category, locale, defaultLocale) : undefined,
-    tagHrefs: post.data.tags?.map((t: string) => resolveTaxonomyPermalink(permalinks.tag, t, locale, defaultLocale)),
+    categoryHref: post.data.category
+      ? resolveTaxonomyPermalink(permalinks.category, tax.slugFor('categories', post.data.category), locale, defaultLocale)
+      : undefined,
+    tagHrefs: post.data.tags?.map((t: string) =>
+      resolveTaxonomyPermalink(permalinks.tag, tax.slugFor('tags', t), locale, defaultLocale)),
   };
 }));
 
-const displayCategory = category!.charAt(0).toUpperCase() + category!.slice(1);
+const displayCategory = term.title;
 
 const metadata = {
   title: `${format(labels.categoryTitle, { value: displayCategory })} — ${config.site.name}`,
-  description: format(labels.categoryDescription, { value: displayCategory }),
+  description: term.description ?? format(labels.categoryDescription, { value: displayCategory }),
   noindex: false,
   nofollow: false,
   ogType: 'website' as const,

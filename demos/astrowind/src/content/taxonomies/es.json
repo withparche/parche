@@ -1,0 +1,17 @@
+{
+  "categories": [
+    { "key": "Tutoriales", "title": "Tutoriales", "slug": "tutoriales", "description": "Guías paso a paso que te llevan de cero a un resultado que funciona." },
+    { "key": "Documentacion", "title": "Documentación", "slug": "documentacion", "description": "Material de referencia sobre las piezas de la plantilla." },
+    { "key": "Guias", "title": "Guías", "slug": "guias", "description": "Lecturas más largas sobre hacer bien el trabajo, no solo terminarlo." },
+    { "key": "Recursos", "title": "Recursos", "slug": "recursos", "description": "Herramientas y referencias que merecen tu tiempo." }
+  ],
+  "tags": [
+    { "key": "astro", "title": "Astro" },
+    { "key": "tailwind-css", "title": "Tailwind CSS" },
+    { "key": "front-end", "title": "Front-end" },
+    { "key": "design-system", "title": "Sistemas de diseño", "slug": "sistemas-de-diseno", "description": "Tokens, componentes y los contratos entre ellos." },
+    { "key": "landing-pages", "title": "Landing pages" },
+    { "key": "resources", "title": "Recursos", "slug": "recursos" },
+    { "key": "design", "title": "Diseño", "slug": "diseno" }
+  ]
+}

@@ -20,19 +20,24 @@ export interface RouteAlternate {
 }
 
 export async function getRouteAlternates(opts: {
-  /** The unprefixed path for this route, e.g. '/blog' or '/blog/tag/astro'. */
-  path: string;
+  /** The unprefixed path for this route, e.g. '/blog'. */
+  path?: string;
+  /** Per-locale path, for routes whose segment is translated (a tag's slug can
+   *  differ per language). Takes precedence over `path`. */
+  pathFor?: (locale: string) => string | Promise<string>;
   locales: string[];
   defaultLocale: string;
   /** Return false to leave a locale out. Defaults to including every locale. */
   hasContent?: (locale: string) => boolean | Promise<boolean>;
 }): Promise<RouteAlternate[]> {
-  const { path, locales, defaultLocale, hasContent } = opts;
+  const { path, pathFor, locales, defaultLocale, hasContent } = opts;
   const out: RouteAlternate[] = [];
 
   for (const locale of locales) {
     if (hasContent && !(await hasContent(locale))) continue;
-    out.push({ locale, path: localizePath(path, locale, defaultLocale) });
+    const localePath = pathFor ? await pathFor(locale) : path;
+    if (!localePath) continue;
+    out.push({ locale, path: localizePath(localePath, locale, defaultLocale) });
   }
 
   return out;

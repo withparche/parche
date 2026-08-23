@@ -18,6 +18,7 @@ import { resolvePostPermalink, resolveTaxonomyPermalink, localizePath } from '..
 import { resolveLayout } from 'parche:utils/layout';
 import { defaultLocale, locales } from 'parche:config/i18n';
 import { getRouteAlternates, toAbsolute } from '../../../utils/alternates.js';
+import { resolveTerm, resolveSlug, createTaxonomyResolver } from '../../../utils/taxonomy.js';
 import { resolveAssets } from 'parche:utils/assets';
 import { resolveLabels, format } from '../../../labels.js';
 import Container from 'parche:primitives/Container';
@@ -34,14 +35,17 @@ export async function getStaticPaths() {
   const showDrafts = isDev && (blogConfig as any).showDraftsInDev;
   const pageSize = (blogConfig as any).postsPerPage ?? 12;
 
-  // Collect all tags across all locales and compute max pages per tag
+  // Collect all tags across all locales and compute max pages per tag. The path
+  // parameter is the term's resolved slug, which a declared term can override —
+  // link generation goes through the same resolver so the two cannot drift.
+  const { resolveTerm: rt } = await import('../../../utils/taxonomy.js');
   const tagMaxPages = new Map<string, number>();
   for (const locale of allLocales) {
     const tags = await qat(locale, showDrafts);
     for (const [tag, count] of tags) {
       const pages = Math.max(1, Math.ceil(count / pageSize));
-      const key = tag.toLowerCase();
-      tagMaxPages.set(key, Math.max(tagMaxPages.get(key) ?? 0, pages));
+      const { slug } = await rt('tags', tag, locale);
+      tagMaxPages.set(slug, Math.max(tagMaxPages.get(slug) ?? 0, pages));
     }
   }
 
@@ -60,10 +64,21 @@ const { tag } = Astro.params;
 const isDev = import.meta.env.DEV;
 const showDrafts = isDev && cfg.showDraftsInDev;
 const pageNum = parseInt(Astro.params.page ?? '') || 1;
-const tagBaseUrl = resolveTaxonomyPermalink(permalinks.tag, tag!, locale, defaultLocale);
+
+// The parameter is a slug; the queries match on the value as written in
+// frontmatter, so resolve it back. A slug with no term in this locale means the
+// page was generated for another language and must 404, not render empty.
+const tax = await createTaxonomyResolver(locale);
+const knownTags = [...(await queryAllTags(locale, showDrafts)).keys()];
+const term = await resolveSlug('tags', tag!, locale, knownTags);
+if (!term) {
+  return Astro.redirect('/404');
+}
+
+const tagBaseUrl = resolveTaxonomyPermalink(permalinks.tag, term.slug, locale, defaultLocale);
 
 const page = await queryPostsByTag({
-  tag: tag!,
+  tag: term.key,
   locale,
   page: pageNum,
   pageSize: cfg.postsPerPage ?? 12,
@@ -84,11 +99,12 @@ const labels = resolveLabels(cfg.labels, locale, defaultLocale);
 // A tag only exists in a locale if some post there carries it.
 const alternates = toAbsolute(
   await getRouteAlternates({
-    path: resolveTaxonomyPermalink(permalinks.tag, tag!),
+    pathFor: async (l) =>
+      resolveTaxonomyPermalink(permalinks.tag, (await resolveTerm('tags', term.key, l)).slug),
     locales: locales as string[],
     defaultLocale,
     hasContent: async (l) =>
-      (await queryPostsByTag({ tag: tag!, locale: l, page: 1, pageSize: 1, showDrafts })).total > 0,
+      (await queryPostsByTag({ tag: term.key, locale: l, page: 1, pageSize: 1, showDrafts })).total > 0,
   }),
   Astro.site,
 );
@@ -109,16 +125,19 @@ const posts = await resolveAssets(page.data.map((post: any) => {
     category: post.data.category,
     tags: post.data.tags,
     readingTime: post.data.readingTime ?? rt?.minutes,
-    categoryHref: post.data.category ? resolveTaxonomyPermalink(permalinks.category, post.data.category, locale, defaultLocale) : undefined,
-    tagHrefs: post.data.tags?.map((t: string) => resolveTaxonomyPermalink(permalinks.tag, t, locale, defaultLocale)),
+    categoryHref: post.data.category
+      ? resolveTaxonomyPermalink(permalinks.category, tax.slugFor('categories', post.data.category), locale, defaultLocale)
+      : undefined,
+    tagHrefs: post.data.tags?.map((t: string) =>
+      resolveTaxonomyPermalink(permalinks.tag, tax.slugFor('tags', t), locale, defaultLocale)),
   };
 }));
 
-const displayTag = tag!.charAt(0).toUpperCase() + tag!.slice(1);
+const displayTag = term.title;
 
 const metadata = {
   title: `${format(labels.tagTitle, { value: displayTag })} — ${config.site.name}`,
-  description: format(labels.tagDescription, { value: displayTag }),
+  description: term.description ?? format(labels.tagDescription, { value: displayTag }),
   noindex: false,
   nofollow: false,
   ogType: 'website' as const,

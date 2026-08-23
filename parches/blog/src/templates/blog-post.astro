@@ -11,6 +11,7 @@ import blogConfig from 'parche:app/blog';
 import { resolveTaxonomyPermalink, localizePath } from '../types.js';
 import { defaultLocale } from 'parche:config/i18n';
 import { resolveLabels } from '../labels.js';
+import { createTaxonomyResolver } from '../utils/taxonomy.js';
 
 interface Props {
   data: {
@@ -27,7 +28,7 @@ interface Props {
     sections?: { widget: string; props?: Record<string, unknown> }[];
     [key: string]: unknown;
   };
-  authorData?: { name: string; avatar?: { src: string; alt: string }; bio?: string; role?: string; social?: Record<string, string> }[];
+  authorData?: { name: string; slug?: string; avatar?: { src: string; alt: string }; bio?: string; role?: string; social?: Record<string, string> }[];
   permalinks?: Record<string, string>;
 }
 
@@ -35,6 +36,7 @@ const { data, authorData = [], permalinks: routePermalinks } = Astro.props;
 const permalinks = routePermalinks ?? (blogConfig as any).permalinks;
 const locale = Astro.currentLocale ?? defaultLocale;
 const labels = resolveLabels((blogConfig as any).labels, locale, defaultLocale);
+const tax = await createTaxonomyResolver(locale);
 const hasSlot = Astro.slots.has('default');
 const pageUrl = Astro.url.href;
 ---
@@ -56,9 +58,9 @@ const pageUrl = Astro.url.href;
       authors={authorData.map((a) => ({
         name: a.name,
         avatar: a.avatar,
-        href: resolveTaxonomyPermalink(permalinks.author, a.name.toLowerCase().replace(/\s+/g, '-'), locale, defaultLocale),
+        href: resolveTaxonomyPermalink(permalinks.author, a.slug ?? a.name, locale, defaultLocale),
       }))}
-      categoryHref={data.category ? resolveTaxonomyPermalink(permalinks.category, data.category, locale, defaultLocale) : undefined}
+      categoryHref={data.category ? resolveTaxonomyPermalink(permalinks.category, tax.slugFor('categories', data.category), locale, defaultLocale) : undefined}
     />
 
     <div
@@ -73,7 +75,7 @@ const pageUrl = Astro.url.href;
           {data.tags.map((tag) => (
             <li class="bg-gray-100 dark:bg-slate-700 inline-block mr-2 rtl:mr-0 rtl:ml-2 max-sm:mb-2 py-0.5 px-2 lowercase font-medium">
               <a
-                href={resolveTaxonomyPermalink(permalinks.tag, tag, locale, defaultLocale)}
+                href={resolveTaxonomyPermalink(permalinks.tag, tax.slugFor('tags', tag), locale, defaultLocale)}
                 class="text-muted dark:text-slate-300 hover:text-primary dark:hover:text-gray-200"
               >
                 {tag}

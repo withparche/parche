@@ -1,0 +1,21 @@
+{
+  "categories": [
+    { "key": "Tutorials", "title": "Tutorials", "description": "Step-by-step guides that take you from nothing to a working result." },
+    { "key": "Documentation", "title": "Documentation", "description": "Reference material for the template's moving parts." },
+    { "key": "Guides", "title": "Guides", "description": "Longer reads on doing the job well, not just getting it done." },
+    { "key": "Resources", "title": "Resources", "description": "Tools and references worth your time." }
+  ],
+  "tags": [
+    { "key": "astro", "title": "Astro" },
+    { "key": "tailwind-css", "title": "Tailwind CSS", "slug": "tailwind-css" },
+    { "key": "front-end", "title": "Front-end" },
+    { "key": "design-system", "title": "Design systems", "description": "Tokens, components and the contracts between them." },
+    { "key": "seo", "title": "SEO", "description": "Being found, without tricks." },
+    { "key": "performance", "title": "Performance" },
+    { "key": "landing-pages", "title": "Landing pages" },
+    { "key": "markdown", "title": "Markdown" },
+    { "key": "resources", "title": "Resources" },
+    { "key": "design", "title": "Design" },
+    { "key": "blog", "title": "Blog" }
+  ]
+}

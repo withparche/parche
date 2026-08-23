@@ -1,5 +1,6 @@
 ---
 import { loadWidgets } from 'parche:registry/widgets';
+import { resolveAssets } from '../utils/assets.js';
 import DynamicRenderer from 'parche:DynamicRenderer';
 
 interface WrapperConfig {
@@ -41,9 +42,13 @@ const {
 // Load only the layout widgets this layout references ('layout/Main' is a
 // synthetic marker with no loader — skipped). Lazy catalog.
 const widgets = await loadWidgets(layoutSections.map((s) => s.widget));
+
+// Chrome props carry assets too — a logo, a mega-menu card image. They never
+// pass through DynamicRenderer, so '@/assets/…' is resolved here instead.
+const sections = await resolveAssets(layoutSections);
 ---
 
-{layoutSections.map((section) => {
+{sections.map((section) => {
   if (section.widget === 'layout/Main') {
     return (
       <main id="main-content" class="flex-1">

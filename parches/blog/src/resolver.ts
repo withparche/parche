@@ -17,6 +17,7 @@ import { findRelatedPosts } from './utils/related-posts.js';
 import { extractTOC } from './utils/toc.js';
 import { generateBlogPostingJsonLd, generateBreadcrumbJsonLd } from './utils/blog-metadata.js';
 import { resolvePostPermalink, resolveTaxonomyPermalink, localizePath } from './types.js';
+import { createTaxonomyResolver } from './utils/taxonomy.js';
 
 interface ResolveOptions {
   showDrafts?: boolean;
@@ -73,6 +74,7 @@ export async function resolve(
   const { defaultLocale } = await import('parche:config/i18n');
   const { resolveLabels } = await import('./labels.js');
   const labels = resolveLabels(cfg.labels, locale, defaultLocale);
+  const tax = await createTaxonomyResolver(locale);
 
   const { post, allPosts } = await querySinglePost({
     slug,
@@ -95,7 +97,12 @@ export async function resolve(
       const author =
         (await getEntry('authors', `${locale}/${authorSlug}`)) ??
         (await getEntry('authors', authorSlug as any));
-      if (author) authorData.push(author.data);
+      if (author) {
+      // The author route generates its paths from the entry key (or an explicit
+      // `slug`), so links must use that — not a slugified display name.
+      const key = author.id.includes('/') ? author.id.slice(author.id.indexOf('/') + 1) : author.id;
+      authorData.push({ ...author.data, slug: (author.data as any).slug ?? key });
+    }
     } catch {
       /* author not found */
     }
@@ -142,7 +149,7 @@ export async function resolve(
     { name: labels.home, url: `${base}${localizePath('/', locale, defaultLocale)}` || '/' },
     { name: labels.blog, url: `${base}${localizePath(permalinks.listing, locale, defaultLocale)}` },
     ...(post.data.category
-      ? [{ name: post.data.category, url: `${base}${resolveTaxonomyPermalink(permalinks.category, post.data.category, locale, defaultLocale)}` }]
+      ? [{ name: post.data.category, url: `${base}${resolveTaxonomyPermalink(permalinks.category, tax.slugFor('categories', post.data.category), locale, defaultLocale)}` }]
       : []),
     { name: post.data.title, url: pageUrl },
   ]);

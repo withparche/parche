@@ -3,33 +3,114 @@
     {
       "widget": "layout/Header",
       "props": {
-        "logo": { "text": "AstroWind", "href": "/" },
+        "logo": {
+          "text": "AstroWind",
+          "href": "/"
+        },
         "links": [
           {
             "label": "Homes",
             "children": [
               {
                 "links": [
-                  { "label": "SaaS", "href": "/homes/saas", "description": "A product landing page with pricing" },
-                  { "label": "Startup", "href": "/homes/startup", "description": "Metrics, brands and social proof" },
-                  { "label": "Mobile App", "href": "/homes/mobile-app", "description": "Store badges and screenshots" },
-                  { "label": "Personal", "href": "/homes/personal", "description": "A quieter, editorial home" }
+                  {
+                    "label": "SaaS",
+                    "href": "/homes/saas",
+                    "description": "A product landing page with pricing"
+                  },
+                  {
+                    "label": "Startup",
+                    "href": "/homes/startup",
+                    "description": "Metrics, brands and social proof"
+                  },
+                  {
+                    "label": "Mobile App",
+                    "href": "/homes/mobile-app",
+                    "description": "Store badges and screenshots"
+                  },
+                  {
+                    "label": "Personal",
+                    "href": "/homes/personal",
+                    "description": "A quieter, editorial home"
+                  }
                 ]
               }
             ]
           },
           {
             "label": "Pages",
+            "mega": {
+              "columns": 3,
+              "featured": {
+                "title": "See the pricing",
+                "description": "Three plans, no hidden costs. Start free and move up when you outgrow it.",
+                "image": "@/assets/images/workspace.svg",
+                "href": "/pricing"
+              },
+              "footer": "Looking for something else? <a class=\"text-primary hover:underline\" href=\"/contact\">Ask us directly</a>."
+            },
             "children": [
               {
+                "title": "Company",
                 "links": [
-                  { "label": "Features (anchor link)", "href": "/#features" },
-                  { "label": "Services", "href": "/services" },
-                  { "label": "Pricing", "href": "/pricing" },
-                  { "label": "About us", "href": "/about" },
-                  { "label": "Contact", "href": "/contact" },
-                  { "label": "Terms", "href": "/terms" },
-                  { "label": "Privacy policy", "href": "/privacy" }
+                  {
+                    "label": "About us",
+                    "href": "/about",
+                    "icon": "tabler:users",
+                    "description": "Who builds this and how"
+                  },
+                  {
+                    "label": "Services",
+                    "href": "/services",
+                    "icon": "tabler:briefcase",
+                    "description": "What we do for you"
+                  },
+                  {
+                    "label": "Contact",
+                    "href": "/contact",
+                    "icon": "tabler:mail",
+                    "description": "We answer within two days"
+                  }
+                ]
+              },
+              {
+                "title": "Product",
+                "links": [
+                  {
+                    "label": "Features",
+                    "href": "/#features",
+                    "icon": "tabler:sparkles",
+                    "description": "What you get with AstroWind"
+                  },
+                  {
+                    "label": "Pricing",
+                    "href": "/pricing",
+                    "icon": "tabler:currency-dollar",
+                    "description": "Plans and what they include"
+                  },
+                  {
+                    "label": "Blog",
+                    "href": "/blog",
+                    "icon": "tabler:news",
+                    "description": "Guides and documentation"
+                  }
+                ]
+              },
+              {
+                "title": "Legal",
+                "links": [
+                  {
+                    "label": "Terms",
+                    "href": "/terms",
+                    "icon": "tabler:file-text",
+                    "description": "The licence and the fine print"
+                  },
+                  {
+                    "label": "Privacy policy",
+                    "href": "/privacy",
+                    "icon": "tabler:shield-lock",
+                    "description": "What we collect: very little"
+                  }
                 ]
               }
             ]
@@ -39,12 +120,30 @@
             "children": [
               {
                 "links": [
-                  { "label": "Lead Generation", "href": "/landing/lead-generation" },
-                  { "label": "Long-form Sales", "href": "/landing/sales" },
-                  { "label": "Click-Through", "href": "/landing/click-through" },
-                  { "label": "Product Details", "href": "/landing/product" },
-                  { "label": "Coming Soon", "href": "/landing/pre-launch" },
-                  { "label": "Subscription", "href": "/landing/subscription" }
+                  {
+                    "label": "Lead Generation",
+                    "href": "/landing/lead-generation"
+                  },
+                  {
+                    "label": "Long-form Sales",
+                    "href": "/landing/sales"
+                  },
+                  {
+                    "label": "Click-Through",
+                    "href": "/landing/click-through"
+                  },
+                  {
+                    "label": "Product Details",
+                    "href": "/landing/product"
+                  },
+                  {
+                    "label": "Coming Soon",
+                    "href": "/landing/pre-launch"
+                  },
+                  {
+                    "label": "Subscription",
+                    "href": "/landing/subscription"
+                  }
                 ]
               }
             ]
@@ -54,17 +153,33 @@
             "children": [
               {
                 "links": [
-                  { "label": "Blog list", "href": "/blog" },
-                  { "label": "Article", "href": "/get-started-website-with-astro-tailwind-css" },
-                  { "label": "Category page", "href": "/blog/category/tutorials" },
-                  { "label": "Tag page", "href": "/blog/tag/astro" }
+                  {
+                    "label": "Blog list",
+                    "href": "/blog"
+                  },
+                  {
+                    "label": "Article",
+                    "href": "/get-started-website-with-astro-tailwind-css"
+                  },
+                  {
+                    "label": "Category page",
+                    "href": "/blog/category/tutorials"
+                  },
+                  {
+                    "label": "Tag page",
+                    "href": "/blog/tag/astro"
+                  }
                 ]
               }
             ]
           }
         ],
         "actions": [
-          { "label": "Download", "href": "https://github.com/arthelokyo/astrowind", "variant": "primary" }
+          {
+            "label": "Download",
+            "href": "https://github.com/arthelokyo/astrowind",
+            "variant": "primary"
+          }
         ],
         "announcement": {
           "text": "AstroWind 2.0 is out — <strong>Astro 7</strong> + Tailwind CSS v4.",
@@ -73,7 +188,9 @@
         }
       }
     },
-    { "widget": "layout/Main" },
+    {
+      "widget": "layout/Main"
+    },
     {
       "widget": "layout/Footer",
       "props": {
@@ -82,45 +199,108 @@
           {
             "title": "Product",
             "links": [
-              { "label": "Features", "href": "/#features" },
-              { "label": "Security", "href": "#" },
-              { "label": "Team", "href": "#" },
-              { "label": "Enterprise", "href": "#" },
-              { "label": "Pricing", "href": "/pricing" }
+              {
+                "label": "Features",
+                "href": "/#features"
+              },
+              {
+                "label": "Security",
+                "href": "#"
+              },
+              {
+                "label": "Team",
+                "href": "#"
+              },
+              {
+                "label": "Enterprise",
+                "href": "#"
+              },
+              {
+                "label": "Pricing",
+                "href": "/pricing"
+              }
             ]
           },
           {
             "title": "Platform",
             "links": [
-              { "label": "Developer API", "href": "#" },
-              { "label": "Partners", "href": "#" },
-              { "label": "Integrations", "href": "#" },
-              { "label": "Status", "href": "#" }
+              {
+                "label": "Developer API",
+                "href": "#"
+              },
+              {
+                "label": "Partners",
+                "href": "#"
+              },
+              {
+                "label": "Integrations",
+                "href": "#"
+              },
+              {
+                "label": "Status",
+                "href": "#"
+              }
             ]
           },
           {
             "title": "Support",
             "links": [
-              { "label": "Docs", "href": "#" },
-              { "label": "Community", "href": "#" },
-              { "label": "Contact", "href": "/contact" },
-              { "label": "Blog", "href": "/blog" }
+              {
+                "label": "Docs",
+                "href": "#"
+              },
+              {
+                "label": "Community",
+                "href": "#"
+              },
+              {
+                "label": "Contact",
+                "href": "/contact"
+              },
+              {
+                "label": "Blog",
+                "href": "/blog"
+              }
             ]
           },
           {
             "title": "Company",
             "links": [
-              { "label": "About", "href": "/about" },
-              { "label": "Services", "href": "/services" },
-              { "label": "Terms", "href": "/terms" },
-              { "label": "Privacy policy", "href": "/privacy" }
+              {
+                "label": "About",
+                "href": "/about"
+              },
+              {
+                "label": "Services",
+                "href": "/services"
+              },
+              {
+                "label": "Terms",
+                "href": "/terms"
+              },
+              {
+                "label": "Privacy policy",
+                "href": "/privacy"
+              }
             ]
           }
         ],
         "socialLinks": [
-          { "label": "RSS", "href": "/rss.xml", "icon": "tabler:rss" },
-          { "label": "X", "href": "https://twitter.com/arthelokyo", "icon": "tabler:brand-x" },
-          { "label": "GitHub", "href": "https://github.com/arthelokyo/astrowind", "icon": "tabler:brand-github" }
+          {
+            "label": "RSS",
+            "href": "/rss.xml",
+            "icon": "tabler:rss"
+          },
+          {
+            "label": "X",
+            "href": "https://twitter.com/arthelokyo",
+            "icon": "tabler:brand-x"
+          },
+          {
+            "label": "GitHub",
+            "href": "https://github.com/arthelokyo/astrowind",
+            "icon": "tabler:brand-github"
+          }
         ],
         "footNote": "Made by <a class=\"text-primary hover:underline\" href=\"https://github.com/arthelokyo\">arthelokyo</a> · All rights reserved."
       }
