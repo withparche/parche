@@ -40,7 +40,7 @@ export function resolveMetadata(
   options: { locale?: string } = {},
 ): ResolvedMetadata {
   const meta = pageData.metadata;
-  const seo = config.seo ?? {};
+  const seo = config.metadata ?? {};
 
   const title = meta?.title ?? pageData.title;
   const description = meta?.description ?? pageData.description ?? '';
@@ -60,7 +60,7 @@ export function resolveMetadata(
     twitterCard: meta?.twitterCard ?? seo.defaultTwitterCard ?? 'summary_large_image',
     article: meta?.article,
     jsonLd: meta?.jsonLd,
-    siteName: config.site.name,
+    siteName: config.brand.name,
     locale: options.locale ?? 'en',
   };
 }
@@ -153,18 +153,18 @@ export function generateJsonLdWebPage(page: JsonLdWebPage): Record<string, unkno
 }
 
 export function generateJsonLdOrganization(config: SiteConfig): Record<string, unknown> | null {
-  const org = config.organization;
+  const org = config.metadata?.organization;
   if (!org) return null;
 
-  const name = org.name ?? config.site.name;
+  const name = org.name ?? config.brand.name;
   if (!name) return null;
 
   return {
     '@type': org.type ?? 'Organization',
     name,
     ...(org.legalName && { legalName: org.legalName }),
-    ...(org.url ?? config.site.url ? { url: org.url ?? config.site.url } : {}),
-    ...(org.logo ?? config.site.logo ? { logo: org.logo ?? config.site.logo } : {}),
+    ...(org.url ?? config.site ? { url: org.url ?? config.site } : {}),
+    ...(org.logo ?? config.brand.logo ? { logo: org.logo ?? config.brand.logo } : {}),
     ...(org.description && { description: org.description }),
     ...(org.foundingDate && { foundingDate: org.foundingDate }),
     ...(org.socialProfiles?.length && { sameAs: org.socialProfiles }),
@@ -240,7 +240,7 @@ export function buildJsonLdGraph(
   graph.push(generateJsonLdWebSite({
     name: resolved.siteName,
     url: siteUrl,
-    description: config.site.description || undefined,
+    description: config.brand.description || undefined,
   }));
 
   // WebPage

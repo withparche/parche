@@ -147,7 +147,7 @@ const posts = await resolveAssets(page.data.map((post: any) => {
 }));
 
 const metadata = {
-  title: `${authorData.name} — ${site.site.name}`,
+  title: `${authorData.name} — ${site.brand.name}`,
   description: authorData.bio ?? format(labels.authorTitle, { value: authorData.name }),
   noindex: false,
   nofollow: false,

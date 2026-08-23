@@ -72,7 +72,7 @@ if (!post) {
   return Astro.redirect('/404');
 }
 
-const siteUrl = config.site.url || Astro.site?.href || '';
+const siteUrl = config.site || Astro.site?.href || '';
 
 // Render markdown
 const { Content } = await render(post);
@@ -145,7 +145,7 @@ const breadcrumbJsonLd = generateBreadcrumbJsonLd([
 ]);
 
 const metadata = {
-  title: `${post.data.metadata?.title ?? post.data.title} — ${site.site.name}`,
+  title: `${post.data.metadata?.title ?? post.data.title} — ${site.brand.name}`,
   description: post.data.metadata?.description ?? post.data.description ?? post.data.excerpt,
   canonical: post.data.metadata?.canonical,
   noindex: post.data.metadata?.noindex ?? post.data.draft ?? false,

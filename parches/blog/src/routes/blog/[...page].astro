@@ -120,8 +120,8 @@ const posts = await resolveAssets(page.data.map((post: any) => {
 }));
 
 const metadata = {
-  title: `${labels.listingTitle} — ${site.site.name}`,
-  description: site.site.description,
+  title: `${labels.listingTitle} — ${site.brand.name}`,
+  description: site.brand.description,
   noindex: false,
   nofollow: false,
   ogType: 'website' as const,

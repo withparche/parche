@@ -1,9 +1,9 @@
 import { defineConfig } from '@parche/core/config';
 
 export default defineConfig({
-  site: {
+  site: 'https://example.com',
+  brand: {
     name: 'Parche i18n Example',
     description: 'A minimal bilingual demo built with Parche.',
-    url: 'https://example.com',
   },
 });

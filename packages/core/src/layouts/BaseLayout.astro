@@ -29,12 +29,28 @@ const ogImageURL = ogImage && Astro.site
   : ogImage;
 
 const robotsContent = buildRobotsContent(metadata);
-const siteUrl = Astro.site?.href ?? config.site.url ?? '';
+const siteUrl = Astro.site?.href ?? config.site ?? '';
 const breadcrumbs = siteUrl ? buildBreadcrumbs(Astro.url.pathname, siteUrl, metadata.title) : undefined;
-const jsonLdGraph = buildJsonLdGraph(metadata, canonicalURL, siteUrl, config, breadcrumbs);
+// Structured data is built from the config, which can name assets ('@/assets/…')
+// and is another path that never sees DynamicRenderer. Absolute URLs matter here
+// too: schema.org consumers cannot resolve a site-relative logo.
+const resolvedConfig = await resolveAssets(config);
+const absoluteConfig = Astro.site && (resolvedConfig as any).metadata?.organization?.logo
+  ? {
+      ...resolvedConfig,
+      metadata: {
+        ...(resolvedConfig as any).metadata,
+        organization: {
+          ...(resolvedConfig as any).metadata.organization,
+          logo: new URL((resolvedConfig as any).metadata.organization.logo, Astro.site).href,
+        },
+      },
+    }
+  : resolvedConfig;
+const jsonLdGraph = buildJsonLdGraph(metadata, canonicalURL, siteUrl, absoluteConfig, breadcrumbs);
 
-const verification = config.seo?.verification;
-const preconnect = config.seo?.preconnect ?? [];
+const verification = config.metadata?.verification;
+const preconnect = config.metadata?.preconnect ?? [];
 const twitterHandle = config.metadata?.twitterHandle;
 const article = metadata.ogType === 'article' ? metadata.article : undefined;
 ---

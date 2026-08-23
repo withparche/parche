@@ -36,8 +36,8 @@ export async function GET(context: APIContext) {
   }));
 
   return rss({
-    title: `${config.site?.name ?? labels.blog} — ${labels.rssFeed}`,
-    description: config.site?.description ?? '',
+    title: `${config.brand?.name ?? labels.blog} — ${labels.rssFeed}`,
+    description: config.brand?.description ?? '',
     site: siteUrl,
     items,
     customData: `<language>${locale}</language>`,

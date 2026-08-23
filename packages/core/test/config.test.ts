@@ -20,10 +20,10 @@ const CTX: ParcheConfigContext = {
 
 test('prepareParcheConfig: inline mode serves the validated site config', () => {
   const prepared = prepareParcheConfig(
-    { site: { name: 'Acme', description: 'x' }, parches: [{ name: 'ui' }] },
+    { brand: { name: 'Acme', description: 'x' }, parches: [{ name: 'ui' }] },
     CTX,
   );
-  assert.equal(prepared.inlineSiteConfig?.site.name, 'Acme');
+  assert.equal(prepared.inlineSiteConfig?.brand.name, 'Acme');
   assert.equal((prepared.userConfig as any).site, undefined, 'site must not leak into userConfig');
   assert.equal(prepared.userConfig.config, undefined);
   assert.equal(prepared.userConfig.parches?.length, 1);
@@ -42,12 +42,13 @@ test('prepareParcheConfig: separate-file mode passes the config path, no inline'
 test('prepareParcheConfig: function form receives ctx and its result is used', () => {
   const prepared = prepareParcheConfig(
     (ctx) => ({
-      site: { name: 'T', description: '', url: ctx.env.SITE_URL ?? 'https://fallback' },
+      site: ctx.env.SITE_URL ?? 'https://fallback',
+      brand: { name: 'T', description: '' },
       parches: [],
     }),
     { ...CTX, env: { SITE_URL: 'https://from-env' } },
   );
-  assert.equal(prepared.inlineSiteConfig?.site.url, 'https://from-env');
+  assert.equal(prepared.inlineSiteConfig?.site, 'https://from-env');
 });
 
 test('prepareParcheConfig: seo.allowAICrawlers is read; site SEO does not leak to userConfig', () => {
@@ -126,14 +127,14 @@ test('satisfiesVersion: caret / tilde / >= / exact / prerelease / *', () => {
 // --- defineConfig (site config): strict, applies defaults ------------------
 
 test('defineConfig: accepts a valid site config and applies defaults', () => {
-  const cfg = defineConfig({ site: { name: 'Acme' } });
-  assert.equal(cfg.site.name, 'Acme');
+  const cfg = defineConfig({ brand: { name: 'Acme' } });
+  assert.equal(cfg.brand.name, 'Acme');
   assert.deepEqual(cfg.metadata, {}); // default
 });
 
 test('defineConfig: a removed/typo top-level key (e.g. theme) throws, not silently dropped', () => {
   assert.throws(
-    () => defineConfig({ site: { name: 'Acme' }, theme: { darkMode: true } } as any),
+    () => defineConfig({ brand: { name: 'Acme' }, theme: { darkMode: true } } as any),
     /theme|Unrecognized|not allowed|strict/i,
   );
 });

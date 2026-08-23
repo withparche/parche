@@ -138,7 +138,7 @@ const posts = await resolveAssets(page.data.map((post: any) => {
 const displayTag = term.title;
 
 const metadata = {
-  title: `${format(labels.tagTitle, { value: displayTag })} — ${site.site.name}`,
+  title: `${format(labels.tagTitle, { value: displayTag })} — ${site.brand.name}`,
   description: term.description ?? format(labels.tagDescription, { value: displayTag }),
   noindex: false,
   nofollow: false,

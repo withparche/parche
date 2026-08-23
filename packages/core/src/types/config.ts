@@ -42,40 +42,51 @@ const contactPointSchema = z.object({
 });
 
 export const siteConfigSchema = z.object({
-  site: z.object({
+  /**
+   * The deployed origin — the same value, with the same name and type, as
+   * Astro's `site`. Declare it here or in astro.config, never in both: Parche
+   * uses Astro's when only Astro has it, hands its own to Astro when only Parche
+   * has it, and errors when both do.
+   */
+  site: z.string().url().optional(),
+
+  /** Mirrors Astro's `base`, under the same one-declaration rule. */
+  base: z.string().optional(),
+
+  /**
+   * The site's identity — the part Astro has no concept of.
+   *
+   * Kept separate from `site` precisely because `site` means something specific
+   * in Astro (an origin), and one name should not mean two things.
+   */
+  brand: z.object({
     name: z.string(),
     description: z.string().default(''),
-    url: z.string().url().optional(),
     logo: z.string().optional(),
   }),
 
-  metadata: z.object({
-    ogImage: z.string().optional(),
-    twitterHandle: z.string().optional(),
-  }).default({}),
 
   /**
-   * Internationalization of the site identity.
+   * Internationalization, mirroring Astro's own `i18n` block.
    *
-   * Astro's own `i18n` block owns routing — which locales exist and how URLs are
-   * shaped — and Parche reads its locales from there rather than restating them.
-   * What Astro deliberately leaves out is translation: its documentation says
-   * metadata and content are the developer's job. This is that missing half.
+   * `defaultLocale` and `locales` have the same names and shapes Astro uses, and
+   * follow the one-declaration rule: Parche reads Astro's when only Astro has
+   * them, writes its own into Astro when only Parche does, and errors when both
+   * do. `routing` is not mirrored — Parche resolves URLs itself and always needs
+   * Astro's manual mode.
    *
-   * Each locale entry mirrors the shape it overrides and is merged over the
-   * top-level values, which remain the default. Declare only what differs:
+   * `translations` has no Astro counterpart. Astro's i18n is routing only; its
+   * documentation puts translating metadata on the developer, and this is that
+   * missing half. Each entry mirrors the shape it overrides and is merged over
+   * the top-level values, so declare only what differs:
    *
    *   i18n: {
    *     defaultLocale: 'en',
-   *     locales: {
-   *       en: {},
-   *       es: { site: { description: 'Una plantilla gratuita…' } },
+   *     locales: ['en', 'es'],
+   *     translations: {
+   *       es: { brand: { description: 'Una plantilla gratuita…' } },
    *     },
    *   }
-   *
-   * The keys are the locale codes, so this map declares which languages exist
-   * as well as what each one overrides — Astro's `locales` array is derived
-   * from them when Parche is the one declaring them.
    *
    * Pages translate their own title and description in frontmatter; this covers
    * the site-wide fallbacks used by routes that have none — the blog listing,
@@ -83,19 +94,21 @@ export const siteConfigSchema = z.object({
    */
   i18n: z
     .object({
-      /**
-       * The default locale, mirroring Astro's `i18n.defaultLocale`.
-       *
-       * Declare it in one place only: Parche uses Astro's when Astro declares
-       * it, writes its own into Astro when only Parche does, and errors when
-       * both do — otherwise neither is the source of truth.
-       */
       defaultLocale: z.string().optional(),
+      /** Locale codes, or Astro's object form for a custom path segment. */
       locales: z
+        .array(
+          z.union([
+            z.string(),
+            z.object({ path: z.string(), codes: z.array(z.string()) }).strict(),
+          ]),
+        )
+        .optional(),
+      translations: z
         .record(
           z.string(),
           z.object({
-            site: z
+            brand: z
               .object({
                 name: z.string().optional(),
                 description: z.string().optional(),
@@ -115,9 +128,22 @@ export const siteConfigSchema = z.object({
         .default({}),
     })
     .strict()
-    .default({ locales: {} }),
+    .default({ translations: {} }),
 
-  seo: z.object({
+  /**
+   * The site-wide metadata a page falls back to when it declares none.
+   *
+   * Deliberately the same name as a page's own `metadata`, because it is the
+   * same thing one level up: the defaults. A page overrides what it wants and
+   * inherits the rest. Everything search engines and social cards read lives
+   * here — including `organization`, which is JSON-LD and was sitting at the top
+   * level as though it were a concept of its own.
+   */
+  metadata: z.object({
+    /** Default share image, used when a page declares none. */
+    ogImage: z.string().optional(),
+    /** e.g. '@arthelokyo'. */
+    twitterHandle: z.string().optional(),
     verification: verificationSchema,
     defaultRobots: defaultRobotsSchema,
     defaultOgType: z.enum(['website', 'article', 'product', 'profile']).default('website'),
@@ -125,19 +151,24 @@ export const siteConfigSchema = z.object({
     // Note: AI-crawler policy for robots.txt is the `parche({ seo: { allowAICrawlers } })`
     // integration option, not a SiteConfig field — kept there so it's a single home.
     preconnect: z.array(z.string()).default([]),
-  }).default({}),
-
-  organization: z.object({
-    type: z.enum(['Organization', 'LocalBusiness', 'Corporation']).default('Organization'),
-    name: z.string().optional(),
-    legalName: z.string().optional(),
-    logo: z.string().optional(),
-    url: z.string().optional(),
-    description: z.string().optional(),
-    foundingDate: z.string().optional(),
-    socialProfiles: z.array(z.string()).default([]),
-    address: addressSchema.optional(),
-    contactPoint: contactPointSchema.optional(),
+    /** Publisher identity, emitted as a schema.org Organization node in JSON-LD.
+     *  Worth declaring only with the fields that add something a `WebSite` node
+     *  does not already say — logo, socialProfiles, address. */
+    organization: z
+      .object({
+        type: z.enum(['Organization', 'LocalBusiness', 'Corporation']).default('Organization'),
+        name: z.string().optional(),
+        legalName: z.string().optional(),
+        logo: z.string().optional(),
+        url: z.string().optional(),
+        description: z.string().optional(),
+        foundingDate: z.string().optional(),
+        /** Emitted as `sameAs` — the canonical way to claim an account. */
+        socialProfiles: z.array(z.string()).default([]),
+        address: addressSchema.optional(),
+        contactPoint: contactPointSchema.optional(),
+      })
+      .default({}),
   }).default({}),
 
   // Note: header/footer nav and theme are NOT configured here.

@@ -130,7 +130,7 @@ const posts = await resolveAssets(page.data.map((post: any) => {
 const displayCategory = term.title;
 
 const metadata = {
-  title: `${format(labels.categoryTitle, { value: displayCategory })} — ${site.site.name}`,
+  title: `${format(labels.categoryTitle, { value: displayCategory })} — ${site.brand.name}`,
   description: term.description ?? format(labels.categoryDescription, { value: displayCategory }),
   noindex: false,
   nofollow: false,

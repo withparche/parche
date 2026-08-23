@@ -182,7 +182,7 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
         const siteConfig =
           prepared.inlineSiteConfig ??
           (await tryLoadSiteConfig(rootDirEarly, resolved.config ?? './parche.config.ts'));
-        const parcheSiteUrl = siteConfig?.site?.url;
+        const parcheSiteUrl = (siteConfig as any)?.site;
         resolvedSiteUrl = resolveSiteUrl(config.site ? String(config.site) : undefined, parcheSiteUrl);
         if (!config.site && parcheSiteUrl) {
           updateConfig({ site: parcheSiteUrl });
@@ -304,14 +304,18 @@ export function prepareParcheConfig(
   // Fold `extends` first (a preset may seed site data or parches), then split
   // the site identity out of the integration options.
   const merged = resolveExtends(cfg as unknown as ParcheUserConfig) as unknown as ParcheConfig;
-  const { site, metadata, seo, organization, config: configPath, ...rest } =
+  const { site, base, brand, metadata, seo, i18n, config: configPath, ...rest } =
     merged as ParcheConfig & { config?: string };
   const userOpts = rest as ParcheUserConfig;
-  const { allowAICrawlers = true, ...siteSeo } = (seo ?? {}) as Record<string, unknown>;
+  // `seo` on the parche() options carries only the robots policy now; the
+  // site-wide defaults moved to `metadata`, which is what a page overrides.
+  const { allowAICrawlers = true } = (seo ?? {}) as Record<string, unknown>;
 
-  if (site) {
+  // `brand` is the one required block, so its presence is what marks inline mode
+  // — `site` is now just a URL, and a project may legitimately leave it to Astro.
+  if (brand) {
     // Inline mode: validate + serve the site identity as parche:config.
-    const inlineSiteConfig = siteConfigSchema.parse({ site, metadata, seo: siteSeo, organization });
+    const inlineSiteConfig = siteConfigSchema.parse({ site, base, brand, metadata, i18n });
     return { userConfig: userOpts, inlineSiteConfig, allowAICrawlers: allowAICrawlers as boolean };
   }
 

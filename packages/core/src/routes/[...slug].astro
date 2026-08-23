@@ -84,8 +84,8 @@ if (Astro.props.fromResolver) {
   locale = Astro.props.resolverLocale ?? fromProps.locale;
   resolvedApp = await resolveContent(Astro.props.resolverSlug ?? fromProps.rest, locale, {
     showDrafts: isDev,
-    siteUrl: config.site.url || Astro.site?.href || '',
-    siteName: config.site.name,
+    siteUrl: config.site || Astro.site?.href || '',
+    siteName: config.brand.name,
   });
   if (resolvedApp) {
     mode = 'resolver';
@@ -102,8 +102,8 @@ if (Astro.props.fromResolver) {
   locale = fromUrl.locale;
   resolvedApp = await resolveContent(fromUrl.rest, locale, {
     showDrafts: isDev,
-    siteUrl: config.site.url || Astro.site?.href || '',
-    siteName: config.site.name,
+    siteUrl: config.site || Astro.site?.href || '',
+    siteName: config.brand.name,
   });
 
   if (resolvedApp) {
@@ -158,8 +158,8 @@ if (mode === 'page' && pageData) {
 
   const resolved = resolveMetadata(pageData, config, { locale });
   resolved.title = pageKey === 'home'
-    ? config.site.name
-    : `${resolved.title} — ${config.site.name}`;
+    ? config.brand.name
+    : `${resolved.title} — ${config.brand.name}`;
   pageMetadata = resolved;
 
   PageTemplateComponent = pageTemplate !== 'dynamic' ? templateMap[pageTemplate] : null;

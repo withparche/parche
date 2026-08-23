@@ -63,7 +63,7 @@ const labels = resolveLabels(cfg.labels, locale, defaultLocale);
 const layoutSections = await resolveLayout('default', locale, defaultLocale);
 
 const metadata = {
-  title: `${format(labels.seriesTitle, { value: seriesName })} — ${site.site.name}`,
+  title: `${format(labels.seriesTitle, { value: seriesName })} — ${site.brand.name}`,
   description: format(labels.seriesDescription, { value: seriesName }),
   noindex: false,
   nofollow: false,
