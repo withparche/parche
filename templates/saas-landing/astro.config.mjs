@@ -23,7 +23,18 @@ export default defineConfig({
       config: './parche.config.ts',
       routes: { pages: true },
     }),
-    icon(),
+    // Scoped icon set (SSR). Parche is data-driven: widgets receive icon `name`s
+    // from JSON content, so the names are dynamic and astro-icon can't tree-shake
+    // by scanning code. Without `include` it bundles the ENTIRE tabler/lucide/
+    // simple-icons sets (~2 MB) resident in the SSR server process. List exactly
+    // the icons this demo's content + widgets use; add here when you use a new one.
+    icon({
+      include: {
+        lucide: ['globe'],
+        'simple-icons': ['github', 'linkedin', 'mastodon', 'x'],
+        tabler: ['align-center', 'arrow-right', 'article', 'bolt', 'bookmark', 'brand-figma', 'brand-github', 'brand-linkedin', 'brand-notion', 'brand-slack', 'brand-stripe', 'brand-vercel', 'brand-x', 'building', 'calendar', 'cards', 'chart-bar', 'check', 'chevron-right', 'click', 'clock', 'credit-card', 'external-link', 'file-text', 'help-circle', 'info-circle', 'info-square', 'layout-grid', 'layout-kanban', 'layout-list', 'layout-rows', 'layout-sidebar', 'layout-sidebar-right', 'list-check', 'list-numbers', 'mail', 'map', 'message-circle', 'plug', 'server-bolt', 'sparkles', 'speakerphone', 'star', 'users-group'],
+      },
+    }),
   ],
   fonts: parcheFonts,
   i18n: { defaultLocale: 'en', locales: ['en'], routing: 'manual' },
