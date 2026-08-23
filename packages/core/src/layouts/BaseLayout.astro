@@ -18,6 +18,23 @@ interface Props {
 const { metadata, config, lang } = Astro.props;
 
 const locale = lang ?? metadata.locale ?? 'en';
+
+/**
+ * Text direction, derived rather than configured.
+ *
+ * Which languages read right-to-left is a fact about the language, not a choice
+ * a site should have to restate — and `Intl` already knows it. Without this the
+ * `rtl:` utilities the blog widgets already carry could never activate, so the
+ * support was decorative.
+ *
+ * `getTextInfo` is recent, hence the guard; older runtimes get the common case.
+ */
+let dir: 'ltr' | 'rtl' = 'ltr';
+try {
+  dir = (new Intl.Locale(locale) as any).getTextInfo?.().direction === 'rtl' ? 'rtl' : 'ltr';
+} catch {
+  // Unrecognised locale tag — left-to-right is the safe assumption.
+}
 const canonicalURL = metadata.canonical
   || (Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.pathname);
 // The share image can come from a page's frontmatter or the site config, and
@@ -55,7 +72,7 @@ const twitterHandle = config.metadata?.twitterHandle;
 const article = metadata.ogType === 'article' ? metadata.article : undefined;
 ---
 
-<html lang={locale} data-theme={defaultTheme || undefined}>
+<html lang={locale} dir={dir} data-theme={defaultTheme || undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
