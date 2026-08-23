@@ -52,10 +52,22 @@ on the components being accessible and themeable.
   layout variants per widget so a page can vary rhythm without relying on the
   presence or absence of an image (BACKLOG, deferred).
 - `parche astro add <widget|parche>`.
-- Community templates repo (`withparche/templates`).
 - A documentation site.
 - Measure the per-request SSR cost now that the catch-all is exercised under
   `output: 'server'` (BACKLOG T1, info).
+
+## v0.9 — splitting things out
+
+Deferred on purpose, not forgotten. Each of these costs more the earlier it is
+done, because it turns one change into two coordinated ones.
+
+- **Community templates repo (`withparche/templates`).** The templates already
+  install standalone, so the move itself is cheap — the cost is coordination.
+  While the config surface is still changing shape (twice in two releases so
+  far), a breaking change is one PR here and two once they live apart. CI would
+  copy each template, point its dependencies at the local packages and build it,
+  which is what `test/build-starter.mjs` already does for the starter, and
+  `templates:check` becomes the guard against the two repos drifting.
 
 ## Big bets
 
@@ -75,6 +87,10 @@ Decisions worth remembering, so they are not relitigated.
 - **Widget names in core.** Core hardcodes no widget name — full-bleed layout comes
   from the parche manifest and the blog resolver returns generic sections. Any feature
   needing core to know a widget by name needs a manifest capability instead.
+- **Templates as monorepo fixtures.** portfolio and saas-landing used
+  `workspace:*` and `catalog:`, so neither installed anywhere but here — a
+  template that cannot be copied is not a template. They pin published ranges
+  now, and `linkWorkspacePackages` keeps CI building them against local code.
 - **`parche astro generate` as a template command.** `new` is template-based;
   `generate` is reserved for the AI/Narrans path and stays unimplemented until then.
 
