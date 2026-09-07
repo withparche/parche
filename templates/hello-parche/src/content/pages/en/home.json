@@ -7,7 +7,7 @@
       "props": {
         "tagline": "Parche",
         "title": "Your site starts <span class='text-primary'>here</span>",
-        "subtitle": "This page is data — edit src/content/pages/en/home.json. Add widgets, swap the theme, ship. The site's name lives in parche.config.ts and the header reads it from there."
+        "subtitle": "This page is data — edit src/content/pages/en/home.json. Add widgets, swap the theme, ship. The site's name lives in src/parche.config.json and the header reads it from there."
       }
     },
     {

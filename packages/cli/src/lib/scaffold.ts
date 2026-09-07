@@ -90,7 +90,7 @@ export async function scaffold(opts: ScaffoldOptions): Promise<void> {
   if (!renamed) {
     note(
       `Could not read the template's package.json, so the project keeps the ` +
-        `template's name. Rename it in package.json and parche.config.ts.`,
+        `template's name. Rename it in package.json and src/parche.config.json.`,
       'rename',
     );
   }

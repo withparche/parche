@@ -13,7 +13,7 @@ export default defineConfig({
   output: 'server',
   adapter: node({ mode: 'standalone' }),
   integrations: [
-    // Parches here; the site identity is configured in ./parche.config.ts.
+    // Parches here; the site identity is configured in ./src/parche.config.json.
     // (Or inline it with `site: { … }`. parche() also accepts a
     // (ctx) => config function for env-based / multi-tenant setups.)
     parche({
