@@ -26,6 +26,16 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
 
 ### Fixed
 
+- **`overrides` now counts toward a parche's `requires`** (`1fd6c71`). A component
+  registered through `overrides` resolves the same virtual module a parche would
+  provide, but the requirement check only counted what parches contributed — and
+  ran before overrides were applied. So a project could not satisfy a contract
+  with its own components: registering `Container`, `Section` and the eight
+  `blog/*` widgets `@parche/blog` requires still failed the build claiming they
+  were missing, and the only way through was to wrap them in a `ParcheManifest` —
+  a distribution format — purely to pass a check. Overrides are still applied
+  last, so precedence is unchanged; only the tallying moves earlier.
+
 - **An author's `slug` no longer overwrites its entry id** (`b953c29`). `slug` is
   reserved: Astro's glob loader takes a top-level one from an entry's data and
   uses it as that entry's id. `authorSchema` declared it as an ordinary optional

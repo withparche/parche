@@ -23,7 +23,11 @@ test('prompts: --yes derives both names from the directory', async () => {
 function template(name = 'hello-parche', display = 'Hello Parche') {
   const dir = mkdtempSync(join(tmpdir(), 'parche-tpl-'));
   writeFileSync(join(dir, 'package.json'), JSON.stringify({ name, version: '0.0.1' }, null, 2));
-  writeFileSync(join(dir, 'parche.config.ts'), `export default defineConfig({\n  brand: { name: '${display}' },\n});\n`);
+  mkdirSync(join(dir, 'src'));
+  writeFileSync(
+    join(dir, 'src', 'parche.config.json'),
+    JSON.stringify({ brand: { name: display } }, null, 2) + '\n',
+  );
   writeFileSync(join(dir, 'README.md'), `# ${display}\n\nBuilt with Parche.\n`);
   mkdirSync(join(dir, 'node_modules'));
   writeFileSync(join(dir, 'node_modules', 'junk.js'), `// ${display}`);
@@ -42,7 +46,7 @@ test('adapt: both the display name and the slug are replaced', () => {
   const dir = template();
   assert.equal(adaptProject(dir, { packageName: 'my-blog', siteName: 'My Blog' }), true);
 
-  assert.match(readFileSync(join(dir, 'parche.config.ts'), 'utf8'), /name: 'My Blog'/);
+  assert.match(readFileSync(join(dir, 'src', 'parche.config.json'), 'utf8'), /"name": "My Blog"/);
   assert.match(readFileSync(join(dir, 'README.md'), 'utf8'), /^# My Blog/);
   assert.equal(JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8')).name, 'my-blog');
 });

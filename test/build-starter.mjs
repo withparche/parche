@@ -39,7 +39,9 @@ try {
     .toString()
     .trim();
   if (stale) failure = `template name not renamed in:\n${stale}`;
-  else if (!existsSync(join(SMOKE, 'parche.config.ts'))) failure = 'parche.config.ts missing at project root';
+  else if (!existsSync(join(SMOKE, 'src', 'parche.config.json'))) {
+    failure = 'src/parche.config.json missing';
+  }
 
 
   if (!failure) {

@@ -9,7 +9,7 @@ import createUI from '@parche/ui';
 export default defineConfig({
   adapter: node({ mode: 'standalone' }),
   integrations: [
-    // Parches here; the site identity is configured in ./parche.config.ts.
+    // Parches here; the site identity is configured in ./src/parche.config.json.
     // (Or inline it with `site: { … }` instead of a separate file.)
     parche({
       parches: [createPrimitives(), createUI()],

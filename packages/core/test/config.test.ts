@@ -32,11 +32,11 @@ test('prepareParcheConfig: inline mode serves the validated site config', () => 
 
 test('prepareParcheConfig: separate-file mode passes the config path, no inline', () => {
   const prepared = prepareParcheConfig(
-    { parches: [{ name: 'ui' }], config: './parche.config.ts' },
+    { parches: [{ name: 'ui' }], config: './src/parche.config.json' },
     CTX,
   );
   assert.equal(prepared.inlineSiteConfig, undefined);
-  assert.equal(prepared.userConfig.config, './parche.config.ts');
+  assert.equal(prepared.userConfig.config, './src/parche.config.json');
 });
 
 test('prepareParcheConfig: function form receives ctx and its result is used', () => {
@@ -53,7 +53,7 @@ test('prepareParcheConfig: function form receives ctx and its result is used', (
 
 test('prepareParcheConfig: seo.allowAICrawlers is read; site SEO does not leak to userConfig', () => {
   const prepared = prepareParcheConfig(
-    { config: './parche.config.ts', seo: { allowAICrawlers: false } as any },
+    { config: './src/parche.config.json', seo: { allowAICrawlers: false } as any },
     CTX,
   );
   assert.equal(prepared.allowAICrawlers, false);
