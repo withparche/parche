@@ -11,6 +11,21 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
 
 ## [Unreleased]
 
+### Added
+
+- **`HeadMeta`: a site now owns its `<head>`** (`eaf47de`). `BaseLayout` emitted
+  no favicon link, no theme-color and no manifest, and a site had no way to add
+  them — the head is built inside core's injected route, out of reach of the
+  `head` slot, and the site config has no field for any of it. The favicon only
+  ever worked because browsers fetch `/favicon.ico` by convention; an SVG icon or
+  a touch icon could not be declared at all. Core should not decide what goes
+  there, but it has to leave a place for it. `HeadMeta` is that place: a component
+  rendered on every page, after core's own metadata and before the page's `head`
+  slot, that emits nothing by default. Override it with `components:HeadMeta` to
+  put there whatever core should not decide; it receives the resolved site config
+  and the page's metadata as props. A project without an override renders exactly
+  what it did before.
+
 ### Changed
 
 - **The site config is JSON, at `src/parche.config.json`** (`366bd5d`). Shipping it
