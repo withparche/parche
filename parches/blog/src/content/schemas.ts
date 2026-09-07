@@ -101,7 +101,13 @@ export const taxonomySchema = z.object({
 
 export const authorSchema = z.object({
   name: z.string(),
-  slug: z.string().optional(),
+  /** URL segment for this author's listing. Defaults to the entry key.
+   *
+   *  Named `urlSlug`, like a post's, because `slug` is reserved: Astro's glob
+   *  loader takes a top-level `slug` as the entry's id, so an author file at
+   *  `authors/en/jane.json` declaring `"slug": "jane"` got the id `jane` rather
+   *  than `en/jane`, and the locale-prefixed lookup missed. */
+  urlSlug: z.string().optional(),
   bio: z.string().optional(),
   avatar: z
     .object({
