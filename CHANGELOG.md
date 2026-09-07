@@ -24,6 +24,18 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   file named, as is a copy in both `src/` and the project root. The schema still
   validates.
 
+### Fixed
+
+- **An author's `slug` no longer overwrites its entry id** (`b953c29`). `slug` is
+  reserved: Astro's glob loader takes a top-level one from an entry's data and
+  uses it as that entry's id. `authorSchema` declared it as an ordinary optional
+  field, so an author at `authors/en/jane.json` with `"slug": "jane"` got the id
+  `jane` instead of `en/jane`, and the locale-prefixed lookup missed — while an
+  author *without* one tripped the getter Astro installs on absent `slug`
+  properties, which logs at ERROR. Every project in the repo hit one side or the
+  other. The field is now `urlSlug`, matching `postSchema`, which had avoided the
+  reservation all along; that inconsistency is what hid this.
+
 ### Removed
 
 - **The injected `404` route, and `routes.notFoundRoute`** (`a726ef9`). Injecting
