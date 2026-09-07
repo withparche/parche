@@ -7,6 +7,7 @@ import type { ResolvedMetadata } from '../utils/metadata';
 import { buildRobotsContent, buildBreadcrumbs, buildJsonLdGraph } from '../utils/metadata';
 import type { SiteConfig } from '../types/config';
 import { defaultTheme } from 'parche:config/themes';
+import HeadMeta from 'parche:components/HeadMeta';
 import { resolveAssets } from '../utils/assets.js';
 
 interface Props {
@@ -155,6 +156,10 @@ const article = metadata.ogType === 'article' ? metadata.article : undefined;
     </script>
 
     <ClientRouter />
+
+    {/* The site's own head content — favicons, theme-color, anything core
+        should not decide. Empty unless the site overrides it. */}
+    <HeadMeta config={config} metadata={metadata} />
 
     <slot name="head" />
   </head>

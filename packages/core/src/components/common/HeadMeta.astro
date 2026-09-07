@@ -1,0 +1,20 @@
+---
+/**
+ * The site's own <head> content. BaseLayout renders this on every page, after
+ * core's metadata and before the page's `head` slot, and by default it renders
+ * nothing — core has no opinion about favicons, theme colours, manifests or
+ * analytics. A site supplies them by overriding this component:
+ *
+ *   parche({ overrides: { 'components:HeadMeta': './src/components/HeadMeta.astro' } })
+ *
+ * The override receives the resolved site config and the page's metadata, so
+ * it can read the brand name or the canonical URL without importing anything.
+ */
+import type { SiteConfig } from '../../types/config';
+import type { ResolvedMetadata } from '../../utils/metadata';
+
+interface Props {
+  config: SiteConfig;
+  metadata: ResolvedMetadata;
+}
+---

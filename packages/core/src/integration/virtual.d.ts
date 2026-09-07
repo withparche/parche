@@ -83,6 +83,10 @@ declare module 'parche:layouts/BaseLayout' {
 
 // Components (core-owned; Header/Footer now live in the ui parche as
 // parche:widgets/layout/*)
+declare module 'parche:components/HeadMeta' {
+  const C: import('astro/runtime/server/index.js').AstroComponentFactory;
+  export default C;
+}
 declare module 'parche:components/ThemeToggle' {
   const Component: typeof import('../components/common/ThemeToggle.astro').default;
   export default Component;

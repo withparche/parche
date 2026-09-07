@@ -77,6 +77,20 @@ test('requires: missing widget throws with attribution', () => {
   );
 });
 
+test('HeadMeta: core provides an empty default, and a site can override it', () => {
+  let reg!: ReturnType<typeof createRegistry>;
+  captureWarnings(() => { reg = createRegistry({ parches: [] }, ROOT); });
+  assert.match(reg.modules['parche:components/HeadMeta'], /components\/common\/HeadMeta\.astro$/);
+
+  captureWarnings(() => {
+    reg = createRegistry(
+      { parches: [], overrides: { 'components:HeadMeta': './src/components/HeadMeta.astro' } },
+      ROOT,
+    );
+  });
+  assert.equal(reg.modules['parche:components/HeadMeta'], `${ROOT}/src/components/HeadMeta.astro`);
+});
+
 test('requires: a component supplied via overrides satisfies it', () => {
   // Registering a component through `overrides` resolves the same virtual
   // module a parche would provide, so it has to count. Without this, a project

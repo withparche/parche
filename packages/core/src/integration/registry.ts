@@ -65,6 +65,8 @@ export function satisfiesVersion(actual: string, range: string): boolean {
 const CORE_MODULES: Record<string, string> = {
   // Theme / i18n engine controls (consumed by the ui parche's Header)
   'parche:components/ThemeToggle': corePath('components/common/ThemeToggle.astro'),
+  // Empty by default; a site overrides it to own its <head>.
+  'parche:components/HeadMeta': corePath('components/common/HeadMeta.astro'),
   'parche:components/ThemeSelector': corePath('components/common/ThemeSelector.astro'),
   'parche:components/OptimizedImage': corePath('components/common/OptimizedImage.astro'),
   'parche:components/LocaleSwitcher': corePath('components/common/LocaleSwitcher.astro'),
