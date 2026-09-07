@@ -1,0 +1,7 @@
+{
+  "site": "https://example.com",
+  "brand": {
+    "name": "Parche shadcn Example",
+    "description": "shadcn/ui components themed by Parche."
+  }
+}

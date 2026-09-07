@@ -118,7 +118,7 @@ export function createRegistry(
   // Site config: `parche({ site })` passes it inline (served as parche:config by
   // the vite plugin); otherwise parche:config points at the user's config file.
   if (!inlineSiteConfig) {
-    const configPath = userConfig.config || './parche.config.ts';
+    const configPath = userConfig.config || './src/parche.config.json';
     modules['parche:config'] = path.resolve(rootDir, configPath);
   }
 

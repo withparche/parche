@@ -13,7 +13,7 @@ export default defineConfig({
       // Import the themes to showcase — watch the shadcn components reskin as
       // you switch. Only these three themes' CSS is bundled.
       parches: [createPrimitives(), createUI(), corporate(), minimal(), playful()],
-      config: './parche.config.ts',
+      config: './src/parche.config.json',
       routes: { pages: true },
       overrides: { 'widgets:ShadcnShowcase': './src/widgets/ShadcnWidget.astro' },
     }),

@@ -1,0 +1,7 @@
+{
+  "site": "https://example.com",
+  "brand": {
+    "name": "Hello Parche",
+    "description": "Built with Parche."
+  }
+}

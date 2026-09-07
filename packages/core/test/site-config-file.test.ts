@@ -10,7 +10,9 @@ import { siteConfigSchema } from '../src/types/config.ts';
 function project(files: Record<string, string>): string {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'parche-cfg-'));
   for (const [name, body] of Object.entries(files)) {
-    fs.writeFileSync(path.join(dir, name), body);
+    const target = path.join(dir, name);
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    fs.writeFileSync(target, body);
   }
   return dir;
 }
@@ -25,9 +27,30 @@ test('probes for a config file when none is named', () => {
   assert.equal(resolveSiteConfigPath(dir, undefined), path.join(dir, 'parche.config.json'));
 });
 
-test('a TypeScript config wins the probe over JSON', () => {
-  const dir = project({ 'parche.config.json': JSON_CONFIG, 'parche.config.ts': 'export default {};' });
-  assert.equal(resolveSiteConfigPath(dir, undefined), path.join(dir, 'parche.config.ts'));
+test('src/parche.config.json is the home, and is probed first', () => {
+  const dir = project({ 'src/parche.config.json': JSON_CONFIG });
+  assert.equal(resolveSiteConfigPath(dir, undefined), path.join(dir, 'src', 'parche.config.json'));
+});
+
+test('a config in both places is an error, not a silent precedence', () => {
+  const dir = project({ 'src/parche.config.json': JSON_CONFIG, 'parche.config.json': JSON_CONFIG });
+  assert.throws(() => resolveSiteConfigPath(dir, undefined), /Two site configs/);
+});
+
+test('a TypeScript config is reported, not ignored', () => {
+  // It used to be probed and executed, which failed for any project that
+  // installed core from npm — Node will not strip types under node_modules —
+  // and the failure was swallowed, surfacing later as a missing `site`.
+  const dir = project({ 'src/parche.config.ts': 'export default {};' });
+  assert.throws(() => resolveSiteConfigPath(dir, undefined), /must be JSON/);
+});
+
+test('an explicit path to a non-JSON config is refused by name', () => {
+  const dir = project({ 'parche.config.ts': 'export default {};' });
+  assert.throws(
+    () => resolveSiteConfigPath(dir, './parche.config.ts'),
+    /must be JSON.*parche\.config\.ts/s,
+  );
 });
 
 test('an explicit path is honoured, and a missing one resolves to null', () => {

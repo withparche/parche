@@ -7,7 +7,7 @@ import createUI from '@parche/ui';
 
 export default defineConfig({
   integrations: [
-    parche({ parches: [createPrimitives(), createUI()], config: './parche.config.ts' }),
+    parche({ parches: [createPrimitives(), createUI()], config: './src/parche.config.json' }),
     icon(),
   ],
   image: { remotePatterns: [{ protocol: 'https' }] },

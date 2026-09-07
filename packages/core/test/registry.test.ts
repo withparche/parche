@@ -17,9 +17,9 @@ function captureWarnings(fn: () => void): string[] {
   return warnings;
 }
 
-test('empty config: parche:config points at the default root file, no fullBleed', () => {
+test('empty config: parche:config points at the default file, no fullBleed', () => {
   const reg = createRegistry({ parches: [] }, ROOT);
-  assert.equal(reg.modules['parche:config'], `${ROOT}/parche.config.ts`);
+  assert.equal(reg.modules['parche:config'], `${ROOT}/src/parche.config.json`);
   assert.deepEqual(reg.fullBleedWidgets, []);
   assert.deepEqual(reg.widgetPropRequirements, []);
 });

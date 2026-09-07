@@ -29,17 +29,22 @@ parche astro new hello-parche my-app  # or name a starter directly
 
 ## Configure
 
-A site's identity lives in `parche.config.ts` — or `parche.config.json`, because it
-is plain data all the way down and a git-based CMS should be able to edit it:
+A site's identity lives in `src/parche.config.json`. It is JSON because the whole
+thing is plain data — nothing in it may be a function, an import or a class
+instance — so a git-based CMS can edit it, and core can read it before Vite
+exists:
 
-```ts
-export default defineConfig({
-  site: 'https://example.com',
-  brand: { name: 'Acme', description: 'What this site is.' },
-  metadata: { ogImage: '/og.png', twitterHandle: '@acme' },
-  i18n: { translations: { es: { brand: { description: 'Qué es este sitio.' } } } },
-});
+```json
+{
+  "site": "https://example.com",
+  "brand": { "name": "Acme", "description": "What this site is." },
+  "metadata": { "ogImage": "/og.png", "twitterHandle": "@acme" },
+  "i18n": { "translations": { "es": { "brand": { "description": "Qué es este sitio." } } } }
+}
 ```
+
+It is validated against the same schema a `defineConfig()` call used to apply, so
+an invalid config still fails the build with a clear message.
 
 `site`, `base` and `i18n` mirror Astro's own keys. Declare each in one place only —
 Parche uses Astro's when only Astro has it, feeds its own to Astro when only Parche

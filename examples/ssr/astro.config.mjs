@@ -11,7 +11,7 @@ export default defineConfig({
   output: 'server',
   adapter: node({ mode: 'standalone' }),
   integrations: [
-    parche({ parches: [createPrimitives(), createUI()], config: './parche.config.ts' }),
+    parche({ parches: [createPrimitives(), createUI()], config: './src/parche.config.json' }),
     // Scoped icon set (SSR). Parche is data-driven: widgets receive icon `name`s
     // from JSON content, so the names are dynamic and astro-icon can't tree-shake
     // by scanning code. Without `include` it bundles the ENTIRE tabler/lucide/

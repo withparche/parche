@@ -10,7 +10,7 @@ export default defineConfig({
   integrations: [
     parche({
       parches: [createPrimitives(), createUI()],
-      config: './parche.config.ts',
+      config: './src/parche.config.json',
       routes: { pages: true },
       // Register a React-backed widget. Content can now use "widget": "Counter".
       overrides: {
