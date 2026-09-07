@@ -189,6 +189,21 @@ export function createRegistry(
     }
   }
 
+  // A component supplied through `overrides` satisfies a `requires` just as a
+  // parche's does — it resolves to the same virtual module. Counting it here,
+  // before the check below, is what lets a project meet a contract with its own
+  // components instead of having to wrap them in a manifest first.
+  if (userConfig.overrides) {
+    for (const key of Object.keys(userConfig.overrides)) {
+      const [kind, ...rest] = key.split(':');
+      if (!rest.length) continue;
+      const name = rest.join('/');
+      if (kind === 'primitives') providedPrimitives.add(name);
+      else if (kind === 'widgets') providedWidgets.add(name);
+      else if (kind === 'templates') providedTemplates.add(name);
+    }
+  }
+
   if (badPaths.length) {
     console.warn('[parche] Parche path problems (these modules will fail to load):\n  - ' + badPaths.join('\n  - '));
   }

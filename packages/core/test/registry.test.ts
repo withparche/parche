@@ -77,6 +77,44 @@ test('requires: missing widget throws with attribution', () => {
   );
 });
 
+test('requires: a component supplied via overrides satisfies it', () => {
+  // Registering a component through `overrides` resolves the same virtual
+  // module a parche would provide, so it has to count. Without this, a project
+  // meeting @parche/blog's contract with its own widgets could never build —
+  // it had to wrap them in a manifest first, purely to satisfy the check.
+  let reg!: ReturnType<typeof createRegistry>;
+  captureWarnings(() => {
+    reg = createRegistry(
+      {
+        parches: [{ name: 'blog', requires: { primitives: ['Container'], widgets: ['blog/BlogList'] } }],
+        overrides: {
+          'primitives:Container': './src/primitives/Container.astro',
+          'widgets:blog:BlogList': './src/widgets/blog/BlogList.astro',
+        },
+      },
+      ROOT,
+    );
+  });
+  assert.equal(reg.modules['parche:primitives/Container'], `${ROOT}/src/primitives/Container.astro`);
+  assert.equal(reg.modules['parche:widgets/blog/BlogList'], `${ROOT}/src/widgets/blog/BlogList.astro`);
+});
+
+test('requires: an unrelated override does not satisfy it', () => {
+  assert.throws(
+    () =>
+      captureWarnings(() =>
+        createRegistry(
+          {
+            parches: [{ name: 'needs-hero', requires: { widgets: ['Hero'] } }],
+            overrides: { 'widgets:Other': './src/widgets/Other.astro' },
+          },
+          ROOT,
+        ),
+      ),
+    /needs-hero.*requires widget "Hero"/s,
+  );
+});
+
 test('requires: missing template and missing peer parche both throw', () => {
   assert.throws(
     () =>
