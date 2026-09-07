@@ -11,6 +11,35 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
 
 ## [Unreleased]
 
+### Changed
+
+- **The site config is JSON, at `src/parche.config.json`** (`366bd5d`). Shipping it
+  as `.ts` was the mistake. The site identity lives in its own file for exactly one
+  reason — so a git-based CMS can edit it, which is why nothing in it may be a
+  function, an import or a class instance — and a CMS cannot edit TypeScript. It
+  was data dressed as code. It did not work either: core reads the file during
+  `astro:config:setup`, and for anyone who installed Parche from npm the import
+  threw and was swallowed, so `site` never reached Astro and the failure surfaced
+  three steps away as a broken RSS feed. A `.ts` config is refused now, with the
+  file named, as is a copy in both `src/` and the project root. The schema still
+  validates.
+
+### Removed
+
+- **The injected `404` route, and `routes.notFoundRoute`** (`a726ef9`). Injecting
+  it was the mistake. Astro has a way to do this — a file at `src/pages/404.astro`
+  — and a framework built on Astro uses Astro's way instead of growing its own.
+  Core claims to own no routing and no design decisions; this owned both, and the
+  damage followed from that rather than the other way round. A static route cannot
+  be defined twice, so a project doing it the documented way collided with us on
+  every build. The page core shipped was hardcoded Tailwind and hardcoded English
+  that no translation mechanism could reach, so a bilingual site served "Page not
+  found" in both languages, and core could not fix that without inventing a labels
+  system that is not its job either. `routes.notFoundRoute` only ever pointed the
+  injection elsewhere and had no users; the `routes` schema is `.strict()`, so
+  passing it now fails the build naming the key. A site with no 404 of its own gets
+  the host's, which is what a plain Astro project does.
+
 ## [0.6.0] — 2026-08-23
 
 A template is a working project now, not a stencil. Only `@parche/cli` and
