@@ -10,7 +10,7 @@ export default defineConfig({
   integrations: [
     parche({
       parches: [createPrimitives(), createUI(), createBlog({ postsPerPage: 6, permalinks: { post: '/%slug%' } })],
-      config: './parche.config.ts',
+      config: './src/parche.config.json',
       routes: { pages: true },
     }),
     icon(),

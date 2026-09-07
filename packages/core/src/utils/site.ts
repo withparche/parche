@@ -4,7 +4,7 @@
  * A page translates its own title and description in frontmatter, but the
  * site-wide fallbacks — used by the blog listing, taxonomy pages, RSS channels
  * and the Open Graph defaults — had nowhere to be translated. `locales` in
- * `parche.config.ts` fills that gap; this merges it.
+ * `parche.config.json` fills that gap; this merges it.
  *
  * The merge is shallow per block and only over the fields a locale declares, so
  * the top-level values remain the default for anything left out.
@@ -26,7 +26,7 @@ export function localizeSiteConfig(config: SiteConfig, locale: string): SiteConf
  * Resolve the site URL from the two places it can be declared.
  *
  * The overlap between Astro's `site` and Parche's `site.url` is deliberate: the
- * goal is that a project can configure everything in `parche.config.ts`. What is
+ * goal is that a project can configure everything in `parche.config.json`. What is
  * not allowed is declaring it twice, because then neither is the source of truth
  * and the two can drift apart silently.
  *

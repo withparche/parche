@@ -158,8 +158,6 @@ export interface ParcheRoutesConfig {
   layouts?: Record<string, string>;
   /** Override the injected catch-all route entrypoint */
   catchAllRoute?: string;
-  /** Override the injected 404 page entrypoint */
-  notFoundRoute?: string;
   /** Override the injected middleware entrypoint */
   middleware?: string;
 }
@@ -204,7 +202,7 @@ export interface ParcheUserConfig {
   /** Override any component using namespaced keys: 'widgets:hero:Hero', 'primitives:Button', etc.
    *  Values are paths to .astro component files. */
   overrides?: Record<string, string>;
-  /** Path to user config file (default: './parche.config.ts', at project root) */
+  /** Path to the site config file (default: './src/parche.config.json'). JSON only. */
   config?: string;
   /** Parches (plugins): primitive-packs, widget-packs and apps. Order = precedence. */
   parches?: ParcheManifest[];

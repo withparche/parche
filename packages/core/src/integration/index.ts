@@ -81,7 +81,6 @@ const userConfigSchema = z
         templates: z.record(z.string(), z.string()).optional(),
         layouts: z.record(z.string(), z.string()).optional(),
         catchAllRoute: z.string().optional(),
-        notFoundRoute: z.string().optional(),
         middleware: z.string().optional(),
       })
       .strict()
@@ -233,13 +232,6 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
               ?? path.resolve(routesDir, '[...slug].astro'),
           });
 
-          // 404 page
-          injectRoute({
-            pattern: '404',
-            entrypoint: resolved.routes?.notFoundRoute
-              ?? path.resolve(routesDir, '404.astro'),
-          });
-
           // Middleware for i18n locale resolution
           addMiddleware({
             entrypoint: resolved.routes?.middleware
@@ -291,7 +283,7 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
  *   • Inline — pass `site` (and optionally metadata/seo/organization) right here.
  *     It's validated and served as `parche:config`; no separate file needed.
  *   • Separate file — omit `site` and point `config` at a file (default
- *     `./parche.config.ts` at the project root). The parches stay in
+ *     `./src/parche.config.json`). The parches stay in
  *     astro.config; everything else lives in that file (authored with
  *     `defineConfig` from `@parche/core/config`).
  *
@@ -303,7 +295,7 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
  * // astro.config.mjs
  * import parche from '@parche/core';
  * export default defineConfig({
- *   integrations: [parche({ parches: [createUI()], config: './parche.config.ts', routes: { pages: true } })],
+ *   integrations: [parche({ parches: [createUI()], config: './src/parche.config.json', routes: { pages: true } })],
  * });
  */
 export default function parche(input: ParcheConfigInput = {}): AstroIntegration {
@@ -340,7 +332,7 @@ export function prepareParcheConfig(
   }
 
   // Separate-file mode: site identity comes from `config` (or the default
-  // ./parche.config.ts). Only the robots policy is read from seo here.
+  // ./src/parche.config.json). Only the robots policy is read from seo here.
   return {
     userConfig: { ...userOpts, config: configPath },
     allowAICrawlers: allowAICrawlers as boolean,

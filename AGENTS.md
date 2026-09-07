@@ -35,7 +35,7 @@ pnpm test                      # unit tests + a build over every project
 ```
 
 Config lives in the registry, which is built once in `astro:config:setup` — so a
-change to `astro.config.mjs`, `parche.config.ts` or the set of parches **needs a dev
+change to `astro.config.mjs`, `src/parche.config.json` or the set of parches **needs a dev
 server restart**, not a reload. Content changes are served from Astro's
 `.astro/data-store.json`; if an edit does not show, delete `.astro/` and restart.
 
@@ -51,9 +51,12 @@ server restart**, not a reload. Content changes are served from Astro's
 
 Each of these was a real bug before it was a rule.
 
-- **The site config is data, all the way down.** It must survive a round trip through
-  JSON, because `parche.config.json` is supported so a git-based CMS can edit it.
-  Never put a function, an import or a class instance in it.
+- **The site config is data, all the way down.** It *is* JSON — `src/parche.config.json` —
+  so a git-based CMS can edit it. Never put a function, an import or a class
+  instance in it. A `.ts` config is refused with an error naming the file: core
+  reads this during `astro:config:setup`, and executing a `.ts` there failed for
+  every project that installed core from npm (Node will not strip types under
+  `node_modules`) while working inside this repo, where the package is a symlink.
 - **A config value has one home.** `site`, `base` and `i18n` exist in both
   `astro.config.mjs` and the Parche config. Declaring one in both is an error naming
   both places; Parche feeds its own to Astro when only Parche has it. Do not add a

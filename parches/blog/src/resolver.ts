@@ -99,9 +99,9 @@ export async function resolve(
         (await getEntry('authors', authorSlug as any));
       if (author) {
       // The author route generates its paths from the entry key (or an explicit
-      // `slug`), so links must use that — not a slugified display name.
+      // `urlSlug`), so links must use that — not a slugified display name.
       const key = author.id.includes('/') ? author.id.slice(author.id.indexOf('/') + 1) : author.id;
-      authorData.push({ ...author.data, slug: (author.data as any).slug ?? key });
+      authorData.push({ ...author.data, slug: (author.data as any).urlSlug ?? key });
     }
     } catch {
       /* author not found */

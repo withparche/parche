@@ -13,7 +13,7 @@ export default defineConfig({
       // itself to the switcher. The floating ThemePanel appears automatically
       // when more than one theme (incl. the base "Default") is available.
       parches: [createPrimitives(), createUI(), corporate(), minimal(), playful(), startup()],
-      config: './parche.config.ts',
+      config: './src/parche.config.json',
       routes: { pages: true },
     }),
     icon(),

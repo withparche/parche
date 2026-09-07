@@ -11,7 +11,7 @@ export default defineConfig({
     // Parches here; the site identity is configured in ./parche.config.ts.
     parche({
       parches: [createPrimitives(), createUI()],
-      config: './parche.config.ts',
+      config: './src/parche.config.json',
       routes: { pages: true },
     }),
     icon(),

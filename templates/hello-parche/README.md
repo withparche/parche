@@ -7,4 +7,4 @@ pnpm install
 pnpm dev
 ```
 
-Pages live in `src/content/pages`. Edit `parche.config.ts` (project root) for site settings.
+Pages live in `src/content/pages`. Edit `src/parche.config.json` for site settings.

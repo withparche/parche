@@ -9,7 +9,7 @@ export default defineConfig({
   integrations: [
     parche({
       parches: [createPrimitives(), createUI()],
-      config: './parche.config.ts',
+      config: './src/parche.config.json',
       routes: { pages: true },
     }),
     icon(),

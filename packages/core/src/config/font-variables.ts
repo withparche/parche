@@ -4,7 +4,7 @@
  * Core defines the shape and nothing else: it ships no fonts. A typeface is part
  * of a visual identity, so it belongs to whoever owns that identity — a theme
  * parche declares its fonts in its manifest, and a site can declare or override
- * them in `parche.config.ts`. Both are data, so a JSON config carries them and a
+ * them in `parche.config.json`. Both are data, so the config carries them and a
  * CMS can edit them.
  *
  * What core does provide is the fallback chain in `base.css`, so a project with

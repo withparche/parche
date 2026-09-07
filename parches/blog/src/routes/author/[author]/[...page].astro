@@ -55,7 +55,7 @@ export async function getStaticPaths() {
   const authorMaxPages = new Map<string, number>();
   for (const author of uniqueAuthors) {
     const { postKey: authorKey } = epl(author.id);
-    const slug = (author.data as any).slug ?? authorKey;
+    const slug = (author.data as any).urlSlug ?? authorKey;
     const key = slug.toLowerCase();
     for (const locale of allLocales) {
       const result = await qpa({ authorKey, locale, page: 1, pageSize, showDrafts });

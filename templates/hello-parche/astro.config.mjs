@@ -13,7 +13,7 @@ export default defineConfig({
     // (Or inline it with `site: { … }` instead of a separate file.)
     parche({
       parches: [createPrimitives(), createUI()],
-      config: './parche.config.ts',
+      config: './src/parche.config.json',
       routes: { pages: true },
     }),
     icon(),

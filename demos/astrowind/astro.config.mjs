@@ -30,7 +30,7 @@ export default defineConfig({
         }),
         astrowind(),
       ],
-      config: './parche.config.ts',
+      config: './src/parche.config.json',
       routes: { pages: true },
       // Render the theme server-side so the first paint is AstroWind, not the
       // base look. A visitor's own pick still wins on the client.

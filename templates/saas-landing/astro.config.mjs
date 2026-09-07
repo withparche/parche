@@ -18,7 +18,7 @@ export default defineConfig({
     // (ctx) => config function for env-based / multi-tenant setups.)
     parche({
       parches: [createPrimitives(), createUI()],
-      config: './parche.config.ts',
+      config: './src/parche.config.json',
       routes: { pages: true },
     }),
     // Scoped icon set (SSR). Parche is data-driven: widgets receive icon `name`s
