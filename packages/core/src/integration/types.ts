@@ -158,8 +158,6 @@ export interface ParcheRoutesConfig {
   layouts?: Record<string, string>;
   /** Override the injected catch-all route entrypoint */
   catchAllRoute?: string;
-  /** Override the injected 404 page entrypoint */
-  notFoundRoute?: string;
   /** Override the injected middleware entrypoint */
   middleware?: string;
 }

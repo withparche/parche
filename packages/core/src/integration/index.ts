@@ -81,7 +81,6 @@ const userConfigSchema = z
         templates: z.record(z.string(), z.string()).optional(),
         layouts: z.record(z.string(), z.string()).optional(),
         catchAllRoute: z.string().optional(),
-        notFoundRoute: z.string().optional(),
         middleware: z.string().optional(),
       })
       .strict()
@@ -231,13 +230,6 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
             pattern: '[...slug]',
             entrypoint: resolved.routes?.catchAllRoute
               ?? path.resolve(routesDir, '[...slug].astro'),
-          });
-
-          // 404 page
-          injectRoute({
-            pattern: '404',
-            entrypoint: resolved.routes?.notFoundRoute
-              ?? path.resolve(routesDir, '404.astro'),
           });
 
           // Middleware for i18n locale resolution
