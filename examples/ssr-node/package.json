@@ -1,5 +1,5 @@
 {
-  "name": "example-ssr",
+  "name": "example-ssr-node",
   "type": "module",
   "version": "0.0.1",
   "private": true,

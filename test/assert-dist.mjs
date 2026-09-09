@@ -17,7 +17,8 @@ const PROJECTS = {
   'examples/markdown-pages': { kind: 'static', clientJsMax: 24_000 },
   'examples/react': { kind: 'static', skipClientBudget: true }, // ships React islands
   'examples/shadcn': { kind: 'static', skipClientBudget: true }, // ships React islands
-  'examples/ssr': { kind: 'ssr', clientJsMax: 24_000 },
+  'examples/ssr-cloudflare': { kind: 'ssr', clientJsMax: 24_000 },
+  'examples/ssr-node': { kind: 'ssr', clientJsMax: 24_000 },
   'examples/themes': { kind: 'static', clientJsMax: 24_000 },
   'templates/portfolio': { kind: 'static', clientJsMax: 24_000 },
   'templates/saas-landing': {

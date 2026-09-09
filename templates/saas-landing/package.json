@@ -15,7 +15,7 @@
     "@parche/ui": "^0.6.0",
     "@iconify-json/tabler": "^1.2.38",
     "@tailwindcss/vite": "^4.3.3",
-    "astro": "^7.2.4",
+    "astro": "^7.3.2",
     "astro-icon": "^1.2.0",
     "sharp": "^0.35.3",
     "tailwindcss": "^4.3.3"

@@ -1,0 +1,25 @@
+{
+  "name": "example-ssr-cloudflare",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@parche/core": "workspace:*",
+    "@parche/primitives": "workspace:*",
+    "@parche/ui": "workspace:*",
+    "@iconify-json/tabler": "catalog:",
+    "@tailwindcss/vite": "catalog:",
+    "astro": "catalog:",
+    "astro-icon": "catalog:",
+    "tailwindcss": "catalog:"
+  },
+  "devDependencies": {
+    "@astrojs/cloudflare": "catalog:",
+    "wrangler": "catalog:"
+  }
+}

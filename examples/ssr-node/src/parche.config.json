@@ -1,7 +1,7 @@
 {
   "site": "https://example.com",
   "brand": {
-    "name": "Parche ssr Example",
+    "name": "Parche ssr-node Example",
     "description": "A minimal Parche demo."
   }
 }
