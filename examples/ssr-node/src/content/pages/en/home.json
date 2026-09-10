@@ -1,0 +1,14 @@
+{
+  "title": "A JSON page, server-rendered",
+  "description": "One page defined as data, rendered per request.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "tagline": "SSR · Node",
+        "title": "A JSON page, rendered per request",
+        "subtitle": "This page is <code>src/content/pages/en/home.json</code>. Parche's route resolves it on every request, on the Node adapter. The <a class='text-primary underline' href='/request'>/request</a> page beside it is a hand-written .astro file that imports a widget from <code>parche:widgets/*</code>."
+      }
+    }
+  ]
+}

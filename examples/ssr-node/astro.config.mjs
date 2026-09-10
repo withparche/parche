@@ -11,7 +11,13 @@ export default defineConfig({
   output: 'server',
   adapter: node({ mode: 'standalone' }),
   integrations: [
-    parche({ parches: [createPrimitives(), createUI()], config: './src/parche.config.json' }),
+    parche({
+      parches: [createPrimitives(), createUI()],
+      config: './src/parche.config.json',
+      // Pages are data: content/pages/<locale>/*.json, served by Parche's
+      // catch-all route. With output: 'server' it resolves the slug per request.
+      routes: { pages: true },
+    }),
     // Scoped icon set (SSR). Parche is data-driven: widgets receive icon `name`s
     // from JSON content, so the names are dynamic and astro-icon can't tree-shake
     // by scanning code. Without `include` it bundles the ENTIRE tabler set

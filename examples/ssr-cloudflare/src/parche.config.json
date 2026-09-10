@@ -2,6 +2,6 @@
   "site": "https://example.com",
   "brand": {
     "name": "Parche ssr-cloudflare Example",
-    "description": "A minimal Parche demo."
+    "description": "A JSON page rendered per request."
   }
 }

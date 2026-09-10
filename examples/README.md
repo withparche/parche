@@ -13,8 +13,8 @@ pnpm --filter example-<name> dev
 | `themes` | The OKLCH theme system and the floating theme panel. |
 | `custom-widget` | Registering a project-local widget via config and using it in content. |
 | `markdown-pages` | Pages authored in Markdown — `sections` in frontmatter plus a prose body. |
-| `ssr-node` | Per-request server rendering (`prerender = false`) on the Node adapter, standalone mode. |
-| `ssr-cloudflare` | The same page on the Cloudflare adapter; `dev` and `preview` run in `workerd`, configured by `wrangler.jsonc`. |
+| `ssr-node` | A JSON page served per request (`output: 'server'`) on the Node adapter, plus an `.astro` page that imports a widget from `parche:widgets/*` and shows per-request values. |
+| `ssr-cloudflare` | The same on the Cloudflare adapter, running in `workerd` via `wrangler.jsonc`; the `.astro` page also reads `Astro.request.cf`. |
 | `import-widget` | Importing a widget directly into an `.astro` page via `parche:widgets/*`. |
 | `react` | A React component registered as a Parche widget and used from JSON content. |
 | `shadcn` | Real shadcn/ui components (Button, Card, Input, Badge) themed by Parche's token bridge. |
