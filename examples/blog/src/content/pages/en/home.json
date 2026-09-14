@@ -32,7 +32,7 @@
         "items": [
           { "title": "Pages as data", "description": "Author pages as JSON/MD sections, rendered by DynamicRenderer.", "icon": "tabler:file-code" },
           { "title": "Primitives + widgets", "description": "Foundational primitives consumed via parche:primitives/*, widgets via parche:widgets/*.", "icon": "tabler:components" },
-          { "title": "Pluggable apps", "description": "Drop in @parche/blog for routes, collections and RSS.", "icon": "tabler:plug" },
+          { "title": "Pluggable apps", "description": "Drop in @parche/astro-blog for routes, collections and RSS.", "icon": "tabler:plug" },
           { "title": "OKLCH theming", "description": "A token system that reskins every widget by swapping variables.", "icon": "tabler:palette" },
           { "title": "SSR or static", "description": "Runs on any adapter Astro supports. This demo uses the Node adapter.", "icon": "tabler:server" },
           { "title": "SEO built in", "description": "Metadata, Open Graph, JSON-LD and sitemaps out of the box.", "icon": "tabler:rocket" }

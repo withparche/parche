@@ -1,5 +1,5 @@
 {
-  "name": "@parche/core",
+  "name": "@parche/astro",
   "version": "0.6.0",
   "type": "module",
   "exports": {

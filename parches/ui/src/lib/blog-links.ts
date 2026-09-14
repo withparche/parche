@@ -1,7 +1,7 @@
 /**
  * Link helpers for the homepage blog widgets (BlogLatestPosts, BlogHighlightedPosts).
  *
- * These widgets live in the ui parche, which cannot import `@parche/blog` — the
+ * These widgets live in the ui parche, which cannot import `@parche/astro-blog` — the
  * dependency runs the other way (the blog parche requires ui's `blog/*` widgets).
  * So the blog's permalink pattern is read at runtime from the `parche:app/blog`
  * virtual module, and the substitution below mirrors `resolvePostPermalink` in

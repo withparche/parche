@@ -1,4 +1,4 @@
-# @parche/core
+# @parche/astro
 
 The Parche host: the engine that turns data-driven content into Astro pages.
 

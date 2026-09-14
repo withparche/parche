@@ -10,7 +10,7 @@ export type { PostEntry, AuthorEntry, TaxonomyEntry, TaxonomyTerm } from './sche
  * Follows the same factory pattern as core's createCollections().
  *
  * Usage in content.config.ts:
- *   import { createBlogCollections } from '@parche/blog/content';
+ *   import { createBlogCollections } from '@parche/astro-blog/content';
  *   const { posts, authors } = createBlogCollections();
  *   export const collections = { ...coreCollections, posts, authors };
  */

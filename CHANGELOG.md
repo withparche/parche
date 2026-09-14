@@ -31,7 +31,7 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   provide, but the requirement check only counted what parches contributed — and
   ran before overrides were applied. So a project could not satisfy a contract
   with its own components: registering `Container`, `Section` and the eight
-  `blog/*` widgets `@parche/blog` requires still failed the build claiming they
+  `blog/*` widgets `@parche/astro-blog` requires still failed the build claiming they
   were missing, and the only way through was to wrap them in a `ParcheManifest` —
   a distribution format — purely to pass a check. Overrides are still applied
   last, so precedence is unchanged; only the tallying moves earlier.
@@ -312,7 +312,7 @@ read from there.
 both. Keep whichever you prefer: Parche reads Astro's when only Astro has it, and
 feeds its own to Astro when only Parche does.
 
-**3. Remove `fonts: parcheFonts` and its import.** `@parche/core/fonts` no longer
+**3. Remove `fonts: parcheFonts` and its import.** `@parche/astro/fonts` no longer
 exists. A project with no theme now renders in the system font stack and downloads
 nothing; to keep a web font, import a theme that declares one or declare it yourself:
 
@@ -339,10 +339,10 @@ per-request work substantially. Two changes are **breaking** for anyone on
 ### Added
 
 - **Test suite — the first regression net** (`f888c86`, `e541cd5`). Three layers on
-  `node:test` + `tsx`: **51 unit tests** across `@parche/core` (registry/requires-V2,
+  `node:test` + `tsx`: **51 unit tests** across `@parche/astro` (registry/requires-V2,
   config/extends/presets, vite-plugin generators), `@parche/cli` (slug/titleCase,
   prompt defaults, placeholder replacement, binary + `node_modules` skip) and
-  `@parche/blog` (post helpers, reading time, related-posts scoring); a
+  `@parche/astro-blog` (post helpers, reading time, related-posts scoring); a
   **build-smoke** pass (`test/assert-dist.mjs`) asserting the 0-JS-to-client
   invariant, per-project client-JS budgets, no unresolved-widget markers and the
   SSR chunk shape over 11 built projects; and a **starter** check
@@ -452,13 +452,13 @@ means removing `theme: { darkMode: true }` if you copied it from an example — 
 consumed by nothing (dark mode is driven by theme parches and `[data-theme]`).
 
 Nothing else in the public API changed shape. `parche()` is still the default export
-of `@parche/core` and still accepts the `{ parches, config, routes }` form; 0.4.0 only
+of `@parche/astro` and still accepts the `{ parches, config, routes }` form; 0.4.0 only
 adds the option of passing `site` inline in the same object.
 
 ## [0.3.0-alpha.0] — 2026-08-21
 
-First publish to npm (`@parche/core`, `@parche/primitives`, `@parche/ui`,
-`@parche/blog`, `@parche/themes`, `@parche/cli`, `create-parche`). Everything below
+First publish to npm (`@parche/astro`, `@parche/primitives`, `@parche/ui`,
+`@parche/astro-blog`, `@parche/themes`, `@parche/cli`, `create-parche`). Everything below
 landed in the repo's first day and became this release.
 
 ### Foundation (`a2e25f9` → `01b778f`)
@@ -468,7 +468,7 @@ landed in the repo's first day and became this release.
 - **Data-driven fonts** (`036112b`) — `BaseLayout` fonts declared as config, not code.
 - **Tailwind `@source` paths fixed** in `base.css` (`a693a13`).
 - **i18n example** (`d494454`), later extended with a Chinese locale (`64b9e36`).
-- **Feature examples + `@parche/core/styles` export** (`24c073c`).
+- **Feature examples + `@parche/astro/styles` export** (`24c073c`).
 - **`dynamic-widgets` renamed to `import-widget`** (`01b778f`).
 
 ### Modernization (`20aeff8` → `291abd7`)
@@ -480,7 +480,7 @@ landed in the repo's first day and became this release.
 
 ### Parches architecture (`12bbbb0` → `f5acb6c`)
 
-- **`parches/` layout** (`12bbbb0`): plugins moved out of the host; `@parche/core`
+- **`parches/` layout** (`12bbbb0`): plugins moved out of the host; `@parche/astro`
   becomes the only non-parche.
 - **Unified `parches: []` config with a provides/requires contract** (`f2fdd9a`).
   Everything that plugs into core is a parche with one manifest shape declaring what it

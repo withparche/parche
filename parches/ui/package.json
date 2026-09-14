@@ -6,7 +6,7 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@parche/core": "workspace:*",
+    "@parche/astro": "workspace:*",
     "tailwind-merge": "catalog:",
     "zod": "catalog:"
   },

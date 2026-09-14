@@ -1,4 +1,4 @@
-# @parche/blog
+# @parche/astro-blog
 
 Parche blog: routes, collections and RSS, as a parche.
 

@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import icon from 'astro-icon';
 import cloudflare from '@astrojs/cloudflare';
-import parche from '@parche/core';
+import parche from '@parche/astro';
 import createPrimitives from '@parche/primitives';
 import createUI from '@parche/ui';
 

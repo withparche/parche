@@ -9,7 +9,7 @@ confirm-first (see [How this is maintained](#how-this-is-maintained)).
 
 ## Where we are
 
-The architecture has settled. `@parche/core` is a pure engine — the host — and
+The architecture has settled. `@parche/astro` is a pure engine — the host — and
 everything else is a **parche** declaring what it provides and requires, composed
 through a single `parche({ parches: [...] })` entry with preset/`extends` support.
 Pages are data (`sections: [{ widget, props }]`) rendered through the virtual-module

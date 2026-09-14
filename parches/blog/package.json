@@ -1,5 +1,5 @@
 {
-  "name": "@parche/blog",
+  "name": "@parche/astro-blog",
   "version": "0.6.0",
   "type": "module",
   "exports": {
@@ -7,7 +7,7 @@
     "./content": "./src/content/index.ts"
   },
   "dependencies": {
-    "@parche/core": "workspace:*",
+    "@parche/astro": "workspace:*",
     "@astrojs/rss": "catalog:",
     "zod": "catalog:"
   },

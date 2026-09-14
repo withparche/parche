@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { WidgetMeta } from '@parche/core/types';
+import type { WidgetMeta } from '@parche/astro/types';
 
 const stat = z.object({
   amount: z.string().optional().meta({ placeholder: '10K+' }),

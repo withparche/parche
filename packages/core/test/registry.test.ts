@@ -80,7 +80,7 @@ test('requires: missing widget throws with attribution', () => {
 test('requires: a component supplied via overrides satisfies it', () => {
   // Registering a component through `overrides` resolves the same virtual
   // module a parche would provide, so it has to count. Without this, a project
-  // meeting @parche/blog's contract with its own widgets could never build —
+  // meeting @parche/astro-blog's contract with its own widgets could never build —
   // it had to wrap them in a manifest first, purely to satisfy the check.
   let reg!: ReturnType<typeof createRegistry>;
   captureWarnings(() => {

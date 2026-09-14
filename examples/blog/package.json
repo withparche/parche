@@ -9,8 +9,8 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "@parche/blog": "workspace:*",
-    "@parche/core": "workspace:*",
+    "@parche/astro-blog": "workspace:*",
+    "@parche/astro": "workspace:*",
     "@parche/primitives": "workspace:*",
     "@parche/ui": "workspace:*",
     "@iconify-json/tabler": "catalog:",

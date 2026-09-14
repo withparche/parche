@@ -289,7 +289,7 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
  *   • Separate file — omit `site` and point `config` at a file (default
  *     `./src/parche.config.json`). The parches stay in
  *     astro.config; everything else lives in that file (authored with
- *     `defineConfig` from `@parche/core/config`).
+ *     `defineConfig` from `@parche/astro/config`).
  *
  * The argument may also be a function of the runtime context
  * (`(ctx) => config`) for env-based / conditional / multi-tenant setups, and any
@@ -297,7 +297,7 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
  *
  * @example
  * // astro.config.mjs
- * import parche from '@parche/core';
+ * import parche from '@parche/astro';
  * export default defineConfig({
  *   integrations: [parche({ parches: [createUI()], config: './src/parche.config.json', routes: { pages: true } })],
  * });

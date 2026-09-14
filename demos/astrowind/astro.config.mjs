@@ -1,10 +1,10 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import icon from 'astro-icon';
-import parche from '@parche/core';
+import parche from '@parche/astro';
 import createPrimitives from '@parche/primitives';
 import createUI from '@parche/ui';
-import createBlog from '@parche/blog';
+import createBlog from '@parche/astro-blog';
 import { astrowind } from '@parche/themes';
 import { blogLabels } from './src/blog-labels.js';
 

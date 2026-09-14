@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { WidgetMeta } from '@parche/core/types';
+import type { WidgetMeta } from '@parche/astro/types';
 
 const ctaButton = z.object({
   variant: z.enum(['primary', 'secondary', 'tertiary', 'link']).default('primary'),

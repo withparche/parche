@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { WidgetMeta } from '@parche/core/types';
+import type { WidgetMeta } from '@parche/astro/types';
 
 const pricingItem = z.object({
   title: z.string().optional(),

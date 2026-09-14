@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@iconify-json/tabler": "^1.2.38",
-    "@parche/blog": "workspace:*",
-    "@parche/core": "workspace:*",
+    "@parche/astro-blog": "workspace:*",
+    "@parche/astro": "workspace:*",
     "@parche/primitives": "workspace:*",
     "@parche/themes": "workspace:*",
     "@parche/ui": "workspace:*",

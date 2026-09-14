@@ -1,4 +1,4 @@
-import { createCollections } from '@parche/core/content';
+import { createCollections } from '@parche/astro/content';
 
 const { pages, layouts } = createCollections();
 

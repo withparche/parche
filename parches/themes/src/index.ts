@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import type { ParcheManifest } from '@parche/core';
+import type { ParcheManifest } from '@parche/astro';
 
 /**
  * Built-in Parche themes. Each theme is a parche that contributes its override

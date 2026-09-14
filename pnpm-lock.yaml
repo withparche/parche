@@ -71,12 +71,12 @@ importers:
       '@iconify-json/tabler':
         specifier: ^1.2.38
         version: 1.2.38
-      '@parche/blog':
-        specifier: workspace:*
-        version: link:../../parches/blog
-      '@parche/core':
+      '@parche/astro':
         specifier: workspace:*
         version: link:../../packages/core
+      '@parche/astro-blog':
+        specifier: workspace:*
+        version: link:../../parches/blog
       '@parche/primitives':
         specifier: workspace:*
         version: link:../../parches/primitives
@@ -107,12 +107,12 @@ importers:
       '@iconify-json/tabler':
         specifier: 'catalog:'
         version: 1.2.38
-      '@parche/blog':
-        specifier: workspace:*
-        version: link:../../parches/blog
-      '@parche/core':
+      '@parche/astro':
         specifier: workspace:*
         version: link:../../packages/core
+      '@parche/astro-blog':
+        specifier: workspace:*
+        version: link:../../parches/blog
       '@parche/primitives':
         specifier: workspace:*
         version: link:../../parches/primitives
@@ -144,7 +144,7 @@ importers:
       '@iconify-json/tabler':
         specifier: 'catalog:'
         version: 1.2.38
-      '@parche/core':
+      '@parche/astro':
         specifier: workspace:*
         version: link:../../packages/core
       '@parche/primitives':
@@ -174,7 +174,7 @@ importers:
       '@iconify-json/tabler':
         specifier: 'catalog:'
         version: 1.2.38
-      '@parche/core':
+      '@parche/astro':
         specifier: workspace:*
         version: link:../../packages/core
       '@parche/primitives':
@@ -204,7 +204,7 @@ importers:
       '@iconify-json/tabler':
         specifier: 'catalog:'
         version: 1.2.38
-      '@parche/core':
+      '@parche/astro':
         specifier: workspace:*
         version: link:../../packages/core
       '@parche/primitives':
@@ -231,7 +231,7 @@ importers:
       '@iconify-json/tabler':
         specifier: 'catalog:'
         version: 1.2.38
-      '@parche/core':
+      '@parche/astro':
         specifier: workspace:*
         version: link:../../packages/core
       '@parche/primitives':
@@ -264,7 +264,7 @@ importers:
       '@iconify-json/tabler':
         specifier: 'catalog:'
         version: 1.2.38
-      '@parche/core':
+      '@parche/astro':
         specifier: workspace:*
         version: link:../../packages/core
       '@parche/primitives':
@@ -307,7 +307,7 @@ importers:
       '@iconify-json/tabler':
         specifier: 'catalog:'
         version: 1.2.38
-      '@parche/core':
+      '@parche/astro':
         specifier: workspace:*
         version: link:../../packages/core
       '@parche/primitives':
@@ -362,7 +362,7 @@ importers:
       '@iconify-json/tabler':
         specifier: 'catalog:'
         version: 1.2.38
-      '@parche/core':
+      '@parche/astro':
         specifier: workspace:*
         version: link:../../packages/core
       '@parche/primitives':
@@ -396,7 +396,7 @@ importers:
       '@iconify-json/tabler':
         specifier: 'catalog:'
         version: 1.2.38
-      '@parche/core':
+      '@parche/astro':
         specifier: workspace:*
         version: link:../../packages/core
       '@parche/primitives':
@@ -427,7 +427,7 @@ importers:
       '@iconify-json/tabler':
         specifier: 'catalog:'
         version: 1.2.38
-      '@parche/core':
+      '@parche/astro':
         specifier: workspace:*
         version: link:../../packages/core
       '@parche/primitives':
@@ -529,7 +529,7 @@ importers:
       '@astrojs/rss':
         specifier: 'catalog:'
         version: 4.0.19
-      '@parche/core':
+      '@parche/astro':
         specifier: workspace:*
         version: link:../../packages/core
       zod:
@@ -554,7 +554,7 @@ importers:
 
   parches/ui:
     dependencies:
-      '@parche/core':
+      '@parche/astro':
         specifier: workspace:*
         version: link:../../packages/core
       tailwind-merge:
@@ -576,7 +576,7 @@ importers:
       '@iconify-json/tabler':
         specifier: ^1.2.38
         version: 1.2.38
-      '@parche/core':
+      '@parche/astro':
         specifier: ^0.6.0
         version: link:../../packages/core
       '@parche/primitives':
@@ -610,7 +610,7 @@ importers:
       '@iconify-json/tabler':
         specifier: ^1.2.38
         version: 1.2.38
-      '@parche/core':
+      '@parche/astro':
         specifier: ^0.6.0
         version: link:../../packages/core
       '@parche/primitives':
@@ -640,7 +640,7 @@ importers:
       '@iconify-json/tabler':
         specifier: ^1.2.38
         version: 1.2.38
-      '@parche/core':
+      '@parche/astro':
         specifier: ^0.6.0
         version: link:../../packages/core
       '@parche/primitives':

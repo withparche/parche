@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { WidgetMeta } from '@parche/core/types';
+import type { WidgetMeta } from '@parche/astro/types';
 
 export const schema = z.object({
   icon: z.string().default('tabler:info-square').meta({ input: 'icon' }),

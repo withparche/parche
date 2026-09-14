@@ -9,7 +9,7 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "@parche/core": "workspace:*",
+    "@parche/astro": "workspace:*",
     "@parche/primitives": "workspace:*",
     "@parche/themes": "workspace:*",
     "@parche/ui": "workspace:*",

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { WidgetMeta } from '@parche/core/types';
+import type { WidgetMeta } from '@parche/astro/types';
 
 const link = z.object({
   label: z.string().optional().meta({ placeholder: 'Website' }),

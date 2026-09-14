@@ -208,10 +208,10 @@ export type SectionEntry = z.infer<typeof sectionSchema>;
  * Ready-to-use collections for a standard Parche project.
  *
  * Usage in content.config.ts:
- *   export { collections } from '@parche/core/content';
+ *   export { collections } from '@parche/astro/content';
  *
  * Or extend:
- *   import { createCollections, pageSchema } from '@parche/core/content';
+ *   import { createCollections, pageSchema } from '@parche/astro/content';
  *   export const collections = createCollections({
  *     pageSchema: pageSchema.extend({ author: z.string() }),
  *   });

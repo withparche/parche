@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import type { ParcheManifest } from '@parche/core';
+import type { ParcheManifest } from '@parche/astro';
 
 /**
  * The ui parche: the widget library. Section widgets are authored in page

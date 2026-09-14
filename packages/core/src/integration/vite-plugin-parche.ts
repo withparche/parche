@@ -4,7 +4,7 @@ import type { Plugin } from 'vite';
 import type { ResolvedRegistry } from './types.js';
 
 /**
- * Resolve a bare specifier to an absolute path from @parche/core's own location.
+ * Resolve a bare specifier to an absolute path from @parche/astro's own location.
  *
  * Generated virtual modules have no place on disk, so a bare `import ... from 'zod'`
  * inside one is resolved by Vite relative to the consuming project root — which under

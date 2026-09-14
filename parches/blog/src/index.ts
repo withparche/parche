@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import type { ParcheManifest } from '@parche/core';
+import type { ParcheManifest } from '@parche/astro';
 import type { BlogConfig } from './types.js';
 import { resolveBlogConfig, permalinkToRoutePattern } from './types.js';
 
@@ -24,7 +24,7 @@ function isRootLevelPermalink(permalink: string): boolean {
  * Create a blog app for Parche.
  *
  * Usage in astro.config:
- *   import createBlog from '@parche/blog';
+ *   import createBlog from '@parche/astro-blog';
  *   parche({ apps: [createBlog({ postsPerPage: 12 })] })
  *
  *   // Custom permalinks:

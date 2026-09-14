@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { metadataSchema } from '@parche/core/content';
+import { metadataSchema } from '@parche/astro/content';
 
 /**
  * Schema for blog post entries.

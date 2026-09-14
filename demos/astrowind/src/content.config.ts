@@ -1,5 +1,5 @@
-import { createCollections } from '@parche/core/content';
-import { createBlogCollections } from '@parche/blog/content';
+import { createCollections } from '@parche/astro/content';
+import { createBlogCollections } from '@parche/astro-blog/content';
 
 const { pages, layouts } = createCollections();
 const { posts, authors, taxonomies } = createBlogCollections();

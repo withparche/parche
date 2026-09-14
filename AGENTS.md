@@ -16,7 +16,7 @@ materialization.
 - `parches/*` — plugins ("parches"). Each provides primitives / widgets / routes and declares what it requires:
   - `parches/primitives` — foundational components, exposed as `parche:primitives/*`.
   - `parches/ui` — widget library (`parche:widgets/*`).
-  - `parches/blog` — app parche: routes, collections, RSS (`@parche/blog`).
+  - `parches/blog` — app parche: routes, collections, RSS (`@parche/astro-blog`).
   - `parches/themes` — theme parches (`corporate`, `minimal`, …): each contributes its `[data-theme]` CSS + switcher entry, so a site bundles only the themes it imports.
 - `packages/cli` — `@parche/cli`, the `parche` command (`parche astro new`). Built with tsup.
 - `packages/create-parche` — the `npm create parche` entry (reuses the CLI's scaffolder).
