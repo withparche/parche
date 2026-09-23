@@ -10,11 +10,11 @@ const unused = colorRoles.filter((r) => !(used[`color-${r.short}`]?.length)).map
 
 <DesignPage title="Design system" description="The design system is the set of --ds- tokens: colour roles, type styles and font roles, each with a light and a dark value. Every element and widget is styled from them and nothing else; a theme is a file that overrides them.">
   <section class="docs-ui mb-12" aria-labelledby="system">
-    <h2 id="system" class="type-h2 mb-4">The tokens: <code>--ds-*</code></h2>
+    <h2 id="system" class="type-h2 mb-4">The tokens, all prefixed <code>--ds-</code></h2>
     <div class="grid gap-4 md:grid-cols-3">
       <div class="rounded-lg border border-border bg-surface p-5">
         <p class="text-xs font-semibold uppercase tracking-wider text-muted">Colour roles</p>
-        <p class="mt-2 font-semibold text-heading"><code>--ds-color-&lt;role&gt;</code></p>
+        <p class="mt-2 font-semibold text-heading"><code>--ds-color-background</code>, <code>--ds-color-primary</code>, <code>--ds-color-muted</code> …</p>
         <p class="mt-2 text-sm text-muted">{roleCount} roles — canvas, text, surfaces, primary, status, focus, overlay — each with a light and a dark value. Bridged to Tailwind as <code>bg-surface</code>, <code>text-muted</code>, <code>outline-ring</code>. <a href="/design/colors" class="text-primary underline">Colors</a>.</p>
       </div>
       <div class="rounded-lg border border-border bg-surface p-5">
@@ -36,14 +36,14 @@ const unused = colorRoles.filter((r) => !(used[`color-${r.short}`]?.length)).map
     <div class="grid gap-4 md:grid-cols-3">
       <div class="rounded-lg border border-border p-5">
         <p class="text-xs font-semibold uppercase tracking-wider text-muted">Beneath · primitives</p>
-        <p class="mt-2 font-semibold text-heading"><code>--color-&lt;family&gt;-&lt;step&gt;</code></p>
+        <p class="mt-2 font-semibold text-heading"><code>--color-primary-500</code>, <code>--color-neutral-50</code> … <code>--color-danger-950</code></p>
         <p class="mt-2 text-sm text-muted">{ramps.length} OKLCH ramps of 11 steps that the roles point into. Raw material, not tokens of the system: nothing in an element or widget names one directly, and the contract test refuses <code>bg-green-500</code>. A theme may replace a ramp.</p>
         <p class="mt-3 text-xs text-muted"><code>tokens.css</code></p>
       </div>
       <div class="rounded-lg border border-border p-5">
         <p class="text-xs font-semibold uppercase tracking-wider text-muted">Beneath · Tailwind's scale</p>
-        <p class="mt-2 font-semibold text-heading"><code>--radius-*</code>, <code>--shadow-*</code></p>
-        <p class="mt-2 text-sm text-muted">{radii.length} radii and {shadows.length} shadows in Tailwind's theme, reached as <code>rounded-md</code> and <code>shadow-lg</code>. There is no <code>--ds-</code> token for shape today; Corporate and Minimal flatten these with a rule instead. <a href="/design/shape" class="text-primary underline">Shape</a>.</p>
+        <p class="mt-2 font-semibold text-heading"><code>{radii[0]?.name}</code> … <code>{radii[radii.length - 1]?.name}</code>, <code>{shadows[0]?.name}</code> … <code>{shadows[shadows.length - 1]?.name}</code></p>
+        <p class="mt-2 text-sm text-muted">{radii.length} radii and {shadows.length} shadows, Tailwind theme variables set by <code>tokens.css</code> and reached as <code>rounded-md</code> or <code>shadow-lg</code>. There is no <code>--ds-</code> token for shape today; Corporate and Minimal flatten these with a rule instead. <a href="/design/shape" class="text-primary underline">Shape</a>.</p>
         <p class="mt-3 text-xs text-muted"><code>tokens.css</code></p>
       </div>
       <div class="rounded-lg border border-border p-5">
