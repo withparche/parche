@@ -15,7 +15,7 @@ const leftover = colorRoles.filter((r) => !groups.some((g) => g.roles.includes(r
 if (leftover.length) groups.push({ label: 'Other', roles: leftover.map((r) => r.short) });
 ---
 
-<DesignPage title="Colors" description="The colour roles every element is painted with, their light and dark values, who uses them, and the contrast of the pairs that matter — measured live for the theme and mode chosen in the bar.">
+<DesignPage title="Colors" description="The --ds-color- roles every element is painted with: their light and dark values, who uses them, and the contrast of the pairs that matter, measured live for the theme and mode chosen in the bar.">
   <section class="mb-12" aria-labelledby="roles">
     <h2 id="roles" class="docs-ui type-h2 mb-2">Roles</h2>
     <p class="docs-ui mb-6 text-sm text-muted">The swatch is live: switch the theme or the mode in the bar and it follows. Values are what <code>semantic.css</code> declares for the default theme.</p>
@@ -72,8 +72,8 @@ if (leftover.length) groups.push({ label: 'Other', roles: leftover.map((r) => r.
   </section>
 
   <section class="mb-12" aria-labelledby="ramps">
-    <h2 id="ramps" class="docs-ui type-h2 mb-2">Primitive ramps</h2>
-    <p class="docs-ui mb-4 text-sm text-muted">Layer 1. Seven families, eleven OKLCH steps each. Roles point into these; nothing else does. A theme may replace a whole ramp.</p>
+    <h2 id="ramps" class="docs-ui type-h2 mb-2">Beneath the roles: the primitive ramps</h2>
+    <p class="docs-ui mb-4 text-sm text-muted">Not tokens of the system. <code>--color-&lt;family&gt;-&lt;step&gt;</code>: seven OKLCH families of eleven steps that some roles point into (<code>primary-soft</code> is <code>primary-50</code>, the status colours are the 700 and 400 steps). Nothing else names them, and a theme may replace a whole family. Shown here so a role's value can be read back to its source.</p>
     <div class="docs-preview rounded-lg border border-(--doc-border) p-4">
       {ramps.map((ramp) => (
         <div class="mb-4">

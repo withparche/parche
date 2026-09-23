@@ -11,7 +11,7 @@ const widths = [
 ];
 ---
 
-<DesignPage title="Shape" description="Radii, shadows and the measures. Primitives from layer 1 that elements reach through Tailwind (rounded-md, shadow-lg) and that a theme may flatten, as Corporate and Minimal do.">
+<DesignPage title="Shape" description="There is no --ds- token for shape. Elements reach Tailwind's radius and shadow scale directly (rounded-md, shadow-lg), and the measures are Tailwind's max-w steps. A theme that wants another geometry overrides --radius-* or, as Corporate and Minimal do, flattens everything with one rule. Whether shape should become roles of the system is an open question this page exists to settle.">
   <section class="mb-12" aria-labelledby="radii">
     <h2 id="radii" class="docs-ui type-h2 mb-2">Radii</h2>
     <p class="docs-ui mb-4 text-sm text-muted"><code>--radius-*</code>, bridged as <code>rounded-*</code>. Buttons and badges use <code>full</code>; cards, dialogs and inputs <code>md</code> to <code>xl</code>.</p>

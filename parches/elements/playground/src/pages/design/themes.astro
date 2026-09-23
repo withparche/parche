@@ -55,8 +55,8 @@ const summarize = (decls: Record<string, string>) => {
   </section>
 
   <section class="mb-12" aria-labelledby="shadcn">
-    <h2 id="shadcn" class="docs-ui type-h2 mb-2">shadcn/ui aliases</h2>
-    <p class="docs-ui mb-4 text-sm text-muted">{shadcnAliases.length} names shadcn components expect, each a pointer to a role or a ramp step. No second palette: a theme that overrides the roles reskins shadcn components too. Pointers into a ramp step rather than a role are the ones to review.</p>
+    <h2 id="shadcn" class="docs-ui type-h2 mb-2">Beside the system: the shadcn/ui compatibility layer</h2>
+    <p class="docs-ui mb-4 text-sm text-muted">Not tokens of the system and not used by any element. {shadcnAliases.length} names shadcn components expect, each a pointer to a role, so a shadcn component can be applied later without a second palette; a theme that overrides the roles reskins it too. The pointers that go to a ramp step instead of a role are the ones to review, because a theme that only touches roles does not move them.</p>
     <div class="docs-ui overflow-x-auto rounded-lg border border-border">
       <table class="w-full text-sm">
         <thead><tr class="text-left text-muted"><th class="px-4 py-2">shadcn</th><th class="px-4 py-2">Points to</th></tr></thead>
