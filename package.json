@@ -6,12 +6,15 @@
     "dev": "pnpm --filter example-blog dev",
     "build": "pnpm --filter example-blog build",
     "preview": "pnpm --filter example-blog preview",
-    "test": "pnpm run test:unit && pnpm run test:build",
+    "test": "pnpm run test:unit && pnpm run test:ssr && pnpm run test:build && pnpm run test:browser && pnpm run test:ssr-smoke",
     "test:unit": "node --import tsx --test packages/core/test/*.test.ts packages/cli/test/*.test.ts parches/blog/test/*.test.ts parches/elements/test/unit/*.test.ts",
     "test:build": "pnpm -r build && node test/assert-dist.mjs",
     "test:starter": "node test/build-starter.mjs",
     "templates:sync": "node scripts/sync-template-deps.mjs",
-    "templates:check": "node scripts/sync-template-deps.mjs --check"
+    "templates:check": "node scripts/sync-template-deps.mjs --check",
+    "test:ssr": "pnpm --filter @parche/elements test:ssr",
+    "test:browser": "pnpm --filter @parche/elements test:browser",
+    "test:ssr-smoke": "node test/ssr-smoke.mjs"
   },
   "packageManager": "pnpm@11.12.0",
   "devDependencies": {

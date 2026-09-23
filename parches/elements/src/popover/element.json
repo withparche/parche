@@ -1,0 +1,15 @@
+{
+  "name": "popover",
+  "type": "element",
+  "files": [
+    { "path": "Popover.astro", "type": "part" },
+    { "path": "popover.props.ts", "type": "props" },
+    { "path": "popover.element.ts", "type": "element" },
+    { "path": "popover.css", "type": "style" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": { "@oddbird/popover-polyfill": "^0.7.2", "@floating-ui/dom": "^1.8.0" },
+  "registryDependencies": ["button"],
+  "source": null
+}

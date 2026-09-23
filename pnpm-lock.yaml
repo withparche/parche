@@ -27,6 +27,9 @@ catalogs:
     '@iconify-json/tabler':
       specifier: ^1.2.38
       version: 1.2.38
+    '@oddbird/popover-polyfill':
+      specifier: ^0.7.2
+      version: 0.7.2
     '@playwright/test':
       specifier: ^1.63.0
       version: 1.63.0
@@ -45,6 +48,9 @@ catalogs:
     astro-icon:
       specifier: ^1.2.0
       version: 1.2.0
+    invokers-polyfill:
+      specifier: ^1.0.4
+      version: 1.0.4
     react:
       specifier: ^19.2.8
       version: 19.2.8
@@ -557,9 +563,15 @@ importers:
       '@floating-ui/dom':
         specifier: 'catalog:'
         version: 1.8.0
+      '@oddbird/popover-polyfill':
+        specifier: 'catalog:'
+        version: 0.7.2
       astro-icon:
         specifier: 'catalog:'
         version: 1.2.0
+      invokers-polyfill:
+        specifier: 'catalog:'
+        version: 1.0.4
       tailwind-merge:
         specifier: 'catalog:'
         version: 3.6.0
@@ -2078,6 +2090,9 @@ packages:
   '@nodable/entities@3.0.0':
     resolution: {integrity: sha512-8L9xFeTYKhm49xfIypoe2W5wV1m/3Z58kT+7kR9A8OyFxcPduI4VmxaUMQyKYrRjUoLLSXv6EKKID5Tvj9cUVw==}
 
+  '@oddbird/popover-polyfill@0.7.2':
+    resolution: {integrity: sha512-f9R6XrZEshs/5qugqNH8wAqVzwuXLsnJW+iFQnPzX+/5pEr13b5bmxDVbJWj1U+E7LKJMcSu+IFif49mgacbYQ==}
+
   '@oslojs/encoding@1.1.0':
     resolution: {integrity: sha512-70wQhgYmndg4GCPxPPxPGevRKqTIJ2Nh4OkiMWmDAVYsTQ+Ta7Sq+rPevXyXGdzr30/qZBnyOalCszoMxlyldQ==}
 
@@ -2955,6 +2970,9 @@ packages:
 
   inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
+
+  invokers-polyfill@1.0.4:
+    resolution: {integrity: sha512-mgs5JuNbd9aQ++wL3Gk2poHfZejTN9N/UlH9IGOsfkEFnPiN3A72bYf4mL/62YF0htWtaJ0WqfGdS0V6xdwywg==}
 
   iron-webcrypto@1.2.1:
     resolution: {integrity: sha512-feOM6FaSr6rEABp/eDfVseKyTMDt+KGpeB35SkVn9Tyn0CqvVsY3EwI0v5i8nMHyJnzCIQf7nsy3p41TPkJZhg==}
@@ -4946,6 +4964,8 @@ snapshots:
 
   '@nodable/entities@3.0.0': {}
 
+  '@oddbird/popover-polyfill@0.7.2': {}
+
   '@oslojs/encoding@1.1.0': {}
 
   '@oxc-project/types@0.144.0': {}
@@ -5810,6 +5830,8 @@ snapshots:
   import-meta-resolve@4.2.0: {}
 
   inherits@2.0.4: {}
+
+  invokers-polyfill@1.0.4: {}
 
   iron-webcrypto@1.2.1: {}
 

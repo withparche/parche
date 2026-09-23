@@ -109,7 +109,42 @@ pass. An element that does not pass does not land.
 
 The element module must be importable on Node and workerd: nothing touches
 `window` or `document` at module scope (the test suite imports every module
-without a DOM).
+without a DOM), and the SSR smoke (`test/ssr-smoke.mjs`) renders every
+element per request on both adapters through `/elements` in the SSR examples.
+
+### Overlays: the platform owns them
+
+Dialog, Sheet and Popover are the native `<dialog>` and `[popover]`, opened
+declaratively:
+
+- **Invokers, not wiring.** Any button anywhere with `command="show-modal"
+  commandfor={id}` opens a Dialog or Sheet; `popovertarget={id}` toggles a
+  Popover and becomes its anchor. Elements take an explicit `id` for that
+  reason: the trigger and the surface are linked by the document, not by the
+  element, so they work with no script and they survive a DOM morph.
+- **Polyfills only where missing, loaded lazily.** `invokers-polyfill` and
+  `@oddbird/popover-polyfill` are imported at run time after a feature check;
+  evergreen browsers never download them. CSS anchor positioning has no
+  polyfill: where it is absent the element positions the popover with
+  `@floating-ui/dom`, also lazy. The build budget counts these chunks apart
+  from the eager ones (`test/assert-dist.mjs`).
+- **What the element adds** is small and the same everywhere: the
+  `data-state` hook, `parche:open` / `parche:close` (cancelable) and their
+  after-events, `aria-expanded` on popover invokers, and the `closedby`
+  behaviour where the attribute is unknown. Focus trap, Escape, light dismiss
+  and focus return are the platform's.
+- **Transitions live in the element's `.css`** (`@starting-style`,
+  `allow-discrete`), under `prefers-reduced-motion: no-preference`, and never
+  carry function.
+
+### Controls: wrap the real thing
+
+Switch is `<input type="checkbox" role="switch">`, Slider is
+`<input type="range">`, Accordion is Collapsibles sharing a native
+`details name`. None has an element module: the browser owns the state, the
+keyboard and the form submission. One lesson the gate taught: a `<label>`
+that wraps both an `<output>` and an input names the output (the first
+labelable descendant), so Slider uses `<label for>`.
 
 ## Eject and copy
 

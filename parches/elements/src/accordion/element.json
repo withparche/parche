@@ -1,0 +1,28 @@
+{
+  "name": "accordion",
+  "type": "element",
+  "files": [
+    {
+      "path": "Accordion.astro",
+      "type": "part"
+    },
+    {
+      "path": "accordion.props.ts",
+      "type": "props"
+    },
+    {
+      "path": "README.md",
+      "type": "doc"
+    },
+    {
+      "path": "examples/basic.astro",
+      "type": "example"
+    }
+  ],
+  "dependencies": {},
+  "registryDependencies": [
+    "collapsible",
+    "icon"
+  ],
+  "source": null
+}

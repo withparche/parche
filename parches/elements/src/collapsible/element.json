@@ -1,0 +1,15 @@
+{
+  "name": "collapsible",
+  "type": "element",
+  "files": [
+    { "path": "Collapsible.astro", "type": "part" },
+    { "path": "collapsible.props.ts", "type": "props" },
+    { "path": "collapsible.element.ts", "type": "element" },
+    { "path": "collapsible.css", "type": "style" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["icon"],
+  "source": null
+}

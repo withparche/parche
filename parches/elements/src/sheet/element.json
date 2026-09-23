@@ -1,0 +1,15 @@
+{
+  "name": "sheet",
+  "type": "element",
+  "files": [
+    { "path": "Sheet.astro", "type": "part" },
+    { "path": "sheet.props.ts", "type": "props" },
+    { "path": "sheet.element.ts", "type": "element" },
+    { "path": "sheet.css", "type": "style" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["dialog", "icon", "button"],
+  "source": null
+}

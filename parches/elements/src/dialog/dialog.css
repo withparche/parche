@@ -1,0 +1,34 @@
+/* Dialog: lock the page scroll while a modal is up, and animate the entry and
+   exit where the platform allows it (`@starting-style` + `allow-discrete`,
+   Baseline 2024). Reduced motion: no transition. Nothing here is required for
+   function. */
+html:has(.parche-dialog > dialog:modal) {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .parche-dialog > dialog,
+  .parche-dialog > dialog::backdrop {
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      overlay 0.2s ease allow-discrete,
+      display 0.2s ease allow-discrete;
+  }
+  .parche-dialog > dialog:not([open]) {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.98);
+  }
+  .parche-dialog > dialog:not([open])::backdrop {
+    opacity: 0;
+  }
+  @starting-style {
+    .parche-dialog > dialog[open] {
+      opacity: 0;
+      transform: translateY(0.5rem) scale(0.98);
+    }
+    .parche-dialog > dialog[open]::backdrop {
+      opacity: 0;
+    }
+  }
+}

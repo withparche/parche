@@ -1,0 +1,15 @@
+/* Collapsible: animate the native disclosure where the platform allows it.
+   `::details-content` (Chromium 131+, Safari 18.4+) lets the content height
+   transition; elsewhere the content simply appears. Reduced motion: no
+   transition. Nothing here is required for function. */
+@media (prefers-reduced-motion: no-preference) {
+  .parche-collapsible details::details-content {
+    block-size: 0;
+    overflow-y: clip;
+    transition: block-size 0.2s ease, content-visibility 0.2s allow-discrete;
+  }
+  .parche-collapsible details[open]::details-content {
+    block-size: auto;
+    block-size: calc-size(auto, size);
+  }
+}

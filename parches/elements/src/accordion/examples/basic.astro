@@ -1,0 +1,15 @@
+---
+import Accordion from '../Accordion.astro';
+const items = [
+  { title: 'Is the content data?', content: '<p>Yes — a page is a list of sections and their props, in JSON.</p>', open: true },
+  { title: 'Can I swap the widgets?', content: '<p>Any widget package that keeps the schema. The contract is the schema, not the code.</p>' },
+  { title: 'Does it need JavaScript?', content: '<p>Not for this accordion: native <code>&lt;details name&gt;</code> keeps one open at a time.</p>' },
+];
+---
+
+<div class="max-w-xl">
+  <Accordion items={items} />
+</div>
+<div class="mt-8 max-w-xl">
+  <Accordion items={items.map((i) => ({ ...i, open: false }))} multiple />
+</div>

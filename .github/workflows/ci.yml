@@ -29,8 +29,11 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Unit tests (@parche/astro)
+      - name: Unit tests (@parche/astro, @parche/elements contract)
         run: pnpm run test:unit
+
+      - name: SSR render tests (@parche/elements)
+        run: pnpm run test:ssr
 
       # Templates pin concrete versions — they cannot use catalog: — so this is
       # what keeps the catalog in charge of them rather than letting them drift.
@@ -42,6 +45,19 @@ jobs:
 
       - name: Assert dist invariants (build-smoke)
         run: node test/assert-dist.mjs
+
+      # The accessibility gate: every element page of the built playground,
+      # axe WCAG 2.1 AA in Chromium, Firefox and WebKit, light and dark, plus
+      # the no-JS and reduced-motion passes and the per-element keyboard specs.
+      - name: Install Playwright browsers
+        run: pnpm --filter @parche/elements exec playwright install --with-deps
+
+      - name: Browser a11y gate (@parche/elements)
+        run: pnpm run test:browser
+
+      # Every element rendered per request on Node and on workerd.
+      - name: SSR smoke (Node + Cloudflare)
+        run: pnpm run test:ssr-smoke
 
       - name: Starter scaffold + build (hello-parche)
         run: pnpm run test:starter

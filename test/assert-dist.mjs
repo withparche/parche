@@ -7,7 +7,15 @@ import { join } from 'node:path';
 
 const ROOT = process.cwd();
 
-// Baselines measured on a good build; thresholds leave a small margin.
+// Chunks a browser downloads only when it lacks a platform feature: the
+// invoker-commands and Popover API polyfills, and the anchor-positioning
+// fallback. Budgeted apart from the eager client JS in every project.
+const LAZY = /^(floating-ui|invoker|popover-fn)\./;
+const LAZY_MAX = 40_000;
+
+// Baselines measured on a good build; thresholds leave a small margin. The
+// eager budget of a site with the ui Header includes Sheet (the dialog element)
+// and Collapsible for the mobile menu (~3 KB together).
 const PROJECTS = {
   'demos/astrowind': { kind: 'static', clientJsMax: 24_000 },
   'examples/blog': { kind: 'static', clientJsMax: 24_000 },
@@ -17,12 +25,13 @@ const PROJECTS = {
   'examples/markdown-pages': { kind: 'static', clientJsMax: 24_000 },
   'examples/react': { kind: 'static', skipClientBudget: true }, // ships React islands
   'examples/shadcn': { kind: 'static', skipClientBudget: true }, // ships React islands
-  'examples/ssr-cloudflare': { kind: 'ssr', clientJsMax: 24_000 },
-  'examples/ssr-node': { kind: 'ssr', clientJsMax: 24_000 },
+  // The SSR examples serve /elements: every interactive element's script.
+  'examples/ssr-cloudflare': { kind: 'ssr', clientJsMax: 28_000 },
+  'examples/ssr-node': { kind: 'ssr', clientJsMax: 28_000 },
   'examples/themes': { kind: 'static', clientJsMax: 24_000 },
-  // The elements playground: every element page must build; budget grows with
-  // each interactive element's declared cost (see the elements plan).
-  'parches/elements/playground': { kind: 'static', clientJsMax: 24_000 },
+  // The elements playground: every element page must build; the eager budget
+  // grows with each interactive element's declared cost (see the elements plan).
+  'parches/elements/playground': { kind: 'static', clientJsMax: 30_000 },
   'templates/portfolio': { kind: 'static', clientJsMax: 24_000 },
   'templates/saas-landing': {
     kind: 'ssr',
@@ -38,11 +47,18 @@ const WIDGET_CHUNK = /^(Hero|Hero2|HeroText|Features|Features2|Features3|Pricing
 const failures = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };
 
-function jsBytes(dir) {
+function jsBytes(dir, match = () => true) {
   if (!existsSync(dir)) return 0;
   return readdirSync(dir)
-    .filter((f) => f.endsWith('.js'))
+    .filter((f) => f.endsWith('.js') && match(f))
     .reduce((sum, f) => sum + statSync(join(dir, f)).size, 0);
+}
+
+function checkClientBudget(proj, cfg, dir) {
+  const eager = jsBytes(dir, (f) => !LAZY.test(f));
+  check(eager <= cfg.clientJsMax, `${proj}: client JS ${eager}B > ${cfg.clientJsMax}B budget (0-JS-to-client regression?)`);
+  const lazy = jsBytes(dir, (f) => LAZY.test(f));
+  check(lazy <= LAZY_MAX, `${proj}: lazy JS ${lazy}B > ${LAZY_MAX}B budget`);
 }
 
 function walkHtml(dir, acc = []) {
@@ -64,10 +80,7 @@ for (const [proj, cfg] of Object.entries(PROJECTS)) {
   if (cfg.kind === 'ssr') {
     check(existsSync(join(dist, 'server', 'entry.mjs')), `${proj}: dist/server/entry.mjs missing`);
 
-    if (!cfg.skipClientBudget) {
-      const bytes = jsBytes(join(dist, 'client', '_astro'));
-      check(bytes <= cfg.clientJsMax, `${proj}: client JS ${bytes}B > ${cfg.clientJsMax}B budget`);
-    }
+    if (!cfg.skipClientBudget) checkClientBudget(proj, cfg, join(dist, 'client', '_astro'));
 
     const chunksDir = join(dist, 'server', 'chunks');
     if (existsSync(chunksDir)) {
@@ -91,10 +104,7 @@ for (const [proj, cfg] of Object.entries(PROJECTS)) {
     const htmls = walkHtml(dist);
     check(htmls.length > 0, `${proj}: no HTML built`);
 
-    if (!cfg.skipClientBudget) {
-      const bytes = jsBytes(join(dist, '_astro'));
-      check(bytes <= cfg.clientJsMax, `${proj}: client JS ${bytes}B > ${cfg.clientJsMax}B budget (0-JS-to-client regression?)`);
-    }
+    if (!cfg.skipClientBudget) checkClientBudget(proj, cfg, join(dist, '_astro'));
 
     const withMissing = htmls.filter((h) => readFileSync(h, 'utf8').includes('data-parche-missing-widget'));
     check(withMissing.length === 0, `${proj}: ${withMissing.length} page(s) with unresolved widgets`);

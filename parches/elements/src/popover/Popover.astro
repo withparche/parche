@@ -1,0 +1,43 @@
+---
+/**
+ * Popover — the Popover API end to end. Any button with `popovertarget={id}`
+ * toggles it, and becomes its anchor: the platform handles the top layer,
+ * light dismiss, Escape and, with CSS anchor positioning, the placement. The
+ * element adds `aria-expanded` on the invokers, the state hook and events,
+ * and a positioning fallback where anchors are missing.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './popover.props';
+
+const { props: { id, title, placement, align }, rest, className } = splitProps(schema, Astro.props);
+const titleId = title ? `${id}-title` : undefined;
+const hasTrigger = Astro.slots.has('trigger');
+---
+
+<parche-popover
+  class={cn('parche-popover contents', className)}
+  data-part="root"
+  data-state="closed"
+  data-placement={placement}
+  data-align={align}
+  {...rest}
+>
+  {hasTrigger && <slot name="trigger" />}
+  <div
+    id={id}
+    popover="auto"
+    role={title ? 'dialog' : undefined}
+    aria-labelledby={titleId}
+    class="parche-popover-surface w-max max-w-xs rounded-lg border border-border bg-surface p-4 text-sm text-muted shadow-lg"
+    data-part="surface"
+  >
+    {title && <h2 id={titleId} class="mb-1 font-semibold text-heading" data-part="title" set:html={title} />}
+    <div class="parche-popover-content" data-part="content">
+      <slot />
+    </div>
+  </div>
+</parche-popover>
+
+<script>
+  import './popover.element.ts';
+</script>

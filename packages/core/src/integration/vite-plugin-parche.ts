@@ -377,12 +377,14 @@ function generateElementsModule(registry: ResolvedRegistry): string {
     if (prim.props) {
       const m = `p${i}`;
       imports.push(`import * as ${m} from ${JSON.stringify(prim.props)};`);
+      // `parts` is optional (single-part elements have none); read it through
+      // Reflect.get so Rollup does not warn about a missing named export.
       statements.push(
         `if (${m}.schema) { try { elementSchemas[${nameJson}] = { root: z.toJSONSchema(${m}.schema), parts: {} }; } ` +
         `catch (e) { console.warn(${JSON.stringify(`[parche] Skipped JSON Schema for element "${prim.name}": `)} + ((e && e.message) || e)); } }`,
       );
       statements.push(
-        `if (${m}.parts && elementSchemas[${nameJson}]) { for (const [part, def] of Object.entries(${m}.parts)) { ` +
+        `const ${m}Parts = Reflect.get(${m}, 'parts'); if (${m}Parts && elementSchemas[${nameJson}]) { for (const [part, def] of Object.entries(${m}Parts)) { ` +
         `if (def && def.schema) { try { elementSchemas[${nameJson}].parts[part] = z.toJSONSchema(def.schema); } ` +
         `catch (e) { console.warn(${JSON.stringify(`[parche] Skipped JSON Schema for element "${prim.name}" part `)} + JSON.stringify(part) + ': ' + ((e && e.message) || e)); } } } }`,
       );

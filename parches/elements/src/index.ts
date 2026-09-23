@@ -35,6 +35,14 @@ export default function createElements(): ParcheManifest {
       Skeleton: el('skeleton/Skeleton.astro'),
       Breadcrumb: el('breadcrumb/Breadcrumb.astro'),
       Pagination: el('pagination/Pagination.astro'),
+      // Interactive tier A: platform-backed (details, dialog, popover, inputs)
+      Collapsible: { entry: el('collapsible/Collapsible.astro'), style: el('collapsible/collapsible.css') },
+      Accordion: el('accordion/Accordion.astro'),
+      Switch: el('switch/Switch.astro'),
+      Slider: el('slider/Slider.astro'),
+      Dialog: { entry: el('dialog/Dialog.astro'), style: el('dialog/dialog.css') },
+      Sheet: { entry: el('sheet/Sheet.astro'), style: el('sheet/sheet.css') },
+      Popover: { entry: el('popover/Popover.astro'), style: el('popover/popover.css') },
     },
   };
 }

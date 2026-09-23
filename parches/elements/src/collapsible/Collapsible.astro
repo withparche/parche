@@ -1,0 +1,34 @@
+---
+/**
+ * Collapsible — a disclosure on native <details>/<summary>. It works with no
+ * script at all; the custom element upgrades it with the `data-state` hook,
+ * `parche:toggle` / `parche:toggled` events and the `forceOpen` media rule.
+ * `name` groups collapsibles so opening one closes the others (native
+ * `details name`, Baseline 2024) — that is what Accordion uses.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import Icon from '../icon/Icon.astro';
+import { schema, type Props } from './collapsible.props';
+
+const { props: { title, open, name, forceOpen }, rest, className } = splitProps(schema, Astro.props);
+const hasTrigger = Astro.slots.has('trigger');
+---
+
+<parche-collapsible force-open={forceOpen} data-part="root" data-state={open ? 'open' : 'closed'} class={cn('parche-collapsible block', className)} {...rest}>
+  <details class="group" open={open || undefined} name={name}>
+    <summary
+      class="parche-collapsible-trigger flex cursor-pointer list-none items-center justify-between gap-3 rounded-md py-3 text-left font-medium text-heading transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring [&::-webkit-details-marker]:hidden"
+      data-part="trigger"
+    >
+      <span class="flex-1">{hasTrigger ? <slot name="trigger" /> : title}</span>
+      <Icon name="tabler:chevron-down" size="sm" class="shrink-0 text-muted transition-transform group-open:rotate-180" data-part="indicator" />
+    </summary>
+    <div class="parche-collapsible-content pb-4 text-muted" data-part="content">
+      <slot />
+    </div>
+  </details>
+</parche-collapsible>
+
+<script>
+  import './collapsible.element.ts';
+</script>

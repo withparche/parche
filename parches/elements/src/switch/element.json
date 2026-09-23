@@ -1,0 +1,13 @@
+{
+  "name": "switch",
+  "type": "element",
+  "files": [
+    { "path": "Switch.astro", "type": "part" },
+    { "path": "switch.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": [],
+  "source": null
+}

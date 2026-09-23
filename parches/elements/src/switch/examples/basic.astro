@@ -1,0 +1,9 @@
+---
+import Switch from '../Switch.astro';
+---
+
+<div class="flex flex-col gap-4">
+  <Switch name="newsletter" label="Email me the changelog" />
+  <Switch name="analytics" label="Allow analytics" description="Privacy-friendly, no cookies." checked />
+  <Switch name="beta" label="Beta features" disabled />
+</div>

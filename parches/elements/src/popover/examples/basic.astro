@@ -1,0 +1,17 @@
+---
+import Popover from '../Popover.astro';
+import Button from '../../button/Button.astro';
+---
+
+<div class="flex flex-wrap gap-3">
+  <Popover id="example-popover">
+    <Button slot="trigger" variant="secondary" popovertarget="example-popover">Below, centred</Button>
+    <p>A small panel. Click outside or press Escape to close it.</p>
+  </Popover>
+
+  <Popover id="example-popover-titled" title="Share this page" placement="top" align="start">
+    <Button slot="trigger" variant="secondary" popovertarget="example-popover-titled">Above, with a title</Button>
+    <p class="mb-3">Copy the link or pick a network.</p>
+    <Button size="sm" popovertarget="example-popover-titled" popovertargetaction="hide">Done</Button>
+  </Popover>
+</div>

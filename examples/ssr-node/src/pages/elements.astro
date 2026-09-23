@@ -1,0 +1,23 @@
+---
+// Every element, rendered on this request. The SSR smoke (test/ssr-smoke.mjs)
+// fetches this page from the running server: proof that no element touches
+// the browser at request time.
+import '@parche/astro/styles';
+import Showcase from '@parche/elements/showcase';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Elements — Parche SSR</title>
+  </head>
+  <body>
+    <main class="mx-auto max-w-4xl px-4 py-12">
+      <h1 class="type-h1 mb-10 text-heading">Elements, server-rendered on Node</h1>
+      <Showcase />
+      <p class="mt-8 text-muted"><a class="text-primary underline" href="/">Back to the JSON page</a></p>
+    </main>
+  </body>
+</html>

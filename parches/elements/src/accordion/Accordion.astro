@@ -1,0 +1,36 @@
+---
+/**
+ * Accordion — Collapsibles sharing a native `details name`, so the browser
+ * itself keeps one open at a time: no script for the exclusivity, none for
+ * the toggling. Data-driven (`items`), because that is how widgets carry
+ * questions and answers in JSON; for hand-written markup, compose Collapsibles
+ * with a shared `name` directly.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import Collapsible from '../collapsible/Collapsible.astro';
+import Icon from '../icon/Icon.astro';
+import { schema, type Props } from './accordion.props';
+
+const { props: { items, multiple, name, forceOpen }, rest, className } = splitProps(schema, Astro.props);
+
+// A deterministic group name: stable across renders (the builder morphs the
+// DOM, the tests snapshot it), derived from the content itself.
+function hash(input: string): string {
+  let h = 5381;
+  for (let i = 0; i < input.length; i++) h = ((h << 5) + h + input.charCodeAt(i)) >>> 0;
+  return h.toString(36);
+}
+const groupName = multiple ? undefined : (name ?? `acc-${hash(items.map((i) => i.title).join('|'))}`);
+---
+
+<div class={cn('parche-accordion divide-y divide-border', className)} data-part="root" data-multiple={multiple ? '' : undefined} {...rest}>
+  {items.map((item) => (
+    <Collapsible name={groupName} open={item.open} forceOpen={forceOpen} data-part="item">
+      <span slot="trigger" class="flex items-center gap-3">
+        {item.icon && <Icon name={item.icon} size="sm" class="shrink-0 text-primary" aria-hidden="true" />}
+        <span set:html={item.title} />
+      </span>
+      <div set:html={item.content} />
+    </Collapsible>
+  ))}
+</div>

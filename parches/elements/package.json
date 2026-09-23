@@ -6,13 +6,16 @@
     ".": "./src/index.ts",
     "./utils": "./src/utils.ts",
     "./client": "./src/client.ts",
-    "./client/*": "./src/*/*.element.ts"
+    "./client/*": "./src/*/*.element.ts",
+    "./showcase": "./src/_showcase/Showcase.astro"
   },
   "dependencies": {
     "@floating-ui/dom": "catalog:",
     "astro-icon": "catalog:",
     "tailwind-merge": "catalog:",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "invokers-polyfill": "catalog:",
+    "@oddbird/popover-polyfill": "catalog:"
   },
   "peerDependencies": {
     "@parche/astro": "workspace:*",

@@ -1,0 +1,21 @@
+---
+/**
+ * Showcase — the first example of every element, in folder order. It is what
+ * the SSR examples serve at `/elements` and what the SSR smoke fetches on Node
+ * and on workerd: if any element touches `window` at request time, this page
+ * is where it breaks. Not an element: a page fragment over the examples.
+ */
+const modules = import.meta.glob<{ default: any }>('../*/examples/*.astro', { eager: true });
+const first = new Map<string, { name: string; Component: any }>();
+for (const [file, mod] of Object.entries(modules).sort(([a], [b]) => a.localeCompare(b))) {
+  const folder = file.split('/').at(-3)!;
+  if (!first.has(folder)) first.set(folder, { name: file.split('/').pop()!.replace(/\.astro$/, ''), Component: mod.default });
+}
+---
+
+{[...first].map(([folder, { name, Component }]) => (
+  <section class="mb-12" aria-labelledby={`element-${folder}`} data-element={folder} data-example={name}>
+    <h2 id={`element-${folder}`} class="type-h3 mb-4 text-heading">{folder}</h2>
+    <Component />
+  </section>
+))}

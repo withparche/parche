@@ -1,0 +1,9 @@
+---
+import Slider from '../Slider.astro';
+---
+
+<div class="flex max-w-sm flex-col gap-6">
+  <Slider name="volume" label="Volume" value={40} unit="%" />
+  <Slider name="quality" label="Image quality" min={1} max={10} value={7} />
+  <Slider name="locked" label="Locked" value={50} disabled showValue={false} />
+</div>

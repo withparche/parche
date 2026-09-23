@@ -2,6 +2,8 @@
 import Icon from 'parche:elements/Icon';
 import Button from 'parche:elements/Button';
 import Image from 'parche:elements/Image';
+import Sheet from 'parche:elements/Sheet';
+import Collapsible from 'parche:elements/Collapsible';
 import ThemeToggle from 'parche:components/ThemeToggle';
 import LocaleSwitcher from 'parche:components/LocaleSwitcher';
 
@@ -311,124 +313,89 @@ function linkType(link: HeaderLink): 'link' | 'dropdown' | 'mega' {
       )}
     </div>
 
-    <!-- Mobile menu toggle -->
-    <parche-mobile-menu>
-      <button
-        type="button"
-        class="md:hidden flex items-center justify-center w-10 h-10 text-muted hover:text-heading transition-colors cursor-pointer"
-        data-menu-toggle
-        aria-label="Toggle menu"
-        aria-expanded="false"
-      >
-        <svg data-icon="open" class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="3" y1="6" x2="21" y2="6"></line>
-          <line x1="3" y1="12" x2="21" y2="12"></line>
-          <line x1="3" y1="18" x2="21" y2="18"></line>
-        </svg>
-        <svg data-icon="close" class="w-6 h-6 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
+    <!-- Mobile menu: a Sheet opened by an invoker, the platform does the rest -->
+    <Button
+      variant="ghost"
+      size="sm"
+      class="md:hidden size-10 p-0"
+      command="show-modal"
+      commandfor="parche-mobile-menu"
+      icon="tabler:menu-2"
+      label="Open menu"
+    />
+    <Sheet id="parche-mobile-menu" title="Menu" hideTitle closeLabel="Close menu">
+      <nav class="flex flex-col" aria-label="Mobile navigation">
+        {links.map((link) => {
+          const type = linkType(link);
 
-      <!-- Mobile menu panel -->
-      <div
-        data-menu-panel
-        class="fixed left-0 right-0 top-[4.75rem] z-40 bg-surface border-t border-border translate-y-[-100%] invisible transition-[transform,visibility] duration-300 ease-out md:hidden overflow-y-auto"
-        style="height: calc(100vh - 4.75rem); height: calc(100dvh - 4.75rem);"
-      >
-        <nav class="flex flex-col px-6 py-6 gap-0" aria-label="Mobile navigation">
-          {links.map((link) => {
-            const type = linkType(link);
-
-            if (type === 'link') {
-              return (
-                <a
-                  href={link.href}
-                  class="text-lg font-medium text-muted hover:text-heading py-3 border-b border-border transition-colors no-underline"
-                  data-menu-link
-                >
-                  {link.label}
-                </a>
-              );
-            }
-
-            // Mobile accordion for dropdown / mega
+          if (type === 'link') {
             return (
-              <div class="border-b border-border" data-mobile-accordion>
-                <button
-                  type="button"
-                  class="flex items-center justify-between w-full text-lg font-medium text-muted hover:text-heading py-3 transition-colors cursor-pointer"
-                  aria-expanded="false"
-                  data-accordion-trigger
-                >
-                  <span>{link.label}</span>
-                  <svg class="w-4 h-4 transition-transform duration-200" data-accordion-chevron xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                  </svg>
-                </button>
-
-                <div class="hidden pb-3" data-accordion-panel>
-                  {(link.children ?? []).map((group) => (
-                    <div class="mb-2">
-                      {group.title && (
-                        <div class="text-xs font-semibold uppercase tracking-wider text-muted/60 px-3 py-1.5">{group.title}</div>
-                      )}
-                      {group.links.map((item) => (
-                        <a
-                          href={item.href}
-                          class="flex items-center gap-3 px-3 py-2 text-base text-muted hover:text-heading transition-colors no-underline"
-                          data-menu-link
-                        >
-                          {item.icon && <Icon name={item.icon} class="w-4 h-4 shrink-0 text-muted/60" />}
-                          <span>{item.label}</span>
-                        </a>
-                      ))}
-                    </div>
-                  ))}
-
-                  {/* Mobile featured card (compact) */}
-                  {link.mega?.featured && (
-                    <a
-                      href={link.mega.featured.href}
-                      class="flex items-center gap-3 mx-3 mt-2 p-3 rounded-lg bg-surface-hover no-underline"
-                      data-menu-link
-                    >
-                      {link.mega.featured.image && (
-                        <Image src={link.mega.featured.image} alt="" width={48} ratio="1/1" class="size-12 rounded" />
-                      )}
-                      <div>
-                        <div class="text-sm font-semibold text-heading">{link.mega.featured.title}</div>
-                        {link.mega.featured.description && (
-                          <div class="text-xs text-muted/60 mt-0.5">{link.mega.featured.description}</div>
-                        )}
-                      </div>
-                    </a>
-                  )}
-                </div>
-              </div>
+              <a
+                href={link.href}
+                class="text-lg font-medium text-muted hover:text-heading py-3 border-b border-border transition-colors no-underline"
+              >
+                {link.label}
+              </a>
             );
-          })}
-        </nav>
+          }
 
-        {/* Mobile actions */}
-        {actions.length > 0 && (
-          <div class="flex flex-col gap-2 px-6 pt-4">
-            {actions.map((action) => (
-              <Button href={action.href} variant={action.variant || 'primary'} size="md" class="w-full" data-menu-link>
-                {action.icon && <Icon name={action.icon} class="w-4 h-4" />}
-                {action.label}
-              </Button>
-            ))}
-          </div>
-        )}
+          // Dropdown / mega groups collapse into disclosures
+          return (
+            <Collapsible title={link.label} class="border-b border-border">
+              {(link.children ?? []).map((group) => (
+                <div class="mb-2">
+                  {group.title && (
+                    <div class="text-xs font-semibold uppercase tracking-wider text-muted/60 px-3 py-1.5">{group.title}</div>
+                  )}
+                  {group.links.map((item) => (
+                    <a
+                      href={item.href}
+                      class="flex items-center gap-3 px-3 py-2 text-base text-muted hover:text-heading transition-colors no-underline"
+                    >
+                      {item.icon && <Icon name={item.icon} class="w-4 h-4 shrink-0 text-muted/60" />}
+                      <span>{item.label}</span>
+                    </a>
+                  ))}
+                </div>
+              ))}
 
-        <div class="flex items-center gap-3 px-6 pt-4">
-          <LocaleSwitcher />
-          <ThemeToggle />
-        </div>
+              {/* Mobile featured card (compact) */}
+              {link.mega?.featured && (
+                <a
+                  href={link.mega.featured.href}
+                  class="flex items-center gap-3 mx-3 mt-2 p-3 rounded-lg bg-surface-hover no-underline"
+                >
+                  {link.mega.featured.image && (
+                    <Image src={link.mega.featured.image} alt="" width={48} ratio="1/1" class="size-12 rounded" />
+                  )}
+                  <div>
+                    <div class="text-sm font-semibold text-heading">{link.mega.featured.title}</div>
+                    {link.mega.featured.description && (
+                      <div class="text-xs text-muted/60 mt-0.5">{link.mega.featured.description}</div>
+                    )}
+                  </div>
+                </a>
+              )}
+            </Collapsible>
+          );
+        })}
+      </nav>
+
+      <div class="flex items-center gap-3 pt-4">
+        <LocaleSwitcher />
+        <ThemeToggle />
       </div>
-    </parche-mobile-menu>
+
+      {actions.length > 0 && (
+        <Fragment slot="footer">
+          {actions.map((action) => (
+            <Button href={action.href} variant={action.variant || 'primary'} size="md" block icon={action.icon}>
+              {action.label}
+            </Button>
+          ))}
+        </Fragment>
+      )}
+    </Sheet>
   </div>
 </header>
 
@@ -594,75 +561,6 @@ function linkType(link: HeaderLink): 'link' | 'dropdown' | 'mega' {
       });
     }
   }
-
-  // ---- Mobile menu + accordions ----
-  class ParcheMobileMenu extends HTMLElement {
-    connectedCallback() {
-      const toggle = this.querySelector('[data-menu-toggle]') as HTMLButtonElement;
-      const panel = this.querySelector('[data-menu-panel]') as HTMLElement;
-      const iconOpen = this.querySelector('[data-icon="open"]') as HTMLElement;
-      const iconClose = this.querySelector('[data-icon="close"]') as HTMLElement;
-      const links = this.querySelectorAll('[data-menu-link]');
-
-      if (!toggle || !panel) return;
-
-      let isOpen = false;
-
-      const setOpen = (open: boolean) => {
-        isOpen = open;
-        toggle.setAttribute('aria-expanded', String(open));
-        iconOpen.classList.toggle('hidden', open);
-        iconClose.classList.toggle('hidden', !open);
-
-        if (open) {
-          panel.classList.remove('translate-y-[-100%]', 'invisible');
-          panel.classList.add('translate-y-0', 'visible');
-          document.body.style.overflow = 'hidden';
-        } else {
-          panel.classList.add('translate-y-[-100%]', 'invisible');
-          panel.classList.remove('translate-y-0', 'visible');
-          document.body.style.overflow = '';
-        }
-      };
-
-      toggle.addEventListener('click', () => setOpen(!isOpen));
-
-      links.forEach((link) => {
-        link.addEventListener('click', () => setOpen(false));
-      });
-
-      // Accordions
-      this.querySelectorAll('[data-mobile-accordion]').forEach((accordion) => {
-        const accTrigger = accordion.querySelector('[data-accordion-trigger]') as HTMLButtonElement;
-        const accPanel = accordion.querySelector('[data-accordion-panel]') as HTMLElement;
-        const accChevron = accordion.querySelector('[data-accordion-chevron]') as HTMLElement;
-
-        if (!accTrigger || !accPanel) return;
-
-        accTrigger.addEventListener('click', () => {
-          const expanded = accTrigger.getAttribute('aria-expanded') === 'true';
-          accTrigger.setAttribute('aria-expanded', String(!expanded));
-          accPanel.classList.toggle('hidden', expanded);
-          accChevron?.classList.toggle('rotate-180', !expanded);
-        });
-      });
-
-      document.addEventListener('click', (e) => {
-        if (isOpen && !this.contains(e.target as Node)) {
-          setOpen(false);
-        }
-      });
-
-      document.addEventListener('keydown', (e) => {
-        if (isOpen && e.key === 'Escape') {
-          setOpen(false);
-          toggle.focus();
-        }
-      });
-    }
-  }
-
-  customElements.define('parche-mobile-menu', ParcheMobileMenu);
 
   // Init dropdowns
   ParcheDropdown.init();

@@ -63,7 +63,7 @@ export function supportsAnchorPositioning(): boolean {
 export async function positionFallback(
   anchor: HTMLElement,
   floating: HTMLElement,
-  placement: 'top' | 'bottom' | 'left' | 'right' | 'top-start' | 'bottom-start' | 'bottom-end' = 'bottom',
+  placement: `${'top' | 'bottom' | 'left' | 'right'}${'' | '-start' | '-end'}` = 'bottom',
   offsetPx = 8,
 ): Promise<() => void> {
   const { computePosition, autoUpdate, offset, flip, shift } = await import('@floating-ui/dom');

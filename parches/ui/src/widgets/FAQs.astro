@@ -1,33 +1,26 @@
 ---
 import type { Props } from './FAQs.props';
 import Heading from 'parche:elements/Heading';
-import Icon from 'parche:elements/Icon';
+import Accordion from 'parche:elements/Accordion';
 
 const { tagline, title, subtitle, items = [], columns = '2' } = Astro.props;
+
+// Accordion is the disclosure list; two columns are two accordions, each
+// exclusive on its own (a native `details name` group per column).
+const entries = items
+  .filter((item) => item.title)
+  .map((item) => ({ title: item.title!, content: item.description ?? '', icon: item.icon }));
+const half = Math.ceil(entries.length / 2);
+const groups = columns === '1' || entries.length < 2 ? [entries] : [entries.slice(0, half), entries.slice(half)];
 ---
 
 <Heading {tagline} {title} {subtitle} />
 
-<dl
+<div
   class:list={[
-    'grid gap-y-8 md:gap-y-10',
-    columns === '1' ? 'max-w-4xl mx-auto grid-cols-1' : 'grid-cols-1 md:grid-cols-2 md:gap-x-12',
+    'grid gap-x-12 gap-y-4',
+    columns === '1' ? 'max-w-4xl mx-auto grid-cols-1' : 'grid-cols-1 md:grid-cols-2',
   ]}
 >
-  {items.map(({ title: question, description: answer, icon }) => (
-    <div class="flex gap-3">
-      <Icon
-        name={icon ?? 'tabler:chevron-right'}
-        class="flex-shrink-0 mt-1 w-6 h-6 text-primary"
-      />
-      <div>
-        {question && (
-          <dt class="type-body font-semibold text-heading mb-1" set:html={question} />
-        )}
-        {answer && (
-          <dd class="type-body text-muted" set:html={answer} />
-        )}
-      </div>
-    </div>
-  ))}
-</dl>
+  {groups.map((group) => group.length > 0 && <Accordion items={group} />)}
+</div>

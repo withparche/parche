@@ -27,7 +27,11 @@ export default defineConfig({
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
     { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
     { name: 'webkit', use: { ...devices['Desktop Safari'] } },
-    { name: 'no-js', use: { ...devices['Desktop Chrome'], javaScriptEnabled: false } },
+    // No script at all: the degraded markup must work on its own. Reduced
+    // motion too, because with script disabled Chromium stops producing
+    // animation frames once a CSS transition ends, and Playwright's stability
+    // check (two equal frames) then never resolves for the next click.
+    { name: 'no-js', use: { ...devices['Desktop Chrome'], javaScriptEnabled: false, reducedMotion: 'reduce' } },
     { name: 'reduced-motion', use: { ...devices['Desktop Chrome'], reducedMotion: 'reduce' } },
   ],
 });

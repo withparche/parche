@@ -145,7 +145,9 @@ for (const { name, dir, entry, value } of folders) {
 
   test(`${name}: imports stay inside the folder, in a declared registry dependency, or on the allow-list (copy-ready)`, () => {
     const manifestPath = path.join(dir, 'element.json');
-    const deps: string[] = fs.existsSync(manifestPath) ? JSON.parse(fs.readFileSync(manifestPath, 'utf8')).registryDependencies ?? [] : [];
+    const json = fs.existsSync(manifestPath) ? JSON.parse(fs.readFileSync(manifestPath, 'utf8')) : {};
+    const deps: string[] = json.registryDependencies ?? [];
+    const npm: string[] = Object.keys(json.dependencies ?? {});
     for (const f of files.filter((f) => /\.(astro|ts)$/.test(f))) {
       const src = fs.readFileSync(f, 'utf8');
       for (const m of src.matchAll(/(?:import|from)\s+['"]([^'"]+)['"]/g)) {
@@ -159,7 +161,8 @@ for (const { name, dir, entry, value } of folders) {
           assert.ok(deps.includes(sibling), `${rel(f)} imports "${spec}" — add "${sibling}" to element.json registryDependencies`);
           continue;
         }
-        assert.ok(ALLOWED_IMPORTS.some((re) => re.test(spec)), `${rel(f)} imports "${spec}", not on the allow-list`);
+        const declared = npm.some((d) => spec === d || spec.startsWith(`${d}/`));
+        assert.ok(declared || ALLOWED_IMPORTS.some((re) => re.test(spec)), `${rel(f)} imports "${spec}", not on the allow-list nor in element.json dependencies`);
         assert.doesNotMatch(spec, /^parche:/, `${rel(f)} must not import a parche:* virtual module`);
       }
     }

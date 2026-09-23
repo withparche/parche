@@ -1,0 +1,40 @@
+---
+/**
+ * Slider — a native <input type="range">, coloured with the primary token
+ * through `accent-color`. The live value is an <output> bound to the input
+ * with `for` and a one-line inline `oninput` handler: no element, no module
+ * of ours; without script the readout simply keeps the initial value.
+ *
+ * The label does not wrap the input: <output> is labelable too, and a
+ * wrapping label would name the first labelable descendant — the output —
+ * leaving the slider nameless (caught by the browser gate).
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './slider.props';
+
+const { props: { name, label, min, max, step, value, disabled, showValue, unit }, rest, className } = splitProps(schema, Astro.props);
+const current = value ?? min;
+const id = (rest.id as string | undefined) ?? `slider-${(name ?? label).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+---
+
+<div class={cn('parche-slider flex flex-col gap-2', disabled && 'opacity-60', className)} data-part="root" {...rest}>
+  <div class="flex items-baseline justify-between text-sm">
+    <label class="parche-slider-label font-medium text-heading" data-part="label" for={id}>{label}</label>
+    {showValue && (
+      <output class="parche-slider-value tabular-nums text-muted" data-part="value" for={id} aria-hidden="true">{current}{unit}</output>
+    )}
+  </div>
+  <input
+    type="range"
+    id={id}
+    name={name}
+    min={min}
+    max={max}
+    step={step}
+    value={current}
+    disabled={disabled || undefined}
+    class="parche-slider-input h-2 w-full cursor-pointer accent-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring disabled:cursor-not-allowed"
+    data-part="input"
+    oninput={showValue ? `this.parentElement.querySelector('output').value = this.value + ${JSON.stringify(unit ?? '')}` : undefined}
+  />
+</div>

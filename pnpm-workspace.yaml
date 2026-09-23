@@ -38,6 +38,8 @@ catalog:
   "@types/react-dom": ^19.2.3
   "@iconify-json/tabler": ^1.2.38
   "@floating-ui/dom": ^1.8.0
+  invokers-polyfill: ^1.0.4
+  "@oddbird/popover-polyfill": ^0.7.2
   vitest: ^5.0.1
   "@playwright/test": ^1.63.0
   "@axe-core/playwright": ^4.13.0

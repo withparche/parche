@@ -1,0 +1,65 @@
+---
+/**
+ * Dialog — the native <dialog>, end to end. Any button anywhere on the page
+ * with `command="show-modal" commandfor={id}` opens it; the close button sends
+ * `command="close"`. The platform owns the top layer, the backdrop, the focus
+ * trap, Escape, and returning focus to the invoker. `closedby` decides light
+ * dismiss. The element polyfills commands and `closedby` only where missing.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import Icon from '../icon/Icon.astro';
+import { schema, type Props } from './dialog.props';
+
+const { props: { id, title, description, size, closedBy, closeLabel }, rest, className } = splitProps(schema, Astro.props);
+const titleId = `${id}-title`;
+const descriptionId = description ? `${id}-description` : undefined;
+const hasFooter = Astro.slots.has('footer');
+const hasTrigger = Astro.slots.has('trigger');
+const sizes = { sm: 'max-w-sm', md: 'max-w-lg', lg: 'max-w-2xl' };
+---
+
+<parche-dialog class={cn('parche-dialog contents', className)} data-part="root" data-state="closed" {...rest}>
+  {hasTrigger && <slot name="trigger" />}
+  <dialog
+    id={id}
+    closedby={closedBy}
+    aria-labelledby={titleId}
+    aria-describedby={descriptionId}
+    class={cn(
+      'parche-dialog-surface m-auto w-[calc(100%-2rem)] rounded-xl border border-border bg-surface p-0 text-foreground shadow-lg backdrop:bg-overlay',
+      sizes[size],
+    )}
+    data-part="dialog"
+  >
+    <div class="parche-dialog-panel flex max-h-[85dvh] flex-col" data-part="panel">
+      <header class="flex items-start justify-between gap-4 px-6 pt-6" data-part="header">
+        <div class="min-w-0">
+          <h2 id={titleId} class="type-h3 text-heading" data-part="title" set:html={title} />
+          {description && <p id={descriptionId} class="mt-1 text-sm text-muted" data-part="description" set:html={description} />}
+        </div>
+        <button
+          type="button"
+          command="close"
+          commandfor={id}
+          class="parche-dialog-close -m-2 shrink-0 cursor-pointer rounded-full p-2 text-muted transition-colors hover:bg-surface-hover hover:text-heading focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          data-part="close"
+          aria-label={closeLabel}
+        >
+          <Icon name="tabler:x" size="sm" aria-hidden="true" />
+        </button>
+      </header>
+      <div class="parche-dialog-content overflow-y-auto px-6 py-4 text-muted" data-part="content">
+        <slot />
+      </div>
+      {hasFooter && (
+        <footer class="flex flex-wrap justify-end gap-3 px-6 pb-6" data-part="footer">
+          <slot name="footer" />
+        </footer>
+      )}
+    </div>
+  </dialog>
+</parche-dialog>
+
+<script>
+  import './dialog.element.ts';
+</script>

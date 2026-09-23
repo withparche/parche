@@ -1,0 +1,69 @@
+---
+/**
+ * Sheet — Dialog's behaviour, docked to an edge: a modal <dialog> that fills
+ * one side of the viewport and slides in. Same invokers (`command="show-modal"
+ * commandfor={id}`), same platform focus trap, Escape and focus return. The
+ * element is Dialog's, under its own tag.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import Icon from '../icon/Icon.astro';
+import { schema, type Props } from './sheet.props';
+
+const { props: { id, title, description, side, closedBy, closeLabel, hideTitle }, rest, className } = splitProps(schema, Astro.props);
+const titleId = `${id}-title`;
+const descriptionId = description ? `${id}-description` : undefined;
+const hasFooter = Astro.slots.has('footer');
+const hasTrigger = Astro.slots.has('trigger');
+
+// The UA centres a modal dialog with `inset: 0; margin: auto`; the side is
+// what we override, the rest stays native.
+const sides = {
+  right: 'inset-y-0 right-0 left-auto h-dvh max-h-none w-full max-w-sm border-l',
+  left: 'inset-y-0 left-0 right-auto h-dvh max-h-none w-full max-w-sm border-r',
+  top: 'inset-x-0 top-0 bottom-auto w-full max-w-none max-h-[85dvh] border-b',
+  bottom: 'inset-x-0 bottom-0 top-auto w-full max-w-none max-h-[85dvh] rounded-t-xl border-t',
+};
+---
+
+<parche-sheet class={cn('parche-sheet contents', className)} data-part="root" data-state="closed" data-side={side} {...rest}>
+  {hasTrigger && <slot name="trigger" />}
+  <dialog
+    id={id}
+    closedby={closedBy}
+    aria-labelledby={titleId}
+    aria-describedby={descriptionId}
+    class={cn('parche-sheet-surface fixed m-0 border-border bg-surface p-0 text-foreground shadow-lg backdrop:bg-overlay', sides[side])}
+    data-part="dialog"
+  >
+    <div class="parche-sheet-panel flex h-full max-h-[inherit] flex-col" data-part="panel">
+      <header class={cn('flex items-start justify-between gap-4 px-6 pt-6', hideTitle && !description && 'pb-0')} data-part="header">
+        <div class="min-w-0">
+          <h2 id={titleId} class={cn('type-h3 text-heading', hideTitle && 'sr-only')} data-part="title" set:html={title} />
+          {description && <p id={descriptionId} class="mt-1 text-sm text-muted" data-part="description" set:html={description} />}
+        </div>
+        <button
+          type="button"
+          command="close"
+          commandfor={id}
+          class="parche-sheet-close -m-2 shrink-0 cursor-pointer rounded-full p-2 text-muted transition-colors hover:bg-surface-hover hover:text-heading focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          data-part="close"
+          aria-label={closeLabel}
+        >
+          <Icon name="tabler:x" size="sm" aria-hidden="true" />
+        </button>
+      </header>
+      <div class="parche-sheet-content flex-1 overflow-y-auto px-6 py-4" data-part="content">
+        <slot />
+      </div>
+      {hasFooter && (
+        <footer class="flex flex-col gap-3 px-6 pb-6" data-part="footer">
+          <slot name="footer" />
+        </footer>
+      )}
+    </div>
+  </dialog>
+</parche-sheet>
+
+<script>
+  import './sheet.element.ts';
+</script>

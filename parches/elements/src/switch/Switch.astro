@@ -1,0 +1,39 @@
+---
+/**
+ * Switch — a real <input type="checkbox" role="switch"> wrapped in its label.
+ * The browser owns the state, the form submission, the keyboard and the
+ * announced "on/off"; the track and thumb are CSS driven by `:checked`.
+ * No script.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './switch.props';
+
+const { props: { name, value, checked, disabled, label, description }, rest, className } = splitProps(schema, Astro.props);
+const hasLabel = Astro.slots.has('default');
+---
+
+<label class={cn('parche-switch inline-flex cursor-pointer items-start gap-3', disabled && 'cursor-not-allowed opacity-60', className)} data-part="root" {...rest}>
+  <input
+    type="checkbox"
+    role="switch"
+    class="peer sr-only"
+    name={name}
+    value={value}
+    checked={checked || undefined}
+    disabled={disabled || undefined}
+    data-part="input"
+  />
+  <span
+    class="parche-switch-track relative mt-0.5 inline-flex h-6 w-11 shrink-0 items-center rounded-full border border-border bg-surface transition-colors peer-checked:border-primary peer-checked:bg-primary peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ring"
+    data-part="track"
+    aria-hidden="true"
+  >
+    <span class="parche-switch-thumb absolute left-0.5 size-5 rounded-full bg-heading shadow-sm transition-transform [.peer:checked~&]:translate-x-5 [.peer:checked~&]:bg-on-primary" data-part="thumb"></span>
+  </span>
+  {(label || hasLabel || description) && (
+    <span class="flex flex-col">
+      {(label || hasLabel) && <span class="parche-switch-label text-sm font-medium text-heading" data-part="label">{hasLabel ? <slot /> : label}</span>}
+      {description && <span class="parche-switch-description text-sm text-muted" data-part="description">{description}</span>}
+    </span>
+  )}
+</label>

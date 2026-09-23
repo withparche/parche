@@ -1,0 +1,15 @@
+{
+  "name": "dialog",
+  "type": "element",
+  "files": [
+    { "path": "Dialog.astro", "type": "part" },
+    { "path": "dialog.props.ts", "type": "props" },
+    { "path": "dialog.element.ts", "type": "element" },
+    { "path": "dialog.css", "type": "style" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": { "invokers-polyfill": "^1.0.4" },
+  "registryDependencies": ["icon", "button"],
+  "source": null
+}

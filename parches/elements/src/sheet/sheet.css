@@ -1,0 +1,49 @@
+/* Sheet: lock the page scroll while open, slide in from the docked side where
+   the platform can animate the top layer. Reduced motion: no transition.
+   Nothing here is required for function. */
+html:has(.parche-sheet > dialog:modal) {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .parche-sheet > dialog,
+  .parche-sheet > dialog::backdrop {
+    transition:
+      transform 0.25s ease,
+      opacity 0.25s ease,
+      overlay 0.25s ease allow-discrete,
+      display 0.25s ease allow-discrete;
+  }
+  .parche-sheet > dialog:not([open])::backdrop {
+    opacity: 0;
+  }
+  .parche-sheet[data-side='right'] > dialog:not([open]) {
+    transform: translateX(100%);
+  }
+  .parche-sheet[data-side='left'] > dialog:not([open]) {
+    transform: translateX(-100%);
+  }
+  .parche-sheet[data-side='top'] > dialog:not([open]) {
+    transform: translateY(-100%);
+  }
+  .parche-sheet[data-side='bottom'] > dialog:not([open]) {
+    transform: translateY(100%);
+  }
+  @starting-style {
+    .parche-sheet > dialog[open]::backdrop {
+      opacity: 0;
+    }
+    .parche-sheet[data-side='right'] > dialog[open] {
+      transform: translateX(100%);
+    }
+    .parche-sheet[data-side='left'] > dialog[open] {
+      transform: translateX(-100%);
+    }
+    .parche-sheet[data-side='top'] > dialog[open] {
+      transform: translateY(-100%);
+    }
+    .parche-sheet[data-side='bottom'] > dialog[open] {
+      transform: translateY(100%);
+    }
+  }
+}

@@ -1,0 +1,16 @@
+---
+import Collapsible from '../Collapsible.astro';
+---
+
+<div class="max-w-xl divide-y divide-border">
+  <Collapsible title="What is a parche?">
+    A plugin. It contributes elements, widgets, routes or a theme, and declares what it requires.
+  </Collapsible>
+  <Collapsible title="Does it work without JavaScript?" open>
+    Yes. This is a native <code>&lt;details&gt;</code>; the script only adds the state hook and events.
+  </Collapsible>
+  <Collapsible forceOpen="(min-width: 48rem)">
+    <span slot="trigger">Open on wide screens, collapsible on narrow ones</span>
+    Resize the window: at 48rem and up this stays open and the trigger is inert.
+  </Collapsible>
+</div>
