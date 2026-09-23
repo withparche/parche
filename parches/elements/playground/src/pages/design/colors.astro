@@ -18,13 +18,13 @@ if (leftover.length) groups.push({ label: 'Other', roles: leftover.map((r) => r.
 <DesignPage title="Colors" description="The --ds-color- roles every element is painted with: their light and dark values, who uses them, and the contrast of the pairs that matter, measured live for the theme and mode chosen in the bar.">
   <section class="mb-12" aria-labelledby="roles">
     <h2 id="roles" class="docs-ui type-h2 mb-2">Roles</h2>
-    <p class="docs-ui mb-6 text-sm text-muted">The swatch is live: switch the theme or the mode in the bar and it follows. Values are what <code>semantic.css</code> declares for the default theme.</p>
+    <p class="docs-ui mb-6 text-sm text-muted">The swatch is live: switch the theme or the mode in the bar and it follows. Values are what <code>semantic.css</code> declares for the default theme. The Tailwind column lists the utilities the bridge gives every role; <code>outline-</code>, <code>ring-</code>, <code>divide-</code> and the rest exist too.</p>
     {groups.map((group) => (
       <div class="mb-8">
         <h3 class="docs-ui type-h3 mb-3">{group.label}</h3>
         <div class="docs-preview overflow-x-auto rounded-lg border border-(--doc-border) p-4">
           <table class="w-full text-sm">
-            <thead><tr class="text-left text-muted"><th class="py-1 pr-4">Swatch</th><th class="py-1 pr-4">Role</th><th class="py-1 pr-4">Utility</th><th class="py-1 pr-4">Light</th><th class="py-1 pr-4">Dark</th><th class="py-1 pr-4">Used by</th><th class="py-1">Note</th></tr></thead>
+            <thead><tr class="text-left text-muted"><th class="py-1 pr-4">Swatch</th><th class="py-1 pr-4">Token</th><th class="py-1 pr-4">Tailwind</th><th class="py-1 pr-4">Light</th><th class="py-1 pr-4">Dark</th><th class="py-1 pr-4">Used by</th><th class="py-1">Note</th></tr></thead>
             <tbody>
               {group.roles.map((short) => {
                 const r = byShort.get(short);
@@ -33,8 +33,8 @@ if (leftover.length) groups.push({ label: 'Other', roles: leftover.map((r) => r.
                 return (
                   <tr class="border-t border-border align-top">
                     <td class="py-2 pr-4"><span class="block size-8 rounded-md border border-border" style={`background: var(${r.name})`} title={r.name}></span></td>
-                    <td class="py-2 pr-4 font-mono text-heading">{short}</td>
-                    <td class="py-2 pr-4 font-mono text-muted">{r.utility ? `*-${r.utility}` : '—'}</td>
+                    <td class="py-2 pr-4 font-mono text-heading whitespace-nowrap">{r.name}</td>
+                    <td class="py-2 pr-4 font-mono text-xs text-muted whitespace-nowrap">{r.utility ? <>bg-{r.utility}<br />text-{r.utility}<br />border-{r.utility}</> : '—'}</td>
                     <td class="py-2 pr-4 font-mono text-xs text-muted">{r.light}</td>
                     <td class="py-2 pr-4 font-mono text-xs text-muted">{r.dark || '—'}</td>
                     <td class="py-2 pr-4 text-xs text-muted" title={by.join(', ')}>{by.length ? `${by.length} element${by.length > 1 ? 's' : ''}` : '—'}</td>
@@ -59,8 +59,8 @@ if (leftover.length) groups.push({ label: 'Other', roles: leftover.map((r) => r.
           {contrastPairs.map((p) => (
             <tr class="border-t border-border" data-fg={`--ds-color-${p.fg}`} data-bg={`--ds-color-${p.bg}`} data-target={p.target} data-advisory={p.advisory ? '' : undefined}>
               <td class="py-2 pr-4"><span class="inline-block rounded-md px-3 py-1 font-medium" style={`color: var(--ds-color-${p.fg}); background: var(--ds-color-${p.bg}); ${p.target === 3 && (p.fg === 'border' || p.fg === 'ring') ? `border: 2px solid var(--ds-color-${p.fg}); color: var(--ds-color-text);` : ''}`}>Aa</span></td>
-              <td class="py-2 pr-4 font-mono text-heading">{p.fg}</td>
-              <td class="py-2 pr-4 font-mono text-heading">{p.bg}</td>
+              <td class="py-2 pr-4 font-mono text-xs text-heading whitespace-nowrap">--ds-color-{p.fg}</td>
+              <td class="py-2 pr-4 font-mono text-xs text-heading whitespace-nowrap">--ds-color-{p.bg}</td>
               <td class="py-2 pr-4 text-muted">{p.where}</td>
               <td class="py-2 pr-4 text-muted">{p.target}:1{p.advisory && ' (advisory)'}</td>
               <td class="py-2 font-mono" data-ratio>…</td>
