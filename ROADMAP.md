@@ -13,14 +13,20 @@ The architecture has settled. `@parche/astro` is a pure engine — the host — 
 everything else is a **parche** declaring what it provides and requires, composed
 through a single `parche({ parches: [...] })` entry with preset/`extends` support.
 Pages are data (`sections: [{ widget, props }]`) rendered through the virtual-module
-registry. All seven packages are versioned together at `0.5.0`, three templates,
-nine examples and a full bilingual demo build in CI, and there is a regression net
-(106 unit tests + build-smoke + a starter scaffold-build).
+registry, and the site config is JSON so a CMS can edit it.
 
-0.5.0 came out of porting AstroWind: the config surface was reshaped to mirror
-Astro and to stay serialisable for a CMS, and the blog became locale-aware end to
-end. What is *not* settled remains the widget layer — and, now visibly, the
-configuration story itself, which has changed shape twice in two releases.
+The component layer has settled too. `@parche/elements` holds 48 elements built on
+the platform — `<details>`, `<dialog>` and invoker commands, the Popover API, native
+inputs — with a custom element only where there is interactivity, and
+`@parche/ui` is composed from them and ships no script of its own. Accessibility is
+a gate, not a goal: axe in three engines, light and dark, a no-JavaScript pass, a
+reduced-motion pass, SSR render tests and an SSR smoke on Node and Cloudflare all
+run in `pnpm test` and CI, next to 500 unit tests, the build-smoke over fourteen
+projects and the starter scaffold-build.
+
+What is *not* settled is the widget layer's variety — one layout per widget, the
+V2 spec still pending — and the documentation, which is a playground and a
+provisional folder until parche.dev exists.
 
 ## Next: v0.6 — trustworthy contracts, credible components
 
@@ -31,11 +37,11 @@ on the components being accessible and themeable.
 
 - [ ] `requires` validates widget **signatures**, not just presence — reusing each
       widget's `.props.ts` Zod schema, with a clear build-time error naming the parche.
-- [ ] Primitives pass an accessibility pass: focus management, ARIA, keyboard
-      interaction — no primitive relies on the shared `Action` wrapper for its a11y.
-- [ ] No hardcoded colors in primitives or widgets (e.g. Badge's `bg-green-500`), so
-      a theme parche reskins everything.
-- [ ] `0.5.0` published to npm, with the config migration documented in the
+- [x] Elements pass an accessibility pass — and keep passing: the gate runs axe,
+      keyboard, no-JS and reduced-motion specs on every element (0.7.0).
+- [x] No hardcoded colors in elements or widgets, so a theme parche reskins
+      everything; the contract test refuses a raw palette class (0.7.0).
+- [x] `0.5.0` published to npm, with the config migration documented in the
       changelog — it is the second breaking change to `parche.config.ts` in two
       releases, so the next one should be the last before the shape is frozen.
 
@@ -43,16 +49,22 @@ on the components being accessible and themeable.
 
 - [ ] `Steps` chooses its layout (`timeline` vs `grid`) independently of whether an
       image is present (BACKLOG T2/T3, med).
-- [ ] Every widget routes its CTA through the shared `Action` component — four do
-      today, the rest hand-roll the markup (BACKLOG T3, med).
+- [x] Every widget routes its CTA through one Button element (0.7.0).
 
 ## v0.7 — variety and reach
 
 - Widget spec V2: variants as separate components, the dual human/AI schema, and more
   layout variants per widget so a page can vary rhythm without relying on the
   presence or absence of an image (BACKLOG, deferred).
-- `parche astro add <widget|parche>`.
-- A documentation site.
+- `parche astro add <widget|parche>` and `parche astro eject <element>`: the
+  element folders already carry `element.json` and the copy rules the contract
+  test enforces; the CLI is what is missing.
+- The documentation site, parche.dev. The elements playground and `docs-wip/`
+  hold what it will render: per-element READMEs, examples and the catalog.
+- The second level of elements, on demand: Navigation Menu, Command palette,
+  Toggle Group, Stepper, Table, Progress, Marquee, Rating, Date picker, Tree,
+  Image Compare.
+- The new tokens (state, `ring`, `overlay`) in the builder's token editor.
 - Measure the per-request SSR cost now that the catch-all is exercised under
   `output: 'server'` (BACKLOG T1, info).
 
@@ -91,6 +103,19 @@ Decisions worth remembering, so they are not relitigated.
   `workspace:*` and `catalog:`, so neither installed anywhere but here — a
   template that cannot be copied is not a template. They pin published ranges
   now, and `linkWorkspacePackages` keeps CI building them against local code.
+- **Shadow DOM, a framework runtime, or `custom-elements.json` tooling for the
+  elements.** Light DOM so tokens and Tailwind reach the markup and
+  `aria-labelledby` can cross parts; a 60-line base class instead of Lit; docs
+  come from each element's own README, examples and `.props.ts`, not from a
+  manifest analyzer.
+- **Compound Tabs (`Tabs.Root / Tab / Panel`).** Astro has no component context,
+  so no part can know the selected value on the server without every part
+  repeating it. Tabs is data-driven (`items`, a slot per panel); Carousel is the
+  one compound element because its slides need no shared state.
+- **Autoplay in Carousel, and an anchor-positioning polyfill.** A carousel that
+  moves on its own needs a pause control and steals attention; the APG says
+  avoid it. The 160 KB anchor polyfill lost to a 15 KB lazy floating-ui fallback
+  that only browsers without anchors download.
 - **`parche astro generate` as a template command.** `new` is template-based;
   `generate` is reserved for the AI/Narrans path and stays unimplemented until then.
 

@@ -11,6 +11,58 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
 
 ## [Unreleased]
 
+### Added
+
+- **`@parche/elements`: 48 building blocks, a custom element only where there is
+  interactivity** (`d995344`, `6a52656`, `f554106`, `5b98ea8`, `5c595fa`,
+  `436a3bc`, `0954e06`). Markup is rendered complete on the server with the
+  WAI-ARIA APG roles and states already in place; tokens only; every part carries
+  `data-part`, `data-state` and a `parche-<name>-*` class, so a theme restyles an
+  element without touching it. Native first: Collapsible and Accordion on
+  `<details name>`, Dialog and Sheet on `<dialog>` and invoker commands, Popover,
+  Menu and Tooltip on the Popover API with CSS anchor positioning, Switch, Slider
+  and the form tier (Field, Label, Input, Textarea, Select, Checkbox, RadioGroup,
+  Combobox) on real inputs; Tabs, Carousel, Toast, Toc, Share, Stat, Banner and
+  AspectRatio complete the set. Polyfills and the positioning fallback load
+  lazily and only where a browser lacks the feature, and every interactive
+  element works without JavaScript in a documented form. Widgets import them as
+  `parche:elements/<Name>`; a project ejects one by copying its folder and
+  redirects the virtual id with `overrides` for widgets it cannot edit. Each
+  element folder holds its README, examples and `element.json`, the unit a
+  future `parche astro add` copies.
+
+- **The accessibility gate** (`d995344`, `f554106`). `pnpm test` and CI now run,
+  after the unit tests and the build-smoke: SSR render tests of every element,
+  axe WCAG 2.1 AA over every page of the elements playground in Chromium, Firefox
+  and WebKit, in light and dark, plus a no-JavaScript pass and a reduced-motion
+  pass with per-element keyboard specs, and an SSR smoke that starts the Node
+  example and `wrangler dev` for the Cloudflare one and renders every element per
+  request. An element that does not pass does not land; the gate found six real
+  defects on the way.
+
+- **Design tokens for state, focus and overlays** (`d995344`). `success`,
+  `warning` and `danger` with their `on-*` and `*-soft` pairs, `on-surface`,
+  `surface-hover`, `ring` and `overlay`, bridged to Tailwind as `bg-danger-soft`,
+  `outline-ring` and the rest, and `highlight` bridged at last. The dark palette
+  was corrected where the gate measured it short: muted text, primary on
+  primary-soft, highlight.
+
+- **An elements playground** (`d995344`, `0954e06`, `ce406a3`). `pnpm --filter
+  @parche/elements playground`: one page per element laid out as documentation —
+  summary and when to use it from the element's README, every example as a
+  Preview / Code pair, anatomy, keyboard, no-JS behaviour, props and tokens from
+  the `parche:registry/elements` catalog — in a fixed palette; the theme controls
+  change what is inside each Preview. It is the fixture the gate runs against.
+  Official documentation is a later step, on parche.dev.
+
+- **An SSR example on Cloudflare** (`410f761`, `f2f72d2`). `examples/ssr-cloudflare`
+  beside `examples/ssr-node`, each the smallest thing that proves the adapter:
+  one JSON page, one `.astro` page that imports a widget from the virtual module,
+  and `/elements`, which renders every element for the SSR smoke.
+
+- **`Testimonials` and `Brands` take `layout: "carousel"`** (`5b98ea8`), on the
+  Carousel element; the grid and the wrapped row stay the defaults.
+
 ### Changed
 
 - **The site config is JSON, at `src/parche.config.json`** (`366bd5d`). Shipping it
@@ -23,6 +75,29 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   three steps away as a broken RSS feed. A `.ts` config is refused now, with the
   file named, as is a copy in both `src/` and the project root. The schema still
   validates.
+
+- **`@parche/core` is `@parche/astro`, and `@parche/blog` is `@parche/astro-blog`**
+  (`3d2d86c`). Breaking. The names say what they are: the Astro integration and
+  the blog for it, leaving room for other hosts. The old packages are unpublished;
+  see [Migrating](#migrating-from-060).
+
+- **`primitives` is `elements`, everywhere** (`d995344`). Breaking. The manifest
+  key, `requires.elements`, the `parche:elements/*` virtual path, the
+  `elements:<Name>` override key and the `parche:registry/elements` catalog. One
+  word for one concept, chosen because the things are HTML elements, upgraded.
+
+- **`@parche/ui` is built on the elements and ships no script of its own**
+  (`6a52656`, `f554106`, `5b98ea8`, `436a3bc`, `2b67272`). Breaking for anyone
+  who imported its internals. The Header's navigation is Menus and a Popover, its
+  mobile menu a Sheet, its announcement a Banner and its scroll shadow a
+  scroll-driven animation; FAQs is an Accordion, Stats are Stat elements, Contact
+  and the contact template use Input, Textarea and Checkbox, the blog's table of
+  contents and share buttons are Toc and Share, and core's LocaleSwitcher,
+  ThemeSelector and ThemePanel are Menus and a Popover. `components/Action.astro`,
+  `LegacyHeadline.astro`, `LegacyWrapper.astro`, `scripts/parche-counter.ts` and
+  the hand-rolled dropdown, menu and share scripts are gone; a unit test refuses
+  any `<script>` in the ui parche. The client budget of a site with the Header
+  grows by the elements it carries, about 11 KB over Astro's router.
 
 ### Fixed
 
@@ -54,6 +129,15 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   other. The field is now `urlSlug`, matching `postSchema`, which had avoided the
   reservation all along; that inconsistency is what hid this.
 
+- **What a pass by hand over the playground found, on top of the gate**
+  (`eec8784`, `fbd13f2`). A part is scoped to its nearest `parche-*` element, so
+  a Tabs no longer hides a Dialog's panel inside its own; hidden tab panels leave
+  the tab order; a carousel with several slides per view has only the reachable
+  positions, no longer widens the whole page, and shows no controls when
+  everything fits; the combobox list sits under its input; popovers opened by
+  hover or from script anchor to their trigger, and a click on the trigger of a
+  hover-opened menu keeps it open.
+
 ### Removed
 
 - **The injected `404` route, and `routes.notFoundRoute`** (`a726ef9`). Injecting
@@ -69,6 +153,21 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   injection elsewhere and had no users; the `routes` schema is `.strict()`, so
   passing it now fails the build naming the key. A site with no 404 of its own gets
   the host's, which is what a plain Astro project does.
+
+### Migrating from 0.6.0
+
+**Packages.** `@parche/core` is `@parche/astro` and `@parche/blog` is
+`@parche/astro-blog`: change the dependency and every import, including
+`@parche/astro/types`. The old names are unpublished.
+
+**`primitives` → `elements`.** In a manifest, `primitives:` is `elements:` and
+`requires.primitives` is `requires.elements`; in a widget, `parche:primitives/X`
+is `parche:elements/X`; in `overrides`, the key `primitives:X` is `elements:X`.
+
+**`@parche/ui` internals.** `components/Action.astro` and `LegacyHeadline.astro`
+no longer exist: use `parche:elements/Button` (`tertiary` is `secondary`) and
+`parche:elements/Heading`. The ui widgets keep their schemas, so JSON pages need
+no change; `Testimonials` and `Brands` gain an optional `layout`.
 
 ## [0.6.0] — 2026-08-23
 

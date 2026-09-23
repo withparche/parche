@@ -146,12 +146,10 @@ What remains open is below.
 - **[med] `Steps` still cannot choose its layout.** Carried over from T2: it renders a
   horizontal grid without an image and a vertical timeline with one, so a work-history
   timeline has to invent an image to get the shape it wants.
-- **[med] Only four widgets use the shared `Action` component.** Hero, Hero2, HeroText
-  and CallToAction route their CTAs through it and get the focus ring and icon
-  handling; Content, Steps, Pricing and Projects hand-roll their own markup. The
-  inconsistency shows up as buttons that look almost the same.
-- **[low] `LegacyWrapper.astro` is imported by nothing.** Dead since chrome moved to
-  the ui parche.
+- **[FIXED] Only four widgets use the shared `Action` component.** Every widget's
+  CTA is the Button element now and `Action.astro` is gone (`6a52656`).
+- **[FIXED] `LegacyWrapper.astro` is imported by nothing.** Deleted with the
+  static tier (`6a52656`).
 
 ### Corrections to earlier entries
 
