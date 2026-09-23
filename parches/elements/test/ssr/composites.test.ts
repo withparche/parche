@@ -22,7 +22,7 @@ describe('Tabs', () => {
     expect(tabs[1]).toMatch(/aria-selected="false"[^>]*tabindex="-1"[^>]*disabled/);
     const id = tabs[0].match(/id="([^"]+)-tab-a"/)![1];
     expect(html).toMatch(new RegExp(`<div role="tabpanel" id="${id}-panel-a" aria-labelledby="${id}-tab-a" tabindex="0"(?! hidden)`));
-    expect(html).toMatch(new RegExp(`<div role="tabpanel" id="${id}-panel-c"[^>]* hidden="until-found"`));
+    expect(html).toMatch(new RegExp(`<div role="tabpanel" id="${id}-panel-c"[^>]*tabindex="-1" hidden="until-found"`));
     expect(html).toContain('<p>alpha</p>');
     expect(html).toContain('<p>gamma</p>');
     expect(html).toMatch(/data-part="heading"[^>]*>A</);

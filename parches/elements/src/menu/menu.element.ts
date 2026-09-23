@@ -92,6 +92,11 @@ export class ParcheMenu extends ParchePopover {
   }
 
 
+  /** The user clicked the trigger of a menu hover already opened: they mean to use it. */
+  protected keptOpen(): void {
+    this.items[0]?.focus();
+  }
+
   #typeahead(letter: string): void {
     const items = this.items;
     const from = items.indexOf(document.activeElement as HTMLElement);

@@ -23,7 +23,7 @@ const datalistId = `${id}-datalist`;
 const anchor = `--${id}-anchor`;
 ---
 
-<parche-combobox class={cn('parche-combobox block', className)} {...rootRest} data-part={part} data-state="closed" data-anchored data-placement="bottom" data-align="start">
+<parche-combobox class={cn('parche-combobox block', className)} {...rootRest} data-part={part} data-state="closed">
   <Field id={id} label={label} description={description} error={error} required={required} hideLabel={hideLabel}>
     <div class="parche-combobox-wrapper relative" data-part="wrapper" style={`anchor-name: ${anchor}`}>
       <input

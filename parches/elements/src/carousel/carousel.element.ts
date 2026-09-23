@@ -2,17 +2,22 @@ import { ParcheElement } from '@parche/elements/client';
 
 /**
  * <parche-carousel> — drives a scroll-snap track:
- * - previous / next buttons and the slide picker scroll the track to a
- *   slide; ArrowLeft / ArrowRight and Home / End on the track do the same;
- * - an IntersectionObserver tracks which slide is in view (by touch, wheel
- *   or buttons alike) and keeps `data-index`, the slides' `data-state`, the
- *   picker's `aria-current` and the buttons' `disabled` in step;
- * - `parche:changed` after the visible slide changes.
+ * - the position is the slide at the start of the track: `data-index`,
+ *   read from the scroll offset (throttled to a frame), so touch, wheel,
+ *   keyboard and the buttons all agree;
+ * - with several slides per view the last ones can never reach the start,
+ *   so only `count - perView + 1` positions exist: the surplus picker
+ *   buttons hide, and "next" disables at the last reachable position;
+ * - previous / next and the picker scroll to a position; ArrowLeft /
+ *   ArrowRight and Home / End on the track do the same;
+ * - `parche:changed` after the position changes.
  * Scrolling itself is the browser's; smooth unless motion is reduced.
  */
 export class ParcheCarousel extends ParcheElement {
   static tag = 'parche-carousel' as const;
   static observedAttributes = ['data-index'];
+
+  #frame = 0;
 
   get index(): number {
     return Number(this.dataset.index ?? 0);
@@ -26,13 +31,23 @@ export class ParcheCarousel extends ParcheElement {
     return this.part('track');
   }
 
-  /** Scroll to a slide by index (clamped). */
+  /** Slides visible at once, from the stylesheet's responsive variable. */
+  get perView(): number {
+    return Math.max(1, Number(getComputedStyle(this).getPropertyValue('--carousel-per-view')) || 1);
+  }
+
+  /** How many positions the track can snap to. */
+  get positions(): number {
+    return Math.max(1, this.slides.length - this.perView + 1);
+  }
+
+  /** Scroll so that slide `index` is first in view (clamped to a reachable position). */
   go(index: number): void {
-    const slides = this.slides;
     const track = this.track;
+    const slides = this.slides;
     if (!track || slides.length === 0) return;
-    const target = slides[Math.max(0, Math.min(slides.length - 1, index))];
-    track.scrollTo({ left: target.offsetLeft - track.offsetLeft, behavior: this.reducedMotion ? 'auto' : 'smooth' });
+    const target = slides[Math.max(0, Math.min(this.positions - 1, index))];
+    track.scrollTo({ left: target.offsetLeft - slides[0].offsetLeft, behavior: this.reducedMotion ? 'auto' : 'smooth' });
   }
 
   protected setup(signal: AbortSignal): void {
@@ -54,7 +69,7 @@ export class ParcheCarousel extends ParcheElement {
       'keydown',
       (event) => {
         if (event.target !== track) return;
-        const map: Record<string, number> = { ArrowRight: this.index + 1, ArrowLeft: this.index - 1, Home: 0, End: this.slides.length - 1 };
+        const map: Record<string, number> = { ArrowRight: this.index + 1, ArrowLeft: this.index - 1, Home: 0, End: this.positions - 1 };
         if (event.key in map) {
           event.preventDefault();
           this.go(map[event.key]);
@@ -63,36 +78,42 @@ export class ParcheCarousel extends ParcheElement {
       { signal },
     );
 
-    // The slide most in view is the current one. Threshold 0.6 so a slide
-    // half scrolled away does not flip the state back and forth.
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (!visible) return;
-        const index = Number((visible.target as HTMLElement).dataset.index);
-        if (index !== this.index) {
-          this.dataset.index = String(index); // → update()
-          this.emitted('change', { index });
-        }
-      },
-      { root: track, threshold: 0.6 },
-    );
-    for (const slide of this.slides) observer.observe(slide);
-    signal.addEventListener('abort', () => observer.disconnect());
+    // The position follows the scroll offset, whatever moved it.
+    const measure = () => {
+      this.#frame = 0;
+      const slides = this.slides;
+      if (slides.length < 2) return;
+      const step = slides[1].offsetLeft - slides[0].offsetLeft || 1;
+      const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 1;
+      const index = atEnd ? this.positions - 1 : Math.min(this.positions - 1, Math.round(track.scrollLeft / step));
+      if (index !== this.index) {
+        this.dataset.index = String(index); // → update()
+        this.emitted('change', { index });
+      }
+    };
+    const schedule = () => {
+      if (!this.#frame) this.#frame = requestAnimationFrame(measure);
+    };
+    track.addEventListener('scroll', schedule, { passive: true, signal });
+    track.addEventListener('scrollend', measure, { passive: true, signal }); // no frame needed once the scroll settles
+    window.addEventListener('resize', () => (schedule(), this.update()), { passive: true, signal });
+    signal.addEventListener('abort', () => cancelAnimationFrame(this.#frame));
   }
 
   protected update(): void {
     const index = this.index;
-    const slides = this.slides;
-    slides.forEach((slide, i) => this.setState(slide, i === index ? 'active' : 'inactive'));
-    for (const dot of this.parts('dot')) {
-      if (Number(dot.dataset.index) === index) dot.setAttribute('aria-current', 'true');
+    const positions = this.positions;
+    this.slides.forEach((slide, i) => this.setState(slide, i === index ? 'active' : 'inactive'));
+    for (const dot of this.parts<HTMLButtonElement>('dot')) {
+      const i = Number(dot.dataset.index);
+      dot.hidden = i >= positions;
+      if (i === index) dot.setAttribute('aria-current', 'true');
       else dot.removeAttribute('aria-current');
     }
     const prev = this.part<HTMLButtonElement>('prev');
     const next = this.part<HTMLButtonElement>('next');
     if (prev) prev.disabled = index <= 0;
-    if (next) next.disabled = index >= slides.length - 1;
+    if (next) next.disabled = index >= positions - 1;
   }
 }
 

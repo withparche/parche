@@ -29,7 +29,11 @@ export class ParcheStat extends ParcheElement {
         if (!entries[0].isIntersecting || this.#done) return;
         this.#done = true;
         observer.disconnect();
-        this.#count(target, raw, match[1], num, decimals, match[3]);
+        // A background tab gets no animation frames: the count would sit at
+        // zero until the tab shows. Start it when it does.
+        const start = () => this.#count(target, raw, match[1], num, decimals, match[3]);
+        if (document.hidden) document.addEventListener('visibilitychange', start, { once: true, signal });
+        else start();
       },
       { threshold: 0.3 },
     );

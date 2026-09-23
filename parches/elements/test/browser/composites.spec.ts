@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { example, jsDisabled } from './_shared';
 
 test.describe('Tabs', () => {
-  test('arrows move the selection, the panel follows, the URL syncs', async ({ page }) => {
+  test('arrows move the selection, the panel follows, the URL syncs', async ({ page, browserName }) => {
     test.skip(jsDisabled());
     await page.goto('/tabs');
     const tabs = example(page, 'basic').getByRole('tablist', { name: 'Billing period' });
@@ -19,6 +19,14 @@ test.describe('Tabs', () => {
     // The disabled tab is skipped and wrapping goes back to the first.
     await page.keyboard.press('ArrowRight');
     await expect(monthly).toBeFocused();
+    // Tab leaves the list for the visible panel's content, never a hidden panel.
+    await page.keyboard.press('Tab');
+    await expect(page.getByRole('tabpanel', { name: 'Monthly' })).toBeFocused();
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('ArrowRight');
+    // WebKit skips links on Tab unless Option is held.
+    await page.keyboard.press(browserName === 'webkit' ? 'Alt+Tab' : 'Tab');
+    await expect(page.getByRole('link', { name: 'See the terms.' })).toBeFocused();
   });
 
   test('a URL opens the page on that tab', async ({ page }) => {
@@ -62,6 +70,26 @@ test.describe('Menu', () => {
     await expect(menu).toBeHidden();
     await expect(trigger).toBeFocused();
     await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  test('hover opens it under its trigger, as the Header does', async ({ page }) => {
+    test.skip(jsDisabled());
+    await page.goto('/menu');
+    const trigger = example(page, 'basic').getByRole('button', { name: 'Product' });
+    const menu = page.locator('#example-menu');
+    await trigger.hover();
+    await expect(menu).toBeVisible();
+    const t = (await trigger.boundingBox())!;
+    const m = (await menu.boundingBox())!;
+    // Below the trigger, or above it when there is no room below.
+    expect(m.y >= t.y + t.height - 1 || m.y + m.height <= t.y + 1).toBe(true);
+    expect(Math.abs(m.x - t.x)).toBeLessThan(4);
+    // A click on the trigger keeps a hover-opened menu open; the next one closes it.
+    await trigger.click();
+    await expect(menu).toBeVisible();
+    await trigger.click();
+    await expect(menu).toBeHidden();
+    await page.mouse.move(10, 10);
   });
 
   test('ArrowDown on the trigger opens; a radio item emits parche:select and closes', async ({ page }) => {
@@ -138,6 +166,28 @@ test.describe('Carousel', () => {
     await page.keyboard.press('End');
     await expect(carousel.getByRole('button', { name: 'Slide 4' })).toHaveAttribute('aria-current', 'true');
     await expect(next).toBeDisabled();
+  });
+
+  test('with three per view only the reachable positions exist: two dots, next stops, prev returns', async ({ page }) => {
+    test.skip(jsDisabled());
+    await page.setViewportSize({ width: 1200, height: 800 });
+    await page.goto('/carousel');
+    const carousel = example(page, 'basic').getByRole('region', { name: 'What people say' });
+    const dots = carousel.locator('[data-part="dot"]:not([hidden])');
+    await expect(dots).toHaveCount(2);
+    const next = carousel.getByRole('button', { name: 'Next slide' });
+    const prev = carousel.getByRole('button', { name: 'Previous slide' });
+    await next.click();
+    await expect(carousel).toHaveAttribute('data-index', '1');
+    await expect(next).toBeDisabled();
+    await expect(carousel.getByRole('button', { name: 'Slide 2' })).toHaveAttribute('aria-current', 'true');
+    await prev.click();
+    await expect(carousel).toHaveAttribute('data-index', '0');
+    await expect(prev).toBeDisabled();
+    // Wheel scrolling moves the position too.
+    await carousel.getByRole('group', { name: 'What people say: slides' }).hover();
+    await page.mouse.wheel(800, 0);
+    await expect(carousel).toHaveAttribute('data-index', '1');
   });
 
   test('without script the track scrolls natively and the controls are hidden', async ({ page }) => {

@@ -27,12 +27,14 @@ export class ParcheTabs extends ParcheElement {
     this.select(next);
   }
 
+  // Own tabs and panels carry `data-value`; anything else with the same
+  // part name inside the panels' content is not ours.
   get tabs(): HTMLButtonElement[] {
-    return this.parts<HTMLButtonElement>('tab');
+    return this.parts<HTMLButtonElement>('tab').filter((t) => 'value' in t.dataset);
   }
 
   get panels(): HTMLElement[] {
-    return this.parts('panel');
+    return this.parts('panel').filter((p) => 'value' in p.dataset);
   }
 
   /** Select a tab by value. Returns false when unknown, disabled or vetoed. */
@@ -96,7 +98,9 @@ export class ParcheTabs extends ParcheElement {
       if (active) panel.removeAttribute('hidden');
       else panel.setAttribute('hidden', 'until-found');
       this.setState(panel, active ? 'active' : 'inactive');
-      if (active) panel.tabIndex = tabbable(panel).length ? -1 : 0;
+      // A hidden panel must not be a tab stop: `hidden="until-found"` keeps the
+      // element focusable, and focus would land on nothing visible.
+      panel.tabIndex = active && tabbable(panel).length === 0 ? 0 : -1;
     }
   }
 

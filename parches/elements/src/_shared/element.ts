@@ -78,12 +78,23 @@ export abstract class ParcheElement extends Base {
    */
   protected abstract update(): void;
 
-  /** Parts of this instance by `data-part`, excluding nested instances of the same tag. */
+  /**
+   * Parts of this instance by `data-part`. A part belongs to the nearest
+   * `parche-*` element above it, so a Dialog's `panel` inside a Tabs panel,
+   * or a Toc's `list` inside one, is never mistaken for this element's own
+   * (the gate found exactly that: Tabs hid a Dialog's panel with
+   * `until-found`). Static elements are not boundaries: a Combobox's input
+   * lives inside a Field and is still the Combobox's.
+   */
   protected parts<T extends HTMLElement = HTMLElement>(name: string): T[] {
-    const tag = (this.constructor as typeof ParcheElement).tag;
-    return Array.from(this.querySelectorAll<T>(`[data-part="${name}"]`)).filter(
-      (el) => el.closest(tag) === this,
-    );
+    return Array.from(this.querySelectorAll<T>(`[data-part="${name}"]`)).filter((el) => {
+      let p = el.parentElement;
+      while (p && p !== this) {
+        if (p.tagName.startsWith('PARCHE-')) return false;
+        p = p.parentElement;
+      }
+      return p === this;
+    });
   }
 
   /** First part of this instance by `data-part`, or null. */

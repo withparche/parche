@@ -49,8 +49,10 @@ Four cards, three per view on wide screens.
 
 ## Events
 
-`parche:changed` (`detail.index`) after the visible slide changes, whatever
-moved it. `element.go(index)` for scripts.
+`parche:changed` (`detail.index`) after the first visible slide changes,
+whatever moved it. `element.go(index)` for scripts. With several slides per
+view only `count - perView + 1` positions exist: the surplus picker buttons
+hide and "next" stops at the last reachable one.
 
 ## Without JavaScript
 

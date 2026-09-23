@@ -99,8 +99,10 @@ pass. An element that does not pass does not land.
   and are removed on disconnect; `setup(signal)` runs once, `update()` on
   connect and on every observed attribute change. State lives in attributes,
   so a DOM morph (the builder, view transitions) re-syncs the element for free.
-- `parts(name)` / `part(name)` find this instance's parts by `data-part`,
-  excluding nested instances of the same tag.
+- `parts(name)` / `part(name)` find this instance's parts by `data-part`.
+  A part belongs to the nearest `parche-*` element above it, so a Dialog's
+  `panel` inside a Tabs panel is never mistaken for the Tabs' own; static
+  elements (a Field around a Combobox's input) are not boundaries.
 - `emit('change')` dispatches `parche:change` (bubbling, cancelable);
   `emitted('change')` the non-cancelable `parche:changed` after.
 - No shadow DOM, no templates, no framework runtime. Native first:

@@ -83,10 +83,11 @@ test.describe('Popover', () => {
     if (!jsDisabled()) {
       await expect(trigger).toHaveAttribute('aria-expanded', 'true');
       await expect(surface.locator('xpath=..')).toHaveAttribute('data-state', 'open');
-      // Anchored under the trigger: either the platform's anchor positioning or the fallback.
+      // Anchored to the trigger (below, or above when there is no room below):
+      // either the platform's anchor positioning or the fallback.
       const t = (await trigger.boundingBox())!;
       const s = (await surface.boundingBox())!;
-      expect(s.y).toBeGreaterThanOrEqual(t.y + t.height);
+      expect(s.y >= t.y + t.height - 1 || s.y + s.height <= t.y + 1).toBe(true);
     }
     await page.keyboard.press('Escape');
     await expect(surface).toBeHidden();

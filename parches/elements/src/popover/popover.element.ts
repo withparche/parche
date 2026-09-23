@@ -30,6 +30,7 @@ export class ParchePopover extends ParcheElement {
 
   #stop: (() => void) | null = null;
   #hoverTimer: ReturnType<typeof setTimeout> | null = null;
+  #openedByHover = false;
 
   get surface(): HTMLElement | null {
     return this.querySelector(':scope > [popover]');
@@ -54,7 +55,16 @@ export class ParchePopover extends ParcheElement {
   }
 
   show(): void {
-    this.surface?.showPopover();
+    const surface = this.surface;
+    if (!surface) return;
+    // `source` makes the invoker the implicit anchor (and the light-dismiss
+    // ancestor) for opens from script or hover, as a click would; older
+    // engines ignore the option or throw on it, hence the fallback.
+    try {
+      surface.showPopover({ source: this.invokers[0] ?? undefined } as Parameters<HTMLElement['showPopover']>[0]);
+    } catch {
+      surface.showPopover();
+    }
   }
 
   hide(): void {
@@ -76,6 +86,16 @@ export class ParchePopover extends ParcheElement {
     if (!surface) return;
 
     void polyfillPopover();
+
+    // An explicit anchor on the first invoker, so the placement grammar
+    // works however the popover was opened (click, hover, script); `anchor`
+    // names another element instead.
+    const invoker = this.invokers[0];
+    if (invoker && !this.hasAttribute('anchor') && surface.id) {
+      const name = `--parche-anchor-${surface.id}`;
+      invoker.style.setProperty('anchor-name', name);
+      surface.style.setProperty('position-anchor', name);
+    }
 
     surface.addEventListener(
       'beforetoggle',
@@ -108,7 +128,10 @@ export class ParchePopover extends ParcheElement {
           'pointerenter',
           () => {
             cancel();
-            if (!this.open) this.show();
+            if (!this.open) {
+              this.#openedByHover = true;
+              this.show();
+            }
           },
           { signal },
         );
@@ -121,11 +144,36 @@ export class ParchePopover extends ParcheElement {
           { signal },
         );
       }
+      // A click on the trigger while hover already opened it would toggle it
+      // shut: the first click keeps it open, the next one closes it.
+      for (const invoker of this.invokers) {
+        invoker.addEventListener(
+          'click',
+          (event) => {
+            if (this.open && this.#openedByHover) {
+              event.preventDefault();
+              this.#openedByHover = false;
+              this.keptOpen();
+            }
+          },
+          { signal },
+        );
+      }
+      surface.addEventListener(
+        'toggle',
+        (event) => {
+          if ((event as ToggleEvent).newState === 'closed') this.#openedByHover = false;
+        },
+        { signal },
+      );
       signal.addEventListener('abort', cancel);
     }
 
     signal.addEventListener('abort', () => this.#release());
   }
+
+  /** A click on the trigger kept a hover-opened surface open; subclasses may move focus in. */
+  protected keptOpen(): void {}
 
   protected update(): void {
     const open = this.open;

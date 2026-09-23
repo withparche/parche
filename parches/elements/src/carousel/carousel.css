@@ -23,6 +23,12 @@
 .parche-carousel > [data-part='track'] {
   gap: var(--carousel-gap);
   scrollbar-width: none;
+  /* A single-line flex track's min-content width is the sum of its slides,
+     and that intrinsic size climbs up through any flex or grid ancestor with
+     `min-width: auto` until the page overflows sideways. Inline-size
+     containment makes the track's contribution zero: it is only ever as wide
+     as its container. */
+  contain: inline-size;
 }
 .parche-carousel [data-part='slide'] {
   flex-basis: calc((100% - (var(--carousel-per-view) - 1) * var(--carousel-gap)) / var(--carousel-per-view));

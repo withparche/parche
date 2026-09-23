@@ -45,7 +45,7 @@ export const meta = defineElement({
       { name: 'prev', element: 'button' },
       { name: 'next', element: 'button' },
       { name: 'dots', element: 'div', role: 'group' },
-      { name: 'dot', element: 'button' },
+      { name: 'dot', element: 'button', description: 'One per reachable position; surplus ones hide when several slides share the view.' },
     ],
   },
 });
