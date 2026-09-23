@@ -11,6 +11,13 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
 
 ## [Unreleased]
 
+## [0.7.0] — 2026-09-23
+
+The component layer: `@parche/elements`, 48 elements built on the platform with
+accessibility as a gate, and `@parche/ui` composed from them with no script of its
+own. Breaking three times over — the package names, `primitives` → `elements`,
+and the ui internals — see [Migrating](#migrating-from-060).
+
 ### Added
 
 - **`@parche/elements`: 48 building blocks, a custom element only where there is
@@ -694,7 +701,8 @@ templates shipped in core, and were extracted to the ui parche later (`4af1d90`)
 of the bootstrap — this project was built to be worked on with coding agents from the
 first commit.
 
-[Unreleased]: https://github.com/withparche/parche/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/withparche/parche/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/withparche/parche/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/withparche/parche/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/withparche/parche/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/withparche/parche/compare/v0.4.0...v0.5.0
