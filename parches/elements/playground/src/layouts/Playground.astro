@@ -25,6 +25,15 @@ const { title, description } = Astro.props;
 const metadata = { title: `${title} — ${config.brand.name}`, description: description ?? config.brand.description };
 const nav = grouped(elementIndex.map((e) => e.name));
 const current = Astro.url.pathname.replace(/\/$/, '');
+const designPages = [
+  { href: '/design', label: 'Overview' },
+  { href: '/design/colors', label: 'Colors' },
+  { href: '/design/typography', label: 'Typography' },
+  { href: '/design/shape', label: 'Shape' },
+  { href: '/design/themes', label: 'Themes' },
+];
+const link = (href: string) =>
+  `block rounded-md px-2 py-1 text-sm no-underline transition-colors ${current === href ? 'bg-primary-soft font-medium text-heading' : 'text-muted hover:bg-surface-hover hover:text-heading'}`;
 const linkClass = (name: string) =>
   `block rounded-md px-2 py-1 text-sm no-underline transition-colors ${current === `/${name.toLowerCase()}` ? 'bg-primary-soft font-medium text-heading' : 'text-muted hover:bg-surface-hover hover:text-heading'}`;
 ---
@@ -50,6 +59,14 @@ const linkClass = (name: string) =>
   <div class="mx-auto grid w-full max-w-7xl gap-10 px-4 py-8 lg:grid-cols-[14rem_minmax(0,1fr)]">
     <aside class="docs-ui hidden lg:block">
       <nav aria-label="Elements" class="sticky top-16 max-h-[calc(100vh-5rem)] overflow-y-auto pr-2">
+        <div class="mb-5">
+          <p class="mb-1 px-2 text-xs font-semibold uppercase tracking-wider text-muted">Design system</p>
+          <ul>
+            {designPages.map((p) => (
+              <li><a href={p.href} class={link(p.href)} aria-current={current === p.href ? 'page' : undefined}>{p.label}</a></li>
+            ))}
+          </ul>
+        </div>
         {nav.map((group) => (
           <div class="mb-5">
             <p class="mb-1 px-2 text-xs font-semibold uppercase tracking-wider text-muted">{group.label}</p>
@@ -70,6 +87,10 @@ const linkClass = (name: string) =>
 
   <Sheet id="playground-nav" title="Elements" side="left" closeLabel="Close navigation" class="docs-ui">
     <nav aria-label="Elements" class="-mt-2">
+      <div class="mb-4">
+        <p class="mb-1 text-xs font-semibold uppercase tracking-wider text-muted">Design system</p>
+        <ul>{designPages.map((p) => <li><a href={p.href} class={link(p.href)}>{p.label}</a></li>)}</ul>
+      </div>
       {nav.map((group) => (
         <div class="mb-4">
           <p class="mb-1 text-xs font-semibold uppercase tracking-wider text-muted">{group.label}</p>

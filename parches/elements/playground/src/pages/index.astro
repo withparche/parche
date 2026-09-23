@@ -12,7 +12,7 @@ const byName = new Map(elementIndex.map((e) => [e.name, e]));
   <h1 class="type-h1 mb-2">Elements</h1>
   <p class="type-body text-muted mb-10 max-w-2xl">
     {elementIndex.length} building blocks on tokens and the platform: server-rendered, accessible by contract, a custom element only where there is interactivity.
-    This playground is the accessibility test fixture.
+    This playground is the accessibility test fixture. The <a href="/design" class="text-primary underline">design system</a> pages document the tokens they are painted with.
   </p>
   {nav.map((group) => (
     <section class="mb-10" aria-labelledby={`g-${group.label.toLowerCase().replace(/\s+/g, '-')}`}>

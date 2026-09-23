@@ -1,0 +1,140 @@
+---
+import DesignPage from '../../components/DesignPage.astro';
+import { elementMeta } from 'parche:registry/elements';
+import { ramps, colorRoles, contrastPairs, usage } from '../../lib/tokens';
+
+const used = usage(elementMeta as any);
+const groups = [
+  { label: 'Canvas and text', roles: ['background', 'foreground', 'text', 'heading', 'muted', 'highlight'] },
+  { label: 'Surfaces', roles: ['surface', 'surface-hover', 'on-surface', 'border', 'overlay'] },
+  { label: 'Primary', roles: ['primary', 'on-primary', 'primary-soft', 'ring'] },
+  { label: 'Status', roles: ['success', 'on-success', 'success-soft', 'warning', 'on-warning', 'warning-soft', 'danger', 'on-danger', 'danger-soft'] },
+];
+const byShort = new Map(colorRoles.map((r) => [r.short, r]));
+const leftover = colorRoles.filter((r) => !groups.some((g) => g.roles.includes(r.short)));
+if (leftover.length) groups.push({ label: 'Other', roles: leftover.map((r) => r.short) });
+---
+
+<DesignPage title="Colors" description="The colour roles every element is painted with, their light and dark values, who uses them, and the contrast of the pairs that matter — measured live for the theme and mode chosen in the bar.">
+  <section class="mb-12" aria-labelledby="roles">
+    <h2 id="roles" class="docs-ui type-h2 mb-2">Roles</h2>
+    <p class="docs-ui mb-6 text-sm text-muted">The swatch is live: switch the theme or the mode in the bar and it follows. Values are what <code>semantic.css</code> declares for the default theme.</p>
+    {groups.map((group) => (
+      <div class="mb-8">
+        <h3 class="docs-ui type-h3 mb-3">{group.label}</h3>
+        <div class="docs-preview overflow-x-auto rounded-lg border border-(--doc-border) p-4">
+          <table class="w-full text-sm">
+            <thead><tr class="text-left text-muted"><th class="py-1 pr-4">Swatch</th><th class="py-1 pr-4">Role</th><th class="py-1 pr-4">Utility</th><th class="py-1 pr-4">Light</th><th class="py-1 pr-4">Dark</th><th class="py-1 pr-4">Used by</th><th class="py-1">Note</th></tr></thead>
+            <tbody>
+              {group.roles.map((short) => {
+                const r = byShort.get(short);
+                if (!r) return null;
+                const by = used[`color-${short}`] ?? [];
+                return (
+                  <tr class="border-t border-border align-top">
+                    <td class="py-2 pr-4"><span class="block size-8 rounded-md border border-border" style={`background: var(${r.name})`} title={r.name}></span></td>
+                    <td class="py-2 pr-4 font-mono text-heading">{short}</td>
+                    <td class="py-2 pr-4 font-mono text-muted">{r.utility ? `*-${r.utility}` : '—'}</td>
+                    <td class="py-2 pr-4 font-mono text-xs text-muted">{r.light}</td>
+                    <td class="py-2 pr-4 font-mono text-xs text-muted">{r.dark || '—'}</td>
+                    <td class="py-2 pr-4 text-xs text-muted" title={by.join(', ')}>{by.length ? `${by.length} element${by.length > 1 ? 's' : ''}` : '—'}</td>
+                    <td class="py-2 text-xs text-muted">{r.note ?? ''}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    ))}
+  </section>
+
+  <section class="mb-12" aria-labelledby="contrast">
+    <h2 id="contrast" class="docs-ui type-h2 mb-2">Contrast</h2>
+    <p class="docs-ui mb-4 text-sm text-muted">The pairs the elements rely on, measured in the browser from the rendered colours: text pairs need 4.5:1, large text and non-text 3:1. An advisory pair (△) is reported, not failed. Switch the theme or the mode and the table recomputes.</p>
+    <div class="docs-preview rounded-lg border border-(--doc-border) p-4">
+      <table class="w-full text-sm" data-contrast>
+        <thead><tr class="text-left text-muted"><th class="py-1 pr-4">Sample</th><th class="py-1 pr-4">Foreground</th><th class="py-1 pr-4">Background</th><th class="py-1 pr-4">Where</th><th class="py-1 pr-4">Target</th><th class="py-1">Ratio</th></tr></thead>
+        <tbody>
+          {contrastPairs.map((p) => (
+            <tr class="border-t border-border" data-fg={`--ds-color-${p.fg}`} data-bg={`--ds-color-${p.bg}`} data-target={p.target} data-advisory={p.advisory ? '' : undefined}>
+              <td class="py-2 pr-4"><span class="inline-block rounded-md px-3 py-1 font-medium" style={`color: var(--ds-color-${p.fg}); background: var(--ds-color-${p.bg}); ${p.target === 3 && (p.fg === 'border' || p.fg === 'ring') ? `border: 2px solid var(--ds-color-${p.fg}); color: var(--ds-color-text);` : ''}`}>Aa</span></td>
+              <td class="py-2 pr-4 font-mono text-heading">{p.fg}</td>
+              <td class="py-2 pr-4 font-mono text-heading">{p.bg}</td>
+              <td class="py-2 pr-4 text-muted">{p.where}</td>
+              <td class="py-2 pr-4 text-muted">{p.target}:1{p.advisory && ' (advisory)'}</td>
+              <td class="py-2 font-mono" data-ratio>…</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="mb-12" aria-labelledby="ramps">
+    <h2 id="ramps" class="docs-ui type-h2 mb-2">Primitive ramps</h2>
+    <p class="docs-ui mb-4 text-sm text-muted">Layer 1. Seven families, eleven OKLCH steps each. Roles point into these; nothing else does. A theme may replace a whole ramp.</p>
+    <div class="docs-preview rounded-lg border border-(--doc-border) p-4">
+      {ramps.map((ramp) => (
+        <div class="mb-4">
+          <p class="mb-1 text-xs font-semibold uppercase tracking-wider text-muted">{ramp.family}</p>
+          <div class="grid grid-cols-11 gap-1">
+            {ramp.steps.map((s) => (
+              <div class="min-w-0">
+                <span class="block h-10 rounded-md border border-border" style={`background: var(--color-${ramp.family}-${s.step})`} title={`--color-${ramp.family}-${s.step}: ${s.value}`}></span>
+                <span class="mt-1 block truncate text-center text-[10px] text-muted">{s.step}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+</DesignPage>
+
+<script>
+  // WCAG contrast from the rendered colours. The canvas converts whatever
+  // syntax the token uses (OKLCH included) to sRGB; the ratio follows WCAG 2.
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = 1;
+  const ctx = canvas.getContext('2d', { willReadFrequently: true })!;
+  const probe = document.createElement('span');
+  probe.style.position = 'absolute';
+  probe.style.visibility = 'hidden';
+  document.body.append(probe);
+
+  function rgb(token: string): [number, number, number] | null {
+    probe.style.color = `var(${token})`;
+    const value = getComputedStyle(probe).color;
+    ctx.clearRect(0, 0, 1, 1);
+    ctx.fillStyle = '#000';
+    ctx.fillStyle = value;
+    ctx.fillRect(0, 0, 1, 1);
+    const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
+    return a < 250 ? null : [r, g, b];
+  }
+  function luminance([r, g, b]: [number, number, number]): number {
+    const f = (c: number) => (c / 255 <= 0.04045 ? c / 255 / 12.92 : Math.pow((c / 255 + 0.055) / 1.055, 2.4));
+    return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+  }
+  function measure() {
+    for (const row of document.querySelectorAll<HTMLElement>('[data-contrast] tr[data-fg]')) {
+      const fg = rgb(row.dataset.fg!);
+      const bg = rgb(row.dataset.bg!);
+      const cell = row.querySelector<HTMLElement>('[data-ratio]')!;
+      if (!fg || !bg) {
+        cell.textContent = 'n/a';
+        continue;
+      }
+      const [hi, lo] = [luminance(fg), luminance(bg)].sort((a, b) => b - a);
+      const ratio = (hi + 0.05) / (lo + 0.05);
+      const target = Number(row.dataset.target);
+      const ok = ratio >= target;
+      const advisory = 'advisory' in row.dataset;
+      cell.textContent = `${ratio.toFixed(2)}:1 ${ok ? '✓' : advisory ? '△' : '✗'}`;
+      cell.style.color = ok ? 'var(--ds-color-success)' : advisory ? 'var(--ds-color-warning)' : 'var(--ds-color-danger)';
+    }
+  }
+  measure();
+  new MutationObserver(measure).observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+</script>

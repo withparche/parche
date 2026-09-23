@@ -1,0 +1,65 @@
+---
+import DesignPage from '../../components/DesignPage.astro';
+import { elementIndex, elementMeta } from 'parche:registry/elements';
+import { ramps, colorRoles, typography, radii, shadows, themes, shadcnAliases, usage } from '../../lib/tokens';
+
+const used = usage(elementMeta as any);
+const roleCount = colorRoles.length;
+const unused = colorRoles.filter((r) => !(used[`color-${r.short}`]?.length)).map((r) => r.short);
+---
+
+<DesignPage title="Design system" description="Three layers of CSS custom properties, read from the real stylesheets. Every element and widget is styled from the middle one; a theme is a file that overrides it.">
+  <section class="docs-ui mb-12" aria-labelledby="layers">
+    <h2 id="layers" class="type-h2 mb-4">The three layers</h2>
+    <ol class="grid gap-4 md:grid-cols-3">
+      <li class="rounded-lg border border-border bg-surface p-5">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">1 · Primitives</p>
+        <p class="mt-2 font-semibold text-heading"><code>--color-&lt;family&gt;-&lt;step&gt;</code></p>
+        <p class="mt-2 text-sm text-muted">{ramps.length} OKLCH ramps of 11 steps, plus {radii.length} radii and {shadows.length} shadows. Raw material: nothing in an element or widget names one of these directly, and the contract test refuses a class like <code>bg-green-500</code>.</p>
+        <p class="mt-3 text-xs text-muted"><code>packages/core/src/styles/tokens.css</code></p>
+      </li>
+      <li class="rounded-lg border border-border bg-surface p-5">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">2 · Roles</p>
+        <p class="mt-2 font-semibold text-heading"><code>--ds-color-&lt;role&gt;</code>, <code>--ds-size-h1</code>…</p>
+        <p class="mt-2 text-sm text-muted">{roleCount} colour roles with a light and a dark value, six type styles of four tokens each, two font roles. Bridged to Tailwind as <code>bg-surface</code>, <code>text-muted</code>, <code>outline-ring</code>. This is the whole styling API.</p>
+        <p class="mt-3 text-xs text-muted"><code>packages/core/src/styles/semantic.css</code></p>
+      </li>
+      <li class="rounded-lg border border-border bg-surface p-5">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">3 · Themes</p>
+        <p class="mt-2 font-semibold text-heading"><code>:root[data-theme="…"]</code></p>
+        <p class="mt-2 text-sm text-muted">{themes.length} themes ship, each a parche with one CSS file that overrides ramps and roles under its attribute, light and dark, and may bring a typeface. <code>.dark</code> on <code>&lt;html&gt;</code> is the colour mode; <code>data-theme</code> the theme.</p>
+        <p class="mt-3 text-xs text-muted"><code>parches/themes/src/*.css</code></p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="docs-ui mb-12" aria-labelledby="numbers">
+    <h2 id="numbers" class="type-h2 mb-4">At a glance</h2>
+    <dl class="grid gap-x-8 gap-y-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+      <div><dt class="text-muted">Colour roles</dt><dd class="type-h3">{roleCount}</dd></div>
+      <div><dt class="text-muted">Consumed by elements</dt><dd class="type-h3">{roleCount - unused.length}</dd></div>
+      <div><dt class="text-muted">Elements</dt><dd class="type-h3">{elementIndex.length}</dd></div>
+      <div><dt class="text-muted">shadcn aliases</dt><dd class="type-h3">{shadcnAliases.length}</dd></div>
+    </dl>
+    {unused.length > 0 && (
+      <p class="mt-4 text-sm text-muted">Roles no element declares in its <code>tokens</code>: {unused.map((u, i) => <><code>{u}</code>{i < unused.length - 1 ? ', ' : ''}</>)}. They may still be used by widgets or core; worth a look.</p>
+    )}
+  </section>
+
+  <section class="docs-ui mb-12" aria-labelledby="rules">
+    <h2 id="rules" class="type-h2 mb-4">The rules</h2>
+    <ul class="list-disc space-y-2 pl-5 text-sm text-muted">
+      <li><strong class="text-heading">Tokens only.</strong> Elements and widgets use role utilities (<code>bg-surface</code>, <code>text-heading</code>, <code>border-border</code>), never a palette step. That is what lets a theme reskin everything from one file.</li>
+      <li><strong class="text-heading">Every role has a light and a dark value</strong>, and the pairs the elements put together must read at WCAG AA. The <a href="/design/colors" class="text-primary underline">Colors</a> page measures them live for the theme and mode you pick above.</li>
+      <li><strong class="text-heading">A theme overrides, it does not add.</strong> A theme file may set any primitive or role, and typography, under its own attribute; it may not invent a token the elements do not know.</li>
+      <li><strong class="text-heading">Composed type styles</strong> (<code>.type-h1</code>… <code>.type-label</code>) are the only classes core adds; everything else is Tailwind on the bridged roles.</li>
+      <li><strong class="text-heading">shadcn names are aliases</strong>, pure pointers to the roles, so a shadcn component drops in without a second palette.</li>
+    </ul>
+  </section>
+
+  <section class="docs-ui mb-12" aria-labelledby="types">
+    <h2 id="types" class="type-h2 mb-4">Type styles</h2>
+    <p class="text-sm text-muted">Six, each four tokens (size, weight, tracking, leading). Detail on the <a href="/design/typography" class="text-primary underline">Typography</a> page.</p>
+    <p class="mt-2 text-sm text-muted">{typography.map((t) => <code class="mr-2">type-{t.style}</code>)}</p>
+  </section>
+</DesignPage>

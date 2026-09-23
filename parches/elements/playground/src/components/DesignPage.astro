@@ -1,0 +1,41 @@
+---
+/**
+ * The frame every design-system page shares: the docs shell, a page header
+ * and the section navigation between the five pages.
+ */
+import Playground from '../layouts/Playground.astro';
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+const pages = [
+  { href: '/design', label: 'Overview' },
+  { href: '/design/colors', label: 'Colors' },
+  { href: '/design/typography', label: 'Typography' },
+  { href: '/design/shape', label: 'Shape' },
+  { href: '/design/themes', label: 'Themes' },
+];
+const current = Astro.url.pathname.replace(/\/$/, '') || '/design';
+---
+
+<Playground title={title} description={description}>
+  <header class="docs-ui mb-10 border-b border-border pb-8">
+    <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-muted">Design system</p>
+    <h1 class="type-h1">{title}</h1>
+    <p class="type-body text-muted mt-3 max-w-2xl">{description}</p>
+    <nav aria-label="Design system pages" class="mt-6 flex flex-wrap gap-1">
+      {pages.map((p) => (
+        <a
+          href={p.href}
+          aria-current={current === p.href ? 'page' : undefined}
+          class={`rounded-full px-3 py-1 text-sm no-underline ${current === p.href ? 'bg-primary text-on-primary' : 'text-muted hover:bg-surface-hover hover:text-heading'}`}
+        >
+          {p.label}
+        </a>
+      ))}
+    </nav>
+  </header>
+  <slot />
+</Playground>

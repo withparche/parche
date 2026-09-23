@@ -1,0 +1,62 @@
+---
+import DesignPage from '../../components/DesignPage.astro';
+import { typography, fonts } from '../../lib/tokens';
+
+const specimen: Record<string, string> = {
+  h1: 'Pages are data',
+  h2: 'A widget package covers most of what a site needs',
+  h3: 'Those widgets are not a commitment',
+  body: 'Swap in a different widget package, or eject the ones you want to change. The contract is the schema, not the code, so the page keeps working while you replace what renders it.',
+  caption: 'Measured on the saas-landing build: the layout server chunk went from 2.3 MB to 31 KB.',
+  label: 'Design system',
+};
+---
+
+<DesignPage title="Typography" description="Six composed type styles, each four tokens a theme may override, and the two font roles. Core ships no typeface: a theme brings one, and the fallback costs no download.">
+  <section class="mb-12" aria-labelledby="styles">
+    <h2 id="styles" class="docs-ui type-h2 mb-2">Type styles</h2>
+    <p class="docs-ui mb-6 text-sm text-muted">Each is one class, <code>.type-&lt;style&gt;</code>, composed from <code>--ds-size</code>, <code>--ds-weight</code>, <code>--ds-tracking</code> and <code>--ds-leading</code>, in the heading or body font and the matching colour role. The specimens are live.</p>
+    {typography.map((t) => (
+      <div class="mb-6">
+        <div class="docs-ui mb-2 flex flex-wrap items-baseline gap-x-6 gap-y-1 text-xs text-muted">
+          <span class="font-mono text-sm text-heading">.type-{t.style}</span>
+          <span>size <code>{t.size}</code></span>
+          <span>weight <code>{t.weight}</code></span>
+          <span>tracking <code>{t.tracking}</code></span>
+          <span>leading <code>{t.leading}</code></span>
+        </div>
+        <div class="docs-preview rounded-lg border border-(--doc-border) px-6 py-5">
+          <p class={`type-${t.style}`}>{specimen[t.style]}</p>
+        </div>
+      </div>
+    ))}
+  </section>
+
+  <section class="mb-12" aria-labelledby="fonts">
+    <h2 id="fonts" class="docs-ui type-h2 mb-2">Font roles</h2>
+    <p class="docs-ui mb-4 text-sm text-muted">Two roles, both reading <code>--font-sans</code>, which Astro's fonts config fills when a theme declares a typeface (AstroWind and Corporate bring Inter; Playful and Startup their own). No theme, no download.</p>
+    <div class="docs-ui overflow-x-auto rounded-lg border border-border">
+      <table class="w-full text-sm">
+        <thead><tr class="text-left text-muted"><th class="px-4 py-2">Role</th><th class="px-4 py-2">Value</th></tr></thead>
+        <tbody>{fonts.map((f) => <tr class="border-t border-border"><td class="px-4 py-2 font-mono text-heading">{f.name}</td><td class="px-4 py-2 font-mono text-xs text-muted">{f.value}</td></tr>)}</tbody>
+      </table>
+    </div>
+    <div class="docs-preview mt-4 rounded-lg border border-(--doc-border) px-6 py-5">
+      <p class="type-h3" style="font-family: var(--ds-font-heading)">Heading font: the quick brown fox jumps over the lazy dog</p>
+      <p class="type-body mt-2" style="font-family: var(--ds-font-body)">Body font: the quick brown fox jumps over the lazy dog. 0123456789</p>
+    </div>
+  </section>
+
+  <section class="mb-12" aria-labelledby="prose">
+    <h2 id="prose" class="docs-ui type-h2 mb-2">Prose</h2>
+    <p class="docs-ui mb-4 text-sm text-muted">Markdown output gets <code>.prose</code>, also in core, mirroring the same tokens so rendered content matches hand-written widgets. The Prose element wraps it.</p>
+    <div class="docs-preview rounded-lg border border-(--doc-border) px-6 py-5">
+      <div class="prose">
+        <h2>A heading inside prose</h2>
+        <p>Paragraphs, <a href="#">links</a>, <strong>strong</strong> and <code>code</code> take their colour and rhythm from the roles above.</p>
+        <ul><li>A list item</li><li>Another one</li></ul>
+        <blockquote>A quotation, indented with the border role.</blockquote>
+      </div>
+    </div>
+  </section>
+</DesignPage>

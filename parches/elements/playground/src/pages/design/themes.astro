@@ -1,0 +1,74 @@
+---
+import DesignPage from '../../components/DesignPage.astro';
+import { themes, shadcnAliases } from '../../lib/tokens';
+
+const kind = (name: string) => (name.startsWith('--ds-color-') ? 'role' : name.startsWith('--color-') ? 'ramp' : name.startsWith('--ds-') ? 'type' : 'other');
+const summarize = (decls: Record<string, string>) => {
+  const counts = { role: 0, ramp: 0, type: 0, other: 0 } as Record<string, number>;
+  for (const k of Object.keys(decls)) counts[kind(k)]++;
+  return counts;
+};
+---
+
+<DesignPage title="Themes" description="What each shipped theme overrides, read from its CSS file. Pick one in the bar to see every preview in this playground wear it.">
+  <section class="mb-12" aria-labelledby="list">
+    <h2 id="list" class="docs-ui type-h2 mb-2">Shipped themes</h2>
+    <p class="docs-ui mb-6 text-sm text-muted">A theme is a parche: one CSS file scoped to <code>:root[data-theme="&lt;value&gt;"]</code>, light and dark, plus its switcher entry and, when it has one, a typeface. A site bundles only the themes it imports.</p>
+    {themes.map((t) => {
+      const l = summarize(t.light);
+      const d = summarize(t.dark);
+      return (
+        <article class="docs-ui mb-8 rounded-lg border border-border bg-surface p-5">
+          <div class="flex flex-wrap items-baseline justify-between gap-2">
+            <h3 class="type-h3">{t.label} <span class="font-mono text-sm text-muted">data-theme="{t.value}"</span></h3>
+            <span class="text-xs text-muted">light: {Object.keys(t.light).length} tokens · dark: {Object.keys(t.dark).length} tokens</span>
+          </div>
+          {t.intro && <p class="mt-2 text-sm text-muted">{t.intro}</p>}
+          <dl class="mt-4 grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2 lg:grid-cols-4">
+            <div><dt class="text-muted">Ramps overridden</dt><dd class="text-heading">{l.ramp} light · {d.ramp} dark</dd></div>
+            <div><dt class="text-muted">Roles overridden</dt><dd class="text-heading">{l.role} light · {d.role} dark</dd></div>
+            <div><dt class="text-muted">Type tokens</dt><dd class="text-heading">{l.type + d.type}</dd></div>
+            <div><dt class="text-muted">Other rules</dt><dd class="text-heading">{t.extras.length}</dd></div>
+          </dl>
+          {t.extras.length > 0 && (
+            <div class="mt-3 text-xs text-muted">
+              <p class="mb-1">Rules beyond tokens, worth a look — a theme that reaches into elements is one that will break when they change:</p>
+              <ul class="space-y-1 font-mono">{t.extras.map((e) => <li>{e}</li>)}</ul>
+            </div>
+          )}
+          <details class="mt-4 text-xs">
+            <summary class="cursor-pointer text-muted">Every override</summary>
+            <div class="mt-3 grid gap-6 md:grid-cols-2">
+              <div>
+                <p class="mb-1 font-semibold text-heading">Light</p>
+                <ul class="space-y-0.5 font-mono text-muted">{Object.entries(t.light).map(([k, v]) => <li><span class="text-heading">{k}</span>: {v}</li>)}</ul>
+              </div>
+              <div>
+                <p class="mb-1 font-semibold text-heading">Dark</p>
+                <ul class="space-y-0.5 font-mono text-muted">{Object.entries(t.dark).map(([k, v]) => <li><span class="text-heading">{k}</span>: {v}</li>)}</ul>
+              </div>
+            </div>
+          </details>
+        </article>
+      );
+    })}
+  </section>
+
+  <section class="mb-12" aria-labelledby="shadcn">
+    <h2 id="shadcn" class="docs-ui type-h2 mb-2">shadcn/ui aliases</h2>
+    <p class="docs-ui mb-4 text-sm text-muted">{shadcnAliases.length} names shadcn components expect, each a pointer to a role or a ramp step. No second palette: a theme that overrides the roles reskins shadcn components too. Pointers into a ramp step rather than a role are the ones to review.</p>
+    <div class="docs-ui overflow-x-auto rounded-lg border border-border">
+      <table class="w-full text-sm">
+        <thead><tr class="text-left text-muted"><th class="px-4 py-2">shadcn</th><th class="px-4 py-2">Points to</th></tr></thead>
+        <tbody>
+          {shadcnAliases.map((a) => (
+            <tr class="border-t border-border">
+              <td class="px-4 py-1.5 font-mono text-heading">{a.name}</td>
+              <td class="px-4 py-1.5 font-mono text-xs text-muted">{a.value}{!a.value.includes('--ds-') && <span class="ml-2 rounded-full border border-border px-1.5 text-[10px] text-heading">ramp step</span>}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</DesignPage>
