@@ -1,9 +1,10 @@
 import { defineCommand, runMain } from 'citty';
+import { version } from './lib/version.js';
 
 const main = defineCommand({
   meta: {
     name: 'parche',
-    version: '0.1.0',
+    version,
     description: "The Parche CLI — build sites you don't just fork.",
   },
   subCommands: {

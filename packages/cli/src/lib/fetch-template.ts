@@ -4,8 +4,25 @@ import { resolve } from 'node:path';
 import { homedir } from 'node:os';
 import { downloadTemplate } from 'giget';
 import type { Source } from './resolve-source.js';
+import { version } from './version.js';
 
 const IGNORE = /(^|[/\\])(node_modules|dist|\.astro|\.git)([/\\]|$)/;
+
+/** Sources in this repository: what the CLI's own release tag versions. */
+const CURATED = /^gh:withparche\/parche\//;
+
+/**
+ * The giget inputs to try for one source, in order. A ref given by the user is
+ * used as is. Otherwise a curated template is fetched at the CLI's own release
+ * tag first — a 0.7 CLI scaffolds the templates written for 0.7, whatever
+ * `main` has moved on to — and at the default branch if that tag does not
+ * exist yet (a checkout ahead of a release).
+ */
+export function attempts(spec: string, ref: string | undefined, cliVersion = version): string[] {
+  if (ref) return [`${spec}#${ref}`];
+  if (CURATED.test(spec) && cliVersion !== '0.0.0') return [`${spec}#v${cliVersion}`, spec];
+  return [spec];
+}
 
 /** Fetch a resolved source into `target` (local copy or giget download). */
 export async function fetchTemplate(
@@ -19,11 +36,12 @@ export async function fetchTemplate(
     return;
   }
 
-  const specs = [src.spec!, ...(src.fallbackSpec ? [src.fallbackSpec] : [])];
+  const sources = [src.spec!, ...(src.fallbackSpec ? [src.fallbackSpec] : [])];
+  const specs = sources.flatMap((s) => attempts(s, opts.ref));
   let lastErr: unknown;
   for (const spec of specs) {
     try {
-      await downloadTemplate(opts.ref ? `${spec}#${opts.ref}` : spec, {
+      await downloadTemplate(spec, {
         dir: target,
         forceClean: opts.force,
       });
