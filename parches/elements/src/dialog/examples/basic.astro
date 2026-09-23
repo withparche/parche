@@ -10,8 +10,10 @@ import Button from '../../button/Button.astro';
 
 <Dialog id="example-dialog" title="Delete this page?" description="The page and its sections are removed. This cannot be undone.">
   <p>Links pointing to it will return a 404 until you publish a new page at the same path.</p>
-  <Button slot="footer" variant="ghost" command="close" commandfor="example-dialog">Cancel</Button>
-  <Button slot="footer" tone="danger" command="close" commandfor="example-dialog">Delete</Button>
+  <Fragment slot="footer">
+    <Button variant="ghost" command="close" commandfor="example-dialog">Cancel</Button>
+    <Button tone="danger" command="close" commandfor="example-dialog">Delete</Button>
+  </Fragment>
 </Dialog>
 
 <Dialog id="example-dialog-strict" title="Read before continuing" size="sm" closedBy="none">

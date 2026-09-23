@@ -25,14 +25,18 @@ import Button from 'parche:elements/Button';
 
 <Dialog id="signup" title="Create your account" description="Free, no card needed.">
   <form id="signup-form" method="dialog">…</form>
-  <Button slot="footer" variant="ghost" command="close" commandfor="signup">Cancel</Button>
-  <Button slot="footer" type="submit" form="signup-form">Create</Button>
+  <Fragment slot="footer">
+    <Button variant="ghost" command="close" commandfor="signup">Cancel</Button>
+    <Button type="submit" form="signup-form">Create</Button>
+  </Fragment>
 </Dialog>
 ```
 
-Anything with `slot="footer"` goes in the footer, several elements included.
-A `trigger` slot exists too, for when you want the button rendered right
-before the dialog; it is the same button, nothing more.
+The footer is a real part of the dialog: it stays put while long content
+scrolls, it is laid out already, and a theme can style it by
+`data-part="footer"`. A single action can carry `slot="footer"` itself; a
+`Fragment` groups several. A `trigger` slot exists too, for when you want
+the button rendered right before the dialog; it is the same button.
 
 :::example basic
 A confirm dialog with a footer, and a strict one that only its button closes.
