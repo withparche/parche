@@ -4,21 +4,20 @@ import Button from '../../button/Button.astro';
 ---
 
 <div class="flex flex-wrap gap-3">
-  <Sheet id="example-sheet" title="Menu" hideTitle>
-    <Button slot="trigger" variant="secondary" command="show-modal" commandfor="example-sheet">From the right</Button>
-    <nav aria-label="Example" class="flex flex-col">
-      <a class="border-b border-border py-3 text-lg font-medium text-heading no-underline" href="#">Product</a>
-      <a class="border-b border-border py-3 text-lg font-medium text-heading no-underline" href="#">Pricing</a>
-      <a class="border-b border-border py-3 text-lg font-medium text-heading no-underline" href="#">Docs</a>
-    </nav>
-    <Button slot="footer" block>Get started</Button>
-  </Sheet>
-
-  <Sheet id="example-sheet-bottom" title="Filters" description="Narrow the results." side="bottom">
-    <Button slot="trigger" variant="secondary" command="show-modal" commandfor="example-sheet-bottom">From the bottom</Button>
-    <p class="text-muted">Anything goes here: forms, lists, long content that scrolls.</p>
-    <Fragment slot="footer">
-      <Button command="close" commandfor="example-sheet-bottom">Apply</Button>
-    </Fragment>
-  </Sheet>
+  <Button variant="secondary" command="show-modal" commandfor="example-sheet">From the right</Button>
+  <Button variant="secondary" command="show-modal" commandfor="example-sheet-bottom">From the bottom</Button>
 </div>
+
+<Sheet id="example-sheet" title="Menu" hideTitle>
+  <nav aria-label="Example" class="flex flex-col">
+    <a class="border-b border-border py-3 text-lg font-medium text-heading no-underline" href="#">Product</a>
+    <a class="border-b border-border py-3 text-lg font-medium text-heading no-underline" href="#">Pricing</a>
+    <a class="border-b border-border py-3 text-lg font-medium text-heading no-underline" href="#">Docs</a>
+  </nav>
+  <Button slot="footer" block>Get started</Button>
+</Sheet>
+
+<Sheet id="example-sheet-bottom" title="Filters" description="Narrow the results." side="bottom">
+  <p class="text-muted">Anything goes here: forms, lists, long content that scrolls.</p>
+  <Button slot="footer" command="close" commandfor="example-sheet-bottom">Apply</Button>
+</Sheet>

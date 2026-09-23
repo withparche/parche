@@ -24,16 +24,15 @@ import Button from 'parche:elements/Button';
 <Button command="show-modal" commandfor="signup">Sign up</Button>
 
 <Dialog id="signup" title="Create your account" description="Free, no card needed.">
-  <form method="dialog">…</form>
-  <Fragment slot="footer">
-    <Button variant="ghost" command="close" commandfor="signup">Cancel</Button>
-    <Button type="submit" form="signup-form">Create</Button>
-  </Fragment>
+  <form id="signup-form" method="dialog">…</form>
+  <Button slot="footer" variant="ghost" command="close" commandfor="signup">Cancel</Button>
+  <Button slot="footer" type="submit" form="signup-form">Create</Button>
 </Dialog>
 ```
 
-The `trigger` slot places a button right before the dialog when you want them
-together; it is the same button, nothing more.
+Anything with `slot="footer"` goes in the footer, several elements included.
+A `trigger` slot exists too, for when you want the button rendered right
+before the dialog; it is the same button, nothing more.
 
 :::example basic
 A confirm dialog with a footer, and a strict one that only its button closes.

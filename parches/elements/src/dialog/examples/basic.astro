@@ -4,20 +4,17 @@ import Button from '../../button/Button.astro';
 ---
 
 <div class="flex flex-wrap gap-3">
-  <Dialog id="example-dialog" title="Delete this page?" description="The page and its sections are removed. This cannot be undone.">
-    <Button slot="trigger" variant="secondary" command="show-modal" commandfor="example-dialog">Open a dialog</Button>
-    <p>Links pointing to it will return a 404 until you publish a new page at the same path.</p>
-    <Fragment slot="footer">
-      <Button variant="ghost" command="close" commandfor="example-dialog">Cancel</Button>
-      <Button tone="danger" command="close" commandfor="example-dialog">Delete</Button>
-    </Fragment>
-  </Dialog>
-
-  <Dialog id="example-dialog-strict" title="Read before continuing" size="sm" closedBy="none">
-    <Button slot="trigger" variant="secondary" command="show-modal" commandfor="example-dialog-strict">Only the button closes</Button>
-    <p>Escape and clicks outside do nothing here: <code>closedBy="none"</code>.</p>
-    <Fragment slot="footer">
-      <Button command="close" commandfor="example-dialog-strict">Got it</Button>
-    </Fragment>
-  </Dialog>
+  <Button variant="secondary" command="show-modal" commandfor="example-dialog">Open a dialog</Button>
+  <Button variant="secondary" command="show-modal" commandfor="example-dialog-strict">Only the button closes</Button>
 </div>
+
+<Dialog id="example-dialog" title="Delete this page?" description="The page and its sections are removed. This cannot be undone.">
+  <p>Links pointing to it will return a 404 until you publish a new page at the same path.</p>
+  <Button slot="footer" variant="ghost" command="close" commandfor="example-dialog">Cancel</Button>
+  <Button slot="footer" tone="danger" command="close" commandfor="example-dialog">Delete</Button>
+</Dialog>
+
+<Dialog id="example-dialog-strict" title="Read before continuing" size="sm" closedBy="none">
+  <p>Escape and clicks outside do nothing here: <code>closedBy="none"</code>.</p>
+  <Button slot="footer" command="close" commandfor="example-dialog-strict">Got it</Button>
+</Dialog>
