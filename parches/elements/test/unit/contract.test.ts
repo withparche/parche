@@ -143,14 +143,20 @@ for (const { name, dir, entry, value } of folders) {
     }
   });
 
-  test(`${name}: imports stay inside the folder or on the allow-list (copy-ready)`, () => {
+  test(`${name}: imports stay inside the folder, in a declared registry dependency, or on the allow-list (copy-ready)`, () => {
+    const manifestPath = path.join(dir, 'element.json');
+    const deps: string[] = fs.existsSync(manifestPath) ? JSON.parse(fs.readFileSync(manifestPath, 'utf8')).registryDependencies ?? [] : [];
     for (const f of files.filter((f) => /\.(astro|ts)$/.test(f))) {
       const src = fs.readFileSync(f, 'utf8');
       for (const m of src.matchAll(/(?:import|from)\s+['"]([^'"]+)['"]/g)) {
         const spec = m[1];
         if (spec.startsWith('.')) {
           const target = path.resolve(path.dirname(f), spec);
-          assert.ok(target.startsWith(dir + path.sep) || target === dir, `${rel(f)} imports outside the folder: ${spec}`);
+          if (target.startsWith(dir + path.sep) || target === dir) continue;
+          // shadcn's model: another element may be imported relatively only when
+          // element.json lists it, so a copy brings the closure along.
+          const sibling = path.relative(SRC, target).split(path.sep)[0];
+          assert.ok(deps.includes(sibling), `${rel(f)} imports "${spec}" — add "${sibling}" to element.json registryDependencies`);
           continue;
         }
         assert.ok(ALLOWED_IMPORTS.some((re) => re.test(spec)), `${rel(f)} imports "${spec}", not on the allow-list`);

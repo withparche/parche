@@ -1,0 +1,22 @@
+---
+import Card from '../Card.astro';
+import Badge from '../../badge/Badge.astro';
+---
+
+<div class="grid gap-4 sm:grid-cols-3">
+  <Card>
+    <h3 slot="header" class="type-h3 text-heading">Plain</h3>
+    <p class="text-muted">A bounded surface with a header and body.</p>
+  </Card>
+  <Card href="#basic">
+    <div slot="media" class="aspect-video bg-primary/10"></div>
+    <h3 class="type-h3 text-heading">Linked</h3>
+    <p class="text-muted">The whole card is the link; hover lifts it.</p>
+    <span slot="footer" class="text-sm text-muted">Read more</span>
+  </Card>
+  <Card padding="lg" shadow="none" as="article">
+    <Badge variant="success">New</Badge>
+    <h3 class="type-h3 text-heading mt-2">Article</h3>
+    <p class="text-muted">Large padding, no shadow, an article element.</p>
+  </Card>
+</div>

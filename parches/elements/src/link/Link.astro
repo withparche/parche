@@ -1,0 +1,41 @@
+---
+/**
+ * Link — inline text navigation. For an action that should look like a
+ * button, use Button with `href`. The arrow variant nudges its icon on hover;
+ * the icon is decorative and the text carries the meaning.
+ */
+import { defineVariants, splitProps } from '@parche/elements/utils';
+import Icon from '../icon/Icon.astro';
+import { schema, type Props } from './link.props';
+
+const { props: { href, variant, external }, rest, className } = splitProps(schema, Astro.props);
+
+const link = defineVariants({
+  base:
+    'parche-link inline-flex items-center gap-1 font-medium transition-colors rounded-sm ' +
+    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+  variants: {
+    variant: {
+      underline: 'text-primary underline underline-offset-4 hover:opacity-80',
+      arrow: 'text-primary no-underline hover:opacity-80 group',
+      ghost: 'text-muted no-underline hover:text-heading',
+    },
+  },
+  defaults: { variant: 'underline' },
+});
+---
+
+<a
+  href={href}
+  class={link({ variant }, className)}
+  data-part="root"
+  {...rest}
+  data-variant={variant}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener noreferrer' : undefined}
+>
+  <slot />
+  {variant === 'arrow' && (
+    <Icon name="tabler:arrow-right" size="sm" class="transition-transform group-hover:translate-x-0.5" data-part="arrow" />
+  )}
+</a>

@@ -1,0 +1,11 @@
+---
+import Skeleton from '../Skeleton.astro';
+---
+
+<div class="flex max-w-md items-start gap-4" aria-busy="true">
+  <Skeleton variant="circle" />
+  <div class="flex-1 space-y-3">
+    <Skeleton variant="rect" height="6rem" />
+    <Skeleton lines={3} />
+  </div>
+</div>

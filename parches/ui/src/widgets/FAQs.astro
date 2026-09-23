@@ -1,12 +1,12 @@
 ---
 import type { Props } from './FAQs.props';
-import LegacyHeadline from '../components/LegacyHeadline.astro';
+import Heading from 'parche:elements/Heading';
 import Icon from 'parche:elements/Icon';
 
 const { tagline, title, subtitle, items = [], columns = '2' } = Astro.props;
 ---
 
-<LegacyHeadline tagline={tagline} title={title} subtitle={subtitle} />
+<Heading {tagline} {title} {subtitle} />
 
 <dl
   class:list={[

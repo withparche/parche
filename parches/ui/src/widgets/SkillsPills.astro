@@ -6,6 +6,7 @@
  */
 import { twMerge } from 'tailwind-merge';
 import Icon from 'parche:elements/Icon';
+import Image from 'parche:elements/Image';
 
 type Skill = string | { name?: string; icon?: string; image?: { src?: string; alt?: string } };
 
@@ -30,7 +31,7 @@ const norm = (s: Skill) => (typeof s === 'string' ? { name: s } : s);
         return (
           <span class="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-2.5 py-1 text-sm font-medium text-heading">
             {icon && <Icon name={icon} class="h-4 w-4 text-muted" />}
-            {image?.src && <img src={image.src} alt={image.alt ?? name ?? ''} class="h-4 w-4 rounded-sm object-contain" />}
+            {image?.src && <Image src={image.src} alt={image.alt ?? name ?? ''} width={16} height={16} class="size-4 rounded-sm" />}
             {name}
           </span>
         );

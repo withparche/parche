@@ -1,5 +1,6 @@
 ---
-import LegacyHeadline from '../components/LegacyHeadline.astro';
+import Heading from 'parche:elements/Heading';
+import Image from 'parche:elements/Image';
 import Action from '../components/Action.astro';
 import type { Props } from './Hero.props';
 
@@ -18,18 +19,8 @@ const {
      viewport edge on every template in the repo. -->
 <div class="mx-auto max-w-7xl px-4 md:px-6 py-12 md:py-20">
   <div class="text-center pb-10 md:pb-16 max-w-5xl mx-auto">
-    {tagline && (
-      <p class="type-label uppercase text-primary mb-2" set:html={tagline} />
-    )}
-    {title && (
-      <div class="max-w-4xl mx-auto">
-        <h1 class="type-h1 mb-6" set:html={title} />
-      </div>
-    )}
+    <Heading level={1} {tagline} {title} {subtitle} width="lg" spacing={false} class="mb-8" />
     <div class="max-w-3xl mx-auto">
-      {subtitle && (
-        <p class="type-body text-xl text-muted mb-8" set:html={subtitle} />
-      )}
       {actions.length > 0 && (
         <div class="max-w-xs sm:max-w-md m-auto flex flex-nowrap flex-col sm:flex-row sm:justify-center gap-4">
           {actions.map((action) => (
@@ -42,11 +33,13 @@ const {
   </div>
   {image && (
     <div class="relative m-auto max-w-5xl">
-      <img
+      <Image
         src={typeof image === 'string' ? image : image.src}
         alt={typeof image === 'string' ? '' : (image.alt || '')}
-        class="mx-auto rounded-md w-full"
+        width={1024}
+        ratio="16/9"
         loading="eager"
+        class="rounded-md"
       />
     </div>
   )}

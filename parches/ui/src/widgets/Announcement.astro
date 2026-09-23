@@ -1,6 +1,7 @@
 ---
 import type { Props } from './Announcement.props';
 import Icon from 'parche:elements/Icon';
+import Badge from 'parche:elements/Badge';
 
 const { badge, title, description, href } = Astro.props as Props;
 
@@ -17,18 +18,13 @@ const Tag = href ? 'a' : 'div';
     ]}
   >
     {badge && (
-      <span class="bg-surface text-heading shrink-0 rounded px-2 py-0.5 text-xs font-semibold uppercase tracking-wide">
-        {badge}
-      </span>
+      <Badge size="sm" class="shrink-0 font-semibold uppercase tracking-wide">{badge}</Badge>
     )}
 
     {text && <span class="font-medium">{text}</span>}
 
     {href && (
-      <Icon
-        name="tabler:arrow-right"
-        class="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5"
-      />
+      <Icon name="tabler:arrow-right" size="sm" class="transition-transform group-hover:translate-x-0.5" />
     )}
   </Tag>
 </div>

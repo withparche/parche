@@ -1,0 +1,28 @@
+---
+/**
+ * Section — a full-width band with vertical rhythm. Pair it with a Container
+ * inside for the horizontal measure. `surface` paints it on the surface token,
+ * which is how pages alternate bands without raw colours.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './section.props';
+
+const { props: { padding, surface, as: Tag }, rest, className } = splitProps(schema, Astro.props);
+
+const paddings: Record<typeof padding, string> = {
+  none: '',
+  sm: 'py-12',
+  md: 'py-16 md:py-24',
+  lg: 'py-24 md:py-32',
+};
+---
+
+<Tag
+  class={cn('parche-section', paddings[padding], surface && 'bg-surface', className)}
+  data-part="root"
+  {...rest}
+  data-padding={padding}
+  data-state={surface ? 'surface' : undefined}
+>
+  <slot />
+</Tag>

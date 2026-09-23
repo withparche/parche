@@ -1,0 +1,19 @@
+---
+/**
+ * Prose — the `.prose` typography from core's base.css, which styles rendered
+ * Markdown with the design tokens. Pass `html` (a rendered body) or slot the
+ * content. `size` scales the base text.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './prose.props';
+
+const { props: { html, size }, rest, className } = splitProps(schema, Astro.props);
+
+const sizes: Record<typeof size, string> = { sm: 'text-sm', md: 'text-base', lg: 'text-lg' };
+---
+
+{html ? (
+  <div class={cn('parche-prose prose max-w-none', sizes[size], className)} data-part="root" {...rest} data-size={size} set:html={html} />
+) : (
+  <div class={cn('parche-prose prose max-w-none', sizes[size], className)} data-part="root" {...rest} data-size={size}><slot /></div>
+)}

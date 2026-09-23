@@ -1,0 +1,9 @@
+---
+import Pagination from '../Pagination.astro';
+---
+
+<div class="space-y-6">
+  <Pagination current={1} total={8} base="#basic" />
+  <Pagination current={5} total={8} base="#basic" />
+  <Pagination current={8} total={8} base="#basic" numbers={false} prevLabel="Newer posts" nextLabel="Older posts" />
+</div>

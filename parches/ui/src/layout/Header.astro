@@ -1,6 +1,7 @@
 ---
 import Icon from 'parche:elements/Icon';
 import Button from 'parche:elements/Button';
+import Image from 'parche:elements/Image';
 import ThemeToggle from 'parche:components/ThemeToggle';
 import LocaleSwitcher from 'parche:components/LocaleSwitcher';
 
@@ -85,13 +86,13 @@ function linkType(link: HeaderLink): 'link' | 'dropdown' | 'mega' {
 ---
 
 <!-- Skip to content (accessibility) -->
-<a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-white focus:rounded-md focus:outline-none">
+<a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-primary focus:text-on-primary focus:rounded-md focus:outline-none">
   Skip to content
 </a>
 
 <!-- Announcement bar -->
 {announcement && (
-  <div class:list={["text-sm relative", announcement.class || "bg-neutral-900 text-white dark:bg-surface dark:text-heading dark:border-b dark:border-border"]} data-announcement>
+  <div class:list={["text-sm relative", announcement.class || "bg-foreground text-background dark:bg-surface dark:text-heading dark:border-b dark:border-border"]} data-announcement>
     <div class="relative flex items-center py-2 px-3">
       {(announcement.dismissible !== false) && (
         <button
@@ -156,7 +157,7 @@ function linkType(link: HeaderLink): 'link' | 'dropdown' | 'mega' {
           return (
             <a
               href={link.href}
-              class="text-[0.938rem] font-medium text-muted hover:text-heading transition-colors no-underline px-3 py-2 rounded-md hover:bg-black/5 dark:hover:bg-white/5"
+              class="text-[0.938rem] font-medium text-muted hover:text-heading transition-colors no-underline px-3 py-2 rounded-md hover:bg-surface-hover"
             >
               {link.label}
             </a>
@@ -171,7 +172,7 @@ function linkType(link: HeaderLink): 'link' | 'dropdown' | 'mega' {
           <div class:list={[isMega ? 'static' : 'relative']} data-dropdown>
             <button
               type="button"
-              class="inline-flex items-center gap-1 text-[0.938rem] font-medium text-muted hover:text-heading transition-colors px-3 py-2 rounded-md hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer"
+              class="inline-flex items-center gap-1 text-[0.938rem] font-medium text-muted hover:text-heading transition-colors px-3 py-2 rounded-md hover:bg-surface-hover cursor-pointer"
               aria-expanded="false"
               aria-haspopup="true"
               data-dropdown-trigger
@@ -198,7 +199,7 @@ function linkType(link: HeaderLink): 'link' | 'dropdown' | 'mega' {
                       {group.links.map((item) => (
                         <a
                           href={item.href}
-                          class="flex items-center gap-3 px-4 py-2 text-sm text-muted hover:text-heading hover:bg-black/5 dark:hover:bg-white/5 transition-colors no-underline"
+                          class="flex items-center gap-3 px-4 py-2 text-sm text-muted hover:text-heading hover:bg-surface-hover transition-colors no-underline"
                           role="menuitem"
                         >
                           {item.icon && <Icon name={item.icon} class="w-4 h-4 shrink-0 text-muted/60" />}
@@ -241,7 +242,7 @@ function linkType(link: HeaderLink): 'link' | 'dropdown' | 'mega' {
                                 <li>
                                   <a
                                     href={item.href}
-                                    class="group flex items-start gap-3 p-2 -mx-2 rounded-md hover:bg-black/5 dark:hover:bg-white/5 transition-colors no-underline"
+                                    class="group flex items-start gap-3 p-2 -mx-2 rounded-md hover:bg-surface-hover transition-colors no-underline"
                                     role="menuitem"
                                   >
                                     {item.icon && (
@@ -266,12 +267,7 @@ function linkType(link: HeaderLink): 'link' | 'dropdown' | 'mega' {
                         <div class="w-64 shrink-0">
                           <a href={link.mega.featured.href} class="block rounded-lg overflow-hidden border border-border hover:border-primary/30 transition-colors no-underline group">
                             {link.mega.featured.image && (
-                              <img
-                                src={link.mega.featured.image}
-                                alt=""
-                                class="w-full h-36 object-cover"
-                                loading="lazy"
-                              />
+                              <Image src={link.mega.featured.image} alt="" width={256} ratio="16/9" />
                             )}
                             <div class="p-4">
                               <div class="text-sm font-semibold text-heading group-hover:text-primary transition-colors">{link.mega.featured.title}</div>
@@ -395,11 +391,11 @@ function linkType(link: HeaderLink): 'link' | 'dropdown' | 'mega' {
                   {link.mega?.featured && (
                     <a
                       href={link.mega.featured.href}
-                      class="flex items-center gap-3 mx-3 mt-2 p-3 rounded-lg bg-black/5 dark:bg-white/5 no-underline"
+                      class="flex items-center gap-3 mx-3 mt-2 p-3 rounded-lg bg-surface-hover no-underline"
                       data-menu-link
                     >
                       {link.mega.featured.image && (
-                        <img src={link.mega.featured.image} alt="" class="w-12 h-12 rounded object-cover" loading="lazy" />
+                        <Image src={link.mega.featured.image} alt="" width={48} ratio="1/1" class="size-12 rounded" />
                       )}
                       <div>
                         <div class="text-sm font-semibold text-heading">{link.mega.featured.title}</div>

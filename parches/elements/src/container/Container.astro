@@ -1,0 +1,28 @@
+---
+/**
+ * Container — the horizontal measure. Widgets used to hand-roll `mx-auto
+ * max-w-7xl px-4` in fourteen places with three different widths; this is the
+ * one place that decision lives. Static, no tokens beyond spacing.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './container.props';
+
+const { props: { width, padding, as: Tag }, rest, className } = splitProps(schema, Astro.props);
+
+const widths: Record<typeof width, string> = {
+  sm: 'max-w-3xl',
+  md: 'max-w-5xl',
+  lg: 'max-w-6xl',
+  xl: 'max-w-7xl',
+  full: 'max-w-none',
+};
+---
+
+<Tag
+  class={cn('parche-container mx-auto w-full', widths[width], padding && 'px-4 md:px-6', className)}
+  data-part="root"
+  {...rest}
+  data-width={width}
+>
+  <slot />
+</Tag>

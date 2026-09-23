@@ -1,0 +1,37 @@
+---
+/**
+ * Badge — a status pill. The status variants use the semantic status tokens
+ * (`success`, `warning`, `danger` with their soft tints), so a theme can
+ * recolour them and every one keeps AA contrast by construction.
+ */
+import { defineVariants, splitProps } from '@parche/elements/utils';
+import Icon from '../icon/Icon.astro';
+import { schema, type Props } from './badge.props';
+
+const { props: { variant, size, icon }, rest, className } = splitProps(schema, Astro.props);
+
+const badge = defineVariants({
+  base: 'parche-badge inline-flex items-center gap-1 rounded-full font-medium whitespace-nowrap border',
+  variants: {
+    variant: {
+      default: 'bg-surface text-heading border-border',
+      primary: 'bg-primary-soft text-primary border-primary/20',
+      success: 'bg-success-soft text-success border-success/30',
+      warning: 'bg-warning-soft text-warning border-warning/30',
+      danger: 'bg-danger-soft text-danger border-danger/30',
+      muted: 'bg-surface text-muted border-border',
+    },
+    size: {
+      sm: 'px-2 py-0.5 text-xs',
+      md: 'px-2.5 py-1 text-xs',
+    },
+  },
+  defaults: { variant: 'default', size: 'md' },
+});
+---
+
+<span class={badge({ variant, size }, className)} data-part="root"
+  {...rest} data-variant={variant} data-size={size}>
+  {icon && <Icon name={icon} size="xs" />}
+  <slot />
+</span>

@@ -1,0 +1,28 @@
+---
+/**
+ * Tag — a taxonomy chip. A link when `href` is set (a category page, a filter),
+ * a span otherwise. `active` is the selected filter, announced with
+ * `aria-current`.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './tag.props';
+
+const { props: { href, active }, rest, className } = splitProps(schema, Astro.props);
+const Tag = href ? 'a' : 'span';
+---
+
+<Tag
+  href={href}
+  class={cn(
+    'parche-tag inline-flex items-center rounded-md px-2.5 py-1 text-xs font-medium no-underline transition-colors',
+    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+    active ? 'bg-primary text-on-primary' : 'bg-surface text-muted border border-border hover:border-primary/40 hover:text-heading',
+    className,
+  )}
+  data-part="root"
+  {...rest}
+  data-state={active ? 'active' : undefined}
+  aria-current={href && active ? 'true' : undefined}
+>
+  <slot />
+</Tag>

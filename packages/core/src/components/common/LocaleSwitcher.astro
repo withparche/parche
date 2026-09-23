@@ -83,7 +83,7 @@ const allLocales = hasMultipleLocales
   <div class="relative" data-locale-switcher>
     <button
       type="button"
-      class="inline-flex items-center gap-1.5 text-sm font-medium text-muted hover:text-heading transition-colors px-2 h-8 rounded-md hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer"
+      class="inline-flex items-center gap-1.5 text-sm font-medium text-muted hover:text-heading transition-colors px-2 h-8 rounded-md hover:bg-surface-hover cursor-pointer"
       aria-expanded="false"
       aria-haspopup="true"
       aria-label={`Language: ${currentName}`}
@@ -107,7 +107,7 @@ const allLocales = hasMultipleLocales
         {allLocales.map((item) =>
           item.current ? (
             <div
-              class="flex items-center justify-between px-3 py-2 text-sm font-medium text-heading bg-black/5 dark:bg-white/5"
+              class="flex items-center justify-between px-3 py-2 text-sm font-medium text-heading bg-surface-hover"
               role="menuitem"
               aria-current="true"
             >
@@ -127,7 +127,7 @@ const allLocales = hasMultipleLocales
           ) : (
             <a
               href={item.href}
-              class="flex items-center px-3 py-2 text-sm text-muted hover:text-heading hover:bg-black/5 dark:hover:bg-white/5 transition-colors no-underline"
+              class="flex items-center px-3 py-2 text-sm text-muted hover:text-heading hover:bg-surface-hover transition-colors no-underline"
               role="menuitem"
               hreflang={item.locale}
             >

@@ -1,0 +1,40 @@
+---
+/**
+ * Video — YouTube and Vimeo page URLs become lazy, privacy-friendlier embeds
+ * (youtube-nocookie, no tracking params); anything else is a native `<video>`
+ * with controls. No client script of ours.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './video.props';
+
+const { props: { src, title, poster, ratio }, rest, className } = splitProps(schema, Astro.props);
+
+const ratios: Record<typeof ratio, string> = { '16/9': 'aspect-video', '4/3': 'aspect-[4/3]', '1/1': 'aspect-square', '21/9': 'aspect-[21/9]' };
+
+function embedUrl(url: string): string | null {
+  const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([\w-]{6,})/);
+  if (yt) return `https://www.youtube-nocookie.com/embed/${yt[1]}`;
+  const vimeo = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if (vimeo) return `https://player.vimeo.com/video/${vimeo[1]}?dnt=1`;
+  return null;
+}
+const embed = embedUrl(src);
+---
+
+<div class={cn('parche-video overflow-hidden rounded-md bg-surface', ratios[ratio], className)} data-part="root"
+  {...rest} data-ratio={ratio} data-provider={embed ? (embed.includes('youtube') ? 'youtube' : 'vimeo') : 'file'}>
+  {embed ? (
+    <iframe
+      src={embed}
+      title={title}
+      class="size-full border-0"
+      loading="lazy"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen
+      referrerpolicy="strict-origin-when-cross-origin"
+      data-part="player"
+    ></iframe>
+  ) : (
+    <video src={src} title={title} poster={poster} controls preload="metadata" playsinline class="size-full" data-part="player"></video>
+  )}
+</div>

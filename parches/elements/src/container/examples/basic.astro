@@ -1,0 +1,12 @@
+---
+import Container from '../Container.astro';
+const widths = ['sm', 'md', 'lg', 'xl', 'full'] as const;
+---
+
+<div class="space-y-3">
+  {widths.map((width) => (
+    <Container width={width} class="rounded-md border border-dashed border-border py-2 text-center text-sm text-muted">
+      width="{width}"
+    </Container>
+  ))}
+</div>

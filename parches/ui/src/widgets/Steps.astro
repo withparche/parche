@@ -1,7 +1,8 @@
 ---
 import type { Props } from './Steps.props';
-import LegacyHeadline from '../components/LegacyHeadline.astro';
+import Heading from 'parche:elements/Heading';
 import Icon from 'parche:elements/Icon';
+import Image from 'parche:elements/Image';
 
 const { title, subtitle, tagline, items = [], image, isReversed = false } = Astro.props as Props;
 const hasImage = !!image;
@@ -12,7 +13,7 @@ const hasImage = !!image;
   <div class:list={['flex flex-col gap-8 md:gap-12 md:flex-row', { 'md:flex-row-reverse': isReversed }]}>
     <div class="md:py-4 md:self-center md:basis-1/2">
       {(title || subtitle || tagline) && (
-        <LegacyHeadline title={title} subtitle={subtitle} tagline={tagline} classes={{ container: 'text-left rtl:text-right mb-8' }} />
+        <Heading {title} {subtitle} {tagline} align="start" spacing={false} class="rtl:text-right mb-8" />
       )}
       {items.length > 0 && (
         <div>
@@ -39,14 +40,14 @@ const hasImage = !!image;
     <div class="relative md:basis-1/2">
       {typeof image === 'string'
         ? <Fragment set:html={image} />
-        : <img src={image.src} alt={image.alt ?? ''} class="w-full rounded-md shadow-lg object-cover object-top md:absolute md:inset-0 md:h-full bg-surface" />
+        : <Image src={image.src} alt={image.alt ?? ''} width={800} ratio="4/3" class="rounded-md shadow-lg md:absolute md:inset-0 md:h-full md:w-full md:aspect-auto" />
       }
     </div>
   </div>
 ) : (
   <div>
     {(title || subtitle || tagline) && (
-      <LegacyHeadline title={title} subtitle={subtitle} tagline={tagline} classes={{ container: 'text-center mb-12' }} />
+      <Heading {title} {subtitle} {tagline} spacing={false} class="mb-12" />
     )}
     {items.length > 0 && (
       <ol class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">

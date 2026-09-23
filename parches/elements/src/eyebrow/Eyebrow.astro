@@ -1,0 +1,22 @@
+---
+/**
+ * Eyebrow — the short uppercase label that sits above a heading and names the
+ * section ("Features", "Pricing"). Typography comes from the `type-label`
+ * role, colour from a tone token.
+ */
+import { defineVariants, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './eyebrow.props';
+
+const { props: { tone, as: Tag }, rest, className } = splitProps(schema, Astro.props);
+
+const eyebrow = defineVariants({
+  base: 'parche-eyebrow type-label',
+  variants: { tone: { primary: 'text-primary', muted: 'text-muted', highlight: 'text-highlight' } },
+  defaults: { tone: 'primary' },
+});
+---
+
+<Tag class={eyebrow({ tone }, className)} data-part="root"
+  {...rest} data-tone={tone}>
+  <slot />
+</Tag>

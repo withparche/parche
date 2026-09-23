@@ -1,5 +1,6 @@
 ---
 import Action from '../components/Action.astro';
+import Image from 'parche:elements/Image';
 import type { Props } from './Hero2.props';
 
 const {
@@ -38,11 +39,12 @@ const {
     </div>
     {image && (
       <div class="md:basis-1/2 mt-10 md:mt-0">
-        <img
+        <Image
           src={typeof image === 'string' ? image : image.src}
           alt={typeof image === 'string' ? '' : (image.alt || '')}
-          class="mx-auto rounded-md w-full max-w-[600px]"
+          width={600}
           loading="eager"
+          class="mx-auto rounded-md max-w-[600px]"
         />
       </div>
     )}

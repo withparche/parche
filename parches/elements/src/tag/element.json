@@ -1,0 +1,13 @@
+{
+  "name": "tag",
+  "type": "element",
+  "files": [
+    { "path": "Tag.astro", "type": "part" },
+    { "path": "tag.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": [],
+  "source": null
+}

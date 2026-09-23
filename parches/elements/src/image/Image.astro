@@ -1,0 +1,55 @@
+---
+/**
+ * Image — one component for both kinds of picture a page has. Local images
+ * (astro:assets metadata, which `resolveAssets` produces from `@/assets/…`)
+ * go through Astro's optimiser: hashed, resized, modern formats. Remote URLs
+ * render a plain `<img>` with explicit dimensions, so the layout never shifts.
+ */
+import { Image as AstroImage } from 'astro:assets';
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './image.props';
+
+const { props: { src, alt, width, height, ratio, loading, fit }, rest, className } = splitProps(schema, Astro.props);
+
+const ratios: Record<NonNullable<typeof ratio>, string> = {
+  '1/1': 'aspect-square',
+  '4/3': 'aspect-[4/3]',
+  '16/9': 'aspect-video',
+  '3/2': 'aspect-[3/2]',
+  '21/9': 'aspect-[21/9]',
+};
+
+const isRemote = typeof src === 'string';
+const computedHeight = height ?? (ratio ? undefined : Math.round((width * 9) / 16));
+const imgClass = cn('parche-image-img bg-surface', ratio && 'size-full', ratio && (fit === 'contain' ? 'object-contain' : 'object-cover'));
+---
+
+<div
+  class={cn('parche-image', ratio && ratios[ratio], ratio && 'overflow-hidden', className)}
+  data-part="root"
+  {...rest}
+  data-ratio={ratio}
+>
+  {isRemote ? (
+    <img
+      src={src}
+      alt={alt}
+      width={width}
+      height={computedHeight}
+      loading={loading}
+      decoding="async"
+      class={imgClass}
+      data-part="img"
+    />
+  ) : (
+    <AstroImage
+      src={src}
+      alt={alt}
+      width={width}
+      height={computedHeight ?? Math.round((width * src.height) / src.width)}
+      loading={loading}
+      class={imgClass}
+      data-part="img"
+    />
+  )}
+</div>

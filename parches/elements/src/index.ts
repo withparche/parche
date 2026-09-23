@@ -8,23 +8,33 @@ import type { ParcheManifest } from '@parche/astro';
  */
 export default function createElements(): ParcheManifest {
   const dir = path.dirname(fileURLToPath(import.meta.url));
-  const atom = (file: string) => path.resolve(dir, 'atoms', file);
+  const el = (file: string) => path.resolve(dir, file);
   return {
     name: 'elements',
     // Let Tailwind scan these components' classes, even installed from npm.
     content: [path.resolve(dir, '**/*.astro')],
     elements: {
-      Button: atom('Button.astro'),
-      Container: atom('Container.astro'),
-      Section: atom('Section.astro'),
-      Icon: atom('Icon.astro'),
-      Badge: atom('Badge.astro'),
-      Eyebrow: atom('Eyebrow.astro'),
-      Avatar: atom('Avatar.astro'),
-      Divider: atom('Divider.astro'),
-      Tag: atom('Tag.astro'),
-      Link: atom('Link.astro'),
-      Image: atom('Image.astro'),
+      Button: el('button/Button.astro'),
+      Container: el('container/Container.astro'),
+      Section: el('section/Section.astro'),
+      Icon: el('icon/Icon.astro'),
+      Badge: el('badge/Badge.astro'),
+      Eyebrow: el('eyebrow/Eyebrow.astro'),
+      Avatar: el('avatar/Avatar.astro'),
+      Divider: el('divider/Divider.astro'),
+      Tag: el('tag/Tag.astro'),
+      Link: el('link/Link.astro'),
+      Image: el('image/Image.astro'),
+      // Static tier, phase 1
+      Heading: el('heading/Heading.astro'),
+      Card: el('card/Card.astro'),
+      Kbd: el('kbd/Kbd.astro'),
+      Code: el('code/Code.astro'),
+      Prose: el('prose/Prose.astro'),
+      Video: el('video/Video.astro'),
+      Skeleton: el('skeleton/Skeleton.astro'),
+      Breadcrumb: el('breadcrumb/Breadcrumb.astro'),
+      Pagination: el('pagination/Pagination.astro'),
     },
   };
 }

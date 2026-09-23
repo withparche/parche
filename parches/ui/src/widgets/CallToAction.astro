@@ -1,18 +1,14 @@
 ---
-import LegacyHeadline from '../components/LegacyHeadline.astro';
+import Heading from 'parche:elements/Heading';
+import Card from 'parche:elements/Card';
 import Action from '../components/Action.astro';
 import type { Props } from './CallToAction.props';
 
 const { title, subtitle, tagline, actions = [] } = Astro.props;
 ---
 
-<div class="max-w-3xl mx-auto text-center p-6 rounded-md shadow-xl bg-surface border border-border">
-  <LegacyHeadline
-    {title}
-    {subtitle}
-    {tagline}
-    classes={{ container: 'mb-0 md:mb-0', title: 'text-4xl md:text-4xl' }}
-  />
+<Card shadow="md" class="max-w-3xl mx-auto text-center">
+  <Heading {title} {subtitle} {tagline} spacing={false} />
   {actions.length > 0 && (
     <div class="flex flex-col sm:flex-row justify-center gap-4 mt-6">
       {actions.map((action) => (
@@ -20,4 +16,4 @@ const { title, subtitle, tagline, actions = [] } = Astro.props;
       ))}
     </div>
   )}
-</div>
+</Card>

@@ -27,7 +27,9 @@ export async function expectAccessible(page: Page): Promise<void> {
   for (const dark of [false, true]) {
     await page.evaluate((d) => document.documentElement.classList.toggle('dark', d), dark);
     await settle(page);
-    const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+    // Third-party embeds (YouTube, Vimeo) are not ours to fix: axe can reach
+    // into cross-origin frames through Playwright, so exclude every iframe.
+    const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).exclude('iframe').analyze();
     const report = results.violations
       .map((v) => `${v.id}:\n` + v.nodes.map((n) => `    ${n.target.join(' ')} — ${n.any.map((a) => a.message).join('; ')}`).join('\n'))
       .join('\n');

@@ -1,0 +1,13 @@
+{
+  "name": "breadcrumb",
+  "type": "element",
+  "files": [
+    { "path": "Breadcrumb.astro", "type": "part" },
+    { "path": "breadcrumb.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["icon"],
+  "source": null
+}

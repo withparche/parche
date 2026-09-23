@@ -1,0 +1,14 @@
+{
+  "name": "button",
+  "type": "element",
+  "files": [
+    { "path": "Button.astro", "type": "part" },
+    { "path": "button.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" },
+    { "path": "examples/icons.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["icon"],
+  "source": null
+}

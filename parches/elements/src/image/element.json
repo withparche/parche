@@ -1,0 +1,13 @@
+{
+  "name": "image",
+  "type": "element",
+  "files": [
+    { "path": "Image.astro", "type": "part" },
+    { "path": "image.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": [],
+  "source": null
+}

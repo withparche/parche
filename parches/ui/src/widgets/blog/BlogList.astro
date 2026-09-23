@@ -6,6 +6,7 @@
 import BlogPostCard from 'parche:widgets/blog/BlogPostCard';
 import BlogPostCardGrid from 'parche:widgets/blog/BlogPostCardGrid';
 import Pagination from 'parche:widgets/blog/Pagination';
+import Container from 'parche:elements/Container';
 
 interface PostItem {
   title: string;
@@ -62,13 +63,11 @@ const {
 const isGrid = variant === 'grid';
 ---
 
-<section {id} class:list={[isGrid ? 'px-6 sm:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-6xl' : 'px-6 sm:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-4xl', className]}>
+<Container as="section" width={isGrid ? 'lg' : 'md'} id={id} class:list={['py-12 sm:py-16 lg:py-20', className]}>
   {(title || subtitle) && (
     <header class="mb-8 md:mb-16 text-center max-w-3xl mx-auto">
-      {title && <h1 class="text-4xl md:text-5xl font-bold leading-tighter tracking-tighter font-heading" set:html={title} />}
-      {subtitle && (
-        <div class="mt-2 md:mt-3 mx-auto text-xl text-gray-500 dark:text-slate-400 font-medium" set:html={subtitle} />
-      )}
+      {title && <h1 class="text-4xl md:text-5xl font-bold leading-tighter tracking-tighter font-heading text-heading" set:html={title} />}
+      {subtitle && <div class="mt-2 md:mt-3 mx-auto text-xl text-muted font-medium" set:html={subtitle} />}
     </header>
   )}
 
@@ -101,4 +100,4 @@ const isGrid = variant === 'grid';
       nextText={nextText}
     />
   )}
-</section>
+</Container>

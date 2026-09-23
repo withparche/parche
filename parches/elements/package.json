@@ -23,7 +23,8 @@
     "astro": "catalog:",
     "vitest": "catalog:",
     "@playwright/test": "catalog:",
-    "@axe-core/playwright": "catalog:"
+    "@axe-core/playwright": "catalog:",
+    "@iconify-json/tabler": "catalog:"
   },
   "engines": {
     "node": ">=20"

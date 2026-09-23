@@ -1,7 +1,8 @@
 ---
 import type { Props } from './Steps2.props';
-import LegacyHeadline from '../components/LegacyHeadline.astro';
+import Heading from 'parche:elements/Heading';
 import Icon from 'parche:elements/Icon';
+import Button from 'parche:elements/Button';
 
 const {
   title,
@@ -17,23 +18,12 @@ const {
   <!-- Headline + CTA column -->
   <div class:list={['w-full lg:w-1/2', isReversed ? 'lg:ml-16 md:ml-8' : 'lg:mr-16 md:mr-8']}>
     {(title || subtitle || tagline) && (
-      <LegacyHeadline
-        title={title}
-        subtitle={subtitle}
-        tagline={tagline}
-        classes={{ container: 'text-center md:text-left rtl:md:text-right mb-4 md:mb-8' }}
-      />
+      <Heading {title} {subtitle} {tagline} spacing={false} class="md:text-left rtl:md:text-right mb-4 md:mb-8" />
     )}
 
     {callToAction && callToAction.text && callToAction.href && (
       <div class="text-center md:text-left rtl:md:text-right">
-        <a
-          href={callToAction.href}
-          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-primary text-on-primary type-label font-semibold hover:opacity-90 transition-opacity"
-        >
-          {callToAction.icon && <Icon name={callToAction.icon} class="w-4 h-4" />}
-          {callToAction.text}
-        </a>
+        <Button href={callToAction.href} icon={callToAction.icon} class="rounded-md">{callToAction.text}</Button>
       </div>
     )}
   </div>

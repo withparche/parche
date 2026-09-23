@@ -1,0 +1,41 @@
+---
+/**
+ * Card — the surface widgets kept hand-rolling (`bg-surface border border-border
+ * rounded-md shadow-sm` in twelve files). One element, four slots. As a link
+ * (`href`) the whole card is the target, with the ring on focus.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './card.props';
+
+const { props: { as, href, padding, shadow, border, interactive: interactiveProp }, rest, className } = splitProps(schema, Astro.props);
+
+const interactive = href ? true : interactiveProp;
+const Tag = href ? 'a' : as;
+const paddings: Record<typeof padding, string> = { none: '', sm: 'p-4', md: 'p-4 md:p-6', lg: 'p-6 md:p-8' };
+const shadows: Record<typeof shadow, string> = { none: '', sm: 'shadow-sm', md: 'shadow-md' };
+const hasMedia = Astro.slots.has('media');
+const hasHeader = Astro.slots.has('header');
+const hasFooter = Astro.slots.has('footer');
+---
+
+<Tag
+  href={href}
+  class={cn(
+    'parche-card flex flex-col overflow-hidden rounded-md bg-surface text-text',
+    border && 'border border-border',
+    shadows[shadow],
+    interactive && 'transition-shadow hover:shadow-md',
+    href && 'no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+    className,
+  )}
+  data-part="root"
+  {...rest}
+  data-state={interactive ? 'interactive' : undefined}
+>
+  {hasMedia && <div class="parche-card-media" data-part="media"><slot name="media" /></div>}
+  <div class={cn('parche-card-body flex flex-1 flex-col', paddings[padding])} data-part="body">
+    {hasHeader && <div class="parche-card-header mb-3" data-part="header"><slot name="header" /></div>}
+    <slot />
+    {hasFooter && <div class="parche-card-footer mt-4 border-t border-border pt-4" data-part="footer"><slot name="footer" /></div>}
+  </div>
+</Tag>

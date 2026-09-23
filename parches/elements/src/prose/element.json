@@ -1,0 +1,13 @@
+{
+  "name": "prose",
+  "type": "element",
+  "files": [
+    { "path": "Prose.astro", "type": "part" },
+    { "path": "prose.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": [],
+  "source": null
+}

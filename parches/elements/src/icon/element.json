@@ -1,0 +1,13 @@
+{
+  "name": "icon",
+  "type": "element",
+  "files": [
+    { "path": "Icon.astro", "type": "part" },
+    { "path": "icon.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": { "astro-icon": "^1.2.0" },
+  "registryDependencies": [],
+  "source": null
+}

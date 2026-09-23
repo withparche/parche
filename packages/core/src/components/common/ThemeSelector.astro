@@ -40,7 +40,7 @@ const { themes = configuredThemes } = Astro.props;
         buttons.forEach((btn) => {
           const isActive = btn.dataset.themeValue === active;
           btn.classList.toggle('bg-primary', isActive);
-          btn.classList.toggle('text-white', isActive);
+          btn.classList.toggle('text-on-primary', isActive);
           btn.classList.toggle('text-muted', !isActive);
         });
       };

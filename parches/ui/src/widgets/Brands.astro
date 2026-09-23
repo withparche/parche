@@ -1,12 +1,14 @@
 ---
 import type { Props } from './Brands.props';
-import LegacyHeadline from '../components/LegacyHeadline.astro';
+import Heading from 'parche:elements/Heading';
 import Icon from 'parche:elements/Icon';
+import Card from 'parche:elements/Card';
+import Image from 'parche:elements/Image';
 
 const { tagline, title, subtitle, icons = [], images = [] } = Astro.props;
 ---
 
-<LegacyHeadline tagline={tagline} title={title} subtitle={subtitle} />
+<Heading {tagline} {title} {subtitle} />
 
 <div class="flex flex-wrap justify-center gap-x-6 sm:gap-x-12 lg:gap-x-24">
   {icons.map((icon) => (
@@ -14,17 +16,9 @@ const { tagline, title, subtitle, icons = [], images = [] } = Astro.props;
   ))}
   {images.map((image) =>
     image.src && (
-      <div class="flex justify-center my-2 lg:my-4 py-1 px-3 rounded-md bg-surface border border-border">
-        <img
-          src={image.src}
-          alt={image.alt ?? ''}
-          class="max-h-12 w-auto object-contain"
-          width={120}
-          height={48}
-          loading="lazy"
-          decoding="async"
-        />
-      </div>
+      <Card padding="none" shadow="none" class="my-2 lg:my-4 justify-center px-3 py-1">
+        <Image src={image.src} alt={image.alt ?? ''} width={120} height={48} class="max-h-12" />
+      </Card>
     )
   )}
 </div>

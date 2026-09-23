@@ -1,0 +1,49 @@
+---
+/**
+ * Avatar — a person's picture, or their initials on a tinted disc when there
+ * is no picture. The fallback is announced as an image named after the person,
+ * so a screen reader hears the same thing either way.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './avatar.props';
+
+const { props: { src, name = '', alt, size }, rest, className } = splitProps(schema, Astro.props);
+
+const sizes: Record<typeof size, string> = {
+  xs: 'size-6 text-xs',
+  sm: 'size-8 text-xs',
+  md: 'size-10 text-sm',
+  lg: 'size-12 text-base',
+  xl: 'size-16 text-lg',
+};
+
+const initials = name
+  .split(/\s+/)
+  .filter(Boolean)
+  .slice(0, 2)
+  .map((w) => w[0]!.toUpperCase())
+  .join('');
+const label = alt ?? name;
+---
+
+{src ? (
+  <img
+    src={src}
+    alt={label}
+    class={cn('parche-avatar rounded-full object-cover bg-surface shrink-0', sizes[size], className)}
+    data-part="root" {...rest}
+    data-size={size}
+    loading="lazy"
+    decoding="async"
+  />
+) : (
+  <span
+    class={cn('parche-avatar inline-flex items-center justify-center rounded-full bg-primary-soft text-primary font-semibold shrink-0', sizes[size], className)}
+    data-part="root" {...rest}
+    data-size={size}
+    role="img"
+    aria-label={label || 'Unknown person'}
+  >
+    <span aria-hidden="true">{initials || '?'}</span>
+  </span>
+)}

@@ -1,0 +1,13 @@
+{
+  "name": "link",
+  "type": "element",
+  "files": [
+    { "path": "Link.astro", "type": "part" },
+    { "path": "link.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["icon"],
+  "source": null
+}

@@ -17,6 +17,7 @@
   --color-on-surface:    var(--ds-color-on-surface);
   --color-primary:       var(--ds-color-primary);
   --color-on-primary:    var(--ds-color-on-primary);
+  --color-primary-soft:  var(--ds-color-primary-soft);
   --color-muted:         var(--ds-color-muted);
   --color-border:        var(--ds-color-border);
   --color-heading:       var(--ds-color-heading);
@@ -47,6 +48,7 @@
   --ds-color-surface:     oklch(1 0 0);
   --ds-color-primary:     oklch(0.500 0.220 260);   /* brand blue — same as dark, so primary is consistent across modes */
   --ds-color-on-primary:  oklch(1 0 0);
+  --ds-color-primary-soft: var(--color-primary-50);    /* tinted surface for primary text: 5.7:1 */
   --ds-color-muted:       oklch(0.55 0.02 264.42);
   --ds-color-border:      oklch(0.90 0.006 260);
   --ds-color-heading:     oklch(0.07 0.01 260);
@@ -59,14 +61,15 @@
   --ds-color-ring:          var(--ds-color-primary); /* every focus-visible outline */
   --ds-color-overlay:       oklch(0.07 0.01 260 / 0.5); /* dialog / sheet backdrop */
 
-  /* Status roles — solid + foreground + soft tint */
-  --ds-color-success:       var(--color-success-600);
+  /* Status roles — solid + foreground + soft tint. The 700 step is the
+     lightest that reads at AA both as text on its soft tint and under white. */
+  --ds-color-success:       var(--color-success-700);  /* 5.9:1 on soft, white 6.2:1 */
   --ds-color-on-success:    oklch(1 0 0);
   --ds-color-success-soft:  var(--color-success-50);
-  --ds-color-warning:       var(--color-warning-600);
-  --ds-color-on-warning:    oklch(0.15 0.02 70);
+  --ds-color-warning:       var(--color-warning-700);  /* 4.6:1 on soft, white 4.9:1 */
+  --ds-color-on-warning:    oklch(1 0 0);
   --ds-color-warning-soft:  var(--color-warning-50);
-  --ds-color-danger:        var(--color-danger-600);
+  --ds-color-danger:        var(--color-danger-700);   /* 6.1:1 on soft, white 6.5:1 */
   --ds-color-on-danger:     oklch(1 0 0);
   --ds-color-danger-soft:   var(--color-danger-50);
 
@@ -118,13 +121,17 @@
   --ds-color-background:  oklch(0.100 0.040 260);   /* v1 dark navy: rgb(3 6 32) */
   --ds-color-foreground:  oklch(0.960 0.005 260);
   --ds-color-surface:     oklch(0.140 0.040 260);
-  --ds-color-primary:     oklch(0.500 0.220 260);   /* same blue in dark */
-  --ds-color-on-primary:  oklch(1 0 0);
+  /* Primary reads as text on the dark background (6.2:1), so the fill goes
+     lighter and its foreground dark — the dark-mode split every AA palette
+     makes. The light-mode blue sat at 3.3:1 here. */
+  --ds-color-primary:     oklch(0.650 0.190 260);
+  --ds-color-on-primary:  oklch(0.130 0.040 260);   /* 6.1:1 on primary */
+  --ds-color-primary-soft: oklch(0.200 0.060 260);  /* 5.5:1 under primary text */
   --ds-color-muted:       oklch(0.60 0.015 260);   /* 5.05:1 on surface — WCAG AA; 0.55 sat at 4.11 */
   --ds-color-border:      oklch(0.200 0.030 260);
   --ds-color-heading:     oklch(0.970 0.003 260);
   --ds-color-text:        oklch(0.800 0.010 250);
-  --ds-color-highlight:   oklch(0.550 0.250 295);   /* lighter purple for dark mode */
+  --ds-color-highlight:   oklch(0.660 0.220 295);   /* 6.0:1 on the dark background */
 
   --ds-color-surface-hover: oklch(0.190 0.040 260);
   --ds-color-on-surface:    oklch(0.800 0.010 250);

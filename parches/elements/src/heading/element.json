@@ -1,0 +1,13 @@
+{
+  "name": "heading",
+  "type": "element",
+  "files": [
+    { "path": "Heading.astro", "type": "part" },
+    { "path": "heading.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["eyebrow"],
+  "source": null
+}

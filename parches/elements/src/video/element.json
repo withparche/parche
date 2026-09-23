@@ -1,0 +1,13 @@
+{
+  "name": "video",
+  "type": "element",
+  "files": [
+    { "path": "Video.astro", "type": "part" },
+    { "path": "video.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": [],
+  "source": null
+}

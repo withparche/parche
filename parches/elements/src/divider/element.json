@@ -1,0 +1,13 @@
+{
+  "name": "divider",
+  "type": "element",
+  "files": [
+    { "path": "Divider.astro", "type": "part" },
+    { "path": "divider.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": [],
+  "source": null
+}

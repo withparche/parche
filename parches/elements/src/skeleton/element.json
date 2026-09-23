@@ -1,0 +1,13 @@
+{
+  "name": "skeleton",
+  "type": "element",
+  "files": [
+    { "path": "Skeleton.astro", "type": "part" },
+    { "path": "skeleton.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": [],
+  "source": null
+}

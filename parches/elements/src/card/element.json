@@ -1,0 +1,13 @@
+{
+  "name": "card",
+  "type": "element",
+  "files": [
+    { "path": "Card.astro", "type": "part" },
+    { "path": "card.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["badge"],
+  "source": null
+}

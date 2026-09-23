@@ -7,6 +7,7 @@
  * overridable via `classes.container`.
  */
 import { twMerge } from 'tailwind-merge';
+import Avatar from 'parche:elements/Avatar';
 
 interface Item {
   title?: string;
@@ -28,7 +29,6 @@ interface Props {
 }
 
 const { tagline, title, subtitle, variant = 'list', items = [], classes = {} } = Astro.props as Props;
-const initials = (s?: string) => (s ?? '').trim().charAt(0).toUpperCase();
 ---
 
 <div class={twMerge('mx-auto max-w-3xl', classes.container)}>
@@ -52,11 +52,7 @@ const initials = (s?: string) => (s ?? '').trim().charAt(0).toUpperCase();
     <div class="mt-6 flex flex-col gap-6">
       {items.map((it) => (
         <div class="flex items-center gap-4">
-          <div class="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-surface font-semibold text-muted">
-            {it.logo?.src
-              ? <img src={it.logo.src} alt={it.logo.alt ?? it.title ?? ''} class="size-full object-cover" />
-              : initials(it.title)}
-          </div>
+          <Avatar src={it.logo?.src} name={it.title} alt={it.logo?.alt} size="lg" class="size-14 border border-border" />
           <div class="min-w-0 flex-1">
             <div class="flex items-baseline justify-between gap-3">
               {it.title && <p class="truncate text-lg font-semibold text-heading">{it.title}</p>}

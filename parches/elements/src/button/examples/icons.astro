@@ -1,0 +1,13 @@
+---
+import Button from '../Button.astro';
+---
+
+<div class="flex flex-wrap items-center gap-3">
+  <Button icon="tabler:arrow-right" iconPosition="end">Get started</Button>
+  <Button variant="secondary" icon="tabler:brand-github">GitHub</Button>
+  <Button variant="ghost" icon="tabler:x" label="Close" />
+  <Button href="https://example.com" target="_blank" variant="link" icon="tabler:external-link" iconPosition="end">Docs</Button>
+</div>
+<div class="mt-4 max-w-sm">
+  <Button block>Full width</Button>
+</div>

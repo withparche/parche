@@ -1,6 +1,6 @@
 ---
 import { twMerge } from 'tailwind-merge';
-import LegacyHeadline from '../components/LegacyHeadline.astro';
+import Heading from 'parche:elements/Heading';
 import Icon from 'parche:elements/Icon';
 import type { Props } from './Features2.props';
 
@@ -21,7 +21,7 @@ const gridCols =
       : 'sm:grid-cols-2';
 ---
 
-<LegacyHeadline {title} {subtitle} {tagline} />
+<Heading {title} {subtitle} {tagline} />
 
 {items.length > 0 && (
   <div class={`grid mx-auto gap-4 md:gap-6 ${gridCols}`}>

@@ -1,0 +1,71 @@
+---
+/**
+ * Pagination — a labelled `<nav>` with previous/next and a window of page
+ * numbers. URLs are data (`base` + page number), never a function, so the
+ * element works from JSON. Unavailable prev/next render as disabled spans, in
+ * place, so the layout does not shift between pages.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import Icon from '../icon/Icon.astro';
+import { schema, type Props } from './pagination.props';
+
+const { props: { current, total, base, numbers, window: win, prevLabel, nextLabel, label }, rest, className } = splitProps(schema, Astro.props);
+
+const root = base.replace(/\/$/, '');
+const href = (n: number) => (n === 1 ? root || '/' : `${root}/${n}`);
+
+// Page numbers: 1 … [current-win .. current+win] … total, with ellipses.
+const pages: Array<number | 'gap'> = [];
+if (numbers) {
+  const wanted = new Set<number>([1, total]);
+  for (let n = current - win; n <= current + win; n++) if (n >= 1 && n <= total) wanted.add(n);
+  const sorted = [...wanted].sort((a, b) => a - b);
+  sorted.forEach((n, i) => {
+    if (i > 0 && n - sorted[i - 1]! > 1) pages.push('gap');
+    pages.push(n);
+  });
+}
+
+const control = 'inline-flex min-w-9 items-center justify-center gap-1 rounded-md px-3 py-2 text-sm font-medium no-underline transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
+const enabled = 'text-heading hover:bg-surface-hover hover:text-primary';
+const disabled = 'text-muted opacity-50';
+---
+
+<nav class={cn('parche-pagination', className)} aria-label={label} data-part="root"
+  {...rest}>
+  <ul class="parche-pagination-list flex flex-wrap items-center justify-between gap-2" data-part="list">
+    <li>
+      {current > 1 ? (
+        <a href={href(current - 1)} class={cn('parche-pagination-prev', control, enabled)} data-part="prev" rel="prev"><Icon name="tabler:chevron-left" size="sm" />{prevLabel}</a>
+      ) : (
+        <span class={cn('parche-pagination-prev', control, disabled)} data-part="prev" data-state="disabled" aria-disabled="true"><Icon name="tabler:chevron-left" size="sm" />{prevLabel}</span>
+      )}
+    </li>
+    {numbers && (
+      <li>
+        <ul class="flex items-center gap-1">
+          {pages.map((p) =>
+            p === 'gap' ? (
+              <li><span class="parche-pagination-ellipsis px-2 text-muted" data-part="ellipsis" aria-hidden="true">…</span></li>
+            ) : (
+              <li>
+                {p === current ? (
+                  <span class={cn('parche-pagination-page', control, 'bg-primary text-on-primary')} data-part="page" data-state="current" aria-current="page">{p}</span>
+                ) : (
+                  <a href={href(p)} class={cn('parche-pagination-page', control, enabled)} data-part="page" aria-label={`Page ${p}`}>{p}</a>
+                )}
+              </li>
+            ),
+          )}
+        </ul>
+      </li>
+    )}
+    <li>
+      {current < total ? (
+        <a href={href(current + 1)} class={cn('parche-pagination-next', control, enabled)} data-part="next" rel="next">{nextLabel}<Icon name="tabler:chevron-right" size="sm" /></a>
+      ) : (
+        <span class={cn('parche-pagination-next', control, disabled)} data-part="next" data-state="disabled" aria-disabled="true">{nextLabel}<Icon name="tabler:chevron-right" size="sm" /></span>
+      )}
+    </li>
+  </ul>
+</nav>

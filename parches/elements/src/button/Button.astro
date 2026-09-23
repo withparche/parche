@@ -1,0 +1,78 @@
+---
+/**
+ * Button — the action element. A `<button>` by default, an `<a>` when `href`
+ * is set. Static: no client script. Tokens only.
+ *
+ * Disabled links stay in the accessibility tree with `aria-disabled` and lose
+ * their `href`, as the APG recommends, instead of vanishing from tab order.
+ */
+import { defineVariants, splitProps } from '@parche/elements/utils';
+import Icon from '../icon/Icon.astro';
+import { schema, type Props } from './button.props';
+
+const { props: { variant, size, tone, href, target, type, disabled, icon, iconPosition, block, label }, rest, className } = splitProps(schema, Astro.props);
+
+const button = defineVariants({
+  base:
+    'parche-button inline-flex items-center justify-center gap-2 rounded-full font-semibold no-underline ' +
+    'transition-colors cursor-pointer select-none ' +
+    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring ' +
+    'aria-disabled:cursor-not-allowed aria-disabled:opacity-60 disabled:cursor-not-allowed disabled:opacity-60',
+  variants: {
+    variant: {
+      primary: 'bg-primary text-on-primary shadow-sm hover:opacity-90',
+      secondary: 'bg-surface text-heading border border-border hover:bg-surface-hover',
+      ghost: 'text-muted hover:text-heading hover:bg-surface-hover',
+      link: 'text-primary underline-offset-4 hover:underline px-0 py-0',
+    },
+    size: {
+      sm: 'px-3 py-1.5 text-sm',
+      md: 'px-5 py-2.5 text-sm',
+      lg: 'px-6 py-3 text-base',
+    },
+    tone: { default: '', danger: '' },
+    block: { true: 'w-full', false: '' },
+  },
+  compound: [
+    { variant: 'primary', tone: 'danger', class: 'bg-danger text-on-danger' },
+    { variant: 'secondary', tone: 'danger', class: 'text-danger border-danger/40 hover:bg-danger-soft' },
+    { variant: 'ghost', tone: 'danger', class: 'text-danger hover:bg-danger-soft' },
+    { variant: 'link', tone: 'danger', class: 'text-danger' },
+    { variant: 'link', size: 'sm', class: 'px-0 py-0' },
+    { variant: 'link', size: 'md', class: 'px-0 py-0' },
+    { variant: 'link', size: 'lg', class: 'px-0 py-0' },
+  ],
+  defaults: { variant: 'primary', size: 'md', tone: 'default', block: 'false' },
+});
+
+const classes = button({ variant, size, tone, block: block ? 'true' : 'false' }, className);
+const iconSize = size === 'lg' ? 'md' : 'sm';
+const hasText = Astro.slots.has('default');
+const rel = target === '_blank' ? 'noopener noreferrer' : undefined;
+const Tag = href ? 'a' : 'button';
+
+if (import.meta.env.DEV && icon && !hasText && !label) {
+  console.warn('[parche] <Button> with only an icon needs a `label` for its accessible name.');
+}
+---
+
+<Tag
+  class={classes}
+  data-part="root"
+  {...rest}
+  data-variant={variant}
+  data-size={size}
+  data-tone={tone !== 'default' ? tone : undefined}
+  data-state={disabled ? 'disabled' : undefined}
+  href={href && !disabled ? href : undefined}
+  target={href ? target : undefined}
+  rel={href ? rel : undefined}
+  type={href ? undefined : type}
+  disabled={!href && disabled ? true : undefined}
+  aria-disabled={href && disabled ? 'true' : undefined}
+  aria-label={!hasText ? label : undefined}
+>
+  {icon && iconPosition === 'start' && <Icon name={icon} size={iconSize} aria-hidden="true" />}
+  <slot />
+  {icon && iconPosition === 'end' && <Icon name={icon} size={iconSize} aria-hidden="true" />}
+</Tag>

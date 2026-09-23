@@ -1,12 +1,12 @@
 ---
-import LegacyHeadline from "../components/LegacyHeadline.astro";
+import Heading from "parche:elements/Heading";
 import Icon from "parche:elements/Icon";
 import type { Props } from "./Stats.props";
 
 const { title, subtitle, tagline, stats = [] } = Astro.props;
 ---
 
-<LegacyHeadline {title} {subtitle} {tagline} />
+<Heading {title} {subtitle} {tagline} />
 
 {
   stats.length > 0 && (
@@ -17,13 +17,13 @@ const { title, subtitle, tagline, stats = [] } = Astro.props;
             <div>
               {icon && (
                 <div class="flex items-center justify-center mx-auto mb-4 text-primary">
-                  <Icon name={icon} class="w-10 h-10" />
+                  <Icon name={icon} class="size-10" />
                 </div>
               )}
               <p class="type-h1 text-primary mb-1" data-value={amount}>
                 {amount}
               </p>
-              <p class="font-medium dark:text-slate-400 lg:text-base text-gray-800 text-sm tracking-widest uppercase">{title}</p>
+              <p class="font-medium text-muted lg:text-base text-sm tracking-widest uppercase">{title}</p>
             </div>
           ))}
         </div>

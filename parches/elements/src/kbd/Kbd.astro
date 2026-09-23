@@ -1,0 +1,20 @@
+---
+/**
+ * Kbd — a keyboard key. With `keys`, a combination: nested `<kbd>` inside an
+ * outer `<kbd>`, which is the HTML for "press these together".
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './kbd.props';
+
+const { props: { keys }, rest, className } = splitProps(schema, Astro.props);
+
+const key = 'inline-flex min-w-6 items-center justify-center rounded-md border border-border bg-surface px-1.5 py-0.5 font-mono text-xs font-medium text-heading shadow-[inset_0_-1px_0_var(--color-border)]';
+---
+
+{keys?.length ? (
+  <kbd class={cn('parche-kbd inline-flex items-center gap-1', className)} data-part="root" {...rest}>
+    {keys.map((k) => <kbd class={cn('parche-kbd-key', key)} data-part="key">{k}</kbd>)}
+  </kbd>
+) : (
+  <kbd class={cn('parche-kbd', key, className)} data-part="root" {...rest}><slot /></kbd>
+)}

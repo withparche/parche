@@ -1,0 +1,32 @@
+---
+/**
+ * Icon — an inline SVG from the Iconify sets, via astro-icon. Decorative by
+ * default (`aria-hidden`); pass `label` when the icon is the only content that
+ * conveys meaning and it becomes `role="img"` with that name. Colour follows
+ * `currentColor`, so it takes the text colour of wherever it sits.
+ */
+import { Icon as AstroIcon } from 'astro-icon/components';
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './icon.props';
+
+const { props: { name, size, label }, rest, className } = splitProps(schema, Astro.props);
+
+const sizes: Record<typeof size, string> = {
+  xs: 'size-3',
+  sm: 'size-4',
+  md: 'size-5',
+  lg: 'size-6',
+  xl: 'size-8',
+};
+---
+
+<AstroIcon
+  name={name}
+  class={cn('parche-icon shrink-0', sizes[size], className)}
+  data-part="root"
+  {...rest}
+  data-size={size}
+  aria-hidden={label ? undefined : 'true'}
+  role={label ? 'img' : undefined}
+  aria-label={label}
+/>

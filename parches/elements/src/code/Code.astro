@@ -1,0 +1,17 @@
+---
+/**
+ * Code — inline `<code>` by default, `<pre><code>` as a block. Plain: no
+ * highlighting, no client script. Syntax highlighting belongs to a widget
+ * (Astro's own <Code> renders Shiki at build time).
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './code.props';
+
+const { props: { block, lang }, rest, className } = splitProps(schema, Astro.props);
+---
+
+{block ? (
+  <pre class={cn('parche-code overflow-x-auto rounded-md border border-border bg-surface p-4 font-mono text-sm text-text', className)} data-part="root" {...rest} data-lang={lang}><code class={lang && `language-${lang}`}><slot /></code></pre>
+) : (
+  <code class={cn('parche-code rounded-sm border border-border bg-surface px-1.5 py-0.5 font-mono text-[0.9em] text-heading', className)} data-part="root" {...rest} data-lang={lang}><slot /></code>
+)}

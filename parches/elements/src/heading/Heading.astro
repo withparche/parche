@@ -1,0 +1,31 @@
+---
+/**
+ * Heading — the headline block fourteen widgets used to inline: an eyebrow,
+ * the heading at the right level for the outline, and a subtitle. Title and
+ * subtitle accept inline HTML, because content authors highlight words.
+ * Renders nothing when all three are empty.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import Eyebrow from '../eyebrow/Eyebrow.astro';
+import { schema, type Props } from './heading.props';
+
+const { props: { title, subtitle, tagline, level, align, width, spacing }, rest, className } = splitProps(schema, Astro.props);
+
+const Title = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4';
+const typeRole = level === 1 ? 'type-h1' : level === 2 ? 'type-h2' : 'type-h3';
+const widths: Record<typeof width, string> = { sm: 'max-w-2xl', md: 'max-w-3xl', lg: 'max-w-4xl', full: 'max-w-none' };
+const centered = align === 'center';
+---
+
+{(title || subtitle || tagline) && (
+  <div
+    class={cn('parche-heading', widths[width], centered && 'mx-auto text-center', spacing && 'mb-8 md:mb-12', className)}
+    data-part="root"
+  {...rest}
+    data-align={align}
+  >
+    {tagline && <Eyebrow as="p" class="mb-3" data-part="tagline" set:html={tagline} />}
+    {title && <Title class={cn(typeRole, 'text-heading')} data-part="title" set:html={title} />}
+    {subtitle && <p class="mt-4 text-xl text-muted" data-part="subtitle" set:html={subtitle} />}
+  </div>
+)}

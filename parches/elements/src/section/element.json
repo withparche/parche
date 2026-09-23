@@ -1,0 +1,13 @@
+{
+  "name": "section",
+  "type": "element",
+  "files": [
+    { "path": "Section.astro", "type": "part" },
+    { "path": "section.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["container"],
+  "source": null
+}

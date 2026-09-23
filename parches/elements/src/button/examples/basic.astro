@@ -1,0 +1,22 @@
+---
+import Button from '../Button.astro';
+---
+
+<div class="flex flex-wrap items-center gap-3">
+  <Button>Primary</Button>
+  <Button variant="secondary">Secondary</Button>
+  <Button variant="ghost">Ghost</Button>
+  <Button variant="link" href="#basic">Link</Button>
+</div>
+<div class="mt-4 flex flex-wrap items-center gap-3">
+  <Button size="sm">Small</Button>
+  <Button size="md">Medium</Button>
+  <Button size="lg">Large</Button>
+</div>
+<div class="mt-4 flex flex-wrap items-center gap-3">
+  <Button tone="danger">Delete</Button>
+  <Button variant="secondary" tone="danger">Delete</Button>
+  <Button variant="ghost" tone="danger">Delete</Button>
+  <Button disabled>Disabled</Button>
+  <Button href="#basic" disabled>Disabled link</Button>
+</div>

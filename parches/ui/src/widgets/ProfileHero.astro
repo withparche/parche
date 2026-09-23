@@ -7,6 +7,7 @@
  */
 import { twMerge } from 'tailwind-merge';
 import type { ImageMetadata } from 'astro';
+import Avatar from 'parche:elements/Avatar';
 
 interface Props {
   name?: string;
@@ -37,12 +38,7 @@ const avatarSrc = typeof avatar?.src === 'string' ? avatar?.src : avatar?.src?.s
       {bio && <p class="mt-4 max-w-lg text-lg text-muted">{bio}</p>}
     </div>
     {avatarSrc && (
-      <img
-        src={avatarSrc}
-        alt={avatar?.alt ?? name ?? ''}
-        class="size-28 shrink-0 rounded-full border border-border object-cover sm:size-32"
-        loading="eager"
-      />
+      <Avatar src={avatarSrc} name={name} alt={avatar?.alt} size="xl" class="size-28 border border-border sm:size-32" />
     )}
   </div>
 </div>

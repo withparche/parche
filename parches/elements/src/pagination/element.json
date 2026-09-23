@@ -1,0 +1,13 @@
+{
+  "name": "pagination",
+  "type": "element",
+  "files": [
+    { "path": "Pagination.astro", "type": "part" },
+    { "path": "pagination.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["icon"],
+  "source": null
+}

@@ -1,0 +1,29 @@
+---
+/**
+ * Breadcrumb — a labelled navigation landmark with an ordered list, per the
+ * APG pattern. The last item is the current page (`aria-current="page"`) and
+ * never a link; separators are decorative.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import Icon from '../icon/Icon.astro';
+import { schema, type Props } from './breadcrumb.props';
+
+const { props: { items, label }, rest, className } = splitProps(schema, Astro.props);
+const last = items.length - 1;
+---
+
+<nav class={cn('parche-breadcrumb text-sm text-muted', className)} aria-label={label} data-part="root"
+  {...rest}>
+  <ol class="parche-breadcrumb-list flex flex-wrap items-center gap-1.5" data-part="list">
+    {items.map((item, i) => (
+      <li class="parche-breadcrumb-item flex items-center gap-1.5" data-part="item" data-state={i === last ? 'current' : undefined}>
+        {i > 0 && <Icon name="tabler:chevron-right" size="xs" class="text-muted/60" data-part="separator" />}
+        {item.href && i < last ? (
+          <a href={item.href} class="parche-breadcrumb-link rounded-sm no-underline transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring" data-part="link">{item.label}</a>
+        ) : (
+          <span class={cn('parche-breadcrumb-link', i === last && 'font-medium text-heading')} data-part="link" aria-current={i === last ? 'page' : undefined}>{item.label}</span>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>

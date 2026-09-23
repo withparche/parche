@@ -71,7 +71,7 @@ export default function createUI(): ParcheManifest {
     // this instead of a hardcoded list, so any parche's widgets can opt in.
     fullBleed: ['Hero', 'Hero2', 'HeroText', 'Announcement', 'Note'],
     requires: {
-      elements: ['Avatar', 'Button', 'Container', 'Icon', 'Section', 'Tag'],
+      elements: ['Avatar', 'Badge', 'Breadcrumb', 'Button', 'Card', 'Container', 'Divider', 'Heading', 'Icon', 'Image', 'Link', 'Pagination', 'Section', 'Tag'],
     },
   };
 }

@@ -14,10 +14,10 @@ const { entry } = Astro.props;
 const meta = elementMeta[entry.name];
 const schema = elementSchemas[entry.name];
 
-const exampleModules = import.meta.glob<{ default: any }>('/../src/*/examples/*.astro', { eager: true });
-const prefix = `${entry.dir}/examples/`;
+const slug = entry.dir.split('/').pop()!;
+const exampleModules = import.meta.glob<{ default: any }>('../../../src/*/examples/*.astro', { eager: true });
 const examples = Object.entries(exampleModules)
-  .filter(([file]) => file.startsWith(prefix.replace(/^.*\/src\//, '/../src/')) || file.includes(`/${entry.name.toLowerCase()}/examples/`))
+  .filter(([file]) => file.includes(`/${slug}/examples/`))
   .map(([file, mod]) => ({ name: file.split('/').pop()!.replace(/\.astro$/, ''), Component: mod.default }));
 
 const rootProps = schema?.root?.properties ?? {};

@@ -15,7 +15,7 @@ import { elementIndex, elementMeta } from 'parche:registry/elements';
       return (
         <li class="rounded-lg border border-border bg-surface p-4">
           <a href={`/${e.name.toLowerCase()}`} class="type-h3 text-heading hover:text-primary">{e.name}</a>
-          {e.interactive && <span class="ml-2 rounded-full bg-primary/10 px-2 py-0.5 text-xs text-primary">interactive</span>}
+          {e.interactive && <span class="ml-2 rounded-full bg-primary-soft px-2 py-0.5 text-xs text-primary">interactive</span>}
           {e.overridden && <span class="ml-2 rounded-full bg-warning-soft px-2 py-0.5 text-xs text-warning">ejected</span>}
           <p class="mt-1 text-sm text-muted">{meta?.description ?? ''}</p>
           <p class="mt-2 text-xs text-muted">parts: {e.parts.length ? e.parts.join(', ') : '1'}</p>
