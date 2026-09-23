@@ -114,6 +114,11 @@ export class ParcheCarousel extends ParcheElement {
     const next = this.part<HTMLButtonElement>('next');
     if (prev) prev.disabled = index <= 0;
     if (next) next.disabled = index >= positions - 1;
+    // Everything fits in view: nothing to scroll, so no controls to show.
+    const controls = this.part('controls');
+    const dots = this.part('dots');
+    if (controls) controls.hidden = positions <= 1;
+    if (dots) dots.hidden = positions <= 1;
   }
 }
 
