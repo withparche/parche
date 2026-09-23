@@ -11,7 +11,7 @@
   "dependencies": {
     "@parche/astro-blog": "workspace:*",
     "@parche/astro": "workspace:*",
-    "@parche/primitives": "workspace:*",
+    "@parche/elements": "workspace:*",
     "@parche/ui": "workspace:*",
     "@iconify-json/tabler": "catalog:",
     "@tailwindcss/vite": "catalog:",

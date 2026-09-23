@@ -3,17 +3,17 @@ import path from 'node:path';
 import type { ParcheManifest } from '@parche/astro';
 
 /**
- * The primitives parche: foundational, token-driven building blocks every
- * widget composes from. Provides them as `parche:primitives/*`.
+ * The elements parche: foundational, token-driven building blocks every
+ * widget composes from. Provides them as `parche:elements/*`.
  */
-export default function createPrimitives(): ParcheManifest {
+export default function createElements(): ParcheManifest {
   const dir = path.dirname(fileURLToPath(import.meta.url));
   const atom = (file: string) => path.resolve(dir, 'atoms', file);
   return {
-    name: 'primitives',
+    name: 'elements',
     // Let Tailwind scan these components' classes, even installed from npm.
     content: [path.resolve(dir, '**/*.astro')],
-    primitives: {
+    elements: {
       Button: atom('Button.astro'),
       Container: atom('Container.astro'),
       Section: atom('Section.astro'),

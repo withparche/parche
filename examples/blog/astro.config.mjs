@@ -2,14 +2,14 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import icon from 'astro-icon';
 import parche from '@parche/astro';
-import createPrimitives from '@parche/primitives';
+import createElements from '@parche/elements';
 import createUI from '@parche/ui';
 import createBlog from '@parche/astro-blog';
 
 export default defineConfig({
   integrations: [
     parche({
-      parches: [createPrimitives(), createUI(), createBlog({ postsPerPage: 6, permalinks: { post: '/%slug%' } })],
+      parches: [createElements(), createUI(), createBlog({ postsPerPage: 6, permalinks: { post: '/%slug%' } })],
       config: './src/parche.config.json',
       routes: { pages: true },
     }),

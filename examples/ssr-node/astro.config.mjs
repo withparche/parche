@@ -3,7 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 import icon from 'astro-icon';
 import node from '@astrojs/node';
 import parche from '@parche/astro';
-import createPrimitives from '@parche/primitives';
+import createElements from '@parche/elements';
 import createUI from '@parche/ui';
 
 export default defineConfig({
@@ -12,7 +12,7 @@ export default defineConfig({
   adapter: node({ mode: 'standalone' }),
   integrations: [
     parche({
-      parches: [createPrimitives(), createUI()],
+      parches: [createElements(), createUI()],
       config: './src/parche.config.json',
       // Pages are data: content/pages/<locale>/*.json, served by Parche's
       // catch-all route. With output: 'server' it resolves the slug per request.

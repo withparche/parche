@@ -1,0 +1,27 @@
+---
+import Playground from '../layouts/Playground.astro';
+import { elementIndex, elementMeta } from 'parche:registry/elements';
+---
+
+<Playground title="Elements">
+  <h1 class="type-h1 mb-2">Elements</h1>
+  <p class="type-body text-muted mb-8">
+    Every registered element, its parts, the tokens it consumes and whether it ships a custom element.
+    This page and each element page are the accessibility test fixture.
+  </p>
+  <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {elementIndex.map((e) => {
+      const meta = elementMeta[e.name];
+      return (
+        <li class="rounded-lg border border-border bg-surface p-4">
+          <a href={`/${e.name.toLowerCase()}`} class="type-h3 text-heading hover:text-primary">{e.name}</a>
+          {e.interactive && <span class="ml-2 rounded-full bg-primary/10 px-2 py-0.5 text-xs text-primary">interactive</span>}
+          {e.overridden && <span class="ml-2 rounded-full bg-warning-soft px-2 py-0.5 text-xs text-warning">ejected</span>}
+          <p class="mt-1 text-sm text-muted">{meta?.description ?? ''}</p>
+          <p class="mt-2 text-xs text-muted">parts: {e.parts.length ? e.parts.join(', ') : '1'}</p>
+          {meta?.tokens?.length > 0 && <p class="mt-1 text-xs text-muted">tokens: {meta.tokens.join(', ')}</p>}
+        </li>
+      );
+    })}
+  </ul>
+</Playground>

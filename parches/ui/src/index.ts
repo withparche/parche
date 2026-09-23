@@ -5,7 +5,7 @@ import type { ParcheManifest } from '@parche/astro';
 /**
  * The ui parche: the widget library. Section widgets are authored in page
  * content (`sections: [{ widget, props }]`); blog widgets are consumed by the
- * blog parche. Provides them as `parche:widgets/*`; requires primitives.
+ * blog parche. Provides them as `parche:widgets/*`; requires elements.
  */
 export default function createUI(): ParcheManifest {
   const dir = path.dirname(fileURLToPath(import.meta.url));
@@ -71,7 +71,7 @@ export default function createUI(): ParcheManifest {
     // this instead of a hardcoded list, so any parche's widgets can opt in.
     fullBleed: ['Hero', 'Hero2', 'HeroText', 'Announcement', 'Note'],
     requires: {
-      primitives: ['Avatar', 'Container', 'Icon', 'Section', 'Tag'],
+      elements: ['Avatar', 'Button', 'Container', 'Icon', 'Section', 'Tag'],
     },
   };
 }

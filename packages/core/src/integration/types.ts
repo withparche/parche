@@ -41,6 +41,88 @@ export interface WidgetMeta {
   };
 }
 
+// ---------------------------------------------------------------------------
+// Element props system (Zod v4 + meta) — parallel to widgets, sharing FieldMeta
+// ---------------------------------------------------------------------------
+
+/** One part of an element's anatomy: what the .astro renders for it. */
+export interface ElementPart {
+  /** `data-part` value; also the class-hook suffix `parche-<name>-<part>`. */
+  name: string;
+  /** Element rendered by default: 'button' | 'div' | 'dialog' | 'parche-tabs' … */
+  element: string;
+  /** ARIA role rendered statically on the server, if any. */
+  role?: string;
+  /** `data-state` values this part can take (docs + stylers). */
+  states?: string[];
+  description?: string;
+}
+
+/**
+ * Element-level metadata. The facts a doc page, the builder and `check` need:
+ * anatomy, tokens consumed, keyboard map, no-JS behaviour, the custom element.
+ */
+export interface ElementMeta {
+  element: {
+    label: string;
+    description: string;
+    /** WAI-ARIA APG pattern this follows, e.g. { pattern: 'tabs', url } */
+    a11y?: { pattern: string; url?: string };
+    /** Design tokens consumed, without the `--ds-` prefix: 'color-surface', 'radius-md' … */
+    tokens: string[];
+    /** Custom element tag + client entry — interactive elements only. `entry` is relative to the folder. */
+    tag?: { name: `parche-${string}`; entry: string };
+    /** Key → behaviour. Required when `tag` is set. */
+    keyboard?: Record<string, string>;
+    /** What the server-rendered markup does with JS disabled. Required when `tag` is set. */
+    noJs?: string;
+    /** Compound anatomy; single-part elements list exactly one part. */
+    parts: ElementPart[];
+    tags?: string[];
+  };
+  ui?: {
+    groups?: FieldGroup[];
+  };
+}
+
+/**
+ * An element registered by a parche. A bare string is the .astro path
+ * (single part). The object form registers a folder element: `entry` is the
+ * module the virtual id re-exports (an `.astro` with a default export, or an
+ * `index.ts` with named parts), `parts` gives each part its own virtual id
+ * (`parche:elements/<Name>/<Part>`), `props` is the `.props.ts` (defaults to
+ * `<dir>/<kebab>.props.ts`) and `style` an optional CSS file added to the
+ * styles entry.
+ */
+export interface ElementEntry {
+  entry: string;
+  parts?: Record<string, string>;
+  props?: string;
+  style?: string;
+}
+
+/** A resolved element as the registry sees it. */
+export interface ResolvedElement {
+  name: string;
+  /** Parche that registered it (or 'override'). */
+  from: string;
+  /** Absolute path of the entry module. */
+  entry: string;
+  /** Absolute folder containing the element. */
+  dir: string;
+  /** Part name → absolute .astro path. */
+  parts: Record<string, string>;
+  /** Absolute path to the .props.ts, if it exists. */
+  props?: string;
+  style?: string;
+  /** True when `entry` is not an .astro (named parts via index.ts). */
+  compound: boolean;
+}
+
+/** A required element: a bare name checks presence; the object form also
+ *  asserts the provider exposes the named parts. */
+export type ElementRequirement = string | { name: string; parts?: string[] };
+
 /** A required widget: a bare name checks presence; the object form also asserts
  *  the provider exposes the named props (structural, checked where schemas exist). */
 export type WidgetRequirement = string | { name: string; props?: string[] };
@@ -59,8 +141,8 @@ export interface ParcheRequirement {
  * structurally where the schemas are available.
  */
 export interface ParcheRequires {
-  /** Primitive names that must exist (parche:primitives/{name}) */
-  primitives?: string[];
+  /** Elements that must exist — bare name, or { name, parts } for a structural check */
+  elements?: ElementRequirement[];
   /** Widgets that must exist — bare name, or { name, props } for a structural check */
   widgets?: WidgetRequirement[];
   /** Template names that must exist (parche:templates/{name}) */
@@ -73,16 +155,16 @@ export interface ParcheRequires {
 
 /**
  * A parche (plugin). Contributes capabilities to the Parche host and declares
- * what it requires. Primitive-packs, widget-packs and apps are all parches —
+ * what it requires. Element-packs, widget-packs and apps are all parches —
  * they differ only in what they provide.
  */
 export interface ParcheManifest {
-  /** Unique identifier (e.g. 'primitives', 'ui', 'blog') */
+  /** Unique identifier (e.g. 'elements', 'ui', 'blog') */
   name: string;
   /** Semver of this parche, used to satisfy peers' `requires.parches` ranges. */
   version?: string;
-  /** Primitives to register: name → absolute path (parche:primitives/{name}) */
-  primitives?: Record<string, string>;
+  /** Elements to register: name → absolute .astro path, or a folder entry (parche:elements/{name}) */
+  elements?: Record<string, string | ElementEntry>;
   /** Widgets to register: virtual ID suffix → absolute path (parche:widgets/{name}) */
   widgets?: Record<string, string>;
   /**
@@ -106,6 +188,11 @@ export interface ParcheManifest {
    * `value` is the `data-theme` attribute the theme's CSS is scoped to.
    */
   themes?: Array<{ label: string; value: string }>;
+  /**
+   * Fonts this parche asks the site to load (typically a theme's typeface).
+   * Deduped by `cssVariable`; the site config wins.
+   */
+  fonts?: import('../config/font-variables.js').ParcheFontDef[];
   /**
    * Absolute globs of this parche's own component files, so Tailwind scans them
    * and generates the utility classes they use. A parche must contribute these
@@ -199,7 +286,7 @@ export interface ParcheUserConfig {
    * since later-in-the-array wins). Build presets with `parchePreset(...)`.
    */
   extends?: ParchePreset | ParchePreset[];
-  /** Override any component using namespaced keys: 'widgets:hero:Hero', 'primitives:Button', etc.
+  /** Override any component using namespaced keys: 'widgets:hero:Hero', 'elements:Button', etc.
    *  Values are paths to .astro component files. */
   overrides?: Record<string, string>;
   /** Path to the site config file (default: './src/parche.config.json'). JSON only. */
@@ -234,6 +321,10 @@ export interface ResolvedRegistry {
   /** Structural widget requirements: prop names a requiring parche expects the
    *  provider to expose. Checked against the generated schemas (builder-time). */
   widgetPropRequirements: Array<{ from: string; name: string; props: string[] }>;
+  /** Resolved elements by name — folder, parts, props, style. */
+  elements: Record<string, ResolvedElement>;
+  /** Virtual ids replaced through `overrides`: original path → override path. */
+  overridden: Record<string, { original?: string; override: string }>;
   /** Inline site config (parche({ site })); when set, the plugin serves it as
    *  parche:config instead of re-exporting a user config file. */
   inlineSiteConfig?: import('../types/config.js').SiteConfig;

@@ -21,7 +21,7 @@ parche astro new hello-parche my-app  # or name a starter directly
 | Package | Role |
 | --- | --- |
 | `@parche/astro` | The engine: integration, virtual modules, schemas, renderer, routing, i18n, tokens. |
-| `@parche/primitives` | Foundational building blocks, consumed as `parche:primitives/*`. |
+| `@parche/elements` | Foundational building blocks, consumed as `parche:elements/*`. |
 | `@parche/ui` | Widget library — section widgets and blog widgets. |
 | `@parche/astro-blog` | Blog app: routes, collections, taxonomies, RSS. |
 | `@parche/themes` | Theme parches. Each contributes its CSS, its fonts and a switcher entry. |

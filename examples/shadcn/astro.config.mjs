@@ -3,7 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 import icon from 'astro-icon';
 import react from '@astrojs/react';
 import parche from '@parche/astro';
-import createPrimitives from '@parche/primitives';
+import createElements from '@parche/elements';
 import createUI from '@parche/ui';
 import { corporate, minimal, playful } from '@parche/themes';
 
@@ -12,7 +12,7 @@ export default defineConfig({
     parche({
       // Import the themes to showcase — watch the shadcn components reskin as
       // you switch. Only these three themes' CSS is bundled.
-      parches: [createPrimitives(), createUI(), corporate(), minimal(), playful()],
+      parches: [createElements(), createUI(), corporate(), minimal(), playful()],
       config: './src/parche.config.json',
       routes: { pages: true },
       overrides: { 'widgets:ShadcnShowcase': './src/widgets/ShadcnWidget.astro' },

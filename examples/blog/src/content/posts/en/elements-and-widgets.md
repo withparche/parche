@@ -13,7 +13,7 @@ authors:
   - jane
 ---
 
-Parche keeps foundational building blocks in `@parche/primitives` and the widget
+Parche keeps foundational building blocks in `@parche/elements` and the widget
 library in `@parche/ui`. Both are consumed through virtual modules, so widgets
 never import primitives directly.
 

@@ -2,12 +2,12 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import icon from 'astro-icon';
 import parche from '@parche/astro';
-import createPrimitives from '@parche/primitives';
+import createElements from '@parche/elements';
 import createUI from '@parche/ui';
 
 export default defineConfig({
   integrations: [
-    parche({ parches: [createPrimitives(), createUI()], config: './src/parche.config.json' }),
+    parche({ parches: [createElements(), createUI()], config: './src/parche.config.json' }),
     icon(),
   ],
   image: { remotePatterns: [{ protocol: 'https' }] },

@@ -12,7 +12,7 @@
     "@iconify-json/tabler": "^1.2.38",
     "@parche/astro-blog": "workspace:*",
     "@parche/astro": "workspace:*",
-    "@parche/primitives": "workspace:*",
+    "@parche/elements": "workspace:*",
     "@parche/themes": "workspace:*",
     "@parche/ui": "workspace:*",
     "@tailwindcss/vite": "catalog:",

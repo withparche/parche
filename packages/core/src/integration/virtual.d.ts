@@ -124,11 +124,34 @@ declare module 'parche:templates/*' {
   export default Component;
 }
 
-// Primitives — provided by parches; names aren't known to core, so declare
-// the namespace generically.
-declare module 'parche:primitives/*' {
+// Elements — provided by parches; names aren't known to core, so declare
+// the namespace generically. A single-part element is a default export; a
+// compound one (folder with an index.ts) exposes its parts as named exports:
+//   import * as Tabs from 'parche:elements/Tabs';   → <Tabs.Root>, <Tabs.Tab>…
+//   import Panel from 'parche:elements/Tabs/Panel'; → one part
+declare module 'parche:elements/*' {
   const Component: import('astro').AstroComponentFactory;
   export default Component;
+}
+
+declare module 'parche:registry/elements' {
+  type JsonSchema = Record<string, unknown>;
+  /** JSON Schema per element: the root props and each part's props. */
+  export const elementSchemas: Record<string, { root: JsonSchema; parts: Record<string, JsonSchema> }>;
+  /** `ElementMeta.element` per element, plus its `ui` block. */
+  export const elementMeta: Record<
+    string,
+    import('./types.js').ElementMeta['element'] & { ui: NonNullable<import('./types.js').ElementMeta['ui']> }
+  >;
+  /** Every registered element, in registration order. */
+  export const elementIndex: Array<{
+    name: string;
+    parts: string[];
+    interactive: boolean;
+    from: string;
+    dir: string;
+    overridden: { original?: string; override: string } | null;
+  }>;
 }
 
 // Widgets — provided by parches; names aren't known to core, so declare

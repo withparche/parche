@@ -100,10 +100,6 @@
     color: var(--color-muted);
   }
 
-  /* Highlight — vibrant emphasis color, distinct from shadcn's --accent (subtle bg). */
-  .text-highlight { color: var(--ds-color-highlight); }
-  .bg-highlight   { background-color: var(--ds-color-highlight); }
-
   /* ---------------------------------------------------------------
      Prose — Markdown content styling
      Used by the content template when rendering .md pages.

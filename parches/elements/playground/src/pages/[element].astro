@@ -1,0 +1,85 @@
+---
+import Playground from '../layouts/Playground.astro';
+import { elementIndex, elementMeta, elementSchemas } from 'parche:registry/elements';
+
+// One page per element. Examples are the real `examples/*.astro` files of the
+// element's folder, imported by absolute path from the catalog's `dir`, so
+// what renders here is the element itself, server-rendered — the same output
+// the SSR examples serve and the browser tests inspect.
+export function getStaticPaths() {
+  return elementIndex.map((e) => ({ params: { element: e.name.toLowerCase() }, props: { entry: e } }));
+}
+
+const { entry } = Astro.props;
+const meta = elementMeta[entry.name];
+const schema = elementSchemas[entry.name];
+
+const exampleModules = import.meta.glob<{ default: any }>('/../src/*/examples/*.astro', { eager: true });
+const prefix = `${entry.dir}/examples/`;
+const examples = Object.entries(exampleModules)
+  .filter(([file]) => file.startsWith(prefix.replace(/^.*\/src\//, '/../src/')) || file.includes(`/${entry.name.toLowerCase()}/examples/`))
+  .map(([file, mod]) => ({ name: file.split('/').pop()!.replace(/\.astro$/, ''), Component: mod.default }));
+
+const rootProps = schema?.root?.properties ?? {};
+---
+
+<Playground title={entry.name} description={meta?.description}>
+  <header class="mb-8">
+    <h1 class="type-h1">{entry.name}</h1>
+    <p class="type-body text-muted mt-2">{meta?.description}</p>
+    <dl class="mt-4 grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2">
+      <dt class="text-muted">Parts</dt><dd>{entry.parts.length ? entry.parts.join(', ') : 'single'}</dd>
+      <dt class="text-muted">Interactive</dt><dd>{entry.interactive ? `yes — <${meta?.tag?.name}>` : 'no (zero JS)'}</dd>
+      <dt class="text-muted">Tokens</dt><dd>{meta?.tokens?.join(', ')}</dd>
+      {meta?.a11y && <><dt class="text-muted">APG pattern</dt><dd><a class="text-primary underline" href={meta.a11y.url}>{meta.a11y.pattern}</a></dd></>}
+    </dl>
+  </header>
+
+  {examples.map(({ name, Component }) => (
+    <section class="mb-10" aria-labelledby={`ex-${name}`}>
+      <h2 id={`ex-${name}`} class="type-h3 mb-3">{name}</h2>
+      <div class="rounded-lg border border-border p-6" data-example={name}>
+        <Component />
+      </div>
+    </section>
+  ))}
+
+  {meta?.keyboard && (
+    <section class="mb-10" aria-labelledby="keyboard">
+      <h2 id="keyboard" class="type-h3 mb-3">Keyboard</h2>
+      <table class="w-full text-sm">
+        <thead><tr class="text-left text-muted"><th class="py-1 pr-4">Key</th><th class="py-1">Does</th></tr></thead>
+        <tbody>
+          {Object.entries(meta.keyboard).map(([key, does]) => (
+            <tr class="border-t border-border"><td class="py-1 pr-4 font-mono">{key}</td><td class="py-1">{does}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+  )}
+
+  {meta?.noJs && (
+    <section class="mb-10" aria-labelledby="nojs">
+      <h2 id="nojs" class="type-h3 mb-3">Without JavaScript</h2>
+      <p class="type-body">{meta.noJs}</p>
+    </section>
+  )}
+
+  {Object.keys(rootProps).length > 0 && (
+    <section class="mb-10" aria-labelledby="props">
+      <h2 id="props" class="type-h3 mb-3">Props</h2>
+      <table class="w-full text-sm">
+        <thead><tr class="text-left text-muted"><th class="py-1 pr-4">Prop</th><th class="py-1 pr-4">Type</th><th class="py-1">Default</th></tr></thead>
+        <tbody>
+          {Object.entries(rootProps).map(([prop, def]: [string, any]) => (
+            <tr class="border-t border-border">
+              <td class="py-1 pr-4 font-mono">{prop}</td>
+              <td class="py-1 pr-4">{def.enum ? def.enum.join(' | ') : def.type}</td>
+              <td class="py-1 font-mono">{def.default !== undefined ? String(def.default) : ''}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+  )}
+</Playground>

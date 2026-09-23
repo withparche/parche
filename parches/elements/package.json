@@ -1,0 +1,63 @@
+{
+  "name": "@parche/elements",
+  "version": "0.6.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./utils": "./src/utils.ts",
+    "./client": "./src/client.ts",
+    "./client/*": "./src/*/*.element.ts"
+  },
+  "dependencies": {
+    "@floating-ui/dom": "catalog:",
+    "astro-icon": "catalog:",
+    "tailwind-merge": "catalog:",
+    "zod": "catalog:"
+  },
+  "peerDependencies": {
+    "@parche/astro": "workspace:*",
+    "astro": "catalog:"
+  },
+  "devDependencies": {
+    "@parche/astro": "workspace:*",
+    "astro": "catalog:",
+    "vitest": "catalog:",
+    "@playwright/test": "catalog:",
+    "@axe-core/playwright": "catalog:"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "description": "Parche elements: token-driven, foundational building blocks every widget composes from.",
+  "license": "MIT",
+  "author": "Arthelokyo",
+  "homepage": "https://github.com/withparche/parche#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/withparche/parche.git",
+    "directory": "parches/elements"
+  },
+  "bugs": {
+    "url": "https://github.com/withparche/parche/issues"
+  },
+  "keywords": [
+    "astro",
+    "parche",
+    "elements",
+    "web-components",
+    "components"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "playground": "pnpm --filter elements-playground dev",
+    "test:ssr": "vitest run",
+    "test:browser": "playwright test"
+  }
+}

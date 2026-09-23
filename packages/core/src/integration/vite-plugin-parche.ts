@@ -86,26 +86,22 @@ const LAYOUT_CONFIG_VIRTUAL = '\0parche:config/layout';
 const BASE_CSS_PATH = fileURLToPath(new URL('../styles/base.css', import.meta.url));
 const WIDGET_SCHEMAS_ID = 'parche:registry/widgetSchemas';
 const WIDGET_SCHEMAS_VIRTUAL = '\0parche:registry/widgetSchemas';
+const ELEMENTS_ID = 'parche:registry/elements';
+const ELEMENTS_VIRTUAL = '\0parche:registry/elements';
 const RESOLVERS_ID = 'parche:registry/resolvers';
 const RESOLVERS_VIRTUAL = '\0parche:registry/resolvers';
 const APP_CONFIG_PREFIX = 'parche:app/';
 const APP_CONFIG_VIRTUAL_PREFIX = '\0parche:app/';
 
 /**
- * Extract a widget key from a virtual module ID.
- * Widgets use the full path after the prefix to avoid collisions.
- * Atoms use the short name (last segment).
+ * Extract a widget key from a virtual module ID. Widgets use the full path
+ * after the prefix to avoid collisions.
  *
  * 'parche:widgets/hero/Hero'    → 'hero/Hero'
  * 'parche:widgets/legacy/Hero'  → 'legacy/Hero'
- * 'parche:primitives/Button'         → 'Button'
  */
 function extractWidgetKey(virtualId: string): string {
-  if (virtualId.startsWith('parche:widgets/')) {
-    return virtualId.replace('parche:widgets/', '');
-  }
-  const path = virtualId.replace('parche:', '');
-  return path.split('/').pop()!;
+  return virtualId.replace('parche:widgets/', '');
 }
 
 /**
@@ -122,12 +118,16 @@ function extractTemplateKey(virtualId: string): string {
  * references it — the SSR server never holds the whole catalog resident. Renderers
  * call `loadWidgets(keys)` in their (async) frontmatter to resolve just the
  * components a page uses before rendering synchronously.
+ *
+ * Elements are not widgets: nothing renders them by key, and a compound
+ * element's parts (`Tabs/Panel`, `Menu/Panel`) would collide on a short name.
+ * They have their own catalog, `parche:registry/elements`.
  */
 function generateWidgetMapModule(registry: ResolvedRegistry): string {
   const entries: { key: string; importPath: string }[] = [];
 
   for (const virtualId of Object.keys(registry.modules)) {
-    if (virtualId.startsWith('parche:widgets/') || virtualId.startsWith('parche:primitives/')) {
+    if (virtualId.startsWith('parche:widgets/')) {
       entries.push({ key: extractWidgetKey(virtualId), importPath: virtualId });
     }
   }
@@ -348,6 +348,75 @@ ${requirementChecks.join('\n')}
 }
 
 /**
+ * Generate the elements catalog, `parche:registry/elements`:
+ *  - `elementSchemas` — JSON Schema per element: `{ root, parts: { Part: … } }`
+ *  - `elementMeta`    — the `ElementMeta.element` block + `ui` per element
+ *  - `elementIndex`   — `[{ name, parts, interactive, from, dir, overridden }]`
+ *
+ * Reads each element's `.props.ts` (exports `schema`, optional `parts` with a
+ * `schema` each, and `meta`). Like the widget schemas module, every import is a
+ * namespace import and every serialization is guarded, so one bad file skips
+ * with a warning instead of killing the catalog. Overrides of compound
+ * elements are checked here — the only place their module actually loads —
+ * for the named parts the original exposed.
+ */
+function generateElementsModule(registry: ResolvedRegistry): string {
+  const imports: string[] = [`import { z } from ${JSON.stringify(resolveFromCore('zod'))};`];
+  const statements: string[] = [];
+  const index: string[] = [];
+  let i = 0;
+
+  for (const prim of Object.values(registry.elements)) {
+    const nameJson = JSON.stringify(prim.name);
+    const partNames = Object.keys(prim.parts);
+    const virtualId = `parche:elements/${prim.name}`;
+    const overridden = registry.overridden[virtualId];
+
+    index.push(`{ name: ${nameJson}, parts: ${JSON.stringify(partNames)}, interactive: false, from: ${JSON.stringify(prim.from)}, dir: ${JSON.stringify(prim.dir)}, overridden: ${JSON.stringify(overridden ?? null)} }`);
+
+    if (prim.props) {
+      const m = `p${i}`;
+      imports.push(`import * as ${m} from ${JSON.stringify(prim.props)};`);
+      statements.push(
+        `if (${m}.schema) { try { elementSchemas[${nameJson}] = { root: z.toJSONSchema(${m}.schema), parts: {} }; } ` +
+        `catch (e) { console.warn(${JSON.stringify(`[parche] Skipped JSON Schema for element "${prim.name}": `)} + ((e && e.message) || e)); } }`,
+      );
+      statements.push(
+        `if (${m}.parts && elementSchemas[${nameJson}]) { for (const [part, def] of Object.entries(${m}.parts)) { ` +
+        `if (def && def.schema) { try { elementSchemas[${nameJson}].parts[part] = z.toJSONSchema(def.schema); } ` +
+        `catch (e) { console.warn(${JSON.stringify(`[parche] Skipped JSON Schema for element "${prim.name}" part `)} + JSON.stringify(part) + ': ' + ((e && e.message) || e)); } } } }`,
+      );
+      statements.push(
+        `if (${m}.meta && ${m}.meta.element) { elementMeta[${nameJson}] = { ...${m}.meta.element, ui: ${m}.meta.ui ?? {} }; ` +
+        `const __e = elementIndex.find((e) => e.name === ${nameJson}); if (__e) __e.interactive = !!${m}.meta.element.tag; }`,
+      );
+      i++;
+    }
+
+    // An ejected compound element must keep the original's named parts.
+    if (overridden && prim.compound && partNames.length) {
+      const o = `o${i}`;
+      imports.push(`import * as ${o} from ${JSON.stringify(prim.entry)};`);
+      statements.push(
+        `for (const __p of ${JSON.stringify(partNames)}) { if (!(__p in ${o})) console.warn(${JSON.stringify(`[parche] override "elements:${prim.name}" is missing export "`)} + __p + '" — widgets that import it will fail.'); }`,
+      );
+      i++;
+    }
+  }
+
+  return `${imports.join('\n')}
+
+export const elementSchemas = {};
+export const elementMeta = {};
+export const elementIndex = [
+${index.map((e) => `  ${e},`).join('\n')}
+];
+
+${statements.join('\n')}
+`;
+}
+
+/**
  * Generate a JS module that aggregates all app resolvers.
  * Exports resolveContent(slug, locale, opts) and getResolverPaths(locales, defaultLocale, opts).
  */
@@ -425,6 +494,7 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
       if (id === LAYOUT_CONFIG_ID) return LAYOUT_CONFIG_VIRTUAL;
 
       if (id === WIDGET_SCHEMAS_ID) return WIDGET_SCHEMAS_VIRTUAL;
+      if (id === ELEMENTS_ID) return ELEMENTS_VIRTUAL;
       if (id === RESOLVERS_ID) return RESOLVERS_VIRTUAL;
       if (id.startsWith(APP_CONFIG_PREFIX)) return '\0' + id;
       if (id.startsWith(PARCHE_PREFIX)) {
@@ -471,6 +541,18 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
           }
         }
         return generateWidgetSchemasModule(registry);
+      }
+      if (id === ELEMENTS_VIRTUAL) {
+        // Watch each element's props, client entry and README for HMR
+        for (const prim of Object.values(registry.elements)) {
+          if (prim.props) this.addWatchFile(prim.props);
+          try {
+            for (const f of fs.readdirSync(prim.dir)) {
+              if (f.endsWith('.element.ts') || f === 'README.md') this.addWatchFile(`${prim.dir}/${f}`);
+            }
+          } catch { /* dir may not exist for a bad override; already reported */ }
+        }
+        return generateElementsModule(registry);
       }
 
       // App config virtual modules: parche:app/{name}

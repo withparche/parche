@@ -1,7 +1,13 @@
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import type { ParcheUserConfig, ResolvedRegistry, ParcheManifest } from './types.js';
+import type {
+  ParcheUserConfig,
+  ResolvedRegistry,
+  ParcheManifest,
+  ElementEntry,
+  ResolvedElement,
+} from './types.js';
 import type { SiteConfig } from '../types/config.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -84,7 +90,7 @@ const CORE_MODULES: Record<string, string> = {
   'parche:utils/assets': corePath('utils/assets.ts'),
   'parche:utils/site': corePath('utils/site.ts'),
   // Note: layout/Header, layout/Footer and the contact/content templates are
-  // now provided by the ui parche — core no longer ships chrome or primitives.
+  // now provided by the ui parche — core no longer ships chrome or elements.
 };
 
 /** Core modules that use named exports instead of default export. Frozen default —
@@ -102,6 +108,48 @@ const BASE_NAMED_EXPORTS: readonly string[] = [
  */
 function overrideKeyToVirtualId(key: string): string {
   return 'parche:' + key.replace(/:/g, '/');
+}
+
+/** 'Tabs' → 'tabs', 'CallToAction' → 'call-to-action' (the .props.ts naming). */
+function kebab(name: string): string {
+  return name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+}
+
+/**
+ * Normalise a manifest element (bare path or folder entry) into what the
+ * registry tracks. A bare path is a single-part element whose folder is the
+ * file's directory; `props` defaults to `<dir>/<kebab>.props.ts` when present.
+ */
+function resolveElement(from: string, name: string, value: string | ElementEntry): ResolvedElement {
+  const entry = typeof value === 'string' ? { entry: value } : value;
+  const dir = path.dirname(entry.entry);
+  const props = entry.props ?? path.join(dir, `${kebab(name)}.props.ts`);
+  return {
+    name,
+    from,
+    entry: entry.entry,
+    dir,
+    parts: entry.parts ?? {},
+    props: fs.existsSync(props) ? props : undefined,
+    style: entry.style,
+    compound: !entry.entry.endsWith('.astro'),
+  };
+}
+
+/**
+ * Resolve an override target: a file is used as-is; a directory resolves to
+ * its `index.ts`, then `index.astro`. Returns null when nothing exists, so the
+ * caller can report it with attribution instead of a later Vite resolve error.
+ */
+function resolveOverridePath(rootDir: string, overridePath: string): string | null {
+  const abs = path.resolve(rootDir, overridePath);
+  if (!fs.existsSync(abs)) return null;
+  if (!fs.statSync(abs).isDirectory()) return abs;
+  for (const index of ['index.ts', 'index.astro']) {
+    const candidate = path.join(abs, index);
+    if (fs.existsSync(candidate)) return candidate;
+  }
+  return null;
 }
 
 /**
@@ -144,9 +192,10 @@ export function createRegistry(
   };
 
   // Register parches (order = precedence: later wins). Each parche contributes
-  // primitives / widgets / templates / routes / config to the system.
+  // elements / widgets / templates / routes / config to the system.
   const parches = userConfig.parches ?? [];
-  const providedPrimitives = new Set<string>();
+  const providedElements = new Set<string>();
+  const elements: Record<string, ResolvedElement> = {};
   const providedWidgets = new Set<string>();
   const providedTemplates = new Set<string>();
   const apps: ParcheManifest[] = [];
@@ -162,10 +211,20 @@ export function createRegistry(
     if (parche.themes) contributedThemes.push(...parche.themes);
     if (parche.content) contentGlobs.push(...parche.content);
     if (parche.fullBleed) fullBleedWidgets.push(...parche.fullBleed);
-    if (parche.primitives) {
-      for (const [name, absPath] of Object.entries(parche.primitives)) {
-        setModule(parche.name, 'primitive', `parche:primitives/${name}`, absPath);
-        providedPrimitives.add(name);
+    if (parche.elements) {
+      for (const [name, value] of Object.entries(parche.elements)) {
+        const prim = resolveElement(parche.name, name, value);
+        const virtualId = `parche:elements/${name}`;
+        setModule(parche.name, 'element', virtualId, prim.entry);
+              // A compound element's entry is an index.ts with named parts.
+        if (prim.compound) namedExportModules.add(virtualId);
+        else namedExportModules.delete(virtualId);
+        for (const [part, partPath] of Object.entries(prim.parts)) {
+          setModule(parche.name, 'element part', `${virtualId}/${part}`, partPath);
+        }
+        if (prim.style) contributedStyles.push(prim.style);
+        elements[name] = prim;
+        providedElements.add(name);
       }
     }
     if (parche.widgets) {
@@ -198,7 +257,7 @@ export function createRegistry(
       const [kind, ...rest] = key.split(':');
       if (!rest.length) continue;
       const name = rest.join('/');
-      if (kind === 'primitives') providedPrimitives.add(name);
+      if (kind === 'elements') providedElements.add(name);
       else if (kind === 'widgets') providedWidgets.add(name);
       else if (kind === 'templates') providedTemplates.add(name);
     }
@@ -240,8 +299,22 @@ export function createRegistry(
   for (const parche of parches) {
     const req = parche.requires;
     if (!req) continue;
-    for (const name of req.primitives ?? []) {
-      if (!providedPrimitives.has(name)) missing.push(`"${parche.name}" requires primitive "${name}" (parche:primitives/${name})`);
+    for (const p of req.elements ?? []) {
+      const name = typeof p === 'string' ? p : p.name;
+      if (!providedElements.has(name)) {
+        missing.push(`"${parche.name}" requires element "${name}" (parche:elements/${name})`);
+      } else if (typeof p === 'object' && p.parts?.length) {
+        // Structural check: the provider must expose each named part. An
+        // override counts as providing the element but its parts are only
+        // known at load time (the catalog checks those), so skip it here.
+        const provided = elements[name];
+        if (provided) {
+          const absent = p.parts.filter((part) => !(part in provided.parts));
+          if (absent.length) {
+            missing.push(`"${parche.name}" requires element "${name}" to expose part(s): ${absent.join(', ')} — provider "${provided.from}" does not`);
+          }
+        }
+      }
     }
     for (const w of req.widgets ?? []) {
       const name = typeof w === 'string' ? w : w.name;
@@ -276,12 +349,35 @@ export function createRegistry(
     );
   }
 
-  // Apply user overrides (these take priority)
+  // Apply user overrides (these take priority). A directory resolves to its
+  // index.ts / index.astro; a compound element stays a named-export module,
+  // so an ejected folder must keep the same named exports (the generated
+  // catalog checks that where the module actually loads). Missing targets are
+  // reported with attribution here rather than as a Vite resolve error later.
+  const overridden: ResolvedRegistry['overridden'] = {};
+  const badOverrides: string[] = [];
   if (userConfig.overrides) {
     for (const [key, overridePath] of Object.entries(userConfig.overrides)) {
       const virtualId = overrideKeyToVirtualId(key);
-      modules[virtualId] = path.resolve(rootDir, overridePath);
+      const resolved = resolveOverridePath(rootDir, overridePath);
+      if (!resolved) {
+        badOverrides.push(`"${key}" → ${overridePath}: not found (a directory needs an index.ts or index.astro)`);
+        modules[virtualId] = path.resolve(rootDir, overridePath);
+        continue;
+      }
+      overridden[virtualId] = { original: modules[virtualId], override: resolved };
+      modules[virtualId] = resolved;
+      if (key.startsWith('elements:')) {
+        const name = key.slice('elements:'.length).replace(/:/g, '/');
+        const prim = resolveElement('override', name, { entry: resolved, parts: elements[name]?.parts });
+        elements[name] = { ...prim, parts: elements[name]?.parts ?? {} };
+        if (prim.compound) namedExportModules.add(virtualId);
+        else namedExportModules.delete(virtualId);
+      }
     }
+  }
+  if (badOverrides.length) {
+    console.warn('[parche] Override path problems (these modules will fail to load):\n  - ' + badOverrides.join('\n  - '));
   }
 
   // Resolve i18n config from Astro's official i18n settings
@@ -336,6 +432,8 @@ export function createRegistry(
     namedExportModules,
     fullBleedWidgets,
     widgetPropRequirements,
+    elements,
+    overridden,
     inlineSiteConfig,
     i18n,
     themes,

@@ -457,7 +457,7 @@ adds the option of passing `site` inline in the same object.
 
 ## [0.3.0-alpha.0] — 2026-08-21
 
-First publish to npm (`@parche/astro`, `@parche/primitives`, `@parche/ui`,
+First publish to npm (`@parche/astro`, `@parche/elements`, `@parche/ui`,
 `@parche/astro-blog`, `@parche/themes`, `@parche/cli`, `create-parche`). Everything below
 landed in the repo's first day and became this release.
 
@@ -549,7 +549,7 @@ resolves each section's widget by name and renders it inside `SectionWrapper.ast
 ### Virtual-module registry
 
 `integration/registry.ts` + `integration/vite-plugin-parche.ts` generate the
-`parche:*` module graph at build: `parche:primitives/*`, `parche:widgets/*`,
+`parche:*` module graph at build: `parche:elements/*`, `parche:widgets/*`,
 `parche:templates/*`, `parche:registry/{widgets,templates,resolvers}`,
 `parche:config/*` and `parche:app/*`. Consumers import capabilities by virtual
 specifier, never by package path — the indirection that later made the parches

@@ -7,6 +7,8 @@ linkWorkspacePackages: true
 packages:
   - "packages/*"
   - "parches/*"
+  # Each element library may carry a playground: a fixture site for its tests.
+  - "parches/*/playground"
   - "examples/*"
   # Full-site demos: bigger than an example, not a CLI-served starter.
   - "demos/*"
@@ -35,6 +37,10 @@ catalog:
   "@types/react": ^19.2.14
   "@types/react-dom": ^19.2.3
   "@iconify-json/tabler": ^1.2.38
+  "@floating-ui/dom": ^1.8.0
+  vitest: ^5.0.1
+  "@playwright/test": ^1.63.0
+  "@axe-core/playwright": ^4.13.0
 
 # pnpm's new-package cooldown was gating the latest satteri (Astro 7's markdown
 # engine) and falling back to an older release whose Apple-Silicon binary was

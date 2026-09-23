@@ -3,7 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 import icon from 'astro-icon';
 import node from '@astrojs/node';
 import parche from '@parche/astro';
-import createPrimitives from '@parche/primitives';
+import createElements from '@parche/elements';
 import createUI from '@parche/ui';
 
 // SaaS landing — built as SSR (output: 'server') to exercise Parche's
@@ -17,7 +17,7 @@ export default defineConfig({
     // (Or inline it with `site: { … }`. parche() also accepts a
     // (ctx) => config function for env-based / multi-tenant setups.)
     parche({
-      parches: [createPrimitives(), createUI()],
+      parches: [createElements(), createUI()],
       config: './src/parche.config.json',
       routes: { pages: true },
     }),

@@ -20,6 +20,9 @@ const PROJECTS = {
   'examples/ssr-cloudflare': { kind: 'ssr', clientJsMax: 24_000 },
   'examples/ssr-node': { kind: 'ssr', clientJsMax: 24_000 },
   'examples/themes': { kind: 'static', clientJsMax: 24_000 },
+  // The elements playground: every element page must build; budget grows with
+  // each interactive element's declared cost (see the elements plan).
+  'parches/elements/playground': { kind: 'static', clientJsMax: 24_000 },
   'templates/portfolio': { kind: 'static', clientJsMax: 24_000 },
   'templates/saas-landing': {
     kind: 'ssr',

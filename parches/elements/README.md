@@ -1,6 +1,6 @@
-# @parche/primitives
+# @parche/elements
 
-Parche primitives: token-driven, foundational building blocks.
+Parche elements: token-driven, foundational building blocks every widget composes from.
 
 Part of [Parche](https://github.com/withparche/parche). See the repository for docs and examples.
 

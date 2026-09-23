@@ -91,7 +91,7 @@ export default function createBlog(config?: BlogConfig): ParcheManifest {
     routes,
     config: resolved as unknown as Record<string, unknown>,
     requires: {
-      primitives: ['Container', 'Section'],
+      elements: ['Container', 'Section'],
       widgets: [
         'blog/AuthorCard',
         'blog/BlogList',

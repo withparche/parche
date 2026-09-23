@@ -3,7 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 import icon from 'astro-icon';
 import node from '@astrojs/node';
 import parche from '@parche/astro';
-import createPrimitives from '@parche/primitives';
+import createElements from '@parche/elements';
 import createUI from '@parche/ui';
 
 export default defineConfig({
@@ -12,7 +12,7 @@ export default defineConfig({
     // Parches here; the site identity is configured in ./src/parche.config.json.
     // (Or inline it with `site: { … }` instead of a separate file.)
     parche({
-      parches: [createPrimitives(), createUI()],
+      parches: [createElements(), createUI()],
       config: './src/parche.config.json',
       routes: { pages: true },
     }),

@@ -1,0 +1,36 @@
+---
+import 'parche:config/styles';
+import BaseLayout from 'parche:layouts/BaseLayout';
+import ThemeToggle from 'parche:components/ThemeToggle';
+import ThemeSelector from 'parche:components/ThemeSelector';
+import config from 'parche:config';
+import { elementIndex } from 'parche:registry/elements';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description } = Astro.props;
+const metadata = { title: `${title} — ${config.brand.name}`, description: description ?? config.brand.description };
+---
+
+<BaseLayout metadata={metadata} config={config} lang="en">
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-on-primary">Skip to content</a>
+  <header class="border-b border-border bg-surface">
+    <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
+      <a href="/" class="type-label text-heading">{config.brand.name}</a>
+      <nav aria-label="Elements" class="hidden gap-3 text-sm md:flex">
+        {elementIndex.map((e) => (
+          <a href={`/${e.name.toLowerCase()}`} class="text-muted hover:text-heading">{e.name}</a>
+        ))}
+      </nav>
+      <div class="flex items-center gap-3">
+        <ThemeSelector />
+        <ThemeToggle />
+      </div>
+    </div>
+  </header>
+  <main id="main" class="mx-auto max-w-6xl px-4 py-10">
+    <slot />
+  </main>
+</BaseLayout>

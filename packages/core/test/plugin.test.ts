@@ -7,6 +7,8 @@ import type { ResolvedRegistry } from '../src/integration/types.ts';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const GOOD_ASTRO = path.join(HERE, 'fixtures', 'Good.astro'); // sibling Good.props.ts exists
+const TABS_DIR = path.join(HERE, 'fixtures', 'tabs');
+const EJECTED_TABS = path.join(HERE, 'fixtures', 'ejected', 'tabs', 'index.ts');
 
 /** Minimal ResolvedRegistry with only the fields a given generator reads. */
 function makeRegistry(partial: Partial<ResolvedRegistry>): ResolvedRegistry {
@@ -15,6 +17,8 @@ function makeRegistry(partial: Partial<ResolvedRegistry>): ResolvedRegistry {
     namedExportModules: new Set(),
     fullBleedWidgets: [],
     widgetPropRequirements: [],
+    elements: {},
+    overridden: {},
     i18n: { locales: ['en'], defaultLocale: 'en' },
     themes: [],
     showPanel: false,
@@ -38,7 +42,7 @@ test('widget map is generated lazily (widgetLoaders + loadWidgets, no static imp
     makeRegistry({
       modules: {
         'parche:widgets/Hero': '/x/Hero.astro',
-        'parche:primitives/Button': '/x/Button.astro',
+        'parche:elements/Button': '/x/Button.astro',
       },
     }),
     '\0parche:registry/widgets',
@@ -46,7 +50,9 @@ test('widget map is generated lazily (widgetLoaders + loadWidgets, no static imp
   assert.match(code, /export const widgetLoaders =/);
   assert.match(code, /export async function loadWidgets/);
   assert.match(code, /"Hero": \(\) => import\("parche:widgets\/Hero"\)/);
-  assert.match(code, /"Button": \(\) => import\("parche:primitives\/Button"\)/);
+  // Elements are not widgets: they have their own catalog and a compound
+  // element's parts would collide on a short key here.
+  assert.doesNotMatch(code, /parche:elements\/Button/);
   // The whole point: no eager static widget imports.
   assert.doesNotMatch(code, /^import \w+ from ["']parche:widgets\//m);
 });
@@ -100,4 +106,53 @@ test('resolvers: registered resolvers are imported and aggregated', () => {
   );
   assert.match(code, /import \{ resolve as resolve_0, getPaths as getPaths_0 \} from "\/x\/blog\/resolver\.ts"/);
   assert.match(code, /const resolvers = \[\{ resolve: resolve_0, getPaths: getPaths_0 \}\]/);
+});
+
+test('elements catalog: props file emits guarded root + part schemas, meta and index', () => {
+  const code = load(
+    makeRegistry({
+      elements: {
+        Tabs: {
+          name: 'Tabs', from: 'primitives', entry: path.join(TABS_DIR, 'index.ts'), dir: TABS_DIR,
+          parts: { Root: path.join(TABS_DIR, 'Root.astro'), Panel: path.join(TABS_DIR, 'Panel.astro') },
+          props: path.join(TABS_DIR, 'tabs.props.ts'), compound: true,
+        },
+      },
+    }),
+    '\0parche:registry/elements',
+  );
+  assert.match(code, /export const elementSchemas = \{\};/);
+  assert.match(code, /elementSchemas\["Tabs"\] = \{ root: z\.toJSONSchema\(p0\.schema\), parts: \{\} \}/);
+  assert.match(code, /elementSchemas\["Tabs"\]\.parts\[part\] = z\.toJSONSchema\(def\.schema\)/);
+  assert.match(code, /elementMeta\["Tabs"\] = \{ \.\.\.p0\.meta\.element/);
+  assert.match(code, /__e\.interactive = !!p0\.meta\.element\.tag/);
+  assert.match(code, /name: "Tabs", parts: \["Root","Panel"\], interactive: false, from: "primitives"/);
+  assert.match(code, /try \{/, 'serialization is guarded');
+});
+
+test('elements catalog: a primitive without props still lands in the index', () => {
+  const code = load(
+    makeRegistry({
+      elements: { Button: { name: 'Button', from: 'primitives', entry: '/x/Button.astro', dir: '/x', parts: {}, compound: false } },
+    }),
+    '\0parche:registry/elements',
+  );
+  assert.match(code, /name: "Button", parts: \[\], interactive: false/);
+  assert.doesNotMatch(code, /elementSchemas\["Button"\]/);
+});
+
+test('elements catalog: an overridden compound primitive is checked for the original parts', () => {
+  const code = load(
+    makeRegistry({
+      elements: {
+        Tabs: { name: 'Tabs', from: 'override', entry: EJECTED_TABS, dir: path.dirname(EJECTED_TABS),
+          parts: { Root: '/orig/Root.astro', Panel: '/orig/Panel.astro' }, compound: true },
+      },
+      overridden: { 'parche:elements/Tabs': { original: '/orig/index.ts', override: EJECTED_TABS } },
+    }),
+    '\0parche:registry/elements',
+  );
+  assert.ok(code.includes(`import * as o0 from ${JSON.stringify(EJECTED_TABS)}`));
+  assert.match(code, /for \(const __p of \["Root","Panel"\]\) \{ if \(!\(__p in o0\)\)/);
+  assert.match(code, /override \\"elements:Tabs\\" is missing export/);
 });

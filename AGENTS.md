@@ -13,8 +13,8 @@ materialization.
 ## Layout
 
 - `packages/core` — the host: engine (integration, virtual modules `parche:*`, schemas, renderer, routing, i18n, tokens). The only non-parche.
-- `parches/*` — plugins ("parches"). Each provides primitives / widgets / routes and declares what it requires:
-  - `parches/primitives` — foundational components, exposed as `parche:primitives/*`.
+- `parches/*` — plugins ("parches"). Each provides elements / widgets / routes and declares what it requires:
+  - `parches/elements` — foundational components, exposed as `parche:elements/*`.
   - `parches/ui` — widget library (`parche:widgets/*`).
   - `parches/blog` — app parche: routes, collections, RSS (`@parche/astro-blog`).
   - `parches/themes` — theme parches (`corporate`, `minimal`, …): each contributes its `[data-theme]` CSS + switcher entry, so a site bundles only the themes it imports.
@@ -42,7 +42,7 @@ server restart**, not a reload. Content changes are served from Astro's
 ## Conventions
 
 - Package manager: pnpm workspaces. Node ESM (`"type": "module"`). Install relies on `minimumReleaseAge: 0` (in `pnpm-workspace.yaml`) so Astro 7's fresh native markdown binary resolves on Apple Silicon.
-- Components consume primitives via `parche:primitives/*`, never by importing `@parche/primitives` directly.
+- Components consume elements via `parche:elements/*`, never by importing `@parche/elements` directly.
 - Widgets are registered in `parches/ui/src/index.ts`; keep names stable (page content references them).
 - Docs, comments, and identifiers in English. Be concise.
 - Skills live in `.agents/skills/<name>/SKILL.md` (Agent Skills standard).

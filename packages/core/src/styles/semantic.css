@@ -10,15 +10,31 @@
    bg-background, text-foreground, bg-surface, etc.
    --------------------------------------------------------------- */
 @theme inline {
-  --color-background:  var(--ds-color-background);
-  --color-foreground:  var(--ds-color-foreground);
-  --color-surface:     var(--ds-color-surface);
-  --color-primary:     var(--ds-color-primary);
-  --color-on-primary:  var(--ds-color-on-primary);
-  --color-muted:       var(--ds-color-muted);
-  --color-border:      var(--ds-color-border);
-  --color-heading:     var(--ds-color-heading);
-  --color-text:        var(--ds-color-text);
+  --color-background:    var(--ds-color-background);
+  --color-foreground:    var(--ds-color-foreground);
+  --color-surface:       var(--ds-color-surface);
+  --color-surface-hover: var(--ds-color-surface-hover);
+  --color-on-surface:    var(--ds-color-on-surface);
+  --color-primary:       var(--ds-color-primary);
+  --color-on-primary:    var(--ds-color-on-primary);
+  --color-muted:         var(--ds-color-muted);
+  --color-border:        var(--ds-color-border);
+  --color-heading:       var(--ds-color-heading);
+  --color-text:          var(--ds-color-text);
+  --color-highlight:     var(--ds-color-highlight);
+  --color-ring:          var(--ds-color-ring);
+  --color-overlay:       var(--ds-color-overlay);
+
+  /* Status roles: solid, its foreground, and a soft tint for badges/alerts */
+  --color-success:       var(--ds-color-success);
+  --color-on-success:    var(--ds-color-on-success);
+  --color-success-soft:  var(--ds-color-success-soft);
+  --color-warning:       var(--ds-color-warning);
+  --color-on-warning:    var(--ds-color-on-warning);
+  --color-warning-soft:  var(--ds-color-warning-soft);
+  --color-danger:        var(--ds-color-danger);
+  --color-on-danger:     var(--ds-color-on-danger);
+  --color-danger-soft:   var(--ds-color-danger-soft);
 }
 
 /* ---------------------------------------------------------------
@@ -36,6 +52,23 @@
   --ds-color-heading:     oklch(0.07 0.01 260);
   --ds-color-text:        oklch(0.25 0.008 260);
   --ds-color-highlight:   oklch(0.420 0.270 295);  /* v1 accent purple: rgb(109 40 217) */
+
+  /* Interaction roles — consumed by primitives, never by raw palette classes */
+  --ds-color-surface-hover: oklch(0.965 0.004 260);  /* hover on a surface (menus, ghost buttons) */
+  --ds-color-on-surface:    oklch(0.25 0.008 260);   /* text on a surface (same as text by default) */
+  --ds-color-ring:          var(--ds-color-primary); /* every focus-visible outline */
+  --ds-color-overlay:       oklch(0.07 0.01 260 / 0.5); /* dialog / sheet backdrop */
+
+  /* Status roles — solid + foreground + soft tint */
+  --ds-color-success:       var(--color-success-600);
+  --ds-color-on-success:    oklch(1 0 0);
+  --ds-color-success-soft:  var(--color-success-50);
+  --ds-color-warning:       var(--color-warning-600);
+  --ds-color-on-warning:    oklch(0.15 0.02 70);
+  --ds-color-warning-soft:  var(--color-warning-50);
+  --ds-color-danger:        var(--color-danger-600);
+  --ds-color-on-danger:     oklch(1 0 0);
+  --ds-color-danger-soft:   var(--color-danger-50);
 
   /* Typography — Inter everywhere, matching v1 sizes */
   --ds-font-heading: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
@@ -87,9 +120,24 @@
   --ds-color-surface:     oklch(0.140 0.040 260);
   --ds-color-primary:     oklch(0.500 0.220 260);   /* same blue in dark */
   --ds-color-on-primary:  oklch(1 0 0);
-  --ds-color-muted:       oklch(0.55 0.015 260);
+  --ds-color-muted:       oklch(0.60 0.015 260);   /* 5.05:1 on surface — WCAG AA; 0.55 sat at 4.11 */
   --ds-color-border:      oklch(0.200 0.030 260);
   --ds-color-heading:     oklch(0.970 0.003 260);
   --ds-color-text:        oklch(0.800 0.010 250);
   --ds-color-highlight:   oklch(0.550 0.250 295);   /* lighter purple for dark mode */
+
+  --ds-color-surface-hover: oklch(0.190 0.040 260);
+  --ds-color-on-surface:    oklch(0.800 0.010 250);
+  --ds-color-ring:          var(--ds-color-primary);
+  --ds-color-overlay:       oklch(0.02 0.01 260 / 0.7);
+
+  --ds-color-success:       var(--color-success-400);
+  --ds-color-on-success:    oklch(0.12 0.03 145);
+  --ds-color-success-soft:  oklch(0.22 0.05 145);
+  --ds-color-warning:       var(--color-warning-400);
+  --ds-color-on-warning:    oklch(0.12 0.03 70);
+  --ds-color-warning-soft:  oklch(0.22 0.05 70);
+  --ds-color-danger:        var(--color-danger-400);
+  --ds-color-on-danger:     oklch(0.12 0.03 25);
+  --ds-color-danger-soft:   oklch(0.22 0.06 25);
 }
