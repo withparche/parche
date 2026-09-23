@@ -15,7 +15,7 @@ through a single `parche({ parches: [...] })` entry with preset/`extends` suppor
 Pages are data (`sections: [{ widget, props }]`) rendered through the virtual-module
 registry, and the site config is JSON so a CMS can edit it.
 
-The component layer has settled too. `@parche/elements` holds 48 elements built on
+The component layer has settled too. `@parche/elements` holds 45 elements built on
 the platform — `<details>`, `<dialog>` and invoker commands, the Popover API, native
 inputs — with a custom element only where there is interactivity, and
 `@parche/ui` is composed from them and ships no script of its own. Accessibility is

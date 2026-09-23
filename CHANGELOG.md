@@ -11,16 +11,33 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
 
 ## [Unreleased]
 
+### Added
+
+- **Design-system pages in the playground** (`/design`). The three token layers
+  read from the real stylesheets: every colour role with its light and dark
+  value and which elements consume it, the contrast of the pairs the elements
+  rely on measured live in the browser for the chosen theme and mode, the
+  primitive ramps, the six type styles as specimens, radii, shadows and
+  measures, and per theme exactly what it overrides. Under the same gate as the
+  element pages, and the fixture for reviewing the tokens before they reach
+  the public documentation.
+
+### Fixed
+
+- **Links inside `.prose` are underlined.** They relied on colour alone, at
+  1.3:1 against the surrounding muted text, which the new contrast page and
+  axe's link-in-text-block rule both flagged.
+
 ## [0.7.0] — 2026-09-23
 
-The component layer: `@parche/elements`, 48 elements built on the platform with
+The component layer: `@parche/elements`, 45 elements built on the platform with
 accessibility as a gate, and `@parche/ui` composed from them with no script of its
 own. Breaking three times over — the package names, `primitives` → `elements`,
 and the ui internals — see [Migrating](#migrating-from-060).
 
 ### Added
 
-- **`@parche/elements`: 48 building blocks, a custom element only where there is
+- **`@parche/elements`: 45 building blocks, a custom element only where there is
   interactivity** (`d995344`, `6a52656`, `f554106`, `5b98ea8`, `5c595fa`,
   `436a3bc`, `0954e06`). Markup is rendered complete on the server with the
   WAI-ARIA APG roles and states already in place; tokens only; every part carries
