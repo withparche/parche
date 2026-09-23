@@ -1,0 +1,16 @@
+---
+import Tooltip from '../Tooltip.astro';
+import Button from '../../button/Button.astro';
+---
+
+<div class="flex flex-wrap items-center gap-4 py-6">
+  <Tooltip text="Copy the link to this page">
+    <Button variant="secondary" icon="tabler:external-link" label="Copy link" />
+  </Tooltip>
+  <Tooltip text="Shows below the trigger" placement="bottom">
+    <Button variant="ghost">Below</Button>
+  </Tooltip>
+  <Tooltip text="Shows to the right" placement="right" delay={0}>
+    <Button variant="ghost">Right, no delay</Button>
+  </Tooltip>
+</div>

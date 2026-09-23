@@ -1,0 +1,15 @@
+{
+  "name": "tabs",
+  "type": "element",
+  "files": [
+    { "path": "Tabs.astro", "type": "part" },
+    { "path": "tabs.props.ts", "type": "props" },
+    { "path": "tabs.element.ts", "type": "element" },
+    { "path": "tabs.css", "type": "style" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["icon"],
+  "source": null
+}

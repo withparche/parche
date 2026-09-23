@@ -1,5 +1,12 @@
 ---
+/**
+ * ThemeSelector — pick one of the configured themes from a Menu of
+ * `menuitemradio` items. The element only applies the choice to <html> and
+ * remembers it; the menu itself (opening, keyboard, focus) is the element
+ * library's. Requires the elements parche (every Parche project has it).
+ */
 import { themes as configuredThemes } from 'parche:config/themes';
+import Menu from 'parche:elements/Menu';
 
 interface ThemeOption {
   label: string;
@@ -9,59 +16,48 @@ interface ThemeOption {
 interface Props {
   /** Override the themes list from config */
   themes?: ThemeOption[];
+  /** The menu id; give each instance on a page its own. */
+  id?: string;
 }
 
-const { themes = configuredThemes } = Astro.props;
+const { themes = configuredThemes, id = 'parche-theme-selector' } = Astro.props;
 ---
 
 {themes.length > 1 && (
   <theme-selector>
-    <div class="flex items-center gap-1 bg-surface border border-border rounded-lg p-0.5">
-      {themes.map((theme) => (
-        <button
-          type="button"
-          data-theme-value={theme.value}
-          class="px-2.5 py-1 text-xs font-medium rounded-md transition-colors cursor-pointer text-muted hover:text-heading"
-        >
-          {theme.label}
-        </button>
-      ))}
-    </div>
+    <Menu
+      id={id}
+      icon="tabler:palette"
+      triggerLabel="Theme"
+      align="end"
+      groups={[{ items: themes.map((theme) => ({ label: theme.label, value: theme.value, checked: false })) }]}
+    />
   </theme-selector>
 )}
 
 <script>
   class ThemeSelectorElement extends HTMLElement {
     connectedCallback() {
-      const buttons = this.querySelectorAll<HTMLButtonElement>('[data-theme-value]');
-      const currentTheme = document.documentElement.getAttribute('data-theme') || '';
-
-      const updateActive = (active: string) => {
-        buttons.forEach((btn) => {
-          const isActive = btn.dataset.themeValue === active;
-          btn.classList.toggle('bg-primary', isActive);
-          btn.classList.toggle('text-on-primary', isActive);
-          btn.classList.toggle('text-muted', !isActive);
-        });
+      const items = this.querySelectorAll<HTMLElement>('[role="menuitemradio"]');
+      const mark = (active: string) => {
+        items.forEach((item) => item.setAttribute('aria-checked', String(item.dataset.value === active)));
+        items.forEach((item) => item.querySelector('svg')?.classList.toggle('invisible', item.dataset.value !== active));
       };
+      mark(document.documentElement.getAttribute('data-theme') || '');
 
-      updateActive(currentTheme);
-
-      buttons.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const value = btn.dataset.themeValue || '';
-          if (value) {
-            document.documentElement.setAttribute('data-theme', value);
-            localStorage.setItem('site-theme', value);
-          } else {
-            document.documentElement.removeAttribute('data-theme');
-            localStorage.removeItem('site-theme');
-          }
-          updateActive(value);
-        });
+      this.addEventListener('parche:select', (event) => {
+        const value = (event as CustomEvent<{ value: string }>).detail.value || '';
+        if (value) {
+          document.documentElement.setAttribute('data-theme', value);
+          localStorage.setItem('site-theme', value);
+        } else {
+          document.documentElement.removeAttribute('data-theme');
+          localStorage.removeItem('site-theme');
+        }
+        mark(value);
       });
     }
   }
 
-  customElements.define('theme-selector', ThemeSelectorElement);
+  if (!customElements.get('theme-selector')) customElements.define('theme-selector', ThemeSelectorElement);
 </script>

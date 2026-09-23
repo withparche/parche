@@ -18,7 +18,7 @@ const hasTrigger = Astro.slots.has('trigger');
 const sizes = { sm: 'max-w-sm', md: 'max-w-lg', lg: 'max-w-2xl' };
 ---
 
-<parche-dialog class={cn('parche-dialog contents', className)} data-part="root" data-state="closed" {...rest}>
+<parche-dialog class="parche-dialog contents" data-part="root" data-state="closed" {...rest}>
   {hasTrigger && <slot name="trigger" />}
   <dialog
     id={id}
@@ -28,6 +28,7 @@ const sizes = { sm: 'max-w-sm', md: 'max-w-lg', lg: 'max-w-2xl' };
     class={cn(
       'parche-dialog-surface m-auto w-[calc(100%-2rem)] rounded-xl border border-border bg-surface p-0 text-foreground shadow-lg backdrop:bg-overlay',
       sizes[size],
+      className,
     )}
     data-part="dialog"
   >

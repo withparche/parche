@@ -1,0 +1,22 @@
+/* Tabs without script: the tab list hides, every panel shows stacked under
+   its heading. `scripting: none` (Baseline 2023) keys the rules on the real
+   condition, so users with script never see the stacked state flash before
+   the element upgrades. */
+@media (scripting: none) {
+  .parche-tabs > [data-part='list'] {
+    display: none;
+  }
+  /* `hidden="until-found"` is `content-visibility: hidden` in the UA sheet, and
+     Tailwind's preflight leaves that value alone (its `[hidden]` rule is
+     !important inside a layer, which no unlayered rule could beat). */
+  .parche-tabs [data-part='panel'][hidden] {
+    display: block;
+    content-visibility: visible;
+  }
+  .parche-tabs [data-part='panel'] + [data-part='panel'] {
+    margin-top: 2rem;
+  }
+  .parche-tabs [data-part='heading'] {
+    display: block;
+  }
+}

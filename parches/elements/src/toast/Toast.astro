@@ -1,0 +1,76 @@
+---
+/**
+ * Toast — a live region (`role="status"` around a list) fixed to a corner, plus a template
+ * of one toast the element clones for `show()`. Put one `<Toast />` on the
+ * page (the layout); anything can then notify with
+ * `document.dispatchEvent(new CustomEvent('parche:toast', { detail }))` or
+ * `toaster.show(detail)`. Server-rendered `items` show on first paint, with
+ * no script: a flash message after a form post.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import Icon from '../icon/Icon.astro';
+import { schema, tones, type Props } from './toast.props';
+
+const { props: { position, label, duration, dismissLabel, items }, rest, className } = splitProps(schema, Astro.props);
+
+const positions = {
+  'top-right': 'top-4 right-4 items-end',
+  'top-center': 'top-4 left-1/2 -translate-x-1/2 items-center',
+  'bottom-right': 'bottom-4 right-4 items-end',
+  'bottom-center': 'bottom-4 left-1/2 -translate-x-1/2 items-center',
+};
+const icons = { neutral: 'tabler:info-circle', success: 'tabler:circle-check', warning: 'tabler:alert-triangle', danger: 'tabler:alert-circle' };
+const toneClass = { neutral: 'text-muted', success: 'text-success', warning: 'text-warning', danger: 'text-danger' };
+
+const toastClass =
+  'parche-toast pointer-events-auto flex w-80 max-w-[calc(100vw-2rem)] items-start gap-3 rounded-lg border border-border bg-surface p-4 shadow-lg';
+const dismissClass =
+  'parche-toast-dismiss -m-1 shrink-0 cursor-pointer rounded-full p-1 text-muted transition-colors hover:bg-surface-hover hover:text-heading focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
+---
+
+<parche-toaster
+  class={cn('parche-toaster pointer-events-none fixed z-50 flex flex-col gap-2', positions[position], className)}
+  data-part="root"
+  data-position={position}
+  duration={duration}
+  {...rest}
+>
+  <div role="status" aria-label={label} class="contents" data-part="region">
+    <ol class="parche-toaster-list flex flex-col gap-2" data-part="list">
+    {items.map((item) => (
+      <li class={toastClass} data-part="toast" data-tone={item.tone} data-state="open">
+        <span class={cn('mt-0.5 shrink-0', toneClass[item.tone])} data-part="icon">
+          <Icon name={icons[item.tone]} size="sm" aria-hidden="true" />
+        </span>
+        <span class="min-w-0 flex-1">
+          <p class="parche-toast-title text-sm font-medium text-heading" data-part="title">{item.title}</p>
+          {item.description && <p class="parche-toast-description mt-0.5 text-sm text-muted" data-part="description">{item.description}</p>}
+        </span>
+        <button type="button" class={dismissClass} data-part="dismiss" aria-label={dismissLabel}>
+          <Icon name="tabler:x" size="xs" aria-hidden="true" />
+        </button>
+      </li>
+    ))}
+    </ol>
+  </div>
+  <template data-part="template">
+    <li class={toastClass} data-part="toast" data-tone="neutral" data-state="open">
+      {tones.map((tone) => (
+        <span class={cn('mt-0.5 shrink-0', toneClass[tone])} data-part="icon" data-tone={tone}>
+          <Icon name={icons[tone]} size="sm" aria-hidden="true" />
+        </span>
+      ))}
+      <span class="min-w-0 flex-1">
+        <p class="parche-toast-title text-sm font-medium text-heading" data-part="title"></p>
+        <p class="parche-toast-description mt-0.5 text-sm text-muted" data-part="description"></p>
+      </span>
+      <button type="button" class={dismissClass} data-part="dismiss" aria-label={dismissLabel}>
+        <Icon name="tabler:x" size="xs" aria-hidden="true" />
+      </button>
+    </li>
+  </template>
+</parche-toaster>
+
+<script>
+  import './toast.element.ts';
+</script>

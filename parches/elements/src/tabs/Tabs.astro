@@ -1,0 +1,122 @@
+---
+/**
+ * Tabs — the APG tabs pattern rendered complete on the server: `role="tab"`,
+ * `aria-selected`, `aria-controls` / `id` pairs, `hidden` on the inactive
+ * panels. The element adds the keyboard (roving tabindex, arrows, Home/End),
+ * activation on focus, and the optional URL sync. Data-driven: the tabs are
+ * `items`; a panel is `items[].content` (HTML) or a slot named after the
+ * tab's value.
+ *
+ * Inactive panels are `hidden="until-found"`: find-in-page reaches their
+ * text and the browser reveals the match (`beforematch`), which the element
+ * turns into selecting that tab. Without script every panel shows, stacked
+ * under a heading, and the tab list hides — through `@media (scripting: none)`,
+ * so users with script never see a flash of stacked panels.
+ */
+import { cn, defineVariants, hashId, splitProps } from '@parche/elements/utils';
+import Icon from '../icon/Icon.astro';
+import { schema, type Props } from './tabs.props';
+
+const { props: { items, value, syncKey, orientation, variant, label }, rest, className } = splitProps(schema, Astro.props);
+
+const id = (rest.id as string | undefined) ?? hashId('tabs', items.map((i) => i.value).join('|'));
+const selected = value ?? items.find((i) => !i.disabled)?.value ?? items[0].value;
+const vertical = orientation === 'vertical';
+
+const panels = await Promise.all(
+  items.map(async (item) => ({
+    ...item,
+    html: item.content ?? (Astro.slots.has(item.value) ? await Astro.slots.render(item.value) : ''),
+  })),
+);
+
+const tab = defineVariants({
+  base:
+    'parche-tabs-tab inline-flex cursor-pointer items-center gap-2 text-sm font-medium transition-colors ' +
+    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:opacity-50',
+  variants: {
+    variant: {
+      line: 'border-b-2 border-transparent px-3 py-2 text-muted hover:text-heading data-[state=active]:border-primary data-[state=active]:text-heading',
+      pill: 'rounded-full px-4 py-1.5 text-muted hover:bg-surface-hover hover:text-heading data-[state=active]:bg-primary data-[state=active]:text-on-primary',
+    },
+  },
+  defaults: { variant: 'line' },
+});
+
+const list = defineVariants({
+  base: 'parche-tabs-list flex',
+  variants: {
+    variant: { line: 'gap-1 border-b border-border', pill: 'gap-1 rounded-full border border-border p-1' },
+    orientation: { horizontal: 'flex-row', vertical: 'flex-col items-stretch' },
+  },
+  compound: [
+    { variant: 'line', orientation: 'vertical', class: 'border-b-0 border-r' },
+    { variant: 'pill', orientation: 'vertical', class: 'rounded-xl' },
+  ],
+  defaults: { variant: 'line', orientation: 'horizontal' },
+});
+---
+
+<parche-tabs
+  class={cn('parche-tabs', vertical ? 'flex gap-6' : 'block', className)}
+  data-part="root"
+  data-orientation={orientation}
+  data-value={selected}
+  sync-key={syncKey}
+  {...rest}
+>
+  <div
+    role="tablist"
+    aria-label={label}
+    aria-orientation={vertical ? 'vertical' : undefined}
+    class={list({ variant, orientation })}
+    data-part="list"
+  >
+    {items.map((item) => {
+      const active = item.value === selected;
+      return (
+        <button
+          type="button"
+          role="tab"
+          id={`${id}-tab-${item.value}`}
+          aria-selected={active ? 'true' : 'false'}
+          aria-controls={`${id}-panel-${item.value}`}
+          tabindex={active ? 0 : -1}
+          disabled={item.disabled || undefined}
+          class={tab({ variant })}
+          data-part="tab"
+          data-value={item.value}
+          data-state={active ? 'active' : 'inactive'}
+        >
+          {item.icon && <Icon name={item.icon} size="sm" aria-hidden="true" />}
+          {item.label}
+        </button>
+      );
+    })}
+  </div>
+  <div class={cn('parche-tabs-panels', vertical ? 'flex-1' : 'mt-4')}>
+    {panels.map((panel) => {
+      const active = panel.value === selected;
+      return (
+        <div
+          role="tabpanel"
+          id={`${id}-panel-${panel.value}`}
+          aria-labelledby={`${id}-tab-${panel.value}`}
+          tabindex="0"
+          hidden={active ? undefined : 'until-found'}
+          class="parche-tabs-panel focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          data-part="panel"
+          data-value={panel.value}
+          data-state={active ? 'active' : 'inactive'}
+        >
+          <h3 class="parche-tabs-heading type-h3 mb-2 hidden text-heading" data-part="heading">{panel.label}</h3>
+          <Fragment set:html={panel.html} />
+        </div>
+      );
+    })}
+  </div>
+</parche-tabs>
+
+<script>
+  import './tabs.element.ts';
+</script>

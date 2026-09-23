@@ -137,6 +137,42 @@ declaratively:
   `allow-discrete`), under `prefers-reduced-motion: no-preference`, and never
   carry function.
 
+### Composites: the pattern on the server, the behaviour in the element
+
+Tabs, Menu, Tooltip, Toast and Carousel are the elements with real script,
+and each keeps it small by rendering the APG pattern complete on the server:
+
+- **Tabs** is data-driven (`items`; a panel is a slot named after its tab's
+  value, or `content` HTML). A compound `Tabs.Root / Tab / Panel` cannot
+  know the selected value on the server: Astro has no component context, so
+  every part would have to repeat it. Inactive panels are
+  `hidden="until-found"`: find-in-page reaches them and a match selects the
+  tab (`beforematch`); Tailwind's preflight also leaves that value alone,
+  where its `[hidden]` rule (`!important` inside a layer) beats any unlayered
+  override. Without script all panels show under headings and the list
+  hides, through `@media (scripting: none)` so nothing flashes for users
+  with script.
+- **Menu** extends the Popover element: the trigger is a `popovertarget`
+  button with `aria-haspopup="menu"`, the surface is `role="menu"`, items are
+  data (`groups`) and an item with `checked` is a `menuitemradio`. Focus
+  enters the list on open and goes back to the trigger on close from the
+  element itself, because WebKit never focuses a clicked button and the
+  platform's own focus return would land on `<body>`.
+- **Tooltip** wraps its trigger and anchors a `popover="manual"`
+  `role="tooltip"` to the wrapper; `aria-describedby` is set on upgrade.
+  Without script, CSS shows it on `:hover` / `:focus-within`.
+- **Toast** is one live region per page (`role="status"` around a list) plus
+  a template the element clones. Anything notifies by dispatching
+  `parche:toast` on `document`. Server-rendered `items` work with no script.
+- **Carousel** is the one compound element (`Root` + `Slide`): scroll-snap
+  does the scrolling, the element drives the buttons and the picker from an
+  IntersectionObserver. No autoplay.
+
+The placement grammar (`data-anchored` + `data-placement` / `data-align`)
+lives once, in Popover's CSS; Menu and Tooltip emit the same attributes and
+declare Popover as a registry dependency. `class` on an overlay styles its
+surface: the root is `display: contents`.
+
 ### Controls: wrap the real thing
 
 Switch is `<input type="checkbox" role="switch">`, Slider is

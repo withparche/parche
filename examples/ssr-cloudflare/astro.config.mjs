@@ -27,7 +27,7 @@ export default defineConfig({
     // widgets use; add here when you use a new one.
     icon({
       include: {
-        tabler: ['align-center', 'arrow-right', 'article', 'bookmark', 'brand-github', 'brand-linkedin', 'brand-mastodon', 'brand-x', 'building', 'cards', 'chart-bar', 'check', 'chevron-down', 'chevron-left', 'chevron-right', 'click', 'credit-card', 'external-link', 'help-circle', 'info-circle', 'info-square', 'layout-grid', 'layout-list', 'layout-rows', 'layout-sidebar', 'layout-sidebar-right', 'list-check', 'list-numbers', 'mail', 'menu-2', 'message-circle', 'speakerphone', 'world', 'x'],
+        tabler: ['alert-circle', 'alert-triangle', 'align-center', 'arrow-right', 'article', 'bookmark', 'brand-github', 'brand-linkedin', 'brand-mastodon', 'brand-x', 'building', 'cards', 'chart-bar', 'check', 'chevron-down', 'chevron-left', 'chevron-right', 'circle-check', 'click', 'credit-card', 'external-link', 'help-circle', 'info-circle', 'info-square', 'layout-grid', 'layout-list', 'layout-rows', 'layout-sidebar', 'layout-sidebar-right', 'list-check', 'list-numbers', 'mail', 'menu-2', 'message-circle', 'palette', 'speakerphone', 'world', 'x'],
       },
     }),
   ],

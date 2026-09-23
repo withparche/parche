@@ -1,0 +1,46 @@
+/* Carousel: slide width from `perView` (one on narrow screens, more from
+   48rem up), the scrollbar hidden once the controls take over, and without
+   script the native scroll with its scrollbar and no controls. */
+.parche-carousel {
+  --carousel-gap: 1rem;
+  --carousel-per-view: 1;
+}
+@media (min-width: 48rem) {
+  .parche-carousel[data-per-view='2'],
+  .parche-carousel[data-per-view='3'],
+  .parche-carousel[data-per-view='4'] {
+    --carousel-per-view: 2;
+  }
+}
+@media (min-width: 64rem) {
+  .parche-carousel[data-per-view='3'] {
+    --carousel-per-view: 3;
+  }
+  .parche-carousel[data-per-view='4'] {
+    --carousel-per-view: 4;
+  }
+}
+.parche-carousel > [data-part='track'] {
+  gap: var(--carousel-gap);
+  scrollbar-width: none;
+}
+.parche-carousel [data-part='slide'] {
+  flex-basis: calc((100% - (var(--carousel-per-view) - 1) * var(--carousel-gap)) / var(--carousel-per-view));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .parche-carousel > [data-part='track'] {
+    scroll-behavior: auto;
+  }
+}
+
+@media (scripting: none) {
+  .parche-carousel > [data-part='track'] {
+    scrollbar-width: thin;
+    padding-bottom: 0.5rem;
+  }
+  .parche-carousel [data-part='controls'],
+  .parche-carousel [data-part='dots'] {
+    display: none;
+  }
+}

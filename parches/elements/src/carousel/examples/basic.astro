@@ -1,0 +1,21 @@
+---
+import * as Carousel from '../index';
+import Card from '../../card/Card.astro';
+const quotes = [
+  { name: 'Ada', text: 'The page is data. I stopped fighting the framework.' },
+  { name: 'Grace', text: 'Swapped the whole widget set in an afternoon.' },
+  { name: 'Linus', text: 'Zero client JavaScript by default. Finally.' },
+  { name: 'Margaret', text: 'Themes are tokens, so the redesign was a file.' },
+];
+---
+
+<Carousel.Root count={quotes.length} label="What people say" perView={3}>
+  {quotes.map((q, i) => (
+    <Carousel.Slide index={i} total={quotes.length}>
+      <Card class="h-full">
+        <blockquote class="text-muted">“{q.text}”</blockquote>
+        <p class="mt-3 font-semibold text-heading">{q.name}</p>
+      </Card>
+    </Carousel.Slide>
+  ))}
+</Carousel.Root>

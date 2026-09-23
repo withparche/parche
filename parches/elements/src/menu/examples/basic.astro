@@ -1,0 +1,37 @@
+---
+import Menu from '../Menu.astro';
+---
+
+<div class="flex flex-wrap gap-3">
+  <Menu
+    id="example-menu"
+    label="Product"
+    groups={[
+      {
+        title: 'Build',
+        items: [
+          { label: 'Widgets', href: '#widgets', icon: 'tabler:layout-grid', description: 'Sections from JSON' },
+          { label: 'Themes', href: '#themes', icon: 'tabler:palette' },
+        ],
+      },
+      { items: [{ label: 'Changelog', href: '#changelog' }, { label: 'Roadmap', href: '#roadmap', disabled: true }] },
+    ]}
+  />
+
+  <Menu
+    id="example-menu-radio"
+    icon="tabler:world"
+    triggerLabel="Language: English"
+    variant="secondary"
+    align="end"
+    groups={[
+      {
+        items: [
+          { label: 'English', value: 'en', checked: true, current: true },
+          { label: 'Español', value: 'es', checked: false },
+          { label: 'Français', value: 'fr', checked: false, disabled: true },
+        ],
+      },
+    ]}
+  />
+</div>

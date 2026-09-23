@@ -1,0 +1,73 @@
+---
+/**
+ * Carousel.Root — a scroll-snap track with the APG carousel semantics
+ * (`region` + `aria-roledescription="carousel"`, slides as groups named
+ * "n of N"), previous / next buttons and a slide picker. Scrolling is the
+ * browser's: touch, wheel, keyboard and snapping need no script. The element
+ * drives the controls, tracks the visible slide and syncs the picker.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import Icon from '../icon/Icon.astro';
+import { schema, type Props } from './carousel.props';
+
+const { props: { count, label, perView, controls, dots, prevLabel, nextLabel }, rest, className } = splitProps(schema, Astro.props);
+
+const control =
+  'parche-carousel-control inline-flex size-9 cursor-pointer items-center justify-center rounded-full border border-border bg-surface text-heading transition-colors ' +
+  'hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:opacity-40';
+---
+
+<parche-carousel
+  role="region"
+  aria-roledescription="carousel"
+  aria-label={label}
+  class={cn('parche-carousel relative block', className)}
+  data-part="root"
+  data-per-view={perView}
+  data-index="0"
+  {...rest}
+>
+  <div
+    role="group"
+    aria-label={`${label}: slides`}
+    tabindex="0"
+    class="parche-carousel-track flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+    data-part="track"
+  >
+    <slot />
+  </div>
+  {(controls || dots) && (
+    <div class="mt-4 flex items-center justify-between gap-4">
+      {dots ? (
+        <div role="group" aria-label={`${label}: choose a slide`} class="parche-carousel-dots flex gap-2" data-part="dots">
+          {Array.from({ length: count }, (_, i) => (
+            <button
+              type="button"
+              aria-label={`Slide ${i + 1}`}
+              aria-current={i === 0 ? 'true' : undefined}
+              class="parche-carousel-dot size-2.5 cursor-pointer rounded-full bg-border transition-colors hover:bg-muted aria-[current=true]:bg-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              data-part="dot"
+              data-index={i}
+            />
+          ))}
+        </div>
+      ) : (
+        <span />
+      )}
+      {controls && (
+        <div class="parche-carousel-controls flex gap-2" data-part="controls">
+          <button type="button" class={control} aria-label={prevLabel} data-part="prev" disabled>
+            <Icon name="tabler:chevron-left" size="sm" aria-hidden="true" />
+          </button>
+          <button type="button" class={control} aria-label={nextLabel} data-part="next" disabled={count <= 1 || undefined}>
+            <Icon name="tabler:chevron-right" size="sm" aria-hidden="true" />
+          </button>
+        </div>
+      )}
+    </div>
+  )}
+</parche-carousel>
+
+<script>
+  import './carousel.element.ts';
+</script>

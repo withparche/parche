@@ -1,0 +1,20 @@
+/* Toast: slide in on arrival, fade out when closing, where motion is allowed.
+   The element waits for `transitionend` in the closing state, so without a
+   transition (reduced motion) it removes the toast at once. */
+@media (prefers-reduced-motion: no-preference) {
+  .parche-toaster [data-part='toast'] {
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+  }
+  .parche-toaster [data-part='toast'][data-state='closing'] {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  @starting-style {
+    .parche-toaster [data-part='toast'][data-state='open'] {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+  }
+}

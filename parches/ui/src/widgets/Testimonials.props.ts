@@ -14,6 +14,7 @@ export const schema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional().meta({ input: 'textarea' }),
   testimonials: z.array(testimonial).default([]),
+  layout: z.enum(['grid', 'carousel']).default('grid').meta({ help: 'A grid, or a carousel three per view.' }),
   callToAction: z.object({
     text: z.string().optional(),
     href: z.string().optional().meta({ placeholder: 'https://...' }),
@@ -33,6 +34,7 @@ export const meta: WidgetMeta = {
     groups: [
       { key: 'headline', label: 'Headline', fields: ['tagline', 'title', 'subtitle'] },
       { key: 'content', label: 'Testimonials', fields: ['testimonials'] },
+      { key: 'layout', label: 'Layout', fields: ['layout'] },
       { key: 'actions', label: 'Actions', fields: ['callToAction'] },
     ],
   },

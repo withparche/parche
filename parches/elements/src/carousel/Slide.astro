@@ -1,0 +1,24 @@
+---
+/**
+ * Carousel.Slide — one slide: a group named "n of N" (or `label`), snapping
+ * to the start of the track. Width comes from the Root's `perView` through
+ * a CSS variable; the slide itself carries no layout opinion.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { parts, type SlideProps as Props } from './carousel.props';
+
+const { props: { index, total, label }, rest, className } = splitProps(parts.Slide.schema, Astro.props);
+---
+
+<div
+  role="group"
+  aria-roledescription="slide"
+  aria-label={label ?? `${index + 1} of ${total}`}
+  class={cn('parche-carousel-slide shrink-0 snap-start', className)}
+  data-part="slide"
+  data-index={index}
+  data-state={index === 0 ? 'active' : 'inactive'}
+  {...rest}
+>
+  <slot />
+</div>

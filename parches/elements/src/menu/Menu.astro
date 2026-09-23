@@ -1,0 +1,112 @@
+---
+/**
+ * Menu — the APG menu button on the Popover API. The trigger is a button
+ * with `popovertarget`; the surface is `popover="auto"` with `role="menu"`,
+ * so opening, light dismiss and focus return are the platform's. The element
+ * adds what a menu needs on top: focus into the list on open, roving arrows,
+ * typeahead, close on activation. Items are data (`groups`), because that is
+ * how a header carries its navigation and a switcher its options.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import Icon from '../icon/Icon.astro';
+import { schema, type Props } from './menu.props';
+
+const { props: { id, label, icon, triggerLabel, variant, groups, placement, align, openOnHover }, rest, className } = splitProps(schema, Astro.props);
+const triggerId = `${id}-trigger`;
+const hasTrigger = Astro.slots.has('trigger');
+const ownTrigger = !hasTrigger && (label || icon);
+
+const triggerClass = cn(
+  'parche-menu-trigger inline-flex cursor-pointer items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+  variant === 'ghost' ? 'text-muted hover:bg-surface-hover hover:text-heading' : 'border border-border bg-surface text-heading hover:bg-surface-hover',
+  'aria-expanded:text-heading',
+);
+const itemClass =
+  'parche-menu-item flex w-full cursor-pointer items-center gap-3 px-3 py-2 text-left text-sm text-muted no-underline transition-colors ' +
+  'hover:bg-surface-hover hover:text-heading focus-visible:bg-surface-hover focus-visible:text-heading focus-visible:outline-none ' +
+  'aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-disabled:hover:bg-transparent aria-current:font-medium aria-current:text-heading';
+---
+
+<parche-menu
+  class="parche-menu contents"
+  data-part="root"
+  data-state="closed"
+  data-anchored
+  data-placement={placement}
+  data-align={align}
+  open-on-hover={openOnHover || undefined}
+  {...rest}
+>
+  {hasTrigger && <slot name="trigger" />}
+  {ownTrigger && (
+    <button
+      type="button"
+      id={triggerId}
+      popovertarget={id}
+      aria-haspopup="menu"
+      aria-expanded="false"
+      aria-label={!label ? triggerLabel : undefined}
+      class={triggerClass}
+      data-part="trigger"
+    >
+      {icon && <Icon name={icon} size="sm" aria-hidden="true" />}
+      {label}
+      {label && <Icon name="tabler:chevron-down" size="xs" class="text-muted transition-transform [[aria-expanded=true]>&]:rotate-180" aria-hidden="true" />}
+    </button>
+  )}
+  <div
+    id={id}
+    popover="auto"
+    role="menu"
+    aria-labelledby={ownTrigger ? triggerId : undefined}
+    class={cn('parche-menu-surface min-w-48 rounded-lg border border-border bg-surface py-1 shadow-lg', className)}
+    data-part="surface"
+  >
+    {groups.map((group, g) => (
+      <div
+        role="group"
+        aria-labelledby={group.title ? `${id}-group-${g}` : undefined}
+        class={cn('parche-menu-group', g > 0 && 'mt-1 border-t border-border pt-1')}
+        data-part="group"
+      >
+        {group.title && (
+          <div id={`${id}-group-${g}`} class="parche-menu-title px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-muted" data-part="title">
+            {group.title}
+          </div>
+        )}
+        {group.items.map((item) => {
+          const radio = typeof item.checked === 'boolean';
+          const Tag = item.href && !item.disabled ? 'a' : 'button';
+          return (
+            <Tag
+              role={radio ? 'menuitemradio' : 'menuitem'}
+              tabindex="-1"
+              href={Tag === 'a' ? item.href : undefined}
+              hreflang={Tag === 'a' ? item.hreflang : undefined}
+              type={Tag === 'button' ? 'button' : undefined}
+              aria-checked={radio ? String(item.checked) : undefined}
+              aria-current={item.current ? 'true' : undefined}
+              aria-disabled={item.disabled ? 'true' : undefined}
+              disabled={Tag === 'button' && item.disabled ? true : undefined}
+              class={itemClass}
+              data-part="item"
+              data-value={item.value ?? item.label}
+            >
+              {item.icon && <Icon name={item.icon} size="sm" class="shrink-0 text-muted" aria-hidden="true" />}
+              <span class="flex-1">
+                <span class="block">{item.label}</span>
+                {item.description && <span class="block text-xs text-muted">{item.description}</span>}
+              </span>
+              {radio && <Icon name="tabler:check" size="xs" class={cn('shrink-0 text-primary', !item.checked && 'invisible')} aria-hidden="true" />}
+            </Tag>
+          );
+        })}
+      </div>
+    ))}
+  </div>
+</parche-menu>
+
+<script>
+  import './menu.element.ts';
+</script>

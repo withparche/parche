@@ -1,0 +1,26 @@
+---
+import Toast from '../Toast.astro';
+import Button from '../../button/Button.astro';
+---
+
+<div class="flex flex-wrap gap-3">
+  <Button variant="secondary" data-toast="neutral">Notify</Button>
+  <Button variant="secondary" data-toast="success">Saved</Button>
+  <Button variant="secondary" data-toast="danger">Failed</Button>
+</div>
+
+<Toast position="bottom-right" items={[{ title: 'Rendered on the server', description: 'This one was here before any script ran.', tone: 'success' }]} duration={0} />
+
+<script>
+  document.addEventListener('click', (event) => {
+    const button = (event.target as Element).closest<HTMLElement>('[data-toast]');
+    if (!button) return;
+    const tone = button.dataset.toast as 'neutral' | 'success' | 'danger';
+    const copy = {
+      neutral: { title: 'Heads up', description: 'A neutral notification, gone in five seconds.' },
+      success: { title: 'Changes saved', description: 'The page is live.' },
+      danger: { title: 'Could not save', description: 'The server did not answer. Try again.' },
+    }[tone];
+    document.dispatchEvent(new CustomEvent('parche:toast', { detail: { ...copy, tone, duration: 5000 } }));
+  });
+</script>

@@ -1,0 +1,26 @@
+---
+import Tabs from '../Tabs.astro';
+const billing = [
+  { value: 'monthly', label: 'Monthly' },
+  { value: 'yearly', label: 'Yearly', icon: 'tabler:check' },
+  { value: 'lifetime', label: 'Lifetime', disabled: true },
+];
+---
+
+<Tabs items={billing} label="Billing period" syncKey="billing">
+  <p slot="monthly">Pay month to month. Cancel any time.</p>
+  <p slot="yearly">Two months free. <a href="#" class="text-primary underline">See the terms.</a></p>
+  <p slot="lifetime">Not available yet.</p>
+</Tabs>
+
+<div class="mt-10">
+  <Tabs
+    variant="pill"
+    orientation="vertical"
+    label="Docs"
+    items={[
+      { value: 'install', label: 'Install', content: '<p>Run <code>pnpm add @parche/astro</code>.</p>' },
+      { value: 'configure', label: 'Configure', content: '<p>Add the integration to <code>astro.config.mjs</code>.</p>' },
+    ]}
+  />
+</div>

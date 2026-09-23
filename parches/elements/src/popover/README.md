@@ -31,6 +31,11 @@ import Button from 'parche:elements/Button';
 Below and centred, then above with a title and a button that hides it.
 :::
 
+`anchor` hangs the panel from another element instead of the invoker (a
+header bar for a full-width menu); that element declares
+`style="anchor-name: --<id>"`. `openOnHover` also opens it on hover, on devices
+that hover. `class` styles the surface.
+
 ## Anatomy
 
 `root` (`parche-popover`, `data-state`, `data-placement`, `data-align`) ·

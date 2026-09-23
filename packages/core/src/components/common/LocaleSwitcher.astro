@@ -1,6 +1,7 @@
 ---
 import { locales, defaultLocale } from 'parche:config/i18n';
 import { buildSlugMap, getAlternateUrls, resolvePageFromSlug } from 'parche:utils/i18n';
+import Menu from 'parche:elements/Menu';
 
 // Only render when there are multiple locales configured
 const hasMultipleLocales = Array.isArray(locales) && locales.length > 1;
@@ -37,6 +38,12 @@ if (hasMultipleLocales) {
 
   hasAlternates = alternates.length > 1;
 }
+
+interface Props {
+  /** The menu id; give each instance on a page its own. */
+  id?: string;
+}
+const { id = 'parche-locale-switcher' } = Astro.props;
 
 const currentLocale = Astro.currentLocale || defaultLocale;
 
@@ -80,119 +87,25 @@ const allLocales = hasMultipleLocales
 ---
 
 {hasMultipleLocales && (
-  <div class="relative" data-locale-switcher>
-    <button
-      type="button"
-      class="inline-flex items-center gap-1.5 text-sm font-medium text-muted hover:text-heading transition-colors px-2 h-8 rounded-md hover:bg-surface-hover cursor-pointer"
-      aria-expanded="false"
-      aria-haspopup="true"
-      aria-label={`Language: ${currentName}`}
-      data-locale-trigger
-    >
-      <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"></circle>
-        <path d="M2 12h20"></path>
-        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-      </svg>
-      {/* <span class="uppercase text-xs font-semibold">{currentLocale}</span> */}
-    </button>
-
-    <div
-      class="absolute right-0 top-full pt-1 opacity-0 invisible translate-y-1 transition-all duration-200 z-50"
-      role="menu"
-      data-locale-panel
-    >
-      <div class="bg-surface border border-border rounded-lg shadow-lg py-1 min-w-[150px]">
-        {/* Every locale, in configured order — the current one marked in place */}
-        {allLocales.map((item) =>
-          item.current ? (
-            <div
-              class="flex items-center justify-between px-3 py-2 text-sm font-medium text-heading bg-surface-hover"
-              role="menuitem"
-              aria-current="true"
-            >
-              <span>{getLocaleName(item.locale)}</span>
-              <svg class="w-3.5 h-3.5 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            </div>
-          ) : item.disabled ? (
-            <span
-              class="flex items-center px-3 py-2 text-sm text-muted/40 cursor-default"
-              role="menuitem"
-              aria-disabled="true"
-            >
-              {getLocaleName(item.locale)}
-            </span>
-          ) : (
-            <a
-              href={item.href}
-              class="flex items-center px-3 py-2 text-sm text-muted hover:text-heading hover:bg-surface-hover transition-colors no-underline"
-              role="menuitem"
-              hreflang={item.locale}
-            >
-              {getLocaleName(item.locale)}
-            </a>
-          )
-        )}
-      </div>
-    </div>
-  </div>
+  <Menu
+    id={id}
+    icon="tabler:world"
+    triggerLabel={`Language: ${currentName}`}
+    align="end"
+    groups={[
+      {
+        items: allLocales.map((item) => ({
+          label: getLocaleName(item.locale),
+          value: item.locale,
+          // The current locale is marked in place, not linked; a locale with
+          // no translation of this page is shown but disabled.
+          href: item.current ? undefined : item.href,
+          hreflang: item.locale,
+          checked: item.current,
+          current: item.current,
+          disabled: item.disabled,
+        })),
+      },
+    ]}
+  />
 )}
-
-<script>
-  function initLocaleSwitchers() {
-    document.querySelectorAll('[data-locale-switcher]').forEach((switcher) => {
-      if ((switcher as any)._localeSwitcherInit) return;
-      (switcher as any)._localeSwitcherInit = true;
-
-      const trigger = switcher.querySelector('[data-locale-trigger]') as HTMLButtonElement;
-      const panel = switcher.querySelector('[data-locale-panel]') as HTMLElement;
-      if (!trigger || !panel) return;
-
-      let isOpen = false;
-
-      const open = () => {
-        isOpen = true;
-        trigger.setAttribute('aria-expanded', 'true');
-        panel.classList.remove('opacity-0', 'invisible', 'translate-y-1');
-        panel.classList.add('opacity-100', 'visible', 'translate-y-0');
-      };
-
-      const close = () => {
-        isOpen = false;
-        trigger.setAttribute('aria-expanded', 'false');
-        panel.classList.add('opacity-0', 'invisible', 'translate-y-1');
-        panel.classList.remove('opacity-100', 'visible', 'translate-y-0');
-      };
-
-      // Toggle on click
-      trigger.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        isOpen ? close() : open();
-      });
-
-      // Prevent clicks inside the panel from closing it
-      panel.addEventListener('click', (e) => e.stopPropagation());
-
-      // Close on Escape
-      switcher.addEventListener('keydown', (e: Event) => {
-        const ke = e as KeyboardEvent;
-        if (ke.key === 'Escape' && isOpen) {
-          close();
-          trigger.focus();
-        }
-      });
-
-      // Close when clicking outside
-      document.addEventListener('click', (e) => {
-        if (isOpen && !switcher.contains(e.target as Node)) close();
-      });
-    });
-  }
-
-  // Run on initial load and after each client-side navigation
-  initLocaleSwitchers();
-  document.addEventListener('astro:page-load', initLocaleSwitchers);
-</script>

@@ -1,0 +1,14 @@
+{
+  "name": "menu",
+  "type": "element",
+  "files": [
+    { "path": "Menu.astro", "type": "part" },
+    { "path": "menu.props.ts", "type": "props" },
+    { "path": "menu.element.ts", "type": "element" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["popover", "icon"],
+  "source": null
+}

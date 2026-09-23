@@ -4,6 +4,8 @@ import Button from 'parche:elements/Button';
 import Image from 'parche:elements/Image';
 import Sheet from 'parche:elements/Sheet';
 import Collapsible from 'parche:elements/Collapsible';
+import Menu from 'parche:elements/Menu';
+import Popover from 'parche:elements/Popover';
 import ThemeToggle from 'parche:components/ThemeToggle';
 import LocaleSwitcher from 'parche:components/LocaleSwitcher';
 
@@ -85,6 +87,10 @@ function linkType(link: HeaderLink): 'link' | 'dropdown' | 'mega' {
   return link.mega ? 'mega' : 'dropdown';
 }
 
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const navItemClass =
+  'inline-flex items-center gap-1 text-[0.938rem] font-medium text-muted hover:text-heading transition-colors no-underline px-3 py-2 rounded-md hover:bg-surface-hover cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-expanded:text-heading';
+
 ---
 
 <!-- Skip to content (accessibility) -->
@@ -134,7 +140,7 @@ function linkType(link: HeaderLink): 'link' | 'dropdown' | 'mega' {
   data-header
   transition:animate="none"
 >
-  <div class="mx-auto max-w-6xl flex items-center justify-between px-4 md:px-6 h-[4.75rem]">
+  <div id="parche-header-bar" class="mx-auto max-w-6xl flex items-center justify-between px-4 md:px-6 h-[4.75rem]" style="anchor-name: --parche-header-bar">
     <!-- Logo -->
     <a href={homeHref} class="no-underline hover:opacity-80 transition-opacity shrink-0">
       {logoSrc ? (
@@ -166,133 +172,95 @@ function linkType(link: HeaderLink): 'link' | 'dropdown' | 'mega' {
           );
         }
 
-        // Dropdown or Mega
-        const isMega = type === 'mega';
+        const id = `parche-nav-${slug(link.label)}`;
+        const groups = (link.children ?? []).map((group) => ({
+          title: group.title,
+          items: group.links.map((item) => ({ label: item.label, href: item.href, icon: item.icon, description: item.description })),
+        }));
+
+        if (type === 'dropdown') {
+          // A Menu: the APG menu button on the Popover API, hover-opened on desktop.
+          return (
+            <Menu id={id} groups={groups} openOnHover class="min-w-56">
+              <button slot="trigger" type="button" popovertarget={id} aria-haspopup="menu" aria-expanded="false" class={navItemClass}>
+                {link.label}
+                <Icon name="tabler:chevron-down" size="xs" class="transition-transform [[aria-expanded=true]>&]:rotate-180" aria-hidden="true" />
+              </button>
+            </Menu>
+          );
+        }
+
+        // Mega: a disclosure panel hung from the header bar, full width.
         const megaCols = link.mega?.columns ?? 3;
-
         return (
-          <div class:list={[isMega ? 'static' : 'relative']} data-dropdown>
-            <button
-              type="button"
-              class="inline-flex items-center gap-1 text-[0.938rem] font-medium text-muted hover:text-heading transition-colors px-3 py-2 rounded-md hover:bg-surface-hover cursor-pointer"
-              aria-expanded="false"
-              aria-haspopup="true"
-              data-dropdown-trigger
-            >
+          <Popover id={id} anchor="parche-header-bar" placement="bottom" align="center" openOnHover class="w-[min(72rem,calc(100vw-2rem))] max-w-none p-6 text-base">
+            <button slot="trigger" type="button" popovertarget={id} aria-expanded="false" class={navItemClass}>
               {link.label}
-              <svg class="w-3.5 h-3.5 transition-transform duration-200" data-chevron xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
+              <Icon name="tabler:chevron-down" size="xs" class="transition-transform [[aria-expanded=true]>&]:rotate-180" aria-hidden="true" />
             </button>
-
-            {!isMega ? (
-              /* ---- Simple Dropdown ---- */
-              <div
-                class="absolute left-0 top-full pt-2 opacity-0 invisible translate-y-1 transition-all duration-200 z-50"
-                role="menu"
-                data-dropdown-panel
-              >
-                <div class="bg-surface border border-border rounded-lg shadow-lg py-2 min-w-[220px]">
-                  {(link.children ?? []).map((group) => (
-                    <div>
-                      {group.title && (
-                        <div class="px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-muted/60">{group.title}</div>
-                      )}
+            <div class="flex gap-8">
+              {/* Link columns */}
+              <div class:list={[
+                'flex-1 grid gap-x-8 gap-y-6',
+                megaCols === 1 && 'grid-cols-1',
+                megaCols === 2 && 'grid-cols-2',
+                megaCols === 3 && 'grid-cols-3',
+                megaCols === 4 && 'grid-cols-4',
+              ]}>
+                {(link.children ?? []).map((group) => (
+                  <div>
+                    {group.title && (
+                      <div class="text-xs font-semibold uppercase tracking-wider text-muted/60 mb-3">{group.title}</div>
+                    )}
+                    <ul class="space-y-1">
                       {group.links.map((item) => (
-                        <a
-                          href={item.href}
-                          class="flex items-center gap-3 px-4 py-2 text-sm text-muted hover:text-heading hover:bg-surface-hover transition-colors no-underline"
-                          role="menuitem"
-                        >
-                          {item.icon && <Icon name={item.icon} class="w-4 h-4 shrink-0 text-muted/60" />}
-                          <div>
-                            <div class="font-medium">{item.label}</div>
-                            {item.description && <div class="text-xs text-muted/60 mt-0.5">{item.description}</div>}
-                          </div>
-                        </a>
-                      ))}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              /* ---- Mega Menu ---- */
-              <div
-                class="absolute left-0 right-0 top-full opacity-0 invisible translate-y-1 transition-all duration-200 z-50"
-                role="menu"
-                data-dropdown-panel
-                data-mega
-              >
-                <div class="bg-surface border-t border-border shadow-lg">
-                  <div class="mx-auto max-w-6xl px-6 py-6">
-                    <div class="flex gap-8">
-                      {/* Link columns */}
-                      <div class:list={[
-                        'flex-1 grid gap-x-8 gap-y-6',
-                        megaCols === 1 && 'grid-cols-1',
-                        megaCols === 2 && 'grid-cols-2',
-                        megaCols === 3 && 'grid-cols-3',
-                        megaCols === 4 && 'grid-cols-4',
-                      ]}>
-                        {(link.children ?? []).map((group) => (
-                          <div>
-                            {group.title && (
-                              <div class="text-xs font-semibold uppercase tracking-wider text-muted/60 mb-3">{group.title}</div>
+                        <li>
+                          <a
+                            href={item.href}
+                            class="group flex items-start gap-3 p-2 -mx-2 rounded-md hover:bg-surface-hover transition-colors no-underline"
+                          >
+                            {item.icon && (
+                              <span class="mt-0.5 flex items-center justify-center w-8 h-8 rounded-md bg-primary/10 text-primary shrink-0">
+                                <Icon name={item.icon} class="w-4 h-4" />
+                              </span>
                             )}
-                            <ul class="space-y-1">
-                              {group.links.map((item) => (
-                                <li>
-                                  <a
-                                    href={item.href}
-                                    class="group flex items-start gap-3 p-2 -mx-2 rounded-md hover:bg-surface-hover transition-colors no-underline"
-                                    role="menuitem"
-                                  >
-                                    {item.icon && (
-                                      <span class="mt-0.5 flex items-center justify-center w-8 h-8 rounded-md bg-primary/10 text-primary shrink-0">
-                                        <Icon name={item.icon} class="w-4 h-4" />
-                                      </span>
-                                    )}
-                                    <div>
-                                      <div class="text-sm font-medium text-heading group-hover:text-primary transition-colors">{item.label}</div>
-                                      {item.description && <div class="text-xs text-muted/60 mt-0.5 leading-relaxed">{item.description}</div>}
-                                    </div>
-                                  </a>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Featured card */}
-                      {link.mega?.featured && (
-                        <div class="w-64 shrink-0">
-                          <a href={link.mega.featured.href} class="block rounded-lg overflow-hidden border border-border hover:border-primary/30 transition-colors no-underline group">
-                            {link.mega.featured.image && (
-                              <Image src={link.mega.featured.image} alt="" width={256} ratio="16/9" />
-                            )}
-                            <div class="p-4">
-                              <div class="text-sm font-semibold text-heading group-hover:text-primary transition-colors">{link.mega.featured.title}</div>
-                              {link.mega.featured.description && (
-                                <div class="text-xs text-muted/60 mt-1 leading-relaxed">{link.mega.featured.description}</div>
-                              )}
+                            <div>
+                              <div class="text-sm font-medium text-heading group-hover:text-primary transition-colors">{item.label}</div>
+                              {item.description && <div class="text-xs text-muted/60 mt-0.5 leading-relaxed">{item.description}</div>}
                             </div>
                           </a>
-                        </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+
+              {/* Featured card */}
+              {link.mega?.featured && (
+                <div class="w-64 shrink-0">
+                  <a href={link.mega.featured.href} class="block rounded-lg overflow-hidden border border-border hover:border-primary/30 transition-colors no-underline group">
+                    {link.mega.featured.image && (
+                      <Image src={link.mega.featured.image} alt="" width={256} ratio="16/9" />
+                    )}
+                    <div class="p-4">
+                      <div class="text-sm font-semibold text-heading group-hover:text-primary transition-colors">{link.mega.featured.title}</div>
+                      {link.mega.featured.description && (
+                        <div class="text-xs text-muted/60 mt-1 leading-relaxed">{link.mega.featured.description}</div>
                       )}
                     </div>
-
-                    {/* Mega footer */}
-                    {link.mega?.footer && (
-                      <div class="mt-6 pt-4 border-t border-border text-sm text-muted">
-                        <Fragment set:html={link.mega.footer} />
-                      </div>
-                    )}
-                  </div>
+                  </a>
                 </div>
+              )}
+            </div>
+
+            {/* Mega footer */}
+            {link.mega?.footer && (
+              <div class="mt-6 pt-4 border-t border-border text-sm text-muted">
+                <Fragment set:html={link.mega.footer} />
               </div>
             )}
-          </div>
+          </Popover>
         );
       })}
     </nav>
@@ -382,7 +350,7 @@ function linkType(link: HeaderLink): 'link' | 'dropdown' | 'mega' {
       </nav>
 
       <div class="flex items-center gap-3 pt-4">
-        <LocaleSwitcher />
+        <LocaleSwitcher id="parche-locale-switcher-mobile" />
         <ThemeToggle />
       </div>
 
@@ -433,136 +401,4 @@ function linkType(link: HeaderLink): 'link' | 'dropdown' | 'mega' {
       }
     });
   }
-
-  // ---- Desktop dropdowns ----
-  class ParcheDropdown {
-    static init() {
-      document.querySelectorAll('[data-dropdown]').forEach((dropdown) => {
-        // Prevent double-init on same element
-        if ((dropdown as any)._parcheInit) return;
-        (dropdown as any)._parcheInit = true;
-
-        const trigger = dropdown.querySelector('[data-dropdown-trigger]') as HTMLButtonElement;
-        const panel = dropdown.querySelector('[data-dropdown-panel]') as HTMLElement;
-        const chevron = dropdown.querySelector('[data-chevron]') as HTMLElement;
-        if (!trigger || !panel) return;
-
-        let isOpen = false;
-        let closeTimeout: ReturnType<typeof setTimeout>;
-
-        const open = () => {
-          clearTimeout(closeTimeout);
-          // Close all others first
-          document.querySelectorAll('[data-dropdown]').forEach((other) => {
-            if (other !== dropdown) {
-              const otherTrigger = other.querySelector('[data-dropdown-trigger]') as HTMLButtonElement;
-              const otherPanel = other.querySelector('[data-dropdown-panel]') as HTMLElement;
-              const otherChevron = other.querySelector('[data-chevron]') as HTMLElement;
-              if (otherTrigger && otherPanel) {
-                otherTrigger.setAttribute('aria-expanded', 'false');
-                otherPanel.classList.add('opacity-0', 'invisible', 'translate-y-1');
-                otherPanel.classList.remove('opacity-100', 'visible', 'translate-y-0');
-                otherChevron?.classList.remove('rotate-180');
-              }
-            }
-          });
-
-          isOpen = true;
-          trigger.setAttribute('aria-expanded', 'true');
-          panel.classList.remove('opacity-0', 'invisible', 'translate-y-1');
-          panel.classList.add('opacity-100', 'visible', 'translate-y-0');
-          chevron?.classList.add('rotate-180');
-        };
-
-        const close = () => {
-          isOpen = false;
-          trigger.setAttribute('aria-expanded', 'false');
-          panel.classList.add('opacity-0', 'invisible', 'translate-y-1');
-          panel.classList.remove('opacity-100', 'visible', 'translate-y-0');
-          chevron?.classList.remove('rotate-180');
-        };
-
-        const delayedClose = () => {
-          closeTimeout = setTimeout(close, 150);
-        };
-
-        // Click to toggle
-        trigger.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          isOpen ? close() : open();
-        });
-
-        // Stop propagation on panel clicks
-        panel.addEventListener('click', (e) => {
-          e.stopPropagation();
-        });
-
-        // Hover open/close (desktop)
-        const isMega = panel.hasAttribute('data-mega');
-
-        if (isMega) {
-          trigger.addEventListener('mouseenter', open);
-          panel.addEventListener('mouseenter', () => clearTimeout(closeTimeout));
-          trigger.addEventListener('mouseleave', delayedClose);
-          panel.addEventListener('mouseleave', delayedClose);
-        } else {
-          dropdown.addEventListener('mouseenter', open);
-          dropdown.addEventListener('mouseleave', delayedClose);
-        }
-
-        // Keyboard: Escape, arrows
-        dropdown.addEventListener('keydown', (e: Event) => {
-          const ke = e as KeyboardEvent;
-          if (ke.key === 'Escape' && isOpen) {
-            close();
-            trigger.focus();
-          }
-          if (ke.key === 'ArrowDown' && !isOpen) {
-            ke.preventDefault();
-            open();
-            (panel.querySelector('a') as HTMLAnchorElement)?.focus();
-          }
-          if (isOpen && (ke.key === 'ArrowDown' || ke.key === 'ArrowUp')) {
-            ke.preventDefault();
-            const items = Array.from(panel.querySelectorAll('a')) as HTMLAnchorElement[];
-            const idx = items.indexOf(document.activeElement as HTMLAnchorElement);
-            const next = ke.key === 'ArrowDown'
-              ? (idx < items.length - 1 ? idx + 1 : 0)
-              : (idx > 0 ? idx - 1 : items.length - 1);
-            items[next]?.focus();
-          }
-        });
-
-        // Close on focus outside
-        dropdown.addEventListener('focusout', (e: Event) => {
-          const fe = e as FocusEvent;
-          if (!dropdown.contains(fe.relatedTarget as Node)) {
-            close();
-          }
-        });
-      });
-
-      // Close all on click outside
-      document.addEventListener('click', (e) => {
-        document.querySelectorAll('[data-dropdown]').forEach((dropdown) => {
-          if (!dropdown.contains(e.target as Node)) {
-            const trigger = dropdown.querySelector('[data-dropdown-trigger]') as HTMLButtonElement;
-            const panel = dropdown.querySelector('[data-dropdown-panel]') as HTMLElement;
-            const chevron = dropdown.querySelector('[data-chevron]') as HTMLElement;
-            if (trigger && panel) {
-              trigger.setAttribute('aria-expanded', 'false');
-              panel.classList.add('opacity-0', 'invisible', 'translate-y-1');
-              panel.classList.remove('opacity-100', 'visible', 'translate-y-0');
-              chevron?.classList.remove('rotate-180');
-            }
-          }
-        });
-      });
-    }
-  }
-
-  // Init dropdowns
-  ParcheDropdown.init();
-  document.addEventListener('astro:after-swap', () => ParcheDropdown.init());
 </script>

@@ -3,70 +3,75 @@
    would overflow. Where the platform has no anchors the element positions it
    from script, and with no script at all it shows in flow after the trigger
    (`inset: auto` — the UA would otherwise centre it in the viewport). Entry
-   fades where motion is allowed. */
-.parche-popover > [popover] {
+   fades where motion is allowed.
+
+   The rules key on `data-anchored` + `data-placement` / `data-align` rather
+   than on the Popover class: Menu and Tooltip emit the same attributes and
+   list Popover as a registry dependency, so one copy of the placement grammar
+   serves the three. */
+[data-anchored] > [popover] {
   inset: auto;
   margin: 0;
 }
 
 @supports (position-area: bottom) {
-  .parche-popover > [popover] {
+  [data-anchored] > [popover] {
     position-try-fallbacks: flip-block, flip-inline;
   }
-  .parche-popover[data-placement='bottom'] > [popover] {
+  [data-anchored][data-placement='bottom'] > [popover] {
     position-area: bottom;
     margin-top: 0.5rem;
   }
-  .parche-popover[data-placement='bottom'][data-align='start'] > [popover] {
+  [data-anchored][data-placement='bottom'][data-align='start'] > [popover] {
     position-area: bottom span-right;
   }
-  .parche-popover[data-placement='bottom'][data-align='end'] > [popover] {
+  [data-anchored][data-placement='bottom'][data-align='end'] > [popover] {
     position-area: bottom span-left;
   }
-  .parche-popover[data-placement='top'] > [popover] {
+  [data-anchored][data-placement='top'] > [popover] {
     position-area: top;
     margin-bottom: 0.5rem;
   }
-  .parche-popover[data-placement='top'][data-align='start'] > [popover] {
+  [data-anchored][data-placement='top'][data-align='start'] > [popover] {
     position-area: top span-right;
   }
-  .parche-popover[data-placement='top'][data-align='end'] > [popover] {
+  [data-anchored][data-placement='top'][data-align='end'] > [popover] {
     position-area: top span-left;
   }
-  .parche-popover[data-placement='right'] > [popover] {
+  [data-anchored][data-placement='right'] > [popover] {
     position-area: right;
     margin-left: 0.5rem;
   }
-  .parche-popover[data-placement='right'][data-align='start'] > [popover] {
+  [data-anchored][data-placement='right'][data-align='start'] > [popover] {
     position-area: right span-bottom;
   }
-  .parche-popover[data-placement='right'][data-align='end'] > [popover] {
+  [data-anchored][data-placement='right'][data-align='end'] > [popover] {
     position-area: right span-top;
   }
-  .parche-popover[data-placement='left'] > [popover] {
+  [data-anchored][data-placement='left'] > [popover] {
     position-area: left;
     margin-right: 0.5rem;
   }
-  .parche-popover[data-placement='left'][data-align='start'] > [popover] {
+  [data-anchored][data-placement='left'][data-align='start'] > [popover] {
     position-area: left span-bottom;
   }
-  .parche-popover[data-placement='left'][data-align='end'] > [popover] {
+  [data-anchored][data-placement='left'][data-align='end'] > [popover] {
     position-area: left span-top;
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .parche-popover > [popover] {
+  [data-anchored] > [popover] {
     transition:
       opacity 0.15s ease,
       overlay 0.15s ease allow-discrete,
       display 0.15s ease allow-discrete;
   }
-  .parche-popover > [popover]:not(:popover-open) {
+  [data-anchored] > [popover]:not(:popover-open) {
     opacity: 0;
   }
   @starting-style {
-    .parche-popover > [popover]:popover-open {
+    [data-anchored] > [popover]:popover-open {
       opacity: 0;
     }
   }

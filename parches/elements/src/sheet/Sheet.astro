@@ -25,14 +25,14 @@ const sides = {
 };
 ---
 
-<parche-sheet class={cn('parche-sheet contents', className)} data-part="root" data-state="closed" data-side={side} {...rest}>
+<parche-sheet class="parche-sheet contents" data-part="root" data-state="closed" data-side={side} {...rest}>
   {hasTrigger && <slot name="trigger" />}
   <dialog
     id={id}
     closedby={closedBy}
     aria-labelledby={titleId}
     aria-describedby={descriptionId}
-    class={cn('parche-sheet-surface fixed m-0 border-border bg-surface p-0 text-foreground shadow-lg backdrop:bg-overlay', sides[side])}
+    class={cn('parche-sheet-surface fixed m-0 border-border bg-surface p-0 text-foreground shadow-lg backdrop:bg-overlay', sides[side], className)}
     data-part="dialog"
   >
     <div class="parche-sheet-panel flex h-full max-h-[inherit] flex-col" data-part="panel">

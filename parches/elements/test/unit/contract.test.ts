@@ -118,7 +118,8 @@ for (const { name, dir, entry, value } of folders) {
       assert.equal(meta.element.tag.entry, `./${slug}.element.ts`);
       assert.match(meta.element.tag.name, /^parche-[a-z-]+$/);
       const src = fs.readFileSync(elementPath, 'utf8');
-      assert.doesNotMatch(src, /^\s*(?:window|document)\./m, 'no window/document access at module scope');
+      // Module scope is column zero; a `document.` inside a method is fine.
+      assert.doesNotMatch(src, /^(?:window|document)\./m, 'no window/document access at module scope');
       const root = astro.find((f) => /(?:Root|^[A-Z][a-zA-Z]+)\.astro$/.test(path.basename(f)) && fs.readFileSync(f, 'utf8').includes('.element.ts'));
       assert.ok(root, 'exactly one .astro (the root) imports the element script');
     }

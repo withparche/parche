@@ -34,16 +34,21 @@ const SERVERS = [
 
 const failures = [];
 
-async function waitFor(url, ms) {
+// Poll until the page is really served: `wrangler dev` answers 200 with a
+// placeholder while workerd is still starting, so a status alone is not enough.
+async function waitFor(url, ms, ready) {
   const deadline = Date.now() + ms;
+  let last = '';
   while (Date.now() < deadline) {
     try {
       const res = await fetch(url);
-      if (res.ok) return res;
+      const html = await res.text();
+      if (res.ok && ready(html)) return html;
+      last = `${res.status} ${html.slice(0, 200)}`;
     } catch {}
     await new Promise((r) => setTimeout(r, 500));
   }
-  throw new Error(`no 200 from ${url} within ${ms}ms`);
+  throw new Error(`${url} not ready within ${ms}ms; last response: ${last}`);
 }
 
 for (const server of SERVERS) {
@@ -58,8 +63,9 @@ for (const server of SERVERS) {
 
   try {
     const url = `http://127.0.0.1:${server.port}/elements`;
-    const res = await waitFor(url, 60_000);
-    const html = await res.text();
+    // A render error mid-stream still answers 200 with a truncated body, so
+    // the page counts as served only once it is complete.
+    const html = await waitFor(url, 60_000, (body) => body.includes('data-element="') && body.trimEnd().endsWith('</html>'));
     const missing = ELEMENTS.filter((name) => !html.includes(`data-element="${name}"`));
     if (missing.length) failures.push(`${server.name}: /elements is missing ${missing.join(', ')}`);
     const roots = (html.match(/data-part="root"/g) ?? []).length;

@@ -1,0 +1,15 @@
+{
+  "name": "tooltip",
+  "type": "element",
+  "files": [
+    { "path": "Tooltip.astro", "type": "part" },
+    { "path": "tooltip.props.ts", "type": "props" },
+    { "path": "tooltip.element.ts", "type": "element" },
+    { "path": "tooltip.css", "type": "style" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["popover", "button"],
+  "source": null
+}

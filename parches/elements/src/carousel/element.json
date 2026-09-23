@@ -1,0 +1,17 @@
+{
+  "name": "carousel",
+  "type": "element",
+  "files": [
+    { "path": "Root.astro", "type": "part" },
+    { "path": "Slide.astro", "type": "part" },
+    { "path": "index.ts", "type": "index" },
+    { "path": "carousel.props.ts", "type": "props" },
+    { "path": "carousel.element.ts", "type": "element" },
+    { "path": "carousel.css", "type": "style" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["icon", "card"],
+  "source": null
+}

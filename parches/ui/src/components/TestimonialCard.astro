@@ -1,0 +1,35 @@
+---
+// One testimonial: the card Testimonials lays out in a grid or a carousel.
+import Card from 'parche:elements/Card';
+import Avatar from 'parche:elements/Avatar';
+import Divider from 'parche:elements/Divider';
+
+interface Props {
+  title?: string;
+  testimonial?: string;
+  name?: string;
+  job?: string;
+  image?: { src?: string; alt?: string };
+}
+const { title, testimonial, name, job, image } = Astro.props;
+---
+
+<Card as="article" class="h-full">
+  {title && <h3 slot="header" class="type-label text-heading font-medium">{title}</h3>}
+
+  {testimonial && (
+    <blockquote class="flex-auto">
+      <p class="type-body text-muted">"{testimonial}"</p>
+    </blockquote>
+  )}
+
+  <Divider class="my-4" />
+
+  <div class="flex items-center gap-3">
+    {image?.src && <Avatar src={image.src} name={name} alt={image.alt} size="md" />}
+    <div class="grow">
+      {name && <p class="type-body font-semibold text-heading">{name}</p>}
+      {job && <p class="type-label text-muted">{job}</p>}
+    </div>
+  </div>
+</Card>

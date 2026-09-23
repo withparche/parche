@@ -1,49 +1,28 @@
 ---
 import type { Props } from './Testimonials.props';
 import Heading from 'parche:elements/Heading';
-import Card from 'parche:elements/Card';
-import Avatar from 'parche:elements/Avatar';
-import Divider from 'parche:elements/Divider';
 import Button from 'parche:elements/Button';
+import * as Carousel from 'parche:elements/Carousel';
+import TestimonialCard from '../components/TestimonialCard.astro';
 
-const {
-  title,
-  subtitle,
-  tagline,
-  testimonials = [],
-  callToAction,
-} = Astro.props;
+const { title, subtitle, tagline, testimonials = [], layout = 'grid', callToAction } = Astro.props;
 ---
 
 <Heading {title} {subtitle} {tagline} />
 
-{testimonials.length > 0 && (
-  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    {testimonials.map(({ title: cardTitle, testimonial, name, job, image }) => (
-      <Card as="article" class="h-full">
-        {cardTitle && (
-          <h3 slot="header" class="type-label text-heading font-medium">{cardTitle}</h3>
-        )}
-
-        {testimonial && (
-          <blockquote class="flex-auto">
-            <p class="type-body text-muted">"{testimonial}"</p>
-          </blockquote>
-        )}
-
-        <Divider class="my-4" />
-
-        <div class="flex items-center gap-3">
-          {image && <Avatar src={image.src} name={name} alt={image.alt} size="md" />}
-          <div class="grow">
-            {name && <p class="type-body font-semibold text-heading">{name}</p>}
-            {job && <p class="type-label text-muted">{job}</p>}
-          </div>
-        </div>
-      </Card>
+{testimonials.length > 0 && layout === 'carousel' ? (
+  <Carousel.Root count={testimonials.length} label={title ?? 'Testimonials'} perView={3}>
+    {testimonials.map((item, i) => (
+      <Carousel.Slide index={i} total={testimonials.length}>
+        <TestimonialCard {...item} />
+      </Carousel.Slide>
     ))}
+  </Carousel.Root>
+) : testimonials.length > 0 ? (
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {testimonials.map((item) => <TestimonialCard {...item} />)}
   </div>
-)}
+) : null}
 
 {callToAction?.text && callToAction?.href && (
   <div class="flex justify-center mt-8 md:mt-12">

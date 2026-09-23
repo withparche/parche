@@ -1,0 +1,43 @@
+---
+/**
+ * Tooltip — wraps its trigger (the default slot) and renders a
+ * `role="tooltip"` surface as a manual popover anchored to the wrapper. The
+ * element shows it on hover (after `delay`) and on focus, hides it on leave,
+ * blur and Escape, and links the trigger to it with `aria-describedby`.
+ * Text only: a tooltip is a description, not a place for controls.
+ */
+import { cn, hashId, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './tooltip.props';
+
+const { props: { text, placement, delay }, rest, className } = splitProps(schema, Astro.props);
+const id = (rest.id as string | undefined) ?? hashId('tip', text);
+const anchor = `--${id}`;
+---
+
+<parche-tooltip
+  class={cn('parche-tooltip relative inline-block', className)}
+  data-part="root"
+  data-state="closed"
+  data-anchored
+  data-placement={placement}
+  data-align="center"
+  delay={delay}
+  style={`anchor-name: ${anchor}`}
+  {...rest}
+>
+  <slot />
+  <div
+    id={id}
+    role="tooltip"
+    popover="manual"
+    class="parche-tooltip-surface pointer-events-none w-max max-w-xs rounded-md bg-heading px-2.5 py-1.5 text-xs font-medium text-background shadow-md"
+    style={`position-anchor: ${anchor}`}
+    data-part="surface"
+  >
+    {text}
+  </div>
+</parche-tooltip>
+
+<script>
+  import './tooltip.element.ts';
+</script>

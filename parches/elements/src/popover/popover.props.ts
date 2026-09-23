@@ -6,6 +6,8 @@ export const schema = z.object({
   title: z.string().optional().meta({ help: 'Names the popover (it becomes a non-modal dialog). Inline HTML allowed.' }),
   placement: z.enum(['top', 'bottom', 'left', 'right']).default('bottom'),
   align: z.enum(['start', 'center', 'end']).default('center'),
+  anchor: z.string().optional().meta({ help: 'Id of the element to anchor to instead of the invoker; that element must declare `style="anchor-name: --<id>"`.' }),
+  openOnHover: z.boolean().default(false).meta({ help: 'Also open on pointer hover, on hover-capable devices.' }),
 });
 
 export type Props = z.infer<typeof schema> & { class?: string };

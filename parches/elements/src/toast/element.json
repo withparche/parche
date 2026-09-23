@@ -1,0 +1,15 @@
+{
+  "name": "toast",
+  "type": "element",
+  "files": [
+    { "path": "Toast.astro", "type": "part" },
+    { "path": "toast.props.ts", "type": "props" },
+    { "path": "toast.element.ts", "type": "element" },
+    { "path": "toast.css", "type": "style" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["icon", "button"],
+  "source": null
+}

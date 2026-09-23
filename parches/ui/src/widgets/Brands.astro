@@ -4,21 +4,41 @@ import Heading from 'parche:elements/Heading';
 import Icon from 'parche:elements/Icon';
 import Card from 'parche:elements/Card';
 import Image from 'parche:elements/Image';
+import * as Carousel from 'parche:elements/Carousel';
 
-const { tagline, title, subtitle, icons = [], images = [] } = Astro.props;
+const { tagline, title, subtitle, icons = [], images = [], layout = 'wrap' } = Astro.props;
+
+const brands = [
+  ...icons.map((icon) => ({ icon })),
+  ...images.filter((image) => image.src).map((image) => ({ image })),
+];
 ---
 
 <Heading {tagline} {title} {subtitle} />
 
-<div class="flex flex-wrap justify-center gap-x-6 sm:gap-x-12 lg:gap-x-24">
-  {icons.map((icon) => (
-    <Icon name={icon} class="py-3 lg:py-5 w-12 h-auto mx-auto sm:mx-0 text-muted" />
-  ))}
-  {images.map((image) =>
-    image.src && (
-      <Card padding="none" shadow="none" class="my-2 lg:my-4 justify-center px-3 py-1">
-        <Image src={image.src} alt={image.alt ?? ''} width={120} height={48} class="max-h-12" />
-      </Card>
-    )
-  )}
-</div>
+{layout === 'carousel' && brands.length > 0 ? (
+  <Carousel.Root count={brands.length} label={title ?? 'Brands'} perView={4} dots={false}>
+    {brands.map((brand, i) => (
+      <Carousel.Slide index={i} total={brands.length} class="flex items-center justify-center py-3">
+        {'icon' in brand ? (
+          <Icon name={brand.icon} class="w-12 h-auto text-muted" />
+        ) : (
+          <Image src={brand.image.src!} alt={brand.image.alt ?? ''} width={120} height={48} class="max-h-12" />
+        )}
+      </Carousel.Slide>
+    ))}
+  </Carousel.Root>
+) : (
+  <div class="flex flex-wrap justify-center gap-x-6 sm:gap-x-12 lg:gap-x-24">
+    {icons.map((icon) => (
+      <Icon name={icon} class="py-3 lg:py-5 w-12 h-auto mx-auto sm:mx-0 text-muted" />
+    ))}
+    {images.map((image) =>
+      image.src && (
+        <Card padding="none" shadow="none" class="my-2 lg:my-4 justify-center px-3 py-1">
+          <Image src={image.src} alt={image.alt ?? ''} width={120} height={48} class="max-h-12" />
+        </Card>
+      )
+    )}
+  </div>
+)}

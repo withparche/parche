@@ -1,0 +1,38 @@
+/* Tooltip without script: hover and focus reveal it by CSS, positioned next to
+   the trigger as an absolute box (the top layer needs `showPopover()`).
+   `pointer-events: none` keeps it from stealing the hover. Placement rules and
+   the entry fade come from Popover's `data-anchored` grammar. */
+@media (scripting: none) {
+  .parche-tooltip:hover > [role='tooltip'],
+  .parche-tooltip:focus-within > [role='tooltip'] {
+    display: block;
+    position: absolute;
+    z-index: 50;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .parche-tooltip[data-placement='top']:hover > [role='tooltip'],
+  .parche-tooltip[data-placement='top']:focus-within > [role='tooltip'] {
+    bottom: calc(100% + 0.5rem);
+  }
+  .parche-tooltip[data-placement='bottom']:hover > [role='tooltip'],
+  .parche-tooltip[data-placement='bottom']:focus-within > [role='tooltip'] {
+    top: calc(100% + 0.5rem);
+  }
+  .parche-tooltip[data-placement='left']:hover > [role='tooltip'],
+  .parche-tooltip[data-placement='left']:focus-within > [role='tooltip'],
+  .parche-tooltip[data-placement='right']:hover > [role='tooltip'],
+  .parche-tooltip[data-placement='right']:focus-within > [role='tooltip'] {
+    top: 50%;
+    left: auto;
+    transform: translateY(-50%);
+  }
+  .parche-tooltip[data-placement='left']:hover > [role='tooltip'],
+  .parche-tooltip[data-placement='left']:focus-within > [role='tooltip'] {
+    right: calc(100% + 0.5rem);
+  }
+  .parche-tooltip[data-placement='right']:hover > [role='tooltip'],
+  .parche-tooltip[data-placement='right']:focus-within > [role='tooltip'] {
+    left: calc(100% + 0.5rem);
+  }
+}

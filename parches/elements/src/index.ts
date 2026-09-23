@@ -43,6 +43,16 @@ export default function createElements(): ParcheManifest {
       Dialog: { entry: el('dialog/Dialog.astro'), style: el('dialog/dialog.css') },
       Sheet: { entry: el('sheet/Sheet.astro'), style: el('sheet/sheet.css') },
       Popover: { entry: el('popover/Popover.astro'), style: el('popover/popover.css') },
+      Tabs: { entry: el('tabs/Tabs.astro'), style: el('tabs/tabs.css') },
+      Menu: el('menu/Menu.astro'),
+      Tooltip: { entry: el('tooltip/Tooltip.astro'), style: el('tooltip/tooltip.css') },
+      Toast: { entry: el('toast/Toast.astro'), style: el('toast/toast.css') },
+      Carousel: {
+        entry: el('carousel/index.ts'),
+        parts: { Root: el('carousel/Root.astro'), Slide: el('carousel/Slide.astro') },
+        props: el('carousel/carousel.props.ts'),
+        style: el('carousel/carousel.css'),
+      },
     },
   };
 }
