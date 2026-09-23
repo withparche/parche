@@ -1,0 +1,24 @@
+---
+/**
+ * Field — label, control, help text and error as one unit. The control is
+ * slotted, so Field cannot set its attributes; the ids follow a convention
+ * instead (`<id>-description`, `<id>-error`, from `fieldIds()`), and the
+ * control points `aria-describedby` and `aria-invalid` at them. Input,
+ * Textarea, Select and the others do that for you.
+ */
+import { cn, fieldIds, splitProps } from '@parche/elements/utils';
+import Label from '../label/Label.astro';
+import { schema, type Props } from './field.props';
+
+const { props: { id, label, description, error, required, hideLabel }, rest, className, part } = splitProps(schema, Astro.props);
+const { descriptionId, errorId } = fieldIds(id, { description, error });
+---
+
+<div class={cn('parche-field flex flex-col gap-1.5', className)} {...rest} data-part={part} data-state={error ? 'invalid' : 'valid'}>
+  <Label for={id} text={label} required={required} hidden={hideLabel} data-part="label" />
+  <div class="parche-field-control" data-part="control">
+    <slot />
+  </div>
+  {description && <p id={descriptionId} class="parche-field-description text-sm text-muted" data-part="description">{description}</p>}
+  {error && <p id={errorId} class="parche-field-error text-sm text-danger" data-part="error">{error}</p>}
+</div>

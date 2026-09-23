@@ -10,7 +10,7 @@ import { cn, splitProps } from '@parche/elements/utils';
 import Icon from '../icon/Icon.astro';
 import { schema, type Props } from './carousel.props';
 
-const { props: { count, label, perView, controls, dots, prevLabel, nextLabel }, rest, className } = splitProps(schema, Astro.props);
+const { props: { count, label, perView, controls, dots, prevLabel, nextLabel }, rest, className, part } = splitProps(schema, Astro.props);
 
 const control =
   'parche-carousel-control inline-flex size-9 cursor-pointer items-center justify-center rounded-full border border-border bg-surface text-heading transition-colors ' +
@@ -22,10 +22,10 @@ const control =
   aria-roledescription="carousel"
   aria-label={label}
   class={cn('parche-carousel relative block', className)}
-  data-part="root"
+  {...rest}
+  data-part={part}
   data-per-view={perView}
   data-index="0"
-  {...rest}
 >
   <div
     role="group"

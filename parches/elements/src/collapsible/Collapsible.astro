@@ -10,11 +10,11 @@ import { cn, splitProps } from '@parche/elements/utils';
 import Icon from '../icon/Icon.astro';
 import { schema, type Props } from './collapsible.props';
 
-const { props: { title, open, name, forceOpen }, rest, className } = splitProps(schema, Astro.props);
+const { props: { title, open, name, forceOpen }, rest, className, part } = splitProps(schema, Astro.props);
 const hasTrigger = Astro.slots.has('trigger');
 ---
 
-<parche-collapsible force-open={forceOpen} data-part="root" data-state={open ? 'open' : 'closed'} class={cn('parche-collapsible block', className)} {...rest}>
+<parche-collapsible force-open={forceOpen} {...rest} data-part={part} data-state={open ? 'open' : 'closed'} class={cn('parche-collapsible block', className)}>
   <details class="group" open={open || undefined} name={name}>
     <summary
       class="parche-collapsible-trigger flex cursor-pointer list-none items-center justify-between gap-3 rounded-md py-3 text-left font-medium text-heading transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring [&::-webkit-details-marker]:hidden"

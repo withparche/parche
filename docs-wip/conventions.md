@@ -173,6 +173,35 @@ lives once, in Popover's CSS; Menu and Tooltip emit the same attributes and
 declare Popover as a registry dependency. `class` on an overlay styles its
 surface: the root is `display: contents`.
 
+### Forms: native controls inside a Field
+
+Input, Textarea, Select, Checkbox, RadioGroup and Combobox are the platform's
+controls with their label, help text and error attached:
+
+- **Field** renders label, control, description and error. The control is
+  slotted, so Field cannot reach its attributes; the ids follow a convention
+  (`<id>-description`, `<id>-error`) and `fieldIds()` from
+  `@parche/elements/utils` gives a control its `aria-describedby`. The
+  library's controls do that themselves; a custom control inside a Field
+  does it by hand.
+- **No script** for all but Combobox: Select is the native picker with its
+  arrow replaced, Textarea grows with `field-sizing: content`, RadioGroup is
+  a `fieldset` whose legend names the group.
+- **Combobox** is the APG list-autocomplete pattern: focus stays in the
+  input, `aria-activedescendant` names the highlight, typing filters. What
+  the form submits is the input's text; the option's value travels in
+  `data-value` and `parche:select`. Without script a native `<datalist>`
+  offers the same options, and the element detaches it on upgrade.
+
+### Renaming a part
+
+`splitProps` takes `data-part` out of the incoming props and returns it as
+`part` (`'root'` by default); the root renders `data-part={part}`. A
+composition renames a child's part that way (`<Eyebrow data-part="tagline">`
+in Heading, `<Label data-part="label">` in Field). Rendering the static
+attribute and spreading the rest would emit both, and a browser keeps the
+first, which is how the gate found the duplicate.
+
 ### Controls: wrap the real thing
 
 Switch is `<input type="checkbox" role="switch">`, Slider is

@@ -11,13 +11,13 @@ import Collapsible from '../collapsible/Collapsible.astro';
 import Icon from '../icon/Icon.astro';
 import { schema, type Props } from './accordion.props';
 
-const { props: { items, multiple, name, forceOpen }, rest, className } = splitProps(schema, Astro.props);
+const { props: { items, multiple, name, forceOpen }, rest, className, part } = splitProps(schema, Astro.props);
 
 // A deterministic group name, derived from the content itself.
 const groupName = multiple ? undefined : (name ?? hashId('acc', items.map((i) => i.title).join('|')));
 ---
 
-<div class={cn('parche-accordion divide-y divide-border', className)} data-part="root" data-multiple={multiple ? '' : undefined} {...rest}>
+<div class={cn('parche-accordion divide-y divide-border', className)} {...rest} data-part={part} data-multiple={multiple ? '' : undefined}>
   {items.map((item) => (
     <Collapsible name={groupName} open={item.open} forceOpen={forceOpen} data-part="item">
       <span slot="trigger" class="flex items-center gap-3">

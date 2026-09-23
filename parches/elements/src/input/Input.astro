@@ -1,0 +1,48 @@
+---
+/**
+ * Input — a native text input inside a Field. The label, help text and
+ * error come from Field; the input references them by the shared id
+ * convention. No script: validation state is whatever the page decides
+ * (`error`), and the browser's own constraint validation still applies.
+ */
+import { cn, fieldIds, splitProps } from '@parche/elements/utils';
+import Field from '../field/Field.astro';
+import Icon from '../icon/Icon.astro';
+import { schema, type Props } from './input.props';
+
+const { props: { name, label, type, value, placeholder, description, error, required, disabled, readonly, hideLabel, autocomplete, icon }, rest, className } =
+  splitProps(schema, Astro.props);
+const id = (rest.id as string | undefined) ?? name;
+const { describedBy } = fieldIds(id, { description, error });
+const { id: _id, ...fieldRest } = rest;
+
+const controlClass =
+  'parche-input block w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-heading placeholder:text-muted transition-colors ' +
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring ' +
+  'aria-[invalid=true]:border-danger disabled:cursor-not-allowed disabled:opacity-60 read-only:bg-surface-hover';
+---
+
+<Field id={id} label={label} description={description} error={error} required={required} hideLabel={hideLabel} class={className} {...fieldRest}>
+  <div class="parche-input-wrapper relative" data-part="wrapper">
+    {icon && (
+      <span class="parche-input-icon pointer-events-none absolute inset-y-0 left-3 flex items-center text-muted" data-part="icon">
+        <Icon name={icon} size="sm" aria-hidden="true" />
+      </span>
+    )}
+    <input
+      id={id}
+      name={name}
+      type={type}
+      value={value}
+      placeholder={placeholder}
+      required={required || undefined}
+      disabled={disabled || undefined}
+      readonly={readonly || undefined}
+      autocomplete={autocomplete}
+      aria-invalid={error ? 'true' : undefined}
+      aria-describedby={describedBy}
+      class={cn(controlClass, icon && 'pl-9')}
+      data-part="input"
+    />
+  </div>
+</Field>

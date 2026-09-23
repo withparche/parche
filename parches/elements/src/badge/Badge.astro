@@ -8,7 +8,7 @@ import { defineVariants, splitProps } from '@parche/elements/utils';
 import Icon from '../icon/Icon.astro';
 import { schema, type Props } from './badge.props';
 
-const { props: { variant, size, icon }, rest, className } = splitProps(schema, Astro.props);
+const { props: { variant, size, icon }, rest, className, part } = splitProps(schema, Astro.props);
 
 const badge = defineVariants({
   base: 'parche-badge inline-flex items-center gap-1 rounded-full font-medium whitespace-nowrap border',
@@ -30,8 +30,7 @@ const badge = defineVariants({
 });
 ---
 
-<span class={badge({ variant, size }, className)} data-part="root"
-  {...rest} data-variant={variant} data-size={size}>
+<span class={badge({ variant, size }, className)} {...rest} data-part={part} data-variant={variant} data-size={size}>
   {icon && <Icon name={icon} size="xs" />}
   <slot />
 </span>

@@ -1,0 +1,13 @@
+{
+  "name": "select",
+  "type": "element",
+  "files": [
+    { "path": "Select.astro", "type": "part" },
+    { "path": "select.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["field", "icon"],
+  "source": null
+}

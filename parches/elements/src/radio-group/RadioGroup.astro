@@ -1,0 +1,56 @@
+---
+/**
+ * RadioGroup — native radios in a `<fieldset>` named by its `<legend>`. The
+ * browser owns the exclusivity, the arrow keys and the form value; nothing
+ * to script. The group's help text and error are linked from every radio.
+ */
+import { cn, fieldIds, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './radio-group.props';
+
+const { props: { name, label, options, value, description, error, required, disabled, orientation }, rest, className, part } = splitProps(schema, Astro.props);
+const id = (rest.id as string | undefined) ?? name;
+const { descriptionId, errorId, describedBy } = fieldIds(id, { description, error });
+const { id: _id, ...rootRest } = rest;
+---
+
+<fieldset
+  class={cn('parche-radio-group flex flex-col gap-2', disabled && 'opacity-60', className)}
+  disabled={disabled || undefined}
+  aria-describedby={describedBy}
+  aria-invalid={error ? 'true' : undefined}
+  {...rootRest}
+  data-part={part}
+  data-state={error ? 'invalid' : 'valid'}
+  data-orientation={orientation}
+>
+  <legend class="parche-radio-group-legend mb-1 text-sm font-medium text-heading" data-part="legend">
+    {label}
+    {required && <span class="ml-0.5 text-danger" aria-hidden="true">*</span>}
+  </legend>
+  <div class={cn('flex gap-3', orientation === 'horizontal' ? 'flex-row flex-wrap gap-x-6' : 'flex-col')}>
+    {options.map((option) => {
+      const optionId = `${id}-${option.value}`;
+      return (
+        <div class="parche-radio-group-option flex items-start gap-3" data-part="option">
+          <input
+            type="radio"
+            id={optionId}
+            name={name}
+            value={option.value}
+            checked={option.value === value || undefined}
+            required={required || undefined}
+            disabled={option.disabled || undefined}
+            class="parche-radio-group-input mt-0.5 size-4 shrink-0 cursor-pointer border-border accent-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed"
+            data-part="input"
+          />
+          <label for={optionId} class="parche-radio-group-label cursor-pointer text-sm text-heading" data-part="label">
+            {option.label}
+            {option.description && <span class="block text-muted">{option.description}</span>}
+          </label>
+        </div>
+      );
+    })}
+  </div>
+  {description && <p id={descriptionId} class="parche-radio-group-description text-sm text-muted" data-part="description">{description}</p>}
+  {error && <p id={errorId} class="parche-radio-group-error text-sm text-danger" data-part="error">{error}</p>}
+</fieldset>

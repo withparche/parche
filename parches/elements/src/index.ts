@@ -53,6 +53,14 @@ export default function createElements(): ParcheManifest {
         props: el('carousel/carousel.props.ts'),
         style: el('carousel/carousel.css'),
       },
+      Label: el('label/Label.astro'),
+      Field: el('field/Field.astro'),
+      Input: el('input/Input.astro'),
+      Textarea: el('textarea/Textarea.astro'),
+      Select: el('select/Select.astro'),
+      Checkbox: el('checkbox/Checkbox.astro'),
+      RadioGroup: el('radio-group/RadioGroup.astro'),
+      Combobox: { entry: el('combobox/Combobox.astro'), style: el('combobox/combobox.css') },
     },
   };
 }

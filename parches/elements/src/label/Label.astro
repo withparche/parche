@@ -1,0 +1,15 @@
+---
+/**
+ * Label — a `<label for>`. The required mark is decorative: the control
+ * itself carries `required`, which is what assistive tech reads.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './label.props';
+
+const { props: { for: htmlFor, text, required, hidden }, rest, className, part } = splitProps(schema, Astro.props);
+---
+
+<label for={htmlFor} class={cn('parche-label block text-sm font-medium text-heading', hidden && 'sr-only', className)} {...rest} data-part={part}>
+  {text ?? <slot />}
+  {required && <span class="parche-label-required ml-0.5 text-danger" data-part="required" aria-hidden="true">*</span>}
+</label>

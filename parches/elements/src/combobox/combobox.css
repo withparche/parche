@@ -1,0 +1,8 @@
+/* Combobox: the listbox sits under the input, as wide as it, through the
+   `data-anchored` grammar shared with Popover; the fallback positions it from
+   script where anchors are missing. `anchor-size(width)` needs anchors too. */
+@supports not (width: anchor-size(width)) {
+  .parche-combobox [data-part='listbox'] {
+    width: max-content;
+  }
+}

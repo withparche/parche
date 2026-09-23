@@ -8,12 +8,11 @@ import { cn, splitProps } from '@parche/elements/utils';
 import Icon from '../icon/Icon.astro';
 import { schema, type Props } from './breadcrumb.props';
 
-const { props: { items, label }, rest, className } = splitProps(schema, Astro.props);
+const { props: { items, label }, rest, className, part } = splitProps(schema, Astro.props);
 const last = items.length - 1;
 ---
 
-<nav class={cn('parche-breadcrumb text-sm text-muted', className)} aria-label={label} data-part="root"
-  {...rest}>
+<nav class={cn('parche-breadcrumb text-sm text-muted', className)} aria-label={label} {...rest} data-part={part}>
   <ol class="parche-breadcrumb-list flex flex-wrap items-center gap-1.5" data-part="list">
     {items.map((item, i) => (
       <li class="parche-breadcrumb-item flex items-center gap-1.5" data-part="item" data-state={i === last ? 'current' : undefined}>

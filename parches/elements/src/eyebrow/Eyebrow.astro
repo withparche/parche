@@ -7,7 +7,7 @@
 import { defineVariants, splitProps } from '@parche/elements/utils';
 import { schema, type Props } from './eyebrow.props';
 
-const { props: { tone, as: Tag }, rest, className } = splitProps(schema, Astro.props);
+const { props: { tone, as: Tag }, rest, className, part } = splitProps(schema, Astro.props);
 
 const eyebrow = defineVariants({
   base: 'parche-eyebrow type-label',
@@ -16,7 +16,6 @@ const eyebrow = defineVariants({
 });
 ---
 
-<Tag class={eyebrow({ tone }, className)} data-part="root"
-  {...rest} data-tone={tone}>
+<Tag class={eyebrow({ tone }, className)} {...rest} data-part={part} data-tone={tone}>
   <slot />
 </Tag>

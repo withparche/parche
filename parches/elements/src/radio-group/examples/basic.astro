@@ -1,0 +1,24 @@
+---
+import RadioGroup from '../RadioGroup.astro';
+---
+
+<div class="flex max-w-md flex-col gap-6">
+  <RadioGroup
+    name="billing"
+    label="Billing"
+    value="monthly"
+    options={[
+      { value: 'monthly', label: 'Monthly', description: 'Cancel any time.' },
+      { value: 'yearly', label: 'Yearly', description: 'Two months free.' },
+      { value: 'lifetime', label: 'Lifetime', disabled: true },
+    ]}
+    required
+  />
+  <RadioGroup
+    name="size"
+    label="Size"
+    orientation="horizontal"
+    error="Pick a size."
+    options={[{ value: 's', label: 'S' }, { value: 'm', label: 'M' }, { value: 'l', label: 'L' }]}
+  />
+</div>

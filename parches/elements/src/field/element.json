@@ -1,0 +1,13 @@
+{
+  "name": "field",
+  "type": "element",
+  "files": [
+    { "path": "Field.astro", "type": "part" },
+    { "path": "field.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["label"],
+  "source": null
+}

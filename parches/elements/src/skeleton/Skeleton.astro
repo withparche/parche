@@ -7,13 +7,13 @@
 import { cn, splitProps } from '@parche/elements/utils';
 import { schema, type Props } from './skeleton.props';
 
-const { props: { variant, lines, width, height }, rest, className } = splitProps(schema, Astro.props);
+const { props: { variant, lines, width, height }, rest, className, part } = splitProps(schema, Astro.props);
 
 const pulse = 'bg-surface-hover motion-safe:animate-pulse';
 ---
 
 {variant === 'text' ? (
-  <div class={cn('parche-skeleton space-y-2', className)} data-part="root" {...rest} data-variant={variant} aria-hidden="true" style={width ? `width:${width}` : undefined}>
+  <div class={cn('parche-skeleton space-y-2', className)} {...rest} data-part={part} data-variant={variant} aria-hidden="true" style={width ? `width:${width}` : undefined}>
     {Array.from({ length: lines }, (_, i) => (
       <div class={cn('parche-skeleton-line h-3 rounded', pulse)} data-part="line" style={i === lines - 1 && lines > 1 ? 'width:60%' : undefined}></div>
     ))}
@@ -21,7 +21,7 @@ const pulse = 'bg-surface-hover motion-safe:animate-pulse';
 ) : (
   <div
     class={cn('parche-skeleton', pulse, variant === 'circle' ? 'rounded-full' : 'rounded-md', className)}
-    data-part="root" {...rest}
+    data-part={part} {...rest}
     data-variant={variant}
     aria-hidden="true"
     style={`width:${width ?? (variant === 'circle' ? '3rem' : '100%')};height:${height ?? (variant === 'circle' ? '3rem' : '8rem')}`}

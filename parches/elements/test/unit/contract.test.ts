@@ -129,7 +129,12 @@ for (const { name, dir, entry, value } of folders) {
     const { meta } = await import(propsPath);
     const declared = new Set(meta.element.parts.map((p: { name: string }) => p.name));
     const emitted = new Set<string>();
-    for (const f of astro) for (const m of fs.readFileSync(f, 'utf8').matchAll(/data-part="([a-z-]+)"/g)) emitted.add(m[1]);
+    for (const f of astro) {
+      const src = fs.readFileSync(f, 'utf8');
+      for (const m of src.matchAll(/data-part="([a-z-]+)"/g)) emitted.add(m[1]);
+      // The root renders `data-part={part}`: 'root' unless the consumer renames it.
+      if (/data-part=\{part\}/.test(src)) emitted.add('root');
+    }
     assert.deepEqual([...emitted].sort(), [...declared].sort(), 'data-part values and meta.parts must agree');
     assert.ok(declared.size > 0, 'at least one part');
   });

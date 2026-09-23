@@ -7,23 +7,23 @@
 import { cn, splitProps } from '@parche/elements/utils';
 import { schema, type Props } from './divider.props';
 
-const { props: { variant, label }, rest, className } = splitProps(schema, Astro.props);
+const { props: { variant, label }, rest, className, part } = splitProps(schema, Astro.props);
 ---
 
 {label ? (
-  <div class={cn('parche-divider flex items-center gap-4', className)} data-part="root" {...rest} data-variant={variant} role="separator" aria-label={label}>
+  <div class={cn('parche-divider flex items-center gap-4', className)} {...rest} data-part={part} data-variant={variant} role="separator" aria-label={label}>
     <span class="h-px flex-1 bg-border" aria-hidden="true"></span>
     <span class="type-caption text-muted" data-part="label">{label}</span>
     <span class="h-px flex-1 bg-border" aria-hidden="true"></span>
   </div>
 ) : variant === 'line' ? (
-  <hr class={cn('parche-divider border-t border-border', className)} data-part="root" {...rest} data-variant={variant} />
+  <hr class={cn('parche-divider border-t border-border', className)} data-part={part} {...rest} data-variant={variant} />
 ) : variant === 'dots' ? (
-  <div class={cn('parche-divider flex items-center justify-center gap-1.5 py-2', className)} data-part="root" {...rest} data-variant={variant} role="separator">
+  <div class={cn('parche-divider flex items-center justify-center gap-1.5 py-2', className)} data-part={part} {...rest} data-variant={variant} role="separator">
     <span class="size-1 rounded-full bg-border"></span>
     <span class="size-1 rounded-full bg-border"></span>
     <span class="size-1 rounded-full bg-border"></span>
   </div>
 ) : (
-  <div class={cn('parche-divider h-px bg-gradient-to-r from-transparent via-border to-transparent', className)} data-part="root" {...rest} data-variant={variant} role="separator"></div>
+  <div class={cn('parche-divider h-px bg-gradient-to-r from-transparent via-border to-transparent', className)} data-part={part} {...rest} data-variant={variant} role="separator"></div>
 )}

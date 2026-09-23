@@ -1,0 +1,10 @@
+---
+import Checkbox from '../Checkbox.astro';
+---
+
+<div class="flex max-w-sm flex-col gap-4">
+  <Checkbox name="terms" label='I agree to the <a href="#" class="text-primary underline">terms</a>' required />
+  <Checkbox name="news" label="Email me the changelog" description="Once a month, no more." checked />
+  <Checkbox name="consent" label="Allow analytics" error="Required to continue." />
+  <Checkbox name="beta" label="Beta features" disabled />
+</div>

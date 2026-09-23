@@ -7,7 +7,7 @@
 import { cn, splitProps } from '@parche/elements/utils';
 import { schema, type Props } from './tag.props';
 
-const { props: { href, active }, rest, className } = splitProps(schema, Astro.props);
+const { props: { href, active }, rest, className, part } = splitProps(schema, Astro.props);
 const Tag = href ? 'a' : 'span';
 ---
 
@@ -19,8 +19,8 @@ const Tag = href ? 'a' : 'span';
     active ? 'bg-primary text-on-primary' : 'bg-surface text-muted border border-border hover:border-primary/40 hover:text-heading',
     className,
   )}
-  data-part="root"
   {...rest}
+  data-part={part}
   data-state={active ? 'active' : undefined}
   aria-current={href && active ? 'true' : undefined}
 >

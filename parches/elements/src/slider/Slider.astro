@@ -12,12 +12,12 @@
 import { cn, splitProps } from '@parche/elements/utils';
 import { schema, type Props } from './slider.props';
 
-const { props: { name, label, min, max, step, value, disabled, showValue, unit }, rest, className } = splitProps(schema, Astro.props);
+const { props: { name, label, min, max, step, value, disabled, showValue, unit }, rest, className, part } = splitProps(schema, Astro.props);
 const current = value ?? min;
 const id = (rest.id as string | undefined) ?? `slider-${(name ?? label).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 ---
 
-<div class={cn('parche-slider flex flex-col gap-2', disabled && 'opacity-60', className)} data-part="root" {...rest}>
+<div class={cn('parche-slider flex flex-col gap-2', disabled && 'opacity-60', className)} {...rest} data-part={part}>
   <div class="flex items-baseline justify-between text-sm">
     <label class="parche-slider-label font-medium text-heading" data-part="label" for={id}>{label}</label>
     {showValue && (

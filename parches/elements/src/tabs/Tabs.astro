@@ -17,7 +17,7 @@ import { cn, defineVariants, hashId, splitProps } from '@parche/elements/utils';
 import Icon from '../icon/Icon.astro';
 import { schema, type Props } from './tabs.props';
 
-const { props: { items, value, syncKey, orientation, variant, label }, rest, className } = splitProps(schema, Astro.props);
+const { props: { items, value, syncKey, orientation, variant, label }, rest, className, part } = splitProps(schema, Astro.props);
 
 const id = (rest.id as string | undefined) ?? hashId('tabs', items.map((i) => i.value).join('|'));
 const selected = value ?? items.find((i) => !i.disabled)?.value ?? items[0].value;
@@ -59,11 +59,11 @@ const list = defineVariants({
 
 <parche-tabs
   class={cn('parche-tabs', vertical ? 'flex gap-6' : 'block', className)}
-  data-part="root"
+  {...rest}
+  data-part={part}
   data-orientation={orientation}
   data-value={selected}
   sync-key={syncKey}
-  {...rest}
 >
   <div
     role="tablist"

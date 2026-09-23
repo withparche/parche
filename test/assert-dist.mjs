@@ -28,12 +28,12 @@ const PROJECTS = {
   'examples/react': { kind: 'static', skipClientBudget: true }, // ships React islands
   'examples/shadcn': { kind: 'static', skipClientBudget: true }, // ships React islands
   // The SSR examples serve /elements: every interactive element's script.
-  'examples/ssr-cloudflare': { kind: 'ssr', clientJsMax: 36_000 },
-  'examples/ssr-node': { kind: 'ssr', clientJsMax: 36_000 },
+  'examples/ssr-cloudflare': { kind: 'ssr', clientJsMax: 42_000 },
+  'examples/ssr-node': { kind: 'ssr', clientJsMax: 42_000 },
   'examples/themes': { kind: 'static', clientJsMax: 30_000 },
   // The elements playground: every element page must build; the eager budget
   // grows with each interactive element's declared cost (see the elements plan).
-  'parches/elements/playground': { kind: 'static', clientJsMax: 36_000 },
+  'parches/elements/playground': { kind: 'static', clientJsMax: 42_000 },
   'templates/portfolio': { kind: 'static', clientJsMax: 30_000 },
   'templates/saas-landing': {
     kind: 'ssr',

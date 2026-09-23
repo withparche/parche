@@ -7,7 +7,7 @@
 import { cn, splitProps } from '@parche/elements/utils';
 import { schema, type Props } from './section.props';
 
-const { props: { padding, surface, as: Tag }, rest, className } = splitProps(schema, Astro.props);
+const { props: { padding, surface, as: Tag }, rest, className, part } = splitProps(schema, Astro.props);
 
 const paddings: Record<typeof padding, string> = {
   none: '',
@@ -19,8 +19,8 @@ const paddings: Record<typeof padding, string> = {
 
 <Tag
   class={cn('parche-section', paddings[padding], surface && 'bg-surface', className)}
-  data-part="root"
   {...rest}
+  data-part={part}
   data-padding={padding}
   data-state={surface ? 'surface' : undefined}
 >

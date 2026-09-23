@@ -1,0 +1,13 @@
+{
+  "name": "label",
+  "type": "element",
+  "files": [
+    { "path": "Label.astro", "type": "part" },
+    { "path": "label.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": [],
+  "source": null
+}

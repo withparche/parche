@@ -11,7 +11,7 @@ import { cn, splitProps } from '@parche/elements/utils';
 import Icon from '../icon/Icon.astro';
 import { schema, type Props } from './menu.props';
 
-const { props: { id, label, icon, triggerLabel, variant, groups, placement, align, openOnHover }, rest, className } = splitProps(schema, Astro.props);
+const { props: { id, label, icon, triggerLabel, variant, groups, placement, align, openOnHover }, rest, className, part } = splitProps(schema, Astro.props);
 const triggerId = `${id}-trigger`;
 const hasTrigger = Astro.slots.has('trigger');
 const ownTrigger = !hasTrigger && (label || icon);
@@ -25,18 +25,18 @@ const triggerClass = cn(
 const itemClass =
   'parche-menu-item flex w-full cursor-pointer items-center gap-3 px-3 py-2 text-left text-sm text-muted no-underline transition-colors ' +
   'hover:bg-surface-hover hover:text-heading focus-visible:bg-surface-hover focus-visible:text-heading focus-visible:outline-none ' +
-  'aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-disabled:hover:bg-transparent aria-current:font-medium aria-current:text-heading';
+  'aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-disabled:hover:bg-transparent aria-[current=true]:font-medium aria-[current=true]:text-heading';
 ---
 
 <parche-menu
   class="parche-menu contents"
-  data-part="root"
+  {...rest}
+  data-part={part}
   data-state="closed"
   data-anchored
   data-placement={placement}
   data-align={align}
   open-on-hover={openOnHover || undefined}
-  {...rest}
 >
   {hasTrigger && <slot name="trigger" />}
   {ownTrigger && (

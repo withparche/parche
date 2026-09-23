@@ -1,0 +1,13 @@
+{
+  "name": "textarea",
+  "type": "element",
+  "files": [
+    { "path": "Textarea.astro", "type": "part" },
+    { "path": "textarea.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["field"],
+  "source": null
+}

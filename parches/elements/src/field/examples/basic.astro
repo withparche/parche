@@ -1,0 +1,19 @@
+---
+import Field from '../Field.astro';
+import { fieldIds } from '@parche/elements/utils';
+const { describedBy } = fieldIds('ex-handle', { description: 'Letters, numbers and dashes.', error: 'That handle is taken.' });
+---
+
+<div class="max-w-sm">
+  <Field id="ex-handle" label="Handle" description="Letters, numbers and dashes." error="That handle is taken." required>
+    <input
+      id="ex-handle"
+      name="handle"
+      value="parche"
+      required
+      aria-invalid="true"
+      aria-describedby={describedBy}
+      class="block w-full rounded-md border border-danger bg-surface px-3 py-2 text-sm text-heading"
+    />
+  </Field>
+</div>

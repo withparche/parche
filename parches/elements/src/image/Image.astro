@@ -9,7 +9,7 @@ import { Image as AstroImage } from 'astro:assets';
 import { cn, splitProps } from '@parche/elements/utils';
 import { schema, type Props } from './image.props';
 
-const { props: { src, alt, width, height, ratio, loading, fit }, rest, className } = splitProps(schema, Astro.props);
+const { props: { src, alt, width, height, ratio, loading, fit }, rest, className, part } = splitProps(schema, Astro.props);
 
 const ratios: Record<NonNullable<typeof ratio>, string> = {
   '1/1': 'aspect-square',
@@ -26,8 +26,8 @@ const imgClass = cn('parche-image-img bg-surface', ratio && 'size-full', ratio &
 
 <div
   class={cn('parche-image', ratio && ratios[ratio], ratio && 'overflow-hidden', className)}
-  data-part="root"
   {...rest}
+  data-part={part}
   data-ratio={ratio}
 >
   {isRemote ? (

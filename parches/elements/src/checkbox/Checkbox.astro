@@ -1,0 +1,35 @@
+---
+/**
+ * Checkbox — the native checkbox, coloured by `accent-color`, with its label
+ * beside it and the help text and error under it. Not a Field: the label
+ * sits after the box, not above it.
+ */
+import { cn, fieldIds, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './checkbox.props';
+
+const { props: { name, label, value, checked, description, error, required, disabled }, rest, className, part } = splitProps(schema, Astro.props);
+const id = (rest.id as string | undefined) ?? name;
+const { descriptionId, errorId, describedBy } = fieldIds(id, { description, error });
+const { id: _id, ...rootRest } = rest;
+---
+
+<div class={cn('parche-checkbox flex flex-col gap-1', disabled && 'opacity-60', className)} {...rootRest} data-part={part} data-state={error ? 'invalid' : 'valid'}>
+  <div class="flex items-start gap-3">
+    <input
+      type="checkbox"
+      id={id}
+      name={name}
+      value={value}
+      checked={checked || undefined}
+      required={required || undefined}
+      disabled={disabled || undefined}
+      aria-invalid={error ? 'true' : undefined}
+      aria-describedby={describedBy}
+      class="parche-checkbox-input mt-0.5 size-4 shrink-0 cursor-pointer rounded border-border accent-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed"
+      data-part="input"
+    />
+    <label for={id} class={cn('parche-checkbox-label text-sm text-heading', disabled ? 'cursor-not-allowed' : 'cursor-pointer')} data-part="label" set:html={label} />
+  </div>
+  {description && <p id={descriptionId} class="parche-checkbox-description pl-7 text-sm text-muted" data-part="description">{description}</p>}
+  {error && <p id={errorId} class="parche-checkbox-error pl-7 text-sm text-danger" data-part="error">{error}</p>}
+</div>

@@ -1,0 +1,27 @@
+---
+import Select from '../Select.astro';
+---
+
+<div class="flex max-w-sm flex-col gap-5">
+  <Select
+    name="plan"
+    label="Plan"
+    placeholder="Choose a plan"
+    options={[
+      { value: 'free', label: 'Free' },
+      { value: 'pro', label: 'Pro' },
+      { value: 'team', label: 'Team', disabled: true },
+    ]}
+    required
+  />
+  <Select
+    name="region"
+    label="Region"
+    value="eu-west"
+    description="Where your data lives."
+    options={[
+      { label: 'Europe', options: [{ value: 'eu-west', label: 'West' }, { value: 'eu-north', label: 'North' }] },
+      { label: 'Americas', options: [{ value: 'us-east', label: 'US East' }] },
+    ]}
+  />
+</div>

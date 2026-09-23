@@ -1,0 +1,101 @@
+---
+/**
+ * Combobox — the APG "list autocomplete" combobox: an `role="combobox"`
+ * input, a listbox of options as a manual popover anchored under it, and
+ * `aria-activedescendant` for the highlight (focus never leaves the input).
+ * Without script the same options come from a native `<datalist>`, which
+ * the element detaches on upgrade. What the form submits is the text of the
+ * input: the option's `value` travels in `data-value` and `parche:select`.
+ */
+import { cn, fieldIds, splitProps } from '@parche/elements/utils';
+import Field from '../field/Field.astro';
+import Icon from '../icon/Icon.astro';
+import { schema, type Props } from './combobox.props';
+
+const { props: { name, label, options, value, placeholder, description, error, required, disabled, hideLabel, emptyText }, rest, className, part } =
+  splitProps(schema, Astro.props);
+const id = (rest.id as string | undefined) ?? name;
+const { describedBy } = fieldIds(id, { description, error });
+const { id: _id, ...rootRest } = rest;
+const selected = options.find((o) => o.value === value);
+const listId = `${id}-listbox`;
+const datalistId = `${id}-datalist`;
+const anchor = `--${id}-anchor`;
+---
+
+<parche-combobox class={cn('parche-combobox block', className)} {...rootRest} data-part={part} data-state="closed" data-anchored data-placement="bottom" data-align="start">
+  <Field id={id} label={label} description={description} error={error} required={required} hideLabel={hideLabel}>
+    <div class="parche-combobox-wrapper relative" data-part="wrapper" style={`anchor-name: ${anchor}`}>
+      <input
+        id={id}
+        name={name}
+        type="text"
+        role="combobox"
+        aria-autocomplete="list"
+        aria-expanded="false"
+        aria-controls={listId}
+        aria-haspopup="listbox"
+        autocomplete="off"
+        list={datalistId}
+        value={selected?.label}
+        data-value={selected?.value}
+        placeholder={placeholder}
+        required={required || undefined}
+        disabled={disabled || undefined}
+        aria-invalid={error ? 'true' : undefined}
+        aria-describedby={describedBy}
+        class={cn(
+          'parche-combobox-input block w-full rounded-md border border-border bg-surface py-2 pl-3 pr-9 text-sm text-heading placeholder:text-muted transition-colors',
+          'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+          'aria-[invalid=true]:border-danger disabled:cursor-not-allowed disabled:opacity-60',
+        )}
+        data-part="input"
+      />
+      <button
+        type="button"
+        tabindex="-1"
+        aria-label="Show options"
+        aria-controls={listId}
+        disabled={disabled || undefined}
+        class="parche-combobox-indicator absolute inset-y-0 right-0 flex w-9 cursor-pointer items-center justify-center text-muted hover:text-heading disabled:cursor-not-allowed"
+        data-part="indicator"
+        hidden
+      >
+        <Icon name="tabler:chevron-down" size="sm" aria-hidden="true" />
+      </button>
+      <datalist id={datalistId} data-part="datalist">
+        {options.map((o) => <option value={o.label} />)}
+      </datalist>
+      <div
+        id={listId}
+        role="listbox"
+        aria-label={label}
+        popover="manual"
+        class="parche-combobox-listbox max-h-64 w-[anchor-size(width)] min-w-48 overflow-y-auto rounded-md border border-border bg-surface py-1 shadow-lg"
+        style={`position-anchor: ${anchor}`}
+        data-part="listbox"
+      >
+        {options.map((o, i) => (
+          <div
+            role="option"
+            id={`${id}-option-${i}`}
+            aria-selected="false"
+            class="parche-combobox-option cursor-pointer px-3 py-2 text-sm text-heading hover:bg-surface-hover data-[state=active]:bg-surface-hover data-[state=active]:text-heading"
+            data-part="option"
+            data-state="inactive"
+            data-value={o.value}
+            data-label={o.label}
+          >
+            {o.label}
+            {o.description && <span class="block text-xs text-muted">{o.description}</span>}
+          </div>
+        ))}
+        <div class="parche-combobox-empty px-3 py-2 text-sm text-muted" data-part="empty" hidden>{emptyText}</div>
+      </div>
+    </div>
+  </Field>
+</parche-combobox>
+
+<script>
+  import './combobox.element.ts';
+</script>

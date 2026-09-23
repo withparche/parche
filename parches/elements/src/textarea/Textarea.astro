@@ -1,0 +1,38 @@
+---
+/**
+ * Textarea — a native textarea inside a Field. `grow` uses the platform's
+ * `field-sizing: content` (Chrome 123+; a fixed height elsewhere), so it
+ * follows the text with no script.
+ */
+import { cn, fieldIds, splitProps } from '@parche/elements/utils';
+import Field from '../field/Field.astro';
+import { schema, type Props } from './textarea.props';
+
+const { props: { name, label, value, placeholder, description, error, rows, grow, required, disabled, readonly, hideLabel, maxlength }, rest, className } =
+  splitProps(schema, Astro.props);
+const id = (rest.id as string | undefined) ?? name;
+const { describedBy } = fieldIds(id, { description, error });
+const { id: _id, ...fieldRest } = rest;
+---
+
+<Field id={id} label={label} description={description} error={error} required={required} hideLabel={hideLabel} class={className} {...fieldRest}>
+  <textarea
+    id={id}
+    name={name}
+    rows={rows}
+    placeholder={placeholder}
+    required={required || undefined}
+    disabled={disabled || undefined}
+    readonly={readonly || undefined}
+    maxlength={maxlength}
+    aria-invalid={error ? 'true' : undefined}
+    aria-describedby={describedBy}
+    class={cn(
+      'parche-textarea block w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-heading placeholder:text-muted transition-colors',
+      'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+      'aria-[invalid=true]:border-danger disabled:cursor-not-allowed disabled:opacity-60 read-only:bg-surface-hover',
+      grow ? 'resize-none [field-sizing:content]' : 'resize-y',
+    )}
+    data-part="textarea"
+  >{value}</textarea>
+</Field>

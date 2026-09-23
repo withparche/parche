@@ -7,13 +7,13 @@
 import { cn, splitProps } from '@parche/elements/utils';
 import { schema, type Props } from './prose.props';
 
-const { props: { html, size }, rest, className } = splitProps(schema, Astro.props);
+const { props: { html, size }, rest, className, part } = splitProps(schema, Astro.props);
 
 const sizes: Record<typeof size, string> = { sm: 'text-sm', md: 'text-base', lg: 'text-lg' };
 ---
 
 {html ? (
-  <div class={cn('parche-prose prose max-w-none', sizes[size], className)} data-part="root" {...rest} data-size={size} set:html={html} />
+  <div class={cn('parche-prose prose max-w-none', sizes[size], className)} {...rest} data-part={part} data-size={size} set:html={html} />
 ) : (
-  <div class={cn('parche-prose prose max-w-none', sizes[size], className)} data-part="root" {...rest} data-size={size}><slot /></div>
+  <div class={cn('parche-prose prose max-w-none', sizes[size], className)} data-part={part} {...rest} data-size={size}><slot /></div>
 )}

@@ -10,7 +10,7 @@ import { defineVariants, splitProps } from '@parche/elements/utils';
 import Icon from '../icon/Icon.astro';
 import { schema, type Props } from './button.props';
 
-const { props: { variant, size, tone, href, target, type, disabled, icon, iconPosition, block, label }, rest, className } = splitProps(schema, Astro.props);
+const { props: { variant, size, tone, href, target, type, disabled, icon, iconPosition, block, label }, rest, className, part } = splitProps(schema, Astro.props);
 
 const button = defineVariants({
   base:
@@ -58,8 +58,8 @@ if (import.meta.env.DEV && icon && !hasText && !label) {
 
 <Tag
   class={classes}
-  data-part="root"
   {...rest}
+  data-part={part}
   data-variant={variant}
   data-size={size}
   data-tone={tone !== 'default' ? tone : undefined}

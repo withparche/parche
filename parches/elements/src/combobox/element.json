@@ -1,0 +1,15 @@
+{
+  "name": "combobox",
+  "type": "element",
+  "files": [
+    { "path": "Combobox.astro", "type": "part" },
+    { "path": "combobox.props.ts", "type": "props" },
+    { "path": "combobox.element.ts", "type": "element" },
+    { "path": "combobox.css", "type": "style" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["field", "icon", "popover"],
+  "source": null
+}

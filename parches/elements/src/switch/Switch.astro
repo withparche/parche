@@ -8,11 +8,11 @@
 import { cn, splitProps } from '@parche/elements/utils';
 import { schema, type Props } from './switch.props';
 
-const { props: { name, value, checked, disabled, label, description }, rest, className } = splitProps(schema, Astro.props);
+const { props: { name, value, checked, disabled, label, description }, rest, className, part } = splitProps(schema, Astro.props);
 const hasLabel = Astro.slots.has('default');
 ---
 
-<label class={cn('parche-switch inline-flex cursor-pointer items-start gap-3', disabled && 'cursor-not-allowed opacity-60', className)} data-part="root" {...rest}>
+<label class={cn('parche-switch inline-flex cursor-pointer items-start gap-3', disabled && 'cursor-not-allowed opacity-60', className)} {...rest} data-part={part}>
   <input
     type="checkbox"
     role="switch"

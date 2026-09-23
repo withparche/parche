@@ -1,0 +1,9 @@
+---
+import Label from '../Label.astro';
+---
+
+<div class="flex flex-col gap-3">
+  <Label for="ex-name" text="Name" />
+  <Label for="ex-email" text="Email" required />
+  <input id="ex-name" class="hidden" /><input id="ex-email" class="hidden" />
+</div>

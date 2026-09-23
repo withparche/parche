@@ -1,0 +1,18 @@
+---
+import Combobox from '../Combobox.astro';
+const countries = [
+  { value: 'ar', label: 'Argentina' },
+  { value: 'au', label: 'Australia' },
+  { value: 'br', label: 'Brazil' },
+  { value: 'ca', label: 'Canada' },
+  { value: 'de', label: 'Germany', description: 'Deutschland' },
+  { value: 'es', label: 'Spain', description: 'España' },
+  { value: 'uk', label: 'United Kingdom' },
+  { value: 'us', label: 'United States' },
+];
+---
+
+<div class="flex max-w-sm flex-col gap-5">
+  <Combobox name="country" label="Country" placeholder="Start typing…" options={countries} description="Pick from the list." />
+  <Combobox name="ship-to" label="Ship to" options={countries} value="es" />
+</div>

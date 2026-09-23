@@ -1,0 +1,13 @@
+{
+  "name": "input",
+  "type": "element",
+  "files": [
+    { "path": "Input.astro", "type": "part" },
+    { "path": "input.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["field", "icon"],
+  "source": null
+}

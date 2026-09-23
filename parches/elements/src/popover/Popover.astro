@@ -11,21 +11,21 @@
 import { cn, splitProps } from '@parche/elements/utils';
 import { schema, type Props } from './popover.props';
 
-const { props: { id, title, placement, align, anchor, openOnHover }, rest, className } = splitProps(schema, Astro.props);
+const { props: { id, title, placement, align, anchor, openOnHover }, rest, className, part } = splitProps(schema, Astro.props);
 const titleId = title ? `${id}-title` : undefined;
 const hasTrigger = Astro.slots.has('trigger');
 ---
 
 <parche-popover
   class="parche-popover contents"
-  data-part="root"
+  {...rest}
+  data-part={part}
   data-state="closed"
   data-anchored
   data-placement={placement}
   data-align={align}
   anchor={anchor}
   open-on-hover={openOnHover || undefined}
-  {...rest}
 >
   {hasTrigger && <slot name="trigger" />}
   <div

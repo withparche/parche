@@ -1,0 +1,11 @@
+---
+import Input from '../Input.astro';
+---
+
+<div class="flex max-w-sm flex-col gap-5">
+  <Input name="name" label="Name" placeholder="Ada Lovelace" autocomplete="name" required />
+  <Input name="email" label="Email" type="email" icon="tabler:mail" description="We never share it." />
+  <Input name="handle" label="Handle" value="parche" error="That handle is taken." />
+  <Input name="plan" label="Plan" value="Pro" readonly />
+  <Input name="locked" label="Locked" disabled />
+</div>

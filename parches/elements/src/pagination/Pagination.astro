@@ -9,7 +9,7 @@ import { cn, splitProps } from '@parche/elements/utils';
 import Icon from '../icon/Icon.astro';
 import { schema, type Props } from './pagination.props';
 
-const { props: { current, total, base, numbers, window: win, prevLabel, nextLabel, label }, rest, className } = splitProps(schema, Astro.props);
+const { props: { current, total, base, numbers, window: win, prevLabel, nextLabel, label }, rest, className, part } = splitProps(schema, Astro.props);
 
 const root = base.replace(/\/$/, '');
 const href = (n: number) => (n === 1 ? root || '/' : `${root}/${n}`);
@@ -31,8 +31,7 @@ const enabled = 'text-heading hover:bg-surface-hover hover:text-primary';
 const disabled = 'text-muted opacity-50';
 ---
 
-<nav class={cn('parche-pagination', className)} aria-label={label} data-part="root"
-  {...rest}>
+<nav class={cn('parche-pagination', className)} aria-label={label} {...rest} data-part={part}>
   <ul class="parche-pagination-list flex flex-wrap items-center justify-between gap-2" data-part="list">
     <li>
       {current > 1 ? (

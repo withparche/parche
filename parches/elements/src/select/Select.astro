@@ -1,0 +1,56 @@
+---
+/**
+ * Select — the native `<select>` inside a Field, its own arrow hidden and a
+ * token-coloured chevron drawn over it. The picker is the platform's: it
+ * works on every device, with the keyboard, and with no script.
+ */
+import { cn, fieldIds, splitProps } from '@parche/elements/utils';
+import Field from '../field/Field.astro';
+import Icon from '../icon/Icon.astro';
+import { schema, type Props } from './select.props';
+
+const { props: { name, label, options, value, placeholder, description, error, required, disabled, hideLabel }, rest, className } = splitProps(schema, Astro.props);
+const id = (rest.id as string | undefined) ?? name;
+const { describedBy } = fieldIds(id, { description, error });
+const { id: _id, ...fieldRest } = rest;
+
+// Groups and flat options share one shape once flattened with their group.
+const entries = options.map((entry) => ('options' in entry ? { group: entry.label, options: entry.options } : { group: undefined, options: [entry] }));
+---
+
+<Field id={id} label={label} description={description} error={error} required={required} hideLabel={hideLabel} class={className} {...fieldRest}>
+  <div class="parche-select-wrapper relative" data-part="wrapper">
+    <select
+      id={id}
+      name={name}
+      required={required || undefined}
+      disabled={disabled || undefined}
+      aria-invalid={error ? 'true' : undefined}
+      aria-describedby={describedBy}
+      class={cn(
+        'parche-select block w-full appearance-none rounded-md border border-border bg-surface py-2 pl-3 pr-9 text-sm text-heading transition-colors',
+        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+        'aria-[invalid=true]:border-danger disabled:cursor-not-allowed disabled:opacity-60',
+      )}
+      data-part="select"
+    >
+      {placeholder && <option value="" disabled selected={value === undefined || undefined}>{placeholder}</option>}
+      {entries.map((entry) =>
+        entry.group ? (
+          <optgroup label={entry.group}>
+            {entry.options.map((o) => (
+              <option value={o.value} selected={o.value === value || undefined} disabled={o.disabled || undefined}>{o.label}</option>
+            ))}
+          </optgroup>
+        ) : (
+          entry.options.map((o) => (
+            <option value={o.value} selected={o.value === value || undefined} disabled={o.disabled || undefined}>{o.label}</option>
+          ))
+        ),
+      )}
+    </select>
+    <span class="parche-select-indicator pointer-events-none absolute inset-y-0 right-3 flex items-center text-muted" data-part="indicator">
+      <Icon name="tabler:chevron-down" size="sm" aria-hidden="true" />
+    </span>
+  </div>
+</Field>

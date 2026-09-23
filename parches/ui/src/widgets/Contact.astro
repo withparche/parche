@@ -2,6 +2,9 @@
 import type { Props } from './Contact.props';
 import Heading from 'parche:elements/Heading';
 import Button from 'parche:elements/Button';
+import Input from 'parche:elements/Input';
+import Textarea from 'parche:elements/Textarea';
+import Checkbox from 'parche:elements/Checkbox';
 
 const {
   tagline,
@@ -13,6 +16,12 @@ const {
   disclaimer,
   button,
 } = Astro.props;
+
+// The content gives a free-form input type; the element takes a known one.
+const inputTypes = ['text', 'email', 'url', 'tel', 'password', 'number', 'search', 'date', 'time'] as const;
+type InputType = (typeof inputTypes)[number];
+const typeOf = (type: string): InputType => (inputTypes.includes(type as InputType) ? (type as InputType) : 'text');
+const humanize = (name: string) => name.charAt(0).toUpperCase() + name.slice(1).replace(/[-_]+/g, ' ');
 ---
 
 <Heading {tagline} {title} {subtitle} />
@@ -22,57 +31,25 @@ const {
     <form>
       <div class="flex flex-col gap-4">
         {inputs.map((input) => (
-          <div>
-            {input.label && (
-              <label
-                for={input.name}
-                class="type-label text-muted block mb-1"
-              >
-                {input.label}
-              </label>
-            )}
-            <input
-              type={input.type ?? 'text'}
-              id={input.name}
-              name={input.name}
-              placeholder={input.placeholder}
-              autocomplete={input.autocomplete}
-              class="w-full rounded-md border border-border bg-surface px-3 py-2 type-body text-heading placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-          </div>
+          <Input
+            name={input.name}
+            label={input.label ?? humanize(input.name)}
+            type={typeOf(input.type ?? 'text')}
+            placeholder={input.placeholder}
+            autocomplete={input.autocomplete}
+          />
         ))}
 
         {textarea && (
-          <div>
-            {textarea.label && (
-              <label
-                for={textarea.name ?? 'textarea'}
-                class="type-label text-muted block mb-1"
-              >
-                {textarea.label}
-              </label>
-            )}
-            <textarea
-              id={textarea.name ?? 'textarea'}
-              name={textarea.name ?? 'textarea'}
-              placeholder={textarea.placeholder}
-              rows={textarea.rows ?? 4}
-              class="w-full rounded-md border border-border bg-surface px-3 py-2 type-body text-heading placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-            />
-          </div>
+          <Textarea
+            name={textarea.name ?? 'message'}
+            label={textarea.label ?? 'Message'}
+            placeholder={textarea.placeholder}
+            rows={textarea.rows ?? 4}
+          />
         )}
 
-        {disclaimer && disclaimer.label && (
-          <div class="flex items-start gap-2">
-            <input
-              type="checkbox"
-              id="disclaimer"
-              name="disclaimer"
-              class="mt-1 h-4 w-4 rounded border-border accent-primary"
-            />
-            <label for="disclaimer" class="type-body text-muted" set:html={disclaimer.label} />
-          </div>
-        )}
+        {disclaimer?.label && <Checkbox name="disclaimer" label={disclaimer.label} />}
 
         <div>
           <Button type="submit" size="lg" block class="rounded-md">{button ?? 'Send message'}</Button>

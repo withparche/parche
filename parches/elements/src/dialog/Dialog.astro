@@ -10,7 +10,7 @@ import { cn, splitProps } from '@parche/elements/utils';
 import Icon from '../icon/Icon.astro';
 import { schema, type Props } from './dialog.props';
 
-const { props: { id, title, description, size, closedBy, closeLabel }, rest, className } = splitProps(schema, Astro.props);
+const { props: { id, title, description, size, closedBy, closeLabel }, rest, className, part } = splitProps(schema, Astro.props);
 const titleId = `${id}-title`;
 const descriptionId = description ? `${id}-description` : undefined;
 const hasFooter = Astro.slots.has('footer');
@@ -18,7 +18,7 @@ const hasTrigger = Astro.slots.has('trigger');
 const sizes = { sm: 'max-w-sm', md: 'max-w-lg', lg: 'max-w-2xl' };
 ---
 
-<parche-dialog class="parche-dialog contents" data-part="root" data-state="closed" {...rest}>
+<parche-dialog class="parche-dialog contents" {...rest} data-part={part} data-state="closed">
   {hasTrigger && <slot name="trigger" />}
   <dialog
     id={id}

@@ -7,7 +7,7 @@
 import { cn, splitProps } from '@parche/elements/utils';
 import { schema, type Props } from './video.props';
 
-const { props: { src, title, poster, ratio }, rest, className } = splitProps(schema, Astro.props);
+const { props: { src, title, poster, ratio }, rest, className, part } = splitProps(schema, Astro.props);
 
 const ratios: Record<typeof ratio, string> = { '16/9': 'aspect-video', '4/3': 'aspect-[4/3]', '1/1': 'aspect-square', '21/9': 'aspect-[21/9]' };
 
@@ -21,8 +21,7 @@ function embedUrl(url: string): string | null {
 const embed = embedUrl(src);
 ---
 
-<div class={cn('parche-video overflow-hidden rounded-md bg-surface', ratios[ratio], className)} data-part="root"
-  {...rest} data-ratio={ratio} data-provider={embed ? (embed.includes('youtube') ? 'youtube' : 'vimeo') : 'file'}>
+<div class={cn('parche-video overflow-hidden rounded-md bg-surface', ratios[ratio], className)} {...rest} data-part={part} data-ratio={ratio} data-provider={embed ? (embed.includes('youtube') ? 'youtube' : 'vimeo') : 'file'}>
   {embed ? (
     <iframe
       src={embed}

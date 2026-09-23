@@ -1,0 +1,8 @@
+---
+import Textarea from '../Textarea.astro';
+---
+
+<div class="flex max-w-sm flex-col gap-5">
+  <Textarea name="message" label="Message" placeholder="How can we help?" description="Grows as you type." required />
+  <Textarea name="bio" label="Bio" rows={2} grow={false} value="Fixed height, resizable by hand." />
+</div>

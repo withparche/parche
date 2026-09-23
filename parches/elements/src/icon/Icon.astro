@@ -9,7 +9,7 @@ import { Icon as AstroIcon } from 'astro-icon/components';
 import { cn, splitProps } from '@parche/elements/utils';
 import { schema, type Props } from './icon.props';
 
-const { props: { name, size, label }, rest, className } = splitProps(schema, Astro.props);
+const { props: { name, size, label }, rest, className, part } = splitProps(schema, Astro.props);
 
 const sizes: Record<typeof size, string> = {
   xs: 'size-3',
@@ -23,8 +23,8 @@ const sizes: Record<typeof size, string> = {
 <AstroIcon
   name={name}
   class={cn('parche-icon shrink-0', sizes[size], className)}
-  data-part="root"
   {...rest}
+  data-part={part}
   data-size={size}
   aria-hidden={label ? undefined : 'true'}
   role={label ? 'img' : undefined}

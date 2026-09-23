@@ -9,7 +9,7 @@ import { cn, splitProps } from '@parche/elements/utils';
 import Eyebrow from '../eyebrow/Eyebrow.astro';
 import { schema, type Props } from './heading.props';
 
-const { props: { title, subtitle, tagline, level, align, width, spacing }, rest, className } = splitProps(schema, Astro.props);
+const { props: { title, subtitle, tagline, level, align, width, spacing }, rest, className, part } = splitProps(schema, Astro.props);
 
 const Title = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4';
 const typeRole = level === 1 ? 'type-h1' : level === 2 ? 'type-h2' : 'type-h3';
@@ -20,8 +20,8 @@ const centered = align === 'center';
 {(title || subtitle || tagline) && (
   <div
     class={cn('parche-heading', widths[width], centered && 'mx-auto text-center', spacing && 'mb-8 md:mb-12', className)}
-    data-part="root"
-  {...rest}
+    {...rest}
+    data-part={part}
     data-align={align}
   >
     {tagline && <Eyebrow as="p" class="mb-3" data-part="tagline" set:html={tagline} />}
