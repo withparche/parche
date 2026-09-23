@@ -14,30 +14,31 @@ const LAZY = /^(floating-ui|invoker|popover-fn)\./;
 const LAZY_MAX = 40_000;
 
 // Baselines measured on a good build; thresholds leave a small margin. The
-// eager budget of a site with the ui Header includes the elements the Header
-// is built on: Sheet (the dialog element) and Collapsible for the mobile menu,
-// Menu and Popover for the desktop navigation (~7 KB together over the
-// ~21 KB base, most of which is Astro's ClientRouter).
+// eager budget of a site with the ui parche is Astro's ClientRouter (~16 KB)
+// plus the elements its Header and widgets are built on: Sheet, Collapsible,
+// Menu and Popover for the navigation, Banner for the announcement, Stat,
+// Toc and Share for the widgets that use them (~11 KB together). The ui
+// parche itself ships no script.
 const PROJECTS = {
-  'demos/astrowind': { kind: 'static', clientJsMax: 30_000 },
-  'examples/blog': { kind: 'static', clientJsMax: 30_000 },
-  'examples/custom-widget': { kind: 'static', clientJsMax: 30_000 },
-  'examples/i18n': { kind: 'static', clientJsMax: 30_000 },
+  'demos/astrowind': { kind: 'static', clientJsMax: 34_000 },
+  'examples/blog': { kind: 'static', clientJsMax: 34_000 },
+  'examples/custom-widget': { kind: 'static', clientJsMax: 34_000 },
+  'examples/i18n': { kind: 'static', clientJsMax: 34_000 },
   'examples/import-widget': { kind: 'static', clientJsMax: 6_000 },
-  'examples/markdown-pages': { kind: 'static', clientJsMax: 30_000 },
+  'examples/markdown-pages': { kind: 'static', clientJsMax: 34_000 },
   'examples/react': { kind: 'static', skipClientBudget: true }, // ships React islands
   'examples/shadcn': { kind: 'static', skipClientBudget: true }, // ships React islands
   // The SSR examples serve /elements: every interactive element's script.
-  'examples/ssr-cloudflare': { kind: 'ssr', clientJsMax: 42_000 },
-  'examples/ssr-node': { kind: 'ssr', clientJsMax: 42_000 },
-  'examples/themes': { kind: 'static', clientJsMax: 30_000 },
+  'examples/ssr-cloudflare': { kind: 'ssr', clientJsMax: 46_000 },
+  'examples/ssr-node': { kind: 'ssr', clientJsMax: 46_000 },
+  'examples/themes': { kind: 'static', clientJsMax: 34_000 },
   // The elements playground: every element page must build; the eager budget
   // grows with each interactive element's declared cost (see the elements plan).
-  'parches/elements/playground': { kind: 'static', clientJsMax: 42_000 },
-  'templates/portfolio': { kind: 'static', clientJsMax: 30_000 },
+  'parches/elements/playground': { kind: 'static', clientJsMax: 46_000 },
+  'templates/portfolio': { kind: 'static', clientJsMax: 34_000 },
   'templates/saas-landing': {
     kind: 'ssr',
-    clientJsMax: 30_000,
+    clientJsMax: 34_000,
     iconSsrMax: 60_000, // scoped `include` keeps this small (baseline ~28 KB)
     layoutChunkMax: 200_000, // lazy catalog keeps this tiny (baseline ~31 KB); eager was ~2.3 MB
     minWidgetChunks: 2, // widgets must be code-split, not bundled into one chunk

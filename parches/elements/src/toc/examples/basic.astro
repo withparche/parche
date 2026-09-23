@@ -1,0 +1,24 @@
+---
+import Toc from '../Toc.astro';
+const items = [
+  { text: 'Why pages are data', slug: 'ex-toc-data' },
+  { text: 'Widgets', slug: 'ex-toc-widgets', children: [{ text: 'Swapping them', slug: 'ex-toc-swap' }, { text: 'Writing one', slug: 'ex-toc-write' }] },
+  { text: 'Themes', slug: 'ex-toc-themes' },
+];
+---
+
+<div class="grid gap-8 md:grid-cols-[12rem_1fr]">
+  <Toc items={items} class="md:sticky md:top-24 md:self-start" />
+  <div class="space-y-6 text-muted">
+    <h3 id="ex-toc-data" class="type-h3 text-heading">Why pages are data</h3>
+    <p>A page is a list of sections and their props. The widgets render them.</p>
+    <h3 id="ex-toc-widgets" class="type-h3 text-heading">Widgets</h3>
+    <p>Each one is a component with a schema.</p>
+    <h4 id="ex-toc-swap" class="font-semibold text-heading">Swapping them</h4>
+    <p>Any package that keeps the schema.</p>
+    <h4 id="ex-toc-write" class="font-semibold text-heading">Writing one</h4>
+    <p>An Astro component and a props file.</p>
+    <h3 id="ex-toc-themes" class="type-h3 text-heading">Themes</h3>
+    <p>Tokens, in a CSS file.</p>
+  </div>
+</div>

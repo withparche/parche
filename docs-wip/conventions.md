@@ -202,6 +202,23 @@ in Heading, `<Label data-part="label">` in Field). Rendering the static
 attribute and spreading the rest would emit both, and a browser keeps the
 first, which is how the gate found the duplicate.
 
+### Content tier, and the ui parche without scripts
+
+Toc (a scroll-spy: the last heading past the sticky offset is current,
+`aria-current` on its link), Share (network links that need no script, plus
+copy-link and the device share sheet where `navigator.share` exists), Stat
+(the final figure in the markup, counted up on entry, skipped under reduced
+motion, with a hidden twin so assistive tech never hears the intermediate
+numbers) and Banner (dismissible, remembered under a key) close the list.
+
+With them the ui parche carries no `<script>` at all: the Header's scroll
+shadow is a scroll-driven animation (`animation-timeline: scroll()`), its
+announcement is a Banner, Stats are Stat elements, the blog's table of
+contents and share buttons are Toc and Share. The unit suite enforces it
+(`parches/ui/test/no-inline-scripts.test.ts`): a `<script>` in a widget or
+layout is a regression. Core keeps its own three (ThemeToggle, ThemeSelector,
+ThemePanel), which apply the theme; the menus inside them are elements.
+
 ### Controls: wrap the real thing
 
 Switch is `<input type="checkbox" role="switch">`, Slider is

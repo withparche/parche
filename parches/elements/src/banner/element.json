@@ -1,0 +1,14 @@
+{
+  "name": "banner",
+  "type": "element",
+  "files": [
+    { "path": "Banner.astro", "type": "part" },
+    { "path": "banner.props.ts", "type": "props" },
+    { "path": "banner.element.ts", "type": "element" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["icon"],
+  "source": null
+}

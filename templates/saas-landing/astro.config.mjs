@@ -28,7 +28,7 @@ export default defineConfig({
     // demo's content + widgets use; add here when you use a new one.
     icon({
       include: {
-        tabler: ['alert-circle', 'alert-triangle', 'align-center', 'arrow-right', 'article', 'bolt', 'bookmark', 'brand-figma', 'brand-github', 'brand-linkedin', 'brand-mastodon', 'brand-notion', 'brand-slack', 'brand-stripe', 'brand-vercel', 'brand-x', 'building', 'calendar', 'cards', 'chart-bar', 'check', 'chevron-down', 'chevron-left', 'chevron-right', 'circle-check', 'click', 'clock', 'credit-card', 'external-link', 'file-text', 'help-circle', 'info-circle', 'info-square', 'layout-grid', 'layout-kanban', 'layout-list', 'layout-rows', 'layout-sidebar', 'layout-sidebar-right', 'list-check', 'list-numbers', 'mail', 'map', 'menu-2', 'message-circle', 'palette', 'plug', 'server-bolt', 'sparkles', 'speakerphone', 'star', 'users-group', 'world', 'x'],
+        tabler: ['alert-circle', 'alert-triangle', 'align-center', 'arrow-right', 'article', 'bolt', 'bookmark', 'brand-facebook', 'brand-figma', 'brand-github', 'brand-linkedin', 'brand-mastodon', 'brand-notion', 'brand-slack', 'brand-stripe', 'brand-vercel', 'brand-whatsapp', 'brand-x', 'building', 'calendar', 'cards', 'chart-bar', 'check', 'chevron-down', 'chevron-left', 'chevron-right', 'circle-check', 'click', 'clock', 'credit-card', 'external-link', 'file-text', 'help-circle', 'info-circle', 'info-square', 'layout-grid', 'layout-kanban', 'layout-list', 'layout-rows', 'layout-sidebar', 'layout-sidebar-right', 'link', 'list-check', 'list-numbers', 'mail', 'map', 'menu-2', 'message-circle', 'palette', 'plug', 'server-bolt', 'share', 'sparkles', 'speakerphone', 'star', 'users-group', 'world', 'x'],
       },
     }),
   ],

@@ -1,10 +1,6 @@
 ---
-/**
- * Social share buttons — v1 SocialShare style.
- * Icon buttons with data attributes for JS-driven sharing. Each button has an
- * accessible name; the icons are decorative.
- */
-import Icon from 'parche:elements/Icon';
+/** Social share buttons: the Share element (links that work with no script, copy link, native share). */
+import Share from 'parche:elements/Share';
 
 interface Props {
   /** Leading label, e.g. 'Share:'. */
@@ -15,68 +11,7 @@ interface Props {
   class?: string;
 }
 
-const {
-  shareText = 'Share:',
-  url,
-  title,
-  class: className = 'inline-block',
-} = Astro.props;
-
-const networks = [
-  { id: 'twitter', label: 'Share on X', icon: 'tabler:brand-x' },
-  { id: 'facebook', label: 'Share on Facebook', icon: 'tabler:brand-facebook' },
-  { id: 'linkedin', label: 'Share on LinkedIn', icon: 'tabler:brand-linkedin' },
-  { id: 'whatsapp', label: 'Share on WhatsApp', icon: 'tabler:brand-whatsapp' },
-  { id: 'mail', label: 'Share by email', icon: 'tabler:mail' },
-];
+const { shareText = 'Share:', url, title, class: className } = Astro.props;
 ---
 
-<div class:list={['flex items-center gap-1', className]}>
-  <span class="font-bold text-muted mr-1">{shareText}</span>
-  {networks.map((n) => (
-    <button
-      type="button"
-      class="inline-flex size-9 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface-hover hover:text-heading focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-      aria-label={n.label}
-      data-aw-social-share={n.id}
-      data-aw-url={url}
-      data-aw-text={title}
-    >
-      <Icon name={n.icon} size="lg" />
-    </button>
-  ))}
-</div>
-
-<script>
-  document.querySelectorAll('[data-aw-social-share]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const el = btn as HTMLElement;
-      const network = el.dataset.awSocialShare;
-      const url = el.dataset.awUrl || '';
-      const text = el.dataset.awText || '';
-      let shareUrl = '';
-
-      switch (network) {
-        case 'twitter':
-          shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
-          break;
-        case 'facebook':
-          shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
-          break;
-        case 'linkedin':
-          shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
-          break;
-        case 'whatsapp':
-          shareUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
-          break;
-        case 'mail':
-          shareUrl = `mailto:?subject=${encodeURIComponent(text)}&body=${encodeURIComponent(url)}`;
-          break;
-      }
-
-      if (shareUrl) {
-        window.open(shareUrl, '_blank', 'noopener,noreferrer');
-      }
-    });
-  });
-</script>
+<Share url={url} title={title} label={shareText} class={className} />

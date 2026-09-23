@@ -25,7 +25,7 @@ export default defineConfig({
     // demo's content + widgets use; add here when you use a new one.
     icon({
       include: {
-        tabler: ['alert-circle', 'alert-triangle', 'align-center', 'arrow-right', 'article', 'bookmark', 'brand-github', 'brand-linkedin', 'brand-mastodon', 'brand-x', 'building', 'cards', 'chart-bar', 'check', 'chevron-down', 'chevron-left', 'chevron-right', 'circle-check', 'click', 'credit-card', 'external-link', 'help-circle', 'info-circle', 'info-square', 'layout-grid', 'layout-list', 'layout-rows', 'layout-sidebar', 'layout-sidebar-right', 'list-check', 'list-numbers', 'mail', 'menu-2', 'message-circle', 'palette', 'speakerphone', 'world', 'x'],
+        tabler: ['alert-circle', 'alert-triangle', 'align-center', 'arrow-right', 'article', 'bookmark', 'brand-facebook', 'brand-github', 'brand-linkedin', 'brand-mastodon', 'brand-whatsapp', 'brand-x', 'building', 'cards', 'chart-bar', 'check', 'chevron-down', 'chevron-left', 'chevron-right', 'circle-check', 'click', 'credit-card', 'external-link', 'help-circle', 'info-circle', 'info-square', 'layout-grid', 'layout-list', 'layout-rows', 'layout-sidebar', 'layout-sidebar-right', 'link', 'list-check', 'list-numbers', 'mail', 'menu-2', 'message-circle', 'palette', 'share', 'speakerphone', 'world', 'x'],
       },
     }),
   ],

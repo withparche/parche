@@ -1,0 +1,42 @@
+---
+/**
+ * Banner — an announcement bar. The element removes it on dismiss (with a
+ * short collapse where motion is allowed) and, given `remember`, keeps it
+ * hidden on later visits. Rendered on the server either way: without
+ * script it simply stays.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import Icon from '../icon/Icon.astro';
+import { schema, type Props } from './banner.props';
+
+const { props: { text, href, icon, aside, dismissible, dismissLabel, remember, tone }, rest, className, part } = splitProps(schema, Astro.props);
+const tones = {
+  inverse: 'bg-foreground text-background dark:border-b dark:border-border dark:bg-surface dark:text-heading',
+  surface: 'border-b border-border bg-surface text-heading',
+};
+const Message = href ? 'a' : 'span';
+---
+
+<parche-banner class={cn('parche-banner relative block text-sm', tones[tone], className)} {...rest} data-part={part} data-state="open" remember={remember}>
+  <div class="relative flex items-center px-3 py-2">
+    {dismissible && (
+      <button
+        type="button"
+        class="parche-banner-dismiss shrink-0 cursor-pointer rounded p-1 opacity-60 transition-opacity hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        aria-label={dismissLabel}
+        data-part="dismiss"
+      >
+        <Icon name="tabler:x" size="sm" aria-hidden="true" />
+      </button>
+    )}
+    <Message href={href} class={cn('parche-banner-message ml-1', href && 'no-underline transition-colors hover:underline')} data-part="message">
+      {icon && <Icon name={icon} size="sm" class="-mt-0.5 mr-1.5 inline-block" aria-hidden="true" />}
+      <span set:html={text} />
+    </Message>
+    {aside && <span class="parche-banner-aside absolute right-4 top-1/2 hidden -translate-y-1/2 md:block" data-part="aside" set:html={aside} />}
+  </div>
+</parche-banner>
+
+<script>
+  import './banner.element.ts';
+</script>

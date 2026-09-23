@@ -1,0 +1,14 @@
+{
+  "name": "stat",
+  "type": "element",
+  "files": [
+    { "path": "Stat.astro", "type": "part" },
+    { "path": "stat.props.ts", "type": "props" },
+    { "path": "stat.element.ts", "type": "element" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["icon"],
+  "source": null
+}

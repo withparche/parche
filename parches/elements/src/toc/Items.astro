@@ -1,0 +1,26 @@
+---
+// One level of the table of contents; recurses for children.
+import type { TocItem } from './toc.props';
+
+interface Props {
+  items: TocItem[];
+  depth: number;
+}
+const { items, depth } = Astro.props;
+---
+
+<ul class:list={['parche-toc-list space-y-1', depth > 0 && 'ml-4 mt-1']} data-part="list" data-depth={depth}>
+  {items.map((item) => (
+    <li data-part="item">
+      <a
+        href={`#${item.slug}`}
+        class="parche-toc-link block py-0.5 text-muted transition-colors hover:text-heading focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-[current=true]:font-medium aria-[current=true]:text-primary"
+        data-part="link"
+        data-slug={item.slug}
+      >
+        {item.text}
+      </a>
+      {item.children && item.children.length > 0 && <Astro.self items={item.children} depth={depth + 1} />}
+    </li>
+  ))}
+</ul>

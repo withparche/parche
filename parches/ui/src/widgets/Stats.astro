@@ -1,37 +1,15 @@
 ---
-import Heading from "parche:elements/Heading";
-import Icon from "parche:elements/Icon";
-import type { Props } from "./Stats.props";
+import Heading from 'parche:elements/Heading';
+import Stat from 'parche:elements/Stat';
+import type { Props } from './Stats.props';
 
 const { title, subtitle, tagline, stats = [] } = Astro.props;
 ---
 
 <Heading {title} {subtitle} {tagline} />
 
-{
-  stats.length > 0 && (
-    <>
-      <parche-counter>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          {stats.map(({ amount, title, icon }) => (
-            <div>
-              {icon && (
-                <div class="flex items-center justify-center mx-auto mb-4 text-primary">
-                  <Icon name={icon} class="size-10" />
-                </div>
-              )}
-              <p class="type-h1 text-primary mb-1" data-value={amount}>
-                {amount}
-              </p>
-              <p class="font-medium text-muted lg:text-base text-sm tracking-widest uppercase">{title}</p>
-            </div>
-          ))}
-        </div>
-      </parche-counter>
-    </>
-  )
-}
-
-<script>
-  import '../scripts/parche-counter.ts';
-</script>
+{stats.length > 0 && (
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+    {stats.map(({ amount, title: label, icon }) => amount && <Stat value={amount} label={label ?? ''} icon={icon} />)}
+  </div>
+)}

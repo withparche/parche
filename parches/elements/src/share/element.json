@@ -1,0 +1,14 @@
+{
+  "name": "share",
+  "type": "element",
+  "files": [
+    { "path": "Share.astro", "type": "part" },
+    { "path": "share.props.ts", "type": "props" },
+    { "path": "share.element.ts", "type": "element" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["icon"],
+  "source": null
+}

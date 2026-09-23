@@ -1,0 +1,57 @@
+---
+/**
+ * Share — the networks are plain links to their share intents (new tab),
+ * so they need no script. The element adds what only script can do: copy
+ * the link to the clipboard with a live announcement, and the device's own
+ * share sheet (`navigator.share`) where it exists.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import Icon from '../icon/Icon.astro';
+import { schema, type Props } from './share.props';
+
+const { props: { url, title, networks, label, copiedText }, rest, className, part } = splitProps(schema, Astro.props);
+const enc = encodeURIComponent;
+const intents: Record<string, { label: string; icon: string; href?: string }> = {
+  x: { label: 'Share on X', icon: 'tabler:brand-x', href: `https://twitter.com/intent/tweet?url=${enc(url)}&text=${enc(title)}` },
+  facebook: { label: 'Share on Facebook', icon: 'tabler:brand-facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${enc(url)}` },
+  linkedin: { label: 'Share on LinkedIn', icon: 'tabler:brand-linkedin', href: `https://www.linkedin.com/sharing/share-offsite/?url=${enc(url)}` },
+  whatsapp: { label: 'Share on WhatsApp', icon: 'tabler:brand-whatsapp', href: `https://wa.me/?text=${enc(`${title} ${url}`)}` },
+  mail: { label: 'Share by email', icon: 'tabler:mail', href: `mailto:?subject=${enc(title)}&body=${enc(url)}` },
+  copy: { label: 'Copy link', icon: 'tabler:link' },
+};
+const itemClass =
+  'parche-share-item inline-flex size-9 cursor-pointer items-center justify-center rounded-md text-muted transition-colors hover:bg-surface-hover hover:text-heading focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
+---
+
+<parche-share
+  role="group"
+  aria-label={label}
+  class={cn('parche-share inline-flex items-center gap-1', className)}
+  {...rest}
+  data-part={part}
+  url={url}
+  title={title}
+  copied-text={copiedText}
+>
+  <span class="parche-share-label mr-1 font-bold text-muted" data-part="label" aria-hidden="true">{label}</span>
+  {networks.map((network) => {
+    const intent = intents[network];
+    return intent.href ? (
+      <a href={intent.href} target="_blank" rel="noopener noreferrer" class={itemClass} aria-label={intent.label} data-part="item" data-network={network}>
+        <Icon name={intent.icon} size="md" aria-hidden="true" />
+      </a>
+    ) : (
+      <button type="button" class={itemClass} aria-label={intent.label} data-part="item" data-network={network} hidden>
+        <Icon name={intent.icon} size="md" aria-hidden="true" />
+      </button>
+    );
+  })}
+  <button type="button" class={itemClass} aria-label="Share…" data-part="native" hidden>
+    <Icon name="tabler:share" size="md" aria-hidden="true" />
+  </button>
+  <span class="sr-only" role="status" data-part="status"></span>
+</parche-share>
+
+<script>
+  import './share.element.ts';
+</script>

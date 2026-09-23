@@ -1,0 +1,30 @@
+---
+/**
+ * Stat — the final figure is in the markup; the element counts up to it
+ * once it scrolls into view, and leaves it alone under reduced motion. The
+ * value is announced as the final figure throughout (the counting text is
+ * `aria-hidden`; a sibling holds the figure for assistive tech).
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import Icon from '../icon/Icon.astro';
+import { schema, type Props } from './stat.props';
+
+const { props: { value, label, description, icon, align }, rest, className, part } = splitProps(schema, Astro.props);
+---
+
+<parche-stat class={cn('parche-stat block', align === 'center' ? 'text-center' : 'text-left', className)} {...rest} data-part={part} value={value}>
+  {icon && (
+    <span class={cn('parche-stat-icon mb-4 flex text-primary', align === 'center' ? 'justify-center' : 'justify-start')} data-part="icon">
+      <Icon name={icon} size="xl" aria-hidden="true" />
+    </span>
+  )}
+  <p class="parche-stat-value type-h1 mb-1 text-primary" data-part="value">
+    <span data-counter>{value}</span>
+  </p>
+  <p class="parche-stat-label text-sm font-medium uppercase tracking-widest text-muted lg:text-base" data-part="label">{label}</p>
+  {description && <p class="parche-stat-description mt-1 text-sm text-muted" data-part="description">{description}</p>}
+</parche-stat>
+
+<script>
+  import './stat.element.ts';
+</script>

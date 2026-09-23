@@ -1,0 +1,24 @@
+---
+/**
+ * Toc — nested in-page links, one per heading. The element marks the link
+ * of the heading in view with `aria-current="true"` (the styling hook is
+ * that attribute, not a class), using an IntersectionObserver over the
+ * headings the links point at. Depth is unlimited: items nest.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import Items from './Items.astro';
+import { schema, type Props } from './toc.props';
+
+const { props: { items, title, label, offset }, rest, className, part } = splitProps(schema, Astro.props);
+---
+
+<parche-toc class={cn('parche-toc block text-sm', className)} {...rest} data-part={part} offset={offset}>
+  <nav aria-label={label} data-part="nav">
+    <h2 class="parche-toc-title mb-3 font-semibold text-heading" data-part="title">{title}</h2>
+    <Items items={items} depth={0} />
+  </nav>
+</parche-toc>
+
+<script>
+  import './toc.element.ts';
+</script>

@@ -6,6 +6,7 @@ import Sheet from 'parche:elements/Sheet';
 import Collapsible from 'parche:elements/Collapsible';
 import Menu from 'parche:elements/Menu';
 import Popover from 'parche:elements/Popover';
+import Banner from 'parche:elements/Banner';
 import ThemeToggle from 'parche:components/ThemeToggle';
 import LocaleSwitcher from 'parche:components/LocaleSwitcher';
 
@@ -100,43 +101,19 @@ const navItemClass =
 
 <!-- Announcement bar -->
 {announcement && (
-  <div class:list={["text-sm relative", announcement.class || "bg-foreground text-background dark:bg-surface dark:text-heading dark:border-b dark:border-border"]} data-announcement>
-    <div class="relative flex items-center py-2 px-3">
-      {(announcement.dismissible !== false) && (
-        <button
-          type="button"
-          class="shrink-0 p-1 opacity-60 hover:opacity-100 transition-opacity cursor-pointer"
-          aria-label="Dismiss announcement"
-          data-announcement-dismiss
-        >
-          <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
-      )}
-      <div class="ml-1">
-        {announcement.href ? (
-          <a href={announcement.href} class="hover:underline no-underline transition-colors">
-            {announcement.icon && <Icon name={announcement.icon} class="w-4 h-4 inline-block mr-1.5 -mt-0.5" />}
-            <span set:html={announcement.text} />
-          </a>
-        ) : (
-          <span>
-            {announcement.icon && <Icon name={announcement.icon} class="w-4 h-4 inline-block mr-1.5 -mt-0.5" />}
-            <span set:html={announcement.text} />
-          </span>
-        )}
-      </div>
-      {announcement.aside && (
-        <span class="absolute right-4 top-1/2 -translate-y-1/2 hidden md:block" set:html={announcement.aside} />
-      )}
-    </div>
-  </div>
+  <Banner
+    text={announcement.text}
+    href={announcement.href}
+    icon={announcement.icon}
+    aside={announcement.aside}
+    dismissible={announcement.dismissible !== false}
+    dismissLabel="Dismiss announcement"
+    class={announcement.class}
+  />
 )}
 
 <header
-  class="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-lg transition-shadow duration-300"
+  class="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-lg"
   data-header
   transition:animate="none"
 >
@@ -367,38 +344,20 @@ const navItemClass =
   </div>
 </header>
 
-<script>
-  // ---- Scroll shadow ----
-  const header = document.querySelector('[data-header]') as HTMLElement;
-  if (header) {
-    const sentinel = document.createElement('div');
-    sentinel.style.cssText = 'position:absolute;top:0;left:0;right:0;height:1px;pointer-events:none;';
-    header.parentElement?.insertBefore(sentinel, header);
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        header.classList.toggle('shadow-md', !entry.isIntersecting);
-        header.classList.toggle('border-transparent', !entry.isIntersecting);
-      },
-      { threshold: [1] }
-    );
-    observer.observe(sentinel);
-  }
-
-  // ---- Announcement dismiss ----
-  const dismissBtn = document.querySelector('[data-announcement-dismiss]');
-  if (dismissBtn) {
-    dismissBtn.addEventListener('click', () => {
-      const bar = dismissBtn.closest('[data-announcement]') as HTMLElement;
-      if (bar) {
-        bar.style.height = bar.offsetHeight + 'px';
-        bar.offsetHeight; // force reflow
-        bar.style.transition = 'height 0.3s ease, opacity 0.3s ease';
-        bar.style.height = '0';
-        bar.style.opacity = '0';
-        bar.style.overflow = 'hidden';
-        bar.addEventListener('transitionend', () => bar.remove(), { once: true });
+<style>
+  /* The shadow appears once the page has scrolled: a scroll-driven animation
+     over the first pixel of scroll, no script. Browsers without it show no
+     shadow, which is fine. */
+  @supports (animation-timeline: scroll()) {
+    header[data-header] {
+      animation: parche-header-scrolled linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 1px;
+    }
+    @keyframes parche-header-scrolled {
+      to {
+        box-shadow: var(--shadow-md);
       }
-    });
+    }
   }
-</script>
+</style>

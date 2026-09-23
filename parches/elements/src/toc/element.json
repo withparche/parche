@@ -1,0 +1,15 @@
+{
+  "name": "toc",
+  "type": "element",
+  "files": [
+    { "path": "Toc.astro", "type": "part" },
+    { "path": "Items.astro", "type": "part" },
+    { "path": "toc.props.ts", "type": "props" },
+    { "path": "toc.element.ts", "type": "element" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": [],
+  "source": null
+}

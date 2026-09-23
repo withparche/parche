@@ -61,6 +61,10 @@ export default function createElements(): ParcheManifest {
       Checkbox: el('checkbox/Checkbox.astro'),
       RadioGroup: el('radio-group/RadioGroup.astro'),
       Combobox: { entry: el('combobox/Combobox.astro'), style: el('combobox/combobox.css') },
+      Toc: el('toc/Toc.astro'),
+      Share: el('share/Share.astro'),
+      Stat: el('stat/Stat.astro'),
+      Banner: el('banner/Banner.astro'),
     },
   };
 }
