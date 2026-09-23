@@ -1,0 +1,34 @@
+---
+/**
+ * One example: a Preview / Code pair, built with the Tabs element. The
+ * preview keeps its `data-example` wrapper (the browser specs locate
+ * examples by it); the code is the example's own source, highlighted.
+ */
+import Tabs from 'parche:elements/Tabs';
+import { Code } from 'astro/components';
+
+interface Props {
+  element: string;
+  name: string;
+  description?: string;
+  source: string;
+  Component: any;
+}
+const { element, name, description, source, Component } = Astro.props;
+const id = `${element.toLowerCase()}-${name}`;
+// The example imports the element by a relative path; show what a site writes.
+const shown = source.replace(/from '\.\.\/([A-Za-z]+)\.astro'/g, `from 'parche:elements/${element}'`).replace(/from '\.\.\/index'/g, `from 'parche:elements/${element}'`).replace(/from '\.\.\/\.\.\/([a-z-]+)\/([A-Za-z]+)\.astro'/g, "from 'parche:elements/$2'");
+---
+
+<section class="mb-12" aria-labelledby={`ex-${id}`}>
+  <h3 id={`ex-${id}`} class="type-h3 mb-1 capitalize">{name}</h3>
+  {description && <p class="mb-3 text-sm text-muted">{description}</p>}
+  <Tabs id={`tabs-${id}`} items={[{ value: 'preview', label: 'Preview' }, { value: 'code', label: 'Code' }]} label={`${name} example`} variant="pill">
+    <div slot="preview" class="rounded-lg border border-border p-6" data-example={name}>
+      <Component />
+    </div>
+    <div slot="code" class="overflow-hidden rounded-lg border border-border text-sm [&>pre]:overflow-x-auto [&>pre]:p-4">
+      <Code code={shown.trim()} lang="astro" themes={{ light: 'github-light', dark: 'github-dark' }} defaultColor={false} />
+    </div>
+  </Tabs>
+</section>

@@ -14,7 +14,7 @@ duplicate it here.
 
 ## Status
 
-Phases 0 to 5 of the plan are done: 47 elements, the playground, the SSR
+Phases 0 to 5 of the plan are done: 48 elements, the playground, the SSR
 examples' `/elements` page, and the gate — contract, SSR render, build-smoke,
 browser a11y in five projects, SSR smoke on Node and workerd — all in
 `pnpm test` and in CI. What remains is the second-level list in the plan

@@ -1,0 +1,14 @@
+{
+  "name": "aspect-ratio",
+  "type": "element",
+  "files": [
+    { "path": "AspectRatio.astro", "type": "part" },
+    { "path": "aspect-ratio.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" },
+    { "path": "examples/embed.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": [],
+  "source": null
+}

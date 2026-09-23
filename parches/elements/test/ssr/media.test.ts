@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, scriptCount } from './_render';
+import AspectRatio from '../../src/aspect-ratio/AspectRatio.astro';
 import Avatar from '../../src/avatar/Avatar.astro';
 import Image from '../../src/image/Image.astro';
 
@@ -35,5 +36,14 @@ describe('Image', () => {
     expect(html).toMatch(/aspect-square/);
     expect(html).toMatch(/object-cover/);
     expect(html).not.toMatch(/height="/);
+  });
+});
+
+describe('AspectRatio', () => {
+  it('sets the ratio as CSS and stretches the child, no script', async () => {
+    const html = await render(AspectRatio, { ratio: '4 / 3' }, { default: '<img src="/a.png" alt="" />' });
+    expect(html).toMatch(/style="aspect-ratio: 4 \/ 3"[^>]*data-part="root"[^>]*data-ratio="4\/3"/);
+    expect(html).toContain('<img src="/a.png" alt="" />');
+    expect(scriptCount(html)).toBe(0);
   });
 });

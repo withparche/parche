@@ -1,0 +1,21 @@
+---
+/**
+ * AspectRatio — the CSS `aspect-ratio` property on a block, with the child
+ * (an image, a video, an iframe, a map) stretched to fill it. Static: no
+ * script, no padding hacks. The ratio is a prop so content can carry it.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './aspect-ratio.props';
+
+const { props: { ratio }, rest, className, part } = splitProps(schema, Astro.props);
+---
+
+<div
+  class={cn('parche-aspect-ratio relative w-full overflow-hidden [&>*]:absolute [&>*]:inset-0 [&>*]:size-full [&>img]:object-cover [&>video]:object-cover', className)}
+  style={`aspect-ratio: ${ratio.replace(/\s+/g, ' ')}`}
+  {...rest}
+  data-part={part}
+  data-ratio={ratio.replace(/\s+/g, '')}
+>
+  <slot />
+</div>

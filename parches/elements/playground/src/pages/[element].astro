@@ -1,11 +1,13 @@
 ---
 import Playground from '../layouts/Playground.astro';
+import Example from '../components/Example.astro';
+import Badge from 'parche:elements/Badge';
 import { elementIndex, elementMeta, elementSchemas } from 'parche:registry/elements';
 
-// One page per element. Examples are the real `examples/*.astro` files of the
-// element's folder, imported by absolute path from the catalog's `dir`, so
-// what renders here is the element itself, server-rendered — the same output
-// the SSR examples serve and the browser tests inspect.
+// One page per element, laid out like a docs page: what it is and when to
+// use it (from the README's frontmatter), the examples as Preview / Code
+// pairs (the real `examples/*.astro` files, server-rendered), then anatomy,
+// keyboard, no-JS behaviour and props from the catalog.
 export function getStaticPaths() {
   return elementIndex.map((e) => ({ params: { element: e.name.toLowerCase() }, props: { entry: e } }));
 }
@@ -13,45 +15,99 @@ export function getStaticPaths() {
 const { entry } = Astro.props;
 const meta = elementMeta[entry.name];
 const schema = elementSchemas[entry.name];
-
 const slug = entry.dir.split('/').pop()!;
+
 const exampleModules = import.meta.glob<{ default: any }>('../../../src/*/examples/*.astro', { eager: true });
+const exampleSources = import.meta.glob<string>('../../../src/*/examples/*.astro', { query: '?raw', import: 'default', eager: true });
+const readmes = import.meta.glob<{ frontmatter: Record<string, any>; rawContent: () => string }>('../../../src/*/README.md', { eager: true });
+
+const readme = Object.entries(readmes).find(([file]) => file.includes(`/${slug}/README.md`))?.[1];
+const front = readme?.frontmatter ?? {};
+const raw = readme?.rawContent() ?? '';
+// `:::example name` blocks in the README describe each example.
+const descriptions = new Map<string, string>();
+for (const m of raw.matchAll(/:::example (\S+)\n([\s\S]*?):::/g)) descriptions.set(m[1], m[2].trim().replace(/\s+/g, ' '));
+
 const examples = Object.entries(exampleModules)
   .filter(([file]) => file.includes(`/${slug}/examples/`))
-  .map(([file, mod]) => ({ name: file.split('/').pop()!.replace(/\.astro$/, ''), Component: mod.default }));
+  .map(([file, mod]) => {
+    const name = file.split('/').pop()!.replace(/\.astro$/, '');
+    return { name, Component: mod.default, source: exampleSources[file] ?? '', description: descriptions.get(name) };
+  })
+  .sort((a, b) => (a.name === 'basic' ? -1 : b.name === 'basic' ? 1 : a.name.localeCompare(b.name)));
 
 const rootProps = schema?.root?.properties ?? {};
+const partSchemas = schema?.parts ?? {};
+const list = (v: unknown) => (Array.isArray(v) ? v : v ? [v] : []);
 ---
 
 <Playground title={entry.name} description={meta?.description}>
-  <header class="mb-8">
-    <h1 class="type-h1">{entry.name}</h1>
-    <p class="type-body text-muted mt-2">{meta?.description}</p>
-    <dl class="mt-4 grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2">
-      <dt class="text-muted">Parts</dt><dd>{entry.parts.length ? entry.parts.join(', ') : 'single'}</dd>
-      <dt class="text-muted">Interactive</dt><dd>{entry.interactive ? `yes — <${meta?.tag?.name}>` : 'no (zero JS)'}</dd>
-      <dt class="text-muted">Tokens</dt><dd>{meta?.tokens?.join(', ')}</dd>
-      {meta?.a11y && <><dt class="text-muted">APG pattern</dt><dd><a class="text-primary underline" href={meta.a11y.url}>{meta.a11y.pattern}</a></dd></>}
+  <header class="mb-10 border-b border-border pb-8">
+    <div class="mb-3 flex flex-wrap items-center gap-2">
+      <h1 class="type-h1">{entry.name}</h1>
+      {entry.interactive ? <Badge variant="primary">{`<${meta?.tag?.name}>`}</Badge> : <Badge>zero JS</Badge>}
+      {entry.overridden && <Badge variant="warning">ejected</Badge>}
+    </div>
+    <p class="type-body text-muted max-w-2xl">{front.summary ?? meta?.description}</p>
+    {(list(front.whenToUse).length > 0 || list(front.whenNotToUse).length > 0) && (
+      <div class="mt-6 grid gap-6 text-sm sm:grid-cols-2">
+        {list(front.whenToUse).length > 0 && (
+          <div>
+            <p class="mb-1 font-semibold text-heading">Use it for</p>
+            <ul class="list-disc space-y-1 pl-5 text-muted">{list(front.whenToUse).map((t) => <li>{t}</li>)}</ul>
+          </div>
+        )}
+        {list(front.whenNotToUse).length > 0 && (
+          <div>
+            <p class="mb-1 font-semibold text-heading">Not for</p>
+            <ul class="list-disc space-y-1 pl-5 text-muted">{list(front.whenNotToUse).map((t) => <li>{t}</li>)}</ul>
+          </div>
+        )}
+      </div>
+    )}
+    <dl class="mt-6 flex flex-wrap gap-x-8 gap-y-2 text-sm">
+      <div><dt class="inline text-muted">Import </dt><dd class="inline font-mono text-heading">parche:elements/{entry.name}</dd></div>
+      {meta?.a11y && <div><dt class="inline text-muted">APG </dt><dd class="inline"><a class="text-primary underline" href={meta.a11y.url}>{meta.a11y.pattern}</a></dd></div>}
+      {list(front.related).length > 0 && (
+        <div><dt class="inline text-muted">Related </dt><dd class="inline">{list(front.related).map((r, i) => <><a class="text-primary underline" href={`/${String(r).toLowerCase()}`}>{r}</a>{i < list(front.related).length - 1 ? ', ' : ''}</>)}</dd></div>
+      )}
     </dl>
   </header>
 
-  {examples.map(({ name, Component }) => (
-    <section class="mb-10" aria-labelledby={`ex-${name}`}>
-      <h2 id={`ex-${name}`} class="type-h3 mb-3">{name}</h2>
-      <div class="rounded-lg border border-border p-6" data-example={name}>
-        <Component />
-      </div>
+  <section class="mb-12" aria-labelledby="examples">
+    <h2 id="examples" class="type-h2 mb-6">Examples</h2>
+    {examples.map((ex) => <Example element={entry.name} name={ex.name} description={ex.description} source={ex.source} Component={ex.Component} />)}
+  </section>
+
+  {meta?.parts?.length > 0 && (
+    <section class="mb-12" aria-labelledby="anatomy">
+      <h2 id="anatomy" class="type-h2 mb-3">Anatomy</h2>
+      <p class="mb-4 text-sm text-muted">Every part carries <code>data-part</code> and a <code>parche-{slug}-*</code> class; style them from a theme without touching the element.</p>
+      <table class="w-full text-sm">
+        <thead><tr class="text-left text-muted"><th class="py-1 pr-4">Part</th><th class="py-1 pr-4">Element</th><th class="py-1 pr-4">Role</th><th class="py-1 pr-4">States</th><th class="py-1">Notes</th></tr></thead>
+        <tbody>
+          {meta.parts.map((p: any) => (
+            <tr class="border-t border-border align-top">
+              <td class="py-1.5 pr-4 font-mono">{p.name}</td>
+              <td class="py-1.5 pr-4 font-mono text-muted">{p.element}</td>
+              <td class="py-1.5 pr-4 text-muted">{p.role ?? ''}</td>
+              <td class="py-1.5 pr-4 text-muted">{(p.states ?? []).join(', ')}</td>
+              <td class="py-1.5 text-muted">{p.description ?? ''}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </section>
-  ))}
+  )}
 
   {meta?.keyboard && (
-    <section class="mb-10" aria-labelledby="keyboard">
-      <h2 id="keyboard" class="type-h3 mb-3">Keyboard</h2>
+    <section class="mb-12" aria-labelledby="keyboard">
+      <h2 id="keyboard" class="type-h2 mb-3">Keyboard</h2>
       <table class="w-full text-sm">
         <thead><tr class="text-left text-muted"><th class="py-1 pr-4">Key</th><th class="py-1">Does</th></tr></thead>
         <tbody>
           {Object.entries(meta.keyboard).map(([key, does]) => (
-            <tr class="border-t border-border"><td class="py-1 pr-4 font-mono">{key}</td><td class="py-1">{does}</td></tr>
+            <tr class="border-t border-border"><td class="py-1.5 pr-4 font-mono">{key}</td><td class="py-1.5">{does}</td></tr>
           ))}
         </tbody>
       </table>
@@ -59,27 +115,53 @@ const rootProps = schema?.root?.properties ?? {};
   )}
 
   {meta?.noJs && (
-    <section class="mb-10" aria-labelledby="nojs">
-      <h2 id="nojs" class="type-h3 mb-3">Without JavaScript</h2>
-      <p class="type-body">{meta.noJs}</p>
+    <section class="mb-12" aria-labelledby="nojs">
+      <h2 id="nojs" class="type-h2 mb-3">Without JavaScript</h2>
+      <p class="type-body text-muted">{meta.noJs}</p>
     </section>
   )}
 
   {Object.keys(rootProps).length > 0 && (
-    <section class="mb-10" aria-labelledby="props">
-      <h2 id="props" class="type-h3 mb-3">Props</h2>
+    <section class="mb-12" aria-labelledby="props">
+      <h2 id="props" class="type-h2 mb-3">Props</h2>
       <table class="w-full text-sm">
-        <thead><tr class="text-left text-muted"><th class="py-1 pr-4">Prop</th><th class="py-1 pr-4">Type</th><th class="py-1">Default</th></tr></thead>
+        <thead><tr class="text-left text-muted"><th class="py-1 pr-4">Prop</th><th class="py-1 pr-4">Type</th><th class="py-1 pr-4">Default</th><th class="py-1">Help</th></tr></thead>
         <tbody>
           {Object.entries(rootProps).map(([prop, def]: [string, any]) => (
-            <tr class="border-t border-border">
-              <td class="py-1 pr-4 font-mono">{prop}</td>
-              <td class="py-1 pr-4">{def.enum ? def.enum.join(' | ') : def.type}</td>
-              <td class="py-1 font-mono">{def.default !== undefined ? String(def.default) : ''}</td>
+            <tr class="border-t border-border align-top">
+              <td class="py-1.5 pr-4 font-mono">{prop}{schema?.root?.required?.includes(prop) && <span class="text-danger" aria-hidden="true">*</span>}</td>
+              <td class="py-1.5 pr-4 font-mono text-muted">{def.enum ? def.enum.join(' | ') : def.type ?? (def.anyOf ? 'union' : 'object')}</td>
+              <td class="py-1.5 pr-4 font-mono text-muted">{def.default !== undefined ? JSON.stringify(def.default) : ''}</td>
+              <td class="py-1.5 text-muted">{def.help ?? def.description ?? ''}</td>
             </tr>
           ))}
         </tbody>
       </table>
+      {Object.entries(partSchemas).map(([part, ps]: [string, any]) => (
+        <div class="mt-6">
+          <h3 class="type-h3 mb-2">{entry.name}.{part}</h3>
+          <table class="w-full text-sm">
+            <thead><tr class="text-left text-muted"><th class="py-1 pr-4">Prop</th><th class="py-1 pr-4">Type</th><th class="py-1 pr-4">Default</th><th class="py-1">Help</th></tr></thead>
+            <tbody>
+              {Object.entries(ps?.properties ?? {}).map(([prop, def]: [string, any]) => (
+                <tr class="border-t border-border align-top">
+                  <td class="py-1.5 pr-4 font-mono">{prop}</td>
+                  <td class="py-1.5 pr-4 font-mono text-muted">{def.enum ? def.enum.join(' | ') : def.type ?? 'object'}</td>
+                  <td class="py-1.5 pr-4 font-mono text-muted">{def.default !== undefined ? JSON.stringify(def.default) : ''}</td>
+                  <td class="py-1.5 text-muted">{def.help ?? def.description ?? ''}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ))}
+    </section>
+  )}
+
+  {meta?.tokens?.length > 0 && (
+    <section class="mb-12" aria-labelledby="tokens">
+      <h2 id="tokens" class="type-h2 mb-3">Tokens</h2>
+      <p class="text-sm text-muted">{meta.tokens.map((t: string) => <code class="mr-2 inline-block rounded bg-surface px-1.5 py-0.5 font-mono text-xs text-heading">--ds-{t}</code>)}</p>
     </section>
   )}
 </Playground>

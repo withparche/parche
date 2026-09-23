@@ -31,6 +31,7 @@ export default function createElements(): ParcheManifest {
       Kbd: el('kbd/Kbd.astro'),
       Code: el('code/Code.astro'),
       Prose: el('prose/Prose.astro'),
+      AspectRatio: el('aspect-ratio/AspectRatio.astro'),
       Video: el('video/Video.astro'),
       Skeleton: el('skeleton/Skeleton.astro'),
       Breadcrumb: el('breadcrumb/Breadcrumb.astro'),
