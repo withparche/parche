@@ -1,12 +1,18 @@
 ---
 import Container from '../Container.astro';
-const widths = ['sm', 'md', 'lg', 'xl', 'full'] as const;
+const widths = [
+  { width: 'sm', max: '48rem' },
+  { width: 'md', max: '64rem' },
+  { width: 'lg', max: '72rem' },
+  { width: 'xl', max: '80rem' },
+  { width: 'full', max: 'none' },
+] as const;
 ---
 
 <div class="space-y-3">
-  {widths.map((width) => (
+  {widths.map(({ width, max }) => (
     <Container width={width} class="rounded-md border border-dashed border-border py-2 text-center text-sm text-muted">
-      width="{width}"
+      width="{width}" · max {max}
     </Container>
   ))}
 </div>

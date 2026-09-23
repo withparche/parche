@@ -21,7 +21,9 @@ import Container from 'parche:elements/Container';
 ```
 
 :::example basic
-The five widths.
+The five widths. A container never exceeds its parent, so in a column
+narrower than 64rem (this page's, for one) md, lg, xl and full all fill it
+and only sm stands apart; the labels show the real caps.
 :::
 
 ## Anatomy
