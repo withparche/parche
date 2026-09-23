@@ -42,7 +42,7 @@ const list = (v: unknown) => (Array.isArray(v) ? v : v ? [v] : []);
 ---
 
 <Playground title={entry.name} description={meta?.description}>
-  <header class="mb-10 border-b border-border pb-8">
+  <header class="docs-ui mb-10 border-b border-border pb-8">
     <div class="mb-3 flex flex-wrap items-center gap-2">
       <h1 class="type-h1">{entry.name}</h1>
       {entry.interactive ? <Badge variant="primary">{`<${meta?.tag?.name}>`}</Badge> : <Badge>zero JS</Badge>}
@@ -75,12 +75,12 @@ const list = (v: unknown) => (Array.isArray(v) ? v : v ? [v] : []);
   </header>
 
   <section class="mb-12" aria-labelledby="examples">
-    <h2 id="examples" class="type-h2 mb-6">Examples</h2>
+    <h2 id="examples" class="docs-ui type-h2 mb-6">Examples</h2>
     {examples.map((ex) => <Example element={entry.name} name={ex.name} description={ex.description} source={ex.source} Component={ex.Component} />)}
   </section>
 
   {meta?.parts?.length > 0 && (
-    <section class="mb-12" aria-labelledby="anatomy">
+    <section class="docs-ui mb-12" aria-labelledby="anatomy">
       <h2 id="anatomy" class="type-h2 mb-3">Anatomy</h2>
       <p class="mb-4 text-sm text-muted">Every part carries <code>data-part</code> and a <code>parche-{slug}-*</code> class; style them from a theme without touching the element.</p>
       <table class="w-full text-sm">
@@ -101,7 +101,7 @@ const list = (v: unknown) => (Array.isArray(v) ? v : v ? [v] : []);
   )}
 
   {meta?.keyboard && (
-    <section class="mb-12" aria-labelledby="keyboard">
+    <section class="docs-ui mb-12" aria-labelledby="keyboard">
       <h2 id="keyboard" class="type-h2 mb-3">Keyboard</h2>
       <table class="w-full text-sm">
         <thead><tr class="text-left text-muted"><th class="py-1 pr-4">Key</th><th class="py-1">Does</th></tr></thead>
@@ -115,14 +115,14 @@ const list = (v: unknown) => (Array.isArray(v) ? v : v ? [v] : []);
   )}
 
   {meta?.noJs && (
-    <section class="mb-12" aria-labelledby="nojs">
+    <section class="docs-ui mb-12" aria-labelledby="nojs">
       <h2 id="nojs" class="type-h2 mb-3">Without JavaScript</h2>
       <p class="type-body text-muted">{meta.noJs}</p>
     </section>
   )}
 
   {Object.keys(rootProps).length > 0 && (
-    <section class="mb-12" aria-labelledby="props">
+    <section class="docs-ui mb-12" aria-labelledby="props">
       <h2 id="props" class="type-h2 mb-3">Props</h2>
       <table class="w-full text-sm">
         <thead><tr class="text-left text-muted"><th class="py-1 pr-4">Prop</th><th class="py-1 pr-4">Type</th><th class="py-1 pr-4">Default</th><th class="py-1">Help</th></tr></thead>
@@ -159,7 +159,7 @@ const list = (v: unknown) => (Array.isArray(v) ? v : v ? [v] : []);
   )}
 
   {meta?.tokens?.length > 0 && (
-    <section class="mb-12" aria-labelledby="tokens">
+    <section class="docs-ui mb-12" aria-labelledby="tokens">
       <h2 id="tokens" class="type-h2 mb-3">Tokens</h2>
       <p class="text-sm text-muted">{meta.tokens.map((t: string) => <code class="mr-2 inline-block rounded bg-surface px-1.5 py-0.5 font-mono text-xs text-heading">--ds-{t}</code>)}</p>
     </section>

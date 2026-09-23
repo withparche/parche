@@ -1,0 +1,67 @@
+/* The playground's own look: documentation, not a themed site. A fixed
+   palette of blacks for everything that is chrome (bar, sidebar, headings,
+   tables, code), so switching the site theme or the colour mode only
+   changes what is inside a Preview. The chrome that is built with elements
+   (the nav Sheet, the Preview / Code tabs, badges) gets the same palette by
+   overriding the design tokens on those parts only. */
+:root {
+  --doc-bg: #0a0a0b;
+  --doc-surface: #121214;
+  --doc-hover: #1b1b1f;
+  --doc-border: #27272b;
+  --doc-text: #ededef;
+  --doc-muted: #9b9ba4;
+  --doc-accent: #ffffff;
+  --doc-accent-soft: #202024;
+}
+
+body {
+  background: var(--doc-bg);
+  color: var(--doc-text);
+  transition: none;
+}
+
+.docs-ui,
+.docs-tabs > [data-part='list'] {
+  --ds-color-background: var(--doc-bg);
+  --ds-color-foreground: var(--doc-text);
+  --ds-color-surface: var(--doc-surface);
+  --ds-color-surface-hover: var(--doc-hover);
+  --ds-color-on-surface: var(--doc-text);
+  --ds-color-border: var(--doc-border);
+  --ds-color-heading: var(--doc-text);
+  --ds-color-text: var(--doc-text);
+  --ds-color-muted: var(--doc-muted);
+  --ds-color-primary: var(--doc-accent);
+  --ds-color-on-primary: var(--doc-bg);
+  --ds-color-primary-soft: var(--doc-accent-soft);
+  --ds-color-ring: var(--doc-accent);
+  --ds-color-highlight: var(--doc-accent);
+  --ds-color-overlay: rgb(0 0 0 / 0.6);
+  /* The `.type-*` classes read the Tailwind bridges (`--color-heading`…),
+     which resolve on :root; override those too. */
+  --color-background: var(--doc-bg);
+  --color-foreground: var(--doc-text);
+  --color-surface: var(--doc-surface);
+  --color-surface-hover: var(--doc-hover);
+  --color-border: var(--doc-border);
+  --color-heading: var(--doc-text);
+  --color-text: var(--doc-text);
+  --color-muted: var(--doc-muted);
+  --color-primary: var(--doc-accent);
+  --color-on-primary: var(--doc-bg);
+  --color-primary-soft: var(--doc-accent-soft);
+  --color-ring: var(--doc-accent);
+  color: var(--doc-text);
+}
+
+/* The preview canvas is the one place the site theme shows. */
+.docs-preview {
+  background: var(--ds-color-background);
+  color: var(--ds-color-text);
+}
+
+/* Code is always dark: Shiki's github-dark on the docs surface. */
+.astro-code {
+  background-color: var(--doc-surface) !important;
+}

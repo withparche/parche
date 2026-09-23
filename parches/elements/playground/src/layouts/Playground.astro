@@ -1,11 +1,13 @@
 ---
 /**
- * The playground's shell: a docs layout. A slim bar with the brand and the
- * theme controls, a sticky sidebar with the elements by group, the page in
- * the middle, and on narrow screens the same navigation in a Sheet. The
- * navigation is built with the elements themselves.
+ * The playground's shell: a docs layout in a fixed palette of blacks. A slim
+ * bar with the brand and the theme controls, a sticky sidebar with the
+ * elements by group, the page in the middle, and on narrow screens the same
+ * navigation in a Sheet. The theme controls change what is inside each
+ * Preview, never the chrome (see styles/docs.css).
  */
 import 'parche:config/styles';
+import '../styles/docs.css';
 import BaseLayout from 'parche:layouts/BaseLayout';
 import ThemeToggle from 'parche:components/ThemeToggle';
 import ThemeSelector from 'parche:components/ThemeSelector';
@@ -24,13 +26,13 @@ const metadata = { title: `${title} — ${config.brand.name}`, description: desc
 const nav = grouped(elementIndex.map((e) => e.name));
 const current = Astro.url.pathname.replace(/\/$/, '');
 const linkClass = (name: string) =>
-  `block rounded-md px-2 py-1 text-sm no-underline transition-colors ${current === `/${name.toLowerCase()}` ? 'bg-primary-soft font-medium text-primary' : 'text-muted hover:bg-surface-hover hover:text-heading'}`;
+  `block rounded-md px-2 py-1 text-sm no-underline transition-colors ${current === `/${name.toLowerCase()}` ? 'bg-primary-soft font-medium text-heading' : 'text-muted hover:bg-surface-hover hover:text-heading'}`;
 ---
 
 <BaseLayout metadata={metadata} config={config} lang="en">
   <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-on-primary">Skip to content</a>
 
-  <header class="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
+  <header class="docs-ui sticky top-0 z-40 border-b border-border bg-background">
     <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-2.5">
       <div class="flex items-center gap-2">
         <Button variant="ghost" size="sm" class="lg:hidden size-9 p-0" command="show-modal" commandfor="playground-nav" icon="tabler:menu-2" label="Open navigation" />
@@ -38,6 +40,7 @@ const linkClass = (name: string) =>
         <span class="hidden text-sm text-muted sm:inline">· {elementIndex.length} elements</span>
       </div>
       <div class="flex items-center gap-2">
+        <span class="hidden text-xs text-muted md:inline">Previews:</span>
         <ThemeSelector />
         <ThemeToggle />
       </div>
@@ -45,7 +48,7 @@ const linkClass = (name: string) =>
   </header>
 
   <div class="mx-auto grid max-w-7xl gap-10 px-4 py-8 lg:grid-cols-[14rem_minmax(0,1fr)]">
-    <aside class="hidden lg:block">
+    <aside class="docs-ui hidden lg:block">
       <nav aria-label="Elements" class="sticky top-16 max-h-[calc(100vh-5rem)] overflow-y-auto pr-2">
         {nav.map((group) => (
           <div class="mb-5">
@@ -65,7 +68,7 @@ const linkClass = (name: string) =>
     </main>
   </div>
 
-  <Sheet id="playground-nav" title="Elements" side="left" closeLabel="Close navigation">
+  <Sheet id="playground-nav" title="Elements" side="left" closeLabel="Close navigation" class="docs-ui">
     <nav aria-label="Elements" class="-mt-2">
       {nav.map((group) => (
         <div class="mb-4">
@@ -86,18 +89,5 @@ const linkClass = (name: string) =>
      land below it, not under it. */
   html {
     scroll-padding-top: 4.5rem;
-  }
-
-  /* Shiki dual themes: colours come from the variables the Code component
-     writes, picked by the page's colour mode. */
-  .astro-code,
-  .astro-code span {
-    color: var(--shiki-light);
-    background-color: var(--shiki-light-bg);
-  }
-  .dark .astro-code,
-  .dark .astro-code span {
-    color: var(--shiki-dark);
-    background-color: var(--shiki-dark-bg);
   }
 </style>

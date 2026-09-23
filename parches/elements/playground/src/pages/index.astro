@@ -8,6 +8,7 @@ const byName = new Map(elementIndex.map((e) => [e.name, e]));
 ---
 
 <Playground title="Elements">
+  <div class="docs-ui">
   <h1 class="type-h1 mb-2">Elements</h1>
   <p class="type-body text-muted mb-10 max-w-2xl">
     {elementIndex.length} building blocks on tokens and the platform: server-rendered, accessible by contract, a custom element only where there is interactivity.
@@ -25,7 +26,7 @@ const byName = new Map(elementIndex.map((e) => [e.name, e]));
               <div class="flex items-center justify-between gap-2">
                 <a href={`/${name.toLowerCase()}`} class="font-semibold text-heading no-underline hover:text-primary">{name}</a>
                 {e.interactive ? (
-                  <span class="rounded-full bg-primary-soft px-2 py-0.5 text-xs text-primary">{`<${meta?.tag?.name}>`}</span>
+                  <span class="rounded-full bg-primary-soft px-2 py-0.5 text-xs text-heading">{`<${meta?.tag?.name}>`}</span>
                 ) : (
                   <span class="rounded-full border border-border px-2 py-0.5 text-xs text-muted">zero JS</span>
                 )}
@@ -37,4 +38,5 @@ const byName = new Map(elementIndex.map((e) => [e.name, e]));
       </ul>
     </section>
   ))}
+  </div>
 </Playground>
