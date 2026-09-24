@@ -10,7 +10,7 @@ const { tagline, title, subtitle, icons = [], images = [], layout = 'wrap' } = A
 
 const brands = [
   ...icons.map((icon) => ({ icon })),
-  ...images.filter((image) => image.src).map((image) => ({ image })),
+  ...images.map((image) => ({ image })),
 ];
 ---
 
@@ -23,7 +23,7 @@ const brands = [
         {'icon' in brand ? (
           <Icon name={brand.icon} class="w-12 h-auto text-muted" />
         ) : (
-          <Image src={brand.image.src!} alt={brand.image.alt ?? ''} width={120} height={48} class="max-h-12" />
+          <Image src={brand.image.src} alt={brand.image.alt} width={120} height={48} class="max-h-12" />
         )}
       </Carousel.Slide>
     ))}

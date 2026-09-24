@@ -1,12 +1,13 @@
 import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
+import { image } from '../_shared/content';
 
 export const schema = z.object({
   tagline: z.string().optional(),
   title: z.string().optional(),
   subtitle: z.string().optional().meta({ input: 'textarea' }),
   icons: z.array(z.string()).default([]).meta({ help: 'Icon names (e.g. tabler:brand-github)' }),
-  images: z.array(z.object({ src: z.string().optional(), alt: z.string().optional() })).default([]),
+  images: z.array(image).default([]),
   layout: z.enum(['wrap', 'carousel']).default('wrap').meta({ help: 'Wrapped rows, or a carousel four per view.' }),
 });
 

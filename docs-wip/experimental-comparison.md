@@ -75,8 +75,9 @@ otherwise, measured on 2026-09-23 at the branch head.
 
 ## Recommendation
 
-The model holds: the two fixture pages from the redesign are written as
-plain JSON with nothing invented, and every gate is green. The costs are the
+The model holds: four fixture pages from the redesign (launch, docs,
+pricing, local business) are written as plain JSON with nothing invented,
+and every gate is green. The costs are the
 content growth, which is a one-line decision to revisit, and the migration,
 which is scripted. The builder migration is the remaining piece and lives
 in its own repository; it reads the catalog this branch already emits.
