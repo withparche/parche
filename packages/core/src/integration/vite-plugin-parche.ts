@@ -277,8 +277,9 @@ function generateWidgetSchemasModule(registry: ResolvedRegistry): string {
 
     const key = extractWidgetKey(virtualId);
 
-    // Layout widgets (layout/Header, layout/Footer) are structural — skip builder palette
-    if (key.startsWith('layout/')) continue;
+    // Layout widgets (layout/Header, layout/Footer) are structural: in the
+    // catalog, so the validator knows them, but hidden from the builder palette.
+    const hidden = key.startsWith('layout/');
 
     const propsPath = filePath.replace(/\.astro$/, '.props.ts');
     const hasProps = fs.existsSync(propsPath);
@@ -308,6 +309,7 @@ function generateWidgetSchemasModule(registry: ResolvedRegistry): string {
   defaultVariants: ${variantsJson},
   slots: ${m}.meta?.slots ?? {},
   wrapper: ${m}.meta?.widget?.wrapper !== false,
+  hidden: ${hidden},
   ui: ${m}.meta?.ui ?? {},
 };`);
       index++;
@@ -322,6 +324,7 @@ function generateWidgetSchemasModule(registry: ResolvedRegistry): string {
   defaultVariants: ${variantsJson},
   slots: {},
   wrapper: true,
+  hidden: ${hidden},
   ui: {},
 };`);
     }

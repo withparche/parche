@@ -111,8 +111,24 @@ export const meta: WidgetMeta = {
 };
 ```
 
-`allow`, `min` and `max` are read by the builder and by the build check, not by
+`allow`, `min` and `max` are read by the builder and by the validator, not by
 zod: the schema does not know the registry.
+
+## Validation
+
+`validateTree(nodes, ctx)` from `@parche/astro/content` checks a tree against
+the catalog: unknown widgets, slots a widget does not declare, widgets a slot
+does not allow, `min` and `max`, the depth limit, and a wrapper tone nobody
+registered. In dev, the renderer runs it on every page and layout and prints
+each issue with its path:
+
+```
+[parche] sections[2].slots.bogus: "Section" has no slot "bogus" (it declares: default)
+[parche] sections[2]: tone "neon" is not registered (known: default, muted, dark, primary, glow, gradient, dots)
+```
+
+The catalog it reads imports every widget's schema, so it is loaded only in
+dev; a production render never touches it.
 
 ## Migrating content
 
