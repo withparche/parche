@@ -4,6 +4,7 @@ import { validateTree } from '../src/content/validate.ts';
 
 const widgets = {
   Section: { slots: { default: {} } },
+  Switch: { slots: { '*': { allow: ['Prose', 'Image'] } } },
   Hero: { slots: { media: { allow: ['Image', 'Form'], max: 1 } }, wrapper: false },
   Columns: { slots: { default: { allow: ['Column'], min: 2, max: 4 } } },
   Column: { slots: { default: {} } },
@@ -43,6 +44,14 @@ test('unknown widgets, undeclared slots and disallowed children are reported wit
   assert.match(issues[1].message, /declares no slots/);
   assert.match(issues[2].message, /"Prose" is not allowed in "Hero".media/);
   assert.match(issues[3].message, /no slot "aside" \(it declares: media\)/);
+});
+
+test('a `*` slot accepts any name, with its own allow list', () => {
+  const ok = validateTree([{ widget: 'Switch', slots: { agency: [{ widget: 'Prose' }], saas: [{ widget: 'Image' }] } }], ctx);
+  assert.deepEqual(ok, []);
+  const bad = validateTree([{ widget: 'Switch', slots: { agency: [{ widget: 'Form' }] } }], ctx);
+  assert.equal(bad.length, 1);
+  assert.match(bad[0].message, /"Form" is not allowed in "Switch".agency/);
 });
 
 test('min, max, depth and tones are checked', () => {

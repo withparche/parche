@@ -51,7 +51,9 @@ export function validateTree(nodes: Node[], ctx: ValidateContext, base = 'sectio
       }
     }
     for (const [slot, children] of Object.entries(node.slots ?? {})) {
-      const meta = shape.slots?.[slot];
+      // A widget whose slot names come from its content (a Switch, one slot
+      // per option) declares `*`; any name is then accepted with that meta.
+      const meta = shape.slots?.[slot] ?? shape.slots?.['*'];
       const slotPath = `${path}.slots.${slot}`;
       if (!meta) {
         const known = Object.keys(shape.slots ?? {});

@@ -1,0 +1,33 @@
+---
+/**
+ * Side-by-side columns. The children are Column widgets, filled from the
+ * default slot; the count comes from the content, the ratio from the props,
+ * and below the `stack` breakpoint everything stacks.
+ */
+import { schema, type Props } from './Columns.props';
+
+const { ratio, gap, align, stack } = schema.parse(Astro.props) as Props;
+
+const gaps = { sm: 'gap-4 md:gap-6', md: 'gap-6 md:gap-10', lg: 'gap-8 md:gap-16' };
+const aligns = { start: 'items-start', center: 'items-center', stretch: 'items-stretch' };
+---
+
+<div class:list={['parche-columns grid', gaps[gap], aligns[align]]} data-ratio={ratio} data-stack={stack}>
+  <slot />
+</div>
+
+<style>
+  /* One column until the stack breakpoint; then the template the children
+     count and the ratio decide. Two columns follow the ratio, more are equal. */
+  .parche-columns {
+    grid-template-columns: minmax(0, 1fr);
+    --template: repeat(2, minmax(0, 1fr));
+  }
+  .parche-columns:has(> :nth-child(3)) { --template: repeat(3, minmax(0, 1fr)); }
+  .parche-columns:has(> :nth-child(4)) { --template: repeat(4, minmax(0, 1fr)); }
+  .parche-columns[data-ratio="wide-start"]:not(:has(> :nth-child(3))) { --template: 2fr minmax(0, 1fr); }
+  .parche-columns[data-ratio="wide-end"]:not(:has(> :nth-child(3))) { --template: minmax(0, 1fr) 2fr; }
+  @media (min-width: 40rem) { .parche-columns[data-stack="sm"] { grid-template-columns: var(--template); } }
+  @media (min-width: 48rem) { .parche-columns[data-stack="md"] { grid-template-columns: var(--template); } }
+  @media (min-width: 64rem) { .parche-columns[data-stack="lg"] { grid-template-columns: var(--template); } }
+</style>

@@ -1,0 +1,15 @@
+---
+/**
+ * One column of a Columns widget. Nested nodes render compact, so a column
+ * stacks its children with a modest gap.
+ */
+import type { HTMLTag } from 'astro/types';
+import { schema, type Props } from './Column.props';
+
+const { as, sticky, label } = schema.parse(Astro.props) as Props;
+const Tag = as as HTMLTag;
+---
+
+<Tag class:list={['parche-column flex flex-col gap-8 min-w-0', sticky && 'md:sticky md:top-24 md:self-start']} aria-label={label}>
+  <slot />
+</Tag>

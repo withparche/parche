@@ -1,0 +1,24 @@
+---
+/**
+ * A segmented control over the Tabs element: each option's content comes from
+ * the slot named by its value. The Tabs element takes the panels as slots of
+ * the same names; Astro cannot forward a slot under a name from a loop
+ * variable, so up to six are forwarded by position.
+ */
+import Tabs from 'parche:elements/Tabs';
+import { schema, type Props } from './Switch.props';
+
+const { options, value, syncKey, variant, label, align } = schema.parse(Astro.props) as Props;
+const name = (i: number) => options[i]?.value ?? `__none-${i}`;
+---
+
+<div class:list={['parche-switch', align === 'center' && 'text-center']} data-align={align}>
+  <Tabs items={options} value={value} syncKey={syncKey} variant={variant} label={label}>
+    <Fragment slot={name(0)}><slot name={name(0)} /></Fragment>
+    <Fragment slot={name(1)}><slot name={name(1)} /></Fragment>
+    <Fragment slot={name(2)}><slot name={name(2)} /></Fragment>
+    <Fragment slot={name(3)}><slot name={name(3)} /></Fragment>
+    <Fragment slot={name(4)}><slot name={name(4)} /></Fragment>
+    <Fragment slot={name(5)}><slot name={name(5)} /></Fragment>
+  </Tabs>
+</div>
