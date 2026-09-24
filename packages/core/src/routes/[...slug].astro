@@ -159,8 +159,10 @@ if (mode === 'page' && pageData) {
     : `${resolved.title} — ${config.brand.name}`;
   pageMetadata = resolved;
 
+  // Only a Markdown page has a body to render. A JSON entry renders to an
+  // empty component, which left an empty prose block at the end of the page.
   const pageEntry = await getEntry('pages', entryId);
-  if (pageEntry) {
+  if (pageEntry && (pageEntry as any).body?.trim()) {
     try {
       const { Content } = await render(pageEntry);
       PageMarkdownContent = Content;

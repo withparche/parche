@@ -47,6 +47,8 @@ test('a root is wrapped once, a nested node never, and the wrapper itself is not
   expect(explicit.match(/data-wrap/g)?.length).toBe(1);
   const bare = await render(Node, { node: { widget: 'Leaf', props: { text: 'x' } }, widgets, wrapper: null, wrap: true });
   expect(bare).toBe('<p data-leaf>x</p>');
+  const fullBleed = await render(Node, { node: { widget: 'Leaf', props: { text: 'x' } }, widgets, wrapper, unwrapped: ['Leaf'], wrap: true });
+  expect(fullBleed).toBe('<p data-leaf>x</p>');
 });
 
 test('an Outlet places the page trees (wrapped) and the pre-rendered content by name', async () => {

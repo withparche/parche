@@ -18,8 +18,8 @@ const colClass = columns === '2' ? 'grid-cols-2' : columns === '3' ? 'grid-cols-
   <Heading {title} {subtitle} {tagline} width="sm" />
 
   <div class:list={['md:flex md:gap-16', reversed && 'md:flex-row-reverse']}>
-    <div class:list={['self-center', hasMedia ? 'md:basis-1/2' : 'w-full']}>
-      {content && <div class="mb-12 text-lg text-muted" set:html={content} />}
+    <div class:list={['self-center min-w-0', hasMedia ? 'md:basis-1/2' : 'w-full']}>
+      {content && <div class="mb-12 text-lg text-muted [&_pre]:max-w-full [&_pre]:overflow-x-auto [&_pre]:text-sm" set:html={content} />}
 
       {callToAction?.text && (
         <div class="mb-8">

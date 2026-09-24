@@ -6,7 +6,7 @@
  * fills the widget's slots from the node's.
  */
 import { loadWidgets } from 'parche:registry/widgets';
-import { wrapper as wrapperName } from 'parche:config/layout';
+import { wrapper as wrapperName, unwrapped } from 'parche:config/layout';
 import { resolveAssets } from '../utils/assets.js';
 import { expandPresets } from '../utils/presets.js';
 import type { Node as NodeData } from '../content/node';
@@ -76,4 +76,4 @@ if (import.meta.env.DEV || Astro.isPrerendered) {
 }
 ---
 
-{nodes.map((node) => <Node node={node} widgets={widgets} wrapper={wrapper} wrap={wrap} outlets={outlets} />)}
+{nodes.map((node) => <Node node={node} widgets={widgets} wrapper={wrapper} unwrapped={unwrapped} wrap={wrap} outlets={outlets} />)}
