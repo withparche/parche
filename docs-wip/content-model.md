@@ -127,8 +127,10 @@ each issue with its path:
 [parche] sections[2]: tone "neon" is not registered (known: default, muted, dark, primary, glow, gradient, dots)
 ```
 
-The catalog it reads imports every widget's schema, so it is loaded only in
-dev; a production render never touches it.
+In a build, a prerendered page with issues fails the build with the same
+lines, which is the check CI runs; a page rendered on a server at request
+time is not checked, so the catalog, which imports every widget's schema,
+never loads on a request.
 
 ## Migrating content
 

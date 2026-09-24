@@ -38,8 +38,10 @@ otherwise, measured on 2026-09-23 at the branch head.
 - **Everything the builder needs is data.** Slots, wrapper and hidden
   flags in the catalog; tones and the wrapper in `parche:config/layout`; a
   pure validator; presets as files; an optional node id.
-- **Errors say where.** `sections[2].slots.bogus: "Section" has no slot
-  "bogus"` in dev, from the same function a CLI check will use.
+- **Errors say where, and fail the build.** `sections[2].slots.bogus:
+  "Section" has no slot "bogus"` is a warning in dev and a failed build for
+  a prerendered page, from one function; a server-rendered request is never
+  checked.
 
 ## What it cost
 
@@ -66,8 +68,6 @@ otherwise, measured on 2026-09-23 at the branch head.
 - Markdown pages have no leaf widget tag. Plain remark cannot render an
   Astro component; the honest path is MDX, or splitting the body around
   widget nodes. Not started.
-- Validation runs in dev only. A `check` command for CI needs to evaluate
-  `.props.ts` outside Astro; not started.
 - Component tokens have a mechanism and a rule but no first case.
 - The redesign's remaining widgets and elements (SubNav, Comparison,
   Changelog, Team, Lightbox, CommandPalette, Countdown…) are leaves and

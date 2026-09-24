@@ -51,11 +51,12 @@ if (import.meta.env.DEV && wrapperName && !wrapper) {
   console.warn(`[parche] The wrapper widget "${wrapperName}" is declared but not registered; roots render bare.`);
 }
 
-// In dev, check the trees against the catalog: slots a widget does not
-// declare, widgets a slot does not allow, counts, depth, tones. The catalog
-// imports every widget's schema, so it is loaded here only, and only in dev;
-// the production render path never touches it.
-if (import.meta.env.DEV) {
+// Check the trees against the catalog: slots a widget does not declare,
+// widgets a slot does not allow, counts, depth, tones. In dev every issue is
+// a warning with its path; in a build, a prerendered page with issues fails
+// the build, which is the CI check. The catalog imports every widget's
+// schema, so it is loaded only here and never on a server-rendered request.
+if (import.meta.env.DEV || Astro.isPrerendered) {
   const [{ widgetMeta }, { tones }, { validateTree }] = await Promise.all([
     import('parche:registry/widgetSchemas'),
     import('parche:config/layout'),
@@ -66,6 +67,11 @@ if (import.meta.env.DEV) {
     ...validateTree(rawNodes, ctx, wrap ? 'sections' : 'layout'),
     ...Object.entries(rawOutlets?.nodes ?? {}).flatMap(([name, tree]) => validateTree(tree, ctx, name === 'default' ? 'sections' : `slots.${name}`)),
   ];
+  if (issues.length && !import.meta.env.DEV) {
+    throw new Error(
+      `[parche] ${issues.length} content issue(s) on ${Astro.url.pathname}:\n` + issues.map((i) => `  ${i.path}: ${i.message}`).join('\n'),
+    );
+  }
   for (const issue of issues) console.warn(`[parche] ${issue.path}: ${issue.message}`);
 }
 ---
