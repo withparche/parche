@@ -13,7 +13,7 @@ const { title, subtitle, tagline, stats, note } = schema.parse(Astro.props) as P
 <Heading {title} {subtitle} {tagline} />
 
 {stats.length > 0 && (
-  <div class="parche-stats grid grid-cols-2 md:grid-cols-4 gap-8">
+  <div class="parche-stats grid grid-cols-[repeat(auto-fit,minmax(11rem,1fr))] gap-x-8 gap-y-6">
     {stats.map(({ value, unit, label, icon, source, date, href }) => (
       <div class="parche-stat-item">
         <Stat value={unit ? `${value}${unit}` : value} label={label} icon={icon} />

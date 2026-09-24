@@ -26,6 +26,8 @@ test('Stats shows value and unit, and the source and date under each number, lin
   expect(html).toMatch(/p75 · 41,200 sessions[\s\S]*28 days/);
   expect(html).toContain('href="https://example.com/crux"');
   expect(html).toContain('INP');
+  // Fits whatever width it is given: four in a band, two by two in half a column.
+  expect(html).toContain('grid-cols-[repeat(auto-fit,minmax(11rem,1fr))]');
 });
 
 test('Testimonials carries name, role, date and a link to where the quote was said', async () => {
