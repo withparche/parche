@@ -3,7 +3,7 @@
  * Blog post template — v1 SinglePost style.
  * Structure: header (meta → title → excerpt → image) → prose content → tags + share → ToBlogLink
  */
-import DynamicRenderer from 'parche:DynamicRenderer';
+import NodeRenderer from 'parche:NodeRenderer';
 import BlogPostHeader from 'parche:widgets/blog/BlogPostHeader';
 import ShareButtons from 'parche:widgets/blog/ShareButtons';
 import ToBlogLink from 'parche:widgets/blog/ToBlogLink';
@@ -42,7 +42,7 @@ const pageUrl = Astro.url.href;
 ---
 
 {data.sections && data.sections.length > 0 && (
-  <DynamicRenderer sections={data.sections} />
+  <NodeRenderer nodes={data.sections} wrap />
 )}
 
 <section class="py-8 sm:py-16 lg:py-20 mx-auto">

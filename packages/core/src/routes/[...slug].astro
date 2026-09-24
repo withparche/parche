@@ -3,7 +3,7 @@ import 'parche:config/styles';
 import BaseLayout from 'parche:layouts/BaseLayout';
 import ThemePanel from 'parche:components/ThemePanel';
 import LayoutRenderer from 'parche:LayoutRenderer';
-import DynamicRenderer from 'parche:DynamicRenderer';
+import NodeRenderer from 'parche:NodeRenderer';
 import config from 'parche:config';
 import { templateMap } from 'parche:registry/templates';
 import { defaultLocale, locales } from 'parche:config/i18n';
@@ -146,29 +146,18 @@ if (mode === 'resolver' && resolvedApp) {
 
 // ---- Page mode: standard page content ----
 let pageMetadata: any = null;
-let pageTemplate: string = 'dynamic';
-let PageTemplateComponent: any = null;
 let PageMarkdownContent: any = null;
 let pageLayoutName: string = 'default';
 
 if (mode === 'page' && pageData) {
   const slugMap = await buildSlugMap();
   alternates = getAlternateUrls(pageKey, slugMap, defaultLocale, Astro.site);
-  pageTemplate = pageData.template || 'dynamic';
 
   const resolved = resolveMetadata(pageData, config, { locale });
   resolved.title = pageKey === 'home'
     ? config.brand.name
     : `${resolved.title} — ${config.brand.name}`;
   pageMetadata = resolved;
-
-  PageTemplateComponent = pageTemplate !== 'dynamic' ? templateMap[pageTemplate] : null;
-  if (import.meta.env.DEV && pageTemplate !== 'dynamic' && !PageTemplateComponent) {
-    console.warn(
-      `[parche] Unknown template "${pageTemplate}" set on page "${pageKey}" — ` +
-      `not registered by any parche. The page will render without it.`,
-    );
-  }
 
   const pageEntry = await getEntry('pages', entryId);
   if (pageEntry) {
@@ -204,6 +193,11 @@ const layoutName = mode === 'resolver'
   ? (resolvedApp?.layout || 'default')
   : pageLayoutName;
 const layoutSections = await resolveLayout(layoutName, locale, defaultLocale);
+
+// The page's trees by outlet: `sections` is the unnamed outlet, `slots` the named ones.
+const pageSlots: Record<string, any[]> = mode === 'page' && pageData
+  ? { default: pageData.sections ?? [], ...(pageData.slots ?? {}) }
+  : {};
 ---
 
 <BaseLayout metadata={metadata} config={siteConfig} lang={locale}>
@@ -221,10 +215,7 @@ const layoutSections = await resolveLayout(layoutName, locale, defaultLocale);
   )}
 
   {mode === 'resolver' && resolvedApp ? (
-    <LayoutRenderer
-      layoutSections={layoutSections}
-      pageTemplate="dynamic"
-    >
+    <LayoutRenderer layoutSections={layoutSections}>
       {AppTemplate ? (
         <AppTemplate {...resolvedApp.templateProps}>
           {AppContent && <AppContent />}
@@ -236,19 +227,18 @@ const layoutSections = await resolveLayout(layoutName, locale, defaultLocale);
       )}
 
       {appExtras.sections?.length > 0 && (
-        <DynamicRenderer sections={appExtras.sections} />
+        <NodeRenderer nodes={appExtras.sections} wrap />
       )}
     </LayoutRenderer>
   ) : (
-    <LayoutRenderer
-      layoutSections={layoutSections}
-      pageSections={pageData?.sections}
-      pageTemplate={pageTemplate}
-      PageTemplateComponent={PageTemplateComponent}
-      pageData={pageData}
-      PageMarkdownContent={PageMarkdownContent}
-    />
-
+    <LayoutRenderer layoutSections={layoutSections} pageSlots={pageSlots}>
+      {/* A Markdown page's body renders after its sections, in the page's own outlet. */}
+      {PageMarkdownContent && (
+        <div class="mx-auto max-w-4xl px-4 md:px-6 pb-12 md:pb-16 prose">
+          <PageMarkdownContent />
+        </div>
+      )}
+    </LayoutRenderer>
   )}
 
   {showPanel && <ThemePanel />}

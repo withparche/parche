@@ -1,0 +1,30 @@
+---
+/**
+ * The wrapper every page root is rendered in: a band with a tone, a measure
+ * and a vertical rhythm, and an anchor. Written explicitly when a root needs
+ * anything other than the defaults; the registry wraps the rest.
+ *
+ * A tone re-declares the colour roles inside the band (`[data-tone]` rules in
+ * core's generated tones.css and this parche's tones.css), so everything in
+ * it repaints from the same tokens. The band paints `bg-background` itself so
+ * the re-declared canvas shows.
+ */
+import Section from 'parche:elements/Section';
+import Container from 'parche:elements/Container';
+import { schema, type Props } from './Section.props';
+
+const { tone, width, spacing, id, label } = schema.parse(Astro.props) as Props;
+const toned = tone !== 'default';
+---
+
+<Section
+  padding={spacing}
+  id={id}
+  data-tone={toned ? tone : undefined}
+  data-label={label}
+  class:list={['relative', toned && 'bg-background text-text']}
+>
+  <Container width={width}>
+    <slot />
+  </Container>
+</Section>

@@ -4,11 +4,22 @@
       "widget": "layout/Header",
       "props": {
         "links": [
-          { "label": "Home", "href": "/" },
-          { "label": "Blog", "href": "/blog" }
+          {
+            "label": "Home",
+            "href": "/"
+          },
+          {
+            "label": "Blog",
+            "href": "/blog"
+          }
         ],
         "actions": [
-          { "label": "GitHub", "href": "https://github.com/withparche/parche", "variant": "primary", "icon": "tabler:brand-github" }
+          {
+            "label": "GitHub",
+            "href": "https://github.com/withparche/parche",
+            "variant": "primary",
+            "icon": "tabler:brand-github"
+          }
         ],
         "announcement": {
           "text": "🚀 Built with <strong>Parche</strong> — Astro 6 + Tailwind v4.",
@@ -17,7 +28,9 @@
         }
       }
     },
-    { "widget": "layout/Main" },
+    {
+      "widget": "Outlet"
+    },
     {
       "widget": "layout/Footer",
       "props": {
@@ -25,14 +38,28 @@
           {
             "title": "Parche",
             "links": [
-              { "label": "Blog", "href": "/blog" },
-              { "label": "GitHub", "href": "https://github.com/withparche/parche" }
+              {
+                "label": "Blog",
+                "href": "/blog"
+              },
+              {
+                "label": "GitHub",
+                "href": "https://github.com/withparche/parche"
+              }
             ]
           }
         ],
         "socialLinks": [
-          { "label": "RSS", "href": "/rss.xml", "icon": "tabler:rss" },
-          { "label": "GitHub", "href": "https://github.com/withparche/parche", "icon": "tabler:brand-github" }
+          {
+            "label": "RSS",
+            "href": "/rss.xml",
+            "icon": "tabler:rss"
+          },
+          {
+            "label": "GitHub",
+            "href": "https://github.com/withparche/parche",
+            "icon": "tabler:brand-github"
+          }
         ],
         "footNote": "Built with <a class=\"text-primary hover:underline\" href=\"https://github.com/withparche/parche\">Parche</a>."
       }

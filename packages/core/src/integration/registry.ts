@@ -80,7 +80,7 @@ const CORE_MODULES: Record<string, string> = {
   'parche:layouts/BaseLayout': corePath('layouts/BaseLayout.astro'),
 
   // DynamicRenderer & LayoutRenderer
-  'parche:DynamicRenderer': corePath('components/DynamicRenderer.astro'),
+  'parche:NodeRenderer': corePath('components/NodeRenderer.astro'),
   'parche:LayoutRenderer': corePath('components/LayoutRenderer.astro'),
 
   // Utils (named exports)
@@ -92,6 +92,28 @@ const CORE_MODULES: Record<string, string> = {
   // Note: layout/Header, layout/Footer and the contact/content templates are
   // now provided by the ui parche — core no longer ships chrome or elements.
 };
+
+/** The tones every site has; a parche adds more with `tones` and a rule. */
+const CORE_TONES: ReadonlyArray<{ name: string; label: string }> = [
+  { name: 'default', label: 'Default' },
+  { name: 'muted', label: 'Muted' },
+  { name: 'dark', label: 'Dark' },
+  { name: 'primary', label: 'Primary' },
+];
+
+/**
+ * Whether a widget's `.props.ts` declares `wrapper: false`. Read as text, not
+ * imported: the registry runs in the config phase and must not evaluate widget
+ * code, and the render path needs this list without loading any schema.
+ */
+function declaresNoWrapper(astroPath: string): boolean {
+  const propsPath = astroPath.replace(/\.astro$/, '.props.ts');
+  try {
+    return /wrapper\s*:\s*false/.test(fs.readFileSync(propsPath, 'utf8'));
+  } catch {
+    return false;
+  }
+}
 
 /** Core modules that use named exports instead of default export. Frozen default —
  *  each createRegistry call gets its own Set seeded from this (never mutate this). */
@@ -203,14 +225,17 @@ export function createRegistry(
   const contributedFonts: any[] = [];
   const contributedThemes: Array<{ label: string; value: string }> = [];
   const contentGlobs: string[] = [];
-  const fullBleedWidgets: string[] = [];
+  let wrapper: string | null = null;
+  const tones: Array<{ name: string; label: string }> = [...CORE_TONES];
+  const unwrapped: string[] = [];
 
   for (const parche of parches) {
     if (parche.styles) contributedStyles.push(...parche.styles);
     if (parche.fonts) contributedFonts.push(...parche.fonts);
     if (parche.themes) contributedThemes.push(...parche.themes);
     if (parche.content) contentGlobs.push(...parche.content);
-    if (parche.fullBleed) fullBleedWidgets.push(...parche.fullBleed);
+    if (parche.wrapper) wrapper = parche.wrapper;
+    if (parche.tones) tones.push(...parche.tones);
     if (parche.elements) {
       for (const [name, value] of Object.entries(parche.elements)) {
         const prim = resolveElement(parche.name, name, value);
@@ -231,6 +256,7 @@ export function createRegistry(
       for (const [name, absPath] of Object.entries(parche.widgets)) {
         setModule(parche.name, 'widget', `parche:widgets/${name}`, absPath);
         providedWidgets.add(name);
+        if (declaresNoWrapper(absPath)) unwrapped.push(name);
       }
     }
     if (parche.templates) {
@@ -430,7 +456,9 @@ export function createRegistry(
   return {
     modules,
     namedExportModules,
-    fullBleedWidgets,
+    wrapper,
+    tones,
+    unwrapped,
     widgetPropRequirements,
     elements,
     overridden,

@@ -39,16 +39,12 @@ interface ResolvedPost {
   /** Resolved metadata for BaseLayout */
   metadata: Record<string, any>;
   /**
-   * Generic trailing sections the core route renders (via DynamicRenderer) after
+   * Generic trailing nodes the core route renders (via NodeRenderer) after
    * the post body — related posts, series nav, etc. The blog parche owns the
    * widget names and props; core renders them by name and knows none of them.
    */
   extras: {
-    sections: Array<{
-      widget: string;
-      props?: Record<string, any>;
-      wrapper?: false | { classes?: Record<string, unknown>; [key: string]: unknown };
-    }>;
+    sections: Array<{ widget: string; props?: Record<string, any>; slots?: Record<string, any[]> }>;
   };
   /**
    * This post's translations, one per locale that actually has one. Core emits
@@ -176,28 +172,35 @@ export async function resolve(
 
   const extraSections: ResolvedPost['extras']['sections'] = [];
   if (seriesNav) {
+    // A narrow column with no vertical rhythm of its own: an explicit Section
+    // node, so the route wraps nothing else around it.
     extraSections.push({
-      widget: 'blog/SeriesNav',
-      // Labels must travel with the section: the catch-all renders these by name
-      // and has no idea they contain user-facing strings.
-      props: {
-        ...seriesNav,
-        seriesLabel: labels.seriesLabel,
-        partText: labels.seriesPart,
-        prevText: labels.previous,
-        nextText: labels.next,
+      widget: 'Section',
+      props: { width: 'md', spacing: 'none' },
+      slots: {
+        default: [
+          {
+            widget: 'blog/SeriesNav',
+            // Labels must travel with the node: the catch-all renders these by
+            // name and has no idea they contain user-facing strings.
+            props: {
+              ...seriesNav,
+              seriesLabel: labels.seriesLabel,
+              partText: labels.seriesPart,
+              prevText: labels.previous,
+              nextText: labels.next,
+            },
+          },
+        ],
       },
-      // Center in a narrow column with no vertical padding (matches the prior
-      // hand-wrapped markup); py-0 across breakpoints beats the wrapper default.
-      wrapper: { classes: { container: 'max-w-4xl py-0 md:py-0 lg:py-0 mb-8' } },
     });
   }
   if (relatedPosts) {
-    // RelatedPosts renders its own full-width Section/Container — no wrapper.
+    // RelatedPosts renders its own full-width Section/Container; its meta
+    // declares `wrapper: false`, so the route leaves it bare.
     extraSections.push({
       widget: 'blog/RelatedPosts',
       props: { posts: relatedPosts, title: labels.relatedPosts, linkText: labels.viewAllPosts },
-      wrapper: false,
     });
   }
 

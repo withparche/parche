@@ -9,6 +9,7 @@
 @import "./generated/ref.css";
 @import "./generated/sys.css";
 @import "./generated/conf.css";
+@import "./generated/tones.css";
 @import "./shadcn-compat.css";
 
 /* Astro's Fonts API sets --font-sans / --font-mono on :root when a theme

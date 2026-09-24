@@ -53,53 +53,67 @@
       }
     },
     {
-      "widget": "Content",
-      "wrapper": {
-        "bg": "<div style='position:absolute;inset:0;background:linear-gradient(180deg, rgba(59,110,246,0.06), transparent 65%)'></div>"
-      },
+      "widget": "Section",
       "props": {
-        "isReversed": true,
-        "columns": "1",
-        "title": "Captura ahora, organiza después",
-        "content": "La nota más rápida es la que no tuviste que archivar.",
-        "items": [
+        "tone": "gradient"
+      },
+      "slots": {
+        "default": [
           {
-            "title": "Captura rápida",
-            "description": "Un toque desde la pantalla de bloqueo."
-          },
-          {
-            "title": "Bandeja inteligente",
-            "description": "Todo cae en un mismo sitio hasta que lo clasificas."
+            "widget": "Content",
+            "props": {
+              "isReversed": true,
+              "columns": "1",
+              "title": "Captura ahora, organiza después",
+              "content": "La nota más rápida es la que no tuviste que archivar.",
+              "items": [
+                {
+                  "title": "Captura rápida",
+                  "description": "Un toque desde la pantalla de bloqueo."
+                },
+                {
+                  "title": "Bandeja inteligente",
+                  "description": "Todo cae en un mismo sitio hasta que lo clasificas."
+                }
+              ],
+              "image": {
+                "src": "https://images.unsplash.com/photo-1521517407911-565264e7d82d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80",
+                "alt": "Captura"
+              }
+            }
           }
-        ],
-        "image": {
-          "src": "https://images.unsplash.com/photo-1521517407911-565264e7d82d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80",
-          "alt": "Captura"
-        }
+        ]
       }
     },
     {
-      "widget": "Stats",
-      "wrapper": {
-        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(80% 120% at 50% 0%, rgba(59,110,246,0.07), transparent 70%)'></div>"
-      },
+      "widget": "Section",
       "props": {
-        "stats": [
+        "tone": "glow"
+      },
+      "slots": {
+        "default": [
           {
-            "title": "Descargas",
-            "amount": "480K"
-          },
-          {
-            "title": "Valoración",
-            "amount": "4.8"
-          },
-          {
-            "title": "Países",
-            "amount": "38"
-          },
-          {
-            "title": "Sin fallos",
-            "amount": "99.9%"
+            "widget": "Stats",
+            "props": {
+              "stats": [
+                {
+                  "title": "Descargas",
+                  "amount": "480K"
+                },
+                {
+                  "title": "Valoración",
+                  "amount": "4.8"
+                },
+                {
+                  "title": "Países",
+                  "amount": "38"
+                },
+                {
+                  "title": "Sin fallos",
+                  "amount": "99.9%"
+                }
+              ]
+            }
           }
         ]
       }
@@ -128,38 +142,52 @@
       }
     },
     {
-      "widget": "FAQs",
-      "wrapper": {
+      "widget": "Section",
+      "props": {
         "id": "faq"
       },
-      "props": {
-        "title": "Antes de descargarla",
-        "columns": "2",
-        "items": [
+      "slots": {
+        "default": [
           {
-            "title": "¿Es gratis?",
-            "description": "La app básica es gratuita. La suscripción desbloquea la sincronización entre dispositivos."
-          },
-          {
-            "title": "¿Qué versiones admite?",
-            "description": "Las tres últimas versiones principales de cada plataforma."
+            "widget": "FAQs",
+            "props": {
+              "title": "Antes de descargarla",
+              "columns": "2",
+              "items": [
+                {
+                  "title": "¿Es gratis?",
+                  "description": "La app básica es gratuita. La suscripción desbloquea la sincronización entre dispositivos."
+                },
+                {
+                  "title": "¿Qué versiones admite?",
+                  "description": "Las tres últimas versiones principales de cada plataforma."
+                }
+              ]
+            }
           }
         ]
       }
     },
     {
-      "widget": "CallToAction",
-      "wrapper": {
-        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
-      },
+      "widget": "Section",
       "props": {
-        "title": "Descarga la app",
-        "actions": [
+        "tone": "glow"
+      },
+      "slots": {
+        "default": [
           {
-            "variant": "primary",
-            "text": "Descargar",
-            "href": "#",
-            "icon": "tabler:download"
+            "widget": "CallToAction",
+            "props": {
+              "title": "Descarga la app",
+              "actions": [
+                {
+                  "variant": "primary",
+                  "text": "Descargar",
+                  "href": "#",
+                  "icon": "tabler:download"
+                }
+              ]
+            }
           }
         ]
       }

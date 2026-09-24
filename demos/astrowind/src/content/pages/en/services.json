@@ -53,34 +53,41 @@
       }
     },
     {
-      "widget": "Content",
-      "wrapper": {
-        "bg": "<div style='position:absolute;inset:0;background:linear-gradient(180deg, rgba(59,110,246,0.06), transparent 65%)'></div>"
-      },
+      "widget": "Section",
       "props": {
-        "isReversed": true,
-        "columns": "1",
-        "tagline": "Method",
-        "title": "We start from the problem, not the design",
-        "content": "Before touching a colour we want to know who you are speaking to and what should happen when someone lands on the page.",
-        "items": [
+        "tone": "gradient"
+      },
+      "slots": {
+        "default": [
           {
-            "title": "Understand",
-            "description": "A short session to pin down the goal and the real constraints."
-          },
-          {
-            "title": "Build",
-            "description": "Short iterations with something visible at the end of each."
-          },
-          {
-            "title": "Hand over",
-            "description": "You keep control: the content is files in your repository."
+            "widget": "Content",
+            "props": {
+              "isReversed": true,
+              "columns": "1",
+              "tagline": "Method",
+              "title": "We start from the problem, not the design",
+              "content": "Before touching a colour we want to know who you are speaking to and what should happen when someone lands on the page.",
+              "items": [
+                {
+                  "title": "Understand",
+                  "description": "A short session to pin down the goal and the real constraints."
+                },
+                {
+                  "title": "Build",
+                  "description": "Short iterations with something visible at the end of each."
+                },
+                {
+                  "title": "Hand over",
+                  "description": "You keep control: the content is files in your repository."
+                }
+              ],
+              "image": {
+                "src": "https://images.unsplash.com/photo-1552664688-cf412ec27db2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
+                "alt": "Working method"
+              }
+            }
           }
-        ],
-        "image": {
-          "src": "https://images.unsplash.com/photo-1552664688-cf412ec27db2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
-          "alt": "Working method"
-        }
+        ]
       }
     },
     {
@@ -135,19 +142,26 @@
       }
     },
     {
-      "widget": "CallToAction",
-      "wrapper": {
-        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
-      },
+      "widget": "Section",
       "props": {
-        "title": "Shall we start?",
-        "subtitle": "Tell us about the project and we will say within a day whether we can help.",
-        "actions": [
+        "tone": "glow"
+      },
+      "slots": {
+        "default": [
           {
-            "variant": "primary",
-            "text": "Get in touch",
-            "href": "/contact",
-            "icon": "tabler:arrow-right"
+            "widget": "CallToAction",
+            "props": {
+              "title": "Shall we start?",
+              "subtitle": "Tell us about the project and we will say within a day whether we can help.",
+              "actions": [
+                {
+                  "variant": "primary",
+                  "text": "Get in touch",
+                  "href": "/contact",
+                  "icon": "tabler:arrow-right"
+                }
+              ]
+            }
           }
         ]
       }

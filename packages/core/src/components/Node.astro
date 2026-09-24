@@ -1,0 +1,98 @@
+---
+/**
+ * One node of a tree: the widget, its props, and the nodes that fill its
+ * slots, rendered into the widget's Astro slots by name. Recursive and pure:
+ * it receives the resolved widgets, so the same component renders a page, a
+ * layout or a preset, and a test can render it with any components at all.
+ *
+ * Astro collects slotted children at compile time, so a slot name cannot come
+ * from a loop variable. The fixed set of fragments below covers up to six
+ * filled slots per node, which is more than any widget declares.
+ */
+import type { Node } from '../content/node';
+import { MAX_NODE_DEPTH } from '../content/node';
+
+interface Outlets {
+  /** Page trees by outlet name, rendered as roots (wrapped). */
+  nodes: Record<string, Node[]>;
+  /** Pre-rendered content by outlet name, placed after the nodes. */
+  html: Record<string, string>;
+}
+
+interface Props {
+  node: Node;
+  widgets: Record<string, any>;
+  /** The wrapper widget for roots, or null when nothing declares one. */
+  wrapper: { name: string; component: any } | null;
+  /** Wrapped at depth 0 (a page root); a layout root or a nested node is not. */
+  wrap?: boolean;
+  outlets?: Outlets;
+  depth?: number;
+}
+
+const { node, widgets, wrapper, wrap = false, outlets, depth = 0 } = Astro.props;
+const Self = Astro.self;
+
+const isOutlet = node.widget === 'Outlet';
+const outletName = (node.props?.name as string | undefined) ?? 'default';
+const outletNodes = isOutlet ? (outlets?.nodes[outletName] ?? []) : [];
+const outletHtml = isOutlet ? (outlets?.html[outletName] ?? '') : '';
+
+const Widget = isOutlet ? null : widgets[node.widget];
+const props = node.props ?? {};
+
+// Only filled slots become fragments; an empty list leaves the widget's own
+// fallback content in place.
+const filled = Object.entries(node.slots ?? {}).filter(([, kids]) => Array.isArray(kids) && kids.length > 0);
+const MAX_SLOTS = 6;
+if (filled.length > MAX_SLOTS) {
+  throw new Error(`[parche] "${node.widget}" fills ${filled.length} slots; a node may fill at most ${MAX_SLOTS}.`);
+}
+const slotName = (i: number) => filled[i]?.[0] ?? `__unfilled-${i}`;
+const slotNodes = (i: number) => filled[i]?.[1] ?? [];
+
+const wrapped = wrap && depth === 0 && !isOutlet && wrapper !== null && node.widget !== wrapper.name;
+const Wrapper = wrapped ? wrapper!.component : null;
+
+if (import.meta.env.DEV && depth > MAX_NODE_DEPTH) {
+  console.warn(`[parche] "${node.widget}" sits ${depth} levels deep; trees are meant to stop at ${MAX_NODE_DEPTH}.`);
+}
+---
+
+{isOutlet ? (
+  outletName === 'default' ? (
+    <main id="main-content" class="flex-1">
+      {outletNodes.map((child) => <Self node={child} widgets={widgets} wrapper={wrapper} wrap outlets={outlets} />)}
+      {outletHtml && <Fragment set:html={outletHtml} />}
+    </main>
+  ) : (
+    <Fragment>
+      {outletNodes.map((child) => <Self node={child} widgets={widgets} wrapper={wrapper} wrap outlets={outlets} />)}
+      {outletHtml && <Fragment set:html={outletHtml} />}
+    </Fragment>
+  )
+) : !Widget ? (
+  import.meta.env.DEV ? (
+    <div
+      data-parche-missing-widget={node.widget}
+      style="margin:.5rem;padding:.75rem 1rem;border:2px dashed #dc2626;border-radius:.5rem;background:#fef2f2;color:#991b1b;font:14px/1.5 ui-monospace,SFMono-Regular,monospace"
+    >
+      ⚠ Parche: unknown widget <strong>{node.widget}</strong> — not registered by any parche.
+    </div>
+  ) : null
+) : Wrapper ? (
+  <Wrapper>
+    <Self node={node} widgets={widgets} wrapper={wrapper} outlets={outlets} depth={depth} />
+  </Wrapper>
+) : filled.length === 0 ? (
+  <Widget {...props} />
+) : (
+  <Widget {...props}>
+    <Fragment slot={slotName(0)}>{slotNodes(0).map((child) => <Self node={child} widgets={widgets} wrapper={wrapper} outlets={outlets} depth={depth + 1} />)}</Fragment>
+    <Fragment slot={slotName(1)}>{slotNodes(1).map((child) => <Self node={child} widgets={widgets} wrapper={wrapper} outlets={outlets} depth={depth + 1} />)}</Fragment>
+    <Fragment slot={slotName(2)}>{slotNodes(2).map((child) => <Self node={child} widgets={widgets} wrapper={wrapper} outlets={outlets} depth={depth + 1} />)}</Fragment>
+    <Fragment slot={slotName(3)}>{slotNodes(3).map((child) => <Self node={child} widgets={widgets} wrapper={wrapper} outlets={outlets} depth={depth + 1} />)}</Fragment>
+    <Fragment slot={slotName(4)}>{slotNodes(4).map((child) => <Self node={child} widgets={widgets} wrapper={wrapper} outlets={outlets} depth={depth + 1} />)}</Fragment>
+    <Fragment slot={slotName(5)}>{slotNodes(5).map((child) => <Self node={child} widgets={widgets} wrapper={wrapper} outlets={outlets} depth={depth + 1} />)}</Fragment>
+  </Widget>
+)}

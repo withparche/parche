@@ -15,7 +15,9 @@ function makeRegistry(partial: Partial<ResolvedRegistry>): ResolvedRegistry {
   return {
     modules: {},
     namedExportModules: new Set(),
-    fullBleedWidgets: [],
+    wrapper: null,
+    tones: [],
+    unwrapped: [],
     widgetPropRequirements: [],
     elements: {},
     overridden: {},
@@ -57,9 +59,14 @@ test('widget map is generated lazily (widgetLoaders + loadWidgets, no static imp
   assert.doesNotMatch(code, /^import \w+ from ["']parche:widgets\//m);
 });
 
-test('layout config emits the fullBleed widget list', () => {
-  const code = load(makeRegistry({ fullBleedWidgets: ['Hero', 'Note'] }), '\0parche:config/layout');
-  assert.match(code, /export const fullBleedWidgets = \["Hero","Note"\]/);
+test('layout config emits the wrapper, the unwrapped widgets and the tones', () => {
+  const code = load(
+    makeRegistry({ wrapper: 'Section', unwrapped: ['Hero', 'Note'], tones: [{ name: 'default', label: 'Default' }] }),
+    '\0parche:config/layout',
+  );
+  assert.match(code, /export const wrapper = "Section"/);
+  assert.match(code, /export const unwrapped = \["Hero","Note"\]/);
+  assert.match(code, /export const tones = \[\{"name":"default","label":"Default"\}\]/);
 });
 
 test('widget schemas: has-props widget emits guarded toJSONSchema + meta', () => {

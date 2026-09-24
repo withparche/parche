@@ -11,6 +11,8 @@ export type Props = z.infer<typeof schema>;
 
 export const meta: WidgetMeta = {
   widget: {
+    // Renders edge to edge and owns its padding: never wrapped as a page root.
+    wrapper: false,
     label: 'Note',
     description: 'Simple info banner with icon and text',
     category: 'content',

@@ -209,7 +209,11 @@ export const defaultTheme = ${JSON.stringify(registry.defaultTheme ?? null)};
  * hardcoded in core.
  */
 function generateLayoutConfigModule(registry: ResolvedRegistry): string {
-  return `export const fullBleedWidgets = ${JSON.stringify(registry.fullBleedWidgets)};\n`;
+  return (
+    `export const wrapper = ${JSON.stringify(registry.wrapper)};\n` +
+    `export const unwrapped = ${JSON.stringify(registry.unwrapped)};\n` +
+    `export const tones = ${JSON.stringify(registry.tones)};\n`
+  );
 }
 
 /**
@@ -302,6 +306,8 @@ function generateWidgetSchemasModule(registry: ResolvedRegistry): string {
   icon: ${m}.meta?.widget?.icon ?? '',
   defaultProps: ${defaultPropsJson},
   defaultVariants: ${variantsJson},
+  slots: ${m}.meta?.slots ?? {},
+  wrapper: ${m}.meta?.widget?.wrapper !== false,
   ui: ${m}.meta?.ui ?? {},
 };`);
       index++;
@@ -314,6 +320,8 @@ function generateWidgetSchemasModule(registry: ResolvedRegistry): string {
   icon: '',
   defaultProps: ${defaultPropsJson},
   defaultVariants: ${variantsJson},
+  slots: {},
+  wrapper: true,
   ui: {},
 };`);
     }

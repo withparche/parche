@@ -136,6 +136,47 @@ function block(selector, decls, comment) {
   write('sys.css', css);
 }
 
+// ---- tones ----------------------------------------------------------------
+// A tone re-declares the sys colour roles for one section. `dark` is the
+// dark-mode block scoped to a section; `muted` and `primary` remap roles.
+{
+  const darkRoles = [];
+  for (const { path, type, token } of walk(files.sys)) {
+    if (path[0] !== 'color') continue;
+    const d = token.$extensions?.parche?.dark;
+    if (d !== undefined) darkRoles.push(...emit('sys', path, type, d));
+  }
+  const role = (name) => `var(--ds-sys-color-${name})`;
+  // Scoped to the Section element's hook: elements such as Button and Toast
+  // carry a data-tone of their own, and a bare [data-tone] would repaint them.
+  const tone = (name) => `.parche-section[data-tone="${name}"]`;
+  const css =
+    header('tones', 'Section tones: each re-declares the sys colour roles inside a toned Section.') +
+    block(tone('dark'), darkRoles, 'The dark-mode roles, scoped to the section') +
+    '\n' +
+    block(tone('muted'), [['--ds-sys-color-background', role('surface-2')], ['--ds-sys-color-surface', role('background')]], 'A quieter canvas; cards keep the page colour so they still lift') +
+    '\n' +
+    block(
+      tone('primary'),
+      [
+        ['--ds-sys-color-background', role('primary')],
+        ['--ds-sys-color-surface', role('primary-hover')],
+        ['--ds-sys-color-surface-2', role('primary-hover')],
+        ['--ds-sys-color-surface-hover', role('primary-hover')],
+        ['--ds-sys-color-on-surface', role('on-primary')],
+        ['--ds-sys-color-text', role('on-primary')],
+        ['--ds-sys-color-heading', role('on-primary')],
+        ['--ds-sys-color-muted', `color-mix(in oklab, ${role('on-primary')} 80%, ${role('primary')})`],
+        ['--ds-sys-color-link', role('on-primary')],
+        ['--ds-sys-color-border', `color-mix(in oklab, ${role('on-primary')} 30%, transparent)`],
+        ['--ds-sys-color-border-soft', `color-mix(in oklab, ${role('on-primary')} 15%, transparent)`],
+        ['--ds-sys-color-ring', role('on-primary')],
+      ],
+      'The brand colour as canvas, everything on it in on-primary',
+    );
+  write('tones.css', css);
+}
+
 // ---- conf -----------------------------------------------------------------
 {
   const decls = [];

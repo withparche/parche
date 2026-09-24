@@ -22,10 +22,12 @@ function captureWarnings(fn: () => void): string[] {
   return warnings;
 }
 
-test('empty config: parche:config points at the default file, no fullBleed', () => {
+test('empty config: parche:config points at the default file, no wrapper, core tones only', () => {
   const reg = createRegistry({ parches: [] }, ROOT);
   assert.equal(reg.modules['parche:config'], `${ROOT}/src/parche.config.json`);
-  assert.deepEqual(reg.fullBleedWidgets, []);
+  assert.equal(reg.wrapper, null);
+  assert.deepEqual(reg.unwrapped, []);
+  assert.deepEqual(reg.tones.map((t) => t.name), ['default', 'muted', 'dark', 'primary']);
   assert.deepEqual(reg.widgetPropRequirements, []);
 });
 
@@ -36,18 +38,19 @@ test('inline site config: parche:config is served inline, not from a file', () =
   assert.equal(reg.inlineSiteConfig, site);
 });
 
-test('fullBleed widgets are collected from every parche manifest', () => {
+test('wrapper and tones are collected from the parche manifests; the last wrapper wins', () => {
   captureWarnings(() => {
     const reg = createRegistry(
       {
         parches: [
-          { name: 'ui', widgets: { Hero: '/x/Hero.astro' }, fullBleed: ['Hero'] },
-          { name: 'extra', widgets: { Banner: '/x/Banner.astro' }, fullBleed: ['Banner'] },
+          { name: 'ui', widgets: { Section: '/x/Section.astro' }, wrapper: 'Section', tones: [{ name: 'glow', label: 'Glow' }] },
+          { name: 'extra', widgets: { Band: '/x/Band.astro' }, wrapper: 'Band', tones: [{ name: 'dots', label: 'Dots' }] },
         ],
       },
       ROOT,
     );
-    assert.deepEqual(reg.fullBleedWidgets.sort(), ['Banner', 'Hero']);
+    assert.equal(reg.wrapper, 'Band');
+    assert.deepEqual(reg.tones.map((t) => t.name), ['default', 'muted', 'dark', 'primary', 'glow', 'dots']);
   });
 });
 

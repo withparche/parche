@@ -1,0 +1,43 @@
+---
+/**
+ * Renders a tree of nodes: loads only the widgets the tree references, resolves
+ * `@/assets/…` paths at any depth, and hands each root to `Node`, which wraps
+ * it in the registry's wrapper widget when `wrap` is set (page roots) and
+ * fills the widget's slots from the node's.
+ */
+import { loadWidgets } from 'parche:registry/widgets';
+import { wrapper as wrapperName } from 'parche:config/layout';
+import { resolveAssets } from '../utils/assets.js';
+import type { Node as NodeData } from '../content/node';
+import { widgetNames } from '../content/node';
+import Node from './Node.astro';
+
+interface Props {
+  nodes: NodeData[];
+  /** Wrap each root in the wrapper widget (page content). Layout chrome is not wrapped. */
+  wrap?: boolean;
+  /** Content for `Outlet` nodes, when rendering a layout. */
+  outlets?: { nodes: Record<string, NodeData[]>; html: Record<string, string> };
+}
+
+const { nodes: rawNodes, wrap = false, outlets: rawOutlets } = Astro.props;
+
+// Everything the render will touch, loaded once: the tree, the outlet trees
+// and the wrapper. Widgets not referenced are never imported.
+const outletTrees = Object.values(rawOutlets?.nodes ?? {}).flat();
+const names = widgetNames([...rawNodes, ...outletTrees]);
+if (wrapperName) names.push(wrapperName);
+const widgets = await loadWidgets(names);
+
+const nodes = await resolveAssets(rawNodes);
+const outlets = rawOutlets
+  ? { nodes: await resolveAssets(rawOutlets.nodes), html: rawOutlets.html }
+  : undefined;
+
+const wrapper = wrapperName && widgets[wrapperName] ? { name: wrapperName, component: widgets[wrapperName] } : null;
+if (import.meta.env.DEV && wrapperName && !wrapper) {
+  console.warn(`[parche] The wrapper widget "${wrapperName}" is declared but not registered; roots render bare.`);
+}
+---
+
+{nodes.map((node) => <Node node={node} widgets={widgets} wrapper={wrapper} wrap={wrap} outlets={outlets} />)}

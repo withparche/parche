@@ -1,98 +1,25 @@
 ---
-import { loadWidgets } from 'parche:registry/widgets';
-import { resolveAssets } from '../utils/assets.js';
-import DynamicRenderer from 'parche:DynamicRenderer';
-
-interface WrapperConfig {
-  id?: string;
-  isDark?: boolean;
-  bg?: string;
-  classes?: Record<string, unknown>;
-  as?: string;
-}
-
-interface Section {
-  widget: string;
-  props?: Record<string, any>;
-  wrapper?: false | WrapperConfig;
-}
+/**
+ * Renders a layout around page content. A layout is a tree of nodes with
+ * `Outlet` nodes where the page goes: the unnamed outlet takes the page's
+ * `sections` (and whatever this component is given as children), a named one
+ * takes the page's `slots[name]`. Layout roots are chrome and are not wrapped.
+ */
+import NodeRenderer from './NodeRenderer.astro';
+import type { Node } from '../content/node';
 
 interface Props {
-  layoutSections: Section[];
-  pageSections?: Section[];
-  PageTemplateComponent?: any;
-  pageData?: any;
-  PageMarkdownContent?: any;
-  pageTemplate?: string;
-  SectionWrapper?: any;
-  mainId?: string;
+  layoutSections: Node[];
+  /** Page trees by outlet name; `default` is the page's `sections`. */
+  pageSlots?: Record<string, Node[]>;
 }
 
-const {
-  layoutSections,
-  pageSections,
-  PageTemplateComponent,
-  pageData,
-  PageMarkdownContent,
-  pageTemplate = 'dynamic',
-  SectionWrapper: PreviewWrapper,
-  mainId,
-} = Astro.props;
+const { layoutSections, pageSlots = {} } = Astro.props;
 
-// Load only the layout widgets this layout references ('layout/Main' is a
-// synthetic marker with no loader — skipped). Lazy catalog.
-const widgets = await loadWidgets(layoutSections.map((s) => s.widget));
-
-// Chrome props carry assets too — a logo, a mega-menu card image. They never
-// pass through DynamicRenderer, so '@/assets/…' is resolved here instead.
-const sections = await resolveAssets(layoutSections);
+// Children (a resolver's template, a Markdown body) go after the default
+// outlet's nodes. Rendered here, once, and placed by the Outlet node.
+const html: Record<string, string> = {};
+if (Astro.slots.has('default')) html.default = await Astro.slots.render('default');
 ---
 
-{sections.map((section) => {
-  if (section.widget === 'layout/Main') {
-    return (
-      <main id="main-content" class="flex-1">
-        <div id={mainId}>
-          {pageTemplate === 'dynamic' && pageSections && (
-            <DynamicRenderer sections={pageSections} Wrapper={PreviewWrapper} />
-          )}
-          {/* A Markdown page's body renders after its sections. Without this it
-              was silently dropped unless the page also named a template — so a
-              .md page with frontmatter sections lost all of its prose. */}
-          {pageTemplate === 'dynamic' && PageMarkdownContent && (
-            <div class="mx-auto max-w-4xl px-4 md:px-6 pb-12 md:pb-16 prose">
-              <PageMarkdownContent />
-            </div>
-          )}
-          {PageTemplateComponent && (
-            <PageTemplateComponent data={pageData}>
-              {PageMarkdownContent && <PageMarkdownContent />}
-            </PageTemplateComponent>
-          )}
-          <slot />
-        </div>
-      </main>
-    );
-  }
-
-  const Widget = widgets[section.widget];
-  if (!Widget) {
-    if (import.meta.env.DEV) {
-      console.warn(
-        `[parche] Unknown layout widget "${section.widget}" — not registered by any parche. ` +
-        `Check the layout definition or the parche providing this widget.`,
-      );
-      return (
-        <div
-          data-parche-missing-widget={section.widget}
-          style="margin:.5rem;padding:.75rem 1rem;border:2px dashed #dc2626;border-radius:.5rem;background:#fef2f2;color:#991b1b;font:14px/1.5 ui-monospace,SFMono-Regular,monospace"
-        >
-          ⚠ Parche: unknown layout widget <strong>{section.widget}</strong> — not registered by any parche.
-        </div>
-      );
-    }
-    return null;
-  }
-
-  return <Widget {...(section.props ?? {})} />;
-})}
+<NodeRenderer nodes={layoutSections} outlets={{ nodes: pageSlots, html }} />

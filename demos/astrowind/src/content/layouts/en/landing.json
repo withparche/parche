@@ -53,7 +53,7 @@
       }
     },
     {
-      "widget": "layout/Main"
+      "widget": "Outlet"
     },
     {
       "widget": "layout/Footer",

@@ -24,25 +24,32 @@
       }
     },
     {
-      "widget": "CallToAction",
-      "wrapper": {
-        "id": "cta",
-        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
-      },
+      "widget": "Section",
       "props": {
-        "title": "Buy now",
-        "subtitle": "It takes less than a minute and costs nothing to try.",
-        "actions": [
+        "id": "cta",
+        "tone": "glow"
+      },
+      "slots": {
+        "default": [
           {
-            "variant": "primary",
-            "text": "Buy now",
-            "href": "#",
-            "icon": "tabler:arrow-right"
-          },
-          {
-            "variant": "secondary",
-            "text": "Ask a question",
-            "href": "/contact"
+            "widget": "CallToAction",
+            "props": {
+              "title": "Buy now",
+              "subtitle": "It takes less than a minute and costs nothing to try.",
+              "actions": [
+                {
+                  "variant": "primary",
+                  "text": "Buy now",
+                  "href": "#",
+                  "icon": "tabler:arrow-right"
+                },
+                {
+                  "variant": "secondary",
+                  "text": "Ask a question",
+                  "href": "/contact"
+                }
+              ]
+            }
           }
         ]
       }

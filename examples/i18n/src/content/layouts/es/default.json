@@ -2,9 +2,23 @@
   "sections": [
     {
       "widget": "layout/Header",
-      "props": { "links": [{ "label": "Inicio", "href": "/es" }] }
+      "props": {
+        "links": [
+          {
+            "label": "Inicio",
+            "href": "/es"
+          }
+        ]
+      }
     },
-    { "widget": "layout/Main" },
-    { "widget": "layout/Footer", "props": { "footNote": "Hecho con Parche." } }
+    {
+      "widget": "Outlet"
+    },
+    {
+      "widget": "layout/Footer",
+      "props": {
+        "footNote": "Hecho con Parche."
+      }
+    }
   ]
 }

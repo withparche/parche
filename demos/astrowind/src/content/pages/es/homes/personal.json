@@ -129,19 +129,26 @@
       }
     },
     {
-      "widget": "CallToAction",
-      "wrapper": {
-        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
-      },
+      "widget": "Section",
       "props": {
-        "title": "¿Estás con algo?",
-        "subtitle": "Cuéntamelo. Respondo todos los correos.",
-        "actions": [
+        "tone": "glow"
+      },
+      "slots": {
+        "default": [
           {
-            "variant": "primary",
-            "text": "Saluda",
-            "href": "/es/contacto",
-            "icon": "tabler:mail"
+            "widget": "CallToAction",
+            "props": {
+              "title": "¿Estás con algo?",
+              "subtitle": "Cuéntamelo. Respondo todos los correos.",
+              "actions": [
+                {
+                  "variant": "primary",
+                  "text": "Saluda",
+                  "href": "/es/contacto",
+                  "icon": "tabler:mail"
+                }
+              ]
+            }
           }
         ]
       }

@@ -25,6 +25,8 @@ export type Props = z.infer<typeof schema>;
 
 export const meta: WidgetMeta = {
   widget: {
+    // Renders edge to edge and owns its padding: never wrapped as a page root.
+    wrapper: false,
     label: 'Hero Split',
     description: 'Split hero with text on left and image on right',
     category: 'hero',

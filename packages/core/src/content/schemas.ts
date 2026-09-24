@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { nodeSchema } from './node.js';
 
 /**
  * Schema for page-level SEO/metadata overrides.
@@ -52,33 +53,18 @@ export const metadataSchema = z.object({
 /**
  * Base schema for page content entries.
  * Users can extend this with `.extend({ myField: z.string() })`.
+ *
+ * A page is metadata plus trees of nodes: `sections` fills the layout's
+ * unnamed outlet, `slots[name]` fills a named one (`aside`, `toolbar`…).
  */
-/**
- * Schema for a single section (shared by pages and layouts).
- */
-export const sectionSchema = z.object({
-  widget: z.string(),
-  props: z.record(z.string(), z.unknown()).optional(),
-  wrapper: z.union([
-    z.literal(false),
-    z.object({
-      id: z.string().optional(),
-      isDark: z.boolean().optional(),
-      bg: z.string().optional(),
-      classes: z.record(z.string(), z.unknown()).optional(),
-      as: z.string().optional(),
-    }),
-  ]).optional(),
-});
-
 export const pageSchema = z.object({
   title: z.string(),
   description: z.string().optional(),
   urlSlug: z.string().optional(),
-  template: z.string().default('dynamic'),
   layout: z.string().optional(),
   metadata: metadataSchema.optional(),
-  sections: z.array(sectionSchema).optional(),
+  sections: z.array(nodeSchema).optional(),
+  slots: z.record(z.string(), z.array(nodeSchema)).optional(),
   body: z.string().optional(),
   formLabels: z.record(z.string(), z.string()).optional(),
 });
@@ -192,17 +178,18 @@ export const navigationSchema = z.object({
 });
 
 /**
- * Schema for layout entries (same sections format as pages).
+ * Schema for layout entries: a tree of nodes with `Outlet` nodes where the
+ * page goes. `{ "widget": "Outlet" }` is the unnamed outlet; `props.name`
+ * names another.
  */
 export const layoutSchema = z.object({
-  sections: z.array(sectionSchema),
+  sections: z.array(nodeSchema),
 });
 
 export type MetadataEntry = z.infer<typeof metadataSchema>;
 export type PageEntry = z.infer<typeof pageSchema>;
 export type NavigationEntry = z.infer<typeof navigationSchema>;
 export type LayoutEntry = z.infer<typeof layoutSchema>;
-export type SectionEntry = z.infer<typeof sectionSchema>;
 
 /**
  * Ready-to-use collections for a standard Parche project.

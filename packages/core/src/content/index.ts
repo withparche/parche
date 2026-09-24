@@ -1,5 +1,6 @@
+export { nodeSchema, nodeListSchema, walkNodes, widgetNames, MAX_NODE_DEPTH } from './node.js';
+export type { Node } from './node.js';
 export {
-  sectionSchema,
   metadataSchema,
   pageSchema,
   navigationSchema,
@@ -8,4 +9,4 @@ export {
   collections,
 } from './schemas.js';
 
-export type { SectionEntry, MetadataEntry, PageEntry, NavigationEntry, LayoutEntry } from './schemas.js';
+export type { MetadataEntry, PageEntry, NavigationEntry, LayoutEntry } from './schemas.js';

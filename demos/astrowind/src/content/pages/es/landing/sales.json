@@ -24,25 +24,32 @@
       }
     },
     {
-      "widget": "CallToAction",
-      "wrapper": {
-        "id": "cta",
-        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
-      },
+      "widget": "Section",
       "props": {
-        "title": "Comprar ahora",
-        "subtitle": "Lleva menos de un minuto y probarlo no cuesta nada.",
-        "actions": [
+        "id": "cta",
+        "tone": "glow"
+      },
+      "slots": {
+        "default": [
           {
-            "variant": "primary",
-            "text": "Comprar ahora",
-            "href": "#",
-            "icon": "tabler:arrow-right"
-          },
-          {
-            "variant": "secondary",
-            "text": "Hacer una pregunta",
-            "href": "/es/contacto"
+            "widget": "CallToAction",
+            "props": {
+              "title": "Comprar ahora",
+              "subtitle": "Lleva menos de un minuto y probarlo no cuesta nada.",
+              "actions": [
+                {
+                  "variant": "primary",
+                  "text": "Comprar ahora",
+                  "href": "#",
+                  "icon": "tabler:arrow-right"
+                },
+                {
+                  "variant": "secondary",
+                  "text": "Hacer una pregunta",
+                  "href": "/es/contacto"
+                }
+              ]
+            }
           }
         ]
       }

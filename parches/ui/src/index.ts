@@ -11,16 +11,21 @@ export default function createUI(): ParcheManifest {
   const dir = path.dirname(fileURLToPath(import.meta.url));
   const w = (file: string) => path.resolve(dir, 'widgets', file);
   const layout = (file: string) => path.resolve(dir, 'layout', file);
-  const tpl = (file: string) => path.resolve(dir, 'templates', file);
   return {
     name: 'ui',
     // Let Tailwind scan these components' classes, even installed from npm.
     content: [path.resolve(dir, '**/*.astro')],
-    templates: {
-      contact: tpl('contact.astro'),
-      content: tpl('content.astro'),
-    },
+    // Every page root is wrapped in Section unless the widget's meta says
+    // `wrapper: false`; the tones are the values Section's `tone` accepts.
+    wrapper: 'Section',
+    tones: [
+      { name: 'glow', label: 'Glow' },
+      { name: 'gradient', label: 'Gradient' },
+      { name: 'dots', label: 'Dots' },
+    ],
+    styles: [path.resolve(dir, 'styles/tones.css')],
     widgets: {
+      Section: w('Section.astro'),
       // Layout chrome (Header/Footer), consumed by page layouts
       'layout/Header': layout('Header.astro'),
       'layout/Footer': layout('Footer.astro'),
@@ -67,9 +72,6 @@ export default function createUI(): ParcheManifest {
       'blog/TagCloud': w('blog/TagCloud.astro'),
       'blog/ToBlogLink': w('blog/ToBlogLink.astro'),
     },
-    // Widgets that render edge-to-edge and manage their own padding. Core reads
-    // this instead of a hardcoded list, so any parche's widgets can opt in.
-    fullBleed: ['Hero', 'Hero2', 'HeroText', 'Announcement', 'Note'],
     requires: {
       elements: ['Accordion', 'Avatar', 'Badge', 'Banner', 'Breadcrumb', 'Button', 'Card', 'Carousel', 'Checkbox', 'Collapsible', 'Container', 'Divider', 'Heading', 'Icon', 'Image', 'Input', 'Link', 'Menu', 'Pagination', 'Popover', 'Section', 'Share', 'Sheet', 'Stat', 'Tag', 'Textarea', 'Toc'],
     },

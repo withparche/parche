@@ -14,27 +14,34 @@
       }
     },
     {
-      "widget": "Stats",
-      "wrapper": {
-        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(80% 120% at 50% 0%, rgba(59,110,246,0.07), transparent 70%)'></div>"
-      },
+      "widget": "Section",
       "props": {
-        "stats": [
+        "tone": "glow"
+      },
+      "slots": {
+        "default": [
           {
-            "title": "Contributors",
-            "amount": "180"
-          },
-          {
-            "title": "Releases",
-            "amount": "64"
-          },
-          {
-            "title": "Sites built",
-            "amount": "48.4K"
-          },
-          {
-            "title": "Years running",
-            "amount": "4"
+            "widget": "Stats",
+            "props": {
+              "stats": [
+                {
+                  "title": "Contributors",
+                  "amount": "180"
+                },
+                {
+                  "title": "Releases",
+                  "amount": "64"
+                },
+                {
+                  "title": "Sites built",
+                  "amount": "48.4K"
+                },
+                {
+                  "title": "Years running",
+                  "amount": "4"
+                }
+              ]
+            }
           }
         ]
       }

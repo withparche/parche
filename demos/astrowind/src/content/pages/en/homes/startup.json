@@ -28,55 +28,69 @@
       }
     },
     {
-      "widget": "Features2",
-      "wrapper": {
+      "widget": "Section",
+      "props": {
         "id": "features"
       },
-      "props": {
-        "tagline": "What we do",
-        "title": "Three things, done properly",
-        "columns": "3",
-        "items": [
+      "slots": {
+        "default": [
           {
-            "title": "Research",
-            "description": "We talk to the people who will use it before we build anything.",
-            "icon": "tabler:search"
-          },
-          {
-            "title": "Design",
-            "description": "Interfaces that explain themselves, with no manual required.",
-            "icon": "tabler:palette"
-          },
-          {
-            "title": "Engineering",
-            "description": "Small releases, measured, reversible.",
-            "icon": "tabler:code"
+            "widget": "Features2",
+            "props": {
+              "tagline": "What we do",
+              "title": "Three things, done properly",
+              "columns": "3",
+              "items": [
+                {
+                  "title": "Research",
+                  "description": "We talk to the people who will use it before we build anything.",
+                  "icon": "tabler:search"
+                },
+                {
+                  "title": "Design",
+                  "description": "Interfaces that explain themselves, with no manual required.",
+                  "icon": "tabler:palette"
+                },
+                {
+                  "title": "Engineering",
+                  "description": "Small releases, measured, reversible.",
+                  "icon": "tabler:code"
+                }
+              ]
+            }
           }
         ]
       }
     },
     {
-      "widget": "Stats",
-      "wrapper": {
-        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(80% 120% at 50% 0%, rgba(59,110,246,0.07), transparent 70%)'></div>"
-      },
+      "widget": "Section",
       "props": {
-        "stats": [
+        "tone": "glow"
+      },
+      "slots": {
+        "default": [
           {
-            "title": "Weekly users",
-            "amount": "12K"
-          },
-          {
-            "title": "Retention",
-            "amount": "94%"
-          },
-          {
-            "title": "Releases",
-            "amount": "312"
-          },
-          {
-            "title": "Team",
-            "amount": "9"
+            "widget": "Stats",
+            "props": {
+              "stats": [
+                {
+                  "title": "Weekly users",
+                  "amount": "12K"
+                },
+                {
+                  "title": "Retention",
+                  "amount": "94%"
+                },
+                {
+                  "title": "Releases",
+                  "amount": "312"
+                },
+                {
+                  "title": "Team",
+                  "amount": "9"
+                }
+              ]
+            }
           }
         ]
       }
@@ -118,39 +132,53 @@
       }
     },
     {
-      "widget": "FAQs",
-      "wrapper": {
+      "widget": "Section",
+      "props": {
         "id": "faq"
       },
-      "props": {
-        "title": "Common questions",
-        "columns": "2",
-        "items": [
+      "slots": {
+        "default": [
           {
-            "title": "Are you hiring?",
-            "description": "Occasionally. Write to us with something you have built."
-          },
-          {
-            "title": "Where are you based?",
-            "description": "Distributed across four time zones, with two meetings a week."
+            "widget": "FAQs",
+            "props": {
+              "title": "Common questions",
+              "columns": "2",
+              "items": [
+                {
+                  "title": "Are you hiring?",
+                  "description": "Occasionally. Write to us with something you have built."
+                },
+                {
+                  "title": "Where are you based?",
+                  "description": "Distributed across four time zones, with two meetings a week."
+                }
+              ]
+            }
           }
         ]
       }
     },
     {
-      "widget": "CallToAction",
-      "wrapper": {
-        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
-      },
+      "widget": "Section",
       "props": {
-        "title": "Come and see it",
-        "subtitle": "Fifteen minutes, no slides.",
-        "actions": [
+        "tone": "glow"
+      },
+      "slots": {
+        "default": [
           {
-            "variant": "primary",
-            "text": "Book a call",
-            "href": "/contact",
-            "icon": "tabler:calendar"
+            "widget": "CallToAction",
+            "props": {
+              "title": "Come and see it",
+              "subtitle": "Fifteen minutes, no slides.",
+              "actions": [
+                {
+                  "variant": "primary",
+                  "text": "Book a call",
+                  "href": "/contact",
+                  "icon": "tabler:calendar"
+                }
+              ]
+            }
           }
         ]
       }

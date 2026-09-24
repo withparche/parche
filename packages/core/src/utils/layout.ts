@@ -1,10 +1,10 @@
 import { getCollection } from 'astro:content';
-import type { SectionEntry } from '../content/schemas.js';
+import type { Node } from '../content/node.js';
 
-/** Hardcoded base layout: just a Main area (no header/footer) */
-const BASE_LAYOUT_SECTIONS: SectionEntry[] = [{ widget: 'layout/Main' }];
+/** The base layout when a site has none: the page and nothing else. */
+const BASE_LAYOUT_SECTIONS: Node[] = [{ widget: 'Outlet' }];
 
-type LayoutEntry = { id: string; data: { sections: SectionEntry[] } };
+type LayoutEntry = { id: string; data: { sections: Node[] } };
 
 // Content collections are immutable at runtime, so build the id→entry index
 // once and reuse it across requests. Cache only in prod — in dev, content edits
@@ -42,7 +42,7 @@ export async function resolveLayout(
   name: string,
   locale: string,
   defaultLocale: string,
-): Promise<SectionEntry[]> {
+): Promise<Node[]> {
   const index = await getLayoutIndex();
   if (!index) return BASE_LAYOUT_SECTIONS;
 

@@ -1,0 +1,56 @@
+/* Generated from packages/core/tokens/*.json by scripts/build-tokens.mjs. Do not edit; run `pnpm tokens`.
+   Section tones: each re-declares the sys colour roles inside a toned Section. */
+
+/* The dark-mode roles, scoped to the section */
+.parche-section[data-tone="dark"] {
+  --ds-sys-color-background: oklch(0.100 0.040 260);
+  --ds-sys-color-foreground: oklch(0.960 0.005 260);
+  --ds-sys-color-surface: oklch(0.140 0.040 260);
+  --ds-sys-color-surface-hover: oklch(0.190 0.040 260);
+  --ds-sys-color-surface-2: oklch(0.175 0.040 260);
+  --ds-sys-color-on-surface: oklch(0.800 0.010 250);
+  --ds-sys-color-primary: oklch(0.650 0.190 260);
+  --ds-sys-color-primary-hover: oklch(0.700 0.170 260);
+  --ds-sys-color-link: var(--ds-sys-color-primary);
+  --ds-sys-color-on-primary: oklch(0.130 0.040 260);
+  --ds-sys-color-primary-soft: oklch(0.200 0.060 260);
+  --ds-sys-color-muted: oklch(0.60 0.015 260);
+  --ds-sys-color-border: oklch(0.200 0.030 260);
+  --ds-sys-color-border-soft: oklch(0.170 0.030 260);
+  --ds-sys-color-heading: oklch(0.970 0.003 260);
+  --ds-sys-color-text: oklch(0.800 0.010 250);
+  --ds-sys-color-highlight: oklch(0.660 0.220 295);
+  --ds-sys-color-ring: var(--ds-sys-color-primary);
+  --ds-sys-color-overlay: oklch(0.02 0.01 260 / 0.7);
+  --ds-sys-color-success: var(--ds-ref-color-success-400);
+  --ds-sys-color-on-success: oklch(0.12 0.03 145);
+  --ds-sys-color-success-soft: oklch(0.22 0.05 145);
+  --ds-sys-color-warning: var(--ds-ref-color-warning-400);
+  --ds-sys-color-on-warning: oklch(0.12 0.03 70);
+  --ds-sys-color-warning-soft: oklch(0.22 0.05 70);
+  --ds-sys-color-danger: var(--ds-ref-color-danger-400);
+  --ds-sys-color-on-danger: oklch(0.12 0.03 25);
+  --ds-sys-color-danger-soft: oklch(0.22 0.06 25);
+}
+
+/* A quieter canvas; cards keep the page colour so they still lift */
+.parche-section[data-tone="muted"] {
+  --ds-sys-color-background: var(--ds-sys-color-surface-2);
+  --ds-sys-color-surface: var(--ds-sys-color-background);
+}
+
+/* The brand colour as canvas, everything on it in on-primary */
+.parche-section[data-tone="primary"] {
+  --ds-sys-color-background: var(--ds-sys-color-primary);
+  --ds-sys-color-surface: var(--ds-sys-color-primary-hover);
+  --ds-sys-color-surface-2: var(--ds-sys-color-primary-hover);
+  --ds-sys-color-surface-hover: var(--ds-sys-color-primary-hover);
+  --ds-sys-color-on-surface: var(--ds-sys-color-on-primary);
+  --ds-sys-color-text: var(--ds-sys-color-on-primary);
+  --ds-sys-color-heading: var(--ds-sys-color-on-primary);
+  --ds-sys-color-muted: color-mix(in oklab, var(--ds-sys-color-on-primary) 80%, var(--ds-sys-color-primary));
+  --ds-sys-color-link: var(--ds-sys-color-on-primary);
+  --ds-sys-color-border: color-mix(in oklab, var(--ds-sys-color-on-primary) 30%, transparent);
+  --ds-sys-color-border-soft: color-mix(in oklab, var(--ds-sys-color-on-primary) 15%, transparent);
+  --ds-sys-color-ring: var(--ds-sys-color-on-primary);
+}

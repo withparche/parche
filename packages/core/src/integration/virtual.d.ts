@@ -71,8 +71,12 @@ declare module 'parche:config/themes' {
 }
 
 declare module 'parche:config/layout' {
-  /** Widget keys that render full-bleed (skip the default SectionWrapper). */
-  export const fullBleedWidgets: string[];
+  /** The wrapper widget for page roots (`Section`), or null when none is declared. */
+  export const wrapper: string | null;
+  /** Widgets whose meta declares `wrapper: false`: never wrapped, even as roots. */
+  export const unwrapped: string[];
+  /** Section tones the wrapper's `tone` prop accepts. */
+  export const tones: Array<{ name: string; label: string }>;
 }
 
 // Layouts
@@ -161,7 +165,7 @@ declare module 'parche:widgets/*' {
   export default Component;
 }
 
-declare module 'parche:DynamicRenderer' {
+declare module 'parche:NodeRenderer' {
   const Component: import('astro').AstroComponentFactory;
   export default Component;
 }

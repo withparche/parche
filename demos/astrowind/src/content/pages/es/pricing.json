@@ -11,93 +11,100 @@
       }
     },
     {
-      "widget": "Pricing",
-      "wrapper": {
-        "id": "pricing",
-        "bg": "<div style='position:absolute;inset:0;background:linear-gradient(180deg, transparent 40%, rgba(100,116,139,0.06))'></div>"
-      },
+      "widget": "Section",
       "props": {
-        "title": "Nuestros precios",
-        "subtitle": "Paga solo por lo que necesitas.",
-        "prices": [
+        "id": "pricing",
+        "tone": "gradient"
+      },
+      "slots": {
+        "default": [
           {
-            "title": "Básico",
-            "subtitle": "Ideal para proyectos personales",
-            "price": "29",
-            "currency": "$",
-            "period": "al mes",
-            "items": [
-              {
-                "description": "Un proyecto"
-              },
-              {
-                "description": "Soporte de la comunidad"
-              },
-              {
-                "description": "Todos los widgets básicos"
-              },
-              {
-                "description": "Actualizaciones mensuales"
-              }
-            ],
-            "callToAction": {
-              "text": "Empezar",
-              "href": "#"
-            }
-          },
-          {
-            "title": "Estándar",
-            "subtitle": "Ideal para equipos pequeños",
-            "price": "69",
-            "currency": "$",
-            "period": "al mes",
-            "items": [
-              {
-                "description": "Hasta diez proyectos"
-              },
-              {
-                "description": "Soporte prioritario por correo"
-              },
-              {
-                "description": "Todos los widgets y temas"
-              },
-              {
-                "description": "Tokens de diseño compartidos"
-              },
-              {
-                "description": "Actualizaciones semanales"
-              }
-            ],
-            "callToAction": {
-              "text": "Empezar",
-              "href": "#"
-            },
-            "hasRibbon": true,
-            "ribbonTitle": "Popular"
-          },
-          {
-            "title": "Premium",
-            "subtitle": "Ideal para empresas",
-            "price": "199",
-            "currency": "$",
-            "period": "al mes",
-            "items": [
-              {
-                "description": "Proyectos ilimitados"
-              },
-              {
-                "description": "Canal de soporte dedicado"
-              },
-              {
-                "description": "Desarrollo de tema a medida"
-              },
-              {
-                "description": "Sesión de puesta en marcha"
-              }
-            ],
-            "callToAction": {
-              "text": "Empezar",
-              "href": "#"
+            "widget": "Pricing",
+            "props": {
+              "title": "Nuestros precios",
+              "subtitle": "Paga solo por lo que necesitas.",
+              "prices": [
+                {
+                  "title": "Básico",
+                  "subtitle": "Ideal para proyectos personales",
+                  "price": "29",
+                  "currency": "$",
+                  "period": "al mes",
+                  "items": [
+                    {
+                      "description": "Un proyecto"
+                    },
+                    {
+                      "description": "Soporte de la comunidad"
+                    },
+                    {
+                      "description": "Todos los widgets básicos"
+                    },
+                    {
+                      "description": "Actualizaciones mensuales"
+                    }
+                  ],
+                  "callToAction": {
+                    "text": "Empezar",
+                    "href": "#"
+                  }
+                },
+                {
+                  "title": "Estándar",
+                  "subtitle": "Ideal para equipos pequeños",
+                  "price": "69",
+                  "currency": "$",
+                  "period": "al mes",
+                  "items": [
+                    {
+                      "description": "Hasta diez proyectos"
+                    },
+                    {
+                      "description": "Soporte prioritario por correo"
+                    },
+                    {
+                      "description": "Todos los widgets y temas"
+                    },
+                    {
+                      "description": "Tokens de diseño compartidos"
+                    },
+                    {
+                      "description": "Actualizaciones semanales"
+                    }
+                  ],
+                  "callToAction": {
+                    "text": "Empezar",
+                    "href": "#"
+                  },
+                  "hasRibbon": true,
+                  "ribbonTitle": "Popular"
+                },
+                {
+                  "title": "Premium",
+                  "subtitle": "Ideal para empresas",
+                  "price": "199",
+                  "currency": "$",
+                  "period": "al mes",
+                  "items": [
+                    {
+                      "description": "Proyectos ilimitados"
+                    },
+                    {
+                      "description": "Canal de soporte dedicado"
+                    },
+                    {
+                      "description": "Desarrollo de tema a medida"
+                    },
+                    {
+                      "description": "Sesión de puesta en marcha"
+                    }
+                  ],
+                  "callToAction": {
+                    "text": "Empezar",
+                    "href": "#"
+                  }
+                }
+              ]
             }
           }
         ]
@@ -134,83 +141,104 @@
       }
     },
     {
-      "widget": "Steps",
-      "wrapper": {
+      "widget": "Section",
+      "props": {
         "id": "how"
       },
-      "props": {
-        "title": "Del plan elegido a la web publicada",
-        "items": [
+      "slots": {
+        "default": [
           {
-            "title": "Elige un plan",
-            "description": "Si dudas, empieza por el Básico. Subir de nivel más adelante conserva todo lo que ya has hecho.",
-            "icon": "tabler:number-1"
-          },
-          {
-            "title": "Monta tu web",
-            "description": "Clona la plantilla, ajusta los tokens a tu marca y escribe tu contenido como datos.",
-            "icon": "tabler:number-2"
-          },
-          {
-            "title": "Publica",
-            "description": "Compila una vez y despliega la salida estática donde quieras, o sírvela como servidor si necesitas render por petición.",
-            "icon": "tabler:number-3"
-          }
-        ],
-        "image": {
-          "src": "https://images.unsplash.com/photo-1536816579748-4ecb3f03d72a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80",
-          "alt": "Montando una web"
-        }
-      }
-    },
-    {
-      "widget": "FAQs",
-      "wrapper": {
-        "id": "faq"
-      },
-      "props": {
-        "tagline": "Preguntas frecuentes",
-        "title": "Dudas sobre precios, resueltas",
-        "columns": "2",
-        "items": [
-          {
-            "title": "¿Puedo probarlo antes de pagar?",
-            "description": "Sí. Todos los planes incluyen catorce días de prueba y no hace falta tarjeta para empezar."
-          },
-          {
-            "title": "¿Y si se me queda pequeño el plan?",
-            "description": "Pasa al siguiente nivel cuando quieras. Todo lo que has construido se mantiene intacto."
-          },
-          {
-            "title": "¿Devolvéis el dinero?",
-            "description": "Si el primer mes no sale bien, escríbenos y te lo devolvemos íntegro."
-          },
-          {
-            "title": "¿Puedo pagar de forma anual?",
-            "description": "Sí, y la facturación anual sale más barata que la mensual."
+            "widget": "Steps",
+            "props": {
+              "title": "Del plan elegido a la web publicada",
+              "items": [
+                {
+                  "title": "Elige un plan",
+                  "description": "Si dudas, empieza por el Básico. Subir de nivel más adelante conserva todo lo que ya has hecho.",
+                  "icon": "tabler:number-1"
+                },
+                {
+                  "title": "Monta tu web",
+                  "description": "Clona la plantilla, ajusta los tokens a tu marca y escribe tu contenido como datos.",
+                  "icon": "tabler:number-2"
+                },
+                {
+                  "title": "Publica",
+                  "description": "Compila una vez y despliega la salida estática donde quieras, o sírvela como servidor si necesitas render por petición.",
+                  "icon": "tabler:number-3"
+                }
+              ],
+              "image": {
+                "src": "https://images.unsplash.com/photo-1536816579748-4ecb3f03d72a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80",
+                "alt": "Montando una web"
+              }
+            }
           }
         ]
       }
     },
     {
-      "widget": "CallToAction",
-      "wrapper": {
-        "bg": "<div style='position:absolute;inset:0;background:radial-gradient(70% 90% at 50% 100%, rgba(59,110,246,0.12), transparent 70%)'></div>"
-      },
+      "widget": "Section",
       "props": {
-        "title": "¿Aún lo estás pensando?",
-        "subtitle": "Empieza la prueba gratuita y mira hasta dónde llegas en una tarde.",
-        "actions": [
+        "id": "faq"
+      },
+      "slots": {
+        "default": [
           {
-            "variant": "primary",
-            "text": "Empezar prueba",
-            "href": "#pricing",
-            "icon": "tabler:arrow-right"
-          },
+            "widget": "FAQs",
+            "props": {
+              "tagline": "Preguntas frecuentes",
+              "title": "Dudas sobre precios, resueltas",
+              "columns": "2",
+              "items": [
+                {
+                  "title": "¿Puedo probarlo antes de pagar?",
+                  "description": "Sí. Todos los planes incluyen catorce días de prueba y no hace falta tarjeta para empezar."
+                },
+                {
+                  "title": "¿Y si se me queda pequeño el plan?",
+                  "description": "Pasa al siguiente nivel cuando quieras. Todo lo que has construido se mantiene intacto."
+                },
+                {
+                  "title": "¿Devolvéis el dinero?",
+                  "description": "Si el primer mes no sale bien, escríbenos y te lo devolvemos íntegro."
+                },
+                {
+                  "title": "¿Puedo pagar de forma anual?",
+                  "description": "Sí, y la facturación anual sale más barata que la mensual."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "glow"
+      },
+      "slots": {
+        "default": [
           {
-            "variant": "secondary",
-            "text": "Hablar con nosotros",
-            "href": "/es/contacto"
+            "widget": "CallToAction",
+            "props": {
+              "title": "¿Aún lo estás pensando?",
+              "subtitle": "Empieza la prueba gratuita y mira hasta dónde llegas en una tarde.",
+              "actions": [
+                {
+                  "variant": "primary",
+                  "text": "Empezar prueba",
+                  "href": "#pricing",
+                  "icon": "tabler:arrow-right"
+                },
+                {
+                  "variant": "secondary",
+                  "text": "Hablar con nosotros",
+                  "href": "/es/contacto"
+                }
+              ]
+            }
           }
         ]
       }

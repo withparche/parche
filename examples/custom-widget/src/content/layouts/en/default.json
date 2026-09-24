@@ -1,7 +1,24 @@
 {
   "sections": [
-    { "widget": "layout/Header", "props": { "links": [{ "label": "Home", "href": "/" }] } },
-    { "widget": "layout/Main" },
-    { "widget": "layout/Footer", "props": { "footNote": "Built with Parche." } }
+    {
+      "widget": "layout/Header",
+      "props": {
+        "links": [
+          {
+            "label": "Home",
+            "href": "/"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Outlet"
+    },
+    {
+      "widget": "layout/Footer",
+      "props": {
+        "footNote": "Built with Parche."
+      }
+    }
   ]
 }

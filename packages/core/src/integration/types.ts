@@ -26,7 +26,18 @@ export interface FieldGroup {
   fields: string[];
 }
 
-/** Widget-level metadata — classification + builder UI config */
+/** What a widget's slot accepts. Declared in the widget's `.props.ts`; the
+ *  build checks slot contents against it, the builder offers it as a drop zone. */
+export interface SlotMeta {
+  label?: string;
+  help?: string;
+  /** Widget names allowed here; every widget when omitted. */
+  allow?: string[];
+  min?: number;
+  max?: number;
+}
+
+/** Widget-level metadata — classification, slots, builder UI config */
 export interface WidgetMeta {
   widget: {
     label: string;
@@ -35,7 +46,13 @@ export interface WidgetMeta {
     icon?: string;
     thumbnail?: string;
     tags?: string[];
+    /** `false` when the widget renders full-bleed and must not be wrapped in
+     *  the registry's wrapper widget when it is a page root (a Hero, a banner). */
+    wrapper?: false;
   };
+  /** The slots this widget renders (`<slot name="media">`), by name. `default`
+   *  is the unnamed slot. A widget without this entry is a leaf. */
+  slots?: Record<string, SlotMeta>;
   ui?: {
     groups?: FieldGroup[];
   };
@@ -169,13 +186,18 @@ export interface ParcheManifest {
   /** Widgets to register: virtual ID suffix → absolute path (parche:widgets/{name}) */
   widgets?: Record<string, string>;
   /**
-   * Widget keys (as registered in `widgets`) that render full-bleed and manage
-   * their own padding — DynamicRenderer skips the default SectionWrapper for them
-   * unless a section sets `wrapper` explicitly. Declared here (statically) rather
-   * than in each widget's `.props.ts` so the render path never imports schemas.
-   * Core no longer hardcodes any widget names.
+   * The widget every page root is wrapped in (`Section`): a widget with a
+   * default slot, registered in `widgets` by this or another parche. The last
+   * parche to declare one wins. Core knows no widget names, so with no
+   * declaration roots render bare.
    */
-  fullBleed?: string[];
+  wrapper?: string;
+  /**
+   * Section tones this parche adds: names the wrapper's `tone` prop accepts,
+   * each backed by a `[data-tone="<name>"]` rule in this parche's styles.
+   * Core ships `default`, `muted`, `dark` and `primary`.
+   */
+  tones?: Array<{ name: string; label: string }>;
   /** Templates to register: virtual ID suffix → absolute path */
   templates?: Record<string, string>;
   /**
@@ -317,8 +339,12 @@ export interface ResolvedRegistry {
   modules: Record<string, string>;
   /** Set of virtual IDs that use named exports (export *) instead of default */
   namedExportModules: Set<string>;
-  /** Widget keys that render full-bleed (skip the default SectionWrapper) */
-  fullBleedWidgets: string[];
+  /** The wrapper widget for page roots, or null when no parche declares one. */
+  wrapper: string | null;
+  /** Section tones: core's four plus every parche's. */
+  tones: Array<{ name: string; label: string }>;
+  /** Widgets whose `.props.ts` meta says `wrapper: false` (full-bleed roots). */
+  unwrapped: string[];
   /** Structural widget requirements: prop names a requiring parche expects the
    *  provider to expose. Checked against the generated schemas (builder-time). */
   widgetPropRequirements: Array<{ from: string; name: string; props: string[] }>;

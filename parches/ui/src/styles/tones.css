@@ -1,0 +1,42 @@
+/* =================================================================
+   Section tones this parche adds, on top of core's default / muted /
+   dark / primary. A tone is a name the Section widget's `tone` prop
+   accepts; the band sets data-tone and paints bg-background, so a tone
+   may re-declare roles, add a decoration, or both. Everything is drawn
+   from tokens, so a theme moves these with the rest.
+
+   Decorations go on a pseudo-element behind the content, never on the
+   band itself: a mask on the band would fade the text with it.
+   ================================================================= */
+
+.parche-section[data-tone] {
+  isolation: isolate;
+}
+
+.parche-section[data-tone="glow"]::before,
+.parche-section[data-tone="gradient"]::before,
+.parche-section[data-tone="dots"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* A soft radial glow of the brand colour from the top. */
+.parche-section[data-tone="glow"]::before {
+  background: radial-gradient(80% 120% at 50% 0%, var(--ds-sys-color-primary-soft), transparent 70%);
+}
+
+/* A quiet vertical wash of the brand colour that fades out. */
+.parche-section[data-tone="gradient"]::before {
+  background: linear-gradient(180deg, var(--ds-sys-color-primary-soft), transparent 65%);
+}
+
+/* A dot grid, masked so it fades towards the edges. */
+.parche-section[data-tone="dots"]::before {
+  background-image: radial-gradient(color-mix(in oklab, var(--ds-sys-color-primary) 22%, transparent) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 80%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 80%);
+}

@@ -1,5 +1,7 @@
 {
   "sections": [
-    { "widget": "layout/Main" }
+    {
+      "widget": "Outlet"
+    }
   ]
 }
