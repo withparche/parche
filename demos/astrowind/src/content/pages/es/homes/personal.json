@@ -81,8 +81,9 @@
       }
     },
     {
-      "widget": "Features3",
+      "widget": "Features",
       "props": {
+        "style": "list",
         "title": "Trabajos destacados",
         "columns": "3",
         "items": [

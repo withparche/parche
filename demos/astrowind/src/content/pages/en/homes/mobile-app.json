@@ -30,8 +30,9 @@
       }
     },
     {
-      "widget": "Features3",
+      "widget": "Features",
       "props": {
+        "style": "list",
         "title": "Built for the phone, not shrunk to fit",
         "columns": "3",
         "items": [

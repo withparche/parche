@@ -22,8 +22,9 @@
       }
     },
     {
-      "widget": "Features2",
+      "widget": "Features",
       "props": {
+        "style": "cards",
         "tagline": "Servicios",
         "title": "Qué ofrecemos",
         "subtitle": "Cuatro formas de trabajar juntos, de la más ligera a la más completa.",

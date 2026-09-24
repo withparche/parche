@@ -30,8 +30,9 @@
       }
     },
     {
-      "widget": "Features3",
+      "widget": "Features",
       "props": {
+        "style": "list",
         "title": "Pensada para el móvil, no encogida para caber",
         "columns": "3",
         "items": [

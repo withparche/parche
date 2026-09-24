@@ -233,8 +233,9 @@
       "slots": {
         "default": [
           {
-            "widget": "Features2",
+            "widget": "Features",
             "props": {
+              "style": "cards",
               "tagline": "Componentes",
               "title": "Los widgets más usados",
               "subtitle": "Componentes de uso frecuente para construir webs con Tailwind CSS v4.",

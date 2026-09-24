@@ -52,8 +52,9 @@
       }
     },
     {
-      "widget": "Features2",
+      "widget": "Features",
       "props": {
+        "style": "cards",
         "title": "Other channels",
         "subtitle": "If a form is not your thing.",
         "columns": "3",

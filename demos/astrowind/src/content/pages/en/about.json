@@ -47,8 +47,9 @@
       }
     },
     {
-      "widget": "Features3",
+      "widget": "Features",
       "props": {
+        "style": "list",
         "title": "Our values",
         "subtitle": "What we optimise for when the two options both look reasonable.",
         "columns": "3",
@@ -72,12 +73,12 @@
       }
     },
     {
-      "widget": "Features3",
+      "widget": "Features",
       "props": {
+        "style": "list",
         "title": "Our achievements",
         "subtitle": "Milestones worth remembering.",
         "columns": "3",
-        "isAfterContent": true,
         "items": [
           {
             "title": "Most forked Astro theme",
@@ -122,8 +123,9 @@
       }
     },
     {
-      "widget": "Features2",
+      "widget": "Features",
       "props": {
+        "style": "cards",
         "title": "Get in touch",
         "subtitle": "Where to find us.",
         "columns": "3",

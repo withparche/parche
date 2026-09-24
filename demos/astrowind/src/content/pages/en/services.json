@@ -22,8 +22,9 @@
       }
     },
     {
-      "widget": "Features2",
+      "widget": "Features",
       "props": {
+        "style": "cards",
         "tagline": "Services",
         "title": "What we offer",
         "subtitle": "Four ways to work together, from the lightest to the most involved.",

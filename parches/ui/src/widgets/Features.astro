@@ -1,17 +1,18 @@
 ---
-import { twMerge } from 'tailwind-merge';
+/**
+ * The one features widget. `style` picks how an item is drawn: an icon badge
+ * beside the text, a card, or a compact list row. The `media` slot (or the
+ * `image` prop) sits between the headline and the items.
+ */
 import Heading from 'parche:elements/Heading';
 import Icon from 'parche:elements/Icon';
-import type { Props } from './Features.props';
+import Image from 'parche:elements/Image';
+import Card from 'parche:elements/Card';
+import Button from 'parche:elements/Button';
+import { schema, type Props } from './Features.props';
 
-const {
-  title,
-  subtitle,
-  tagline,
-  items = [],
-  columns = '2',
-  defaultIcon,
-} = Astro.props;
+const { style, title, subtitle, tagline, items, columns, defaultIcon, image } = schema.parse(Astro.props) as Props;
+const hasMedia = Astro.slots.has('media') || Boolean(image);
 
 const gridCols =
   columns === '4'
@@ -19,52 +20,57 @@ const gridCols =
     : columns === '3'
       ? 'lg:grid-cols-3 sm:grid-cols-2'
       : 'sm:grid-cols-2';
+const gap = style === 'cards' ? 'gap-4 md:gap-6' : style === 'list' ? 'gap-6 md:gap-8' : 'gap-8 md:gap-y-12';
 ---
 
-<Heading {title} {subtitle} {tagline} />
+<div class="parche-features" data-style={style}>
+  <Heading {title} {subtitle} {tagline} />
 
-{items.length > 0 && (
-  <div class={`grid mx-auto gap-8 md:gap-y-12 ${gridCols}`}>
-    {items.map((item) => {
-      const iconName = item.icon || defaultIcon;
-      return (
-        <div class={twMerge('flex flex-row max-w-md', item.classes?.panel)}>
-          <div class="flex justify-center">
-            {iconName && (
-              <div class={twMerge(
-                'flex items-center justify-center rounded-full bg-primary text-on-primary w-10 h-10 p-2 md:w-12 md:h-12 md:p-3 mr-4 rtl:ml-4 rtl:mr-0',
-                item.classes?.icon,
-              )}>
-                <Icon name={iconName} class="size-full" />
-              </div>
-            )}
-          </div>
-          <div class="mt-0.5">
-            {item.title && (
-              <h3
-                class={twMerge('font-bold text-xl md:text-[1.3rem] text-heading', item.classes?.title)}
-                set:html={item.title}
-              />
-            )}
-            {item.description && (
-              <p
-                class={twMerge(
-                  `${item.title ? 'mt-3' : ''} text-muted type-body`,
-                  item.classes?.description,
-                )}
-                set:html={item.description}
-              />
-            )}
+  {hasMedia && (
+    <div class="parche-features-media mb-8 md:mb-12">
+      <slot name="media">
+        {image && <Image src={image.src} alt={image.alt} width={1024} ratio="21/9" class="rounded-xl shadow-lg" />}
+      </slot>
+    </div>
+  )}
+
+  {items.length > 0 && (
+    <div class:list={['grid mx-auto', gap, gridCols]}>
+      {items.map((item) => {
+        const iconName = item.icon || defaultIcon;
+        const body = (
+          <Fragment>
+            {item.title && <h3 class:list={['text-heading', style === 'list' ? 'text-lg font-semibold' : 'font-bold text-xl md:text-[1.3rem]', style === 'cards' && 'mb-2']} set:html={item.title} />}
+            {item.description && <p class:list={['text-muted type-body', style === 'cards' ? 'grow' : item.title ? (style === 'list' ? 'mt-0.5' : 'mt-3') : '']} set:html={item.description} />}
             {item.callToAction?.text && (
-              <div class={`${item.title || item.description ? 'mt-3' : ''}`}>
-                <a href={item.callToAction.href} class="text-primary font-semibold hover:underline">
-                  {item.callToAction.text}
-                </a>
+              <div class:list={[style === 'cards' ? 'mt-4' : style === 'list' ? 'mt-2' : 'mt-3']}>
+                <Button variant="link" href={item.callToAction.href} class="font-semibold">{item.callToAction.text}</Button>
               </div>
             )}
+          </Fragment>
+        );
+        return style === 'cards' ? (
+          <Card padding="md" class="flex flex-col">
+            {iconName && <Icon name={iconName} class="w-12 h-12 mb-6 text-primary" />}
+            {body}
+          </Card>
+        ) : (
+          <div class="flex flex-row max-w-full sm:max-w-md">
+            {iconName && (
+              style === 'grid' ? (
+                <div class="flex items-center justify-center rounded-full bg-primary text-on-primary w-10 h-10 p-2 md:w-12 md:h-12 md:p-3 mr-4 rtl:ml-4 rtl:mr-0 shrink-0">
+                  <Icon name={iconName} class="size-full" />
+                </div>
+              ) : (
+                <div class="shrink-0 mt-1 mr-4 rtl:ml-4 rtl:mr-0">
+                  <Icon name={iconName} size="lg" class="text-primary" />
+                </div>
+              )
+            )}
+            <div class:list={[style === 'grid' && 'mt-0.5']}>{body}</div>
           </div>
-        </div>
-      );
-    })}
-  </div>
-)}
+        );
+      })}
+    </div>
+  )}
+</div>

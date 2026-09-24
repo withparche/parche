@@ -113,8 +113,9 @@
       }
     },
     {
-      "widget": "Features3",
+      "widget": "Features",
       "props": {
+        "style": "list",
         "title": "Price-related features",
         "subtitle": "What every plan includes, regardless of size.",
         "columns": "2",

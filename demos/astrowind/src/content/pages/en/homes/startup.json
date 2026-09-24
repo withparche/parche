@@ -35,8 +35,9 @@
       "slots": {
         "default": [
           {
-            "widget": "Features2",
+            "widget": "Features",
             "props": {
+              "style": "cards",
               "tagline": "What we do",
               "title": "Three things, done properly",
               "columns": "3",
@@ -108,8 +109,9 @@
       }
     },
     {
-      "widget": "Features3",
+      "widget": "Features",
       "props": {
+        "style": "list",
         "title": "Why teams switch",
         "columns": "3",
         "items": [

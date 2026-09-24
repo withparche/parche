@@ -48,8 +48,9 @@
       }
     },
     {
-      "widget": "Features3",
+      "widget": "Features",
       "props": {
+        "style": "list",
         "title": "Nuestros valores",
         "subtitle": "Qué priorizamos cuando las dos opciones parecen razonables.",
         "columns": "3",
@@ -73,12 +74,12 @@
       }
     },
     {
-      "widget": "Features3",
+      "widget": "Features",
       "props": {
+        "style": "list",
         "title": "Nuestros logros",
         "subtitle": "Hitos que merece la pena recordar.",
         "columns": "3",
-        "isAfterContent": true,
         "items": [
           {
             "title": "El tema de Astro con más forks",
@@ -123,8 +124,9 @@
       }
     },
     {
-      "widget": "Features2",
+      "widget": "Features",
       "props": {
+        "style": "cards",
         "title": "Habla con nosotros",
         "subtitle": "Dónde encontrarnos.",
         "columns": "3",

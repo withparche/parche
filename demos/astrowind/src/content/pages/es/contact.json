@@ -52,8 +52,9 @@
       }
     },
     {
-      "widget": "Features2",
+      "widget": "Features",
       "props": {
+        "style": "cards",
         "title": "Otras vías",
         "subtitle": "Si el formulario no es lo tuyo.",
         "columns": "3",

@@ -35,8 +35,9 @@
       "slots": {
         "default": [
           {
-            "widget": "Features2",
+            "widget": "Features",
             "props": {
+              "style": "cards",
               "tagline": "Qué hacemos",
               "title": "Tres cosas, bien hechas",
               "columns": "3",
@@ -108,8 +109,9 @@
       }
     },
     {
-      "widget": "Features3",
+      "widget": "Features",
       "props": {
+        "style": "list",
         "title": "Por qué se cambian",
         "columns": "3",
         "items": [

@@ -63,6 +63,9 @@ function fromClasses(classes, file) {
  */
 const RENAMES = {
   Hero2: (props) => ({ widget: 'Hero', props: { layout: 'split', ...props } }),
+  Features2: (props) => ({ widget: 'Features', props: { style: 'cards', ...stripItemClasses(props) } }),
+  Features3: ({ isBeforeContent, isAfterContent, ...props }) => ({ widget: 'Features', props: { style: 'list', ...stripItemClasses(props) } }),
+  Features: (props) => ({ widget: 'Features', props: stripItemClasses(props) }),
   HeroText: ({ callToAction, callToAction2, ...props }) => ({
     widget: 'Hero',
     props: {
@@ -75,6 +78,12 @@ const RENAMES = {
     },
   }),
 };
+
+/** Per-item `classes` overrides are gone: the look is the widget's style. */
+function stripItemClasses(props) {
+  if (!Array.isArray(props.items)) return props;
+  return { ...props, items: props.items.map(({ classes, ...item }) => item) };
+}
 
 function rename(node) {
   const to = RENAMES[node.widget];
@@ -104,8 +113,10 @@ function migrateNode(section, file) {
 function migrate(data, file) {
   let changed = false;
   if (Array.isArray(data.sections)) {
+    // Snapshot first: a nested rewrite mutates the slot arrays in place.
+    const before = JSON.stringify(data.sections);
     const next = data.sections.map((s) => migrateNode(s, file));
-    if (JSON.stringify(next) !== JSON.stringify(data.sections)) {
+    if (JSON.stringify(next) !== before) {
       data.sections = next;
       changed = true;
     }

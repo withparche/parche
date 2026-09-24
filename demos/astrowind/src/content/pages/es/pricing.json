@@ -113,8 +113,9 @@
       }
     },
     {
-      "widget": "Features3",
+      "widget": "Features",
       "props": {
+        "style": "list",
         "title": "Qué incluye el precio",
         "subtitle": "Lo que llevan todos los planes, sea cual sea su tamaño.",
         "columns": "2",
