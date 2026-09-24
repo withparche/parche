@@ -1,19 +1,44 @@
 ---
+/**
+ * One headline, one action. The tone of the band around it is the Section's
+ * job; this widget only decides the arrangement.
+ */
 import Heading from 'parche:elements/Heading';
 import Card from 'parche:elements/Card';
 import Action from '../components/Action.astro';
-import type { Props } from './CallToAction.props';
+import { schema, type Props } from './CallToAction.props';
 
-const { title, subtitle, tagline, actions = [] } = Astro.props;
+const { layout, title, subtitle, tagline, actions } = schema.parse(Astro.props) as Props;
 ---
 
-<Card shadow="md" class="max-w-3xl mx-auto text-center">
-  <Heading {title} {subtitle} {tagline} spacing={false} />
-  {actions.length > 0 && (
-    <div class="flex flex-col sm:flex-row justify-center gap-4 mt-6">
-      {actions.map((action) => (
-        <Action action={action} />
-      ))}
+{layout === 'card' ? (
+  <Card shadow="md" class="parche-cta max-w-3xl mx-auto text-center" data-layout="card">
+    <Heading {title} {subtitle} {tagline} spacing={false} />
+    {actions.length > 0 && (
+      <div class="flex flex-col sm:flex-row justify-center gap-4 mt-6">
+        {actions.map((a) => <Action action={a} />)}
+      </div>
+    )}
+  </Card>
+) : layout === 'band' ? (
+  <div class="parche-cta flex flex-col gap-6 md:flex-row md:items-center md:justify-between" data-layout="band">
+    <Heading {title} {subtitle} {tagline} align="start" width="lg" spacing={false} />
+    {actions.length > 0 && (
+      <div class="flex flex-col sm:flex-row gap-4 shrink-0">
+        {actions.map((a) => <Action action={a} />)}
+      </div>
+    )}
+  </div>
+) : (
+  <div class="parche-cta flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between rounded-lg border border-border bg-surface px-6 py-5" data-layout="inline">
+    <div>
+      {title && <p class="font-semibold text-heading" set:html={title} />}
+      {subtitle && <p class="type-caption text-muted" set:html={subtitle} />}
     </div>
-  )}
-</Card>
+    {actions.length > 0 && (
+      <div class="flex gap-3 shrink-0">
+        {actions.map((a) => <Action action={a} />)}
+      </div>
+    )}
+  </div>
+)}

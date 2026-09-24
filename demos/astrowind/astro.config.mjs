@@ -5,7 +5,7 @@ import parche from '@parche/astro';
 import createElements from '@parche/elements';
 import createUI from '@parche/ui';
 import createBlog from '@parche/astro-blog';
-import { astrowind } from '@parche/themes';
+import { astrowind, product } from '@parche/themes';
 import { blogLabels } from './src/blog-labels.js';
 
 // AstroWind recreated on Parche — bilingual (en/es), static output.
@@ -29,12 +29,13 @@ export default defineConfig({
           labels: blogLabels,
         }),
         astrowind(),
+        product(),
       ],
       config: './src/parche.config.json',
       routes: { pages: true },
-      // Render the theme server-side so the first paint is AstroWind, not the
-      // base look. A visitor's own pick still wins on the client.
-      themes: { default: 'astrowind', showPanel: false },
+      // Render the theme server-side so the first paint is the Product look,
+      // not the base one. A visitor's own pick still wins on the client.
+      themes: { default: 'product', showPanel: false },
     }),
     icon(),
   ],

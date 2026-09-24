@@ -1,0 +1,110 @@
+/* =================================================================
+   Theme: Product — the 2026 redesign's default direction.
+   A near-white canvas, ink text, one accent blue everywhere, quiet
+   surfaces and hairlines; Space Grotesk for display, IBM Plex Sans for
+   text, JetBrains Mono for eyebrows and meta. Overrides sys roles, type
+   styles and ref radii under its attribute; touches no element.
+   ================================================================= */
+
+:root[data-theme="product"] {
+  /* Canvas and text */
+  --ds-sys-color-background:    oklch(0.985 0.004 258);
+  --ds-sys-color-foreground:    oklch(0.21 0.02 265);
+  --ds-sys-color-heading:       oklch(0.21 0.02 265);
+  --ds-sys-color-text:          oklch(0.28 0.02 265);
+  --ds-sys-color-muted:         oklch(0.53 0.02 265);
+  --ds-sys-color-highlight:     oklch(0.53 0.2 262);
+
+  /* Surfaces */
+  --ds-sys-color-surface:       oklch(1 0 0);
+  --ds-sys-color-surface-2:     oklch(0.968 0.005 258);
+  --ds-sys-color-surface-hover: oklch(0.955 0.006 258);
+  --ds-sys-color-on-surface:    oklch(0.28 0.02 265);
+  --ds-sys-color-border:        oklch(0.905 0.008 265);
+  --ds-sys-color-border-soft:   oklch(0.95 0.006 265);
+
+  /* One accent, identical everywhere */
+  --ds-sys-color-primary:       oklch(0.53 0.2 262);
+  --ds-sys-color-primary-hover: oklch(0.47 0.2 262);
+  --ds-sys-color-on-primary:    oklch(0.99 0.005 262);
+  --ds-sys-color-primary-soft:  oklch(0.955 0.03 262);
+  --ds-sys-color-link:          oklch(0.53 0.2 262);
+  --ds-sys-color-ring:          oklch(0.53 0.2 262);
+
+  /* Status */
+  --ds-sys-color-success:       oklch(0.52 0.14 155);
+  --ds-sys-color-success-soft:  oklch(0.955 0.032 155);
+  --ds-sys-color-warning:       oklch(0.58 0.15 55);
+  --ds-sys-color-warning-soft:  oklch(0.96 0.035 65);
+
+  /* Shape: 9 / 14 / 20 */
+  --ds-ref-radius-xs:  6px;
+  --ds-ref-radius-sm:  9px;
+  --ds-ref-radius-md:  14px;
+  --ds-ref-radius-lg:  20px;
+  --ds-ref-radius-xl:  20px;
+  --ds-ref-radius-2xl: 24px;
+
+  /* Type: fluid display, a lead, a mono eyebrow */
+  --ds-sys-font-heading: var(--font-heading, var(--font-sans, ui-sans-serif, system-ui, sans-serif));
+  --ds-sys-font-body:    var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  --ds-sys-font-mono:    var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+
+  --ds-sys-type-h1-size:     clamp(2.5rem, 6.2vw, 4.625rem);
+  --ds-sys-type-h1-weight:   600;
+  --ds-sys-type-h1-tracking: -0.035em;
+  --ds-sys-type-h1-leading:  1;
+  --ds-sys-type-h2-size:     clamp(1.8125rem, 4vw, 2.875rem);
+  --ds-sys-type-h2-weight:   600;
+  --ds-sys-type-h2-tracking: -0.03em;
+  --ds-sys-type-h2-leading:  1.06;
+  --ds-sys-type-h3-size:     1.1875rem;
+  --ds-sys-type-h3-weight:   600;
+  --ds-sys-type-h3-tracking: -0.01em;
+  --ds-sys-type-h3-leading:  1.3;
+  --ds-sys-type-lead-size:   clamp(1.0625rem, 1.7vw, 1.25rem);
+  --ds-sys-type-lead-leading: 1.6;
+  --ds-sys-type-body-size:   1rem;
+  --ds-sys-type-body-leading: 1.65;
+  --ds-sys-type-label-size:  0.625rem;
+  --ds-sys-type-label-weight: 500;
+  --ds-sys-type-label-tracking: 0.16em;
+  --ds-sys-type-label-leading: 1.2;
+
+  /* Motion: the redesign's rise is 0.4–0.55s */
+  --ds-conf-motion-slow: 400ms;
+}
+
+/* The eyebrow is set in the mono face. Elements read the label style; only
+   the face changes, so nothing else has to know. */
+:root[data-theme="product"] .type-label {
+  font-family: var(--ds-sys-font-mono);
+}
+
+:root[data-theme="product"].dark {
+  --ds-sys-color-background:    oklch(0.168 0.014 265);
+  --ds-sys-color-foreground:    oklch(0.965 0.006 265);
+  --ds-sys-color-heading:       oklch(0.965 0.006 265);
+  --ds-sys-color-text:          oklch(0.88 0.01 265);
+  --ds-sys-color-muted:         oklch(0.72 0.018 265);
+  --ds-sys-color-highlight:     oklch(0.72 0.16 262);
+
+  --ds-sys-color-surface:       oklch(0.206 0.016 265);
+  --ds-sys-color-surface-2:     oklch(0.248 0.018 265);
+  --ds-sys-color-surface-hover: oklch(0.27 0.018 265);
+  --ds-sys-color-on-surface:    oklch(0.88 0.01 265);
+  --ds-sys-color-border:        oklch(0.31 0.02 265);
+  --ds-sys-color-border-soft:   oklch(0.26 0.018 265);
+
+  --ds-sys-color-primary:       oklch(0.72 0.16 262);
+  --ds-sys-color-primary-hover: oklch(0.78 0.14 262);
+  --ds-sys-color-on-primary:    oklch(0.17 0.03 262);
+  --ds-sys-color-primary-soft:  oklch(0.28 0.06 262);
+  --ds-sys-color-link:          oklch(0.72 0.16 262);
+  --ds-sys-color-ring:          oklch(0.72 0.16 262);
+
+  --ds-sys-color-success:       oklch(0.76 0.14 155);
+  --ds-sys-color-success-soft:  oklch(0.25 0.05 155);
+  --ds-sys-color-warning:       oklch(0.78 0.14 65);
+  --ds-sys-color-warning-soft:  oklch(0.26 0.05 65);
+}
