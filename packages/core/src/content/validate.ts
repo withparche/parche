@@ -35,7 +35,9 @@ export function validateTree(nodes: Node[], ctx: ValidateContext, base = 'sectio
   const maxDepth = ctx.maxDepth ?? MAX_NODE_DEPTH;
 
   const visit = (node: Node, path: string, depth: number) => {
-    if (node.widget === 'Outlet') return;
+    // Outlet and Preset are the renderer's, not widgets: the outlet's content
+    // is validated as its own tree, a preset's tree once it is expanded.
+    if (node.widget === 'Outlet' || node.widget === 'Preset') return;
     const shape = ctx.widgets[node.widget];
     if (!shape) {
       issues.push({ path, message: `unknown widget "${node.widget}"` });

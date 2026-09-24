@@ -7,8 +7,9 @@ export {
   pageSchema,
   navigationSchema,
   layoutSchema,
+  presetSchema,
   createCollections,
   collections,
 } from './schemas.js';
 
-export type { MetadataEntry, PageEntry, NavigationEntry, LayoutEntry } from './schemas.js';
+export type { MetadataEntry, PageEntry, NavigationEntry, LayoutEntry, PresetEntry } from './schemas.js';

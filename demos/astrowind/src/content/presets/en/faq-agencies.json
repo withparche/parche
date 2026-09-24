@@ -1,0 +1,32 @@
+{
+  "label": "Questions agencies ask",
+  "description": "The five objections before committing a client, as an FAQ with two columns.",
+  "tree": [
+    {
+      "widget": "FAQs",
+      "props": {
+        "tagline": "FAQ",
+        "title": "What agencies ask before committing a client to it",
+        "columns": "2",
+        "items": [
+          {
+            "title": "Will this still be here in two years?",
+            "description": "Four years of releases in the same repository, every Astro major supported within six days, and eighteen months of security fixes per major."
+          },
+          {
+            "title": "Can the client edit the site?",
+            "description": "Pages are JSON. The builder edits them; so does any editor that can open a file."
+          },
+          {
+            "title": "What if a widget is not what we need?",
+            "description": "Eject it: the copy is yours, imported by path, and the page keeps working because the contract is the schema."
+          },
+          {
+            "title": "Is there a licence fee?",
+            "description": "MIT. The template is free; the extras are optional."
+          }
+        ]
+      }
+    }
+  ]
+}

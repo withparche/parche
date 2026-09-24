@@ -139,6 +139,27 @@ dev; a production render never touches it.
 `template` is removed. Front matter in Markdown pages is reported for hand
 editing.
 
+## Presets
+
+A preset is a saved subtree with real values, in the `presets` collection
+(`src/content/presets/<locale>/<name>.json`):
+
+```json
+{ "label": "Questions agencies ask", "tree": [ { "widget": "FAQs", "props": { … } } ] }
+```
+
+A page inserts it by name, and the renderer replaces the node by the tree
+before validating and rendering, so a change to the preset shows everywhere
+it is used:
+
+```json
+{ "widget": "Preset", "props": { "name": "faq-agencies" } }
+```
+
+An editor may instead copy the tree into the page, which is the same result
+without the link. A preset may contain another; expansion stops three deep.
+The locale's preset wins over the plain name.
+
 ## Widgets on the model
 
 A widget is one purpose; differences of shape are a prop, structure is a

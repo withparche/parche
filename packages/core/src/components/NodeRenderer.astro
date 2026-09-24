@@ -8,6 +8,7 @@
 import { loadWidgets } from 'parche:registry/widgets';
 import { wrapper as wrapperName } from 'parche:config/layout';
 import { resolveAssets } from '../utils/assets.js';
+import { expandPresets } from '../utils/presets.js';
 import type { Node as NodeData } from '../content/node';
 import { widgetNames } from '../content/node';
 import Node from './Node.astro';
@@ -20,7 +21,18 @@ interface Props {
   outlets?: { nodes: Record<string, NodeData[]>; html: Record<string, string> };
 }
 
-const { nodes: rawNodes, wrap = false, outlets: rawOutlets } = Astro.props;
+const { nodes: givenNodes, wrap = false, outlets: givenOutlets } = Astro.props;
+
+// Presets first: a `Preset` node becomes the saved tree it names, so what
+// follows sees only real widgets.
+const locale = (Astro.locals as any).parche?.locale as string | undefined;
+const rawNodes = await expandPresets(givenNodes, locale);
+const rawOutlets = givenOutlets
+  ? {
+      nodes: Object.fromEntries(await Promise.all(Object.entries(givenOutlets.nodes).map(async ([k, v]) => [k, await expandPresets(v, locale)]))),
+      html: givenOutlets.html,
+    }
+  : undefined;
 
 // Everything the render will touch, loaded once: the tree, the outlet trees
 // and the wrapper. Widgets not referenced are never imported.

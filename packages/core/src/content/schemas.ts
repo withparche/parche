@@ -186,6 +186,18 @@ export const layoutSchema = z.object({
   sections: z.array(nodeSchema),
 });
 
+/**
+ * Schema for preset entries: a saved subtree with real values, inserted into
+ * a page by name through a `Preset` node, or copied by an editor. `label`
+ * and `description` are what a palette shows.
+ */
+export const presetSchema = z.object({
+  label: z.string(),
+  description: z.string().optional(),
+  tree: z.array(nodeSchema).min(1),
+});
+
+export type PresetEntry = z.infer<typeof presetSchema>;
 export type MetadataEntry = z.infer<typeof metadataSchema>;
 export type PageEntry = z.infer<typeof pageSchema>;
 export type NavigationEntry = z.infer<typeof navigationSchema>;
@@ -207,9 +219,11 @@ export function createCollections(options?: {
   pageSchema?: z.ZodType;
   navigationSchema?: z.ZodType;
   layoutSchema?: z.ZodType;
+  presetSchema?: z.ZodType;
   pagesBase?: string;
   navigationBase?: string;
   layoutsBase?: string;
+  presetsBase?: string;
 }) {
   return {
     pages: defineCollection({
@@ -232,6 +246,13 @@ export function createCollections(options?: {
         base: options?.layoutsBase ?? './src/content/layouts',
       }),
       schema: options?.layoutSchema ?? layoutSchema,
+    }),
+    presets: defineCollection({
+      loader: glob({
+        pattern: '**/*.{yaml,yml,json}',
+        base: options?.presetsBase ?? './src/content/presets',
+      }),
+      schema: options?.presetSchema ?? presetSchema,
     }),
   };
 }

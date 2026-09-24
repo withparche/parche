@@ -21,6 +21,7 @@ test('a well-formed tree has no issues', () => {
       { widget: 'Hero', slots: { media: [{ widget: 'Form' }] } },
       { widget: 'Section', props: { tone: 'muted' }, slots: { default: [{ widget: 'Columns', slots: { default: [{ widget: 'Column' }, { widget: 'Column', slots: { default: [{ widget: 'Prose' }] } }] } }] } },
       { widget: 'Outlet' },
+      { widget: 'Preset', props: { name: 'pricing-with-faq' } },
     ],
     ctx,
   );
