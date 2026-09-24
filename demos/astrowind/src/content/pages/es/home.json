@@ -95,7 +95,6 @@
           {
             "widget": "Content",
             "props": {
-              "isReversed": true,
               "tagline": "Por dentro",
               "title": "El plano de AstroWind: diversión y funcionalidad",
               "content": "<h3 class='text-2xl font-bold tracking-tight sm:text-3xl mb-2'>Construido sobre bases modernas</h3>Gana ventaja competitiva incorporando las mejores prácticas del sector.",
@@ -117,7 +116,8 @@
               "image": {
                 "src": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
                 "alt": "Plano de la plantilla"
-              }
+              },
+              "reversed": true
             }
           }
         ]
@@ -126,7 +126,6 @@
     {
       "widget": "Content",
       "props": {
-        "isAfterContent": true,
         "content": "Haz que tu presencia online te represente de verdad.",
         "columns": "1",
         "items": [
@@ -156,8 +155,6 @@
     {
       "widget": "Content",
       "props": {
-        "isReversed": true,
-        "isAfterContent": true,
         "content": "Pensada para crecer y para durar.",
         "columns": "1",
         "items": [
@@ -181,7 +178,8 @@
         "image": {
           "src": "https://images.unsplash.com/photo-1611462985358-60d3498e0364?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
           "alt": "Crecimiento y éxito"
-        }
+        },
+        "reversed": true
       }
     },
     {
@@ -357,20 +355,20 @@
             "props": {
               "stats": [
                 {
-                  "title": "Descargas",
-                  "amount": "132K"
+                  "value": "132K",
+                  "label": "Descargas"
                 },
                 {
-                  "title": "Estrellas",
-                  "amount": "24,8K"
+                  "value": "24,8K",
+                  "label": "Estrellas"
                 },
                 {
-                  "title": "Forks",
-                  "amount": "10,3K"
+                  "value": "10,3K",
+                  "label": "Forks"
                 },
                 {
-                  "title": "Usuarios",
-                  "amount": "48,4K"
+                  "value": "48,4K",
+                  "label": "Usuarios"
                 }
               ]
             }

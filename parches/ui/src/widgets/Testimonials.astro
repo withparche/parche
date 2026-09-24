@@ -1,11 +1,11 @@
 ---
-import type { Props } from './Testimonials.props';
 import Heading from 'parche:elements/Heading';
-import Button from 'parche:elements/Button';
 import * as Carousel from 'parche:elements/Carousel';
+import Action from '../components/Action.astro';
 import TestimonialCard from '../components/TestimonialCard.astro';
+import { schema, type Props } from './Testimonials.props';
 
-const { title, subtitle, tagline, testimonials = [], layout = 'grid', callToAction } = Astro.props;
+const { title, subtitle, tagline, testimonials, layout, callToAction } = schema.parse(Astro.props) as Props;
 ---
 
 <Heading {title} {subtitle} {tagline} />
@@ -24,8 +24,8 @@ const { title, subtitle, tagline, testimonials = [], layout = 'grid', callToActi
   </div>
 ) : null}
 
-{callToAction?.text && callToAction?.href && (
+{callToAction?.text && (
   <div class="flex justify-center mt-8 md:mt-12">
-    <Button href={callToAction.href}>{callToAction.text}</Button>
+    <Action action={callToAction} />
   </div>
 )}

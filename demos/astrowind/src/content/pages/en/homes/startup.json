@@ -75,20 +75,20 @@
             "props": {
               "stats": [
                 {
-                  "title": "Weekly users",
-                  "amount": "12K"
+                  "value": "12K",
+                  "label": "Weekly users"
                 },
                 {
-                  "title": "Retention",
-                  "amount": "94%"
+                  "value": "94%",
+                  "label": "Retention"
                 },
                 {
-                  "title": "Releases",
-                  "amount": "312"
+                  "value": "312",
+                  "label": "Releases"
                 },
                 {
-                  "title": "Team",
-                  "amount": "9"
+                  "value": "9",
+                  "label": "Team"
                 }
               ]
             }

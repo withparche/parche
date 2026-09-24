@@ -1,15 +1,30 @@
 ---
+/**
+ * Sourced numbers. The Stat element draws the figure; under it, where the
+ * number comes from and when, linked to the report when there is one.
+ */
 import Heading from 'parche:elements/Heading';
 import Stat from 'parche:elements/Stat';
-import type { Props } from './Stats.props';
+import { schema, type Props } from './Stats.props';
 
-const { title, subtitle, tagline, stats = [] } = Astro.props;
+const { title, subtitle, tagline, stats, note } = schema.parse(Astro.props) as Props;
 ---
 
 <Heading {title} {subtitle} {tagline} />
 
 {stats.length > 0 && (
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-    {stats.map(({ amount, title: label, icon }) => amount && <Stat value={amount} label={label ?? ''} icon={icon} />)}
+  <div class="parche-stats grid grid-cols-2 md:grid-cols-4 gap-8">
+    {stats.map(({ value, unit, label, icon, source, date, href }) => (
+      <div class="parche-stat-item">
+        <Stat value={unit ? `${value}${unit}` : value} label={label} icon={icon} />
+        {(source || date) && (
+          <p class="type-caption text-muted mt-1 font-mono text-xs">
+            {href ? <a href={href} class="underline underline-offset-2 hover:text-heading">{[source, date].filter(Boolean).join(' · ')}</a> : [source, date].filter(Boolean).join(' · ')}
+          </p>
+        )}
+      </div>
+    ))}
   </div>
 )}
+
+{note && <p class="type-caption text-muted mt-6 text-center" set:html={note} />}

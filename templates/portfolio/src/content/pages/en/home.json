@@ -286,19 +286,19 @@
               "title": "What people say",
               "testimonials": [
                 {
-                  "testimonial": "Alex is the rare designer who can also ship the code. Our velocity doubled.",
                   "name": "Ana Ruiz",
-                  "job": "CTO, Nimbus Labs"
+                  "text": "Alex is the rare designer who can also ship the code. Our velocity doubled.",
+                  "role": "CTO, Nimbus Labs"
                 },
                 {
-                  "testimonial": "The design system Alex built is still the backbone of everything we make.",
                   "name": "Marcus Lee",
-                  "job": "Head of Eng, Orbit"
+                  "text": "The design system Alex built is still the backbone of everything we make.",
+                  "role": "Head of Eng, Orbit"
                 },
                 {
-                  "testimonial": "Thoughtful, fast, and genuinely nice to work with. Would hire again in a heartbeat.",
                   "name": "Priya Nair",
-                  "job": "Founder, Cedar"
+                  "text": "Thoughtful, fast, and genuinely nice to work with. Would hire again in a heartbeat.",
+                  "role": "Founder, Cedar"
                 }
               ]
             }

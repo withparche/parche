@@ -105,7 +105,6 @@
         "tagline": "Built for focus",
         "title": "A calm home for deep work",
         "subtitle": "Parche gets out of your way. Fast keyboard-first navigation, a quiet interface, and everything one shortcut away.",
-        "isReversed": true,
         "image": {
           "src": "@/assets/images/showcase.svg",
           "alt": "Parche dashboard"
@@ -124,7 +123,8 @@
             "title": "Fine-grained permissions",
             "description": "Share the right thing with the right people, safely."
           }
-        ]
+        ],
+        "reversed": true
       }
     },
     {
@@ -140,23 +140,23 @@
               "title": "Teams get more done with Parche",
               "stats": [
                 {
-                  "amount": "12k+",
-                  "title": "Teams onboarded",
+                  "value": "12k+",
+                  "label": "Teams onboarded",
                   "icon": "tabler:users-group"
                 },
                 {
-                  "amount": "38%",
-                  "title": "Less time in meetings",
+                  "value": "38%",
+                  "label": "Less time in meetings",
                   "icon": "tabler:clock"
                 },
                 {
-                  "amount": "4.9/5",
-                  "title": "Average rating",
+                  "value": "4.9/5",
+                  "label": "Average rating",
                   "icon": "tabler:star"
                 },
                 {
-                  "amount": "99.98%",
-                  "title": "Uptime",
+                  "value": "99.98%",
+                  "label": "Uptime",
                   "icon": "tabler:server-bolt"
                 }
               ]
@@ -301,19 +301,19 @@
         "title": "Don't take our word for it",
         "testimonials": [
           {
-            "testimonial": "We replaced three tools with Parche and cut our weekly sync in half. It just feels calmer.",
             "name": "Ana Ruiz",
-            "job": "Head of Product, Northwind"
+            "text": "We replaced three tools with Parche and cut our weekly sync in half. It just feels calmer.",
+            "role": "Head of Product, Northwind"
           },
           {
-            "testimonial": "The roadmaps finally gave leadership a view they trust, without me exporting spreadsheets every week.",
             "name": "Marcus Lee",
-            "job": "Eng Manager, Loop"
+            "text": "The roadmaps finally gave leadership a view they trust, without me exporting spreadsheets every week.",
+            "role": "Eng Manager, Loop"
           },
           {
-            "testimonial": "Setup took an afternoon and the team never looked back. The automations alone pay for it.",
             "name": "Priya Nair",
-            "job": "Ops Lead, Cedar"
+            "text": "Setup took an afternoon and the team never looked back. The automations alone pay for it.",
+            "role": "Ops Lead, Cedar"
           }
         ]
       }

@@ -68,6 +68,27 @@ const RENAMES = {
   Features: (props) => ({ widget: 'Features', props: stripItemClasses(props) }),
   Steps: ({ isReversed, ...props }) => ({ widget: 'Steps', props: { layout: props.image ? 'timeline' : 'grid', ...props, ...(isReversed ? { reversed: true } : {}) } }),
   Steps2: ({ isReversed, ...props }) => ({ widget: 'Steps', props: { layout: 'numbered', ...props, ...(isReversed ? { reversed: true } : {}) } }),
+  // Proof shapes: a number says where it comes from, a quote who said it.
+  Stats: (props) => ({
+    widget: 'Stats',
+    props: {
+      ...props,
+      stats: (props.stats ?? []).map(({ amount, title, ...rest }) => ({ value: amount ?? '', label: title ?? '', ...rest })),
+    },
+  }),
+  Testimonials: (props) => ({
+    widget: 'Testimonials',
+    props: {
+      ...props,
+      testimonials: (props.testimonials ?? []).map(({ testimonial, job, image, ...rest }) => ({
+        ...rest,
+        text: testimonial ?? '',
+        ...(job ? { role: job } : {}),
+        ...(image?.src ? { avatar: { src: image.src, alt: image.alt ?? '' } } : {}),
+      })),
+    },
+  }),
+  Content: ({ isReversed, isAfterContent, ...props }) => ({ widget: 'Content', props: { ...props, ...(isReversed ? { reversed: true } : {}) } }),
   'layout/Header': (props) => ({ widget: 'Header', props }),
   'layout/Footer': (props) => ({ widget: 'Footer', props }),
   HeroText: ({ callToAction, callToAction2, ...props }) => ({

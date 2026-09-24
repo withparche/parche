@@ -26,20 +26,20 @@
             "props": {
               "stats": [
                 {
-                  "title": "Personas que contribuyen",
-                  "amount": "180"
+                  "value": "180",
+                  "label": "Personas que contribuyen"
                 },
                 {
-                  "title": "Versiones publicadas",
-                  "amount": "64"
+                  "value": "64",
+                  "label": "Versiones publicadas"
                 },
                 {
-                  "title": "Webs creadas",
-                  "amount": "48,4K"
+                  "value": "48,4K",
+                  "label": "Webs creadas"
                 },
                 {
-                  "title": "Años en marcha",
-                  "amount": "4"
+                  "value": "4",
+                  "label": "Años en marcha"
                 }
               ]
             }

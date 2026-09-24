@@ -112,14 +112,14 @@
         "title": "Kind words",
         "testimonials": [
           {
-            "testimonial": "Alex left us with a system we could keep using, which is rarer than it should be.",
             "name": "Ana Ruiz",
-            "job": "Head of Product"
+            "text": "Alex left us with a system we could keep using, which is rarer than it should be.",
+            "role": "Head of Product"
           },
           {
-            "testimonial": "Direct, fast and never precious about their own code.",
             "name": "Marcus Lee",
-            "job": "Eng Manager"
+            "text": "Direct, fast and never precious about their own code.",
+            "role": "Eng Manager"
           }
         ]
       }

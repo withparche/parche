@@ -89,7 +89,6 @@
     {
       "widget": "Content",
       "props": {
-        "isReversed": true,
         "tagline": "Inside",
         "title": "One engine, many outputs",
         "content": "Parche is the framework; AstroWind is its reference materialization. The same engine drives local pages, blog posts and, later, niche themes.",
@@ -110,7 +109,8 @@
         "image": {
           "src": "https://placehold.co/1000x680/0ea5e9/ffffff?text=Engine",
           "alt": "Engine"
-        }
+        },
+        "reversed": true
       }
     }
   ]

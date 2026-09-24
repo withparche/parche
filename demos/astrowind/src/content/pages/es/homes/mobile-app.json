@@ -64,7 +64,6 @@
           {
             "widget": "Content",
             "props": {
-              "isReversed": true,
               "columns": "1",
               "title": "Captura ahora, organiza después",
               "content": "La nota más rápida es la que no tuviste que archivar.",
@@ -81,7 +80,8 @@
               "image": {
                 "src": "https://images.unsplash.com/photo-1521517407911-565264e7d82d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80",
                 "alt": "Captura"
-              }
+              },
+              "reversed": true
             }
           }
         ]
@@ -99,20 +99,20 @@
             "props": {
               "stats": [
                 {
-                  "title": "Descargas",
-                  "amount": "480K"
+                  "value": "480K",
+                  "label": "Descargas"
                 },
                 {
-                  "title": "Valoración",
-                  "amount": "4.8"
+                  "value": "4.8",
+                  "label": "Valoración"
                 },
                 {
-                  "title": "Países",
-                  "amount": "38"
+                  "value": "38",
+                  "label": "Países"
                 },
                 {
-                  "title": "Sin fallos",
-                  "amount": "99.9%"
+                  "value": "99.9%",
+                  "label": "Sin fallos"
                 }
               ]
             }
@@ -126,19 +126,19 @@
         "title": "Desde las tiendas",
         "testimonials": [
           {
-            "testimonial": "La única app que he mantenido en la pantalla de inicio más de un mes.",
             "name": "Ana Ruiz",
-            "job": "Diseñadora"
+            "text": "La única app que he mantenido en la pantalla de inicio más de un mes.",
+            "role": "Diseñadora"
           },
           {
-            "testimonial": "Funciona en el tren, que es justo para lo que la compré.",
             "name": "Marcus Lee",
-            "job": "Consultor"
+            "text": "Funciona en el tren, que es justo para lo que la compré.",
+            "role": "Consultor"
           },
           {
-            "testimonial": "Rápida, silenciosa y nunca me pide que la valore.",
             "name": "Priya Nair",
-            "job": "Ingeniera"
+            "text": "Rápida, silenciosa y nunca me pide que la valore.",
+            "role": "Ingeniera"
           }
         ]
       }

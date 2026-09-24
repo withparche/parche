@@ -25,20 +25,20 @@
             "props": {
               "stats": [
                 {
-                  "title": "Contributors",
-                  "amount": "180"
+                  "value": "180",
+                  "label": "Contributors"
                 },
                 {
-                  "title": "Releases",
-                  "amount": "64"
+                  "value": "64",
+                  "label": "Releases"
                 },
                 {
-                  "title": "Sites built",
-                  "amount": "48.4K"
+                  "value": "48.4K",
+                  "label": "Sites built"
                 },
                 {
-                  "title": "Years running",
-                  "amount": "4"
+                  "value": "4",
+                  "label": "Years running"
                 }
               ]
             }

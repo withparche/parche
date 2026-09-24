@@ -63,7 +63,6 @@
           {
             "widget": "Content",
             "props": {
-              "isReversed": true,
               "columns": "1",
               "tagline": "Method",
               "title": "We start from the problem, not the design",
@@ -85,7 +84,8 @@
               "image": {
                 "src": "https://images.unsplash.com/photo-1552664688-cf412ec27db2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
                 "alt": "Working method"
-              }
+              },
+              "reversed": true
             }
           }
         ]
@@ -94,7 +94,6 @@
     {
       "widget": "Content",
       "props": {
-        "isAfterContent": true,
         "columns": "1",
         "content": "And when we are done, you are not dependent on us.",
         "items": [
@@ -124,19 +123,19 @@
         "title": "What they say",
         "testimonials": [
           {
-            "testimonial": "They delivered a faster site than the one we had and, for the first time, we understand how to change it.",
             "name": "Ana Ruiz",
-            "job": "Head of Product, Northwind"
+            "text": "They delivered a faster site than the one we had and, for the first time, we understand how to change it.",
+            "role": "Head of Product, Northwind"
           },
           {
-            "testimonial": "The technical review alone was worth what the whole project cost.",
             "name": "Marcus Lee",
-            "job": "Eng Manager, Loop"
+            "text": "The technical review alone was worth what the whole project cost.",
+            "role": "Eng Manager, Loop"
           },
           {
-            "testimonial": "Translating the site into two languages stopped being a problem the day we migrated.",
             "name": "Priya Nair",
-            "job": "Ops Lead, Cedar"
+            "text": "Translating the site into two languages stopped being a problem the day we migrated.",
+            "role": "Ops Lead, Cedar"
           }
         ],
         "layout": "carousel"

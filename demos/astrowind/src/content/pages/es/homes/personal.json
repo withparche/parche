@@ -112,14 +112,14 @@
         "title": "Lo que dicen",
         "testimonials": [
           {
-            "testimonial": "Alex nos dejó un sistema que podíamos seguir usando, algo menos común de lo que debería.",
             "name": "Ana Ruiz",
-            "job": "Directora de producto"
+            "text": "Alex nos dejó un sistema que podíamos seguir usando, algo menos común de lo que debería.",
+            "role": "Directora de producto"
           },
           {
-            "testimonial": "Directo, rápido y sin ningún apego a su propio código.",
             "name": "Marcus Lee",
-            "job": "Responsable de ingeniería"
+            "text": "Directo, rápido y sin ningún apego a su propio código.",
+            "role": "Responsable de ingeniería"
           }
         ]
       }

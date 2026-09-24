@@ -1,12 +1,9 @@
 import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
+import { action, verifiedQuote } from '../_shared/content';
 
-const testimonial = z.object({
-  title: z.string().optional(),
-  testimonial: z.string().optional().meta({ input: 'textarea' }),
-  name: z.string().optional(),
-  job: z.string().optional(),
-  image: z.object({ src: z.string().optional(), alt: z.string().optional() }).optional(),
+const testimonial = verifiedQuote.extend({
+  title: z.string().optional().meta({ help: 'A short headline above the quote.' }),
 });
 
 export const schema = z.object({
@@ -15,10 +12,7 @@ export const schema = z.object({
   subtitle: z.string().optional().meta({ input: 'textarea' }),
   testimonials: z.array(testimonial).default([]),
   layout: z.enum(['grid', 'carousel']).default('grid').meta({ help: 'A grid, or a carousel three per view.' }),
-  callToAction: z.object({
-    text: z.string().optional(),
-    href: z.string().optional().meta({ placeholder: 'https://...' }),
-  }).optional(),
+  callToAction: action.optional(),
 });
 
 export type Props = z.infer<typeof schema>;
@@ -26,7 +20,7 @@ export type Props = z.infer<typeof schema>;
 export const meta: WidgetMeta = {
   widget: {
     label: 'Testimonials',
-    description: 'Customer testimonials grid with avatars',
+    description: 'Quotes that can be traced: name, role, date and a link to where each was said.',
     category: 'social-proof',
     icon: 'tabler:message-circle',
   },

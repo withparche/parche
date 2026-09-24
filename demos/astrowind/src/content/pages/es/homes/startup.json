@@ -75,20 +75,20 @@
             "props": {
               "stats": [
                 {
-                  "title": "Usuarios semanales",
-                  "amount": "12K"
+                  "value": "12K",
+                  "label": "Usuarios semanales"
                 },
                 {
-                  "title": "Retención",
-                  "amount": "94%"
+                  "value": "94%",
+                  "label": "Retención"
                 },
                 {
-                  "title": "Entregas",
-                  "amount": "312"
+                  "value": "312",
+                  "label": "Entregas"
                 },
                 {
-                  "title": "Equipo",
-                  "amount": "9"
+                  "value": "9",
+                  "label": "Equipo"
                 }
               ]
             }

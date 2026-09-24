@@ -63,7 +63,6 @@
           {
             "widget": "Content",
             "props": {
-              "isReversed": true,
               "columns": "1",
               "tagline": "Método",
               "title": "Empezamos por el problema, no por el diseño",
@@ -85,7 +84,8 @@
               "image": {
                 "src": "https://images.unsplash.com/photo-1552664688-cf412ec27db2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
                 "alt": "Método de trabajo"
-              }
+              },
+              "reversed": true
             }
           }
         ]
@@ -94,7 +94,6 @@
     {
       "widget": "Content",
       "props": {
-        "isAfterContent": true,
         "columns": "1",
         "content": "Y cuando terminamos, no dependes de nosotros.",
         "items": [
@@ -124,19 +123,19 @@
         "title": "Lo que dicen",
         "testimonials": [
           {
-            "testimonial": "Nos entregaron una web más rápida que la anterior y, por primera vez, entendemos cómo cambiarla.",
             "name": "Ana Ruiz",
-            "job": "Directora de producto, Northwind"
+            "text": "Nos entregaron una web más rápida que la anterior y, por primera vez, entendemos cómo cambiarla.",
+            "role": "Directora de producto, Northwind"
           },
           {
-            "testimonial": "La revisión técnica valió por sí sola lo que costó el proyecto entero.",
             "name": "Marcus Lee",
-            "job": "Responsable de ingeniería, Loop"
+            "text": "La revisión técnica valió por sí sola lo que costó el proyecto entero.",
+            "role": "Responsable de ingeniería, Loop"
           },
           {
-            "testimonial": "Traducir la web a dos idiomas dejó de ser un problema el día que migramos.",
             "name": "Priya Nair",
-            "job": "Responsable de operaciones, Cedar"
+            "text": "Traducir la web a dos idiomas dejó de ser un problema el día que migramos.",
+            "role": "Responsable de operaciones, Cedar"
           }
         ],
         "layout": "carousel"
