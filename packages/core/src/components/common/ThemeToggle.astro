@@ -3,9 +3,29 @@
  * ThemeToggle — HTML Web Component (no Shadow DOM)
  * Toggles .dark class on <html>, persists to localStorage.
  * Static HTML is functional without JS (shows both icons, JS hides one).
+ *
+ * `display="text"` shows the current mode as a word in a bordered button
+ * instead of an icon; which word shows is CSS on the `.dark` class, so it
+ * needs no script to be right on first paint.
  */
+interface Props {
+  display?: 'icon' | 'text';
+  labels?: { light: string; dark: string };
+}
+const { display = 'icon', labels = { light: 'Light', dark: 'Dark' } } = Astro.props;
 ---
 
+{display === 'text' ? (
+<theme-toggle class="inline-flex">
+  <button
+    type="button"
+    aria-label="Toggle dark mode"
+    class="inline-flex h-9 cursor-pointer items-center rounded-sm border border-border bg-surface px-3 font-mono text-xs font-medium text-heading transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+  >
+    <span class="dark:hidden">{labels.light}</span><span class="hidden dark:inline">{labels.dark}</span>
+  </button>
+</theme-toggle>
+) : (
 <theme-toggle class="inline-flex">
   <button
     type="button"
@@ -48,6 +68,7 @@
     </svg>
   </button>
 </theme-toggle>
+)}
 
 <script>
   class ThemeToggle extends HTMLElement {

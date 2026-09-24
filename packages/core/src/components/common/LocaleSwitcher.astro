@@ -42,8 +42,10 @@ if (hasMultipleLocales) {
 interface Props {
   /** The menu id; give each instance on a page its own. */
   id?: string;
+  /** `icon` (a globe) or `code`: the current locale's code in a bordered button. */
+  display?: 'icon' | 'code';
 }
-const { id = 'parche-locale-switcher' } = Astro.props;
+const { id = 'parche-locale-switcher', display = 'icon' } = Astro.props;
 
 const currentLocale = Astro.currentLocale || defaultLocale;
 
@@ -89,7 +91,7 @@ const allLocales = hasMultipleLocales
 {hasMultipleLocales && (
   <Menu
     id={id}
-    icon="tabler:world"
+    icon={display === 'icon' ? 'tabler:world' : undefined}
     triggerLabel={`Language: ${currentName}`}
     align="end"
     groups={[
@@ -107,5 +109,17 @@ const allLocales = hasMultipleLocales
         })),
       },
     ]}
-  />
+  >
+    {display === 'code' && (
+      <button
+        slot="trigger"
+        type="button"
+        popovertarget={id}
+        aria-haspopup="menu"
+        aria-expanded="false"
+        aria-label={`Language: ${currentName}`}
+        class="inline-flex h-9 cursor-pointer items-center rounded-sm border border-border bg-surface px-2.5 font-mono text-xs font-medium text-heading uppercase transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+      >{currentLocale}</button>
+    )}
+  </Menu>
 )}

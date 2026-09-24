@@ -125,6 +125,9 @@ function block(selector, decls, comment) {
       }
     }
     if (path[0] === 'color') bridge.push([`--color-${path.slice(1).join('-')}`, `var(${cssName('sys', path)})`]);
+    // font-heading and font-body read the font roles. Not mono: its role reads
+    // the --font-mono face variable, which a --font-mono bridge would shadow.
+    if (path[0] === 'font' && path[1] !== 'mono') bridge.push([`--font-${path[1]}`, `var(${cssName('sys', path)})`]);
   }
   const css =
     header('sys', 'System tokens: colour roles (light and dark), font roles, type styles.') +

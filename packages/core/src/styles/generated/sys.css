@@ -126,4 +126,6 @@
   --color-danger: var(--ds-sys-color-danger);
   --color-on-danger: var(--ds-sys-color-on-danger);
   --color-danger-soft: var(--ds-sys-color-danger-soft);
+  --font-heading: var(--ds-sys-font-heading);
+  --font-body: var(--ds-sys-font-body);
 }

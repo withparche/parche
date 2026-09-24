@@ -10,11 +10,16 @@ const mega = z.object({
 });
 
 export const schema = z.object({
-  logo: z.union([z.string(), z.object({ src: z.string(), alt: z.string().default('Logo'), width: z.number().optional(), height: z.number().optional() }), z.object({ text: z.string(), href: z.string().optional() })]).optional(),
+  logo: z.union([z.string(), z.object({ src: z.string(), alt: z.string().default('Logo'), width: z.number().optional(), height: z.number().optional() }), z.object({ text: z.string(), href: z.string().optional(), mark: z.boolean().optional().meta({ help: 'A square of the brand colour before the wordmark.' }) })]).optional(),
   links: z.array(z.object({ label: z.string(), href: z.string().optional(), children: z.array(group).optional(), mega: mega.optional() })).default([]),
   actions: z.array(z.object({ label: z.string(), href: z.string(), variant: z.enum(['primary', 'secondary', 'ghost']).default('primary'), icon: z.string().optional().meta({ input: 'icon' }) })).optional(),
   announcement: z.object({ text: z.string(), href: z.string().optional(), icon: z.string().optional(), dismissible: z.boolean().default(true), aside: z.string().optional() }).optional(),
   position: z.enum(['left', 'center', 'right']).default('center').meta({ help: 'Where the desktop navigation sits between the logo and the actions.' }),
+  search: z.object({ label: z.string(), href: z.string(), shortcut: z.string().optional() }).optional().meta({ help: 'A search button before the controls: "Search ⌘K".' }),
+  controls: z
+    .object({ theme: z.enum(['icon', 'text', 'none']).optional(), locale: z.enum(['icon', 'code', 'none']).optional() })
+    .optional()
+    .meta({ help: 'How the theme and language switchers show: an icon, a word or a code, or not at all.' }),
 });
 
 export type Props = z.infer<typeof schema>;

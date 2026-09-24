@@ -1,0 +1,8 @@
+---
+import Command from 'parche:elements/Command';
+import { schema, type Props } from './Command.props';
+
+const props = schema.parse(Astro.props) as Props;
+---
+
+<Command {...props} class="max-w-[35.5rem]" />

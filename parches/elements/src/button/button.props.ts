@@ -26,7 +26,7 @@ export const meta = defineElement({
     label: 'Button',
     description: 'The action element: a button, or a link that looks like one.',
     a11y: { pattern: 'button', url: 'https://www.w3.org/WAI/ARIA/apg/patterns/button/' },
-    tokens: ['color-primary', 'color-on-primary', 'color-surface', 'color-surface-hover', 'color-heading', 'color-muted', 'color-border', 'color-ring', 'color-danger', 'color-on-danger', 'color-danger-soft'],
+    tokens: ['color-primary', 'color-on-primary', 'color-surface', 'color-surface-hover', 'color-heading', 'color-muted', 'color-border', 'color-ring', 'color-danger', 'color-on-danger', 'color-danger-soft', 'comp-button-radius', 'comp-button-lg-padding'],
     parts: [{ name: 'root', element: 'button | a', description: 'The button itself; an <a> when href is set.', states: ['disabled'] }],
   },
   ui: {

@@ -1,0 +1,33 @@
+---
+/**
+ * Command — one shell command with a copy button. The text is plain and
+ * selectable without script; the element reveals the button where the
+ * clipboard exists.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './command.props';
+
+const { props: { command, prompt, copyLabel, copiedLabel }, rest, className, part } = splitProps(schema, Astro.props);
+---
+
+<parche-command
+  class={cn('parche-command flex items-center gap-2.5 rounded-md border border-border bg-surface py-[11px] pr-[11px] pl-[15px]', className)}
+  {...rest}
+  data-part={part}
+  copied-label={copiedLabel}
+>
+  <span class="min-w-0 flex-1 overflow-hidden font-mono text-[13px] leading-[1.4] text-ellipsis whitespace-nowrap text-muted">
+    {prompt && <span class="text-primary" data-part="prompt" aria-hidden="true">{prompt} </span>}<code data-part="text">{command}</code>
+  </span>
+  <button
+    type="button"
+    class="flex-none cursor-pointer rounded-[7px] border border-border bg-surface-2 px-2.5 py-[7px] font-mono text-[11px] leading-none font-medium text-heading hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+    data-part="copy"
+    hidden
+  >{copyLabel}</button>
+  <span class="sr-only" role="status" data-part="status"></span>
+</parche-command>
+
+<script>
+  import './command.element.ts';
+</script>

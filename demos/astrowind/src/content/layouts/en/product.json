@@ -1,0 +1,195 @@
+{
+  "sections": [
+    {
+      "widget": "Header",
+      "props": {
+        "logo": {
+          "text": "AstroWind",
+          "href": "/",
+          "mark": true
+        },
+        "position": "left",
+        "links": [
+          {
+            "label": "Product",
+            "children": [
+              {
+                "title": "What it is",
+                "links": [
+                  {
+                    "label": "Widgets",
+                    "href": "#features",
+                    "description": "34 sections, props-driven, no class soup"
+                  },
+                  {
+                    "label": "Live demos",
+                    "href": "#showcase",
+                    "description": "Five complete sites in one repository"
+                  },
+                  {
+                    "label": "Changelog",
+                    "href": "#changelog",
+                    "description": "Every release since June 2022, with dates"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "label": "Case studies",
+            "href": "#work"
+          },
+          {
+            "label": "Services",
+            "href": "#services"
+          },
+          {
+            "label": "Pricing",
+            "href": "/fixtures/pricing"
+          },
+          {
+            "label": "Blog",
+            "href": "/blog"
+          },
+          {
+            "label": "Docs",
+            "href": "/fixtures/docs"
+          }
+        ],
+        "search": {
+          "label": "Search",
+          "shortcut": "⌘K",
+          "href": "/blog"
+        },
+        "controls": {
+          "theme": "text",
+          "locale": "code"
+        },
+        "actions": [
+          {
+            "label": "Get template",
+            "href": "#get",
+            "variant": "primary"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Outlet"
+    },
+    {
+      "widget": "Footer",
+      "props": {
+        "siteName": "AstroWind",
+        "columns": [
+          {
+            "title": "Product",
+            "links": [
+              {
+                "label": "Features",
+                "href": "/#features"
+              },
+              {
+                "label": "Security",
+                "href": "#"
+              },
+              {
+                "label": "Team",
+                "href": "#"
+              },
+              {
+                "label": "Enterprise",
+                "href": "#"
+              },
+              {
+                "label": "Pricing",
+                "href": "/pricing"
+              }
+            ]
+          },
+          {
+            "title": "Platform",
+            "links": [
+              {
+                "label": "Developer API",
+                "href": "#"
+              },
+              {
+                "label": "Partners",
+                "href": "#"
+              },
+              {
+                "label": "Integrations",
+                "href": "#"
+              },
+              {
+                "label": "Status",
+                "href": "#"
+              }
+            ]
+          },
+          {
+            "title": "Support",
+            "links": [
+              {
+                "label": "Docs",
+                "href": "#"
+              },
+              {
+                "label": "Community",
+                "href": "#"
+              },
+              {
+                "label": "Contact",
+                "href": "/contact"
+              },
+              {
+                "label": "Blog",
+                "href": "/blog"
+              }
+            ]
+          },
+          {
+            "title": "Company",
+            "links": [
+              {
+                "label": "About",
+                "href": "/about"
+              },
+              {
+                "label": "Services",
+                "href": "/services"
+              },
+              {
+                "label": "Terms",
+                "href": "/terms"
+              },
+              {
+                "label": "Privacy policy",
+                "href": "/privacy"
+              }
+            ]
+          }
+        ],
+        "socialLinks": [
+          {
+            "label": "RSS",
+            "href": "/rss.xml",
+            "icon": "tabler:rss"
+          },
+          {
+            "label": "X",
+            "href": "https://twitter.com/arthelokyo",
+            "icon": "tabler:brand-x"
+          },
+          {
+            "label": "GitHub",
+            "href": "https://github.com/arthelokyo/astrowind",
+            "icon": "tabler:brand-github"
+          }
+        ],
+        "footNote": "Made by <a class=\"text-primary hover:underline\" href=\"https://github.com/arthelokyo\">arthelokyo</a> · All rights reserved."
+      }
+    }
+  ]
+}

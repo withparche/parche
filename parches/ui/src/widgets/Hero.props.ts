@@ -7,6 +7,14 @@ export const layouts = ['center', 'split', 'text'] as const;
 export const schema = z.object({
   layout: z.enum(layouts).default('center').meta({ help: 'center: copy above the media · split: copy left, media right · text: copy only.' }),
   tagline: z.string().optional().meta({ placeholder: 'e.g. FREE AND OPEN SOURCE' }),
+  badge: z
+    .object({
+      text: z.string().meta({ help: 'The quiet part: "Free · MIT".' }),
+      tag: z.string().optional().meta({ help: 'The accented part: "v1.0".' }),
+      href: z.string().optional(),
+    })
+    .optional()
+    .meta({ help: 'A pill above the heading, in place of the tagline: a licence, a version, a launch.' }),
   title: z.string().optional().meta({ help: 'The page heading (h1). Inline HTML allowed.' }),
   subtitle: z.string().optional().meta({ input: 'textarea' }),
   content: z.string().optional().meta({ input: 'textarea', help: 'Extra HTML under the subtitle.' }),
@@ -26,12 +34,12 @@ export const meta: WidgetMeta = {
     wrapper: false,
   },
   slots: {
-    media: { label: 'Media', help: 'Replaces the image: a form, a video, a card, a code block.', max: 1 },
-    proof: { label: 'Proof', help: 'Under the actions: stats, a logo wall, a quote.', max: 1 },
+    media: { label: 'Media', help: 'Replaces the image: a screenshot, a form, a video, numbers under it. Stacked when several.', max: 3 },
+    proof: { label: 'Proof', help: 'Under the actions: a command, stats, a logo wall, a quote.', max: 2 },
   },
   ui: {
     groups: [
-      { key: 'headline', label: 'Headline', fields: ['tagline', 'title', 'subtitle', 'content'] },
+      { key: 'headline', label: 'Headline', fields: ['badge', 'tagline', 'title', 'subtitle', 'content'] },
       { key: 'actions', label: 'Actions', fields: ['actions'] },
       { key: 'layout', label: 'Layout', fields: ['layout', 'image'] },
     ],

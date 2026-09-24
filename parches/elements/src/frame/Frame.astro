@@ -1,0 +1,35 @@
+---
+/**
+ * Frame — a browser window drawn around its content. The chrome is
+ * decoration: the dots are hidden from assistive technology, and the address
+ * and the chip are plain text.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './frame.props';
+
+const { props: { url, badge, badgeTone, elevated }, rest, className, part } = splitProps(schema, Astro.props);
+const chip: Record<typeof badgeTone, string> = {
+  success: 'bg-success-soft text-success',
+  warning: 'bg-warning-soft text-warning',
+  primary: 'bg-primary-soft text-primary',
+  muted: 'bg-surface text-muted',
+};
+---
+
+<div
+  class={cn('parche-frame overflow-hidden rounded-lg border border-border bg-surface', elevated && 'shadow-lg', className)}
+  {...rest}
+  data-part={part}
+>
+  <div class="parche-frame-bar flex items-center gap-2 border-b border-border bg-surface-2 px-3.5 py-[11px]" data-part="bar">
+    <span class="size-[9px] rounded-full bg-border" aria-hidden="true"></span>
+    <span class="size-[9px] rounded-full bg-border" aria-hidden="true"></span>
+    <span class="size-[9px] rounded-full bg-border" aria-hidden="true"></span>
+    {url && <span class="ml-2 font-mono text-xs leading-none text-muted" data-part="url">{url}</span>}
+    <span class="flex-1"></span>
+    {badge && <span class={cn('rounded-[5px] px-[7px] py-1 font-mono text-[11px] leading-none font-medium', chip[badgeTone])} data-part="badge">{badge}</span>}
+  </div>
+  <div class="parche-frame-body" data-part="body">
+    <slot />
+  </div>
+</div>

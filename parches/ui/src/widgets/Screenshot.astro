@@ -1,0 +1,18 @@
+---
+import Frame from 'parche:elements/Frame';
+import Image from 'parche:elements/Image';
+import Placeholder from 'parche:elements/Placeholder';
+import { schema, type Props } from './Screenshot.props';
+
+const { image, caption, ratio, url, badge, badgeTone, frame } = schema.parse(Astro.props) as Props;
+---
+
+{frame ? (
+  <Frame url={url} badge={badge} badgeTone={badgeTone}>
+    {image ? <Image src={image.src} alt={image.alt} width={1200} ratio={ratio} loading="eager" class="block w-full" /> : <Placeholder caption={caption} ratio={ratio} />}
+  </Frame>
+) : image ? (
+  <Image src={image.src} alt={image.alt} width={1200} ratio={ratio} loading="eager" class="block w-full rounded-lg" />
+) : (
+  <Placeholder caption={caption} ratio={ratio} class="rounded-lg" />
+)}

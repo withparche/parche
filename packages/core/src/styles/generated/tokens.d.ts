@@ -163,5 +163,6 @@ export type DsToken =
   | '--ds-conf-width-xl'
   | '--ds-conf-spacing-sm'
   | '--ds-conf-spacing-md'
-  | '--ds-conf-spacing-lg';
+  | '--ds-conf-spacing-lg'
+  | '--ds-conf-gutter';
 export const dsTokens: readonly DsToken[];

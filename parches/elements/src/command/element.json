@@ -1,0 +1,14 @@
+{
+  "name": "command",
+  "type": "element",
+  "files": [
+    { "path": "Command.astro", "type": "part" },
+    { "path": "command.props.ts", "type": "props" },
+    { "path": "command.element.ts", "type": "element" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": [],
+  "source": null
+}

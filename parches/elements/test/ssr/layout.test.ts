@@ -9,7 +9,7 @@ import SectionExample from '../../src/section/examples/basic.astro';
 describe('Container', () => {
   it('centres at the default width with padding', async () => {
     const html = await render(Container, {}, { default: 'x' });
-    expect(html).toMatch(/<div[^>]*class="[^"]*parche-container[^"]*mx-auto[^"]*max-w-\(--ds-conf-width-lg\)[^"]*px-4/);
+    expect(html).toMatch(/<div[^>]*class="[^"]*parche-container[^"]*mx-auto[^"]*max-w-\(--ds-conf-width-lg\)[^"]*px-\(--ds-conf-gutter\)/);
     expect(html).toMatch(/data-width="lg"/);
     expect(scriptCount(html)).toBe(0);
   });

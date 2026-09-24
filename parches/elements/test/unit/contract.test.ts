@@ -146,8 +146,9 @@ for (const { name, dir, entry, value } of folders) {
     for (const t of meta.element.tokens) {
       if (t.startsWith('comp-')) {
         // A component token is the element's own: it must be declared in the
-        // folder (with a sys default) and consumed there, or it is noise.
-        const declared = sources.some((s) => new RegExp(`--ds-${t}\\s*:`).test(s));
+        // folder with a default, either as a declaration or as the fallback of
+        // the var() that reads it, or it is noise.
+        const declared = sources.some((s) => new RegExp(`--ds-${t}\\s*:`).test(s) || s.includes(`var(--ds-${t},`));
         const consumed = sources.some((s) => s.includes(`var(--ds-${t}`));
         assert.ok(declared, `comp token "${t}" is listed but never declared in the folder`);
         assert.ok(consumed, `comp token "${t}" is declared but never consumed in the folder`);

@@ -17,7 +17,7 @@ const copy = { tagline: 'Legal', title: 'Privacy', subtitle: 'What we collect', 
 test('center: copy above the image, actions centred', async () => {
   const html = await render({ ...copy, image: { src: 'https://example.com/a.png', alt: 'A' } });
   expect(html).toContain('data-layout="center"');
-  expect(html).toContain('<h1 class="type-h1 mb-4 text-balance">Privacy</h1>');
+  expect(html).toContain('<h1 class="type-h1 mb-5 text-balance">Privacy</h1>');
   expect(html).toContain('parche-hero-media');
   expect(html).toContain('alt="A"');
   expect(html).toContain('href="#more"');
@@ -26,8 +26,9 @@ test('center: copy above the image, actions centred', async () => {
 test('split: copy and media side by side; text: no media area even with an image', async () => {
   const split = await render({ ...copy, layout: 'split', image: { src: 'https://example.com/a.png', alt: 'A' } });
   expect(split).toContain('data-layout="split"');
-  expect(split).toContain('md:flex-row');
-  expect(split).toContain('md:basis-1/2');
+  // Two columns on the design's grid: auto-fit, 320px minimum, left-aligned copy.
+  expect(split).toContain('grid-cols-[repeat(auto-fit,minmax(min(320px,100%),1fr))]');
+  expect(split).not.toContain('text-center');
   const text = await render({ ...copy, layout: 'text', image: { src: 'https://example.com/a.png', alt: 'A' } });
   expect(text).toContain('data-layout="text"');
   expect(text).not.toContain('parche-hero-media');
@@ -41,6 +42,14 @@ test('the media slot replaces the image and the proof slot lands under the actio
   expect(html).toContain('<form data-form></form>');
   expect(html).not.toContain('alt="A"');
   expect(html).toMatch(/href="#more"[\s\S]*parche-hero-proof[\s\S]*data-proof/);
+});
+
+test('a badge replaces the tagline: the quiet part and the accented tag', async () => {
+  const html = await render({ ...copy, badge: { text: 'Free · MIT', tag: 'v1.0' } });
+  expect(html).toContain('data-part="badge"');
+  expect(html).toContain('Free · MIT');
+  expect(html).toContain('v1.0');
+  expect(html).not.toContain('type-label');
 });
 
 test('no image and no media slot: no media area at all', async () => {

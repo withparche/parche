@@ -46,14 +46,14 @@
   --ds-ref-radius-2xl: 24px;
 
   /* Type: fluid display, a lead, a mono eyebrow */
-  --ds-sys-font-heading: var(--font-heading, var(--font-sans, ui-sans-serif, system-ui, sans-serif));
+  --ds-sys-font-heading: var(--font-display, var(--font-sans, ui-sans-serif, system-ui, sans-serif));
   --ds-sys-font-body:    var(--font-sans, ui-sans-serif, system-ui, sans-serif);
   --ds-sys-font-mono:    var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
 
   --ds-sys-type-h1-size:     clamp(2.5rem, 6.2vw, 4.625rem);
   --ds-sys-type-h1-weight:   600;
   --ds-sys-type-h1-tracking: -0.035em;
-  --ds-sys-type-h1-leading:  1;
+  --ds-sys-type-h1-leading:  1.02;
   --ds-sys-type-h2-size:     clamp(1.8125rem, 4vw, 2.875rem);
   --ds-sys-type-h2-weight:   600;
   --ds-sys-type-h2-tracking: -0.03em;
@@ -73,6 +73,26 @@
 
   /* Motion: the redesign's rise is 0.4–0.55s */
   --ds-conf-motion-slow: 400ms;
+
+  /* The page grid: a 1240px measure with the gutter outside it, and the
+     section rhythm of the redesign. */
+  --ds-conf-gutter:   clamp(16px, 3vw, 28px);
+  --ds-conf-width-lg: calc(1240px + 2 * var(--ds-conf-gutter));
+  --ds-conf-width-xl: calc(1240px + 2 * var(--ds-conf-gutter));
+  --ds-conf-spacing-md: clamp(64px, 8vw, 112px);
+
+  /* Elevation: flat cards; one soft shadow for hero panels and the
+     recommended tier. */
+  --ds-ref-shadow-xs: none;
+  --ds-ref-shadow-sm: none;
+  --ds-ref-shadow-md: none;
+  --ds-ref-shadow-lg: 0 1px 2px oklch(0.2 0.02 265 / 0.05), 0 14px 34px -14px oklch(0.2 0.02 265 / 0.14);
+
+  /* Component knobs the roles cannot express */
+  --ds-comp-button-radius: 9px;
+  --ds-comp-button-lg-padding: 14px 22px;
+  --ds-comp-placeholder-stripe-a: oklch(0.955 0.008 258);
+  --ds-comp-placeholder-stripe-b: oklch(0.925 0.013 258);
 }
 
 /* The eyebrow is set in the mono face. Elements read the label style; only
@@ -107,4 +127,8 @@
   --ds-sys-color-success-soft:  oklch(0.25 0.05 155);
   --ds-sys-color-warning:       oklch(0.78 0.14 65);
   --ds-sys-color-warning-soft:  oklch(0.26 0.05 65);
+
+  --ds-ref-shadow-lg: 0 1px 2px oklch(0 0 0 / 0.4), 0 16px 40px -16px oklch(0 0 0 / 0.65);
+  --ds-comp-placeholder-stripe-a: oklch(0.235 0.016 265);
+  --ds-comp-placeholder-stripe-b: oklch(0.202 0.014 265);
 }

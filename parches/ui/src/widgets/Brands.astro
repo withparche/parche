@@ -6,7 +6,8 @@ import Card from 'parche:elements/Card';
 import Image from 'parche:elements/Image';
 import * as Carousel from 'parche:elements/Carousel';
 
-const { tagline, title, subtitle, icons = [], images = [], layout = 'wrap' } = Astro.props;
+const { tagline, title, subtitle, icons = [], images = [], names = [], label, link, layout = 'wrap' } = Astro.props;
+const hasHeadline = Boolean(tagline || title || subtitle);
 
 const brands = [
   ...icons.map((icon) => ({ icon })),
@@ -14,9 +15,19 @@ const brands = [
 ];
 ---
 
-<Heading {tagline} {title} {subtitle} />
+{layout !== 'strip' && hasHeadline && <Heading {tagline} {title} {subtitle} />}
 
-{layout === 'carousel' && brands.length > 0 ? (
+{layout === 'strip' ? (
+  <div class="parche-brands-strip flex flex-wrap items-center gap-[clamp(18px,3vw,44px)] py-5" data-layout="strip">
+    {label && <span class="font-mono text-[10px] leading-none font-medium tracking-[0.16em] text-muted uppercase">{label}</span>}
+    <ul class="flex flex-1 flex-wrap items-center gap-[clamp(16px,3vw,40px)]" aria-label={label ?? title ?? 'Brands'}>
+      {names.map((name) => <li class="font-heading text-[17px] leading-none font-semibold tracking-[-0.01em] text-muted">{name}</li>)}
+      {icons.map((icon) => <li><Icon name={icon} class="h-6 w-auto text-muted" /></li>)}
+      {images.map((img) => <li><Image src={img.src} alt={img.alt} width={120} height={32} class="max-h-8" /></li>)}
+    </ul>
+    {link && <a href={link.href} class="text-[13px] leading-none font-medium text-primary no-underline hover:text-heading">{link.text} →</a>}
+  </div>
+) : layout === 'carousel' && brands.length > 0 ? (
   <Carousel.Root count={brands.length} label={title ?? 'Brands'} perView={4} dots={false}>
     {brands.map((brand, i) => (
       <Carousel.Slide index={i} total={brands.length} class="flex items-center justify-center py-3">

@@ -1,0 +1,108 @@
+{
+  "title": "AstroWind 2026",
+  "description": "A fixture page replicating the redesign's home hero and logo strip, to test whether the tokens, the node model and the widgets can express it.",
+  "layout": "product",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "layout": "split",
+        "badge": {
+          "text": "Free · MIT",
+          "tag": "v1.0"
+        },
+        "title": "Ship the website.<br />Skip the setup.",
+        "subtitle": "Production-ready Astro 7 + Tailwind 4: 34 widgets, a real blog pipeline, case-study and pricing systems, and green vitals before you touch anything.",
+        "actions": [
+          {
+            "text": "Get the template →",
+            "href": "#get",
+            "variant": "primary"
+          },
+          {
+            "text": "Live demos",
+            "href": "#showcase",
+            "variant": "secondary"
+          }
+        ]
+      },
+      "slots": {
+        "media": [
+          {
+            "widget": "Screenshot",
+            "props": {
+              "url": "localhost:4321",
+              "badge": "LCP 0.4s",
+              "caption": "hero screenshot · 1200×900",
+              "ratio": "4/3"
+            }
+          },
+          {
+            "widget": "Stats",
+            "props": {
+              "layout": "cards",
+              "stats": [
+                {
+                  "value": "6.1K",
+                  "label": "GitHub stars",
+                  "source": "GitHub",
+                  "date": "Sept 2026"
+                },
+                {
+                  "value": "100",
+                  "label": "Lighthouse, 4 axes",
+                  "tone": "success",
+                  "source": "Lighthouse",
+                  "date": "v12"
+                },
+                {
+                  "value": "38 KB",
+                  "label": "Median page",
+                  "source": "build-smoke"
+                }
+              ]
+            }
+          }
+        ],
+        "proof": [
+          {
+            "widget": "Command",
+            "props": {
+              "command": "npm create astro@latest -- --template arthelokyo/astrowind"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "band",
+        "spacing": "none",
+        "width": "xl"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Brands",
+            "props": {
+              "layout": "strip",
+              "label": "In production at",
+              "names": [
+                "Northwind",
+                "Calderón & Co",
+                "Höok Labs",
+                "Ferrolab",
+                "Quietmile"
+              ],
+              "link": {
+                "text": "2,400+ sites shipped",
+                "href": "#work"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

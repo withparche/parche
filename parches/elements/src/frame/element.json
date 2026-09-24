@@ -1,0 +1,13 @@
+{
+  "name": "frame",
+  "type": "element",
+  "files": [
+    { "path": "Frame.astro", "type": "part" },
+    { "path": "frame.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["placeholder"],
+  "source": null
+}

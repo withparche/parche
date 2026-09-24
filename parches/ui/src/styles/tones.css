@@ -13,6 +13,13 @@
   isolation: isolate;
 }
 
+/* A thin band: the surface colour between two hairlines, for a strip of
+   logos or a one-line announcement between sections. */
+.parche-section[data-tone="band"] {
+  --ds-sys-color-background: var(--ds-sys-color-surface);
+  border-block: 1px solid var(--ds-sys-color-border);
+}
+
 .parche-section[data-tone="glow"]::before,
 .parche-section[data-tone="gradient"]::before,
 .parche-section[data-tone="dots"]::before {

@@ -21,7 +21,7 @@ const widths: Record<typeof width, string> = {
 ---
 
 <Tag
-  class={cn('parche-container mx-auto w-full', widths[width], padding && 'px-4 md:px-6', className)}
+  class={cn('parche-container mx-auto w-full', widths[width], padding && 'px-(--ds-conf-gutter)', className)}
   {...rest}
   data-part={part}
   data-width={width}

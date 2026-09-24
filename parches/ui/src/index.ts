@@ -22,6 +22,7 @@ export default function createUI(): ParcheManifest {
       { name: 'glow', label: 'Glow' },
       { name: 'gradient', label: 'Gradient' },
       { name: 'dots', label: 'Dots' },
+      { name: 'band', label: 'Band' },
     ],
     styles: [path.resolve(dir, 'styles/tones.css')],
     widgets: {
@@ -29,6 +30,8 @@ export default function createUI(): ParcheManifest {
       Columns: w('Columns.astro'),
       Column: w('Column.astro'),
       Switch: w('Switch.astro'),
+      Screenshot: w('Screenshot.astro'),
+      Command: w('Command.astro'),
       // Layout chrome (Header/Footer), consumed by page layouts
       Header: layout('Header.astro'),
       Footer: layout('Footer.astro'),
@@ -71,7 +74,7 @@ export default function createUI(): ParcheManifest {
       'blog/ToBlogLink': w('blog/ToBlogLink.astro'),
     },
     requires: {
-      elements: ['Accordion', 'Tabs', 'Avatar', 'Badge', 'Banner', 'Breadcrumb', 'Button', 'Card', 'Carousel', 'Checkbox', 'Collapsible', 'Container', 'Divider', 'Heading', 'Icon', 'Image', 'Input', 'Link', 'Menu', 'Pagination', 'Popover', 'Section', 'Share', 'Sheet', 'Stat', 'Tag', 'Textarea', 'Toc'],
+      elements: ['Accordion', 'Tabs', 'Command', 'Frame', 'Placeholder', 'Avatar', 'Badge', 'Banner', 'Breadcrumb', 'Button', 'Card', 'Carousel', 'Checkbox', 'Collapsible', 'Container', 'Divider', 'Heading', 'Icon', 'Image', 'Input', 'Link', 'Menu', 'Pagination', 'Popover', 'Section', 'Share', 'Sheet', 'Stat', 'Tag', 'Textarea', 'Toc'],
     },
   };
 }

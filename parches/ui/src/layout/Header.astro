@@ -7,6 +7,7 @@ import Collapsible from 'parche:elements/Collapsible';
 import Menu from 'parche:elements/Menu';
 import Popover from 'parche:elements/Popover';
 import Banner from 'parche:elements/Banner';
+import Kbd from 'parche:elements/Kbd';
 import ThemeToggle from 'parche:components/ThemeToggle';
 import LocaleSwitcher from 'parche:components/LocaleSwitcher';
 
@@ -56,7 +57,18 @@ interface Announcement {
   class?: string;
 }
 
-type Logo = string | { src?: string; alt?: string; width?: number; height?: number; text?: string };
+type Logo = string | { src?: string; alt?: string; width?: number; height?: number; text?: string; mark?: boolean };
+
+interface Search {
+  label: string;
+  href: string;
+  shortcut?: string;
+}
+
+interface Controls {
+  theme?: 'icon' | 'text' | 'none';
+  locale?: 'icon' | 'code' | 'none';
+}
 
 interface Props {
   links?: HeaderLink[];
@@ -72,7 +84,11 @@ interface Props {
   position?: 'left' | 'center' | 'right';
 }
 
-const { links = [], actions = [], logo = 'AstroWind', announcement, position = 'center' } = Astro.props;
+const { links = [], actions = [], logo = 'AstroWind', announcement, position = 'center', search, controls = {} } = Astro.props as {
+  links?: HeaderLink[]; actions?: HeaderAction[]; logo?: Logo; announcement?: Announcement; position?: 'left' | 'center' | 'right'; search?: Search; controls?: Controls;
+};
+const themeDisplay = controls.theme ?? 'icon';
+const localeDisplay = controls.locale ?? 'icon';
 
 const navJustify =
   position === 'left' ? 'justify-start' : position === 'right' ? 'justify-end' : 'justify-center';
@@ -82,6 +98,7 @@ const homeHref = Astro.currentLocale && Astro.currentLocale !== 'en' ? `/${Astro
 // object with `text` (wordmark). Falls back to a text mark, never a broken img.
 const logoSrc = typeof logo === 'object' ? logo.src : undefined;
 const logoText = typeof logo === 'string' ? logo : logo.text;
+const logoMark = typeof logo === 'object' && logo.mark;
 
 function linkType(link: HeaderLink): 'link' | 'dropdown' | 'mega' {
   if (!link.children?.length) return 'link';
@@ -90,7 +107,7 @@ function linkType(link: HeaderLink): 'link' | 'dropdown' | 'mega' {
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const navItemClass =
-  'inline-flex items-center gap-1 text-[0.938rem] font-medium text-muted hover:text-heading transition-colors no-underline px-3 py-2 rounded-md hover:bg-surface-hover cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-expanded:text-heading';
+  'inline-flex items-center gap-1 text-sm leading-none font-medium text-muted hover:text-heading transition-colors no-underline px-[11px] py-2 rounded-sm hover:bg-surface-2 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-expanded:text-heading';
 
 ---
 
@@ -113,13 +130,13 @@ const navItemClass =
 )}
 
 <header
-  class="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-lg"
+  class="sticky top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-lg"
   data-header
   transition:animate="none"
 >
-  <div id="parche-header-bar" class="mx-auto max-w-6xl flex items-center justify-between px-4 md:px-6 h-[4.75rem]" style="anchor-name: --parche-header-bar">
+  <div id="parche-header-bar" class="mx-auto flex min-h-17 max-w-(--ds-conf-width-xl) items-center justify-between gap-[clamp(12px,2vw,26px)] px-(--ds-conf-gutter)" style="anchor-name: --parche-header-bar">
     <!-- Logo -->
-    <a href={homeHref} class="no-underline hover:opacity-80 transition-opacity shrink-0">
+    <a href={homeHref} class="flex shrink-0 items-center gap-2.5 no-underline transition-opacity hover:opacity-80">
       {logoSrc ? (
         <img
           src={logoSrc}
@@ -129,21 +146,21 @@ const navItemClass =
           class="h-8 w-auto"
         />
       ) : (
-        <span class="type-h3 text-heading">{logoText || 'Logo'}</span>
+        <>
+          {logoMark && <span class="block size-[26px] flex-none rounded-sm bg-primary" aria-hidden="true"></span>}
+          <span class="font-heading text-[1.1875rem] leading-none font-semibold tracking-[-0.02em] text-heading">{logoText || 'Logo'}</span>
+        </>
       )}
     </a>
 
     <!-- Desktop nav -->
-    <nav class={`hidden md:flex flex-1 items-center ${navJustify} gap-1`} aria-label="Main navigation">
+    <nav class={`hidden md:flex flex-1 items-center ${navJustify} gap-0.5`} aria-label="Main navigation">
       {links.map((link) => {
         const type = linkType(link);
 
         if (type === 'link') {
           return (
-            <a
-              href={link.href}
-              class="text-[0.938rem] font-medium text-muted hover:text-heading transition-colors no-underline px-3 py-2 rounded-md hover:bg-surface-hover"
-            >
+            <a href={link.href} class={navItemClass}>
               {link.label}
             </a>
           );
@@ -244,10 +261,19 @@ const navItemClass =
 
     <!-- Desktop actions -->
     <div class="hidden md:flex items-center gap-2">
-      <ThemeToggle />
-      <LocaleSwitcher />
+      {search && (
+        <a
+          href={search.href}
+          class="flex items-center gap-[9px] rounded-sm border border-border bg-surface-2 py-2 pr-[9px] pl-3 text-[13px] leading-none text-muted no-underline transition-colors hover:border-primary hover:text-heading"
+        >
+          <span>{search.label}</span>
+          {search.shortcut && <Kbd class="rounded-[5px] border border-border bg-surface px-[5px] py-[3px] font-mono text-[11px] leading-none font-medium">{search.shortcut}</Kbd>}
+        </a>
+      )}
+      {localeDisplay !== 'none' && <LocaleSwitcher display={localeDisplay} />}
+      {themeDisplay !== 'none' && <ThemeToggle display={themeDisplay} />}
       {actions.length > 0 && (
-        <div class="flex items-center gap-2 ml-5">
+        <div class:list={['flex items-center gap-2', !search && 'ml-5']}>
           {actions.map((action) => (
             <Button href={action.href} variant={action.variant || 'primary'} size="sm" class="px-4 py-2.5">
               {action.icon && <Icon name={action.icon} class="w-4 h-4" />}

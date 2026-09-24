@@ -52,7 +52,7 @@ const family = (cssVariable: string, name: string, weights: number[], fallbacks:
 /** The 2026 redesign's Product direction: display, text and mono faces. */
 export const product = (): ParcheManifest =>
   theme('product', 'Product', [
-    family('--font-heading', 'Space Grotesk', [500, 600, 700], ['ui-sans-serif', 'system-ui', 'sans-serif']),
+    family('--font-display', 'Space Grotesk', [500, 600, 700], ['ui-sans-serif', 'system-ui', 'sans-serif']),
     family('--font-sans', 'IBM Plex Sans', [400, 500, 600], ['ui-sans-serif', 'system-ui', 'sans-serif']),
     family('--font-mono', 'JetBrains Mono', [400, 500], ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace']),
   ]);

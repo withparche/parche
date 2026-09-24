@@ -1,40 +1,62 @@
 ---
 /**
  * The one hero. `layout` picks the structure; the `media` slot takes whatever
- * sits beside or below the copy (the `image` prop is the fallback), and the
- * `proof` slot takes what backs the claim, under the actions.
+ * sits beside or below the copy (the `image` prop is the fallback), stacked
+ * when there are several pieces, and the `proof` slot takes what backs the
+ * claim, under the actions. The measure, the gutter and the rhythm come from
+ * the conf tokens, so a theme sets the page grid the hero sits on.
  */
 import Image from 'parche:elements/Image';
 import Action from '../components/Action.astro';
 import { schema, type Props } from './Hero.props';
 
-const { layout, title, subtitle, tagline, content, actions, image } = schema.parse(Astro.props) as Props;
+const { layout, badge, title, subtitle, tagline, content, actions, image } = schema.parse(Astro.props) as Props;
 const hasMedia = Astro.slots.has('media') || Boolean(image);
 const showMedia = layout !== 'text' && hasMedia;
 const split = layout === 'split' && showMedia;
+const centered = !split;
+const Badge = badge?.href ? 'a' : 'span';
 ---
 
 <!-- Owns its measure and padding: it is never wrapped as a page root. -->
-<div class="parche-hero mx-auto max-w-7xl px-4 md:px-6 py-12 md:py-20" data-layout={layout}>
-  <div class:list={['flex flex-col gap-10 md:gap-16', split && 'md:flex-row md:items-center']}>
-    <div class:list={['mx-auto max-w-5xl min-w-0', split ? 'md:basis-1/2 text-center md:text-left' : 'text-center']}>
-      {tagline && <p class="type-label uppercase text-primary mb-2" set:html={tagline} />}
-      {title && <h1 class="type-h1 mb-4 text-balance" set:html={title} />}
-      {subtitle && <p class:list={['type-lead mb-6', !split && 'max-w-3xl mx-auto']} set:html={subtitle} />}
+<div
+  class="parche-hero mx-auto w-full max-w-(--ds-conf-width-xl) px-(--ds-conf-gutter) pt-[calc(var(--ds-conf-spacing-md)*0.75)] pb-[calc(var(--ds-conf-spacing-md)*0.39)]"
+  data-layout={layout}
+>
+  <div
+    class:list={[
+      'grid items-center gap-[clamp(28px,4vw,56px)]',
+      split ? 'grid-cols-[repeat(auto-fit,minmax(min(320px,100%),1fr))]' : 'grid-cols-1',
+    ]}
+  >
+    <div class:list={['parche-hero-copy min-w-0', centered && 'mx-auto max-w-5xl text-center']}>
+      {badge && (
+        <Badge
+          href={badge.href}
+          class="mb-6 inline-flex items-center gap-[9px] rounded-full border border-border bg-surface py-[5px] pr-[5px] pl-3 no-underline"
+          data-part="badge"
+        >
+          <span class="font-mono text-[11px] leading-none font-medium tracking-[0.1em] text-muted uppercase">{badge.text}</span>
+          {badge.tag && <span class="rounded-full bg-primary-soft px-[9px] py-[5px] font-mono text-[11px] leading-none font-medium text-primary">{badge.tag}</span>}
+        </Badge>
+      )}
+      {tagline && !badge && <p class="type-label uppercase text-primary mb-2" set:html={tagline} />}
+      {title && <h1 class="type-h1 mb-5 text-balance" set:html={title} />}
+      {subtitle && <p class:list={['type-lead mb-[30px] max-w-[36em] text-pretty', centered && 'mx-auto']} set:html={subtitle} />}
       {content && <div class="text-muted mb-6 [&_pre]:max-w-full [&_pre]:overflow-x-auto [&_pre]:text-sm" set:html={content} />}
       {actions.length > 0 && (
-        <div class:list={['flex flex-col sm:flex-row gap-4', split ? 'justify-center md:justify-start' : 'max-w-xs sm:max-w-md mx-auto sm:justify-center']}>
-          {actions.map((a) => <Action action={a} class="w-full sm:w-auto" />)}
+        <div class:list={['flex flex-wrap gap-3', centered && 'justify-center']}>
+          {actions.map((a) => <Action action={a} />)}
         </div>
       )}
       {Astro.slots.has('proof') && (
-        <div class="parche-hero-proof mt-8">
+        <div class:list={['parche-hero-proof mt-[26px] flex flex-col gap-3', centered && 'items-center']}>
           <slot name="proof" />
         </div>
       )}
     </div>
     {showMedia && (
-      <div class:list={['parche-hero-media min-w-0', split ? 'md:basis-1/2' : 'relative mx-auto w-full max-w-5xl']}>
+      <div class:list={['parche-hero-media flex min-w-0 flex-col gap-3', !split && 'relative mx-auto w-full max-w-5xl']}>
         <slot name="media">
           {image && (
             <Image

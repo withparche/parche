@@ -1,19 +1,34 @@
 ---
 /**
- * Sourced numbers. The Stat element draws the figure; under it, where the
- * number comes from and when, linked to the report when there is one.
+ * Sourced numbers. As figures, the Stat element draws each large, with where
+ * it comes from and when underneath. As cards, each is a compact bordered
+ * card: the figure in the display face, the label under it.
  */
 import Heading from 'parche:elements/Heading';
 import Stat from 'parche:elements/Stat';
 import { schema, type Props } from './Stats.props';
 
-const { title, subtitle, tagline, stats, note } = schema.parse(Astro.props) as Props;
+const { title, subtitle, tagline, stats, layout, note } = schema.parse(Astro.props) as Props;
+const hasHeadline = Boolean(title || subtitle || tagline);
+const tones = { default: 'text-heading', success: 'text-success', warning: 'text-warning' } as const;
+const where = (s: (typeof stats)[number]) => [s.source, s.date].filter(Boolean).join(' · ');
 ---
 
-<Heading {title} {subtitle} {tagline} />
+{hasHeadline && <Heading {title} {subtitle} {tagline} />}
 
-{stats.length > 0 && (
-  <div class="parche-stats grid grid-cols-[repeat(auto-fit,minmax(11rem,1fr))] gap-x-8 gap-y-6">
+{stats.length > 0 && layout === 'cards' ? (
+  <dl class="parche-stats grid grid-cols-[repeat(auto-fit,minmax(130px,1fr))] gap-2.5" data-layout="cards">
+    {stats.map((s) => (
+      <div class="parche-stat-item flex flex-col rounded-md border border-border bg-surface p-3.5" title={where(s) || undefined}>
+        <dt class="order-2 mt-[5px] text-xs leading-[1.3] text-muted">{s.label}</dt>
+        <dd class:list={['order-1 font-heading text-[22px] leading-none font-semibold tracking-[-0.02em]', tones[s.tone]]}>
+          {s.href ? <a href={s.href} class="text-inherit no-underline">{s.value}{s.unit}</a> : <>{s.value}{s.unit}</>}
+        </dd>
+      </div>
+    ))}
+  </dl>
+) : stats.length > 0 ? (
+  <div class="parche-stats grid grid-cols-[repeat(auto-fit,minmax(11rem,1fr))] gap-x-8 gap-y-6" data-layout="figures">
     {stats.map(({ value, unit, label, icon, source, date, href }) => (
       <div class="parche-stat-item">
         <Stat value={unit ? `${value}${unit}` : value} label={label} icon={icon} />
@@ -25,6 +40,6 @@ const { title, subtitle, tagline, stats, note } = schema.parse(Astro.props) as P
       </div>
     ))}
   </div>
-)}
+) : null}
 
 {note && <p class="type-caption text-muted mt-6 text-center" set:html={note} />}

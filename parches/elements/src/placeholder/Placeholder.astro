@@ -1,0 +1,31 @@
+---
+/**
+ * Placeholder — a striped stand-in for an image, with a caption chip saying
+ * what goes there. The stripes are two component tokens, defaulting to the
+ * second surface and a mix towards the border, so a theme can match its own
+ * mock-ups exactly.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './placeholder.props';
+
+const { props: { caption, ratio }, rest, className, part } = splitProps(schema, Astro.props);
+const stripes =
+  'repeating-linear-gradient(135deg,' +
+  ' var(--ds-comp-placeholder-stripe-a, var(--ds-sys-color-surface-2)) 0 12px,' +
+  ' var(--ds-comp-placeholder-stripe-b, color-mix(in oklab, var(--ds-sys-color-border) 70%, var(--ds-sys-color-surface-2))) 12px 24px)';
+---
+
+<div
+  class={cn('parche-placeholder flex items-end p-4', className)}
+  style={`aspect-ratio: ${ratio}; background: ${stripes};`}
+  role="img"
+  aria-label={caption}
+  {...rest}
+  data-part={part}
+>
+  <span
+    class="parche-placeholder-caption rounded-[7px] border border-border bg-background px-[9px] py-[7px] font-mono text-[11px] leading-none font-medium tracking-[0.08em] text-muted uppercase"
+    data-part="caption"
+    aria-hidden="true"
+  >{caption}</span>
+</div>
