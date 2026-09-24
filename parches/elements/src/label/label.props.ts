@@ -14,7 +14,7 @@ export const meta = defineElement({
   element: {
     label: 'Label',
     description: 'The name of a form control.',
-    tokens: ['color-heading', 'color-danger'],
+    tokens: ['color-heading', 'color-danger', 'comp-label-text', 'comp-label-weight'],
     parts: [
       { name: 'root', element: 'label' },
       { name: 'required', element: 'span', description: 'The mark; decorative, the control carries `required`.' },

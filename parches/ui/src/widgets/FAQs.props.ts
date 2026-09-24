@@ -13,6 +13,7 @@ export const schema = z.object({
   subtitle: z.string().optional().meta({ input: 'textarea' }),
   items: z.array(faqItem).default([]),
   columns: z.enum(['1', '2']).default('2').meta({ help: 'Number of columns' }),
+  layout: z.enum(['accordion', 'list']).default('accordion').meta({ help: 'accordion: centred heading, chevrons · list: start-aligned heading, one column between hairlines, plus and minus, the first answer open.' }),
 });
 
 export type Props = z.infer<typeof schema>;

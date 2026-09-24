@@ -1,82 +1,78 @@
 ---
-import Heading from 'parche:elements/Heading';
-import Icon from 'parche:elements/Icon';
-import Card from 'parche:elements/Card';
+/**
+ * Pricing: the tiers as cards, the recommended one marked, and a comparison
+ * table under them with one column per plan. Cards sell, the table closes.
+ */
 import Button from 'parche:elements/Button';
-import type { Props } from './Pricing.props';
+import SectionHeader from '../components/SectionHeader.astro';
+import { schema, type Props } from './Pricing.props';
 
-const { title, subtitle, tagline, prices = [] } = Astro.props;
+const { title, subtitle, tagline, prices, align, comparison } = schema.parse(Astro.props) as Props;
+const plans = prices.filter((p) => p.price || p.title);
+const featured = plans.findIndex((p) => p.hasRibbon);
+const tone = { default: 'font-semibold text-heading', muted: 'text-muted', success: 'font-semibold text-success' } as const;
 ---
 
-<Heading {title} {subtitle} {tagline} />
+<SectionHeader {tagline} {title} {subtitle} align={align} spacing="md" />
 
-{prices.length > 0 && (
-  <div class="flex items-stretch justify-center">
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {prices.map(({ title, subtitle, description, price, period, currency = '$', type = 'standard', items = [], callToAction, hasRibbon = false, ribbonTitle }) => (
-        (price || title) && (
-          <Card as="article" padding="lg" class="relative mx-auto w-full max-w-sm overflow-visible rounded-lg text-center">
-            {hasRibbon && ribbonTitle && (
-              <div class="absolute right-[-5px] top-[-5px] z-[1] h-[100px] w-[100px] overflow-hidden text-right">
-                <span class="absolute right-[-21px] top-[19px] block w-full rotate-45 bg-primary px-0 py-1 text-center text-[10px] font-bold uppercase leading-5 text-on-primary shadow-[0_3px_10px_-5px_rgba(0,0,0,0.3)]">
-                  {ribbonTitle}
-                </span>
-              </div>
-            )}
+{plans.length > 0 && (
+  <div class:list={['grid grid-cols-[repeat(auto-fit,minmax(min(260px,100%),1fr))] gap-[clamp(16px,2vw,24px)]', comparison && 'mb-[clamp(20px,3vw,32px)]']}>
+    {plans.map((p) => {
+      const numeric = /^[\d.,]/.test(String(p.price ?? ''));
+      const shown = p.type === 'custom' ? (p.price || "Let's talk") : `${numeric ? (p.currency ?? '$') : ''}${p.price ?? ''}`;
+      return (
+        <article
+          class:list={[
+            'relative flex flex-col gap-[18px] rounded-lg border bg-background p-[clamp(22px,2.5vw,30px)]',
+            p.hasRibbon ? 'border-primary shadow-lg' : 'border-border',
+          ]}
+        >
+          {p.hasRibbon && p.ribbonTitle && (
+            <span class="absolute -top-[11px] left-[clamp(22px,2.5vw,30px)] rounded-full bg-primary px-2.5 py-1.5 font-mono text-[10px] leading-none font-medium tracking-[0.14em] text-on-primary uppercase">{p.ribbonTitle}</span>
+          )}
+          <div>
+            {p.title && <h3 class="mb-3 text-base leading-none font-semibold text-heading">{p.title}</h3>}
+            <p class="font-heading text-[40px] leading-none font-semibold tracking-[-0.03em] text-heading">
+              {shown}{(p.suffix || p.period) && <span class="font-body text-[15px] font-normal tracking-normal text-muted"> {p.suffix ?? p.period}</span>}
+            </p>
+            {(p.note || p.subtitle) && <p class="mt-2 text-[13px] leading-[1.5] text-muted">{p.note ?? p.subtitle}</p>}
+            {p.description && <p class="mt-2 text-[13px] leading-[1.5] text-muted">{p.description}</p>}
+          </div>
+          {p.items.length > 0 && (
+            <ul class="flex flex-col gap-[9px] text-sm leading-[1.5] text-heading">
+              {p.items.map((it) => (it.description || it.title) && <li>{it.description ?? it.title}</li>)}
+            </ul>
+          )}
+          {p.callToAction?.href && p.callToAction?.text && (
+            <Button href={p.callToAction.href} variant={p.hasRibbon ? 'primary' : 'secondary'} block class="mt-auto p-3 text-[15px] leading-none">{p.callToAction.text}</Button>
+          )}
+        </article>
+      );
+    })}
+  </div>
+)}
 
-            <div class="px-2 py-0">
-              {title && (
-                <h3 class="type-label mb-2 text-center uppercase tracking-wider text-heading">
-                  {title}
-                </h3>
-              )}
-              {subtitle && (
-                <p class="type-body text-muted">{subtitle}</p>
-              )}
-
-              {type === 'custom' ? (
-                <div class="my-8">
-                  <div class="text-3xl font-bold text-heading">{price || "Let's talk"}</div>
-                  {description && (
-                    <p class="type-body mx-auto mt-3 max-w-[16rem] text-muted">{description}</p>
-                  )}
-                </div>
-              ) : (
-                <div class="my-8">
-                  <div class="mb-1 flex items-baseline justify-center text-center">
-                    {/^[\d.,]/.test(String(price ?? '')) && (
-                      <span class="text-5xl text-heading">{currency}</span>
-                    )}
-                    <span class="text-6xl font-extrabold text-heading">{price}</span>
-                  </div>
-                  {period && <span class="type-body lowercase text-muted">{period}</span>}
-                </div>
-              )}
-
-              {items.length > 0 && (
-                <ul class="my-8 space-y-2 text-left md:my-10">
-                  {items.map(({ description, icon }) =>
-                    description && (
-                      <li class="mb-1.5 flex items-start space-x-3 leading-7">
-                        <div class="mt-1 flex-shrink-0 rounded-full bg-primary p-1 text-on-primary">
-                          <Icon name={icon ?? 'tabler:check'} size="xs" />
-                        </div>
-                        <span class="type-body text-heading">{description}</span>
-                      </li>
-                    )
-                  )}
-                </ul>
-              )}
-            </div>
-
-            {callToAction?.href && callToAction?.text && (
-              <div class="flex justify-center">
-                <Button variant={hasRibbon ? 'primary' : 'secondary'} size="lg" href={callToAction.href} class="rounded-lg">{callToAction.text}</Button>
-              </div>
-            )}
-          </Card>
-        )
-      ))}
-    </div>
+{comparison && plans.length > 0 && (
+  <div class="overflow-auto rounded-lg border border-border bg-background">
+    <table class="w-full min-w-[640px] border-collapse">
+      <thead>
+        <tr>
+          <th scope="col" class="border-b border-border px-5 py-[15px] text-left font-mono text-[10px] leading-none font-medium tracking-[0.14em] text-muted uppercase">{comparison.label}</th>
+          {plans.map((p, i) => (
+            <th scope="col" class:list={['border-b border-border px-5 py-[15px] text-left text-sm leading-none font-semibold text-heading', i === featured && 'bg-primary-soft']}>{p.title}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {comparison.rows.map((row, r) => (
+          <tr>
+            <th scope="row" class:list={['px-5 py-3.5 text-left text-sm leading-[1.4] font-medium text-heading', r < comparison.rows.length - 1 && 'border-b border-border-soft']}>{row.feature}</th>
+            {row.values.map((v) => (
+              <td class:list={['px-5 py-3.5 text-sm leading-[1.4]', tone[v.tone], r < comparison.rows.length - 1 && 'border-b border-border-soft']}>{v.text}</td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
   </div>
 )}

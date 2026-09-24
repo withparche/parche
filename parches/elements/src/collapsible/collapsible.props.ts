@@ -2,6 +2,8 @@ import { z } from 'zod';
 import { defineElement } from '@parche/elements/utils';
 
 export const schema = z.object({
+  marker: z.enum(['chevron', 'plus']).default('chevron').meta({ help: 'The indicator: a chevron that turns, or a plus that becomes a minus.' }),
+  size: z.enum(['md', 'lg']).default('md').meta({ help: 'lg: a larger display-face question with more air, for an FAQ list.' }),
   title: z.string().optional().meta({ help: 'The trigger text. Otherwise use the `trigger` slot.' }),
   open: z.boolean().default(false).meta({ help: 'Expanded on first render.' }),
   name: z.string().optional().meta({ help: 'Collapsibles sharing a name close each other (native `details name`). Accordion sets it for you.' }),

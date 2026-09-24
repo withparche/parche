@@ -7,7 +7,7 @@ import { z } from 'zod';
 
 /** A call to action: what a button in content looks like. */
 export const action = z.object({
-  variant: z.enum(['primary', 'secondary', 'tertiary', 'link']).default('primary'),
+  variant: z.enum(['primary', 'secondary', 'contrast', 'tertiary', 'link']).default('primary'),
   text: z.string().optional(),
   href: z.string().optional().meta({ placeholder: 'https://...' }),
   target: z.string().optional().meta({ placeholder: '_blank' }),

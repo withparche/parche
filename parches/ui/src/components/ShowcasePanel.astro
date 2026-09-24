@@ -1,0 +1,45 @@
+---
+/** One demo of the Showcase: the screenshot beside what it is, three specifics and a link. */
+import Image from 'parche:elements/Image';
+import Placeholder from 'parche:elements/Placeholder';
+
+interface Props {
+  demo?: {
+    title: string;
+    body: string;
+    points: string[];
+    image?: { src: string; alt: string };
+    caption?: string;
+    link?: { text: string; href: string };
+  };
+}
+
+const { demo: d } = Astro.props;
+---
+
+{d && (
+  <div class="grid grid-cols-[repeat(auto-fit,minmax(min(300px,100%),1fr))] items-center gap-[clamp(20px,3vw,44px)]">
+    <div class="min-w-0 overflow-hidden rounded-lg border border-border bg-background">
+      {d.image ? <Image src={d.image.src} alt={d.image.alt} width={1000} ratio="16/10" class="block w-full" /> : <Placeholder caption={d.caption} label={d.title} ratio="16/10" />}
+    </div>
+    <div class="min-w-0">
+      <h3 class="mb-3.5 font-heading text-[clamp(23px,2.6vw,32px)] leading-[1.2] font-semibold tracking-[-0.02em] text-heading">{d.title}</h3>
+      <p class="mb-[22px] text-base leading-[1.65] text-pretty text-muted">{d.body}</p>
+      {d.points.length > 0 && (
+        <ul class="mb-[26px] flex flex-col gap-[11px]">
+          {d.points.map((p) => (
+            <li class="flex items-start gap-3">
+              <span class="font-mono text-xs leading-[1.5] font-medium text-primary" aria-hidden="true">✓</span>
+              <span class="text-[15px] leading-[1.5] text-heading">{p}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      {d.link && (
+        <a href={d.link.href} class="inline-flex items-center gap-[9px] rounded-[var(--ds-comp-button-radius,var(--radius-full))] border border-border bg-background px-[18px] py-3 text-[15px] leading-none font-semibold text-heading no-underline hover:border-primary">
+          {d.link.text} <span class="font-mono" aria-hidden="true">↗</span>
+        </a>
+      )}
+    </div>
+  </div>
+)}

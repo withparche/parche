@@ -20,7 +20,9 @@ const pricePlan = z.object({
     text: z.string().optional().meta({ placeholder: 'Get started' }),
     href: z.string().optional().meta({ placeholder: 'https://...' }),
   }).optional(),
-  hasRibbon: z.boolean().default(false),
+  note: z.string().optional().meta({ help: 'Under the price: "MIT, commercial use included".' }),
+  suffix: z.string().optional().meta({ help: 'After the price, smaller: "once", "/ month".' }),
+  hasRibbon: z.boolean().default(false).meta({ help: 'The recommended tier: accented border, the label above it.' }),
   ribbonTitle: z.string().optional().meta({ placeholder: 'Popular' }),
 });
 
@@ -29,6 +31,19 @@ export const schema = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional().meta({ input: 'textarea' }),
   prices: z.array(pricePlan).default([]),
+  align: z.enum(['center', 'start']).default('center').meta({ help: 'Where the heading sits.' }),
+  comparison: z
+    .object({
+      label: z.string().default('Compare'),
+      rows: z.array(
+        z.object({
+          feature: z.string(),
+          values: z.array(z.object({ text: z.string(), tone: z.enum(['default', 'muted', 'success']).default('default') })).meta({ help: 'One per plan, in the plans order.' }),
+        }),
+      ),
+    })
+    .optional()
+    .meta({ help: 'A table under the cards, one column per plan: quantities, not ticks.' }),
 });
 
 export type Props = z.infer<typeof schema>;

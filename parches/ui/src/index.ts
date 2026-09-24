@@ -23,6 +23,9 @@ export default function createUI(): ParcheManifest {
       { name: 'gradient', label: 'Gradient' },
       { name: 'dots', label: 'Dots' },
       { name: 'band', label: 'Band' },
+      { name: 'surface', label: 'Surface' },
+      { name: 'ruled', label: 'Ruled' },
+      { name: 'ink', label: 'Ink' },
     ],
     styles: [path.resolve(dir, 'styles/tones.css')],
     widgets: {
@@ -32,6 +35,11 @@ export default function createUI(): ParcheManifest {
       Switch: w('Switch.astro'),
       Screenshot: w('Screenshot.astro'),
       Command: w('Command.astro'),
+      Showcase: w('Showcase.astro'),
+      Cases: w('Cases.astro'),
+      Team: w('Team.astro'),
+      Timeline: w('Timeline.astro'),
+      Newsletter: w('Newsletter.astro'),
       // Layout chrome (Header/Footer), consumed by page layouts
       Header: layout('Header.astro'),
       Footer: layout('Footer.astro'),

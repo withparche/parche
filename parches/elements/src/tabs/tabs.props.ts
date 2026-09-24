@@ -25,7 +25,7 @@ export const meta = defineElement({
     label: 'Tabs',
     description: 'One panel at a time, chosen from a tab list.',
     a11y: { pattern: 'tabs', url: 'https://www.w3.org/WAI/ARIA/apg/patterns/tabs/' },
-    tokens: ['color-heading', 'color-muted', 'color-primary', 'color-on-primary', 'color-border', 'color-ring', 'color-surface-hover'],
+    tokens: ['color-heading', 'color-muted', 'color-primary', 'color-on-primary', 'color-border', 'color-ring', 'color-surface-hover', 'comp-tabs-list-radius', 'comp-tabs-tab-radius'],
     tag: { name: 'parche-tabs', entry: './tabs.element.ts' },
     keyboard: {
       'ArrowRight / ArrowLeft': 'Next / previous tab (ArrowDown / ArrowUp when vertical); the panel follows the focus.',
@@ -34,6 +34,7 @@ export const meta = defineElement({
     },
     noJs: 'Every panel is shown, stacked, each under a heading with its tab label; the tab list is hidden. Nothing is unreachable.',
     parts: [
+      { name: 'header', element: 'div', description: 'The row a `header` slot shares with the tab list.' },
       { name: 'root', element: 'parche-tabs' },
       { name: 'list', element: 'div', role: 'tablist' },
       { name: 'tab', element: 'button', role: 'tab', states: ['active', 'inactive'] },

@@ -10,6 +10,8 @@ export const item = z.object({
 
 export const schema = z.object({
   items: z.array(item).min(1),
+  marker: z.enum(['chevron', 'plus']).default('chevron'),
+  size: z.enum(['md', 'lg']).default('md'),
   multiple: z.boolean().default(false).meta({ help: 'Allow several items open at once. Otherwise opening one closes the others.' }),
   name: z.string().optional().meta({ help: 'Group name for the native exclusivity; derived from the items when omitted.' }),
   forceOpen: z.string().optional().meta({ help: 'Media query that keeps every item open, e.g. "(min-width: 48rem)".' }),

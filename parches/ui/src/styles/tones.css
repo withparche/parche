@@ -13,10 +13,41 @@
   isolation: isolate;
 }
 
+/* The page's two canvases, as the redesign alternates them: surface
+   sections open with a hairline; a ruled section keeps the page colour and
+   opens with one too. */
+/* These paint the band's own background and leave the background role
+   alone: what sits on them in the page colour (a card, a secondary button)
+   keeps it and still reads as a layer. */
+.parche-section[data-tone="surface"] {
+  background-color: var(--ds-sys-color-surface);
+  border-top: 1px solid var(--ds-sys-color-border);
+}
+.parche-section[data-tone="ruled"] {
+  border-top: 1px solid var(--ds-sys-color-border);
+}
+
+/* Ink: the heading colour as canvas and the surface colour as text, so it
+   inverts with the mode. The primary action turns canvas-coloured, the way
+   a button on a dark band reads. */
+.parche-section[data-tone="ink"] {
+  --ds-sys-color-background: var(--ds-sys-color-foreground);
+  --ds-sys-color-heading: var(--ds-sys-color-surface);
+  --ds-sys-color-text: var(--ds-sys-color-surface);
+  --ds-sys-color-on-surface: var(--ds-sys-color-surface);
+  --ds-sys-color-muted: color-mix(in oklab, var(--ds-sys-color-surface) 75%, var(--ds-sys-color-foreground));
+  --ds-sys-color-border: color-mix(in oklab, var(--ds-sys-color-surface) 18%, transparent);
+  --ds-sys-color-primary: var(--ds-sys-color-surface);
+  --ds-sys-color-on-primary: var(--ds-sys-color-foreground);
+  --ds-sys-color-link: var(--ds-sys-color-surface);
+  --ds-sys-color-ring: var(--ds-sys-color-surface);
+  border-top: 1px solid var(--ds-sys-color-border);
+}
+
 /* A thin band: the surface colour between two hairlines, for a strip of
    logos or a one-line announcement between sections. */
 .parche-section[data-tone="band"] {
-  --ds-sys-color-background: var(--ds-sys-color-surface);
+  background-color: var(--ds-sys-color-surface);
   border-block: 1px solid var(--ds-sys-color-border);
 }
 

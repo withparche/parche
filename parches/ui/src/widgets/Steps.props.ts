@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
 import { action, image } from '../_shared/content';
 
-export const layouts = ['timeline', 'grid', 'numbered'] as const;
+export const layouts = ['timeline', 'grid', 'numbered', 'rows'] as const;
 
 const step = z.object({
   title: z.string().optional(),
@@ -13,7 +13,7 @@ const step = z.object({
 });
 
 export const schema = z.object({
-  layout: z.enum(layouts).default('timeline').meta({ help: 'timeline: a vertical line beside the media · grid: columns under the headline · numbered: headline and CTA beside a numbered list.' }),
+  layout: z.enum(layouts).default('timeline').meta({ help: 'timeline: a vertical line beside the media · grid: columns under the headline · numbered: headline and CTA beside a numbered list · rows: headline and CTA beside rows between hairlines, the duration at the right.' }),
   tagline: z.string().optional(),
   title: z.string().optional(),
   subtitle: z.string().optional().meta({ input: 'textarea' }),

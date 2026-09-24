@@ -3,7 +3,7 @@
    condition, so users with script never see the stacked state flash before
    the element upgrades. */
 @media (scripting: none) {
-  .parche-tabs > [data-part='list'] {
+  .parche-tabs > [data-part='header'] > [data-part='list'] {
     display: none;
   }
   /* `hidden="until-found"` is `content-visibility: hidden` in the UA sheet, and

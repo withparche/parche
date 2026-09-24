@@ -1,0 +1,57 @@
+---
+/**
+ * The heading a section opens with: an eyebrow, the h2, a lead paragraph, and
+ * optionally a link or a control at the right of the same row. Start-aligned
+ * by default, as sections read; `center` for a closing call to action.
+ *
+ * Shared by the widgets so every section heading on a page has the same
+ * rhythm, set by the type tokens; widths are the design's reading measures.
+ */
+import Eyebrow from 'parche:elements/Eyebrow';
+
+interface Props {
+  tagline?: string;
+  title?: string;
+  subtitle?: string;
+  link?: { text: string; href: string };
+  align?: 'start' | 'center';
+  /** Reading measure of the text block. */
+  width?: 'sm' | 'md' | 'lg';
+  /** Space under the header: tight 36px · sm 40 · md 44 · lg 48 · xl 56 at full width. */
+  spacing?: 'none' | 'tight' | 'sm' | 'md' | 'lg' | 'xl';
+  class?: string;
+}
+
+const { tagline, title, subtitle, link, align = 'start', width = 'md', spacing = 'lg', class: className } = Astro.props;
+const hasAside = Boolean(link) || Astro.slots.has('aside');
+const widths = { sm: 'max-w-[580px]', md: 'max-w-[620px]', lg: 'max-w-[660px]' };
+const spacings = {
+  none: '',
+  tight: 'mb-[clamp(24px,3vw,36px)]',
+  sm: 'mb-[clamp(26px,3vw,40px)]',
+  md: 'mb-[clamp(28px,3.5vw,44px)]',
+  lg: 'mb-[clamp(28px,3.5vw,48px)]',
+  xl: 'mb-[clamp(32px,4vw,56px)]',
+};
+const centered = align === 'center';
+---
+
+{(tagline || title || subtitle) && (
+  <div
+    class:list={[
+      'parche-section-header',
+      hasAside ? 'flex flex-wrap items-end justify-between gap-6' : '',
+      centered && 'text-center',
+      spacings[spacing],
+      className,
+    ]}
+  >
+    <div class:list={['min-w-0', widths[width], centered && 'mx-auto']}>
+      {tagline && <Eyebrow as="p" class="mb-4" set:html={tagline} />}
+      {title && <h2 class:list={['type-h2 text-balance', subtitle && 'mb-3.5']} set:html={title} />}
+      {subtitle && <p class="text-[1.0625rem] leading-[1.6] text-pretty text-muted" set:html={subtitle} />}
+    </div>
+    {link && <a href={link.href} class="shrink-0 text-[15px] leading-none font-semibold whitespace-nowrap text-primary no-underline hover:text-heading">{link.text} →</a>}
+    <slot name="aside" />
+  </div>
+)}

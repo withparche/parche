@@ -25,7 +25,7 @@ export const meta = defineElement({
   element: {
     label: 'Input',
     description: 'A single-line text field with its label, help text and error.',
-    tokens: ['color-surface', 'color-border', 'color-heading', 'color-muted', 'color-ring', 'color-danger', 'color-surface-hover'],
+    tokens: ['color-surface', 'color-background', 'color-border', 'color-heading', 'color-muted', 'color-ring', 'color-danger', 'color-surface-hover', 'comp-field-radius', 'comp-field-padding', 'comp-field-text'],
     parts: [
       { name: 'wrapper', element: 'div', description: 'Holds the icon and the input.' },
       { name: 'icon', element: 'span' },

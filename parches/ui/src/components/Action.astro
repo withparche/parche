@@ -10,7 +10,7 @@
 import Button from 'parche:elements/Button';
 
 interface ActionData {
-  variant?: 'primary' | 'secondary' | 'tertiary' | 'link';
+  variant?: 'primary' | 'secondary' | 'contrast' | 'tertiary' | 'link';
   text?: string;
   href?: string;
   target?: string;
@@ -25,10 +25,13 @@ interface Props {
 const { action, class: className } = Astro.props;
 const { variant = 'primary', text, href, target, icon } = action;
 const buttonVariant = variant === 'tertiary' ? 'secondary' : variant;
+// A trailing arrow (→, ↗) is set in the mono face, smaller, as a glyph rather than a word.
+const arrow = text?.match(/\s([→↗])$/)?.[1];
+const label = arrow ? text!.slice(0, -2) : text;
 ---
 
 {(text || icon) && (
   <Button variant={buttonVariant} size="lg" href={href} target={target} icon={icon} iconPosition="end" label={text ? undefined : icon} class={className}>
-    {text}
+    {label}{arrow && <span class="font-mono text-[0.8em]" aria-hidden="true">{arrow}</span>}
   </Button>
 )}

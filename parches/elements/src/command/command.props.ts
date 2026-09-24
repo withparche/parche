@@ -6,6 +6,7 @@ export const schema = z.object({
   prompt: z.string().default('$').meta({ help: 'The prompt before it; empty for none.' }),
   copyLabel: z.string().default('Copy'),
   copiedLabel: z.string().default('Copied').meta({ help: 'Shown on the button for a moment, and announced, after copying.' }),
+  variant: z.enum(['line', 'button']).default('line').meta({ help: 'line: the command with a copy button · button: only the button, which copies the text without showing it (an email, a snippet).' }),
 });
 
 export type Props = z.infer<typeof schema> & { class?: string };

@@ -21,13 +21,27 @@ const { layout, title, subtitle, tagline, actions } = schema.parse(Astro.props) 
     )}
   </Card>
 ) : layout === 'band' ? (
-  <div class="parche-cta flex flex-col gap-6 md:flex-row md:items-center md:justify-between" data-layout="band">
-    <Heading {title} {subtitle} {tagline} align="start" width="lg" spacing={false} />
+  <div class="parche-cta flex flex-wrap items-center justify-between gap-[clamp(20px,3vw,40px)]" data-layout="band">
+    <div class="min-w-[260px] flex-1">
+      {title && <h2 class="mb-2.5 font-heading text-[clamp(24px,3vw,36px)] leading-[1.15] font-semibold tracking-(--ds-sys-type-h2-tracking) text-balance text-heading" set:html={title} />}
+      {subtitle && <p class="max-w-[52ch] text-base leading-[1.6] text-pretty text-muted" set:html={subtitle} />}
+    </div>
     {actions.length > 0 && (
-      <div class="flex flex-col sm:flex-row gap-4 shrink-0">
+      <div class="flex flex-wrap gap-3">
+        {actions.map((a) => <Action action={a} class="whitespace-nowrap" />)}
+      </div>
+    )}
+  </div>
+) : layout === 'closing' ? (
+  <div class="parche-cta text-center" data-layout="closing">
+    {title && <h2 class="mx-auto mb-5 max-w-[20ch] font-heading text-[clamp(34px,5.6vw,72px)] leading-[1.02] font-semibold tracking-(--ds-sys-type-h1-tracking) text-balance text-heading" set:html={title} />}
+    {subtitle && <p class="type-lead mx-auto mb-8 max-w-[52ch] text-pretty" set:html={subtitle} />}
+    {actions.length > 0 && (
+      <div class:list={['flex flex-wrap justify-center gap-3', Astro.slots.has('below') && 'mb-11']}>
         {actions.map((a) => <Action action={a} />)}
       </div>
     )}
+    {Astro.slots.has('below') && <div class="mx-auto max-w-[calc(520px+2*clamp(22px,3vw,30px))] text-left"><slot name="below" /></div>}
   </div>
 ) : (
   <div class="parche-cta flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between rounded-lg border border-border bg-surface px-6 py-5" data-layout="inline">

@@ -17,7 +17,8 @@ const { describedBy } = fieldIds(id, { description, error });
 const { id: _id, ...fieldRest } = rest;
 
 const controlClass =
-  'parche-input block w-full rounded-md border border-border bg-surface px-3 py-2 text-sm text-heading placeholder:text-muted transition-colors ' +
+  // Radius, padding and text size are the field's component tokens.
+  'parche-input block w-full rounded-[var(--ds-comp-field-radius,var(--radius-md))] border border-border bg-background p-[var(--ds-comp-field-padding,0.5rem_0.75rem)] text-[length:var(--ds-comp-field-text,0.875rem)] text-heading placeholder:text-muted transition-colors ' +
   'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring ' +
   'aria-[invalid=true]:border-danger disabled:cursor-not-allowed disabled:opacity-60 read-only:bg-surface-hover';
 ---

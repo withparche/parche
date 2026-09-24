@@ -103,6 +103,786 @@
           }
         ]
       }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "features",
+        "label": "Features"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Features",
+            "props": {
+              "style": "panels",
+              "align": "start",
+              "tagline": "What you get",
+              "title": "Everything a client site needs, already wired.",
+              "subtitle": "Not a starter you have to finish. Metadata, feeds, images, forms with real states, consent and accessibility are done — you replace the words.",
+              "items": [
+                {
+                  "title": "34 composable widgets",
+                  "description": "Heroes, features, pricing tiers, case studies, process, team, contact. Props-driven, no class soup to unpick."
+                },
+                {
+                  "title": "Core Web Vitals by default",
+                  "description": "Zero JS on static routes, responsive AVIF/WebP, subset fonts. Green vitals before you optimise anything."
+                },
+                {
+                  "title": "SEO and AI discovery",
+                  "description": "Canonicals, OG images, JSON-LD for articles, FAQs and breadcrumbs, sitemap, RSS and <span class='font-mono text-[13px]'>llms.txt</span>."
+                },
+                {
+                  "title": "Forms that behave",
+                  "description": "Idle, loading, field-level error, success and spam-guard states — wired to any endpoint, no JS framework needed."
+                },
+                {
+                  "title": "Accessible, RTL, themed",
+                  "description": "Keyboard paths, visible focus, AA contrast in both schemes, logical properties. WCAG 2.2 AA checked per release."
+                },
+                {
+                  "title": "One file to rebrand",
+                  "description": "Colours, type and radii as CSS variables — shadcn-compatible, so third-party components inherit the theme."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface",
+        "id": "showcase",
+        "label": "Demos"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Showcase",
+            "props": {
+              "tagline": "Live demos",
+              "title": "Five complete sites in one repository.",
+              "syncKey": "demo",
+              "label": "Demo",
+              "demos": [
+                {
+                  "value": "saas",
+                  "label": "SaaS",
+                  "caption": "saas demo · 1000×625",
+                  "title": "SaaS — pricing, changelog, docs",
+                  "body": "The full funnel: feature grid, three-tier pricing with comparison, changelog and a docs section with sidebar search.",
+                  "points": [
+                    "Pricing table with per-plan feature matrix",
+                    "Docs layout with Pagefind search built in",
+                    "Public changelog fed by one content collection"
+                  ],
+                  "link": {
+                    "text": "Open this demo",
+                    "href": "/homes/saas"
+                  }
+                },
+                {
+                  "value": "startup",
+                  "label": "Startup",
+                  "caption": "startup demo · 1000×625",
+                  "title": "Startup — story, team, traction",
+                  "body": "For the seed-stage site that has to look funded: narrative sections, verified metrics, team credentials and an investor-ready press kit page.",
+                  "points": [
+                    "Metrics block with source notes, not vanity numbers",
+                    "Team and advisors with real bios",
+                    "Press kit with downloadable assets"
+                  ],
+                  "link": {
+                    "text": "Open this demo",
+                    "href": "/homes/startup"
+                  }
+                },
+                {
+                  "value": "mobile",
+                  "label": "Mobile app",
+                  "caption": "mobile app demo · 1000×625",
+                  "title": "Mobile app — store-ready landing",
+                  "body": "Device frames, feature carousel, store badges, review wall and an app-privacy table that satisfies both stores.",
+                  "points": [
+                    "Screenshot gallery with keyboard navigation",
+                    "Review wall sourced from a JSON file",
+                    "Privacy disclosure table included"
+                  ],
+                  "link": {
+                    "text": "Open this demo",
+                    "href": "/homes/mobile-app"
+                  }
+                },
+                {
+                  "value": "agency",
+                  "label": "Agency",
+                  "caption": "agency demo · 1000×625",
+                  "title": "Agency — case studies and services",
+                  "body": "The direction most agencies ask for: portfolio grid with results, services and process, rates, and a booking-backed contact page.",
+                  "points": [
+                    "Case study collection with a results block",
+                    "Process widget with deliverables and owners",
+                    "Contact with booking slots and form states"
+                  ],
+                  "link": {
+                    "text": "Open this demo",
+                    "href": "/homes/personal"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "work",
+        "label": "Case studies"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Cases",
+            "props": {
+              "tagline": "Case studies",
+              "title": "Real sites, measured after launch.",
+              "subtitle": "Every case study ships as a content entry with a problem, an approach and three verified numbers. Agencies fill in their own.",
+              "link": {
+                "text": "All 18 case studies",
+                "href": "#work"
+              },
+              "items": [
+                {
+                  "client": "Northwind",
+                  "sector": "SaaS",
+                  "title": "Marketing site off the CMS, onto Git",
+                  "summary": "Six locales, 90 pages, one build. The SEO team stopped filing tickets about the site.",
+                  "caption": "case shot · 900×560",
+                  "results": [
+                    {
+                      "value": "−71%",
+                      "label": "LCP",
+                      "tone": "success"
+                    },
+                    {
+                      "value": "+38%",
+                      "label": "Organic"
+                    },
+                    {
+                      "value": "9 d",
+                      "label": "To launch"
+                    }
+                  ]
+                },
+                {
+                  "client": "Calderón & Co",
+                  "sector": "Agency",
+                  "title": "One template, eleven client sites",
+                  "summary": "A shared token file per brand. Clients edit Markdown and nothing breaks.",
+                  "caption": "case shot · 900×560",
+                  "results": [
+                    {
+                      "value": "−60%",
+                      "label": "Build hours",
+                      "tone": "success"
+                    },
+                    {
+                      "value": "11",
+                      "label": "Sites live"
+                    },
+                    {
+                      "value": "100",
+                      "label": "Lighthouse"
+                    }
+                  ]
+                },
+                {
+                  "client": "Ferrolab",
+                  "sector": "Hardware",
+                  "title": "Docs, blog and store on one stack",
+                  "summary": "Sidebar docs with search, 140 posts migrated, checkout on the edge.",
+                  "caption": "case shot · 900×560",
+                  "results": [
+                    {
+                      "value": "2.1×",
+                      "label": "Signups",
+                      "tone": "success"
+                    },
+                    {
+                      "value": "140",
+                      "label": "Posts moved"
+                    },
+                    {
+                      "value": "0",
+                      "label": "Redirect gaps"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "ink",
+        "spacing": "sm"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "CallToAction",
+            "props": {
+              "layout": "band",
+              "title": "Convinced already? The command is the same one as at the top.",
+              "subtitle": "No second offer down here, no discount, no different form. Free, MIT, four minutes to a running site.",
+              "actions": [
+                {
+                  "text": "Get the template →",
+                  "href": "#get",
+                  "variant": "primary"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface",
+        "id": "services",
+        "label": "Services"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Steps",
+            "props": {
+              "layout": "rows",
+              "tagline": "Services & process",
+              "title": "A process page your client can actually follow.",
+              "subtitle": "The four-step widget ships with fields for deliverables, duration and who is responsible — the three things missing from every template timeline.",
+              "callToAction": {
+                "text": "Book a scoping call",
+                "href": "#contact",
+                "variant": "contrast"
+              },
+              "items": [
+                {
+                  "title": "Discovery & content audit",
+                  "description": "Sitemap, tone, what can be cut. Deliverable: a page-by-page brief.",
+                  "duration": "1 week"
+                },
+                {
+                  "title": "Design system pass",
+                  "description": "Tokens, type scale, widget selection. Deliverable: themed staging site.",
+                  "duration": "1–2 weeks"
+                },
+                {
+                  "title": "Build & content load",
+                  "description": "Pages, forms, redirects, analytics and consent. Deliverable: launch candidate.",
+                  "duration": "2 weeks"
+                },
+                {
+                  "title": "Launch & handover",
+                  "description": "Vitals report, editor training, 30-day support. Deliverable: the repo, yours.",
+                  "duration": "3 days"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Features",
+      "props": {
+        "style": "tiles",
+        "align": "start",
+        "tagline": "Integrations",
+        "title": "Plugs into the stack you already bill for.",
+        "items": [
+          {
+            "title": "Sanity / Contentful",
+            "description": "Content adapters"
+          },
+          {
+            "title": "HubSpot / Resend",
+            "description": "Forms & email"
+          },
+          {
+            "title": "Plausible / GA4",
+            "description": "Consent-gated"
+          },
+          {
+            "title": "Cal.com",
+            "description": "Booking embed"
+          },
+          {
+            "title": "Stripe",
+            "description": "Checkout links"
+          },
+          {
+            "title": "Cloudflare / Vercel",
+            "description": "Deploy presets"
+          },
+          {
+            "title": "Algolia / Pagefind",
+            "description": "Site search"
+          },
+          {
+            "title": "shadcn/ui",
+            "description": "Token-compatible"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface",
+        "id": "pricing",
+        "label": "Pricing"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Pricing",
+            "props": {
+              "align": "start",
+              "tagline": "Pricing",
+              "title": "The template is free. The extras are optional.",
+              "subtitle": "A real three-tier widget with a comparison table, so you can charge for your own work without rebuilding it.",
+              "prices": [
+                {
+                  "title": "Open source",
+                  "type": "custom",
+                  "price": "Free",
+                  "note": "MIT, commercial use included",
+                  "items": [
+                    {
+                      "description": "All 34 widgets and 5 demos"
+                    },
+                    {
+                      "description": "Blog, docs and RSS pipeline"
+                    },
+                    {
+                      "description": "Community support"
+                    }
+                  ],
+                  "callToAction": {
+                    "text": "Clone it",
+                    "href": "#get"
+                  }
+                },
+                {
+                  "title": "Studio",
+                  "price": "149",
+                  "currency": "$",
+                  "suffix": "once",
+                  "note": "Per agency, unlimited client sites",
+                  "hasRibbon": true,
+                  "ribbonTitle": "Most picked",
+                  "items": [
+                    {
+                      "description": "12 extra agency widgets"
+                    },
+                    {
+                      "description": "Case study & proposal templates"
+                    },
+                    {
+                      "description": "Figma token kit, brand presets"
+                    },
+                    {
+                      "description": "Private issue queue, 48 h"
+                    }
+                  ],
+                  "callToAction": {
+                    "text": "Get Studio",
+                    "href": "#get"
+                  }
+                },
+                {
+                  "title": "Done with you",
+                  "type": "custom",
+                  "price": "From $6K",
+                  "note": "Fixed scope, 4–5 weeks",
+                  "items": [
+                    {
+                      "description": "Everything in Studio"
+                    },
+                    {
+                      "description": "Design and build with your team"
+                    },
+                    {
+                      "description": "Migration, redirects, analytics"
+                    },
+                    {
+                      "description": "Editor training and handover"
+                    }
+                  ],
+                  "callToAction": {
+                    "text": "Book a call",
+                    "href": "#contact"
+                  }
+                }
+              ],
+              "comparison": {
+                "label": "Compare",
+                "rows": [
+                  {
+                    "feature": "Widgets",
+                    "values": [
+                      {
+                        "text": "34",
+                        "tone": "muted"
+                      },
+                      {
+                        "text": "46"
+                      },
+                      {
+                        "text": "46 + custom"
+                      }
+                    ]
+                  },
+                  {
+                    "feature": "Case study system",
+                    "values": [
+                      {
+                        "text": "Basic",
+                        "tone": "muted"
+                      },
+                      {
+                        "text": "With results",
+                        "tone": "success"
+                      },
+                      {
+                        "text": "With results",
+                        "tone": "success"
+                      }
+                    ]
+                  },
+                  {
+                    "feature": "Consent & legal pages",
+                    "values": [
+                      {
+                        "text": "Templates",
+                        "tone": "muted"
+                      },
+                      {
+                        "text": "GDPR-ready"
+                      },
+                      {
+                        "text": "Reviewed with you"
+                      }
+                    ]
+                  },
+                  {
+                    "feature": "Support",
+                    "values": [
+                      {
+                        "text": "GitHub discussions",
+                        "tone": "muted"
+                      },
+                      {
+                        "text": "48 h queue"
+                      },
+                      {
+                        "text": "Named contact"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Testimonials",
+      "props": {
+        "align": "start",
+        "tagline": "Proof",
+        "title": "Every quote links to where it was said",
+        "subtitle": "A testimonial nobody can check is decoration. Two verified below, and the third slot left visibly open — which is what the widget does when you have not collected it yet.",
+        "testimonials": [
+          {
+            "text": "We replaced a four-week site build with a weekend. The blog pipeline alone paid for the switch.",
+            "name": "Marta Ibáñez",
+            "role": "Founder, Quietmile",
+            "date": "14 Aug 2026",
+            "source": "GitHub Discussions #412",
+            "href": "#source"
+          },
+          {
+            "text": "I hand clients the repo and they edit Markdown without breaking anything. That never happened with page builders.",
+            "name": "Dan Okoye",
+            "role": "Design lead, Höok Labs",
+            "date": "2 Jul 2026",
+            "source": "Astro Themes review",
+            "href": "#source"
+          }
+        ],
+        "openSlot": {
+          "label": "Open slot · third quote",
+          "text": "Reserved for a quote about page speed, from someone who measured it. No link, no card — the slot stays visible until it exists.",
+          "copy": {
+            "text": "hello@astrowind.dev",
+            "label": "Copy the request email",
+            "copiedLabel": "Copied the request email"
+          }
+        }
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface",
+        "label": "Maintainers"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Team",
+            "props": {
+              "tagline": "Maintainers",
+              "title": "Named people, public track record.",
+              "subtitle": "Four years of releases from the same small group, plus 180 contributors. Credentials matter when a client asks who maintains this.",
+              "members": [
+                {
+                  "name": "Arthelo Kyo",
+                  "role": "Creator · 2,100 commits"
+                },
+                {
+                  "name": "L. Fontana",
+                  "role": "Accessibility · WCAG audits"
+                },
+                {
+                  "name": "S. Navarro",
+                  "role": "Docs & agent skills"
+                }
+              ],
+              "more": {
+                "count": "+180",
+                "label": "Contributors",
+                "note": "Since June 2022"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "changelog",
+        "label": "Changelog"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Timeline",
+            "props": {
+              "tagline": "Changelog",
+              "title": "Four years of releases, same repo.",
+              "subtitle": "Every Astro major has landed here within days. Upgrade notes are public, not behind a paywall.",
+              "link": {
+                "text": "Full changelog and RSS",
+                "href": "#changelog"
+              },
+              "entries": [
+                {
+                  "label": "2022",
+                  "title": "First commit, Astro 1.0 beta",
+                  "description": "Most starred Astro theme within the year."
+                },
+                {
+                  "label": "2023",
+                  "title": "Content collections and transitions",
+                  "description": "The blog grows up; widget count doubles."
+                },
+                {
+                  "label": "2024–25",
+                  "title": "Astro 4 and 5, quietly",
+                  "description": "Accessibility, tooling, deploy targets. 5K stars."
+                },
+                {
+                  "label": "2026",
+                  "title": "v1.0 — Astro 7, Tailwind 4, agent skills",
+                  "description": "Agency widgets, real content everywhere, no placeholders left.",
+                  "highlight": true
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface",
+        "width": "md",
+        "label": "FAQ"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "FAQs",
+            "props": {
+              "layout": "list",
+              "columns": "1",
+              "tagline": "FAQ",
+              "title": "Asked before cloning.",
+              "items": [
+                {
+                  "title": "Can I use it for paid client work?",
+                  "description": "Yes. MIT licence, no attribution required, unlimited sites. Agencies ship it under their own brand — that is the most common use."
+                },
+                {
+                  "title": "What do I need to start?",
+                  "description": "A current Node.js and a terminal. Run the create command, then <span class='font-mono text-sm'>npm run dev</span>. Site name, URL and blog options live in one config file; colours and fonts in one styles file."
+                },
+                {
+                  "title": "How do clients edit content after handover?",
+                  "description": "Markdown in the repo, or a CMS — adapters for Sanity, Contentful and Git-based editors are included. Content lives in collections, so a wrong edit fails the build instead of breaking the live site."
+                },
+                {
+                  "title": "Is it GDPR-ready?",
+                  "description": "Consent gating analytics, a preferences dialog, and terms and privacy pages you fill in. Not legal advice — but the mechanics are there instead of a script tag firing on load."
+                },
+                {
+                  "title": "Where can I deploy it?",
+                  "description": "Anywhere static files are served: Vercel, Netlify, Cloudflare, GitHub Pages, an nginx container or your own server. Presets included for the first four."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "ruled",
+        "id": "contact",
+        "label": "Contact"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Contact",
+            "props": {
+              "layout": "split",
+              "tagline": "Contact",
+              "title": "Talk to a human, or book the slot.",
+              "subtitle": "The contact widget ships with both paths, real validation states and a spam guard that is not a CAPTCHA.",
+              "booking": {
+                "title": "Next available",
+                "badge": "3 slots left",
+                "slots": [
+                  {
+                    "label": "Tue 09:30",
+                    "href": "#book"
+                  },
+                  {
+                    "label": "Tue 14:00",
+                    "href": "#book",
+                    "selected": true
+                  },
+                  {
+                    "label": "Thu 11:00",
+                    "href": "#book"
+                  }
+                ],
+                "note": "Times in your local zone · 25 min · no sales deck"
+              },
+              "inputs": [
+                {
+                  "type": "text",
+                  "name": "name",
+                  "label": "Name",
+                  "autocomplete": "name",
+                  "placeholder": "Marta Ibáñez"
+                },
+                {
+                  "type": "email",
+                  "name": "email",
+                  "label": "Work email",
+                  "autocomplete": "email",
+                  "placeholder": "marta@quietmile.com"
+                }
+              ],
+              "textarea": {
+                "label": "What are you building?",
+                "name": "message",
+                "placeholder": "Marketing site + docs for a hardware launch in November.",
+                "rows": 3
+              },
+              "disclaimer": {
+                "label": "I agree to the privacy policy. We keep enquiries for 12 months."
+              },
+              "button": "Send enquiry",
+              "note": "Form states shipped: idle, loading, field error, success, rate-limited."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface",
+        "spacing": "lg",
+        "id": "get",
+        "label": "Get it"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "CallToAction",
+            "props": {
+              "layout": "closing",
+              "title": "Clone it, replace the words, deploy today.",
+              "subtitle": "Free and open source. No account, no build credits, no lock-in.",
+              "actions": [
+                {
+                  "text": "Get the template →",
+                  "href": "#get",
+                  "variant": "primary"
+                },
+                {
+                  "text": "Read the docs",
+                  "href": "/fixtures/docs",
+                  "variant": "secondary"
+                }
+              ]
+            },
+            "slots": {
+              "below": [
+                {
+                  "widget": "Newsletter",
+                  "props": {
+                    "title": "New articles in your inbox",
+                    "text": "Notes on Astro, Tailwind and the template. Roughly monthly. Nothing else.",
+                    "note": "One-click unsubscribe. 4,100 readers. We never share your address."
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
     }
   ]
 }

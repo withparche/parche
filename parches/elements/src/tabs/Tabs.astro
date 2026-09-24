@@ -23,6 +23,9 @@ const id = (rest.id as string | undefined) ?? hashId('tabs', items.map((i) => i.
 const selected = value ?? items.find((i) => !i.disabled)?.value ?? items[0].value;
 const vertical = orientation === 'vertical';
 
+// A header (a section heading, say) shares the row with the tab list.
+const hasHeader = Astro.slots.has('header');
+
 const panels = await Promise.all(
   items.map(async (item) => ({
     ...item,
@@ -37,7 +40,7 @@ const tab = defineVariants({
   variants: {
     variant: {
       line: 'border-b-2 border-transparent px-3 py-2 text-muted hover:text-heading data-[state=active]:border-primary data-[state=active]:text-heading',
-      pill: 'rounded-full px-4 py-1.5 text-muted hover:bg-surface-hover hover:text-heading data-[state=active]:bg-primary data-[state=active]:text-on-primary',
+      pill: 'rounded-[var(--ds-comp-tabs-tab-radius,var(--radius-full))] px-3.5 py-[9px] text-[13px] leading-none font-semibold text-muted hover:text-heading data-[state=active]:bg-primary data-[state=active]:text-on-primary',
     },
   },
   defaults: { variant: 'line' },
@@ -46,7 +49,7 @@ const tab = defineVariants({
 const list = defineVariants({
   base: 'parche-tabs-list flex',
   variants: {
-    variant: { line: 'gap-1 border-b border-border', pill: 'gap-1 rounded-full border border-border p-1' },
+    variant: { line: 'gap-1 border-b border-border', pill: 'w-fit flex-wrap gap-[5px] rounded-[var(--ds-comp-tabs-list-radius,var(--radius-full))] border border-border bg-background p-[5px]' },
     orientation: { horizontal: 'flex-row', vertical: 'flex-col items-stretch' },
   },
   compound: [
@@ -65,36 +68,39 @@ const list = defineVariants({
   data-value={selected}
   sync-key={syncKey}
 >
-  <div
-    role="tablist"
-    aria-label={label}
-    aria-orientation={vertical ? 'vertical' : undefined}
-    class={list({ variant, orientation })}
-    data-part="list"
-  >
-    {items.map((item) => {
-      const active = item.value === selected;
-      return (
-        <button
-          type="button"
-          role="tab"
-          id={`${id}-tab-${item.value}`}
-          aria-selected={active ? 'true' : 'false'}
-          aria-controls={`${id}-panel-${item.value}`}
-          tabindex={active ? 0 : -1}
-          disabled={item.disabled || undefined}
-          class={tab({ variant })}
-          data-part="tab"
-          data-value={item.value}
-          data-state={active ? 'active' : 'inactive'}
-        >
-          {item.icon && <Icon name={item.icon} size="sm" aria-hidden="true" />}
-          {item.label}
-        </button>
-      );
-    })}
+  <div class={hasHeader ? 'parche-tabs-header flex flex-wrap items-end justify-between gap-6' : 'contents'} data-part="header">
+    {hasHeader && <div class="min-w-0"><slot name="header" /></div>}
+    <div
+      role="tablist"
+      aria-label={label}
+      aria-orientation={vertical ? 'vertical' : undefined}
+      class={list({ variant, orientation })}
+      data-part="list"
+    >
+      {items.map((item) => {
+        const active = item.value === selected;
+        return (
+          <button
+            type="button"
+            role="tab"
+            id={`${id}-tab-${item.value}`}
+            aria-selected={active ? 'true' : 'false'}
+            aria-controls={`${id}-panel-${item.value}`}
+            tabindex={active ? 0 : -1}
+            disabled={item.disabled || undefined}
+            class={tab({ variant })}
+            data-part="tab"
+            data-value={item.value}
+            data-state={active ? 'active' : 'inactive'}
+          >
+            {item.icon && <Icon name={item.icon} size="sm" aria-hidden="true" />}
+            {item.label}
+          </button>
+        );
+      })}
+    </div>
   </div>
-  <div class={cn('parche-tabs-panels', vertical ? 'flex-1' : 'mt-4')}>
+  <div class={cn('parche-tabs-panels', vertical ? 'flex-1' : hasHeader ? 'mt-[clamp(1.625rem,3vw,2.75rem)]' : 'mt-4')}>
     {panels.map((panel) => {
       const active = panel.value === selected;
       return (

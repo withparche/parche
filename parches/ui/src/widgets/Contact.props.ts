@@ -23,6 +23,18 @@ export const schema = z.object({
   }).optional(),
   disclaimer: z.object({ label: z.string().optional() }).optional(),
   button: z.string().optional().meta({ placeholder: 'Send message' }),
+  action: z.string().optional().meta({ help: 'Where the form posts.' }),
+  note: z.string().optional().meta({ help: 'One line under the button.' }),
+  layout: z.enum(['centered', 'split']).default('centered').meta({ help: 'centered: the form under the heading · split: the heading and the booking card on the left, the form on the right.' }),
+  booking: z
+    .object({
+      title: z.string().default('Next available'),
+      badge: z.string().optional().meta({ help: '"3 slots left".' }),
+      slots: z.array(z.object({ label: z.string(), href: z.string().optional(), selected: z.boolean().default(false) })).default([]),
+      note: z.string().optional().meta({ help: '"Times in your local zone · 25 min".' }),
+    })
+    .optional()
+    .meta({ help: 'Bookable slots beside the form, each a link to the booking page.' }),
 });
 
 export type Props = z.infer<typeof schema>;

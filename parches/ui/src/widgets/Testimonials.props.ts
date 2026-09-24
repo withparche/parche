@@ -12,6 +12,15 @@ export const schema = z.object({
   subtitle: z.string().optional().meta({ input: 'textarea' }),
   testimonials: z.array(testimonial).default([]),
   layout: z.enum(['grid', 'carousel']).default('grid').meta({ help: 'A grid, or a carousel three per view.' }),
+  align: z.enum(['center', 'start']).default('center').meta({ help: 'Where the heading sits.' }),
+  openSlot: z
+    .object({
+      label: z.string().meta({ help: '"Open slot · third quote".' }),
+      text: z.string().meta({ input: 'textarea', help: 'What quote the slot is waiting for.' }),
+      copy: z.object({ text: z.string().meta({ help: 'What the button copies: the request email.' }), label: z.string(), copiedLabel: z.string().optional() }).optional(),
+    })
+    .optional()
+    .meta({ help: 'A visibly empty card, kept until a quote you can link to exists.' }),
   callToAction: action.optional(),
 });
 

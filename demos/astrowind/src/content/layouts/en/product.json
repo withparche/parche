@@ -80,86 +80,89 @@
     {
       "widget": "Footer",
       "props": {
-        "siteName": "AstroWind",
+        "layout": "brand",
+        "brand": {
+          "text": "AstroWind",
+          "mark": true,
+          "description": "The open-source Astro template for sites that have to perform.",
+          "links": [
+            {
+              "label": "/rss.xml",
+              "href": "/rss.xml"
+            },
+            {
+              "label": "GitHub",
+              "href": "https://github.com/arthelokyo/astrowind"
+            }
+          ]
+        },
         "columns": [
           {
             "title": "Product",
             "links": [
               {
                 "label": "Features",
-                "href": "/#features"
+                "href": "#features"
               },
               {
-                "label": "Security",
-                "href": "#"
-              },
-              {
-                "label": "Team",
-                "href": "#"
-              },
-              {
-                "label": "Enterprise",
-                "href": "#"
+                "label": "Demos",
+                "href": "#showcase"
               },
               {
                 "label": "Pricing",
-                "href": "/pricing"
+                "href": "#pricing"
+              },
+              {
+                "label": "Changelog",
+                "href": "#changelog"
               }
             ]
           },
           {
-            "title": "Platform",
+            "title": "Agencies",
             "links": [
               {
-                "label": "Developer API",
-                "href": "#"
+                "label": "Case studies",
+                "href": "#work"
               },
               {
-                "label": "Partners",
-                "href": "#"
+                "label": "Services & process",
+                "href": "#services"
               },
               {
-                "label": "Integrations",
-                "href": "#"
+                "label": "Book a call",
+                "href": "#contact"
               },
               {
-                "label": "Status",
-                "href": "#"
+                "label": "Press kit",
+                "href": "#press"
               }
             ]
           },
           {
-            "title": "Support",
+            "title": "Resources",
             "links": [
               {
-                "label": "Docs",
-                "href": "#"
-              },
-              {
-                "label": "Community",
-                "href": "#"
-              },
-              {
-                "label": "Contact",
-                "href": "/contact"
+                "label": "Documentation",
+                "href": "/fixtures/docs"
               },
               {
                 "label": "Blog",
                 "href": "/blog"
+              },
+              {
+                "label": "Skills for AI agents",
+                "href": "#skills"
+              },
+              {
+                "label": "Status",
+                "href": "#status"
               }
             ]
           },
           {
-            "title": "Company",
+            "title": "Legal",
             "links": [
-              {
-                "label": "About",
-                "href": "/about"
-              },
-              {
-                "label": "Services",
-                "href": "/services"
-              },
               {
                 "label": "Terms",
                 "href": "/terms"
@@ -167,28 +170,20 @@
               {
                 "label": "Privacy policy",
                 "href": "/privacy"
+              },
+              {
+                "label": "Cookie preferences",
+                "href": "#cookies"
+              },
+              {
+                "label": "MIT licence",
+                "href": "#licence"
               }
             ]
           }
         ],
-        "socialLinks": [
-          {
-            "label": "RSS",
-            "href": "/rss.xml",
-            "icon": "tabler:rss"
-          },
-          {
-            "label": "X",
-            "href": "https://twitter.com/arthelokyo",
-            "icon": "tabler:brand-x"
-          },
-          {
-            "label": "GitHub",
-            "href": "https://github.com/arthelokyo/astrowind",
-            "icon": "tabler:brand-github"
-          }
-        ],
-        "footNote": "Made by <a class=\"text-primary hover:underline\" href=\"https://github.com/arthelokyo\">arthelokyo</a> · All rights reserved."
+        "copyright": "© 2026 AstroWind · MIT licensed",
+        "note": "Built with Astro 7 · 100 Lighthouse · <span class='font-mono'>38 KB</span> median page"
       }
     }
   ]

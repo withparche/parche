@@ -10,20 +10,28 @@ import { cn, splitProps } from '@parche/elements/utils';
 import Icon from '../icon/Icon.astro';
 import { schema, type Props } from './collapsible.props';
 
-const { props: { title, open, name, forceOpen }, rest, className, part } = splitProps(schema, Astro.props);
+const { props: { title, open, name, forceOpen, marker, size }, rest, className, part } = splitProps(schema, Astro.props);
+const large = size === 'lg';
 const hasTrigger = Astro.slots.has('trigger');
 ---
 
 <parche-collapsible force-open={forceOpen} {...rest} data-part={part} data-state={open ? 'open' : 'closed'} class={cn('parche-collapsible block', className)}>
   <details class="group" open={open || undefined} name={name}>
     <summary
-      class="parche-collapsible-trigger flex cursor-pointer list-none items-center justify-between gap-3 rounded-md py-3 text-left font-medium text-heading transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring [&::-webkit-details-marker]:hidden"
+      class={cn(
+        'parche-collapsible-trigger flex cursor-pointer list-none items-center justify-between gap-3 rounded-md text-left text-heading transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring [&::-webkit-details-marker]:hidden',
+        large ? 'gap-5 py-5 font-heading text-[1.0625rem] leading-[1.4] font-semibold hover:text-heading' : 'py-3 font-medium',
+      )}
       data-part="trigger"
     >
       <span class="flex-1">{hasTrigger ? <slot name="trigger" /> : title}</span>
-      <Icon name="tabler:chevron-down" size="sm" class="shrink-0 text-muted transition-transform group-open:rotate-180" data-part="indicator" />
+      {marker === 'plus' ? (
+        <span class="shrink-0 font-mono text-lg leading-none font-normal text-primary" data-part="indicator" aria-hidden="true"><span class="group-open:hidden">+</span><span class="hidden group-open:inline">−</span></span>
+      ) : (
+        <Icon name="tabler:chevron-down" size="sm" class="shrink-0 text-muted transition-transform group-open:rotate-180" data-part="indicator" />
+      )}
     </summary>
-    <div class="parche-collapsible-content pb-4 text-muted" data-part="content">
+    <div class={cn('parche-collapsible-content text-muted', large ? 'max-w-[66ch] pb-[22px] text-base leading-[1.7] text-pretty' : 'pb-4')} data-part="content">
       <slot />
     </div>
   </details>

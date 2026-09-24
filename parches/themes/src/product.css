@@ -56,8 +56,8 @@
   --ds-sys-type-h1-leading:  1.02;
   --ds-sys-type-h2-size:     clamp(1.8125rem, 4vw, 2.875rem);
   --ds-sys-type-h2-weight:   600;
-  --ds-sys-type-h2-tracking: -0.03em;
-  --ds-sys-type-h2-leading:  1.06;
+  --ds-sys-type-h2-tracking: -0.035em;
+  --ds-sys-type-h2-leading:  1.05;
   --ds-sys-type-h3-size:     1.1875rem;
   --ds-sys-type-h3-weight:   600;
   --ds-sys-type-h3-tracking: -0.01em;
@@ -69,7 +69,7 @@
   --ds-sys-type-label-size:  0.625rem;
   --ds-sys-type-label-weight: 500;
   --ds-sys-type-label-tracking: 0.16em;
-  --ds-sys-type-label-leading: 1.2;
+  --ds-sys-type-label-leading: 1;
 
   /* Motion: the redesign's rise is 0.4–0.55s */
   --ds-conf-motion-slow: 400ms;
@@ -79,7 +79,10 @@
   --ds-conf-gutter:   clamp(16px, 3vw, 28px);
   --ds-conf-width-lg: calc(1240px + 2 * var(--ds-conf-gutter));
   --ds-conf-width-xl: calc(1240px + 2 * var(--ds-conf-gutter));
+  --ds-conf-spacing-sm: clamp(36px, 4.5vw, 64px);
   --ds-conf-spacing-md: clamp(64px, 8vw, 112px);
+  --ds-conf-spacing-lg: clamp(72px, 9vw, 132px);
+  --ds-conf-width-md: calc(880px + 2 * var(--ds-conf-gutter));
 
   /* Elevation: flat cards; one soft shadow for hero panels and the
      recommended tier. */
@@ -91,6 +94,13 @@
   /* Component knobs the roles cannot express */
   --ds-comp-button-radius: 9px;
   --ds-comp-button-lg-padding: 14px 22px;
+  --ds-comp-tabs-list-radius: 14px;
+  --ds-comp-tabs-tab-radius: 9px;
+  --ds-comp-field-radius: 9px;
+  --ds-comp-field-padding: 12px 14px;
+  --ds-comp-field-text: 15px;
+  --ds-comp-label-text: 13px;
+  --ds-comp-label-weight: 600;
   --ds-comp-placeholder-stripe-a: oklch(0.955 0.008 258);
   --ds-comp-placeholder-stripe-b: oklch(0.925 0.013 258);
 }

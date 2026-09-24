@@ -1,0 +1,28 @@
+---
+import SectionHeader from '../components/SectionHeader.astro';
+import { schema, type Props } from './Timeline.props';
+
+const { tagline, title, subtitle, link, entries } = schema.parse(Astro.props) as Props;
+---
+
+<div class="parche-timeline grid grid-cols-[repeat(auto-fit,minmax(min(290px,100%),1fr))] gap-[clamp(32px,5vw,72px)]">
+  <div class="min-w-0">
+    <SectionHeader {tagline} {title} {subtitle} spacing="none" width="lg" class:list={[link && 'mb-[22px]']} />
+    {link && <a href={link.href} class="text-[15px] leading-none font-semibold text-primary no-underline hover:text-heading">{link.text} →</a>}
+  </div>
+  {entries.length > 0 && (
+    <ol class="flex min-w-0 flex-col">
+      {entries.map((e, i) => (
+        <li class:list={['grid grid-cols-[86px_1fr] gap-5 border-t border-border py-[18px]', i === entries.length - 1 && 'border-b']}>
+          <span class:list={['font-mono text-xs leading-[1.5] font-medium', e.highlight ? 'text-primary' : 'text-muted']}>{e.label}</span>
+          <span>
+            <span class="mb-[5px] block font-heading text-base leading-[1.4] font-semibold text-heading">
+              {e.href ? <a href={e.href} class="text-inherit no-underline hover:text-primary">{e.title}</a> : e.title}
+            </span>
+            {e.description && <span class="block text-sm leading-[1.6] text-muted" set:html={e.description} />}
+          </span>
+        </li>
+      ))}
+    </ol>
+  )}
+</div>

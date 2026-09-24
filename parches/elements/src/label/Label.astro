@@ -9,7 +9,7 @@ import { schema, type Props } from './label.props';
 const { props: { for: htmlFor, text, required, hidden }, rest, className, part } = splitProps(schema, Astro.props);
 ---
 
-<label for={htmlFor} class={cn('parche-label block text-sm font-medium text-heading', hidden && 'sr-only', className)} {...rest} data-part={part}>
+<label for={htmlFor} class={cn('parche-label block text-[length:var(--ds-comp-label-text,0.875rem)] leading-none font-[var(--ds-comp-label-weight,500)] text-heading', hidden && 'sr-only', className)} {...rest} data-part={part}>
   {text ?? <slot />}
   {required && <span class="parche-label-required ml-0.5 text-danger" data-part="required" aria-hidden="true">*</span>}
 </label>

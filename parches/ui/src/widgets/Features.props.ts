@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
 import { image } from '../_shared/content';
 
-export const styles = ['grid', 'cards', 'list'] as const;
+export const styles = ['grid', 'cards', 'list', 'panels', 'tiles'] as const;
 
 const item = z.object({
   title: z.string().optional(),
@@ -17,7 +17,8 @@ const item = z.object({
 });
 
 export const schema = z.object({
-  style: z.enum(styles).default('grid').meta({ help: 'grid: icon badge beside the text · cards: each item on a card · list: a compact list, with the media above.' }),
+  style: z.enum(styles).default('grid').meta({ help: 'grid: icon badge beside the text · cards: each item on a card · list: a compact list · panels: numbered cells between hairlines · tiles: small name-and-role cells between hairlines.' }),
+  align: z.enum(['center', 'start']).default('center').meta({ help: 'Where the heading sits.' }),
   tagline: z.string().optional().meta({ placeholder: 'e.g. FEATURES' }),
   title: z.string().optional().meta({ help: 'Main heading of the section' }),
   subtitle: z.string().optional().meta({ input: 'textarea' }),
@@ -43,7 +44,7 @@ export const meta: WidgetMeta = {
     groups: [
       { key: 'headline', label: 'Headline', fields: ['tagline', 'title', 'subtitle'] },
       { key: 'content', label: 'Content', fields: ['items'] },
-      { key: 'layout', label: 'Layout', fields: ['style', 'columns', 'defaultIcon', 'image'] },
+      { key: 'layout', label: 'Layout', fields: ['style', 'align', 'columns', 'defaultIcon', 'image'] },
     ],
   },
 };

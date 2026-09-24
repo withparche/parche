@@ -8,6 +8,7 @@ import Heading from 'parche:elements/Heading';
 import Icon from 'parche:elements/Icon';
 import Image from 'parche:elements/Image';
 import Action from '../components/Action.astro';
+import SectionHeader from '../components/SectionHeader.astro';
 import { schema, type Props } from './Steps.props';
 
 const { layout, title, subtitle, tagline, items, callToAction, reversed, image } = schema.parse(Astro.props) as Props;
@@ -16,6 +17,29 @@ const hasMedia = Astro.slots.has('media') || Boolean(image);
 const cta = callToAction?.text ? callToAction : null;
 ---
 
+{layout === 'rows' ? (
+<div class="parche-steps grid grid-cols-[repeat(auto-fit,minmax(min(290px,100%),1fr))] gap-[clamp(32px,5vw,72px)]" data-layout="rows">
+  <div class="min-w-0">
+    <SectionHeader {tagline} {title} {subtitle} spacing="none" class="mb-[26px]" width="lg" />
+    {cta && <Action action={cta} />}
+  </div>
+  {items.length > 0 && (
+    <ol class="flex min-w-0 flex-col">
+      {items.map((step, index) => (
+        <li class:list={['grid grid-cols-[auto_1fr_auto] items-baseline gap-[clamp(14px,2vw,24px)] border-t border-border py-5', index === items.length - 1 && 'border-b']}>
+          <span class="font-mono text-xs leading-[1.4] font-medium text-primary">{String(index + 1).padStart(2, '0')}</span>
+          <span>
+            {step.title && <span class="mb-1.5 block font-heading text-[17px] leading-[1.35] font-semibold text-heading" set:html={step.title} />}
+            {step.description && <span class="block text-sm leading-[1.6] text-muted" set:html={step.description} />}
+            {step.owner && <span class="mt-1 block font-mono text-xs text-muted">{step.owner}</span>}
+          </span>
+          {step.duration ? <span class="font-mono text-xs leading-[1.4] whitespace-nowrap text-muted">{step.duration}</span> : <span />}
+        </li>
+      ))}
+    </ol>
+  )}
+</div>
+) : (
 <div class="parche-steps max-w-5xl mx-auto" data-layout={layout}>
   {layout === 'timeline' ? (
     <div class:list={['flex flex-col gap-8 md:gap-12', hasMedia && 'md:flex-row', hasMedia && reversed && 'md:flex-row-reverse']}>
@@ -100,3 +124,4 @@ const cta = callToAction?.text ? callToAction : null;
     </div>
   )}
 </div>
+)}

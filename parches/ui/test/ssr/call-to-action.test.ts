@@ -19,7 +19,7 @@ test('card is a centred panel, band spreads headline and action, inline is one b
   expect(card).toContain('parche-card');
   const band = await render({ ...base, layout: 'band' });
   expect(band).toContain('data-layout="band"');
-  expect(band).toContain('md:justify-between');
+  expect(band).toContain('justify-between');
   expect(band).not.toContain('parche-card');
   const inline = await render({ ...base, layout: 'inline' });
   expect(inline).toContain('data-layout="inline"');

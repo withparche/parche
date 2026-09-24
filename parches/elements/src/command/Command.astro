@@ -7,21 +7,25 @@
 import { cn, splitProps } from '@parche/elements/utils';
 import { schema, type Props } from './command.props';
 
-const { props: { command, prompt, copyLabel, copiedLabel }, rest, className, part } = splitProps(schema, Astro.props);
+const { props: { command, prompt, copyLabel, copiedLabel, variant }, rest, className, part } = splitProps(schema, Astro.props);
+const line = variant === 'line';
 ---
 
 <parche-command
-  class={cn('parche-command flex items-center gap-2.5 rounded-md border border-border bg-surface py-[11px] pr-[11px] pl-[15px]', className)}
+  class={cn(line ? 'parche-command flex items-center gap-2.5 rounded-md border border-border bg-surface py-[11px] pr-[11px] pl-[15px]' : 'parche-command inline-flex', className)}
   {...rest}
   data-part={part}
+  data-variant={variant}
   copied-label={copiedLabel}
 >
-  <span class="min-w-0 flex-1 overflow-hidden font-mono text-[13px] leading-[1.4] text-ellipsis whitespace-nowrap text-muted">
-    {prompt && <span class="text-primary" data-part="prompt" aria-hidden="true">{prompt} </span>}<code data-part="text">{command}</code>
+  <span class={line ? 'min-w-0 flex-1 overflow-hidden font-mono text-[13px] leading-[1.4] text-ellipsis whitespace-nowrap text-muted' : 'sr-only'}>
+    {prompt && line && <span class="text-primary" data-part="prompt" aria-hidden="true">{prompt} </span>}<code data-part="text">{command}</code>
   </span>
   <button
     type="button"
-    class="flex-none cursor-pointer rounded-[7px] border border-border bg-surface-2 px-2.5 py-[7px] font-mono text-[11px] leading-none font-medium text-heading hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+    class={line
+      ? 'flex-none cursor-pointer rounded-[7px] border border-border bg-surface-2 px-2.5 py-[7px] font-mono text-[11px] leading-none font-medium text-heading hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring'
+      : 'cursor-pointer rounded-sm border border-border bg-surface px-[13px] py-[9px] font-mono text-xs leading-none font-medium text-heading hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring'}
     data-part="copy"
     hidden
   >{copyLabel}</button>

@@ -1,0 +1,44 @@
+---
+import Image from 'parche:elements/Image';
+import Placeholder from 'parche:elements/Placeholder';
+import SectionHeader from '../components/SectionHeader.astro';
+import { schema, type Props } from './Cases.props';
+
+const { tagline, title, subtitle, link, items } = schema.parse(Astro.props) as Props;
+const tones = { default: 'text-heading', success: 'text-success', warning: 'text-warning' } as const;
+---
+
+<SectionHeader {tagline} {title} {subtitle} {link} />
+
+{items.length > 0 && (
+  <div class="parche-cases grid grid-cols-[repeat(auto-fill,minmax(min(300px,100%),1fr))] gap-[clamp(18px,2.5vw,28px)]">
+    {items.map((c) => (
+      <article class="flex min-w-0 flex-col overflow-hidden rounded-lg border border-border bg-surface">
+        {c.image ? (
+          <Image src={c.image.src} alt={c.image.alt} width={900} ratio="16/10" class="block w-full" />
+        ) : (
+          <Placeholder caption={c.caption} label={c.title} ratio="16/10" stripe={11} compact />
+        )}
+        <div class="flex flex-1 flex-col gap-4 p-[clamp(20px,2.5vw,26px)]">
+          <div>
+            <p class="mb-2.5 font-mono text-[10px] leading-none font-medium tracking-[0.14em] text-muted uppercase">{[c.client, c.sector].filter(Boolean).join(' · ')}</p>
+            <h3 class="mb-2 font-heading text-(length:--ds-sys-type-h3-size) leading-[1.3] font-semibold tracking-[-0.015em] text-pretty text-heading">
+              {c.href ? <a href={c.href} class="text-inherit no-underline hover:text-primary">{c.title}</a> : c.title}
+            </h3>
+            {c.summary && <p class="text-[15px] leading-[1.6] text-muted">{c.summary}</p>}
+          </div>
+          {c.results.length > 0 && (
+            <dl class="mt-auto flex flex-wrap gap-[18px] border-t border-border-soft pt-4">
+              {c.results.map((r) => (
+                <div class="flex flex-col">
+                  <dd class:list={['order-1 font-heading text-xl leading-none font-semibold', tones[r.tone]]}>{r.value}</dd>
+                  <dt class="order-2 mt-[5px] text-xs leading-[1.3] text-muted">{r.label}</dt>
+                </div>
+              ))}
+            </dl>
+          )}
+        </div>
+      </article>
+    ))}
+  </div>
+)}
