@@ -138,3 +138,28 @@ dev; a production render never touches it.
 `spacing`), `wrapper: false` is dropped, `layout/Main` becomes `Outlet`, and
 `template` is removed. Front matter in Markdown pages is reported for hand
 editing.
+
+## Widgets on the model
+
+A widget is one purpose; differences of shape are a prop, structure is a
+slot. `Hero` has `layout: center | split | text` and the slots `media` and
+`proof`; `Features` has `style: grid | cards | list` and a `media` slot;
+`Steps` has `layout: timeline | grid | numbered` and a `media` slot;
+`Content` has a `media` slot; `CallToAction` has `layout: card | band |
+inline`. The containers are `Columns` (two to four `Column`), `Column`, and
+`Switch`, a segmented control with one slot per option: its meta declares
+the slot `*`, which the validator reads as "any name, with this meta".
+
+Content shapes shared by the widgets live in `parches/ui/src/_shared/content.ts`:
+`action`, `image`, `sourcedNumber` (value, unit, label, source, date, href),
+`verifiedQuote` (text, name, role, avatar, date, source, href),
+`responseTime`, and `collectionRef`, a reference a widget may accept in place
+of an inline list once the renderer resolves it.
+
+## Themes on the layering
+
+`product` and `editorial` are the redesign's two directions on the same
+markup. Each overrides sys roles and type styles, ref radii (and shadows,
+for Editorial), and the conf knobs the Section element and the Container
+read for rhythm and measure; neither touches an element. The Product theme
+is the demo's default look.
