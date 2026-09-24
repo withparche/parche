@@ -21,7 +21,8 @@
   },
   "devDependencies": {
     "astro": "catalog:",
-    "@iconify-json/tabler": "catalog:"
+    "@iconify-json/tabler": "catalog:",
+    "vitest": "catalog:"
   },
   "engines": {
     "node": ">=20"
@@ -51,5 +52,8 @@
     "src",
     "README.md",
     "LICENSE"
-  ]
+  ],
+  "scripts": {
+    "test:ssr": "vitest run"
+  }
 }

@@ -1,46 +1,53 @@
 ---
-import Heading from 'parche:elements/Heading';
+/**
+ * The one hero. `layout` picks the structure; the `media` slot takes whatever
+ * sits beside or below the copy (the `image` prop is the fallback), and the
+ * `proof` slot takes what backs the claim, under the actions.
+ */
 import Image from 'parche:elements/Image';
 import Action from '../components/Action.astro';
-import type { Props } from './Hero.props';
+import { schema, type Props } from './Hero.props';
 
-const {
-  title,
-  subtitle,
-  tagline,
-  content,
-  actions = [],
-  image,
-} = Astro.props;
+const { layout, title, subtitle, tagline, content, actions, image } = schema.parse(Astro.props) as Props;
+const hasMedia = Astro.slots.has('media') || Boolean(image);
+const showMedia = layout !== 'text' && hasMedia;
+const split = layout === 'split' && showMedia;
 ---
 
-<!-- Full-bleed widgets skip SectionWrapper, so the horizontal container is
-     theirs to supply. Vertical padding alone left the copy flush against the
-     viewport edge on every template in the repo. -->
-<div class="mx-auto max-w-7xl px-4 md:px-6 py-12 md:py-20">
-  <div class="text-center pb-10 md:pb-16 max-w-5xl mx-auto">
-    <Heading level={1} {tagline} {title} {subtitle} width="lg" spacing={false} class="mb-8" />
-    <div class="max-w-3xl mx-auto">
+<!-- Owns its measure and padding: it is never wrapped as a page root. -->
+<div class="parche-hero mx-auto max-w-7xl px-4 md:px-6 py-12 md:py-20" data-layout={layout}>
+  <div class:list={['flex flex-col gap-10 md:gap-16', split && 'md:flex-row md:items-center']}>
+    <div class:list={['mx-auto max-w-5xl', split ? 'md:basis-1/2 text-center md:text-left' : 'text-center']}>
+      {tagline && <p class="type-label uppercase text-primary mb-2" set:html={tagline} />}
+      {title && <h1 class="type-h1 mb-4 text-balance" set:html={title} />}
+      {subtitle && <p class:list={['type-lead mb-6', !split && 'max-w-3xl mx-auto']} set:html={subtitle} />}
+      {content && <div class="text-muted mb-6" set:html={content} />}
       {actions.length > 0 && (
-        <div class="max-w-xs sm:max-w-md m-auto flex flex-nowrap flex-col sm:flex-row sm:justify-center gap-4">
-          {actions.map((action) => (
-            <Action action={action} class="w-full sm:w-auto" />
-          ))}
+        <div class:list={['flex flex-col sm:flex-row gap-4', split ? 'justify-center md:justify-start' : 'max-w-xs sm:max-w-md mx-auto sm:justify-center']}>
+          {actions.map((a) => <Action action={a} class="w-full sm:w-auto" />)}
+        </div>
+      )}
+      {Astro.slots.has('proof') && (
+        <div class="parche-hero-proof mt-8">
+          <slot name="proof" />
         </div>
       )}
     </div>
-    {content && <div class="mt-6" set:html={content} />}
+    {showMedia && (
+      <div class:list={['parche-hero-media', split ? 'md:basis-1/2' : 'relative mx-auto w-full max-w-5xl']}>
+        <slot name="media">
+          {image && (
+            <Image
+              src={image.src}
+              alt={image.alt}
+              width={split ? 600 : 1024}
+              ratio={split ? undefined : '16/9'}
+              loading="eager"
+              class:list={['rounded-md', split && 'mx-auto max-w-[600px]']}
+            />
+          )}
+        </slot>
+      </div>
+    )}
   </div>
-  {image && (
-    <div class="relative m-auto max-w-5xl">
-      <Image
-        src={typeof image === 'string' ? image : image.src}
-        alt={typeof image === 'string' ? '' : (image.alt || '')}
-        width={1024}
-        ratio="16/9"
-        loading="eager"
-        class="rounded-md"
-      />
-    </div>
-  )}
 </div>

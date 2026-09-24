@@ -2,8 +2,9 @@
 title: Privacy policy
 description: What this site collects, which is very little, and what happens to it.
 sections:
-  - widget: HeroText
+  - widget: Hero
     props:
+      layout: text
       tagline: Legal
       title: Privacy policy
       subtitle: "Last updated: 23 August 2026"

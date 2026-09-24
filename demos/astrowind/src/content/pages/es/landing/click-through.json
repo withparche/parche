@@ -4,8 +4,9 @@
   "description": "Sin menús ni distracciones. Lee la oferta y decide.",
   "sections": [
     {
-      "widget": "Hero2",
+      "widget": "Hero",
       "props": {
+        "layout": "split",
         "tagline": "Ver la oferta",
         "title": "Una decisión, <span class='text-highlight'>un botón</span>",
         "subtitle": "Sin menús ni distracciones. Lee la oferta y decide.",

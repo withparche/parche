@@ -4,8 +4,9 @@
   "description": "A SaaS product home: proposition, features, pricing and questions.",
   "sections": [
     {
-      "widget": "Hero2",
+      "widget": "Hero",
       "props": {
+        "layout": "split",
         "tagline": "SaaS",
         "title": "Where your team <span class='text-highlight'>stops chasing</span> the work",
         "subtitle": "Plan, track and ship from one place. Fewer tools, fewer meetings, more things finished.",

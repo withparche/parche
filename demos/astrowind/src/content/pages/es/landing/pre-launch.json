@@ -4,8 +4,9 @@
   "description": "Quedan pocas semanas. Deja tu dirección y estarás entre las primeras personas en probarlo.",
   "sections": [
     {
-      "widget": "Hero2",
+      "widget": "Hero",
       "props": {
+        "layout": "split",
         "tagline": "Apuntarme a la lista",
         "title": "Algo está <span class='text-highlight'>por llegar</span>",
         "subtitle": "Quedan pocas semanas. Deja tu dirección y estarás entre las primeras personas en probarlo.",

@@ -3,8 +3,9 @@
   "description": "A mobile app home: screenshots, store badges and proof.",
   "sections": [
     {
-      "widget": "Hero2",
+      "widget": "Hero",
       "props": {
+        "layout": "split",
         "tagline": "Mobile",
         "title": "Your day, <span class='text-highlight'>in your pocket</span>",
         "subtitle": "Plan, capture and review from anywhere. It works offline and syncs when you are back.",

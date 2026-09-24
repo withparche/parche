@@ -2,8 +2,9 @@
 title: Terms and conditions
 description: The terms under which this template and this website are provided.
 sections:
-  - widget: HeroText
+  - widget: Hero
     props:
+      layout: text
       tagline: Legal
       title: Terms and conditions
       subtitle: "Last updated: 23 August 2026"

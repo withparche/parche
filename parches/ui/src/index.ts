@@ -32,8 +32,6 @@ export default function createUI(): ParcheManifest {
       // Section widgets
       Announcement: w('Announcement.astro'),
       Hero: w('Hero.astro'),
-      Hero2: w('Hero2.astro'),
-      HeroText: w('HeroText.astro'),
       Features: w('Features.astro'),
       Features2: w('Features2.astro'),
       Features3: w('Features3.astro'),

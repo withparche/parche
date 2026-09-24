@@ -3,8 +3,9 @@
   "description": "Una home de app móvil: capturas, insignias de tienda y pruebas.",
   "sections": [
     {
-      "widget": "Hero2",
+      "widget": "Hero",
       "props": {
+        "layout": "split",
         "tagline": "Móvil",
         "title": "Tu día, <span class='text-highlight'>en el bolsillo</span>",
         "subtitle": "Planifica, captura y revisa desde donde estés. Funciona sin conexión y sincroniza al volver.",

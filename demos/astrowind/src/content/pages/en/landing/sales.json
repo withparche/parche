@@ -4,8 +4,9 @@
   "description": "Take your time. This page covers what the product does, who it is for and where it will not help you.",
   "sections": [
     {
-      "widget": "Hero2",
+      "widget": "Hero",
       "props": {
+        "layout": "split",
         "tagline": "Read the full story",
         "title": "Everything you need, <span class='text-highlight'>explained properly</span>",
         "subtitle": "Take your time. This page covers what the product does, who it is for and where it will not help you.",

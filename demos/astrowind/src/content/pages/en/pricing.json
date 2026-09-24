@@ -3,11 +3,13 @@
   "description": "Simple, transparent pricing. Choose the plan that fits how you work and change it whenever you need to.",
   "sections": [
     {
-      "widget": "HeroText",
+      "widget": "Hero",
       "props": {
+        "layout": "text",
         "tagline": "Pricing",
         "title": "Stellar pricing for every journey",
-        "subtitle": "Choose the plan that aligns with your goals. Change or cancel it whenever you want."
+        "subtitle": "Choose the plan that aligns with your goals. Change or cancel it whenever you want.",
+        "actions": []
       }
     },
     {

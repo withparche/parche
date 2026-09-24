@@ -4,8 +4,9 @@
   "description": "No menus, no distractions. Read the offer and decide.",
   "sections": [
     {
-      "widget": "Hero2",
+      "widget": "Hero",
       "props": {
+        "layout": "split",
         "tagline": "See the offer",
         "title": "One decision, <span class='text-highlight'>one button</span>",
         "subtitle": "No menus, no distractions. Read the offer and decide.",

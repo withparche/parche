@@ -3,11 +3,13 @@
   "description": "Escríbenos: leemos todo lo que llega.",
   "sections": [
     {
-      "widget": "HeroText",
+      "widget": "Hero",
       "props": {
+        "layout": "text",
         "tagline": "Contacto",
         "title": "Hablemos",
-        "subtitle": "Cuéntanos qué estás construyendo y en qué te has atascado. Respondemos en un plazo de dos días laborables."
+        "subtitle": "Cuéntanos qué estás construyendo y en qué te has atascado. Respondemos en un plazo de dos días laborables.",
+        "actions": []
       }
     },
     {

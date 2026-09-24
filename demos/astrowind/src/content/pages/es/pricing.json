@@ -3,11 +3,13 @@
   "description": "Precios claros y sencillos. Elige el plan que encaja con tu forma de trabajar y cámbialo cuando lo necesites.",
   "sections": [
     {
-      "widget": "HeroText",
+      "widget": "Hero",
       "props": {
+        "layout": "text",
         "tagline": "Precios",
         "title": "Precios estelares para cada trayecto",
-        "subtitle": "Elige el plan que encaja con tus objetivos. Cámbialo o cancélalo cuando quieras."
+        "subtitle": "Elige el plan que encaja con tus objetivos. Cámbialo o cancélalo cuando quieras.",
+        "actions": []
       }
     },
     {

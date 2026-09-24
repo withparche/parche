@@ -3,8 +3,9 @@ title: Términos y condiciones
 urlSlug: terminos
 description: Las condiciones bajo las que se ofrecen esta plantilla y este sitio web.
 sections:
-  - widget: HeroText
+  - widget: Hero
     props:
+      layout: text
       tagline: Legal
       title: Términos y condiciones
       subtitle: "Última actualización: 23 de agosto de 2026"

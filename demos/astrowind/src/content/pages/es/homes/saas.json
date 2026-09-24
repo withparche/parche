@@ -4,8 +4,9 @@
   "description": "Una home de producto SaaS: propuesta, funciones, precios y preguntas.",
   "sections": [
     {
-      "widget": "Hero2",
+      "widget": "Hero",
       "props": {
+        "layout": "split",
         "tagline": "SaaS",
         "title": "El sitio donde tu equipo <span class='text-highlight'>deja de perseguir</span> el trabajo",
         "subtitle": "Planifica, sigue y publica desde un mismo lugar. Menos herramientas, menos reuniones, más cosas terminadas.",

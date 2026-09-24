@@ -3,11 +3,13 @@
   "description": "Write to us — we read everything that comes in.",
   "sections": [
     {
-      "widget": "HeroText",
+      "widget": "Hero",
       "props": {
+        "layout": "text",
         "tagline": "Contact",
         "title": "Let's talk",
-        "subtitle": "Tell us what you are building and where you are stuck. We answer within two working days."
+        "subtitle": "Tell us what you are building and where you are stuck. We answer within two working days.",
+        "actions": []
       }
     },
     {

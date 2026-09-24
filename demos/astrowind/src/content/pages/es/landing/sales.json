@@ -4,8 +4,9 @@
   "description": "Tómate tu tiempo. Esta página cuenta qué hace el producto, para quién es y dónde no te va a servir.",
   "sections": [
     {
-      "widget": "Hero2",
+      "widget": "Hero",
       "props": {
+        "layout": "split",
         "tagline": "Leer la historia completa",
         "title": "Todo lo que necesitas, <span class='text-highlight'>bien explicado</span>",
         "subtitle": "Tómate tu tiempo. Esta página cuenta qué hace el producto, para quién es y dónde no te va a servir.",

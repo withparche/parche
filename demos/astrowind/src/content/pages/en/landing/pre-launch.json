@@ -4,8 +4,9 @@
   "description": "We are a few weeks away. Leave your address and you will be among the first to try it.",
   "sections": [
     {
-      "widget": "Hero2",
+      "widget": "Hero",
       "props": {
+        "layout": "split",
         "tagline": "Join the waiting list",
         "title": "Something is <span class='text-highlight'>coming</span>",
         "subtitle": "We are a few weeks away. Leave your address and you will be among the first to try it.",

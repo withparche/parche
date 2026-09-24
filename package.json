@@ -14,7 +14,7 @@
     "test:starter": "node test/build-starter.mjs",
     "templates:sync": "node scripts/sync-template-deps.mjs",
     "templates:check": "node scripts/sync-template-deps.mjs --check",
-    "test:ssr": "pnpm --filter @parche/elements test:ssr",
+    "test:ssr": "pnpm --filter @parche/elements test:ssr && pnpm --filter @parche/ui test:ssr",
     "test:browser": "pnpm --filter @parche/elements test:browser",
     "test:ssr-smoke": "node test/ssr-smoke.mjs"
   },

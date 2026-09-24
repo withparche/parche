@@ -3,8 +3,9 @@ title: Política de privacidad
 urlSlug: privacidad
 description: Qué recoge este sitio, que es muy poco, y qué se hace con ello.
 sections:
-  - widget: HeroText
+  - widget: Hero
     props:
+      layout: text
       tagline: Legal
       title: Política de privacidad
       subtitle: "Última actualización: 23 de agosto de 2026"

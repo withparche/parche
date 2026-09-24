@@ -4,8 +4,9 @@
   "description": "Un correo, los jueves, con lo que aprendimos construyendo software esa semana. Te das de baja en un clic.",
   "sections": [
     {
-      "widget": "Hero2",
+      "widget": "Hero",
       "props": {
+        "layout": "split",
         "tagline": "Suscribirme",
         "title": "Cosas buenas, <span class='text-highlight'>cada semana</span>",
         "subtitle": "Un correo, los jueves, con lo que aprendimos construyendo software esa semana. Te das de baja en un clic.",

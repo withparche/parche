@@ -4,8 +4,9 @@
   "description": "One email, on Thursdays, with what we learned building software that week. Unsubscribe in one click.",
   "sections": [
     {
-      "widget": "Hero2",
+      "widget": "Hero",
       "props": {
+        "layout": "split",
         "tagline": "Subscribe",
         "title": "Good things, <span class='text-highlight'>every week</span>",
         "subtitle": "One email, on Thursdays, with what we learned building software that week. Unsubscribe in one click.",

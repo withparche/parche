@@ -57,11 +57,39 @@ function fromClasses(classes, file) {
   return out;
 }
 
+/**
+ * Widgets that merged into one: the old name becomes the new one with a
+ * `layout`, and props that changed shape are rewritten.
+ */
+const RENAMES = {
+  Hero2: (props) => ({ widget: 'Hero', props: { layout: 'split', ...props } }),
+  HeroText: ({ callToAction, callToAction2, ...props }) => ({
+    widget: 'Hero',
+    props: {
+      layout: 'text',
+      ...props,
+      actions: [
+        ...(callToAction?.text ? [{ ...callToAction, variant: 'primary' }] : []),
+        ...(callToAction2?.text ? [{ ...callToAction2, variant: 'secondary' }] : []),
+      ],
+    },
+  }),
+};
+
+function rename(node) {
+  const to = RENAMES[node.widget];
+  if (!to) return node;
+  const { widget, props } = to(node.props ?? {});
+  return { ...node, widget, props };
+}
+
 function migrateNode(section, file) {
   if (!section || typeof section !== 'object') return section;
   const { wrapper, ...rest } = section;
   if (rest.widget === 'layout/Main') return { widget: 'Outlet' };
   if (rest.wrapper !== undefined) delete rest.wrapper;
+  Object.assign(rest, rename(rest));
+  if (Array.isArray(rest.slots?.default)) rest.slots.default = rest.slots.default.map((n) => migrateNode(n, file));
   if (wrapper === undefined || wrapper === false) return rest;
   const props = {};
   if (wrapper.id) props.id = wrapper.id;
