@@ -118,8 +118,12 @@ export const contrastPairs: Array<{ fg: string; bg: string; target: number; wher
   { fg: 'muted', bg: 'background', target: 4.5, where: 'secondary copy' },
   { fg: 'muted', bg: 'surface', target: 4.5, where: 'secondary copy on cards' },
   { fg: 'on-surface', bg: 'surface', target: 4.5, where: 'text on cards' },
+  { fg: 'on-surface', bg: 'surface-2', target: 4.5, where: 'text on chips and table headers' },
+  { fg: 'muted', bg: 'surface-2', target: 4.5, where: 'secondary copy on chips' },
   { fg: 'on-primary', bg: 'primary', target: 4.5, where: 'primary buttons' },
-  { fg: 'primary', bg: 'background', target: 4.5, where: 'links, ghost buttons' },
+  { fg: 'primary', bg: 'background', target: 4.5, where: 'ghost buttons' },
+  { fg: 'link', bg: 'background', target: 4.5, where: 'links in running text' },
+  { fg: 'on-primary', bg: 'primary-hover', target: 4.5, where: 'primary buttons under the pointer' },
   { fg: 'primary', bg: 'primary-soft', target: 4.5, where: 'primary badges' },
   { fg: 'highlight', bg: 'background', target: 4.5, where: 'highlighted words' },
   { fg: 'on-success', bg: 'success', target: 4.5, where: 'success buttons' },
@@ -137,7 +141,7 @@ export const contrastPairs: Array<{ fg: string; bg: string; target: number; wher
 ];
 
 /** Layer sys: typography, six styles × four tokens, plus the font roles. */
-export const typeStyles = ['h1', 'h2', 'h3', 'body', 'caption', 'label'] as const;
+export const typeStyles = ['h1', 'h2', 'h3', 'lead', 'body', 'caption', 'label'] as const;
 export const typography = typeStyles.map((style) => ({
   style,
   size: light[`--ds-sys-type-${style}-size`] ?? '',

@@ -84,6 +84,15 @@
     color: var(--color-heading);
   }
 
+  .type-lead {
+    font-family: var(--ds-sys-font-body);
+    font-size: var(--ds-sys-type-lead-size);
+    font-weight: var(--ds-sys-type-lead-weight);
+    letter-spacing: var(--ds-sys-type-lead-tracking);
+    line-height: var(--ds-sys-type-lead-leading);
+    color: var(--color-muted);
+  }
+
   .type-body {
     font-family: var(--ds-sys-font-body);
     font-size: var(--ds-sys-type-body-size);

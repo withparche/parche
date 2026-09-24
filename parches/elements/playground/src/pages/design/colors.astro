@@ -6,8 +6,8 @@ import { ramps, colorRoles, contrastPairs, usage } from '../../lib/tokens';
 const used = usage(elementMeta as any);
 const groups = [
   { label: 'Canvas and text', roles: ['background', 'foreground', 'text', 'heading', 'muted', 'highlight'] },
-  { label: 'Surfaces', roles: ['surface', 'surface-hover', 'on-surface', 'border', 'overlay'] },
-  { label: 'Primary', roles: ['primary', 'on-primary', 'primary-soft', 'ring'] },
+  { label: 'Surfaces', roles: ['surface', 'surface-2', 'surface-hover', 'on-surface', 'border', 'border-soft', 'overlay'] },
+  { label: 'Primary', roles: ['primary', 'primary-hover', 'on-primary', 'primary-soft', 'link', 'ring'] },
   { label: 'Status', roles: ['success', 'on-success', 'success-soft', 'warning', 'on-warning', 'warning-soft', 'danger', 'on-danger', 'danger-soft'] },
 ];
 const byShort = new Map(colorRoles.map((r) => [r.short, r]));
