@@ -142,7 +142,19 @@ for (const { name, dir, entry, value } of folders) {
 
   test(`${name}: tokens exist in the generated catalog and no raw palette class is used`, async () => {
     const { meta } = await import(propsPath);
-    for (const t of meta.element.tokens) assert.ok(tokenNames.has(tokenCssName(t)), `unknown token "${t}" (${tokenCssName(t)} is not in the generated catalog)`);
+    const sources = files.filter((f) => /\.(astro|ts|css)$/.test(f)).map((f) => fs.readFileSync(f, 'utf8'));
+    for (const t of meta.element.tokens) {
+      if (t.startsWith('comp-')) {
+        // A component token is the element's own: it must be declared in the
+        // folder (with a sys default) and consumed there, or it is noise.
+        const declared = sources.some((s) => new RegExp(`--ds-${t}\\s*:`).test(s));
+        const consumed = sources.some((s) => s.includes(`var(--ds-${t}`));
+        assert.ok(declared, `comp token "${t}" is listed but never declared in the folder`);
+        assert.ok(consumed, `comp token "${t}" is declared but never consumed in the folder`);
+        continue;
+      }
+      assert.ok(tokenNames.has(tokenCssName(t)), `unknown token "${t}" (${tokenCssName(t)} is not in the generated catalog)`);
+    }
     for (const f of files.filter((f) => /\.(astro|ts|css)$/.test(f))) {
       const src = fs.readFileSync(f, 'utf8');
       const hit = src.match(RAW_PALETTE);

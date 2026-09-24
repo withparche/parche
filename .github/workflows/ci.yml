@@ -29,6 +29,9 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      - name: Design tokens are generated from their sources
+        run: pnpm run tokens:check
+
       - name: Unit tests (@parche/astro, @parche/elements contract)
         run: pnpm run test:unit
 

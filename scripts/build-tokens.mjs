@@ -92,7 +92,9 @@ function block(selector, decls, comment) {
     // Ramps stay reachable for the compat layer; elements never use them.
     const [kind, ...rest] = path;
     if (kind === 'color') bridge.push([`--color-${rest.join('-')}`, `var(${cssName('ref', path)})`]);
-    if (kind === 'radius') bridge.push([`--radius-${rest.join('-')}`, `var(${cssName('ref', path)})`]);
+    // Radii pass through the conf scale: a theme sets --ds-conf-radius-scale to
+    // 0 for square corners or 1.5 for rounder ones without touching the ref values.
+    if (kind === 'radius') bridge.push([`--radius-${rest.join('-')}`, `calc(var(${cssName('ref', path)}) * var(--ds-conf-radius-scale))`]);
     if (kind === 'shadow') bridge.push([`--shadow-${rest.join('-')}`, `var(${cssName('ref', path)})`]);
   }
   const css =

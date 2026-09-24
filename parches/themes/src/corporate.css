@@ -8,7 +8,6 @@
    Geometry override — zero radius, no shadows
    --------------------------------------------------------------- */
 :root:root[data-theme="corporate"] :is(*, *::before, *::after) {
-  border-radius: 0 !important;
   box-shadow: none !important;
 }
 
@@ -16,6 +15,9 @@
    Light mode
    --------------------------------------------------------------- */
 :root[data-theme="corporate"] {
+  /* Square corners come from the conf knob, not from a rule on every element. */
+  --ds-conf-radius-scale: 0;
+
   /* Primitive overrides — pure grayscale (chroma 0) */
   --ds-ref-color-neutral-50:  oklch(0.985 0 0);
   --ds-ref-color-neutral-100: oklch(0.96 0 0);
