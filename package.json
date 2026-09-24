@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "pnpm --filter example-blog dev",
     "build": "pnpm --filter example-blog build",
+    "tokens": "node scripts/build-tokens.mjs",
+    "tokens:check": "node scripts/build-tokens.mjs --check",
     "preview": "pnpm --filter example-blog preview",
     "test": "pnpm run test:unit && pnpm run test:ssr && pnpm run test:build && pnpm run test:browser && pnpm run test:ssr-smoke",
     "test:unit": "node --import tsx --test packages/core/test/*.test.ts packages/cli/test/*.test.ts parches/blog/test/*.test.ts parches/ui/test/*.test.ts parches/elements/test/unit/*.test.ts",

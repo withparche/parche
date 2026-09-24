@@ -1,0 +1,16 @@
+/* Generated from packages/core/tokens/*.json by scripts/build-tokens.mjs. Do not edit; run `pnpm tokens`.
+   Configuration tokens: geometry and rhythm knobs. */
+
+:root {
+  --ds-conf-radius-scale: 1;
+  --ds-conf-motion-fast: 150ms;
+  --ds-conf-motion-base: 200ms;
+  --ds-conf-motion-slow: 250ms;
+  --ds-conf-width-sm: 48rem;
+  --ds-conf-width-md: 64rem;
+  --ds-conf-width-lg: 72rem;
+  --ds-conf-width-xl: 80rem;
+  --ds-conf-spacing-sm: clamp(2rem, 4vw, 3rem);
+  --ds-conf-spacing-md: clamp(3rem, 6vw, 5rem);
+  --ds-conf-spacing-lg: clamp(4rem, 8vw, 7rem);
+}

@@ -1,0 +1,28 @@
+{
+  "$description": "Configuration tokens: knobs that are neither a raw value nor a role. A theme or a site sets them to change geometry and rhythm without touching ramps or roles. Kept deliberately small; a conf token exists only when something reads it.",
+  "radius": {
+    "$type": "number",
+    "scale": { "$value": 1, "$description": "Multiplier applied to every ref radius. Corporate sets 0, Playful 1.5." }
+  },
+  "motion": {
+    "$type": "duration",
+    "fast": { "$value": "150ms", "$description": "Hover and focus transitions." },
+    "base": { "$value": "200ms", "$description": "Open and close of overlays and panels." },
+    "slow": { "$value": "250ms", "$description": "Entry of large surfaces." }
+  },
+  "width": {
+    "$type": "dimension",
+    "$description": "The five measures the Container element offers. Sections pick one.",
+    "sm": { "$value": "48rem" },
+    "md": { "$value": "64rem" },
+    "lg": { "$value": "72rem" },
+    "xl": { "$value": "80rem" }
+  },
+  "spacing": {
+    "$type": "dimension",
+    "$description": "Vertical rhythm of a section.",
+    "sm": { "$value": "clamp(2rem, 4vw, 3rem)" },
+    "md": { "$value": "clamp(3rem, 6vw, 5rem)" },
+    "lg": { "$value": "clamp(4rem, 8vw, 7rem)" }
+  }
+}
