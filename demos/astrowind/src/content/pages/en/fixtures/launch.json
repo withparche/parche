@@ -74,6 +74,39 @@
               ]
             }
           }
+        ],
+        "proof": [
+          {
+            "widget": "Stats",
+            "props": {
+              "stats": [
+                {
+                  "value": "6.1K",
+                  "label": "GitHub stars",
+                  "source": "GitHub",
+                  "date": "Sept 2026"
+                },
+                {
+                  "value": "0.4",
+                  "unit": "s",
+                  "label": "Median LCP",
+                  "source": "CrUX p75",
+                  "date": "28 days"
+                },
+                {
+                  "value": "38",
+                  "unit": "KB",
+                  "label": "Client JS on a page",
+                  "source": "build-smoke"
+                },
+                {
+                  "value": "34",
+                  "label": "Sites in production",
+                  "source": "showcase"
+                }
+              ]
+            }
+          }
         ]
       }
     },

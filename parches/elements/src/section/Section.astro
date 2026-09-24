@@ -9,11 +9,13 @@ import { schema, type Props } from './section.props';
 
 const { props: { padding, surface, as: Tag }, rest, className, part } = splitProps(schema, Astro.props);
 
+// The rhythm comes from the conf tokens, so a theme retunes every band from
+// three knobs instead of restyling the element.
 const paddings: Record<typeof padding, string> = {
   none: '',
-  sm: 'py-12',
-  md: 'py-16 md:py-24',
-  lg: 'py-24 md:py-32',
+  sm: 'py-(--ds-conf-spacing-sm)',
+  md: 'py-(--ds-conf-spacing-md)',
+  lg: 'py-(--ds-conf-spacing-lg)',
 };
 ---
 

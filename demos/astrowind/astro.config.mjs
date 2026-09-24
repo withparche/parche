@@ -5,7 +5,7 @@ import parche from '@parche/astro';
 import createElements from '@parche/elements';
 import createUI from '@parche/ui';
 import createBlog from '@parche/astro-blog';
-import { astrowind, product } from '@parche/themes';
+import { astrowind, product, editorial } from '@parche/themes';
 import { blogLabels } from './src/blog-labels.js';
 
 // AstroWind recreated on Parche — bilingual (en/es), static output.
@@ -30,6 +30,7 @@ export default defineConfig({
         }),
         astrowind(),
         product(),
+        editorial(),
       ],
       config: './src/parche.config.json',
       routes: { pages: true },

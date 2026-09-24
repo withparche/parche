@@ -9,11 +9,13 @@ import { schema, type Props } from './container.props';
 
 const { props: { width, padding, as: Tag }, rest, className, part } = splitProps(schema, Astro.props);
 
+// The measures come from the conf tokens, so a site or a theme retunes the
+// page grid from four knobs.
 const widths: Record<typeof width, string> = {
-  sm: 'max-w-3xl',
-  md: 'max-w-5xl',
-  lg: 'max-w-6xl',
-  xl: 'max-w-7xl',
+  sm: 'max-w-(--ds-conf-width-sm)',
+  md: 'max-w-(--ds-conf-width-md)',
+  lg: 'max-w-(--ds-conf-width-lg)',
+  xl: 'max-w-(--ds-conf-width-xl)',
   full: 'max-w-none',
 };
 ---

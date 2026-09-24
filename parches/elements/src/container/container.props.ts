@@ -15,7 +15,7 @@ export const meta = defineElement({
   element: {
     label: 'Container',
     description: 'Centres content at a chosen max width, with horizontal padding.',
-    tokens: [],
+    tokens: ['conf-width-sm', 'conf-width-md', 'conf-width-lg', 'conf-width-xl'],
     parts: [{ name: 'root', element: 'div', description: 'The centred box; `as` picks the tag.' }],
   },
 });

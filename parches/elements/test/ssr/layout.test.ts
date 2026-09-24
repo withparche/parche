@@ -9,14 +9,14 @@ import SectionExample from '../../src/section/examples/basic.astro';
 describe('Container', () => {
   it('centres at the default width with padding', async () => {
     const html = await render(Container, {}, { default: 'x' });
-    expect(html).toMatch(/<div[^>]*class="[^"]*parche-container[^"]*mx-auto[^"]*max-w-6xl[^"]*px-4/);
+    expect(html).toMatch(/<div[^>]*class="[^"]*parche-container[^"]*mx-auto[^"]*max-w-\(--ds-conf-width-lg\)[^"]*px-4/);
     expect(html).toMatch(/data-width="lg"/);
     expect(scriptCount(html)).toBe(0);
   });
   it('maps widths and can drop padding and change tag', async () => {
     const html = await render(Container, { width: 'sm', padding: false, as: 'main', id: 'main' }, { default: 'x' });
     expect(html).toMatch(/<main[^>]*id="main"/);
-    expect(html).toMatch(/max-w-3xl/);
+    expect(html).toMatch(/max-w-\(--ds-conf-width-sm\)/);
     expect(html).not.toMatch(/px-4/);
   });
   it('example renders', async () => {
@@ -27,14 +27,14 @@ describe('Container', () => {
 describe('Section', () => {
   it('is a section with medium rhythm by default', async () => {
     const html = await render(Section, {}, { default: 'x' });
-    expect(html).toMatch(/<section[^>]*class="[^"]*parche-section[^"]*py-16/);
+    expect(html).toMatch(/<section[^>]*class="[^"]*parche-section[^"]*py-\(--ds-conf-spacing-md\)/);
     expect(html).not.toMatch(/bg-surface/);
   });
   it('paints on the surface token and reports the state', async () => {
     const html = await render(Section, { surface: true, padding: 'lg' }, { default: 'x' });
     expect(html).toMatch(/bg-surface/);
     expect(html).toMatch(/data-state="surface"/);
-    expect(html).toMatch(/py-24/);
+    expect(html).toMatch(/py-\(--ds-conf-spacing-lg\)/);
   });
   it('example renders', async () => {
     expect(await render(SectionExample)).toMatch(/parche-container/);

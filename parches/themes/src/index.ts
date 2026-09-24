@@ -56,3 +56,11 @@ export const product = (): ParcheManifest =>
     family('--font-sans', 'IBM Plex Sans', [400, 500, 600], ['ui-sans-serif', 'system-ui', 'sans-serif']),
     family('--font-mono', 'JetBrains Mono', [400, 500], ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace']),
   ]);
+
+/** The redesign's Editorial direction: serif display, near-square, no shadows. */
+export const editorial = (): ParcheManifest =>
+  theme('editorial', 'Editorial', [
+    family('--font-serif', 'Source Serif 4', [400, 600], ['Georgia', 'Times New Roman', 'serif']),
+    family('--font-sans', 'IBM Plex Sans', [400, 500, 600], ['ui-sans-serif', 'system-ui', 'sans-serif']),
+    family('--font-mono', 'JetBrains Mono', [400, 500], ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace']),
+  ]);
