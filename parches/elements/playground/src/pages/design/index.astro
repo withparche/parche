@@ -1,55 +1,59 @@
 ---
 import DesignPage from '../../components/DesignPage.astro';
 import { elementIndex, elementMeta } from 'parche:registry/elements';
-import { ramps, colorRoles, typography, radii, shadows, themes, shadcnAliases, usage } from '../../lib/tokens';
+import { ramps, colorRoles, typography, fonts, radii, shadows, conf, shadcnAliases, usage } from '../../lib/tokens';
 
 const used = usage(elementMeta as any);
 const roleCount = colorRoles.length;
 const unused = colorRoles.filter((r) => !(used[`color-${r.short}`]?.length)).map((r) => r.short);
+const refCount = ramps.length * ramps[0].steps.length + radii.length + shadows.length + 2;
+const sysCount = roleCount + typography.length * 4 + fonts.length;
 ---
 
-<DesignPage title="Design system" description="The design system is the set of --ds- tokens: colour roles, type styles and font roles, each with a light and a dark value. Every element and widget is styled from them and nothing else; a theme is a file that overrides them.">
-  <section class="docs-ui mb-12" aria-labelledby="system">
-    <h2 id="system" class="type-h2 mb-4">The tokens, all prefixed <code>--ds-</code></h2>
-    <div class="grid gap-4 md:grid-cols-3">
+<DesignPage title="Design system" description="Four layers of --ds- tokens, declared once in DTCG JSON and generated into CSS: ref is the raw material, sys the roles every element and widget is styled from, comp the knobs of one element, conf the geometry and rhythm of a site. A theme overrides ref and sys; nothing invents a token the elements do not know.">
+  <section class="docs-ui mb-12" aria-labelledby="layers">
+    <h2 id="layers" class="type-h2 mb-4">The four layers</h2>
+    <div class="grid gap-4 md:grid-cols-2">
       <div class="rounded-lg border border-border bg-surface p-5">
-        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Colour roles</p>
-        <p class="mt-2 font-semibold text-heading"><code>--ds-color-background</code>, <code>--ds-color-primary</code>, <code>--ds-color-muted</code> …</p>
-        <p class="mt-2 text-sm text-muted">{roleCount} roles — canvas, text, surfaces, primary, status, focus, overlay — each with a light and a dark value. Bridged to Tailwind as <code>bg-surface</code>, <code>text-muted</code>, <code>outline-ring</code>. <a href="/design/colors" class="text-primary underline">Colors</a>.</p>
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">ref · reference</p>
+        <p class="mt-2 font-semibold text-heading"><code>--ds-ref-color-primary-500</code>, <code>--ds-ref-radius-md</code>, <code>--ds-ref-shadow-lg</code>, <code>--ds-ref-font-sans</code></p>
+        <p class="mt-2 text-sm text-muted">{refCount} tokens: {ramps.length} OKLCH ramps of {ramps[0].steps.length} steps, {radii.length} radii, {shadows.length} shadows and two font stacks. Raw material the sys roles point into. No element or widget names one; a theme may replace a whole ramp. <a href="/design/colors#ramps" class="text-primary underline">Ramps</a> · <a href="/design/shape" class="text-primary underline">Shape</a>.</p>
+        <p class="mt-3 text-xs text-muted"><code>packages/core/tokens/ref.json</code></p>
       </div>
       <div class="rounded-lg border border-border bg-surface p-5">
-        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Type styles</p>
-        <p class="mt-2 font-semibold text-heading"><code>--ds-size-h1</code>, <code>--ds-weight-h1</code>…</p>
-        <p class="mt-2 text-sm text-muted">Six styles of four tokens each — size, weight, tracking, leading — composed into <code>.type-h1</code>… <code>.type-label</code>. <a href="/design/typography" class="text-primary underline">Typography</a>.</p>
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">sys · system</p>
+        <p class="mt-2 font-semibold text-heading"><code>--ds-sys-color-primary</code>, <code>--ds-sys-type-h1-size</code>, <code>--ds-sys-font-heading</code></p>
+        <p class="mt-2 text-sm text-muted">{sysCount} tokens: {roleCount} colour roles, each with a light and a dark value, {typography.length} type styles of four tokens, and {fonts.length} font roles. What every element and widget is styled from, bridged to Tailwind as <code>bg-surface</code>, <code>text-muted</code>, <code>outline-ring</code>. What a theme overrides. <a href="/design/colors" class="text-primary underline">Colors</a> · <a href="/design/typography" class="text-primary underline">Typography</a>.</p>
+        <p class="mt-3 text-xs text-muted"><code>packages/core/tokens/sys.json</code></p>
       </div>
-      <div class="rounded-lg border border-border bg-surface p-5">
-        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Font roles</p>
-        <p class="mt-2 font-semibold text-heading"><code>--ds-font-heading</code>, <code>--ds-font-body</code></p>
-        <p class="mt-2 text-sm text-muted">Two roles a theme fills with a typeface. Core ships none; the fallback costs no download.</p>
+      <div class="rounded-lg border border-border p-5">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">comp · component</p>
+        <p class="mt-2 font-semibold text-heading"><code>--ds-comp-&lt;element&gt;-*</code></p>
+        <p class="mt-2 text-sm text-muted">One element's own knobs, each defaulting to a sys token, declared in that element's <code>.props.ts</code>. A comp token exists only where a theme needs to move one element independently of the roles; the default is none, and the contract test refuses one nobody consumes. Empty today.</p>
+        <p class="mt-3 text-xs text-muted">Declared per element, not in a shared file.</p>
+      </div>
+      <div class="rounded-lg border border-border p-5">
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">conf · configuration</p>
+        <p class="mt-2 font-semibold text-heading"><code>--ds-conf-radius-scale</code>, <code>--ds-conf-motion-base</code>, <code>--ds-conf-width-lg</code></p>
+        <p class="mt-2 text-sm text-muted">{conf.length} knobs that are neither a value nor a role: the radius scale, motion durations, the measures, the section rhythm. A theme or a site sets them to change geometry without touching ramps or roles. <a href="/design/shape#conf" class="text-primary underline">Configuration</a>.</p>
+        <p class="mt-3 text-xs text-muted"><code>packages/core/tokens/conf.json</code></p>
       </div>
     </div>
-    <p class="mt-4 text-xs text-muted">Declared in <code>packages/core/src/styles/semantic.css</code>; overridden by a theme under <code>:root[data-theme="…"]</code> and by <code>.dark</code> for the colour mode.</p>
+    <p class="mt-4 text-xs text-muted">Sources in the W3C Design Tokens format; <code>pnpm tokens</code> generates <code>packages/core/src/styles/generated/</code>, which <code>base.css</code> imports. A theme overrides under <code>:root[data-theme="…"]</code>, and <code>.dark</code> switches the colour mode.</p>
   </section>
 
-  <section class="docs-ui mb-12" aria-labelledby="around">
-    <h2 id="around" class="type-h2 mb-4">Beneath it and beside it, not part of it</h2>
-    <div class="grid gap-4 md:grid-cols-3">
+  <section class="docs-ui mb-12" aria-labelledby="beside">
+    <h2 id="beside" class="type-h2 mb-4">Beside it, not part of it</h2>
+    <div class="grid gap-4 md:grid-cols-2">
       <div class="rounded-lg border border-border p-5">
-        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Beneath · primitives</p>
-        <p class="mt-2 font-semibold text-heading"><code>--color-primary-500</code>, <code>--color-neutral-50</code> … <code>--color-danger-950</code></p>
-        <p class="mt-2 text-sm text-muted">{ramps.length} OKLCH ramps of 11 steps that the roles point into. Raw material, not tokens of the system: nothing in an element or widget names one directly, and the contract test refuses <code>bg-green-500</code>. A theme may replace a ramp.</p>
-        <p class="mt-3 text-xs text-muted"><code>tokens.css</code></p>
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Tailwind bridges</p>
+        <p class="mt-2 font-semibold text-heading"><code>bg-surface</code>, <code>rounded-md</code>, <code>bg-neutral-100</code></p>
+        <p class="mt-2 text-sm text-muted">Generated next to the tokens as <code>@theme inline</code> variables that read them, so utilities follow a theme at runtime. The role and shape utilities are what elements write; the ramp utilities exist for the compatibility layer and the contract test refuses them in an element.</p>
       </div>
       <div class="rounded-lg border border-border p-5">
-        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Beneath · Tailwind's scale</p>
-        <p class="mt-2 font-semibold text-heading"><code>{radii[0]?.name}</code> … <code>{radii[radii.length - 1]?.name}</code>, <code>{shadows[0]?.name}</code> … <code>{shadows[shadows.length - 1]?.name}</code></p>
-        <p class="mt-2 text-sm text-muted">{radii.length} radii and {shadows.length} shadows, Tailwind theme variables set by <code>tokens.css</code> and reached as <code>rounded-md</code> or <code>shadow-lg</code>. There is no <code>--ds-</code> token for shape today; Corporate and Minimal flatten these with a rule instead. <a href="/design/shape" class="text-primary underline">Shape</a>.</p>
-        <p class="mt-3 text-xs text-muted"><code>tokens.css</code></p>
-      </div>
-      <div class="rounded-lg border border-border p-5">
-        <p class="text-xs font-semibold uppercase tracking-wider text-muted">Beside · compatibility</p>
-        <p class="mt-2 font-semibold text-heading">shadcn/ui names</p>
-        <p class="mt-2 text-sm text-muted">{shadcnAliases.length} aliases (<code>--background</code>, <code>--primary</code>…) that point at the roles, so a shadcn component drops in later without a second palette. Applied on top, never used by our elements. <a href="/design/themes#shadcn" class="text-primary underline">The table</a>.</p>
+        <p class="text-xs font-semibold uppercase tracking-wider text-muted">shadcn/ui compatibility</p>
+        <p class="mt-2 font-semibold text-heading"><code>--background</code>, <code>--primary</code>, <code>--ring</code> …</p>
+        <p class="mt-2 text-sm text-muted">{shadcnAliases.length} aliases that point at the sys roles, so a shadcn component drops in later without a second palette. Applied on top, never used by our elements. <a href="/design/themes#shadcn" class="text-primary underline">The table</a>.</p>
         <p class="mt-3 text-xs text-muted"><code>shadcn-compat.css</code></p>
       </div>
     </div>
@@ -71,11 +75,11 @@ const unused = colorRoles.filter((r) => !(used[`color-${r.short}`]?.length)).map
   <section class="docs-ui mb-12" aria-labelledby="rules">
     <h2 id="rules" class="type-h2 mb-4">The rules</h2>
     <ul class="list-disc space-y-2 pl-5 text-sm text-muted">
-      <li><strong class="text-heading">Tokens only.</strong> Elements and widgets use role utilities (<code>bg-surface</code>, <code>text-heading</code>, <code>border-border</code>), never a palette step. That is what lets a theme reskin everything from one file.</li>
+      <li><strong class="text-heading">Elements and widgets read sys.</strong> Role utilities (<code>bg-surface</code>, <code>text-heading</code>, <code>border-border</code>) and the shape utilities, never a ramp step. That is what lets a theme reskin everything from one file.</li>
       <li><strong class="text-heading">Every role has a light and a dark value</strong>, and the pairs the elements put together must read at WCAG AA. The <a href="/design/colors" class="text-primary underline">Colors</a> page measures them live for the theme and mode you pick above.</li>
-      <li><strong class="text-heading">A theme overrides, it does not add.</strong> A theme file may set any primitive or role, and typography, under its own attribute; it may not invent a token the elements do not know.</li>
-      <li><strong class="text-heading">Composed type styles</strong> (<code>.type-h1</code>… <code>.type-label</code>) are the only classes core adds; everything else is Tailwind on the bridged roles.</li>
-      <li><strong class="text-heading">Only <code>--ds-</code> is the system.</strong> Ramps and Tailwind's scale sit beneath it; the shadcn names sit beside it as a compatibility layer to apply later. Neither is what an element or a theme should reach for first.</li>
+      <li><strong class="text-heading">A theme overrides, it does not add.</strong> It may set any ref or sys token and any conf knob under its own attribute; it may not invent a token the elements do not know.</li>
+      <li><strong class="text-heading">A comp token needs a reason.</strong> It is added when a theme has to move one element on its own, and it defaults to a sys token, so a theme that ignores it loses nothing.</li>
+      <li><strong class="text-heading">The JSON is the truth.</strong> The CSS is generated and CI fails when it is stale. What is in <code>sys.json</code> is what is in the browser.</li>
     </ul>
   </section>
 

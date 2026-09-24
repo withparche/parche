@@ -15,10 +15,10 @@ const leftover = colorRoles.filter((r) => !groups.some((g) => g.roles.includes(r
 if (leftover.length) groups.push({ label: 'Other', roles: leftover.map((r) => r.short) });
 ---
 
-<DesignPage title="Colors" description="The --ds-color- roles every element is painted with: their light and dark values, who uses them, and the contrast of the pairs that matter, measured live for the theme and mode chosen in the bar.">
+<DesignPage title="Colors" description="The --ds-sys-color- roles every element is painted with: their light and dark values, who uses them, and the contrast of the pairs that matter, measured live for the theme and mode chosen in the bar.">
   <section class="mb-12" aria-labelledby="roles">
     <h2 id="roles" class="docs-ui type-h2 mb-2">Roles</h2>
-    <p class="docs-ui mb-6 text-sm text-muted">The swatch is live: switch the theme or the mode in the bar and it follows. Values are what <code>semantic.css</code> declares for the default theme. The Tailwind column lists the utilities the bridge gives every role; <code>outline-</code>, <code>ring-</code>, <code>divide-</code> and the rest exist too.</p>
+    <p class="docs-ui mb-6 text-sm text-muted">The swatch is live: switch the theme or the mode in the bar and it follows. Values are what <code>sys.json</code> declares for the default theme. The Tailwind column lists the utilities the bridge gives every role; <code>outline-</code>, <code>ring-</code>, <code>divide-</code> and the rest exist too.</p>
     {groups.map((group) => (
       <div class="mb-8">
         <h3 class="docs-ui type-h3 mb-3">{group.label}</h3>
@@ -57,10 +57,10 @@ if (leftover.length) groups.push({ label: 'Other', roles: leftover.map((r) => r.
         <thead><tr class="text-left text-muted"><th class="py-1 pr-4">Sample</th><th class="py-1 pr-4">Foreground</th><th class="py-1 pr-4">Background</th><th class="py-1 pr-4">Where</th><th class="py-1 pr-4">Target</th><th class="py-1">Ratio</th></tr></thead>
         <tbody>
           {contrastPairs.map((p) => (
-            <tr class="border-t border-border" data-fg={`--ds-color-${p.fg}`} data-bg={`--ds-color-${p.bg}`} data-target={p.target} data-advisory={p.advisory ? '' : undefined}>
-              <td class="py-2 pr-4"><span class="inline-block rounded-md px-3 py-1 font-medium" style={`color: var(--ds-color-${p.fg}); background: var(--ds-color-${p.bg}); ${p.target === 3 && (p.fg === 'border' || p.fg === 'ring') ? `border: 2px solid var(--ds-color-${p.fg}); color: var(--ds-color-text);` : ''}`}>Aa</span></td>
-              <td class="py-2 pr-4 font-mono text-xs text-heading whitespace-nowrap">--ds-color-{p.fg}</td>
-              <td class="py-2 pr-4 font-mono text-xs text-heading whitespace-nowrap">--ds-color-{p.bg}</td>
+            <tr class="border-t border-border" data-fg={`--ds-sys-color-${p.fg}`} data-bg={`--ds-sys-color-${p.bg}`} data-target={p.target} data-advisory={p.advisory ? '' : undefined}>
+              <td class="py-2 pr-4"><span class="inline-block rounded-md px-3 py-1 font-medium" style={`color: var(--ds-sys-color-${p.fg}); background: var(--ds-sys-color-${p.bg}); ${p.target === 3 && (p.fg === 'border' || p.fg === 'ring') ? `border: 2px solid var(--ds-sys-color-${p.fg}); color: var(--ds-sys-color-text);` : ''}`}>Aa</span></td>
+              <td class="py-2 pr-4 font-mono text-xs text-heading whitespace-nowrap">--ds-sys-color-{p.fg}</td>
+              <td class="py-2 pr-4 font-mono text-xs text-heading whitespace-nowrap">--ds-sys-color-{p.bg}</td>
               <td class="py-2 pr-4 text-muted">{p.where}</td>
               <td class="py-2 pr-4 text-muted">{p.target}:1{p.advisory && ' (advisory)'}</td>
               <td class="py-2 font-mono" data-ratio>…</td>
@@ -72,8 +72,8 @@ if (leftover.length) groups.push({ label: 'Other', roles: leftover.map((r) => r.
   </section>
 
   <section class="mb-12" aria-labelledby="ramps">
-    <h2 id="ramps" class="docs-ui type-h2 mb-2">Beneath the roles: the primitive ramps</h2>
-    <p class="docs-ui mb-4 text-sm text-muted">Not tokens of the system. <code>--color-neutral-50</code> … <code>--color-danger-950</code>: seven OKLCH families of eleven steps that some roles point into (<code>primary-soft</code> is <code>primary-50</code>, the status colours are the 700 and 400 steps). Nothing else names them, and a theme may replace a whole family. Shown here so a role's value can be read back to its source.</p>
+    <h2 id="ramps" class="docs-ui type-h2 mb-2">Beneath the roles: the ref ramps</h2>
+    <p class="docs-ui mb-4 text-sm text-muted">The reference layer. <code>--ds-ref-color-neutral-50</code> … <code>--ds-ref-color-danger-950</code>: seven OKLCH families of eleven steps that some roles point into (<code>primary-soft</code> is <code>primary-50</code>, the status colours are the 700 and 400 steps). No element or widget names one, and a theme may replace a whole family. Shown here so a role's value can be read back to its source.</p>
     <div class="docs-preview rounded-lg border border-(--doc-border) p-4">
       {ramps.map((ramp) => (
         <div class="mb-4">
@@ -81,7 +81,7 @@ if (leftover.length) groups.push({ label: 'Other', roles: leftover.map((r) => r.
           <div class="grid grid-cols-11 gap-1">
             {ramp.steps.map((s) => (
               <div class="min-w-0">
-                <span class="block h-10 rounded-md border border-border" style={`background: var(--color-${ramp.family}-${s.step})`} title={`--color-${ramp.family}-${s.step}: ${s.value}`}></span>
+                <span class="block h-10 rounded-md border border-border" style={`background: var(--color-${ramp.family}-${s.step})`} title={`${s.name}: ${s.value}`}></span>
                 <span class="mt-1 block truncate text-center text-[10px] text-muted">{s.step}</span>
               </div>
             ))}
@@ -132,7 +132,7 @@ if (leftover.length) groups.push({ label: 'Other', roles: leftover.map((r) => r.
       const ok = ratio >= target;
       const advisory = 'advisory' in row.dataset;
       cell.textContent = `${ratio.toFixed(2)}:1 ${ok ? '✓' : advisory ? '△' : '✗'}`;
-      cell.style.color = ok ? 'var(--ds-color-success)' : advisory ? 'var(--ds-color-warning)' : 'var(--ds-color-danger)';
+      cell.style.color = ok ? 'var(--ds-sys-color-success)' : advisory ? 'var(--ds-sys-color-warning)' : 'var(--ds-sys-color-danger)';
     }
   }
   measure();

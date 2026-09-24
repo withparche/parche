@@ -14,7 +14,7 @@ import { fileURLToPath } from 'node:url';
 import createElements from '../../src/index.ts';
 
 const SRC = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../src');
-const SEMANTIC_CSS = path.resolve(SRC, '../../../packages/core/src/styles/semantic.css');
+const TOKENS_JSON = path.resolve(SRC, '../../../packages/core/src/styles/generated/tokens.json');
 
 /** Raw palette utilities an element must never use: tokens only. */
 const RAW_PALETTE =
@@ -36,10 +36,11 @@ function folderFiles(dir: string): string[] {
     .flatMap((e) => (e.isDirectory() ? folderFiles(path.join(dir, e.name)) : [path.join(dir, e.name)]));
 }
 
-const tokenNames = (() => {
-  const css = fs.readFileSync(SEMANTIC_CSS, 'utf8');
-  return new Set([...css.matchAll(/--ds-([a-z0-9-]+)\s*:/g)].map((m) => m[1]));
-})();
+/** Every token the generated catalog knows, by full CSS name. */
+const tokenNames = new Set(Object.keys(JSON.parse(fs.readFileSync(TOKENS_JSON, 'utf8')).light as Record<string, string>));
+
+/** A `tokens` entry names a sys token unless it carries a layer prefix. */
+const tokenCssName = (t: string) => (/^(ref|sys|comp|conf)-/.test(t) ? `--ds-${t}` : `--ds-sys-${t}`);
 
 /** Element folders on the new layout: `src/<kebab>/` with a `.props.ts`. */
 const folders = Object.entries(registered)
@@ -139,9 +140,9 @@ for (const { name, dir, entry, value } of folders) {
     assert.ok(declared.size > 0, 'at least one part');
   });
 
-  test(`${name}: tokens exist in semantic.css and no raw palette class is used`, async () => {
+  test(`${name}: tokens exist in the generated catalog and no raw palette class is used`, async () => {
     const { meta } = await import(propsPath);
-    for (const t of meta.element.tokens) assert.ok(tokenNames.has(t), `unknown token "${t}" (not in semantic.css)`);
+    for (const t of meta.element.tokens) assert.ok(tokenNames.has(tokenCssName(t)), `unknown token "${t}" (${tokenCssName(t)} is not in the generated catalog)`);
     for (const f of files.filter((f) => /\.(astro|ts|css)$/.test(f))) {
       const src = fs.readFileSync(f, 'utf8');
       const hit = src.match(RAW_PALETTE);

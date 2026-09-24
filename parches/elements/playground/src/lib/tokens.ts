@@ -1,10 +1,14 @@
 /**
- * The design system as data, read from the real stylesheets at build time so
- * the pages document what ships and nothing else. A small CSS block parser
- * is enough: the token files are flat `selector { --name: value; }` blocks.
+ * The design system as data. The token layers come from the generated
+ * catalog (`tokens.json`, built from the DTCG sources), so the pages document
+ * what ships and nothing else; descriptions come from the sources themselves.
+ * The shadcn alias layer and the themes are still CSS, read with a small
+ * block parser because they are flat `selector { --name: value; }` files.
  */
-import tokensCss from '../../../../../packages/core/src/styles/tokens.css?raw';
-import semanticCss from '../../../../../packages/core/src/styles/semantic.css?raw';
+import catalog from '../../../../../packages/core/src/styles/generated/tokens.json';
+import refSource from '../../../../../packages/core/tokens/ref.json';
+import sysSource from '../../../../../packages/core/tokens/sys.json';
+import confSource from '../../../../../packages/core/tokens/conf.json';
 import shadcnCss from '../../../../../packages/core/src/styles/shadcn-compat.css?raw';
 import astrowindCss from '../../../../themes/src/astrowind.css?raw';
 import corporateCss from '../../../../themes/src/corporate.css?raw';
@@ -70,37 +74,31 @@ export function parseBlocks(css: string): Block[] {
   return blocks;
 }
 
-const tokens = parseBlocks(tokensCss);
-const semantic = parseBlocks(semanticCss);
-const shadcn = parseBlocks(shadcnCss);
+const light: Record<string, string> = catalog.light;
+const dark: Record<string, string> = catalog.dark;
+const describe = (source: unknown, ...path: string[]): string | undefined => {
+  let node: any = source;
+  for (const p of path) node = node?.[p];
+  return node?.$description;
+};
+const entries = (prefix: string) => Object.entries(light).filter(([k]) => k.startsWith(prefix));
 
-const find = (blocks: Block[], test: (s: string) => boolean) => blocks.filter((b) => test(b.selector));
-const merge = (blocks: Block[]) => Object.assign({}, ...blocks.map((b) => b.declarations)) as Record<string, string>;
-const mergeComments = (blocks: Block[]) => Object.assign({}, ...blocks.map((b) => b.comments)) as Record<string, string>;
-
-/** Layer 1: the raw OKLCH ramps, `--color-<family>-<step>`. */
+/** Layer ref: the OKLCH ramps, `--ds-ref-color-<family>-<step>`. */
 export const families = ['neutral', 'primary', 'secondary', 'accent', 'success', 'warning', 'danger'] as const;
 export const steps = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'] as const;
-const rampRoot = merge(find(tokens, (s) => s === ':root'));
 export const ramps = families.map((family) => ({
   family,
-  steps: steps.map((step) => ({ step, value: rampRoot[`--color-${family}-${step}`] ?? '' })),
+  description: describe(refSource, 'color', family) ?? '',
+  steps: steps.map((step) => ({ step, name: `--ds-ref-color-${family}-${step}`, value: light[`--ds-ref-color-${family}-${step}`] ?? '' })),
 }));
 
-/** Layer 1 too: radii and shadows, from the `@theme` block. */
-const themeBlock = merge(find(tokens, (s) => s === '@theme'));
-export const radii = Object.entries(themeBlock).filter(([k]) => k.startsWith('--radius-')).map(([name, value]) => ({ name, value }));
-export const shadows = Object.entries(themeBlock).filter(([k]) => k.startsWith('--shadow-')).map(([name, value]) => ({ name, value }));
+/** Layer ref too: radii and shadows, bridged to Tailwind as rounded-* and shadow-*. */
+export const radii = entries('--ds-ref-radius-').map(([name, value]) => ({ name, value, utility: name.replace('--ds-ref-radius-', 'rounded-') }));
+export const shadows = entries('--ds-ref-shadow-').map(([name, value]) => ({ name, value, utility: name.replace('--ds-ref-shadow-', 'shadow-') }));
 
-/** Layer 2: the semantic roles, light and dark, with the comment beside each. */
-const light = merge(find(semantic, (s) => s === ':root'));
-const dark = merge(find(semantic, (s) => s === '.dark'));
-const lightComments = mergeComments(find(semantic, (s) => s === ':root'));
-const darkComments = mergeComments(find(semantic, (s) => s === '.dark'));
-const bridge = merge(find(semantic, (s) => s === '@theme inline'));
-
+/** Layer sys: the colour roles, light and dark, with the description from the source. */
 export interface Role {
-  name: string; // --ds-color-primary
+  name: string; // --ds-sys-color-primary
   short: string; // primary
   utility: string; // bg-primary / text-primary
   light: string;
@@ -108,13 +106,10 @@ export interface Role {
   note?: string;
 }
 
-export const colorRoles: Role[] = Object.keys(light)
-  .filter((k) => k.startsWith('--ds-color-'))
-  .map((name) => {
-    const short = name.replace('--ds-color-', '');
-    const bridged = Object.entries(bridge).find(([, v]) => v === `var(${name})`)?.[0]?.replace('--color-', '');
-    return { name, short, utility: bridged ?? '', light: light[name], dark: dark[name] ?? '', note: lightComments[name] ?? darkComments[name] };
-  });
+export const colorRoles: Role[] = entries('--ds-sys-color-').map(([name, value]) => {
+  const short = name.replace('--ds-sys-color-', '');
+  return { name, short, utility: short, light: value, dark: dark[name] ?? '', note: describe(sysSource, 'color', short) };
+});
 
 /** Contrast pairs the elements rely on: foreground on background, with the WCAG target. */
 export const contrastPairs: Array<{ fg: string; bg: string; target: number; where: string; advisory?: boolean }> = [
@@ -141,24 +136,34 @@ export const contrastPairs: Array<{ fg: string; bg: string; target: number; wher
   { fg: 'ring', bg: 'background', target: 3, where: 'focus ring (non-text)' },
 ];
 
-/** Layer 2: typography, six styles × four tokens, plus the two font roles. */
+/** Layer sys: typography, six styles × four tokens, plus the font roles. */
 export const typeStyles = ['h1', 'h2', 'h3', 'body', 'caption', 'label'] as const;
 export const typography = typeStyles.map((style) => ({
   style,
-  size: light[`--ds-size-${style}`] ?? '',
-  weight: light[`--ds-weight-${style}`] ?? '',
-  tracking: light[`--ds-tracking-${style}`] ?? '',
-  leading: light[`--ds-leading-${style}`] ?? '',
+  size: light[`--ds-sys-type-${style}-size`] ?? '',
+  weight: light[`--ds-sys-type-${style}-weight`] ?? '',
+  tracking: light[`--ds-sys-type-${style}-tracking`] ?? '',
+  leading: light[`--ds-sys-type-${style}-leading`] ?? '',
 }));
-export const fonts = [
-  { name: '--ds-font-heading', value: light['--ds-font-heading'] ?? '' },
-  { name: '--ds-font-body', value: light['--ds-font-body'] ?? '' },
-];
+export const fonts = entries('--ds-sys-font-').map(([name, value]) => ({
+  name,
+  value,
+  description: describe(sysSource, 'font', name.replace('--ds-sys-font-', '')) ?? '',
+}));
+
+/** Layer conf: the knobs, with their description. */
+export const conf = entries('--ds-conf-').map(([name, value]) => {
+  const path = name.replace('--ds-conf-', '').split('-');
+  return { name, value, description: describe(confSource, ...path) ?? '' };
+});
 
 /** The shadcn/ui alias layer: their names → our tokens. */
+const shadcn = parseBlocks(shadcnCss);
+const find = (blocks: Block[], test: (s: string) => boolean) => blocks.filter((b) => test(b.selector));
+const merge = (blocks: Block[]) => Object.assign({}, ...blocks.map((b) => b.declarations)) as Record<string, string>;
 export const shadcnAliases = Object.entries(merge(find(shadcn, (s) => s === ':root'))).map(([name, value]) => ({ name, value }));
 
-/** Layer 3: what each theme overrides. */
+/** The themes: what each overrides. */
 const themeSources: Array<{ value: string; label: string; css: string }> = [
   { value: 'astrowind', label: 'AstroWind', css: astrowindCss },
   { value: 'corporate', label: 'Corporate', css: corporateCss },
@@ -189,6 +194,12 @@ export const themes: ThemeDoc[] = themeSources.map(({ value, label, css }) => {
   const extras = [...css.matchAll(/\n([^\n{}]*data-theme[^\n{}]*)\{/g)].map((m) => m[1].trim()).filter((s) => !tokenLike(s));
   return { value, label, intro, light: merge(lightBlocks), dark: merge(darkBlocks), extras };
 });
+
+/** Which layer a token name belongs to. */
+export function layerOf(name: string): 'ref' | 'sys' | 'comp' | 'conf' | 'other' {
+  const m = name.match(/^--ds-(ref|sys|comp|conf)-/);
+  return (m?.[1] as 'ref' | 'sys' | 'comp' | 'conf' | undefined) ?? 'other';
+}
 
 /** How many elements consume each role, from the catalog. */
 export function usage(elementMeta: Record<string, { tokens?: string[] } | undefined>): Record<string, string[]> {

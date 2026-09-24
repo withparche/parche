@@ -2,7 +2,7 @@
 import DesignPage from '../../components/DesignPage.astro';
 import { themes, shadcnAliases } from '../../lib/tokens';
 
-const kind = (name: string) => (name.startsWith('--ds-color-') ? 'role' : name.startsWith('--color-') ? 'ramp' : name.startsWith('--ds-') ? 'type' : 'other');
+const kind = (name: string) => (name.startsWith('--ds-sys-color-') ? 'role' : name.startsWith('--ds-ref-color-') ? 'ramp' : name.startsWith('--ds-sys-') ? 'type' : 'other');
 const summarize = (decls: Record<string, string>) => {
   const counts = { role: 0, ramp: 0, type: 0, other: 0 } as Record<string, number>;
   for (const k of Object.keys(decls)) counts[kind(k)]++;
@@ -56,7 +56,7 @@ const summarize = (decls: Record<string, string>) => {
 
   <section class="mb-12" aria-labelledby="shadcn">
     <h2 id="shadcn" class="docs-ui type-h2 mb-2">Beside the system: the shadcn/ui compatibility layer</h2>
-    <p class="docs-ui mb-4 text-sm text-muted">Not tokens of the system and not used by any element. {shadcnAliases.length} names shadcn components expect, each a pointer to a role, so a shadcn component can be applied later without a second palette; a theme that overrides the roles reskins it too. The pointers that go to a ramp step instead of a role are the ones to review, because a theme that only touches roles does not move them.</p>
+    <p class="docs-ui mb-4 text-sm text-muted">Not tokens of the system and not used by any element. {shadcnAliases.length} names shadcn components expect, each a pointer to a role, so a shadcn component can be applied later without a second palette; a theme that overrides the roles reskins it too. The pointers that go to a ref ramp step instead of a sys role are the ones to review, because a theme that only touches roles does not move them.</p>
     <div class="docs-ui overflow-x-auto rounded-lg border border-border">
       <table class="w-full text-sm">
         <thead><tr class="text-left text-muted"><th class="px-4 py-2">shadcn</th><th class="px-4 py-2">Points to</th></tr></thead>
@@ -64,7 +64,7 @@ const summarize = (decls: Record<string, string>) => {
           {shadcnAliases.map((a) => (
             <tr class="border-t border-border">
               <td class="px-4 py-1.5 font-mono text-heading">{a.name}</td>
-              <td class="px-4 py-1.5 font-mono text-xs text-muted">{a.value}{!a.value.includes('--ds-') && <span class="ml-2 rounded-full border border-border px-1.5 text-[10px] text-heading">ramp step</span>}</td>
+              <td class="px-4 py-1.5 font-mono text-xs text-muted">{a.value}{a.value.includes('--ds-ref-') && <span class="ml-2 rounded-full border border-border px-1.5 text-[10px] text-heading">ramp step</span>}</td>
             </tr>
           ))}
         </tbody>

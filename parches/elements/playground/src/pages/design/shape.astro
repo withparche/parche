@@ -1,27 +1,26 @@
 ---
 import DesignPage from '../../components/DesignPage.astro';
-import { radii, shadows } from '../../lib/tokens';
+import { radii, shadows, conf } from '../../lib/tokens';
 
+const notes: Record<string, string> = { sm: 'prose, forms', md: 'content', lg: 'the default section measure', xl: 'wide layouts, the header bar' };
 const widths = [
-  { name: 'sm', value: '48rem', note: 'prose, forms' },
-  { name: 'md', value: '64rem', note: 'content' },
-  { name: 'lg', value: '72rem', note: 'the default section measure' },
-  { name: 'xl', value: '80rem', note: 'wide layouts, the header bar' },
-  { name: 'full', value: 'none', note: 'edge to edge' },
+  ...conf.filter((c) => c.name.startsWith('--ds-conf-width-')).map((c) => ({ name: c.name.replace('--ds-conf-width-', ''), token: c.name, value: c.value, note: notes[c.name.replace('--ds-conf-width-', '')] ?? '' })),
+  { name: 'full', token: '', value: 'none', note: 'edge to edge' },
 ];
+const knobs = conf.filter((c) => !c.name.startsWith('--ds-conf-width-'));
 ---
 
-<DesignPage title="Shape" description="There is no --ds- token for shape. What follows are Tailwind theme variables that tokens.css sets in its @theme block, reached through the usual utilities (rounded-md, shadow-lg), and the measures are Tailwind's max-w steps. A theme that wants another geometry overrides these variables or, as Corporate and Minimal do, flattens everything with one rule. Whether shape should become roles of the system is an open question this page exists to settle.">
+<DesignPage title="Shape" description="Shape lives in the reference layer: --ds-ref-radius-* and --ds-ref-shadow-* in ref.json, reached through the usual utilities (rounded-md, shadow-lg), scaled by --ds-conf-radius-scale. The measures are the --ds-conf-width-* knobs the Container element offers. A theme that wants another geometry overrides the ref tokens or sets the conf scale; Corporate and Minimal still flatten everything with one rule, which is what the scale replaces.">
   <section class="mb-12" aria-labelledby="radii">
     <h2 id="radii" class="docs-ui type-h2 mb-2">Radii</h2>
-    <p class="docs-ui mb-4 text-sm text-muted">{radii.length} Tailwind theme variables, set by <code>tokens.css</code>. Buttons and badges use <code>rounded-full</code>; cards, dialogs and inputs <code>rounded-md</code> to <code>rounded-xl</code>.</p>
+    <p class="docs-ui mb-4 text-sm text-muted">{radii.length} ref tokens, bridged to Tailwind. Buttons and badges use <code>rounded-full</code>; cards, dialogs and inputs <code>rounded-md</code> to <code>rounded-xl</code>.</p>
     <div class="docs-preview rounded-lg border border-(--doc-border) p-6">
       <div class="flex flex-wrap gap-6">
         {radii.map((r) => (
           <div class="text-center">
             <span class="mx-auto block size-16 border-2 border-primary bg-primary-soft" style={`border-radius: var(${r.name})`}></span>
             <span class="mt-2 block font-mono text-xs text-heading">{r.name}</span>
-            <span class="block font-mono text-[10px] text-muted">{r.value} · {r.name.replace('--radius-', 'rounded-')}</span>
+            <span class="block font-mono text-[10px] text-muted">{r.value} · {r.utility}</span>
           </div>
         ))}
       </div>
@@ -30,14 +29,14 @@ const widths = [
 
   <section class="mb-12" aria-labelledby="shadows">
     <h2 id="shadows" class="docs-ui type-h2 mb-2">Shadows</h2>
-    <p class="docs-ui mb-4 text-sm text-muted">{shadows.length} Tailwind theme variables, set by <code>tokens.css</code>. Cards take <code>shadow-sm</code>; menus, popovers and dialogs <code>shadow-lg</code>.</p>
+    <p class="docs-ui mb-4 text-sm text-muted">{shadows.length} ref tokens, bridged to Tailwind. Cards take <code>shadow-sm</code>; menus, popovers and dialogs <code>shadow-lg</code>.</p>
     <div class="docs-preview rounded-lg border border-(--doc-border) p-6">
       <div class="flex flex-wrap gap-8">
         {shadows.map((s) => (
           <div class="text-center">
             <span class="mx-auto block size-20 rounded-lg bg-surface" style={`box-shadow: var(${s.name})`}></span>
             <span class="mt-3 block font-mono text-xs text-heading">{s.name}</span>
-            <span class="block font-mono text-[10px] text-muted">{s.name.replace('--shadow-', 'shadow-')}</span>
+            <span class="block font-mono text-[10px] text-muted">{s.utility}</span>
           </div>
         ))}
       </div>
@@ -50,17 +49,23 @@ const widths = [
 
   <section class="mb-12" aria-labelledby="measure">
     <h2 id="measure" class="docs-ui type-h2 mb-2">Measures</h2>
-    <p class="docs-ui mb-4 text-sm text-muted">The Container element owns the horizontal measure; sections pick one of five. These are Tailwind's <code>max-w-3xl</code> to <code>max-w-7xl</code> steps, not tokens, which is deliberate: a theme changes colour and type, not the page grid.</p>
+    <p class="docs-ui mb-4 text-sm text-muted">The Container element owns the horizontal measure; sections pick one of five. Four are <code>--ds-conf-width-*</code> knobs a site may retune; <code>full</code> is edge to edge.</p>
     <div class="docs-ui overflow-x-auto rounded-lg border border-border">
       <table class="w-full text-sm">
-        <thead><tr class="text-left text-muted"><th class="px-4 py-2">width</th><th class="px-4 py-2">max</th><th class="px-4 py-2">For</th></tr></thead>
-        <tbody>{widths.map((w) => <tr class="border-t border-border"><td class="px-4 py-2 font-mono text-heading">{w.name}</td><td class="px-4 py-2 font-mono text-muted">{w.value}</td><td class="px-4 py-2 text-muted">{w.note}</td></tr>)}</tbody>
+        <thead><tr class="text-left text-muted"><th class="px-4 py-2">width</th><th class="px-4 py-2">Token</th><th class="px-4 py-2">max</th><th class="px-4 py-2">For</th></tr></thead>
+        <tbody>{widths.map((w) => <tr class="border-t border-border"><td class="px-4 py-2 font-mono text-heading">{w.name}</td><td class="px-4 py-2 font-mono text-xs text-muted">{w.token || '—'}</td><td class="px-4 py-2 font-mono text-muted">{w.value}</td><td class="px-4 py-2 text-muted">{w.note}</td></tr>)}</tbody>
       </table>
     </div>
   </section>
 
-  <section class="mb-12" aria-labelledby="motion">
-    <h2 id="motion" class="docs-ui type-h2 mb-2">Motion</h2>
-    <p class="docs-ui text-sm text-muted">There are no motion tokens. Transitions live in each element's own CSS, under <code>prefers-reduced-motion: no-preference</code>, and never carry function: the reduced-motion pass of the gate proves every element works with them off. Durations are 150 to 250 ms.</p>
+  <section class="mb-12" aria-labelledby="conf">
+    <h2 id="conf" class="docs-ui type-h2 mb-2">Configuration</h2>
+    <p class="docs-ui mb-4 text-sm text-muted">The <code>--ds-conf-</code> knobs beyond the measures: the radius scale every ref radius is multiplied by, the motion durations, and the section rhythm. A theme or a site sets them under its own selector. Transitions never carry function: the reduced-motion pass of the gate proves every element works with them off.</p>
+    <div class="docs-ui overflow-x-auto rounded-lg border border-border">
+      <table class="w-full text-sm">
+        <thead><tr class="text-left text-muted"><th class="px-4 py-2">Token</th><th class="px-4 py-2">Value</th><th class="px-4 py-2">For</th></tr></thead>
+        <tbody>{knobs.map((k) => <tr class="border-t border-border"><td class="px-4 py-2 font-mono text-heading whitespace-nowrap">{k.name}</td><td class="px-4 py-2 font-mono text-xs text-muted">{k.value}</td><td class="px-4 py-2 text-xs text-muted">{k.description}</td></tr>)}</tbody>
+      </table>
+    </div>
   </section>
 </DesignPage>

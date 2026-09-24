@@ -161,7 +161,7 @@ const list = (v: unknown) => (Array.isArray(v) ? v : v ? [v] : []);
   {meta?.tokens?.length > 0 && (
     <section class="docs-ui mb-12" aria-labelledby="tokens">
       <h2 id="tokens" class="type-h2 mb-3">Tokens</h2>
-      <p class="text-sm text-muted">{meta.tokens.map((t: string) => <code class="mr-2 inline-block rounded bg-surface px-1.5 py-0.5 font-mono text-xs text-heading">--ds-{t}</code>)}</p>
+      <p class="text-sm text-muted">{meta.tokens.map((t: string) => <code class="mr-2 inline-block rounded bg-surface px-1.5 py-0.5 font-mono text-xs text-heading">{/^(ref|sys|comp|conf)-/.test(t) ? `--ds-${t}` : `--ds-sys-${t}`}</code>)}</p>
     </section>
   )}
 </Playground>

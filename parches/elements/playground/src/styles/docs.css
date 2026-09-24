@@ -23,21 +23,21 @@ body {
 
 .docs-ui,
 .docs-tabs > [data-part='list'] {
-  --ds-color-background: var(--doc-bg);
-  --ds-color-foreground: var(--doc-text);
-  --ds-color-surface: var(--doc-surface);
-  --ds-color-surface-hover: var(--doc-hover);
-  --ds-color-on-surface: var(--doc-text);
-  --ds-color-border: var(--doc-border);
-  --ds-color-heading: var(--doc-text);
-  --ds-color-text: var(--doc-text);
-  --ds-color-muted: var(--doc-muted);
-  --ds-color-primary: var(--doc-accent);
-  --ds-color-on-primary: var(--doc-bg);
-  --ds-color-primary-soft: var(--doc-accent-soft);
-  --ds-color-ring: var(--doc-accent);
-  --ds-color-highlight: var(--doc-accent);
-  --ds-color-overlay: rgb(0 0 0 / 0.6);
+  --ds-sys-color-background: var(--doc-bg);
+  --ds-sys-color-foreground: var(--doc-text);
+  --ds-sys-color-surface: var(--doc-surface);
+  --ds-sys-color-surface-hover: var(--doc-hover);
+  --ds-sys-color-on-surface: var(--doc-text);
+  --ds-sys-color-border: var(--doc-border);
+  --ds-sys-color-heading: var(--doc-text);
+  --ds-sys-color-text: var(--doc-text);
+  --ds-sys-color-muted: var(--doc-muted);
+  --ds-sys-color-primary: var(--doc-accent);
+  --ds-sys-color-on-primary: var(--doc-bg);
+  --ds-sys-color-primary-soft: var(--doc-accent-soft);
+  --ds-sys-color-ring: var(--doc-accent);
+  --ds-sys-color-highlight: var(--doc-accent);
+  --ds-sys-color-overlay: rgb(0 0 0 / 0.6);
   /* The `.type-*` classes read the Tailwind bridges (`--color-heading`…),
      which resolve on :root; override those too. */
   --color-background: var(--doc-bg);
@@ -57,8 +57,8 @@ body {
 
 /* The preview canvas is the one place the site theme shows. */
 .docs-preview {
-  background: var(--ds-color-background);
-  color: var(--ds-color-text);
+  background: var(--ds-sys-color-background);
+  color: var(--ds-sys-color-text);
 }
 
 /* Code is always dark: Shiki's github-dark on the docs surface. */

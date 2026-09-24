@@ -25,69 +25,69 @@
   /* --- Primitive ramps ------------------------------------------- */
 
   /* Primary — AstroWind blue, hue 260.6 */
-  --color-primary-50: oklch(0.97 0.02 260.6);
-  --color-primary-100: oklch(0.935 0.045 260.6);
-  --color-primary-200: oklch(0.875 0.095 260.6);
-  --color-primary-300: oklch(0.79 0.15 260.6);
-  --color-primary-400: oklch(0.665 0.196 260.6);
-  --color-primary-500: oklch(0.54 0.227 260.6);
-  --color-primary-600: oklch(0.487 0.203 260.4);
-  --color-primary-700: oklch(0.425 0.175 260.4);
-  --color-primary-800: oklch(0.355 0.142 260.4);
-  --color-primary-900: oklch(0.29 0.112 260.4);
-  --color-primary-950: oklch(0.2 0.078 260.4);
+  --ds-ref-color-primary-50: oklch(0.97 0.02 260.6);
+  --ds-ref-color-primary-100: oklch(0.935 0.045 260.6);
+  --ds-ref-color-primary-200: oklch(0.875 0.095 260.6);
+  --ds-ref-color-primary-300: oklch(0.79 0.15 260.6);
+  --ds-ref-color-primary-400: oklch(0.665 0.196 260.6);
+  --ds-ref-color-primary-500: oklch(0.54 0.227 260.6);
+  --ds-ref-color-primary-600: oklch(0.487 0.203 260.4);
+  --ds-ref-color-primary-700: oklch(0.425 0.175 260.4);
+  --ds-ref-color-primary-800: oklch(0.355 0.142 260.4);
+  --ds-ref-color-primary-900: oklch(0.29 0.112 260.4);
+  --ds-ref-color-primary-950: oklch(0.2 0.078 260.4);
 
   /* Secondary — the darker blue AstroWind hovers into */
-  --color-secondary-500: oklch(0.487 0.203 260.4);
-  --color-secondary-600: oklch(0.425 0.175 260.4);
-  --color-secondary-700: oklch(0.365 0.148 260.4);
+  --ds-ref-color-secondary-500: oklch(0.487 0.203 260.4);
+  --ds-ref-color-secondary-600: oklch(0.425 0.175 260.4);
+  --ds-ref-color-secondary-700: oklch(0.365 0.148 260.4);
 
   /* Accent — the violet used for emphasised words in headings */
-  --color-accent-400: oklch(0.585 0.232 292.6);
-  --color-accent-500: oklch(0.491 0.241 292.6);
-  --color-accent-600: oklch(0.43 0.221 292.6);
+  --ds-ref-color-accent-400: oklch(0.585 0.232 292.6);
+  --ds-ref-color-accent-500: oklch(0.491 0.241 292.6);
+  --ds-ref-color-accent-600: oklch(0.43 0.221 292.6);
 
   /* Neutral — navy-tinted, so surfaces sit next to the dark page colour */
-  --color-neutral-50: oklch(0.985 0.003 265);
-  --color-neutral-100: oklch(0.965 0.006 265);
-  --color-neutral-200: oklch(0.925 0.01 265);
-  --color-neutral-300: oklch(0.86 0.016 265);
-  --color-neutral-400: oklch(0.7 0.028 265);
-  --color-neutral-500: oklch(0.55 0.03 265);
-  --color-neutral-600: oklch(0.45 0.032 265);
-  --color-neutral-700: oklch(0.35 0.036 267);
-  --color-neutral-800: oklch(0.245 0.042 269);
-  --color-neutral-900: oklch(0.185 0.05 269.5);
-  --color-neutral-950: oklch(0.14 0.056 269.5);
+  --ds-ref-color-neutral-50: oklch(0.985 0.003 265);
+  --ds-ref-color-neutral-100: oklch(0.965 0.006 265);
+  --ds-ref-color-neutral-200: oklch(0.925 0.01 265);
+  --ds-ref-color-neutral-300: oklch(0.86 0.016 265);
+  --ds-ref-color-neutral-400: oklch(0.7 0.028 265);
+  --ds-ref-color-neutral-500: oklch(0.55 0.03 265);
+  --ds-ref-color-neutral-600: oklch(0.45 0.032 265);
+  --ds-ref-color-neutral-700: oklch(0.35 0.036 267);
+  --ds-ref-color-neutral-800: oklch(0.245 0.042 269);
+  --ds-ref-color-neutral-900: oklch(0.185 0.05 269.5);
+  --ds-ref-color-neutral-950: oklch(0.14 0.056 269.5);
 
   /* --- Semantic roles — light mode -------------------------------- */
-  --ds-color-background: oklch(1 0 0);
-  --ds-color-foreground: oklch(0.173 0 90);
-  --ds-color-surface: var(--color-neutral-50);
-  --ds-color-primary: var(--color-primary-500);
-  --ds-color-on-primary: oklch(1 0 0);
+  --ds-sys-color-background: oklch(1 0 0);
+  --ds-sys-color-foreground: oklch(0.173 0 90);
+  --ds-sys-color-surface: var(--ds-ref-color-neutral-50);
+  --ds-sys-color-primary: var(--ds-ref-color-primary-500);
+  --ds-sys-color-on-primary: oklch(1 0 0);
   /* AstroWind's muted text is the body colour at 66% — matched here as a
      lightened opaque value, so it stays legible over any surface. */
-  --ds-color-muted: oklch(0.505 0.008 265);
-  --ds-color-border: var(--color-neutral-300);
-  --ds-color-heading: oklch(0 0 0);
-  --ds-color-text: oklch(0.173 0 90);
-  --ds-color-highlight: var(--color-accent-500);
+  --ds-sys-color-muted: oklch(0.505 0.008 265);
+  --ds-sys-color-border: var(--ds-ref-color-neutral-300);
+  --ds-sys-color-heading: oklch(0 0 0);
+  --ds-sys-color-text: oklch(0.173 0 90);
+  --ds-sys-color-highlight: var(--ds-ref-color-accent-500);
 
   /* --- Typography — Inter for every role, tight headings ---------- */
   /* The theme's manifest loads Inter into --font-sans, so both roles just read
      it. Naming a family here would name one the loader never fetched. */
-  --ds-font-heading: var(--font-sans);
-  --ds-font-body: var(--font-sans);
+  --ds-sys-font-heading: var(--font-sans);
+  --ds-sys-font-body: var(--font-sans);
 
-  --ds-weight-h1: 700;
-  --ds-tracking-h1: -0.035em;
-  --ds-leading-h1: 1.05;
-  --ds-weight-h2: 700;
-  --ds-tracking-h2: -0.03em;
-  --ds-weight-h3: 600;
-  --ds-tracking-h3: -0.015em;
-  --ds-leading-body: 1.7;
+  --ds-sys-type-h1-weight: 700;
+  --ds-sys-type-h1-tracking: -0.035em;
+  --ds-sys-type-h1-leading: 1.05;
+  --ds-sys-type-h2-weight: 700;
+  --ds-sys-type-h2-tracking: -0.03em;
+  --ds-sys-type-h3-weight: 600;
+  --ds-sys-type-h3-tracking: -0.015em;
+  --ds-sys-type-body-leading: 1.7;
 }
 
 /* ---------------------------------------------------------------
@@ -95,16 +95,16 @@
    change; the ramps above are shared.
    --------------------------------------------------------------- */
 :root[data-theme='astrowind'].dark {
-  --ds-color-background: oklch(0.14 0.056 269.5);
-  --ds-color-foreground: oklch(0.941 0.016 257.2);
-  --ds-color-surface: oklch(0.185 0.05 269.5);
-  --ds-color-primary: var(--color-primary-500);
-  --ds-color-on-primary: oklch(1 0 0);
-  --ds-color-muted: oklch(0.68 0.02 260);
-  --ds-color-border: oklch(0.29 0.045 269);
-  --ds-color-heading: oklch(0.978 0.001 197);
-  --ds-color-text: oklch(0.941 0.016 257.2);
-  --ds-color-highlight: oklch(0.65 0.2 292.6);
+  --ds-sys-color-background: oklch(0.14 0.056 269.5);
+  --ds-sys-color-foreground: oklch(0.941 0.016 257.2);
+  --ds-sys-color-surface: oklch(0.185 0.05 269.5);
+  --ds-sys-color-primary: var(--ds-ref-color-primary-500);
+  --ds-sys-color-on-primary: oklch(1 0 0);
+  --ds-sys-color-muted: oklch(0.68 0.02 260);
+  --ds-sys-color-border: oklch(0.29 0.045 269);
+  --ds-sys-color-heading: oklch(0.978 0.001 197);
+  --ds-sys-color-text: oklch(0.941 0.016 257.2);
+  --ds-sys-color-highlight: oklch(0.65 0.2 292.6);
 }
 
 /* AstroWind tints the selection rather than using the browser default. */

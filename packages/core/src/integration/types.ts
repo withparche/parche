@@ -68,7 +68,8 @@ export interface ElementMeta {
     description: string;
     /** WAI-ARIA APG pattern this follows, e.g. { pattern: 'tabs', url } */
     a11y?: { pattern: string; url?: string };
-    /** Design tokens consumed, without the `--ds-` prefix: 'color-surface', 'radius-md' … */
+    /** Design tokens consumed. A bare name is a sys token ('color-surface' → --ds-sys-color-surface);
+     *  other layers carry their prefix ('ref-radius-md', 'comp-button-radius', 'conf-motion-base'). */
     tokens: string[];
     /** Custom element tag + client entry — interactive elements only. `entry` is relative to the folder. */
     tag?: { name: `parche-${string}`; entry: string };

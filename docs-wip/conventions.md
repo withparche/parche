@@ -29,7 +29,7 @@ The contract test (`test/unit/contract.test.ts`) enforces all of this for
 every folder: props and meta exports, README and at least one example,
 `element.json` listing exactly the folder's files, `meta.parts` matching the
 `data-part` values the `.astro` files emit, tokens that exist in
-`semantic.css`, no raw palette class, and imports that stay inside the folder,
+the generated token catalog, no raw palette class, and imports that stay inside the folder,
 on the allow-list, or in a declared `registryDependencies` sibling.
 
 ## Props
@@ -42,7 +42,7 @@ export const meta = defineElement({
   element: {
     label, description,
     a11y: { pattern: 'tabs', url },         // WAI-ARIA APG pattern
-    tokens: ['color-surface', 'color-ring'],// --ds-* tokens consumed
+    tokens: ['color-surface', 'color-ring'],// sys tokens consumed (--ds-sys-*)
     tag: { name: 'parche-tabs', entry: './tabs.element.ts' }, // interactive only
     keyboard: { 'ArrowRight': '…' },        // required with tag
     noJs: '…',                              // required with tag
@@ -75,7 +75,7 @@ defaults })`; the zod enum is the source of truth for the options.
 `bg-surface`, `text-heading`, `border-border`, `outline-ring`, the status
 roles `success`/`warning`/`danger` with `on-*` and `*-soft`, `primary-soft`,
 `surface-hover`, `highlight`, `overlay`. Every one is defined for light and
-dark in `packages/core/src/styles/semantic.css` at WCAG AA. The accessibility
+dark in `packages/core/tokens/sys.json` at WCAG AA. The accessibility
 gate found and fixed three of them on the way: dark `muted` (4.1 → 5.05:1),
 dark `primary` (3.3 → 6.2:1, with `on-primary` going dark), light status text
 (700 steps instead of 600).
