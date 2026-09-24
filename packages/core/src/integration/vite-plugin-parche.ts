@@ -141,7 +141,7 @@ ${loaderEntries}
 };
 
 /** Resolve the given widget keys (deduped) to their components. Keys with no
- *  loader (e.g. the synthetic 'layout/Main') are skipped. */
+ *  loader (e.g. the synthetic 'Outlet') are skipped. */
 export async function loadWidgets(keys) {
   const out = {};
   await Promise.all(
@@ -277,9 +277,6 @@ function generateWidgetSchemasModule(registry: ResolvedRegistry): string {
 
     const key = extractWidgetKey(virtualId);
 
-    // Layout widgets (layout/Header, layout/Footer) are structural: in the
-    // catalog, so the validator knows them, but hidden from the builder palette.
-    const hidden = key.startsWith('layout/');
 
     const propsPath = filePath.replace(/\.astro$/, '.props.ts');
     const hasProps = fs.existsSync(propsPath);
@@ -309,7 +306,7 @@ function generateWidgetSchemasModule(registry: ResolvedRegistry): string {
   defaultVariants: ${variantsJson},
   slots: ${m}.meta?.slots ?? {},
   wrapper: ${m}.meta?.widget?.wrapper !== false,
-  hidden: ${hidden},
+  hidden: ${m}.meta?.widget?.hidden === true,
   ui: ${m}.meta?.ui ?? {},
 };`);
       index++;
@@ -324,7 +321,7 @@ function generateWidgetSchemasModule(registry: ResolvedRegistry): string {
   defaultVariants: ${variantsJson},
   slots: {},
   wrapper: true,
-  hidden: ${hidden},
+  hidden: false,
   ui: {},
 };`);
     }

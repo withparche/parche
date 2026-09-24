@@ -1,7 +1,7 @@
 {
   "sections": [
     {
-      "widget": "layout/Header",
+      "widget": "Header",
       "props": {
         "links": [
           {
@@ -15,7 +15,7 @@
       "widget": "Outlet"
     },
     {
-      "widget": "layout/Footer",
+      "widget": "Footer",
       "props": {
         "footNote": "Built with Parche."
       }

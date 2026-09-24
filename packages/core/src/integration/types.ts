@@ -49,6 +49,9 @@ export interface WidgetMeta {
     /** `false` when the widget renders full-bleed and must not be wrapped in
      *  the registry's wrapper widget when it is a page root (a Hero, a banner). */
     wrapper?: false;
+    /** `true` for chrome (Header, Footer): in the catalog, so the validator
+     *  knows it, but not offered in the builder palette. */
+    hidden?: true;
   };
   /** The slots this widget renders (`<slot name="media">`), by name. `default`
    *  is the unnamed slot. A widget without this entry is a leaf. */

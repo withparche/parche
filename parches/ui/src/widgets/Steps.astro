@@ -1,70 +1,102 @@
 ---
-import type { Props } from './Steps.props';
+/**
+ * The one steps widget. `timeline` draws a vertical line beside the media
+ * slot; `grid` lays the steps out in columns under the headline; `numbered`
+ * puts the headline and the call to action beside a numbered list.
+ */
 import Heading from 'parche:elements/Heading';
 import Icon from 'parche:elements/Icon';
 import Image from 'parche:elements/Image';
+import Action from '../components/Action.astro';
+import { schema, type Props } from './Steps.props';
 
-const { title, subtitle, tagline, items = [], image, isReversed = false } = Astro.props as Props;
-const hasImage = !!image;
+const { layout, title, subtitle, tagline, items, callToAction, reversed, image } = schema.parse(Astro.props) as Props;
+const hasHeadline = Boolean(title || subtitle || tagline);
+const hasMedia = Astro.slots.has('media') || Boolean(image);
+const cta = callToAction?.text ? callToAction : null;
 ---
 
-<div class="max-w-5xl mx-auto">
-{hasImage ? (
-  <div class:list={['flex flex-col gap-8 md:gap-12 md:flex-row', { 'md:flex-row-reverse': isReversed }]}>
-    <div class="md:py-4 md:self-center md:basis-1/2">
-      {(title || subtitle || tagline) && (
-        <Heading {title} {subtitle} {tagline} align="start" spacing={false} class="rtl:text-right mb-8" />
-      )}
-      {items.length > 0 && (
-        <div>
-          {items.map(({ title: itemTitle, description, icon }, index) => (
-            <div class="flex">
-              <div class="flex flex-col items-center mr-4 rtl:mr-0 rtl:ml-4">
-                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-on-primary shrink-0">
-                  {icon
-                    ? <Icon name={icon} class="w-5 h-5" />
-                    : <span class="text-sm font-bold leading-none">{index + 1}</span>
-                  }
+<div class="parche-steps max-w-5xl mx-auto" data-layout={layout}>
+  {layout === 'timeline' ? (
+    <div class:list={['flex flex-col gap-8 md:gap-12', hasMedia && 'md:flex-row', hasMedia && reversed && 'md:flex-row-reverse']}>
+      <div class:list={['md:py-4 md:self-center', hasMedia && 'md:basis-1/2']}>
+        {hasHeadline && <Heading {title} {subtitle} {tagline} align="start" spacing={false} class="rtl:text-right mb-8" />}
+        {items.length > 0 && (
+          <ol>
+            {items.map((step, index) => (
+              <li class="flex">
+                <div class="flex flex-col items-center mr-4 rtl:mr-0 rtl:ml-4">
+                  <div class="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-on-primary shrink-0">
+                    {step.icon ? <Icon name={step.icon} class="w-5 h-5" /> : <span class="text-sm font-bold leading-none">{index + 1}</span>}
+                  </div>
+                  {index !== items.length - 1 && <div class="w-px flex-1 my-1 bg-border" />}
                 </div>
-                {index !== items.length - 1 && <div class="w-px flex-1 my-1 bg-border" />}
-              </div>
-              <div class:list={['pt-1', { 'pb-8': index !== items.length - 1 }]}>
-                {itemTitle && <p class="text-xl font-bold text-heading" set:html={itemTitle} />}
-                {description && <p class="type-body text-muted mt-1" set:html={description} />}
-              </div>
-            </div>
-          ))}
+                <div class:list={['pt-1', index !== items.length - 1 && 'pb-8']}>
+                  {step.title && <p class="text-xl font-bold text-heading" set:html={step.title} />}
+                  {(step.duration || step.owner) && (
+                    <p class="type-caption text-muted mt-0.5">{[step.duration, step.owner].filter(Boolean).join(' · ')}</p>
+                  )}
+                  {step.description && <p class="type-body text-muted mt-1" set:html={step.description} />}
+                </div>
+              </li>
+            ))}
+          </ol>
+        )}
+        {cta && <div class="mt-8"><Action action={cta} /></div>}
+      </div>
+      {hasMedia && (
+        <div class="parche-steps-media relative md:basis-1/2">
+          <slot name="media">
+            {image && <Image src={image.src} alt={image.alt} width={800} ratio="4/3" class="rounded-md shadow-lg md:absolute md:inset-0 md:h-full md:w-full md:aspect-auto" />}
+          </slot>
         </div>
       )}
     </div>
-    <div class="relative md:basis-1/2">
-      {typeof image === 'string'
-        ? <Fragment set:html={image} />
-        : <Image src={image.src} alt={image.alt ?? ''} width={800} ratio="4/3" class="rounded-md shadow-lg md:absolute md:inset-0 md:h-full md:w-full md:aspect-auto" />
-      }
+  ) : layout === 'grid' ? (
+    <div>
+      {hasHeadline && <Heading {title} {subtitle} {tagline} spacing={false} class="mb-12" />}
+      {items.length > 0 && (
+        <ol class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {items.map((step, index) => (
+            <li class="text-center">
+              <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-on-primary">
+                {step.icon ? <Icon name={step.icon} class="w-6 h-6" /> : <span class="text-lg font-bold leading-none">{index + 1}</span>}
+              </div>
+              {step.title && <p class="text-xl font-bold text-heading" set:html={step.title} />}
+              {(step.duration || step.owner) && (
+                <p class="type-caption text-muted mt-0.5">{[step.duration, step.owner].filter(Boolean).join(' · ')}</p>
+              )}
+              {step.description && <p class="type-body text-muted mt-2 max-w-xs mx-auto" set:html={step.description} />}
+            </li>
+          ))}
+        </ol>
+      )}
+      {cta && <div class="mt-10 text-center"><Action action={cta} /></div>}
     </div>
-  </div>
-) : (
-  <div>
-    {(title || subtitle || tagline) && (
-      <Heading {title} {subtitle} {tagline} spacing={false} class="mb-12" />
-    )}
-    {items.length > 0 && (
-      <ol class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map(({ title: itemTitle, description, icon }, index) => (
-          <li class="text-center">
-            <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-on-primary">
-              {icon
-                ? <Icon name={icon} class="w-6 h-6" />
-                : <span class="text-lg font-bold leading-none">{index + 1}</span>
-              }
-            </div>
-            {itemTitle && <p class="text-xl font-bold text-heading" set:html={itemTitle} />}
-            {description && <p class="type-body text-muted mt-2 max-w-xs mx-auto" set:html={description} />}
-          </li>
-        ))}
-      </ol>
-    )}
-  </div>
-)}
+  ) : (
+    <div class:list={['flex flex-col gap-8 md:gap-12 md:flex-row', reversed && 'md:flex-row-reverse']}>
+      <div class="w-full lg:w-1/2">
+        {hasHeadline && <Heading {title} {subtitle} {tagline} align="start" spacing={false} class="rtl:text-right mb-4 md:mb-8" />}
+        {cta && <Action action={cta} />}
+      </div>
+      {items.length > 0 && (
+        <ol class="w-full lg:w-1/2 space-y-10">
+          {items.map((step, index) => (
+            <li class="flex items-start gap-4">
+              <span class="flex w-16 h-16 shrink-0 items-center justify-center rounded-full bg-primary text-on-primary text-2xl font-bold">
+                {step.icon ? <Icon name={step.icon} class="w-6 h-6" /> : index + 1}
+              </span>
+              <div class="pt-1">
+                {step.title && <h3 class="type-label font-semibold text-heading mb-2" set:html={step.title} />}
+                {(step.duration || step.owner) && (
+                  <p class="type-caption text-muted mb-2">{[step.duration, step.owner].filter(Boolean).join(' · ')}</p>
+                )}
+                {step.description && <p class="type-body text-muted" set:html={step.description} />}
+              </div>
+            </li>
+          ))}
+        </ol>
+      )}
+    </div>
+  )}
 </div>

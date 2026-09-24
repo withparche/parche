@@ -56,6 +56,7 @@
     {
       "widget": "Steps",
       "props": {
+        "layout": "timeline",
         "title": "Cómo suele ir un proyecto",
         "items": [
           {

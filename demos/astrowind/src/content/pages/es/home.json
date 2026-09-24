@@ -194,6 +194,7 @@
           {
             "widget": "Steps",
             "props": {
+              "layout": "timeline",
               "title": "Pon en marcha la web que quieres, en muy poco tiempo.",
               "items": [
                 {

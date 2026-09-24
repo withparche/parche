@@ -100,8 +100,9 @@
       }
     },
     {
-      "widget": "Steps2",
+      "widget": "Steps",
       "props": {
+        "layout": "numbered",
         "title": "Cómo trabajamos",
         "subtitle": "El ciclo que repetimos versión tras versión.",
         "items": [

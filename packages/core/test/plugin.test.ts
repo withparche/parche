@@ -79,12 +79,12 @@ test('widget schemas: has-props widget emits guarded toJSONSchema + meta', () =>
   assert.match(code, /widgetMeta\["Good"\]/);
 });
 
-test('widget schemas: layout/* widgets are in the catalog but hidden from the palette', () => {
+test('widget schemas: hidden comes from the widget meta; a widget without props is not hidden', () => {
   const code = load(
     makeRegistry({ modules: { 'parche:widgets/layout/Header': '/x/layout/Header.astro' } }),
     '\0parche:registry/widgetSchemas',
   );
-  assert.match(code, /widgetMeta\["layout\/Header"\] = \{[\s\S]*?hidden: true/);
+  assert.match(code, /widgetMeta\["layout\/Header"\] = \{[\s\S]*?hidden: false/);
 });
 
 test('widget schemas: structural prop requirements emit a warning check', () => {

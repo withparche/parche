@@ -1,27 +1,26 @@
 import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
+import { action, image } from '../_shared/content';
 
-const stepItem = z.object({
+export const layouts = ['timeline', 'grid', 'numbered'] as const;
+
+const step = z.object({
   title: z.string().optional(),
   description: z.string().optional().meta({ input: 'textarea' }),
-  icon: z.string().optional().meta({ input: 'icon' }),
+  icon: z.string().optional().meta({ input: 'icon', help: 'Replaces the step number.' }),
+  duration: z.string().optional().meta({ help: '"1 week", "3 days": how long the step takes.' }),
+  owner: z.string().optional().meta({ help: 'Who is responsible: "you", "us", a role.' }),
 });
 
 export const schema = z.object({
+  layout: z.enum(layouts).default('timeline').meta({ help: 'timeline: a vertical line beside the media · grid: columns under the headline · numbered: headline and CTA beside a numbered list.' }),
   tagline: z.string().optional(),
   title: z.string().optional(),
   subtitle: z.string().optional().meta({ input: 'textarea' }),
-  items: z.array(stepItem).default([]),
-  image: z.object({
-    src: z.string().optional(),
-    alt: z.string().optional(),
-  }).optional(),
-  isReversed: z.boolean().default(false).meta({ help: 'Swap timeline and image sides' }),
-  callToAction: z.object({
-    text: z.string().optional(),
-    href: z.string().optional().meta({ placeholder: 'https://...' }),
-    icon: z.string().optional().meta({ input: 'icon' }),
-  }).optional(),
+  items: z.array(step).default([]),
+  callToAction: action.optional(),
+  reversed: z.boolean().default(false).meta({ help: 'Swap the two columns.' }),
+  image: image.optional().meta({ help: 'Beside the timeline when the media slot is empty.' }),
 });
 
 export type Props = z.infer<typeof schema>;
@@ -29,16 +28,18 @@ export type Props = z.infer<typeof schema>;
 export const meta: WidgetMeta = {
   widget: {
     label: 'Steps',
-    description: 'Timeline steps with optional image',
+    description: 'A process: steps with a number or an icon, each with what it delivers, how long it takes and who owns it.',
     category: 'steps',
     icon: 'tabler:list-numbers',
+  },
+  slots: {
+    media: { label: 'Media', help: 'Beside the timeline, replacing the image: a screenshot, a video, a form.', max: 1 },
   },
   ui: {
     groups: [
       { key: 'headline', label: 'Headline', fields: ['tagline', 'title', 'subtitle'] },
       { key: 'content', label: 'Steps', fields: ['items', 'callToAction'] },
-      { key: 'media', label: 'Media', fields: ['image'] },
-      { key: 'layout', label: 'Layout', fields: ['isReversed'] },
+      { key: 'layout', label: 'Layout', fields: ['layout', 'reversed', 'image'] },
     ],
   },
 };

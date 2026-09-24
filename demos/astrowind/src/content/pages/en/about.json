@@ -99,8 +99,9 @@
       }
     },
     {
-      "widget": "Steps2",
+      "widget": "Steps",
       "props": {
+        "layout": "numbered",
         "title": "How we work",
         "subtitle": "The loop we repeat, release after release.",
         "items": [

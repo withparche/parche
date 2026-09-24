@@ -153,6 +153,7 @@
           {
             "widget": "Steps",
             "props": {
+              "layout": "timeline",
               "title": "Del plan elegido a la web publicada",
               "items": [
                 {

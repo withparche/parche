@@ -153,6 +153,7 @@
           {
             "widget": "Steps",
             "props": {
+              "layout": "timeline",
               "title": "From choosing a plan to a live site",
               "items": [
                 {

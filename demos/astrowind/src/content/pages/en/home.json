@@ -194,6 +194,7 @@
           {
             "widget": "Steps",
             "props": {
+              "layout": "timeline",
               "title": "Get your dream website up and running in no time with AstroWind.",
               "items": [
                 {

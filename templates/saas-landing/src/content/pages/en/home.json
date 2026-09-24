@@ -175,6 +175,7 @@
           {
             "widget": "Steps",
             "props": {
+              "layout": "timeline",
               "tagline": "How it works",
               "title": "Up and running in an afternoon",
               "image": {

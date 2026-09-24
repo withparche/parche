@@ -88,9 +88,9 @@ A layout is a tree of nodes with **`Outlet`** nodes where the page goes:
 ```json
 {
   "sections": [
-    { "widget": "layout/Header", "props": { … } },
+    { "widget": "Header", "props": { … } },
     { "widget": "Outlet" },
-    { "widget": "layout/Footer", "props": { … } }
+    { "widget": "Footer", "props": { … } }
   ]
 }
 ```

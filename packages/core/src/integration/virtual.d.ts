@@ -85,8 +85,7 @@ declare module 'parche:layouts/BaseLayout' {
   export default Component;
 }
 
-// Components (core-owned; Header/Footer now live in the ui parche as
-// parche:widgets/layout/*)
+// Components (core-owned; Header and Footer are widgets of the ui parche)
 declare module 'parche:components/ThemeToggle' {
   const Component: typeof import('../components/common/ThemeToggle.astro').default;
   export default Component;

@@ -66,6 +66,10 @@ const RENAMES = {
   Features2: (props) => ({ widget: 'Features', props: { style: 'cards', ...stripItemClasses(props) } }),
   Features3: ({ isBeforeContent, isAfterContent, ...props }) => ({ widget: 'Features', props: { style: 'list', ...stripItemClasses(props) } }),
   Features: (props) => ({ widget: 'Features', props: stripItemClasses(props) }),
+  Steps: ({ isReversed, ...props }) => ({ widget: 'Steps', props: { layout: props.image ? 'timeline' : 'grid', ...props, ...(isReversed ? { reversed: true } : {}) } }),
+  Steps2: ({ isReversed, ...props }) => ({ widget: 'Steps', props: { layout: 'numbered', ...props, ...(isReversed ? { reversed: true } : {}) } }),
+  'layout/Header': (props) => ({ widget: 'Header', props }),
+  'layout/Footer': (props) => ({ widget: 'Footer', props }),
   HeroText: ({ callToAction, callToAction2, ...props }) => ({
     widget: 'Hero',
     props: {

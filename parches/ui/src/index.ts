@@ -27,8 +27,8 @@ export default function createUI(): ParcheManifest {
     widgets: {
       Section: w('Section.astro'),
       // Layout chrome (Header/Footer), consumed by page layouts
-      'layout/Header': layout('Header.astro'),
-      'layout/Footer': layout('Footer.astro'),
+      Header: layout('Header.astro'),
+      Footer: layout('Footer.astro'),
       // Section widgets
       Announcement: w('Announcement.astro'),
       Hero: w('Hero.astro'),
@@ -45,7 +45,6 @@ export default function createUI(): ParcheManifest {
       Testimonials: w('Testimonials.astro'),
       Pricing: w('Pricing.astro'),
       Steps: w('Steps.astro'),
-      Steps2: w('Steps2.astro'),
       Brands: w('Brands.astro'),
       FAQs: w('FAQs.astro'),
       Contact: w('Contact.astro'),

@@ -89,8 +89,9 @@ const CORE_MODULES: Record<string, string> = {
   'parche:utils/layout': corePath('utils/layout.ts'),
   'parche:utils/assets': corePath('utils/assets.ts'),
   'parche:utils/site': corePath('utils/site.ts'),
-  // Note: layout/Header, layout/Footer and the contact/content templates are
-  // now provided by the ui parche — core no longer ships chrome or elements.
+  // Note: Header and Footer are widgets of the ui parche (hidden from the
+  // palette by their meta); core ships no chrome and no elements.
+  // Historically:  // now provided by the ui parche — core no longer ships chrome or elements.
 };
 
 /** The tones every site has; a parche adds more with `tones` and a rule. */
