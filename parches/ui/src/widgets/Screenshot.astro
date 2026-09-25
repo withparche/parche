@@ -4,10 +4,19 @@ import Image from 'parche:elements/Image';
 import Placeholder from 'parche:elements/Placeholder';
 import { schema, type Props } from './Screenshot.props';
 
-const { image, caption, ratio, url, badge, badgeTone, frame } = schema.parse(Astro.props) as Props;
+const { image, caption, ratio, url, badge, badgeTone, frame, device, muted, decorative } = schema.parse(Astro.props) as Props;
 ---
 
-{frame ? (
+{device === 'phone' ? (
+  <div
+    class:list={['parche-phone mx-auto w-full max-w-[220px] rounded-[32px] bg-foreground p-2 shadow-lg transition', muted && 'scale-[0.9] opacity-55']}
+    aria-hidden={decorative ? 'true' : undefined}
+  >
+    <div class="overflow-hidden rounded-[25px]">
+      {image ? <Image src={image.src} alt={decorative ? '' : image.alt} width={440} ratio="9/16" class="block w-full" /> : <Placeholder caption={decorative ? undefined : caption} ratio={ratio === '4/3' ? '9/19.5' : ratio} compact />}
+    </div>
+  </div>
+) : frame ? (
   <Frame url={url} badge={badge} badgeTone={badgeTone}>
     {image ? <Image src={image.src} alt={image.alt} width={1200} ratio={ratio} loading="eager" class="block w-full" /> : <Placeholder caption={caption} ratio={ratio} />}
   </Frame>

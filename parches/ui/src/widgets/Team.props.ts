@@ -16,7 +16,7 @@ export const schema = z.object({
     .object({ count: z.string().meta({ help: '"+180".' }), label: z.string(), note: z.string().optional() })
     .optional()
     .meta({ help: 'A last tile for everyone not listed: contributors since a date.' }),
-  layout: z.enum(['split', 'stacked']).default('split').meta({ help: 'split: the heading beside the grid · stacked: the heading above it.' }),
+  layout: z.enum(['split', 'stacked', 'rows']).default('split').meta({ help: 'split: the heading beside the grid · stacked: the heading above it · rows: one person per row, a small portrait beside a longer bio.' }),
 });
 
 export type Props = z.infer<typeof schema>;

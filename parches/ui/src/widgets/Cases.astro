@@ -1,46 +1,24 @@
 ---
-import Card from 'parche:elements/Card';
-import { inline } from '../_shared/inline';
-import Image from 'parche:elements/Image';
-import Placeholder from 'parche:elements/Placeholder';
+/**
+ * Case studies as evidence: client and sector, what was done, and the
+ * measured results; a featured case leads full width with its quote; rows put
+ * the image beside the text; results can lead each case.
+ */
 import SectionHeader from '../components/SectionHeader.astro';
+import CaseCard from '../components/CaseCard.astro';
 import { schema, type Props } from './Cases.props';
 
-const { tagline, title, subtitle, link, align, items } = schema.parse(Astro.props) as Props;
-const tones = { default: 'text-heading', success: 'text-success', warning: 'text-warning' } as const;
+const { tagline, title, subtitle, link, align, items, layout, results } = schema.parse(Astro.props) as Props;
+const rows = layout === 'rows';
 ---
 
+<!-- One root, so a Section stacks this widget as one block. -->
+<div class="parche-cases-section">
 <SectionHeader {tagline} {title} {subtitle} {link} {align} />
 
 {items.length > 0 && (
-  <div class="parche-cases grid grid-cols-[repeat(auto-fill,minmax(min(300px,100%),1fr))] gap-[clamp(18px,2.5vw,28px)]">
-    {items.map((c) => (
-      <Card as="article" radius="lg" padding="md" shadow="none" class="min-w-0">
-        {c.image ? (
-          <Image slot="media" src={c.image.src} alt={c.image.alt} width={900} ratio="16/10" class="block w-full" />
-        ) : (
-          <Placeholder slot="media" caption={c.caption} label={c.title} ratio="16/10" stripe={11} compact />
-        )}
-        <div class="flex flex-1 flex-col gap-4">
-          <div>
-            <p class="mb-2.5 type-label text-muted">{[c.client, c.sector].filter(Boolean).join(' · ')}</p>
-            <h3 class="mb-2 font-heading text-(length:--ds-sys-type-h3-size) leading-[1.3] font-semibold tracking-[-0.015em] text-pretty text-heading">
-              {c.href ? <a href={c.href} class="text-inherit no-underline hover:text-primary" set:html={inline(c.title)} /> : <Fragment set:html={inline(c.title)} />}
-            </h3>
-            {c.description && <p class="type-body-sm text-muted" set:html={inline(c.description)} />}
-          </div>
-          {c.results.length > 0 && (
-            <dl class="mt-auto flex flex-wrap gap-[18px] border-t border-border-soft pt-4">
-              {c.results.map((r) => (
-                <div class="flex flex-col">
-                  <dd class:list={['order-1 font-heading text-xl leading-none font-semibold', tones[r.tone]]}>{r.value}</dd>
-                  <dt class="order-2 mt-[5px] text-xs leading-[1.3] text-muted">{r.label}</dt>
-                </div>
-              ))}
-            </dl>
-          )}
-        </div>
-      </Card>
-    ))}
+  <div class:list={['parche-cases grid gap-[clamp(18px,2.5vw,28px)]', rows ? 'grid-cols-1' : 'grid-cols-[repeat(auto-fill,minmax(min(300px,100%),1fr))]']} data-layout={layout}>
+    {items.map((c) => <CaseCard item={c} shape={c.featured ? 'featured' : rows ? 'row' : 'card'} resultsFirst={results === 'top'} />)}
   </div>
 )}
+</div>

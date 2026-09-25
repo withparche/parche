@@ -10,6 +10,9 @@ export const schema = z.object({
   badge: z.string().optional().meta({ help: 'A chip in the bar: "LCP 0.4s".' }),
   badgeTone: z.enum(['success', 'warning', 'primary', 'muted']).default('success'),
   frame: z.boolean().default(true).meta({ help: 'Draw the browser window around it.' }),
+  device: z.enum(['none', 'phone']).default('none').meta({ help: 'phone: a phone bezel instead of the browser window, for an app screen (9/19.5).' }),
+  muted: z.boolean().default(false).meta({ help: 'Smaller and faded: the side screens beside the main one.' }),
+  decorative: z.boolean().default(false).meta({ help: 'Hidden from assistive tech: a repeat of what the main screen already shows.' }),
 });
 
 export type Props = z.infer<typeof schema>;

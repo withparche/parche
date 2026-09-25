@@ -365,7 +365,8 @@
                   "variant": "secondary"
                 }
               ],
-              "note": "Next start date 3 November · two slots left this year · we reply to every brief within two working days"
+              "note": "Next start date 3 November · two slots left this year · we reply to every brief within two working days",
+              "size": "md"
             }
           }
         ]

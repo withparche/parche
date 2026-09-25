@@ -16,15 +16,17 @@ import Button from 'parche:elements/Button';
 import List from 'parche:elements/List';
 import FeatureCard from '../components/FeatureCard.astro';
 import FeatureRow from '../components/FeatureRow.astro';
+import Actions from '../components/Actions.astro';
+import Placeholder from 'parche:elements/Placeholder';
 import { schema, type Props } from './Features.props';
 
-const { layout, header, align, title, subtitle, tagline, link, items, columns, card, accent, asideStyle, defaultIcon, image } = schema.parse(Astro.props) as Props;
+const { layout, header, align, title, subtitle, tagline, link, items, columns, card, accent, asideStyle, actions, defaultIcon, image } = schema.parse(Astro.props) as Props;
 const side = header === 'side';
 const rich = items.some((i) => i.points.length > 0 || i.footer);
 // Cards wrap to fit, never more across than `columns`: each track is at least
 // its minimum width and at least a 1/n share of the row.
 const n = Number(columns);
-const minimum = { 1: 0, 2: 280, 3: 250, 4: 220 }[n] ?? 250;
+const minimum = { 1: 0, 2: 280, 3: 250, 4: 220, 5: 180, 6: 160 }[n] ?? 250;
 const fitStyle = n === 1 ? 'grid-template-columns:minmax(0,1fr)' : `grid-template-columns:repeat(auto-fit,minmax(max(min(${minimum}px,100%),calc((100% - ${n - 1} * 22px) / ${n})),1fr))`;
 const hairline = layout === 'panels' || layout === 'tiles';
 const hasMedia = Astro.slots.has('media') || Boolean(image);
@@ -62,7 +64,8 @@ const gap = layout === 'list' ? 'gap-6 md:gap-8' : 'gap-8 md:gap-y-12';
     <div
       class:list={[
         'grid gap-px overflow-hidden rounded-lg border border-border bg-border',
-        layout === 'panels' ? 'grid-cols-[repeat(auto-fit,minmax(min(270px,100%),1fr))]' : 'grid-cols-[repeat(auto-fill,minmax(min(180px,100%),1fr))]',
+        // auto-fit, not auto-fill: an empty track would show the border colour as a grey cell.
+        layout === 'panels' ? 'grid-cols-[repeat(auto-fit,minmax(min(270px,100%),1fr))]' : 'grid-cols-[repeat(auto-fit,minmax(min(180px,100%),1fr))]',
       ]}
     >
       {items.map((item, i) =>
@@ -80,6 +83,16 @@ const gap = layout === 'list' ? 'gap-6 md:gap-8' : 'gap-8 md:gap-y-12';
         ),
       )}
     </div>
+  ) : items.length > 0 && layout === 'strip' ? (
+    <ul class="grid grid-cols-[repeat(auto-fit,minmax(min(170px,100%),1fr))] gap-x-[clamp(20px,3vw,40px)] gap-y-5">
+      {items.map((item) => (
+        <li class:list={[item.tone === 'muted' && 'opacity-60']}>
+          {item.title && <p class="mb-1 text-sm leading-[1.35] font-semibold text-heading" set:html={inline(item.title)} />}
+          {item.description && <p class="text-[13px] leading-[1.5] text-muted" set:html={inline(item.description)} />}
+          {item.footer && <p class="mt-1 font-mono text-[11px] leading-[1.4] text-muted" set:html={inline(item.footer)} />}
+        </li>
+      ))}
+    </ul>
   ) : items.length > 0 && layout === 'cards' ? (
     <div class="grid gap-[clamp(16px,2.2vw,22px)]" style={fitStyle}>
       {items.map((item) => <FeatureCard {item} icon={item.icon || defaultIcon} {rich} {card} {accent} {asideStyle} />)}
@@ -90,7 +103,11 @@ const gap = layout === 'list' ? 'gap-6 md:gap-8' : 'gap-8 md:gap-y-12';
         const Tile = item.href ? 'a' : 'div';
         return (
           <Tile href={item.href} class="group block text-inherit no-underline">
-            {item.image && <Image src={item.image.src} alt={item.image.alt} width={480} ratio="4/5" class="mb-3 block w-full rounded-md border border-border transition-colors group-hover:border-primary" />}
+            {item.image ? (
+              <Image src={item.image.src} alt={item.image.alt} width={480} ratio="4/5" class="mb-3 block w-full rounded-md border border-border transition-colors group-hover:border-primary" />
+            ) : item.placeholder && (
+              <Placeholder caption={item.placeholder} label={item.title?.replace(/[*_`=]/g, '')} ratio="4/5" compact class="mb-3 rounded-md border border-border transition-colors group-hover:border-primary" />
+            )}
             {item.title && <p class="font-heading text-base leading-[1.3] font-semibold text-heading group-hover:text-primary" set:html={inline(item.title)} />}
             {item.description && <p class="mt-1 type-small text-muted" set:html={inline(item.description)} />}
           </Tile>
@@ -99,7 +116,7 @@ const gap = layout === 'list' ? 'gap-6 md:gap-8' : 'gap-8 md:gap-y-12';
     </div>
   ) : items.length > 0 && layout === 'rows' ? (
     <List as="ul" padding={items.some((i) => i.description) ? 'lg' : 'md'}>
-      {items.map((item) => <FeatureRow {item} hasEyebrow={items.some((i) => i.eyebrow)} hasAside={items.some((i) => i.aside)} />)}
+      {items.map((item) => <FeatureRow {item} {accent} hasEyebrow={items.some((i) => i.eyebrow)} hasAside={items.some((i) => i.aside)} />)}
     </List>
   ) : items.length > 0 && (
     <div class:list={['grid mx-auto', gap, gridCols]}>
@@ -135,5 +152,6 @@ const gap = layout === 'list' ? 'gap-6 md:gap-8' : 'gap-8 md:gap-y-12';
       })}
     </div>
   )}
+  <Actions {actions} class="mt-8" />
   </div>
 </div>

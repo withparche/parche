@@ -1,0 +1,496 @@
+{
+  "title": "Corvo Goods",
+  "description": "Waxed cotton bags with brass hardware, stitched by four people in Hebden Bridge. Free UK shipping over £60, 60-day returns and lifetime repairs.",
+  "layout": "corvo",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "layout": "overlay",
+        "size": "lg",
+        "tagline": "New · the Moss weekender",
+        "title": "A weekend bag built to be repaired, not replaced",
+        "subtitle": "Waxed cotton, brass hardware, stitched by four people in West Yorkshire. Send it back at any point in its life and we will fix it.",
+        "actions": [
+          {
+            "text": "Add to basket",
+            "href": "/homes/store#cart",
+            "variant": "primary"
+          },
+          {
+            "text": "All bags",
+            "href": "/homes/store#shop",
+            "variant": "secondary"
+          }
+        ],
+        "note": "60-day returns, postage paid. Lifetime repairs, including the ones you caused.",
+        "proofFirst": true
+      },
+      "slots": {
+        "media": [
+          {
+            "widget": "Screenshot",
+            "props": {
+              "frame": false,
+              "caption": "product shot · 2000×1200",
+              "ratio": "5/3"
+            }
+          }
+        ],
+        "proof": [
+          {
+            "widget": "Stats",
+            "props": {
+              "layout": "inline",
+              "items": [
+                {
+                  "value": "£248",
+                  "label": "Free shipping · 3–5 days · in stock"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "band",
+        "spacing": "sm"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Features",
+            "props": {
+              "layout": "strip",
+              "columns": "4",
+              "items": [
+                {
+                  "title": "60-day returns",
+                  "description": "We pay the postage both ways"
+                },
+                {
+                  "title": "Lifetime repairs",
+                  "description": "Free for the first five years"
+                },
+                {
+                  "title": "Made in Yorkshire",
+                  "description": "Four people, one workshop"
+                },
+                {
+                  "title": "4.9 from 1,240 reviews",
+                  "description": "Verified on Trustpilot"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "shop",
+        "label": "Shop"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Features",
+            "props": {
+              "layout": "gallery",
+              "align": "start",
+              "columns": "4",
+              "title": "Shop by what you need",
+              "subtitle": "Named the way customers ask for them, not the way our stock system files them.",
+              "items": [
+                {
+                  "title": "Weekend bags",
+                  "description": "6 styles · from £198",
+                  "href": "/homes/store#shop",
+                  "placeholder": "category shot · 800×1000"
+                },
+                {
+                  "title": "Everyday totes",
+                  "description": "4 styles · from £120",
+                  "href": "/homes/store#shop",
+                  "placeholder": "category shot · 800×1000"
+                },
+                {
+                  "title": "Wallets and pouches",
+                  "description": "9 styles · from £38",
+                  "href": "/homes/store#shop",
+                  "placeholder": "category shot · 800×1000"
+                },
+                {
+                  "title": "Gifts under £60",
+                  "description": "11 items · ready to post",
+                  "href": "/homes/store#shop",
+                  "placeholder": "category shot · 800×1000"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Products",
+            "props": {
+              "title": "What people buy most",
+              "link": {
+                "text": "All 24 products",
+                "href": "/homes/store#shop"
+              },
+              "columns": "4",
+              "ratio": "4/5",
+              "items": [
+                {
+                  "name": "The Moss weekender",
+                  "href": "/homes/store#shop",
+                  "placeholder": "product shot · 800×1000",
+                  "badge": "Bestseller",
+                  "price": "£248",
+                  "stock": {
+                    "label": "In stock",
+                    "state": "in"
+                  },
+                  "rating": {
+                    "value": 4.9,
+                    "count": 212
+                  }
+                },
+                {
+                  "name": "Field tote, waxed",
+                  "href": "/homes/store#shop",
+                  "placeholder": "product shot · 800×1000",
+                  "price": "£142",
+                  "stock": {
+                    "label": "Only 3 left",
+                    "state": "low"
+                  },
+                  "rating": {
+                    "value": 4.8,
+                    "count": 156
+                  }
+                },
+                {
+                  "name": "Card wallet, oxblood",
+                  "href": "/homes/store#shop",
+                  "placeholder": "product shot · 800×1000",
+                  "price": "£48",
+                  "stock": {
+                    "label": "Sold out",
+                    "state": "out"
+                  },
+                  "restock": {
+                    "text": "Email me when it is back",
+                    "href": "/homes/store#restock"
+                  }
+                },
+                {
+                  "name": "Repair kit",
+                  "href": "/homes/store#shop",
+                  "placeholder": "product shot · 800×1000",
+                  "price": "£18",
+                  "stock": {
+                    "label": "In stock",
+                    "state": "in"
+                  },
+                  "note": "Wax, thread, spare buckle"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "ruled",
+        "id": "reviews",
+        "label": "Reviews"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Testimonials",
+            "props": {
+              "align": "start",
+              "title": "4.9 from 1,240 reviews",
+              "subtitle": "Customers’ own photos, and the fit note that stops half the returns before they happen.",
+              "link": {
+                "text": "Read all on Trustpilot",
+                "href": "/homes/store#reviews"
+              },
+              "items": [
+                {
+                  "text": "Three years old, taken on about forty flights, and it looks better than it did new.",
+                  "name": "Helen W.",
+                  "role": "Moss weekender",
+                  "source": "verified buyer",
+                  "rating": 5,
+                  "placeholder": "customer photo"
+                },
+                {
+                  "text": "Sent it back with a torn strap after two years. Repaired and returned in nine days, no charge, no argument.",
+                  "name": "Tomasz K.",
+                  "role": "Field tote",
+                  "source": "verified buyer",
+                  "rating": 5,
+                  "placeholder": "customer photo"
+                },
+                {
+                  "text": "Smaller than I pictured — it is a two-night bag, not a week. Lovely thing, just measure first.",
+                  "name": "Priya S.",
+                  "role": "Moss weekender",
+                  "source": "verified buyer",
+                  "rating": 4,
+                  "placeholder": "customer photo"
+                }
+              ],
+              "avatars": false
+            }
+          },
+          {
+            "widget": "Callout",
+            "props": {
+              "layout": "bar",
+              "tone": "primary",
+              "title": "Fit note, from that review:",
+              "description": "the Moss holds two nights comfortably, three at a push. Dimensions and a photo next to a carry-on are on the product page. Publishing the size complaint is why our return rate is 4%."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface",
+        "id": "making",
+        "label": "How it is made"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Columns",
+            "props": {
+              "ratio": "equal",
+              "gap": "lg",
+              "align": "center"
+            },
+            "slots": {
+              "default": [
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Screenshot",
+                        "props": {
+                          "frame": false,
+                          "caption": "the workshop · 1200×900",
+                          "ratio": "4/3"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Features",
+                        "props": {
+                          "layout": "rows",
+                          "align": "start",
+                          "tagline": "How it is made",
+                          "title": "Four people, one room, about nine bags a week",
+                          "subtitle": "The cotton is woven in Lancashire and waxed in Yorkshire. The brass is cast in Birmingham. We are not cheaper than a marketplace and we never will be — this is the whole reason to buy from us instead.",
+                          "items": [
+                            {
+                              "title": "Cotton canvas",
+                              "aside": "Lancashire, woven since 1873"
+                            },
+                            {
+                              "title": "Brass hardware",
+                              "aside": "Birmingham, sand cast"
+                            },
+                            {
+                              "title": "Leather trim",
+                              "aside": "Vegetable tanned, Devon"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "ruled",
+        "id": "shipping",
+        "label": "Shipping and returns"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Columns",
+            "props": {
+              "ratio": "equal",
+              "gap": "lg"
+            },
+            "slots": {
+              "default": [
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Table",
+                        "props": {
+                          "title": "Shipping and returns, before the basket",
+                          "subtitle": "Every term you discover at checkout becomes a refund later. Here is all of it, on the home page.",
+                          "header": "none",
+                          "frame": "open",
+                          "columns": [
+                            {
+                              "label": "Destination"
+                            },
+                            {
+                              "label": "Cost",
+                              "align": "end"
+                            }
+                          ],
+                          "rows": [
+                            {
+                              "cells": [
+                                "UK, orders over £60",
+                                "**Free · 3–5 days**"
+                              ]
+                            },
+                            {
+                              "cells": [
+                                "UK, under £60",
+                                "**£4.50**"
+                              ]
+                            },
+                            {
+                              "cells": [
+                                "EU",
+                                "**£12 · duties included**"
+                              ]
+                            },
+                            {
+                              "cells": [
+                                "Rest of world",
+                                "**£22 · duties at your border**"
+                              ]
+                            },
+                            {
+                              "cells": [
+                                "Returns",
+                                "**60 days · we pay postage**"
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "FAQs",
+                        "props": {
+                          "layout": "list",
+                          "columns": "1",
+                          "open": "all",
+                          "title": "Asked before buying",
+                          "items": [
+                            {
+                              "title": "Will the wax mark my clothes?",
+                              "description": "Not after the first week. New wax can leave a faint mark on very pale fabrics; it settles, and a warm cloth removes it."
+                            },
+                            {
+                              "title": "Does it fit as carry-on?",
+                              "description": "Yes on every European carrier we have checked, listed on the product page with dimensions. It is a two-night bag, not a week’s."
+                            },
+                            {
+                              "title": "What does a repair actually cost?",
+                              "description": "Free for five years, including damage you caused. After that, parts at cost and no labour charge. Post it to us and we send it back."
+                            },
+                            {
+                              "title": "Can I order a gift without the price?",
+                              "description": "Every order ships with a receipt-free note. Add a message at checkout and we write it by hand."
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface",
+        "id": "restock",
+        "label": "Restock alerts"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "CallToAction",
+            "props": {
+              "layout": "closing",
+              "size": "md",
+              "title": "Restock alerts, and nothing else",
+              "subtitle": "We make small batches and they sell out. One email when something you looked at is back — no discount codes, no “last chance”, about nine emails a year."
+            },
+            "slots": {
+              "below": [
+                {
+                  "widget": "Newsletter",
+                  "props": {
+                    "layout": "inline",
+                    "placeholder": "you@example.com",
+                    "submit": "Notify me",
+                    "note": "Unsubscribe in one click. We have never sold a list and never will."
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

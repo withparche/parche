@@ -12,9 +12,11 @@ export const schema = z.object({
   layout: z.enum(['centered', 'split', 'plain']).default('centered').meta({ help: 'centered: the form on a card under the heading · split: the heading and the booking card on the left, the form on a card on the right · plain: the heading and the form with no card, for a column beside other content.' }),
   booking: z
     .object({
-      title: z.string().default('Next available'),
+      title: z.string().optional().meta({ help: '"Next available".' }),
       badge: z.string().optional().meta({ help: '"3 slots left".' }),
-      slots: z.array(z.object({ label: z.string(), href: z.string().optional(), selected: z.boolean().default(false) })).default([]),
+      slots: z
+        .array(z.object({ label: z.string(), detail: z.string().optional().meta({ help: 'A second line: "08:00–12:00".' }), href: z.string().optional(), selected: z.boolean().default(false), disabled: z.boolean().default(false).meta({ help: 'Fully booked: dashed and quiet.' }) }))
+        .default([]),
       note: z.string().optional().meta({ help: '"Times in your local zone · 25 min".' }),
     })
     .optional()

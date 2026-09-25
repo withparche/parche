@@ -10,17 +10,28 @@ import Card from 'parche:elements/Card';
 import Stat from 'parche:elements/Stat';
 import { schema, type Props } from './Stats.props';
 
-const { title, subtitle, tagline, link, align, items, layout, note } = schema.parse(Astro.props) as Props;
+const { title, subtitle, tagline, link, align, items, layout, card, note } = schema.parse(Astro.props) as Props;
 const tones = { default: 'text-heading', success: 'text-success', warning: 'text-warning' } as const;
 const where = (s: (typeof items)[number]) => [s.source, s.date].filter(Boolean).join(' · ');
 ---
 
+<!-- One root, so a Section stacks this widget as one block. -->
+<div class="parche-stats-section">
 <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="xl" />
 
-{items.length > 0 && layout === 'panels' ? (
+{items.length > 0 && layout === 'inline' ? (
+  <ul class="parche-stats flex flex-wrap gap-x-[clamp(20px,3vw,36px)] gap-y-3 border-y border-border py-4" data-layout="inline">
+    {items.map((s) => (
+      <li class="parche-stat-item">
+        <p class:list={['font-heading text-xl leading-none font-semibold tracking-[-0.02em]', tones[s.tone]]}>{s.href ? <a href={s.href} class="text-inherit no-underline">{s.value}{s.unit}</a> : <>{s.value}{s.unit}</>}</p>
+        <p class="mt-1.5 text-xs leading-[1.3] text-muted">{s.label}</p>
+      </li>
+    ))}
+  </ul>
+) : items.length > 0 && layout === 'panels' ? (
   <ul class="parche-stats grid grid-cols-[repeat(auto-fit,minmax(min(200px,100%),1fr))] gap-[clamp(14px,1.8vw,18px)]" data-layout="panels">
     {items.map((s) => (
-      <Card as="li" padding="md" shadow="none" class="parche-stat-item">
+      <Card as="li" variant={card} padding="md" shadow="none" class="parche-stat-item">
         <p class:list={['font-heading text-[clamp(1.75rem,3vw,2.125rem)] leading-none font-semibold tracking-[-0.03em]', tones[s.tone]]}>{s.value}{s.unit}</p>
         <p class="mt-3 text-sm leading-[1.35] font-semibold text-heading">{s.label}</p>
         {(s.description || s.source || s.date) && (
@@ -56,3 +67,4 @@ const where = (s: (typeof items)[number]) => [s.source, s.date].filter(Boolean).
 ) : null}
 
 {note && <p class="type-caption text-muted mt-6 text-center" set:html={inline(note)} />}
+</div>

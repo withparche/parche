@@ -1,9 +1,12 @@
 import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
-import { action, verifiedQuote, heading, headingGroup } from '../_shared/content';
+import { action, image, verifiedQuote, heading, headingGroup, text } from '../_shared/content';
 
 const testimonial = verifiedQuote.extend({
   title: z.string().optional().meta({ help: 'A short headline above the quote.' }),
+  rating: z.number().min(0).max(5).optional().meta({ help: 'Stars out of five, for a review from a store or a map.' }),
+  image: image.optional().meta({ help: 'A photo on top of the card: the customer\'s own photo of the product.' }),
+  placeholder: z.string().optional().meta({ help: 'Until there is a photo: "customer photo".' }),
 });
 
 export const schema = z.object({
@@ -18,6 +21,8 @@ export const schema = z.object({
     })
     .optional()
     .meta({ help: 'A visibly empty card, kept until a quote you can link to exists.' }),
+  avatars: z.boolean().default(true).meta({ help: 'Draw a round space for the portrait when a quote has none; off for store and map reviews.' }),
+  note: text().optional().meta({ help: 'One line under the quotes: how they were collected, what is missing.' }),
   actions: z.array(action).default([]).meta({ help: 'Under the quotes: all reviews, the case studies.' }),
 });
 

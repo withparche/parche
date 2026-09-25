@@ -12,7 +12,7 @@ import Actions from '../components/Actions.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import { schema, type Props } from './Steps.props';
 
-const { layout, title, subtitle, tagline, link, items, actions, reversed, image } = schema.parse(Astro.props) as Props;
+const { layout, header, title, subtitle, tagline, link, items, actions, reversed, image } = schema.parse(Astro.props) as Props;
 // The grid centres its heading over the columns unless the content says otherwise.
 const align = (Astro.props as { align?: 'start' | 'center' }).align ?? (layout === 'grid' ? 'center' : 'start');
 const hasMedia = Astro.slots.has('media') || Boolean(image);
@@ -36,7 +36,7 @@ const hasMedia = Astro.slots.has('media') || Boolean(image);
   <Actions {actions} class="mt-8" />
 </div>
 ) : layout === 'rows' ? (
-<div class="parche-steps grid grid-cols-[repeat(auto-fit,minmax(min(290px,100%),1fr))] gap-[clamp(32px,5vw,72px)]" data-layout="rows">
+<div class:list={['parche-steps', header === 'side' && 'grid grid-cols-[repeat(auto-fit,minmax(min(290px,100%),1fr))] gap-[clamp(32px,5vw,72px)]']} data-layout="rows">
   <div class="min-w-0">
     <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="none" class="mb-[26px]" width="lg" />
     <Actions {actions} />

@@ -40,6 +40,7 @@ export default function createUI(): ParcheManifest {
       OnThisPage: w('OnThisPage.astro'),
       PrevNext: w('PrevNext.astro'),
       Releases: w('Releases.astro'),
+      Products: w('Products.astro'),
       Columns: w('Columns.astro'),
       Column: w('Column.astro'),
       Switch: w('Switch.astro'),

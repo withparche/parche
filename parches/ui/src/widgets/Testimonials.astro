@@ -8,22 +8,24 @@ import SectionHeader from '../components/SectionHeader.astro';
 import TestimonialCard from '../components/TestimonialCard.astro';
 import { schema, type Props } from './Testimonials.props';
 
-const { title, subtitle, tagline, link, align, items, layout, actions, openSlot } = schema.parse(Astro.props) as Props;
+const { title, subtitle, tagline, link, align, items, layout, avatars, note, actions, openSlot } = schema.parse(Astro.props) as Props;
 ---
 
+<!-- One root, so a Section stacks this widget as one block. -->
+<div class="parche-testimonials">
 <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="tight" />
 
 {items.length > 0 && layout === 'carousel' ? (
   <Carousel.Root count={items.length} label={title ?? 'Testimonials'} perView={3}>
     {items.map((item, i) => (
       <Carousel.Slide index={i} total={items.length}>
-        <TestimonialCard {...item} />
+        <TestimonialCard {...item} {avatars} />
       </Carousel.Slide>
     ))}
   </Carousel.Root>
 ) : (items.length > 0 || openSlot) ? (
   <div class="grid grid-cols-[repeat(auto-fit,minmax(min(280px,100%),1fr))] gap-[clamp(16px,2vw,22px)]">
-    {items.map((item) => <TestimonialCard {...item} />)}
+    {items.map((item) => <TestimonialCard {...item} {avatars} />)}
     {openSlot && (
       <Card variant="dashed" padding="lg" gap="sm" shadow="none">
         <span class="type-label text-muted">{openSlot.label}</span>
@@ -36,4 +38,7 @@ const { title, subtitle, tagline, link, align, items, layout, actions, openSlot 
   </div>
 ) : null}
 
+{note && <p class:list={['mt-5 type-small text-muted [&_a]:text-primary', align === 'center' && 'text-center']} set:html={inline(note)} />}
+
 <Actions {actions} class="mt-8 justify-center md:mt-12" />
+</div>

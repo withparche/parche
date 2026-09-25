@@ -1,0 +1,59 @@
+{
+  "sections": [
+    {
+      "widget": "Header",
+      "props": {
+        "announcement": {
+          "text": "Cohort 12 starts 6 October · 7 of 24 places left · [Applications close 26 September](/homes/course#apply)",
+          "dismissible": false
+        },
+        "logo": {
+          "text": "Talamo",
+          "href": "/homes/course",
+          "mark": true
+        },
+        "position": "left",
+        "links": {
+          "$ref": "navigation/talamo"
+        },
+        "controls": {
+          "theme": "text",
+          "locale": "none"
+        },
+        "actions": [
+          {
+            "label": "Apply",
+            "href": "/homes/course#apply",
+            "variant": "contrast"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Outlet",
+      "props": {
+        "wrapper": {
+          "widget": "Section"
+        }
+      }
+    },
+    {
+      "widget": "Footer",
+      "props": {
+        "layout": "brand",
+        "brand": {
+          "text": "Talamo",
+          "mark": false,
+          "description": "Design systems, taught live. Eleven cohorts since 2023, run from Lisbon.",
+          "links": [],
+          "href": "/homes/course"
+        },
+        "columns": {
+          "$ref": "navigation/talamo-footer"
+        },
+        "copyright": "© 2026 Talamo Unipessoal Lda · Lisbon",
+        "note": "Outcome figures: cohorts 1–11, published methodology"
+      }
+    }
+  ]
+}

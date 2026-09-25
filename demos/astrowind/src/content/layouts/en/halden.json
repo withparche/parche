@@ -1,0 +1,47 @@
+{
+  "sections": [
+    {
+      "widget": "Header",
+      "props": {
+        "logo": {
+          "text": "Halden Robotics",
+          "href": "/homes/startup",
+          "mark": true
+        },
+        "position": "left",
+        "links": {
+          "$ref": "navigation/halden"
+        },
+        "controls": {
+          "theme": "text",
+          "locale": "none"
+        },
+        "actions": [
+          {
+            "label": "Book a site visit",
+            "href": "/homes/startup#visit",
+            "variant": "contrast"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Outlet",
+      "props": {
+        "wrapper": {
+          "widget": "Section"
+        }
+      }
+    },
+    {
+      "widget": "Footer",
+      "props": {
+        "layout": "minimal",
+        "columns": {
+          "$ref": "navigation/halden-footer"
+        },
+        "copyright": "© 2026 Halden Robotics BV · Rotterdam · Bilbao"
+      }
+    }
+  ]
+}

@@ -12,7 +12,7 @@ import { inline } from '../_shared/inline';
 import FormSuccess from '../components/FormSuccess.astro';
 import { schema, type Props } from './Newsletter.props';
 
-const { title, subtitle, layout, placeholder, submit, note, endpoint, loading, error, success } = schema.parse(Astro.props) as Props;
+const { title, subtitle, layout, align, placeholder, submit, note, endpoint, loading, error, success } = schema.parse(Astro.props) as Props;
 // A stable id from the content, so two newsletters on one page do not clash.
 const seed = `${title ?? ''}${placeholder}${submit}`;
 let h = 5381;
@@ -23,7 +23,7 @@ const Frame = card ? Card : 'div';
 const frame = card ? { variant: 'canvas', radius: 'lg', padding: 'lg', shadow: 'none' } : {};
 ---
 
-<Frame {...frame} class:list={['parche-newsletter text-left', !card && 'mx-auto w-full max-w-[460px]']} data-layout={layout}>
+<Frame {...frame} class:list={['parche-newsletter text-left', !card && (align === 'center' ? 'mx-auto w-full max-w-[460px]' : 'w-full')]} data-layout={layout}>
   {card && title && <p class="mb-1.5 type-title" set:html={inline(title)} />}
   {card && subtitle && <p class="mb-4 text-sm leading-[1.55] text-muted" set:html={inline(subtitle)} />}
   <Form {endpoint} label={title ?? 'Subscribe'} success={success?.mode ?? 'button'} loadingLabel={loading} successLabel={success?.label} errorMessage={error}>
@@ -44,7 +44,7 @@ const frame = card ? { variant: 'canvas', radius: 'lg', padding: 'lg', shadow: '
       <Button type="submit" variant={card ? 'contrast' : 'primary'} class:list={['text-[15px] leading-none', card ? 'px-[18px] py-3' : 'px-[22px] py-3.5']}>{submit}</Button>
       <p id={`${id}-error`} class="basis-full text-sm text-danger empty:hidden" data-part="error"></p>
     </div>
-    {note && <p class:list={['mt-3 text-xs leading-[1.5] text-muted', !card && 'text-center']} set:html={inline(note)} />}
+    {note && <p class:list={['mt-3 text-xs leading-[1.5] text-muted', !card && align === 'center' && 'text-center']} set:html={inline(note)} />}
     {success && (success.title || success.text || success.links.length > 0 || success.copy) && <FormSuccess slot="success" {success} />}
   </Form>
 </Frame>

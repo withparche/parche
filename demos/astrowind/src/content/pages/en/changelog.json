@@ -42,7 +42,8 @@
               "success": {
                 "label": "Subscribed — one email per release",
                 "mode": "button"
-              }
+              },
+              "align": "start"
             }
           }
         ]

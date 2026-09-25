@@ -11,9 +11,10 @@ export const schema = z.object({
   title: z.string().optional(),
   description: z.string().optional().meta({ input: 'textarea' }),
   items: z.array(z.string()).default([]).meta({ help: 'A list, one line each ("**Lead.** text"); in inline, links separated by dots.' }),
-  rows: z.array(z.object({ label: z.string(), value: z.string() })).default([]).meta({ help: 'Key and value rows between hairlines, in a card: hours, a budget, an address.' }),
+  rows: z.array(z.object({ label: z.string(), value: z.string(), tone: z.enum(tones).optional() })).default([]).meta({ help: 'Key and value rows between hairlines, in a card: hours, a budget, an address.' }),
   footer: z.string().optional().meta({ help: 'Under a rule at the bottom (card), or the quiet source at the end (inline).' }),
   link: z.object({ text: z.string(), href: z.string() }).optional(),
+  elevated: z.boolean().default(false).meta({ help: 'A card that stands out: the surface colour, a shadow and the label in the brand colour.' }),
 });
 
 export type Props = z.infer<typeof schema> & { class?: string };
@@ -30,6 +31,7 @@ export const meta = defineElement({
       { name: 'description', element: 'p' },
       { name: 'items', element: 'ul' },
       { name: 'rows', element: 'dl' },
+      { name: 'actions', element: 'div', description: 'The `actions` slot: buttons stacked full width.' },
       { name: 'footer', element: 'p' },
     ],
   },

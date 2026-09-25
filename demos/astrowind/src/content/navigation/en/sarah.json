@@ -1,0 +1,21 @@
+{
+  "label": "Sarah Johnson menu",
+  "items": [
+    {
+      "label": "Work",
+      "href": "/homes/personal#work"
+    },
+    {
+      "label": "About",
+      "href": "/homes/personal#about"
+    },
+    {
+      "label": "Gallery",
+      "href": "/homes/personal#gallery"
+    },
+    {
+      "label": "Services",
+      "href": "/homes/personal#services"
+    }
+  ]
+}

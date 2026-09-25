@@ -27,16 +27,86 @@
       ]
     },
     {
+      "label": "Demos",
+      "children": [
+        {
+          "title": "Home pages",
+          "links": [
+            {
+              "label": "SaaS · Cadence",
+              "href": "/homes/saas"
+            },
+            {
+              "label": "Startup · Halden",
+              "href": "/homes/startup"
+            },
+            {
+              "label": "Mobile app · Nocta",
+              "href": "/homes/mobile-app"
+            },
+            {
+              "label": "Portfolio · Sarah Johnson",
+              "href": "/homes/personal"
+            },
+            {
+              "label": "Local business · Vela",
+              "href": "/homes/local"
+            },
+            {
+              "label": "Agency · Marea",
+              "href": "/homes/agency"
+            },
+            {
+              "label": "Store · Corvo",
+              "href": "/homes/store"
+            },
+            {
+              "label": "Course · Talamo",
+              "href": "/homes/course"
+            }
+          ]
+        },
+        {
+          "title": "Site pages",
+          "links": [
+            {
+              "label": "Pricing",
+              "href": "/pricing"
+            },
+            {
+              "label": "Services",
+              "href": "/services"
+            },
+            {
+              "label": "About",
+              "href": "/about"
+            },
+            {
+              "label": "Contact",
+              "href": "/contact"
+            },
+            {
+              "label": "Docs",
+              "href": "/docs"
+            },
+            {
+              "label": "Changelog",
+              "href": "/changelog"
+            }
+          ]
+        }
+      ],
+      "mega": {
+        "columns": 2
+      }
+    },
+    {
       "label": "Case studies",
       "href": "/#work"
     },
     {
-      "label": "Services",
-      "href": "/#services"
-    },
-    {
       "label": "Pricing",
-      "href": "/fixtures/pricing"
+      "href": "/#pricing"
     },
     {
       "label": "Blog",
@@ -44,7 +114,7 @@
     },
     {
       "label": "Docs",
-      "href": "/fixtures/docs"
+      "href": "/docs"
     }
   ]
 }

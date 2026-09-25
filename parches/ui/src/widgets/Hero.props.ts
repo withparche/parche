@@ -2,10 +2,10 @@ import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
 import { action, image } from '../_shared/content';
 
-export const layouts = ['center', 'split', 'text', 'side'] as const;
+export const layouts = ['center', 'split', 'text', 'side', 'overlay'] as const;
 
 export const schema = z.object({
-  layout: z.enum(layouts).default('center').meta({ help: 'center: copy above the media · split: copy left, media right · text: copy only · side: the heading on the left, the subtitle and actions on the right, for a page intro.' }),
+  layout: z.enum(layouts).default('center').meta({ help: 'center: copy above the media · split: copy left, media right · text: copy only · side: the heading on the left, the subtitle and actions on the right, for a page intro · overlay: the media across the page and the copy on a card over it, for a product.' }),
   align: z.enum(['center', 'start']).default('center').meta({ help: 'Where the copy sits in center and text layouts.' }),
   size: z.enum(['lg', 'md']).default('lg').meta({ help: 'lg for a home page, md for the title of an inner page.' }),
   tagline: z.string().optional().meta({ placeholder: 'e.g. FREE AND OPEN SOURCE' }),
@@ -21,6 +21,8 @@ export const schema = z.object({
   subtitle: z.string().optional().meta({ input: 'textarea' }),
   content: z.string().optional().meta({ input: 'textarea', help: 'Extra HTML under the subtitle.' }),
   actions: z.array(action).default([]),
+  note: z.string().optional().meta({ help: 'One quiet line under the actions: "Free for one project forever", the returns policy.' }),
+  proofFirst: z.boolean().default(false).meta({ help: 'Put the proof slot (numbers, a call button) before the actions.' }),
   image: image.optional().meta({ help: 'Shown in the media area when the media slot is empty.' }),
 });
 

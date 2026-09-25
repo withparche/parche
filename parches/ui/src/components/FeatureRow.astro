@@ -11,16 +11,20 @@ interface Props {
   item: FeaturesProps['items'][number];
   hasEyebrow: boolean;
   hasAside: boolean;
+  /** Eyebrows in the brand colour (a week range, a step number); quiet otherwise. */
+  accent?: boolean;
 }
 
-const { item, hasEyebrow, hasAside } = Astro.props;
-const toneInk: Record<string, string> = { neutral: 'text-muted', primary: 'text-primary', success: 'text-success', warning: 'text-warning', danger: 'text-danger' };
+const { item, hasEyebrow, hasAside, accent = false } = Astro.props;
+const toneInk: Record<string, string> = { neutral: 'text-muted', muted: 'text-muted', primary: 'text-primary', success: 'text-success', warning: 'text-warning', danger: 'text-danger' };
+const pill: Record<string, string> = { neutral: 'bg-surface-2 text-muted', muted: 'bg-surface-2 text-muted', primary: 'bg-primary-soft text-primary', success: 'bg-success-soft text-success', warning: 'bg-warning-soft text-warning', danger: 'bg-danger-soft text-danger' };
+const eyebrowInk = item.eyebrowTone ? toneInk[item.eyebrowTone] : item.tone !== 'neutral' && item.tone !== 'muted' ? toneInk[item.tone] : accent ? 'text-primary' : 'text-muted';
 const cols = hasEyebrow && hasAside ? 'grid-cols-[auto_1fr_auto]' : hasEyebrow ? 'grid-cols-[auto_1fr]' : hasAside ? 'grid-cols-[1fr_auto]' : 'grid-cols-1';
 const Title = item.href ? 'a' : 'span';
 ---
 
-<li class:list={['grid items-baseline gap-x-[clamp(14px,2vw,26px)]', cols]}>
-  {hasEyebrow && <span class:list={['font-mono text-xs leading-[1.6] font-medium whitespace-nowrap', item.tone === 'neutral' ? 'text-primary' : toneInk[item.tone]]} set:html={inline(item.eyebrow) ?? ''} />}
+<li class:list={['grid items-baseline gap-x-[clamp(14px,2vw,26px)]', cols, item.tone === 'muted' && 'opacity-55']}>
+  {hasEyebrow && <span class:list={['font-mono text-xs leading-[1.6] font-medium whitespace-nowrap', eyebrowInk]} set:html={inline(item.eyebrow) ?? ''} />}
   <span class="min-w-0">
     {item.title && (
       <Title href={item.href} class:list={['block type-title', item.description && 'mb-1.5', item.href && 'no-underline hover:text-primary']} set:html={inline(item.title)} />
@@ -31,7 +35,13 @@ const Title = item.href ? 'a' : 'span';
         {item.points.map((p) => <li set:html={inline(p)} />)}
       </ul>
     )}
-    {item.footer && <span class:list={['mt-2 block font-mono text-[13px] leading-[1.55]', item.tone === 'neutral' ? 'text-muted' : toneInk[item.tone]]} set:html={inline(item.footer)} />}
+    {item.footer && <span class:list={['mt-2 block font-mono text-[13px] leading-[1.55]', toneInk[item.tone]]} set:html={inline(item.footer)} />}
   </span>
-  {hasAside && <span class="text-right font-mono text-[13px] leading-[1.4] whitespace-nowrap text-muted" set:html={inline(item.aside) ?? ''} />}
+  {hasAside && (
+    item.asideTone ? (
+      <span class:list={['justify-self-end rounded-full px-2.5 py-1 font-mono text-[11px] leading-none font-medium whitespace-nowrap', pill[item.asideTone]]} set:html={inline(item.aside) ?? ''} />
+    ) : (
+      <span class="text-right font-mono text-[13px] leading-[1.4] whitespace-nowrap text-muted" set:html={inline(item.aside) ?? ''} />
+    )
+  )}
 </li>

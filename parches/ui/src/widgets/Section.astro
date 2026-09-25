@@ -25,6 +25,9 @@ const toned = tone !== 'default';
   class:list={['relative', toned && 'bg-background text-text']}
 >
   <Container width={width}>
-    <slot />
+    <!-- Several widgets in one band stack with the rhythm between blocks. -->
+    <div class="parche-section-stack flex flex-col gap-[clamp(28px,3.5vw,48px)]">
+      <slot />
+    </div>
   </Container>
 </Section>

@@ -1,0 +1,54 @@
+---
+/**
+ * Product cards. The photo carries the badge; under it the name, then the
+ * price beside the stock (green in stock, amber low, quiet sold out), then the
+ * rating. A sold-out card fades its name and offers the restock link. The
+ * whole card links to the product when there is somewhere to go.
+ */
+import Image from 'parche:elements/Image';
+import Placeholder from 'parche:elements/Placeholder';
+import SectionHeader from '../components/SectionHeader.astro';
+import { inline } from '../_shared/inline';
+import { schema, type Props } from './Products.props';
+
+const { tagline, title, subtitle, link, align, items, columns, ratio } = schema.parse(Astro.props) as Props;
+const n = Number(columns);
+const grid = `grid-template-columns:repeat(auto-fit,minmax(max(min(180px,100%),calc((100% - ${n - 1} * 18px) / ${n})),1fr))`;
+const stockInk = { in: 'text-success', low: 'text-warning', out: 'text-muted' } as const;
+---
+
+<div class="parche-products">
+  <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="md" width="lg" />
+  <ul class="grid gap-[clamp(12px,1.6vw,18px)]" style={grid}>
+    {items.map((p) => {
+      const out = p.stock?.state === 'out';
+      const Name = p.href ? 'a' : 'span';
+      return (
+        <li class="group relative flex flex-col overflow-hidden rounded-md border border-border bg-surface transition-colors hover:border-primary">
+          <div class="relative">
+            {p.image ? (
+              <Image src={p.image.src} alt={p.image.alt} width={600} ratio={ratio} class:list={['block w-full', out && 'opacity-60']} />
+            ) : (
+              <Placeholder caption={p.placeholder} label={p.name.replace(/[*_`=]/g, '')} {ratio} compact class:list={[out && 'opacity-60']} />
+            )}
+            {p.badge && <span class="absolute top-2.5 left-2.5 rounded-sm bg-foreground px-2 py-1 font-mono text-[10px] leading-none font-medium tracking-[0.1em] text-background uppercase">{p.badge}</span>}
+          </div>
+          <div class="flex flex-1 flex-col gap-1.5 p-3.5">
+            <Name href={p.href} class:list={['font-heading text-[15px] leading-[1.3] font-semibold no-underline after:absolute after:inset-0', out ? 'text-muted' : 'text-heading']} set:html={inline(p.name)} />
+            <p class="flex items-baseline justify-between gap-2">
+              <span class="text-[15px] leading-none font-semibold text-heading">
+                {p.price}{p.compareAt && <s class="ml-1.5 text-xs font-normal text-muted">{p.compareAt}</s>}
+              </span>
+              {p.stock && <span class:list={['text-xs leading-none font-medium', stockInk[p.stock.state]]}>{p.stock.label}</span>}
+            </p>
+            {p.rating && (
+              <p class="text-xs leading-[1.4] text-muted">{p.rating.value.toFixed(1)} ★{p.rating.count !== undefined && ` · ${p.rating.count} reviews`}</p>
+            )}
+            {p.note && <p class="text-xs leading-[1.4] text-muted" set:html={inline(p.note)} />}
+            {out && p.restock && <a href={p.restock.href} class="relative z-[1] mt-auto pt-1 text-xs leading-none font-medium text-primary no-underline hover:text-heading">{p.restock.text}</a>}
+          </div>
+        </li>
+      );
+    })}
+  </ul>
+</div>

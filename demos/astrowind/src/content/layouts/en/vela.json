@@ -1,0 +1,59 @@
+{
+  "sections": [
+    {
+      "widget": "Header",
+      "props": {
+        "logo": {
+          "text": "Vela Fontanería",
+          "href": "/homes/local",
+          "mark": true
+        },
+        "position": "left",
+        "links": {
+          "$ref": "navigation/vela"
+        },
+        "controls": {
+          "theme": "text",
+          "locale": "none"
+        },
+        "actions": [
+          {
+            "label": "Book a slot",
+            "href": "/homes/local#book",
+            "variant": "primary"
+          }
+        ],
+        "announcement": {
+          "text": "**[944 00 00 00](tel:+34944000000)** · Open now · until 20:00",
+          "aside": "Out of hours: emergencies answered, €30 surcharge",
+          "dismissible": false
+        }
+      }
+    },
+    {
+      "widget": "Outlet",
+      "props": {
+        "wrapper": {
+          "widget": "Section"
+        }
+      }
+    },
+    {
+      "widget": "Footer",
+      "props": {
+        "layout": "brand",
+        "brand": {
+          "text": "Vela Fontanería SL",
+          "href": "/homes/local",
+          "mark": false,
+          "description": "Calle Autonomía 44, bajo\n48012 Bilbao · Licence 48/2291"
+        },
+        "columns": {
+          "$ref": "navigation/vela-footer"
+        },
+        "copyright": "© 2026 Vela Fontanería SL · Bilbao",
+        "note": "One page per real area you serve — never one per keyword."
+      }
+    }
+  ]
+}

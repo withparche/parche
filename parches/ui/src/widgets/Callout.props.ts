@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
-import { link, text } from '../_shared/content';
+import { action, link, text } from '../_shared/content';
 
 export const schema = z.object({
   tone: z.enum(['neutral', 'primary', 'success', 'warning', 'danger']).default('neutral').meta({ help: 'warning: what we turn down, a gap · success: a guarantee, a live signal · primary: a tip, a choice · neutral: a quiet panel.' }),
@@ -9,9 +9,11 @@ export const schema = z.object({
   title: text().optional(),
   description: text({ input: 'textarea' }).optional(),
   items: z.array(text()).default([]).meta({ help: 'One line each; start with **a bold lead.** when the list is reasons.' }),
-  rows: z.array(z.object({ label: text(), value: text() })).default([]).meta({ help: 'Key and value rows in a card: opening hours, budgets, an address.' }),
+  rows: z.array(z.object({ label: text(), value: text(), tone: z.enum(['neutral', 'primary', 'success', 'warning', 'danger']).optional() })).default([]).meta({ help: 'Key and value rows in a card: opening hours, budgets, an address.' }),
   footer: text().optional(),
   link: link.optional(),
+  actions: z.array(action).default([]).meta({ help: 'Buttons at the bottom of a card, full width: apply, book.' }),
+  elevated: z.boolean().default(false).meta({ help: 'A card that stands out: the surface colour, a shadow, the label in the brand colour.' }),
 });
 
 export type Props = z.infer<typeof schema>;

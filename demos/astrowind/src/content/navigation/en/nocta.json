@@ -1,0 +1,17 @@
+{
+  "label": "Nocta menu",
+  "items": [
+    {
+      "label": "Screens",
+      "href": "/homes/mobile-app#screens"
+    },
+    {
+      "label": "Your data",
+      "href": "/homes/mobile-app#data"
+    },
+    {
+      "label": "Price",
+      "href": "/homes/mobile-app#price"
+    }
+  ]
+}

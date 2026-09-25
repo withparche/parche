@@ -17,6 +17,7 @@ export const schema = z.object({
   ...heading(),
   items: z.array(step).default([]),
   actions: z.array(action).default([]).meta({ help: 'Beside or under the steps: book the call, start the trial.' }),
+  header: z.enum(['side', 'top']).default('side').meta({ help: 'rows: the heading beside the steps, or above them.' }),
   reversed: z.boolean().default(false).meta({ help: 'Swap the two columns.' }),
   image: image.optional().meta({ help: 'Beside the timeline when the media slot is empty.' }),
 });

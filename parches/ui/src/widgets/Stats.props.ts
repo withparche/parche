@@ -11,7 +11,8 @@ const stat = sourcedNumber.extend({
 export const schema = z.object({
   ...heading({ align: 'center' }),
   items: z.array(stat).default([]),
-  layout: z.enum(['figures', 'cards', 'panels']).default('figures').meta({ help: 'figures: large numbers in a row · cards: compact bordered cards, for beside a screenshot or under a hero · panels: a card per number with its label and a sentence on where it comes from.' }),
+  layout: z.enum(['figures', 'cards', 'panels', 'inline']).default('figures').meta({ help: 'figures: large numbers in a row · cards: compact bordered cards, for beside a screenshot or under a hero · panels: a card per number with its label and a sentence on where it comes from · inline: small figures in one row between two rules, for a hero.' }),
+  card: z.enum(['surface', 'canvas']).default('surface').meta({ help: 'panels: the card colour, the page colour on a surface section.' }),
   note: z.string().optional().meta({ help: 'One line under the numbers: the window, the method, the caveat.' }),
 });
 

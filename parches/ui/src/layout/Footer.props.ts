@@ -11,10 +11,11 @@ export const schema = z.object({
   copyright: z.string().optional(),
   siteName: z.string().optional(),
   theme: z.string().optional(),
-  layout: z.enum(['classic', 'brand']).default('classic').meta({ help: 'classic: site name and link columns · brand: a brand block with a mark, a line and chips, then mono-titled columns and a two-sided bottom line.' }),
+  layout: z.enum(['classic', 'brand', 'minimal']).default('classic').meta({ help: 'classic: site name and link columns · brand: a brand block with a mark, a line and chips, then mono-titled columns and a two-sided bottom line · minimal: one line, the copyright and a row of links.' }),
   brand: z
     .object({
       text: z.string(),
+      href: z.string().optional().meta({ help: 'Where the brand name links: the brand\'s home.' }),
       mark: z.boolean().default(false),
       description: z.string().optional(),
       links: z.array(z.object({ label: z.string(), href: z.string() })).default([]).meta({ help: 'Small mono chips: "/rss.xml", "GitHub".' }),

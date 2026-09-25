@@ -1,0 +1,68 @@
+{
+  "label": "Corvo footer",
+  "items": [
+    {
+      "title": "Shop",
+      "links": [
+        {
+          "label": "Bags",
+          "href": "/homes/store#shop"
+        },
+        {
+          "label": "Small goods",
+          "href": "/homes/store#shop"
+        },
+        {
+          "label": "Gift cards",
+          "href": "/homes/store#shop"
+        },
+        {
+          "label": "Seconds and samples",
+          "href": "/homes/store#shop"
+        }
+      ]
+    },
+    {
+      "title": "Help",
+      "links": [
+        {
+          "label": "Shipping",
+          "href": "/homes/store#shipping"
+        },
+        {
+          "label": "Returns · 60 days",
+          "href": "/homes/store#shipping"
+        },
+        {
+          "label": "Book a repair",
+          "href": "/homes/store#repairs"
+        },
+        {
+          "label": "Care guide",
+          "href": "/homes/store#care"
+        }
+      ]
+    },
+    {
+      "title": "Legal",
+      "links": [
+        {
+          "label": "Terms",
+          "href": "/terms"
+        },
+        {
+          "label": "Privacy",
+          "href": "/privacy"
+        },
+        {
+          "label": "Cookie preferences",
+          "href": "/privacy#cookies"
+        },
+        {
+          "label": "Supply chain statement",
+          "href": "/homes/store#modern-slavery"
+        }
+      ]
+    }
+  ]
+}

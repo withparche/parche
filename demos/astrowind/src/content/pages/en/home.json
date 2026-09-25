@@ -856,7 +856,7 @@
                 },
                 {
                   "text": "Read the docs",
-                  "href": "/fixtures/docs",
+                  "href": "/docs",
                   "variant": "secondary"
                 }
               ]

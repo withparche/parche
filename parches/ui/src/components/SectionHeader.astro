@@ -27,7 +27,11 @@ interface Props {
 
 const { tagline, title, subtitle, link, align = 'start', width = 'md', spacing = 'lg', level = 2, class: className } = Astro.props;
 const Title = level === 1 ? 'h1' : 'h2';
-const titleClass = level === 1 ? 'font-heading text-[clamp(2.25rem,4.6vw,3.25rem)] leading-[1.05] font-semibold tracking-(--ds-sys-type-h1-tracking) text-heading' : 'type-h2';
+// In a column beside other content the heading steps down a size, as a
+// section's second-level heading would.
+const titleClass = level === 1
+  ? 'font-heading text-[clamp(2.25rem,4.6vw,3.25rem)] leading-[1.05] font-semibold tracking-(--ds-sys-type-h1-tracking) text-heading'
+  : 'type-h2 [.parche-column_&]:text-[clamp(1.5rem,2.6vw,1.875rem)] [.parche-column_&]:leading-[1.15]';
 const hasAside = Boolean(link) || Astro.slots.has('aside');
 const widths = { sm: 'max-w-[580px]', md: 'max-w-[620px]', lg: 'max-w-[660px]' };
 const spacings = {

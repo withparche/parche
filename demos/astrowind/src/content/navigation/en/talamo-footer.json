@@ -1,0 +1,64 @@
+{
+  "label": "Talamo footer",
+  "items": [
+    {
+      "title": "The course",
+      "links": [
+        {
+          "label": "Curriculum",
+          "href": "/homes/course#curriculum"
+        },
+        {
+          "label": "Free sample lesson",
+          "href": "/homes/course#sample"
+        },
+        {
+          "label": "Dates and price",
+          "href": "/homes/course#price"
+        },
+        {
+          "label": "Funded places",
+          "href": "/homes/course#price"
+        }
+      ]
+    },
+    {
+      "title": "Evidence",
+      "links": [
+        {
+          "label": "Outcomes report 2026",
+          "href": "/homes/course#outcomes"
+        },
+        {
+          "label": "Alumni work",
+          "href": "/homes/course#graduates"
+        },
+        {
+          "label": "Unfiltered reviews",
+          "href": "/homes/course#graduates"
+        }
+      ]
+    },
+    {
+      "title": "Legal",
+      "links": [
+        {
+          "label": "Terms",
+          "href": "/terms"
+        },
+        {
+          "label": "Refund policy",
+          "href": "/homes/course#price"
+        },
+        {
+          "label": "Privacy",
+          "href": "/privacy"
+        },
+        {
+          "label": "Accessibility",
+          "href": "/homes/course#accessibility"
+        }
+      ]
+    }
+  ]
+}

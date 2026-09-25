@@ -1,0 +1,21 @@
+{
+  "label": "Halden Robotics menu",
+  "items": [
+    {
+      "label": "What we build",
+      "href": "/homes/startup#what"
+    },
+    {
+      "label": "Traction",
+      "href": "/homes/startup#traction"
+    },
+    {
+      "label": "Team",
+      "href": "/homes/startup#team"
+    },
+    {
+      "label": "Roadmap",
+      "href": "/homes/startup#roadmap"
+    }
+  ]
+}

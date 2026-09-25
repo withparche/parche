@@ -1,0 +1,64 @@
+{
+  "sections": [
+    {
+      "widget": "Header",
+      "props": {
+        "announcement": {
+          "text": "Free UK shipping over £60 · £4.50 below · 60-day returns, we pay the postage",
+          "aside": "Made in Hebden Bridge",
+          "dismissible": false
+        },
+        "logo": {
+          "text": "Corvo Goods",
+          "href": "/homes/store",
+          "mark": true
+        },
+        "position": "left",
+        "links": {
+          "$ref": "navigation/corvo"
+        },
+        "search": {
+          "label": "Search",
+          "href": "/homes/store#search"
+        },
+        "controls": {
+          "theme": "text",
+          "locale": "none"
+        },
+        "actions": [
+          {
+            "label": "Basket · 0",
+            "href": "/homes/store#cart",
+            "variant": "secondary"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Outlet",
+      "props": {
+        "wrapper": {
+          "widget": "Section"
+        }
+      }
+    },
+    {
+      "widget": "Footer",
+      "props": {
+        "layout": "brand",
+        "brand": {
+          "text": "Corvo Goods",
+          "mark": true,
+          "description": "Unit 4, Victoria Works\nHebden Bridge HX7 · open Thursdays",
+          "links": [],
+          "href": "/homes/store"
+        },
+        "columns": {
+          "$ref": "navigation/corvo-footer"
+        },
+        "copyright": "© 2026 Corvo Goods Ltd · Company 09441233",
+        "note": "Prices include VAT"
+      }
+    }
+  ]
+}

@@ -24,21 +24,29 @@ const form = { fields, submit, note, endpoint, loading, error, success, label: t
       <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="none" class="mb-[26px]" />
       {booking && (
         <Card padding="sm" shadow="none">
-          <div class="mb-3.5 flex flex-wrap items-center justify-between gap-4">
-            <span class="text-[15px] leading-none font-semibold text-heading">{booking.title}</span>
-            {booking.badge && <span class="rounded-full bg-success-soft px-[9px] py-[5px] font-mono text-[11px] leading-none font-medium text-success">{booking.badge}</span>}
-          </div>
-          <ul class="flex flex-wrap gap-2">
+          {(booking.title || booking.badge) && (
+            <div class="mb-3.5 flex flex-wrap items-center justify-between gap-4">
+              {booking.title && <span class="text-[15px] leading-none font-semibold text-heading">{booking.title}</span>}
+              {booking.badge && <span class="rounded-full bg-success-soft px-[9px] py-[5px] font-mono text-[11px] leading-none font-medium text-success">{booking.badge}</span>}
+            </div>
+          )}
+          <ul class:list={['gap-2', booking.slots.some((s) => s.detail) ? 'grid grid-cols-[repeat(auto-fill,minmax(130px,1fr))]' : 'flex flex-wrap']}>
             {booking.slots.map((s) => {
-              const cls = s.selected
-                ? 'border-primary bg-primary-soft text-primary'
-                : 'border-border bg-background text-heading hover:border-primary';
+              const cls = s.disabled
+                ? 'border-dashed border-border bg-surface-2 text-muted'
+                : s.selected
+                  ? 'border-primary bg-primary-soft text-primary'
+                  : 'border-border bg-background text-heading hover:border-primary';
+              const body = s.detail ? (
+                <Fragment><span class="block text-sm leading-none font-semibold">{s.label}</span><span class="mt-1.5 block font-mono text-xs leading-none opacity-80">{s.detail}</span></Fragment>
+              ) : s.label;
+              const base = s.detail ? 'block rounded-sm border px-3 py-2.5 no-underline' : 'block rounded-sm border px-3 py-[9px] font-mono text-[13px] leading-none font-medium no-underline';
               return (
                 <li>
-                  {s.href ? (
-                    <a href={s.href} class:list={['block rounded-sm border px-3 py-[9px] font-mono text-[13px] leading-none font-medium no-underline', cls]} aria-current={s.selected ? 'true' : undefined}>{s.label}</a>
+                  {s.href && !s.disabled ? (
+                    <a href={s.href} class:list={[base, cls]} aria-current={s.selected ? 'true' : undefined}>{body}</a>
                   ) : (
-                    <span class:list={['block rounded-sm border px-3 py-[9px] font-mono text-[13px] leading-none font-medium', cls]}>{s.label}</span>
+                    <span class:list={[base, cls]} aria-disabled={s.disabled ? 'true' : undefined}>{body}</span>
                   )}
                 </li>
               );

@@ -11,6 +11,7 @@ import Card from 'parche:elements/Card';
 import Icon from 'parche:elements/Icon';
 import Image from 'parche:elements/Image';
 import Button from 'parche:elements/Button';
+import Placeholder from 'parche:elements/Placeholder';
 import { inline } from '../_shared/inline';
 import type { Props as FeaturesProps } from '../widgets/Features.props';
 
@@ -27,13 +28,14 @@ const { item, icon, rich, card, accent = false, asideStyle = 'figure' } = Astro.
 const tone = item.tone;
 const toneBox: Record<string, string> = {
   neutral: '',
+  muted: 'opacity-60',
   primary: 'border-primary bg-primary-soft',
   success: 'border-success bg-success-soft',
   warning: 'border-warning bg-warning-soft',
   danger: 'border-danger bg-danger-soft',
 };
-const toneInk: Record<string, string> = { neutral: 'text-muted', primary: 'text-primary', success: 'text-success', warning: 'text-warning', danger: 'text-danger' };
-const eyebrowInk = (item.featured || accent) && tone === 'neutral' ? 'text-primary' : toneInk[tone];
+const toneInk: Record<string, string> = { neutral: 'text-muted', muted: 'text-muted', primary: 'text-primary', success: 'text-success', warning: 'text-warning', danger: 'text-danger' };
+const eyebrowInk = item.eyebrowTone ? toneInk[item.eyebrowTone] : (item.featured || accent) && tone === 'neutral' ? 'text-primary' : toneInk[tone];
 ---
 
 <Card
@@ -46,7 +48,11 @@ const eyebrowInk = (item.featured || accent) && tone === 'neutral' ? 'text-prima
   class:list={['h-full', toneBox[tone], item.featured && 'border-primary', item.href && 'text-inherit hover:border-primary']}
   data-tone={tone}
 >
-  {item.image && <Image slot="media" src={item.image.src} alt={item.image.alt} width={640} ratio="16/10" class="block w-full" />}
+  {item.image ? (
+    <Image slot="media" src={item.image.src} alt={item.image.alt} width={640} ratio="16/10" class="block w-full" />
+  ) : item.placeholder && (
+    <Placeholder slot="media" caption={item.placeholder} label={item.title?.replace(/[*_`=]/g, '')} ratio="16/10" compact />
+  )}
   {icon && <Icon name={icon} class="mb-5 h-10 w-10 text-primary" />}
   {item.eyebrow && <p class:list={['mb-3 font-mono text-[10px] leading-none font-medium tracking-[0.13em] uppercase', eyebrowInk]} set:html={inline(item.eyebrow)} />}
   {(item.title || item.aside) && (

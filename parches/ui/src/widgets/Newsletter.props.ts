@@ -6,6 +6,7 @@ import { sending } from '../_shared/form';
 export const schema = z.object({
   title: text().optional(),
   subtitle: text().optional().meta({ help: 'What arrives and how often: one promise, one frequency.' }),
+  align: z.enum(['center', 'start']).default('center').meta({ help: 'Where an inline row sits: centred in a band, or at the start of a column.' }),
   layout: z.enum(['card', 'inline']).default('card').meta({ help: 'card: a titled card, for the end of a page or a post · inline: the field and the button in one centred row, for a hero or a closing band.' }),
   placeholder: z.string().default('you@company.com'),
   submit: z.string().default('Subscribe').meta({ help: 'The submit button label.' }),

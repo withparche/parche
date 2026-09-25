@@ -1,63 +1,37 @@
 {
-  "title": "Startup",
-  "description": "A startup home: traction, proof and a clear next step.",
+  "title": "Halden Robotics",
+  "description": "Warehouse robots that survive a real floor: a seed-stage startup home with sourced traction, named investors, the team and a dated public roadmap.",
+  "layout": "halden",
   "sections": [
     {
       "widget": "Hero",
       "props": {
-        "tagline": "Seed stage",
-        "title": "We turn ==messy ideas== into working products",
-        "subtitle": "A small team, shipping weekly, with customers in the room from day one.",
+        "layout": "overlay",
+        "size": "lg",
+        "tagline": "Seed stage · Bilbao and Rotterdam · 11 people",
+        "title": "Warehouse robots that survive a real floor",
+        "subtitle": "Most autonomous pallet movers are built for clean demos. Ours are built for wet concrete, pallets twenty centimetres off, and the forklift driver who will not slow down for anybody.",
         "actions": [
           {
             "variant": "primary",
-            "text": "See the product",
-            "href": "#features",
-            "icon": "tabler:arrow-right"
+            "text": "Book a site visit",
+            "href": "#visit"
           },
           {
             "variant": "secondary",
-            "text": "Read the blog",
-            "href": "/blog"
+            "text": "Read the numbers",
+            "href": "#traction"
           }
-        ],
-        "image": {
-          "src": "https://images.unsplash.com/photo-1620558138198-cfb9b4f3c294?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1671&q=80",
-          "alt": "Product"
-        }
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "id": "features"
+        ]
       },
       "slots": {
-        "default": [
+        "media": [
           {
-            "widget": "Features",
+            "widget": "Screenshot",
             "props": {
-              "layout": "cards",
-              "tagline": "What we do",
-              "title": "Three things, done properly",
-              "columns": "3",
-              "items": [
-                {
-                  "title": "Research",
-                  "description": "We talk to the people who will use it before we build anything.",
-                  "icon": "tabler:search"
-                },
-                {
-                  "title": "Design",
-                  "description": "Interfaces that explain themselves, with no manual required.",
-                  "icon": "tabler:palette"
-                },
-                {
-                  "title": "Engineering",
-                  "description": "Small releases, measured, reversible.",
-                  "icon": "tabler:code"
-                }
-              ]
+              "caption": "the robot on a customer floor · 2400×1400",
+              "ratio": "12/7",
+              "frame": false
             }
           }
         ]
@@ -66,69 +40,54 @@
     {
       "widget": "Section",
       "props": {
-        "tone": "glow"
+        "id": "traction",
+        "label": "Traction",
+        "tone": "surface"
       },
       "slots": {
         "default": [
           {
             "widget": "Stats",
             "props": {
+              "layout": "panels",
+              "align": "start",
+              "tagline": "Traction",
+              "title": "Four numbers, each with where it came from",
+              "subtitle": "We are eighteen months old. These are the only figures we have, and they are measured rather than estimated.",
               "items": [
                 {
-                  "value": "12K",
-                  "label": "Weekly users"
+                  "value": "3",
+                  "label": "Paying deployments",
+                  "description": "Two food distribution centres and one parts warehouse. Contracts, not pilots."
                 },
                 {
-                  "value": "94%",
-                  "label": "Retention"
+                  "value": "11,400",
+                  "label": "Pallet moves completed",
+                  "description": "Fleet controller log, January to August 2026. Forty-one aborted moves in the same period."
                 },
                 {
-                  "value": "312",
-                  "label": "Releases"
+                  "value": "99.6%",
+                  "label": "Moves without intervention",
+                  "tone": "success",
+                  "description": "Same log. We publish the intervention count, not only the percentage."
                 },
                 {
-                  "value": "9",
-                  "label": "Team"
+                  "value": "€4.2M",
+                  "label": "Seed round, March 2026",
+                  "description": "Led by Tramline Ventures, with Kessler Industrial and four angels from the sector."
                 }
-              ]
+              ],
+              "card": "canvas"
             }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Brands",
-      "props": {
-        "title": "Backed by",
-        "icons": [
-          "tabler:brand-ycombinator",
-          "tabler:brand-github",
-          "tabler:brand-stripe",
-          "tabler:brand-vercel"
-        ]
-      }
-    },
-    {
-      "widget": "Features",
-      "props": {
-        "layout": "list",
-        "title": "Why teams switch",
-        "columns": "3",
-        "items": [
-          {
-            "title": "It is fast",
-            "description": "Pages load before you notice they were loading.",
-            "icon": "tabler:bolt"
           },
           {
-            "title": "It is honest",
-            "description": "No dark patterns, no lock-in, no surprise invoices.",
-            "icon": "tabler:shield-check"
-          },
-          {
-            "title": "It is supported",
-            "description": "A human answers, usually the one who wrote the code.",
-            "icon": "tabler:message"
+            "widget": "Callout",
+            "props": {
+              "tone": "warning",
+              "layout": "card",
+              "label": "What we have not built yet",
+              "description": "No cold-storage certification, no multi-floor handoff, and the fleet API is read-only until Q1. If your site needs any of those this year, we are the wrong supplier — and saying so now is cheaper for both of us."
+            }
           }
         ]
       }
@@ -136,23 +95,33 @@
     {
       "widget": "Section",
       "props": {
-        "id": "faq"
+        "id": "what",
+        "label": "What we build",
+        "tone": "ruled"
       },
       "slots": {
         "default": [
           {
-            "widget": "FAQs",
+            "widget": "Features",
             "props": {
-              "title": "Common questions",
-              "columns": "2",
+              "layout": "rows",
+              "header": "side",
+              "align": "start",
+              "tagline": "What we build",
+              "title": "One machine, three things it does differently",
+              "subtitle": "We are not building a platform. We build one pallet mover and the controller that runs a fleet of them.",
               "items": [
                 {
-                  "title": "Are you hiring?",
-                  "description": "Occasionally. Write to us with something you have built."
+                  "title": "It expects the floor to be wrong",
+                  "description": "Wet patches, missing markings, pallets off-position. It re-plans instead of stopping and paging a human."
                 },
                 {
-                  "title": "Where are you based?",
-                  "description": "Distributed across four time zones, with two meetings a week."
+                  "title": "It yields to people, visibly",
+                  "description": "A projected floor marking shows where it is going next. Near-miss reports from drivers stopped in week two."
+                },
+                {
+                  "title": "It runs on the WMS you already have",
+                  "description": "Adapters for the three systems our customers use. No rip-and-replace, no eighteen-month integration."
                 }
               ]
             }
@@ -163,21 +132,162 @@
     {
       "widget": "Section",
       "props": {
-        "tone": "glow"
+        "id": "team",
+        "label": "Team",
+        "tone": "surface"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Columns",
+            "props": {
+              "ratio": "equal",
+              "gap": "lg",
+              "align": "start"
+            },
+            "slots": {
+              "default": [
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Features",
+                        "props": {
+                          "layout": "rows",
+                          "align": "start",
+                          "tagline": "Backed by",
+                          "title": "Named investors, not a logo wall",
+                          "items": [
+                            {
+                              "title": "Tramline Ventures",
+                              "description": "Led the seed · board seat, Ana Iriarte"
+                            },
+                            {
+                              "title": "Kessler Industrial",
+                              "description": "Strategic · introduced our first customer"
+                            },
+                            {
+                              "title": "Four angels",
+                              "description": "Operators from warehousing and logistics · names on request"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Team",
+                        "props": {
+                          "layout": "stacked",
+                          "tagline": "Team",
+                          "title": "Who you would actually work with",
+                          "items": [
+                            {
+                              "name": "Ane Zubiri",
+                              "role": "CEO · nine years in warehouse automation"
+                            },
+                            {
+                              "name": "Joost de Vries",
+                              "role": "CTO · built the first controller at Delft"
+                            },
+                            {
+                              "name": "Marta Sáenz",
+                              "role": "Field engineering · on your floor, not on a call"
+                            }
+                          ],
+                          "more": {
+                            "count": "+8",
+                            "label": "Engineering and ops",
+                            "note": "Four roles open right now"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "roadmap",
+        "label": "Roadmap",
+        "tone": "ruled"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Features",
+            "props": {
+              "layout": "rows",
+              "align": "start",
+              "tagline": "Public roadmap",
+              "title": "Dated, and we mark it when it slips",
+              "subtitle": "A roadmap without a slipped item is a roadmap nobody is keeping honest.",
+              "items": [
+                {
+                  "eyebrow": "Q4 2026",
+                  "title": "Multi-floor handoff",
+                  "description": "Lifts and ramps, one fleet across levels.",
+                  "aside": "on track",
+                  "asideTone": "success"
+                },
+                {
+                  "eyebrow": "Q1 2027",
+                  "title": "Write access in the fleet API",
+                  "description": "Queue and re-prioritise moves from your own systems.",
+                  "aside": "slipped 6 wks",
+                  "asideTone": "warning"
+                },
+                {
+                  "eyebrow": "Q2 2027",
+                  "title": "Cold-storage certification",
+                  "description": "Minus twenty-five degrees, certified rather than claimed.",
+                  "aside": "scoping",
+                  "asideTone": "muted"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "visit",
+        "label": "Site visits",
+        "tone": "surface"
       },
       "slots": {
         "default": [
           {
             "widget": "CallToAction",
             "props": {
-              "title": "Come and see it",
-              "subtitle": "Fifteen minutes, no slides.",
+              "layout": "closing",
+              "size": "md",
+              "title": "Come and stand next to one",
+              "subtitle": "Site visits every other Thursday in Rotterdam: two hours, your questions, no deck. Or we bring one to your floor for a week.",
               "actions": [
                 {
                   "variant": "primary",
-                  "text": "Book a call",
-                  "href": "/contact",
-                  "icon": "tabler:calendar"
+                  "text": "Book a site visit",
+                  "href": "#visit"
+                },
+                {
+                  "variant": "secondary",
+                  "text": "Or see the four open roles",
+                  "href": "#team"
                 }
               ]
             }

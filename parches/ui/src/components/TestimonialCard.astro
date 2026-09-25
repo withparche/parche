@@ -5,21 +5,34 @@
  */
 import Card from 'parche:elements/Card';
 import Avatar from 'parche:elements/Avatar';
+import Image from 'parche:elements/Image';
+import Placeholder from 'parche:elements/Placeholder';
 import type { VerifiedQuote } from '../_shared/content';
 import { inline } from '../_shared/inline';
 
-type Props = VerifiedQuote & { title?: string };
-const { title, text, name, role, avatar, date, source, href } = Astro.props;
+type Props = VerifiedQuote & { title?: string; rating?: number; image?: { src: string; alt: string }; placeholder?: string; avatars?: boolean };
+const { title, text, name, role, avatar, date, source, href, rating, image, placeholder, avatars = true } = Astro.props;
+const stars = rating !== undefined ? Math.round(rating) : undefined;
 ---
 
 <Card as="figure" padding="lg" gap="md" shadow="none" class="h-full">
+  {image ? (
+    <Image slot="media" src={image.src} alt={image.alt} width={600} ratio="4/3" class="block w-full" />
+  ) : placeholder && (
+    <Placeholder slot="media" caption={placeholder} ratio="4/3" compact />
+  )}
+  {stars !== undefined && (
+    <p class="text-sm leading-none tracking-[0.1em] text-primary" aria-label={`${rating} out of 5`}>
+      {'★'.repeat(stars)}<span class="text-border">{'★'.repeat(5 - stars)}</span>
+    </p>
+  )}
   {title && <p class="type-label text-heading">{title}</p>}
   <blockquote class="text-[17px] leading-[1.6] text-pretty text-heading">“<Fragment set:html={inline(text)} />”</blockquote>
   <figcaption class="mt-auto flex flex-col gap-3">
     <span class="flex items-center gap-3">
       {avatar?.src ? (
         <Avatar src={avatar.src} name={name} alt={avatar.alt} size="sm" class="size-[34px]" />
-      ) : (
+      ) : avatars && (
         <span class="block size-[34px] flex-none rounded-full border border-border bg-surface-2" aria-hidden="true"></span>
       )}
       <span>

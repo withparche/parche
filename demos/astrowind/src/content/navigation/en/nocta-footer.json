@@ -1,0 +1,21 @@
+{
+  "label": "Nocta footer",
+  "items": [
+    {
+      "label": "Your data",
+      "href": "/homes/mobile-app#data"
+    },
+    {
+      "label": "Support",
+      "href": "/contact"
+    },
+    {
+      "label": "Privacy",
+      "href": "/privacy"
+    },
+    {
+      "label": "Terms",
+      "href": "/terms"
+    }
+  ]
+}

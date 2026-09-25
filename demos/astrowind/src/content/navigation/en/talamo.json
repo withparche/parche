@@ -1,0 +1,21 @@
+{
+  "label": "Talamo menu",
+  "items": [
+    {
+      "label": "Curriculum",
+      "href": "/homes/course#curriculum"
+    },
+    {
+      "label": "Who teaches",
+      "href": "/homes/course#teachers"
+    },
+    {
+      "label": "Outcomes",
+      "href": "/homes/course#outcomes"
+    },
+    {
+      "label": "Dates & price",
+      "href": "/homes/course#price"
+    }
+  ]
+}

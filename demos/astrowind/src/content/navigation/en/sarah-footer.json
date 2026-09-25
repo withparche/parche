@@ -1,0 +1,31 @@
+{
+  "label": "Sarah Johnson footer",
+  "items": [
+    {
+      "title": "Elsewhere",
+      "links": [
+        {
+          "label": "Dribbble",
+          "href": "https://dribbble.com"
+        },
+        {
+          "label": "Behance",
+          "href": "https://www.behance.net"
+        }
+      ]
+    },
+    {
+      "title": "Paperwork",
+      "links": [
+        {
+          "label": "CV, one page",
+          "href": "/homes/personal#cv"
+        },
+        {
+          "label": "Privacy",
+          "href": "/privacy"
+        }
+      ]
+    }
+  ]
+}

@@ -1,92 +1,355 @@
 {
-  "title": "SaaS",
-  "layout": "default",
-  "description": "A SaaS product home: proposition, features, pricing and questions.",
+  "title": "Cadence",
+  "description": "Cadence turns merged pull requests into release notes your users understand — published to your site, your in-app widget and your email list from one draft.",
+  "layout": "cadence",
   "sections": [
     {
       "widget": "Hero",
       "props": {
-        "layout": "split",
-        "tagline": "SaaS",
-        "title": "Where your team ==stops chasing== the work",
-        "subtitle": "Plan, track and ship from one place. Fewer tools, fewer meetings, more things finished.",
+        "layout": "center",
+        "size": "lg",
+        "badge": {
+          "text": "Ships with your release, not after it"
+        },
+        "title": "The changelog your customers actually read",
+        "subtitle": "Cadence turns merged pull requests into release notes your users understand — published to your site, your in-app widget and your email list from one draft.",
         "actions": [
           {
             "variant": "primary",
-            "text": "Start free",
-            "href": "#pricing",
-            "icon": "tabler:arrow-right"
+            "text": "Start free — no card",
+            "href": "#signup"
           },
           {
             "variant": "secondary",
-            "text": "Book a demo",
-            "href": "/contact"
+            "text": "See it working",
+            "href": "#product"
           }
         ],
-        "image": {
-          "src": "https://images.unsplash.com/photo-1531973486364-5fa64260d75b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1658&q=80",
-          "alt": "Product"
-        }
-      }
-    },
-    {
-      "widget": "Brands",
-      "props": {
-        "title": "Teams already using it",
-        "icons": [
-          "tabler:brand-github",
-          "tabler:brand-figma",
-          "tabler:brand-slack",
-          "tabler:brand-notion",
-          "tabler:brand-stripe",
-          "tabler:brand-vercel"
+        "note": "Free for one project forever · 2 minutes to your first published note"
+      },
+      "slots": {
+        "media": [
+          {
+            "widget": "Screenshot",
+            "props": {
+              "url": "app.cadence.dev/releases",
+              "caption": "product UI · release editor · 2000×830",
+              "ratio": "2000/830"
+            }
+          }
         ]
       }
     },
     {
       "widget": "Section",
       "props": {
-        "id": "features"
+        "tone": "band",
+        "spacing": "none",
+        "width": "xl"
       },
       "slots": {
         "default": [
           {
-            "widget": "Features",
+            "widget": "Brands",
             "props": {
-              "tagline": "Features",
-              "title": "Everything your team needs",
-              "subtitle": "Stop stitching five tools together. Work, docs and the plan live together here.",
-              "columns": "3",
-              "items": [
+              "layout": "strip",
+              "label": "Shipping with",
+              "names": [
+                "Northwind",
+                "Ferrolab",
+                "Quietmile",
+                "Höok"
+              ],
+              "note": "1,180 teams · 14,400 notes published"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "product",
+        "label": "Product",
+        "tone": "surface"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Switch",
+            "props": {
+              "options": [
                 {
-                  "title": "Boards and tasks",
-                  "description": "Plan sprints on flexible boards, with sub-tasks and custom fields.",
-                  "icon": "tabler:layout-kanban"
+                  "value": "step-1",
+                  "label": "1"
                 },
                 {
-                  "title": "Docs that link",
-                  "description": "Write specs that stay connected to the work they describe.",
-                  "icon": "tabler:file-text"
+                  "value": "step-2",
+                  "label": "2"
                 },
                 {
-                  "title": "Roadmaps",
-                  "description": "Turn strategy into a timeline the whole company can follow.",
-                  "icon": "tabler:map"
+                  "value": "step-3",
+                  "label": "3"
                 },
                 {
-                  "title": "Automations",
-                  "description": "Automate the repetitive steps: assignments, statuses, reminders.",
-                  "icon": "tabler:bolt"
+                  "value": "step-4",
+                  "label": "4"
+                }
+              ],
+              "label": "Step",
+              "syncKey": "step",
+              "tagline": "How it works",
+              "title": "Four steps, and you never write release notes twice",
+              "subtitle": "Click a step to see that screen. Real product, including the parts that are still plain."
+            },
+            "slots": {
+              "step-1": [
+                {
+                  "widget": "Features",
+                  "props": {
+                    "header": "side",
+                    "title": "It drafts before you do",
+                    "subtitle": "Merged pull requests arrive grouped by label, already written in plain language. You start from a draft, never from a blank page on release day.",
+                    "link": {
+                      "text": "Try this step yourself",
+                      "href": "#signup"
+                    }
+                  },
+                  "slots": {
+                    "media": [
+                      {
+                        "widget": "Screenshot",
+                        "props": {
+                          "caption": "inbox · merged PRs · 1200×750",
+                          "badge": "Step 1",
+                          "badgeTone": "primary",
+                          "ratio": "8/5"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "step-2": [
+                {
+                  "widget": "Features",
+                  "props": {
+                    "header": "side",
+                    "title": "Edit like a document",
+                    "subtitle": "Rewrite the summary, drop the internal ticket numbers, add a screenshot. Markdown, and a preview that matches the published page exactly.",
+                    "link": {
+                      "text": "Try this step yourself",
+                      "href": "#signup"
+                    }
+                  },
+                  "slots": {
+                    "media": [
+                      {
+                        "widget": "Screenshot",
+                        "props": {
+                          "caption": "editor · release note · 1200×750",
+                          "badge": "Step 2",
+                          "badgeTone": "primary",
+                          "ratio": "8/5"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "step-3": [
+                {
+                  "widget": "Features",
+                  "props": {
+                    "header": "side",
+                    "title": "Publish to three places at once",
+                    "subtitle": "Public page, in-app widget, email digest. One button, one version of the truth — the three can no longer disagree.",
+                    "link": {
+                      "text": "Try this step yourself",
+                      "href": "#signup"
+                    }
+                  },
+                  "slots": {
+                    "media": [
+                      {
+                        "widget": "Screenshot",
+                        "props": {
+                          "caption": "surfaces · publish · 1200×750",
+                          "badge": "Step 3",
+                          "badgeTone": "primary",
+                          "ratio": "8/5"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "step-4": [
+                {
+                  "widget": "Features",
+                  "props": {
+                    "header": "side",
+                    "title": "See who read it, and what they opened",
+                    "subtitle": "Per-account read receipts and the feature they used afterwards. This is what tells you whether the release landed or just shipped.",
+                    "link": {
+                      "text": "Try this step yourself",
+                      "href": "#signup"
+                    }
+                  },
+                  "slots": {
+                    "media": [
+                      {
+                        "widget": "Screenshot",
+                        "props": {
+                          "caption": "analytics · read receipts · 1200×750",
+                          "badge": "Step 4",
+                          "badgeTone": "primary",
+                          "ratio": "8/5"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Features",
+      "props": {
+        "layout": "cards",
+        "columns": "4",
+        "items": [
+          {
+            "title": "Written from your commits",
+            "description": "Cadence drafts from merged PRs and labels. You edit the draft; nobody starts from a blank page on release day."
+          },
+          {
+            "title": "One draft, three surfaces",
+            "description": "Public page, in-app widget and email — published together, so the three never disagree again."
+          },
+          {
+            "title": "Read receipts per release",
+            "description": "Which accounts saw which note, and which feature they opened afterwards. The only changelog metric that matters."
+          },
+          {
+            "title": "Self-hostable",
+            "description": "One container, your database, your domain. The hosted plan is convenience, not a hostage situation."
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "roles",
+        "label": "Who uses it",
+        "tone": "surface"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Switch",
+            "props": {
+              "options": [
+                {
+                  "value": "support",
+                  "label": "Support"
                 },
                 {
-                  "title": "Summaries",
-                  "description": "Catch up on any project with a summary of what changed.",
-                  "icon": "tabler:sparkles"
+                  "value": "product",
+                  "label": "Product"
                 },
                 {
-                  "title": "Integrations",
-                  "description": "Connect the tools your team already uses every day.",
-                  "icon": "tabler:plug"
+                  "value": "eng",
+                  "label": "Engineering"
+                }
+              ],
+              "label": "Your job",
+              "syncKey": "role",
+              "tagline": "Who uses it",
+              "title": "Three jobs, one changelog",
+              "subtitle": "Pick the one closest to yours — the page below changes, not just the words."
+            },
+            "slots": {
+              "support": [
+                {
+                  "widget": "Features",
+                  "props": {
+                    "layout": "cards",
+                    "columns": "3",
+                    "card": "canvas",
+                    "items": [
+                      {
+                        "eyebrow": "The problem",
+                        "description": "Half your tickets are “is this new?” or “did you change something?”, and the answer lives in a Slack thread from three weeks ago."
+                      },
+                      {
+                        "eyebrow": "With Cadence",
+                        "eyebrowTone": "primary",
+                        "description": "Every note is searchable, linkable and embeddable inside the support thread, so the answer is a link rather than an investigation."
+                      },
+                      {
+                        "eyebrow": "Measured",
+                        "description": "Northwind: “is this new?” tickets down about two thirds in the first month.",
+                        "footer": "Their own Zendesk tags, Aug 2026"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "product": [
+                {
+                  "widget": "Features",
+                  "props": {
+                    "layout": "cards",
+                    "columns": "3",
+                    "card": "canvas",
+                    "items": [
+                      {
+                        "eyebrow": "The problem",
+                        "description": "You ship something you are proud of and nobody notices. Adoption is flat and you cannot tell whether it is the feature or the silence."
+                      },
+                      {
+                        "eyebrow": "With Cadence",
+                        "eyebrowTone": "primary",
+                        "description": "Read receipts per account, and the feature opened afterwards — so you can separate “nobody wants it” from “nobody heard about it”."
+                      },
+                      {
+                        "eyebrow": "Measured",
+                        "description": "Median 41% of active accounts read a release note within seven days.",
+                        "footer": "Aggregate across 1,180 workspaces"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "eng": [
+                {
+                  "widget": "Features",
+                  "props": {
+                    "layout": "cards",
+                    "columns": "3",
+                    "card": "canvas",
+                    "items": [
+                      {
+                        "eyebrow": "The problem",
+                        "description": "Release notes land on whoever merged last, on the day they least have time, written from commit messages nobody outside the team understands."
+                      },
+                      {
+                        "eyebrow": "With Cadence",
+                        "eyebrowTone": "primary",
+                        "description": "The draft is already written from merged PRs and labels. Editing takes minutes, and it is never a blank page on release day."
+                      },
+                      {
+                        "eyebrow": "Measured",
+                        "description": "Median time from merge to published note: 40 minutes.",
+                        "footer": "Product telemetry, Jan–Aug 2026"
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -97,36 +360,162 @@
     {
       "widget": "Section",
       "props": {
-        "tone": "gradient"
+        "id": "integrations",
+        "label": "Integrations"
       },
       "slots": {
         "default": [
           {
-            "widget": "Content",
+            "widget": "Features",
             "props": {
-              "columns": "1",
-              "tagline": "Focus",
-              "title": "A calm home for real work",
-              "content": "Fast keyboard-first navigation, a quiet interface, everything one shortcut away.",
+              "layout": "cards",
+              "columns": "5",
+              "align": "start",
+              "tagline": "Integrations",
+              "title": "It reads from where the work already is",
+              "subtitle": "Grouped by what each one does, because a grid of logos tells you nothing.",
               "items": [
                 {
-                  "title": "Command palette",
-                  "description": "Jump to any project, doc or task in milliseconds."
+                  "title": "GitHub · GitLab",
+                  "description": "Reads merged PRs and labels"
                 },
                 {
-                  "title": "Offline-first",
-                  "description": "Keep working on the train; changes sync when you are back."
+                  "title": "Linear · Jira",
+                  "description": "Pulls the customer-facing title"
                 },
                 {
-                  "title": "Fine-grained permissions",
-                  "description": "Share the right thing with the right people, safely."
+                  "title": "Slack",
+                  "description": "Draft review before publishing"
+                },
+                {
+                  "title": "Resend · Postmark",
+                  "description": "Sends the digest from your domain"
+                },
+                {
+                  "title": "Intercom · Zendesk",
+                  "description": "Shows the note inside support threads"
+                },
+                {
+                  "title": "Webhooks · REST",
+                  "description": "Everything the UI does, scriptable"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "compare",
+        "label": "Compare",
+        "tone": "surface"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Table",
+            "props": {
+              "tagline": "Instead of",
+              "title": "What teams do today, and why it stops working",
+              "minWidth": 640,
+              "columns": [
+                {
+                  "label": ""
+                },
+                {
+                  "label": "Cadence",
+                  "highlight": true
+                },
+                {
+                  "label": "A page in your wiki"
+                },
+                {
+                  "label": "GitHub releases"
                 }
               ],
-              "image": {
-                "src": "https://images.unsplash.com/photo-1580481072645-022f9a6dbf27?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-                "alt": "Interface"
-              },
-              "reversed": true
+              "rows": [
+                {
+                  "cells": [
+                    "Who can read it",
+                    "Your customers",
+                    "Your staff, usually",
+                    "Developers"
+                  ]
+                },
+                {
+                  "cells": [
+                    "Written in plain language",
+                    "Drafted, then edited",
+                    "If someone has time",
+                    "Commit messages"
+                  ]
+                },
+                {
+                  "cells": [
+                    "In-app notification",
+                    "Included",
+                    "No",
+                    "No"
+                  ]
+                },
+                {
+                  "cells": [
+                    "Cost",
+                    {
+                      "text": "Free, then $29/mo",
+                      "tone": "muted"
+                    },
+                    {
+                      "text": "Free — they win this",
+                      "tone": "success"
+                    },
+                    {
+                      "text": "Free — they win this",
+                      "tone": "success"
+                    }
+                  ]
+                },
+                {
+                  "cells": [
+                    "Fails when",
+                    {
+                      "text": "You ship once a quarter",
+                      "tone": "muted"
+                    },
+                    "The owner goes on holiday",
+                    "Non-technical users read it"
+                  ]
+                }
+              ],
+              "note": "If you ship four times a year and have one person who enjoys writing the notes, a wiki page is genuinely enough. Saying so is what makes the rest of this table worth reading."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "ink",
+        "spacing": "sm"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "CallToAction",
+            "props": {
+              "layout": "band",
+              "title": "Convinced already? Same button as the top.",
+              "subtitle": "Free for one project, no card, two minutes to your first published note.",
+              "actions": [
+                {
+                  "variant": "contrast",
+                  "text": "Start free",
+                  "href": "#signup"
+                }
+              ]
             }
           }
         ]
@@ -136,71 +525,251 @@
       "widget": "Section",
       "props": {
         "id": "pricing",
-        "tone": "glow"
+        "label": "Pricing",
+        "tone": "surface"
       },
       "slots": {
         "default": [
           {
-            "widget": "Pricing",
+            "widget": "Switch",
             "props": {
+              "options": [
+                {
+                  "value": "monthly",
+                  "label": "Monthly"
+                },
+                {
+                  "value": "yearly",
+                  "label": "Yearly · 2 months free"
+                }
+              ],
+              "value": "yearly",
+              "label": "Billing period",
+              "syncKey": "billing",
               "tagline": "Pricing",
-              "title": "Pricing that scales with you",
+              "title": "Per project, not per seat",
+              "subtitle": "Seat-based pricing punishes you for inviting the people who should read the changelog."
+            },
+            "slots": {
+              "monthly": [
+                {
+                  "widget": "Pricing",
+                  "props": {
+                    "items": [
+                      {
+                        "title": "Free",
+                        "price": "0",
+                        "currency": "$",
+                        "note": "One project, forever. Not a trial.",
+                        "features": [
+                          "Public changelog page",
+                          "RSS feed and email digest",
+                          "Cadence badge in the footer"
+                        ],
+                        "actions": [
+                          {
+                            "text": "Start free",
+                            "href": "#signup"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "Team",
+                        "price": "29",
+                        "currency": "$",
+                        "suffix": "/month",
+                        "note": "Switch to yearly and two months are free",
+                        "recommended": true,
+                        "badge": "4 of 5 teams pick this",
+                        "features": [
+                          "Unlimited projects and editors",
+                          "In-app widget and read receipts",
+                          "Your domain, no badge",
+                          "Slack and Linear integrations"
+                        ],
+                        "actions": [
+                          {
+                            "text": "Start free, upgrade later",
+                            "href": "#signup"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "Self-hosted",
+                        "price": "99",
+                        "currency": "$",
+                        "suffix": "/month",
+                        "note": "Your infrastructure, your data",
+                        "features": [
+                          "Everything in Team",
+                          "One container, any Postgres",
+                          "SSO and audit log",
+                          "Named support contact"
+                        ],
+                        "actions": [
+                          {
+                            "text": "Talk to us",
+                            "href": "/contact"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ],
+              "yearly": [
+                {
+                  "widget": "Pricing",
+                  "props": {
+                    "items": [
+                      {
+                        "title": "Free",
+                        "price": "0",
+                        "currency": "$",
+                        "note": "One project, forever. Not a trial.",
+                        "features": [
+                          "Public changelog page",
+                          "RSS feed and email digest",
+                          "Cadence badge in the footer"
+                        ],
+                        "actions": [
+                          {
+                            "text": "Start free",
+                            "href": "#signup"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "Team",
+                        "price": "290",
+                        "currency": "$",
+                        "suffix": "/year",
+                        "note": "Two months free against monthly",
+                        "noteTone": "success",
+                        "recommended": true,
+                        "badge": "4 of 5 teams pick this",
+                        "features": [
+                          "Unlimited projects and editors",
+                          "In-app widget and read receipts",
+                          "Your domain, no badge",
+                          "Slack and Linear integrations"
+                        ],
+                        "actions": [
+                          {
+                            "text": "Start free, upgrade later",
+                            "href": "#signup"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "Self-hosted",
+                        "price": "990",
+                        "currency": "$",
+                        "suffix": "/year",
+                        "note": "Your infrastructure, your data",
+                        "features": [
+                          "Everything in Team",
+                          "One container, any Postgres",
+                          "SSO and audit log",
+                          "Named support contact"
+                        ],
+                        "actions": [
+                          {
+                            "text": "Talk to us",
+                            "href": "/contact"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Callout",
+            "props": {
+              "layout": "inline",
+              "tone": "neutral",
+              "label": "Trust",
+              "items": [
+                "[SOC 2 Type II](/contact#soc2)",
+                "[GDPR · EU data residency](/contact#gdpr)",
+                "[99.97% uptime, 90 days](/contact#status)",
+                "[security@cadence.dev](mailto:security@cadence.dev)"
+              ],
+              "footer": "Every badge links to its evidence."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Testimonials",
+      "props": {
+        "avatars": false,
+        "items": [
+          {
+            "text": "Support tickets asking ‘is this new?’ dropped by about two thirds in the first month.",
+            "name": "Priya Raman",
+            "role": "Head of Support, Northwind",
+            "date": "18 Aug 2026",
+            "source": "recorded call, with permission",
+            "href": "#source"
+          },
+          {
+            "text": "We publish notes on release day now instead of three weeks later. That is the entire product.",
+            "name": "Dan Okoye",
+            "role": "Staff engineer, Höok",
+            "date": "2 Jul 2026",
+            "source": "public post",
+            "href": "#source"
+          }
+        ],
+        "openSlot": {
+          "label": "Open slot",
+          "text": "Reserved for a quote about read receipts changing a roadmap decision. Empty until someone says it."
+        }
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "faq",
+        "label": "FAQ",
+        "tone": "surface",
+        "width": "md"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "FAQs",
+            "props": {
+              "layout": "list",
+              "columns": "1",
+              "open": "all",
+              "tagline": "FAQ",
+              "title": "Asked before signing up",
               "items": [
                 {
-                  "title": "Free",
-                  "subtitle": "To get started",
-                  "price": "0",
-                  "currency": "$",
-                  "period": "per month",
-                  "features": [
-                    "Up to 3 projects",
-                    "Unlimited docs",
-                    "Community support"
-                  ],
-                  "actions": [
-                    {
-                      "text": "Get started",
-                      "href": "#"
-                    }
-                  ]
+                  "title": "Is the free plan a trial?",
+                  "description": "No. One project, unlimited notes, forever, with a small Cadence badge in the footer. We would rather you outgrow it than have it expire on you."
                 },
                 {
-                  "title": "Team",
-                  "subtitle": "For growing teams",
-                  "price": "12",
-                  "currency": "$",
-                  "period": "per user / month",
-                  "recommended": true,
-                  "badge": "Popular",
-                  "features": [
-                    "Unlimited projects",
-                    "Automations and roadmaps",
-                    "Integrations",
-                    "Priority support"
-                  ],
-                  "actions": [
-                    {
-                      "text": "Start free trial",
-                      "href": "#"
-                    }
-                  ]
+                  "title": "What happens to my notes if we leave?",
+                  "description": "Export to Markdown with the images, one click, no support ticket. The public page can also be handed over as static files you host yourself."
                 },
                 {
-                  "title": "Enterprise",
-                  "subtitle": "For organizations at scale",
-                  "type": "custom",
-                  "description": "Volume pricing tailored to your organization.",
-                  "features": [
-                    "SSO y SCIM",
-                    "Advanced permissions",
-                    "Dedicated success manager"
-                  ],
-                  "actions": [
-                    {
-                      "text": "Contact sales",
-                      "href": "/contact"
-                    }
-                  ]
+                  "title": "Does the AI write the final text?",
+                  "description": "It writes the draft; a person publishes. Nothing reaches your customers without a human pressing publish, and the diff between draft and published is kept so you can see what it got wrong."
+                },
+                {
+                  "title": "Where is our data?",
+                  "description": "Frankfurt, on the hosted plan. SOC 2 Type II report on request, subprocessors listed publicly, and the self-hosted plan exists precisely for teams who cannot accept any of that."
+                },
+                {
+                  "title": "We ship once a quarter. Is this for us?",
+                  "description": "Honestly, probably not. Below about one release a month, a page in your wiki does the job. Come back when the wiki page starts going stale."
                 }
               ]
             }
@@ -211,67 +780,62 @@
     {
       "widget": "Section",
       "props": {
-        "id": "faq"
+        "id": "blog",
+        "label": "Blog"
       },
       "slots": {
         "default": [
           {
-            "widget": "FAQs",
+            "widget": "BlogLatestPosts",
             "props": {
-              "tagline": "FAQs",
-              "title": "Questions, answered",
-              "columns": "2",
-              "items": [
-                {
-                  "title": "Can I try it first?",
-                  "description": "Yes — the free plan is genuinely free, and paid plans include a fourteen-day trial."
-                },
-                {
-                  "title": "Can I import my data?",
-                  "description": "We import from the usual tools, keeping your structure intact."
-                },
-                {
-                  "title": "Is my data secure?",
-                  "description": "Encrypted in transit and at rest. Enterprise adds SSO and audit logs."
-                },
-                {
-                  "title": "Do you offer discounts?",
-                  "description": "For non-profits, students and annual billing."
-                }
-              ]
+              "title": "From the blog",
+              "link": {
+                "text": "All articles"
+              },
+              "count": 3
             }
           }
         ]
       }
     },
     {
-      "widget": "Steps",
+      "widget": "Section",
       "props": {
-        "layout": "numbered",
-        "title": "Up and running in an afternoon",
-        "items": [
+        "id": "signup",
+        "label": "Start free",
+        "tone": "surface",
+        "spacing": "lg"
+      },
+      "slots": {
+        "default": [
           {
-            "title": "Import your work",
-            "description": "Bring tasks and docs over in a couple of clicks.",
-            "icon": "tabler:download"
-          },
-          {
-            "title": "Invite your team",
-            "description": "Set up spaces and permissions, and get everyone in one place.",
-            "icon": "tabler:users"
-          },
-          {
-            "title": "Ship",
-            "description": "Plan, track and release, with automations doing the busywork.",
-            "icon": "tabler:rocket"
+            "widget": "CallToAction",
+            "props": {
+              "layout": "closing",
+              "size": "lg",
+              "title": "Publish your next release with it",
+              "subtitle": "Free for one project, no card, and the same button as the top of the page."
+            },
+            "slots": {
+              "below": [
+                {
+                  "widget": "Newsletter",
+                  "props": {
+                    "layout": "inline",
+                    "placeholder": "you@company.com",
+                    "submit": "Start free",
+                    "loading": "Creating…",
+                    "note": "No sales sequence. One email when your first note publishes.",
+                    "success": {
+                      "mode": "button",
+                      "label": "Check your inbox"
+                    }
+                  }
+                }
+              ]
+            }
           }
         ]
-      }
-    },
-    {
-      "widget": "BlogLatestPosts",
-      "props": {
-        "title": "From the blog"
       }
     }
   ]

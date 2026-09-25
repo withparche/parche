@@ -1,0 +1,21 @@
+{
+  "label": "Corvo menu",
+  "items": [
+    {
+      "label": "Bags",
+      "href": "/homes/store#shop"
+    },
+    {
+      "label": "Small goods",
+      "href": "/homes/store#shop"
+    },
+    {
+      "label": "Repairs",
+      "href": "/homes/store#shop"
+    },
+    {
+      "label": "How it is made",
+      "href": "/homes/store#making"
+    }
+  ]
+}

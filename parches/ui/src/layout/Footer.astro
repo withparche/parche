@@ -41,7 +41,7 @@ const {
 <footer class="relative border-t border-border bg-background not-prose" data-layout="brand">
   <div class="mx-auto grid max-w-(--ds-conf-width-xl) grid-cols-[repeat(auto-fit,minmax(min(170px,100%),1fr))] gap-[clamp(24px,3vw,40px)] px-(--ds-conf-gutter) pt-[clamp(44px,5vw,72px)] pb-7">
     <div class="min-w-0">
-      <a href="/" class="mb-3.5 flex items-center gap-2.5 text-heading no-underline">
+      <a href={brand?.href ?? '/'} class="mb-3.5 flex items-center gap-2.5 text-heading no-underline">
         {brand?.mark && <span class="block size-[22px] flex-none rounded-sm bg-primary" aria-hidden="true"></span>}
         <span class="font-heading text-[17px] leading-none font-semibold tracking-[-0.02em]">{brand?.text ?? siteName}</span>
       </a>
@@ -63,9 +63,26 @@ const {
       </div>
     ))}
   </div>
-  <div class="mx-auto flex max-w-(--ds-conf-width-xl) flex-wrap justify-between gap-4 border-t border-border px-(--ds-conf-gutter) py-5 type-small text-muted">
+  <div class="mx-auto flex max-w-(--ds-conf-width-xl) flex-wrap items-center justify-between gap-4 border-t border-border px-(--ds-conf-gutter) py-5 type-small text-muted">
     <span>{copyright ? <Fragment set:html={inline(copyright)} /> : <>&copy; {new Date().getFullYear()} {siteName}</>}</span>
+    {secondaryLinks.length > 0 && (
+      <ul class="flex flex-wrap gap-x-4 gap-y-1">
+        {secondaryLinks.map(({ label, href }: { label: string; href: string }) => <li><a href={href} class="text-muted no-underline hover:text-heading">{label}</a></li>)}
+      </ul>
+    )}
     {note && <span set:html={inline(note)} />}
+  </div>
+</footer>
+) : layout === 'minimal' ? (
+<footer class="relative border-t border-border bg-background not-prose" data-layout="minimal">
+  <div class="mx-auto flex max-w-(--ds-conf-width-xl) flex-wrap items-center justify-between gap-x-6 gap-y-3 px-(--ds-conf-gutter) py-7 type-small text-muted">
+    <span>{copyright ? <Fragment set:html={inline(copyright)} /> : <>&copy; {new Date().getFullYear()} {siteName}</>}</span>
+    <ul class="flex flex-wrap gap-x-5 gap-y-1">
+      {[...secondaryLinks, ...columns.flatMap((c: { links: Array<{ label: string; href: string }> }) => c.links)].map(({ label, href }: { label: string; href: string }) => (
+        <li><a href={href} class="text-muted no-underline hover:text-heading">{label}</a></li>
+      ))}
+    </ul>
+    {note && <span class="basis-full" set:html={inline(note)} />}
   </div>
 </footer>
 ) : (

@@ -12,7 +12,7 @@
 import { cn, splitProps } from '@parche/elements/utils';
 import { schema, tones } from './callout.props';
 
-const { props: { tone, layout, label, title, description, items, rows, footer, link }, rest, className, part } = splitProps(schema, Astro.props);
+const { props: { tone, layout, label, title, description, items, rows, footer, link, elevated }, rest, className, part } = splitProps(schema, Astro.props);
 type Tone = (typeof tones)[number];
 
 const box: Record<Tone, string> = {
@@ -76,13 +76,13 @@ const labelClass = cn('font-mono text-[10px] leading-none font-medium tracking-[
   </aside>
 ) : (
   <aside
-    class={cn('parche-callout flex flex-col rounded-[var(--ds-comp-callout-radius-lg,var(--radius-lg))] border p-[var(--ds-comp-callout-padding,clamp(1.375rem,2.6vw,1.875rem))]', box[tone], className)}
+    class={cn('parche-callout flex flex-col rounded-[var(--ds-comp-callout-radius-lg,var(--radius-lg))] border p-[var(--ds-comp-callout-padding,clamp(1.375rem,2.6vw,1.875rem))]', box[tone], elevated && 'border-border bg-surface shadow-lg', className)}
     {...rest}
     data-part={part}
     data-state={tone}
     data-layout="card"
   >
-    {label && <p class={cn(labelClass, 'mb-4')} data-part="label" set:html={label} />}
+    {label && <p class={cn(labelClass, 'mb-4', elevated && 'text-primary')} data-part="label" set:html={label} />}
     {title && <p class="mb-2 font-heading text-lg leading-[1.35] font-semibold text-heading" data-part="title" set:html={title} />}
     {description && <p class="max-w-[80ch] text-[15px] leading-[1.6] text-text" data-part="description" set:html={description} />}
     {items.length > 0 && (
@@ -95,12 +95,13 @@ const labelClass = cn('font-mono text-[10px] leading-none font-medium tracking-[
         {rows.map((r) => (
           <div class="flex items-baseline justify-between gap-4 py-2.5 first:pt-0 last:pb-0">
             <dt class="text-sm leading-[1.4] text-heading" set:html={r.label} />
-            <dd class="font-mono text-[13px] leading-[1.4] whitespace-nowrap text-muted" set:html={r.value} />
+            <dd class={cn('font-mono text-[13px] leading-[1.4] whitespace-nowrap', r.tone && r.tone !== 'neutral' ? ink[r.tone] : 'text-muted')} set:html={r.value} />
           </div>
         ))}
       </dl>
     )}
     {link && <a href={link.href} class="mt-3.5 self-start text-sm leading-none font-semibold text-primary no-underline hover:text-heading">{link.text} →</a>}
+    {Astro.slots.has('actions') && <div class="mt-5 flex flex-col gap-2.5" data-part="actions"><slot name="actions" /></div>}
     {footer && <p class={cn('mt-[18px] border-t border-border pt-4 text-[13px] leading-[1.6]', tone === 'neutral' ? 'text-muted' : 'text-text')} data-part="footer" set:html={footer} />}
   </aside>
 )}

@@ -1,0 +1,52 @@
+{
+  "sections": [
+    {
+      "widget": "Header",
+      "props": {
+        "logo": {
+          "text": "Nocta",
+          "href": "/homes/mobile-app",
+          "mark": true
+        },
+        "position": "left",
+        "links": {
+          "$ref": "navigation/nocta"
+        },
+        "controls": {
+          "theme": "text",
+          "locale": "none"
+        },
+        "actions": [
+          {
+            "label": "Download",
+            "href": "/homes/mobile-app#download",
+            "variant": "contrast"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Outlet",
+      "props": {
+        "wrapper": {
+          "widget": "Section"
+        }
+      }
+    },
+    {
+      "widget": "Footer",
+      "props": {
+        "layout": "minimal",
+        "brand": {
+          "text": "Nocta",
+          "href": "/homes/mobile-app",
+          "mark": true
+        },
+        "secondaryLinks": {
+          "$ref": "navigation/nocta-footer"
+        },
+        "copyright": "© 2026 Nocta · made by two people in Lisbon"
+      }
+    }
+  ]
+}

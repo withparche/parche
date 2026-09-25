@@ -1,0 +1,21 @@
+{
+  "label": "Vela menu",
+  "items": [
+    {
+      "label": "Services & prices",
+      "href": "/homes/local#services"
+    },
+    {
+      "label": "Area",
+      "href": "/homes/local#area"
+    },
+    {
+      "label": "Reviews",
+      "href": "/homes/local#reviews"
+    },
+    {
+      "label": "Book",
+      "href": "/homes/local#book"
+    }
+  ]
+}

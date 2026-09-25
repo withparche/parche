@@ -1,0 +1,56 @@
+{
+  "label": "Vela footer",
+  "items": [
+    {
+      "title": "Reach us",
+      "links": [
+        {
+          "label": "944 00 00 00",
+          "href": "tel:+34944000000"
+        },
+        {
+          "label": "WhatsApp",
+          "href": "https://wa.me/34600000000"
+        },
+        {
+          "label": "hola@velafontaneria.es",
+          "href": "mailto:hola@velafontaneria.es"
+        }
+      ]
+    },
+    {
+      "title": "Areas",
+      "links": [
+        {
+          "label": "Plumber in Bilbao",
+          "href": "/homes/local#bilbao"
+        },
+        {
+          "label": "Plumber in Getxo",
+          "href": "/homes/local#getxo"
+        },
+        {
+          "label": "Plumber in Barakaldo",
+          "href": "/homes/local#barakaldo"
+        }
+      ]
+    },
+    {
+      "title": "Legal",
+      "links": [
+        {
+          "label": "Terms",
+          "href": "/terms"
+        },
+        {
+          "label": "Privacy",
+          "href": "/privacy"
+        },
+        {
+          "label": "Two-year guarantee",
+          "href": "/homes/local#guarantee"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "sections": [
+    {
+      "widget": "Header",
+      "props": {
+        "logo": {
+          "text": "Sarah Johnson",
+          "href": "/homes/personal"
+        },
+        "position": "left",
+        "links": {
+          "$ref": "navigation/sarah"
+        },
+        "controls": {
+          "theme": "text",
+          "locale": "none"
+        },
+        "actions": [
+          {
+            "label": "Available from October",
+            "href": "/homes/personal#hire",
+            "variant": "contrast"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Outlet",
+      "props": {
+        "wrapper": {
+          "widget": "Section"
+        }
+      }
+    },
+    {
+      "widget": "Footer",
+      "props": {
+        "layout": "minimal",
+        "brand": {
+          "text": "Sarah Johnson",
+          "mark": false,
+          "description": "Graphic designer, eight years, mostly for software and cultural clients.",
+          "links": [],
+          "href": "/homes/personal"
+        },
+        "copyright": "© 2026 Sarah Johnson · New York",
+        "columns": {
+          "$ref": "navigation/sarah-footer"
+        }
+      }
+    }
+  ]
+}
