@@ -8,7 +8,7 @@
           "href": "/"
         },
         "links": {
-          "$navigation": "main"
+          "$ref": "navigation/main"
         },
         "actions": [
           {
@@ -33,10 +33,10 @@
       "props": {
         "siteName": "Parche",
         "columns": {
-          "$navigation": "footer"
+          "$ref": "navigation/footer"
         },
         "socialLinks": {
-          "$navigation": "social"
+          "$ref": "navigation/social"
         },
         "copyright": "© 2026 Parche, Inc. All rights reserved.",
         "footNote": "Built with Parche."

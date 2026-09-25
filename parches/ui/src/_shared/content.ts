@@ -94,9 +94,12 @@ export const responseTime = z.object({
 export type ResponseTime = z.infer<typeof responseTime>;
 
 /**
- * A reference to a content collection, for a widget that lists entries the
- * page should not repeat inline: `{ "$collection": "posts", "limit": 3 }`.
- * The renderer resolves it to the entries' data before the widget sees it.
+ * A query on a content collection, for a widget that lists entries the page
+ * should not repeat inline: `{ "$collection": "posts", "limit": 3 }`. The
+ * renderer resolves it to the entries' data (each with its `id`) before the
+ * widget sees it, so a widget's schema names the item shape, not this one;
+ * this shape is for the builder, to offer a query where a list goes. A
+ * single entry is `{ "$ref": "<collection>/<id>" }` (core content/refs.ts).
  */
 export const collectionRef = z.object({
   $collection: z.string().meta({ help: 'The collection name.' }),

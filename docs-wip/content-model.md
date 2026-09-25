@@ -107,24 +107,45 @@ A layout is a tree of nodes with **`Outlet`** nodes where the page goes:
 `slots.aside`. An outlet may sit at any depth, inside a `Columns` for a docs
 shell. Layout roots are chrome and are not wrapped.
 
-## Menus
+## References
 
-Menus are content of their own, in the `navigation` collection: one file per
-menu and locale, `src/content/navigation/<locale>/<name>.json`, holding
-`{ "label": "Main menu", "items": [ … ] }`. The items are in the shape the
-consuming prop takes (header links, footer columns, social links). Any prop
-points at a menu instead of repeating it:
+Content that lives once in a collection is pointed at from props, not copied
+into them. There are two forms, and the renderer resolves both before a widget
+sees its props, so widget schemas stay plain lists and objects and any widget
+can take a reference:
 
 ```json
-{ "widget": "Header", "props": { "links": { "$navigation": "main" }, "actions": [ … ] } }
+{ "$ref": "navigation/main" }
+{ "$ref": "authors/marta#/name" }
+{ "$collection": "posts", "sort": "-publishDate", "limit": 3, "filter": { "category": "guides" } }
 ```
 
-Before a tree renders, the renderer replaces each reference by the menu's
-items (`{locale}/{name}` first, then `{name}`), so widgets keep plain list
-schemas and any widget can take a menu. A reference to a menu that does not
-exist renders an empty list and is a content issue with its path, which fails
-a build like the others. Layouts then hold structure only, and an editor
-changes a link once for every layout that shows it.
+- `$ref` names one entry, `<collection>/<id>`, looked up in the page locale
+  first (`es/main`), then without one (`main`). It yields the entry's data,
+  or the field an optional JSON Pointer after `#` names. A menu is the one
+  exception: `navigation/<name>` yields the menu's `items`, the list a header
+  or footer prop takes.
+- `$collection` is a query: the page locale's entries when the collection is
+  split by locale, drafts left out, then `filter` (equality, or membership
+  for an array field), `sort` (a field, `-` for descending) and `limit`. It
+  yields a list of the entries' data, each with its `id`.
+- An object is a reference only when it has nothing else in it (`$ref`
+  alone; `$collection` with only those three options). A reference that does
+  not resolve renders empty and is a content issue with its path, which fails
+  a build like the others.
+
+### Menus
+
+Menus are one such collection, `navigation`: one file per menu and locale,
+`src/content/navigation/<locale>/<name>.json`, holding
+`{ "label": "Main menu", "items": [ … ] }` with the items in the shape the
+consuming prop takes. A layout then holds structure only:
+
+```json
+{ "widget": "Header", "props": { "links": { "$ref": "navigation/main" }, "actions": [ … ] } }
+```
+
+and an editor changes a link once for every layout that shows it.
 
 ## Declaring slots in a widget
 

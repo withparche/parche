@@ -73,8 +73,8 @@ export const pageSchema = z.object({
  * A menu in the `navigation` collection, one file per menu and locale
  * (`navigation/en/main.json`). `items` is the list a widget prop takes, in
  * that widget's shape: header links for a header, link columns for a footer.
- * A prop points at it with `{ "$navigation": "main" }`; the renderer replaces
- * the reference by the items and the widget's own schema checks them.
+ * A prop points at it with `{ "$ref": "navigation/main" }`; the renderer
+ * replaces the reference by the items and the widget's own schema checks them.
  */
 export const navigationSchema = z.object({
   label: z.string().optional(),

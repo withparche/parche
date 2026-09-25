@@ -10,7 +10,7 @@
         },
         "position": "left",
         "links": {
-          "$navigation": "product"
+          "$ref": "navigation/product"
         },
         "search": {
           "label": "Search",
@@ -53,7 +53,7 @@
           ]
         },
         "columns": {
-          "$navigation": "product-footer"
+          "$ref": "navigation/product-footer"
         },
         "copyright": "© 2026 AstroWind · MIT licensed",
         "note": "Built with Astro 7 · 100 Lighthouse · `38 KB` median page"

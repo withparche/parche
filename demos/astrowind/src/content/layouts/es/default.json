@@ -8,7 +8,7 @@
           "href": "/es"
         },
         "links": {
-          "$navigation": "main"
+          "$ref": "navigation/main"
         },
         "actions": [
           {
@@ -32,10 +32,10 @@
       "props": {
         "siteName": "AstroWind",
         "columns": {
-          "$navigation": "footer"
+          "$ref": "navigation/footer"
         },
         "socialLinks": {
-          "$navigation": "social"
+          "$ref": "navigation/social"
         },
         "footNote": "Hecho por <a class=\"text-primary hover:underline\" href=\"https://github.com/arthelokyo\">arthelokyo</a> · Todos los derechos reservados."
       }

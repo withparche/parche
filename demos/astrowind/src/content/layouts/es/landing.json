@@ -8,7 +8,7 @@
           "href": "/es"
         },
         "links": {
-          "$navigation": "landing"
+          "$ref": "navigation/landing"
         },
         "actions": [
           {
@@ -29,7 +29,7 @@
         "siteName": "AstroWind",
         "columns": [],
         "secondaryLinks": {
-          "$navigation": "legal"
+          "$ref": "navigation/legal"
         },
         "footNote": "Hecho por <a class=\"text-primary hover:underline\" href=\"https://github.com/arthelokyo\">arthelokyo</a>."
       }

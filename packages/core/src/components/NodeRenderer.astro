@@ -9,7 +9,7 @@ import { loadWidgets } from 'parche:registry/widgets';
 import { wrapper as wrapperName, unwrapped } from 'parche:config/layout';
 import { resolveAssets } from '../utils/assets.js';
 import { expandPresets } from '../utils/presets.js';
-import { resolveNavigation } from '../utils/navigation.js';
+import { resolveRefs } from '../utils/refs.js';
 import type { Node as NodeData } from '../content/node';
 import { widgetNames } from '../content/node';
 import Node from './Node.astro';
@@ -26,9 +26,9 @@ const { nodes: givenNodes, wrap = false, outlets: givenOutlets } = Astro.props;
 
 // Presets first: a `Preset` node becomes the saved tree it names, so what
 // follows sees only real widgets.
-// Then menus: a `{ "$navigation": name }` value becomes that menu's items.
+// Then references: a `$ref` or `$collection` value becomes the content it names.
 const locale = (Astro.locals as any).parche?.locale as string | undefined;
-const expand = async (tree: NodeData[], base: string) => resolveNavigation(await expandPresets(tree, locale), locale, base);
+const expand = async (tree: NodeData[], base: string) => resolveRefs(await expandPresets(tree, locale), locale, base);
 const root = await expand(givenNodes, wrap ? 'sections' : 'layout');
 const rawNodes = root.nodes;
 const outletResults = givenOutlets
@@ -37,7 +37,7 @@ const outletResults = givenOutlets
 const rawOutlets = givenOutlets
   ? { nodes: Object.fromEntries(outletResults.map(([k, r]) => [k, r.nodes])), html: givenOutlets.html }
   : undefined;
-const missingMenus = [...root.missing, ...outletResults.flatMap(([, r]) => r.missing)];
+const refIssues = [...root.issues, ...outletResults.flatMap(([, r]) => r.issues)];
 
 // Everything the render will touch, loaded once: the tree, the outlet trees
 // and the wrapper. Widgets not referenced are never imported.
@@ -69,7 +69,7 @@ if (import.meta.env.DEV || Astro.isPrerendered) {
   ]);
   const ctx = { widgets: widgetMeta as any, tones: tones.map((t) => t.name), wrapper: wrapperName };
   const issues = [
-    ...missingMenus.map((m) => ({ path: m.path, message: `menu "${m.name}" is not in the navigation collection` })),
+    ...refIssues,
     ...validateTree(rawNodes, ctx, wrap ? 'sections' : 'layout'),
     ...Object.entries(rawOutlets?.nodes ?? {}).flatMap(([name, tree]) => validateTree(tree, ctx, name === 'default' ? 'sections' : `slots.${name}`)),
   ];

@@ -8,7 +8,7 @@
           "href": "/"
         },
         "links": {
-          "$navigation": "docs"
+          "$ref": "navigation/docs"
         },
         "actions": [
           {
@@ -75,10 +75,10 @@
       "widget": "Footer",
       "props": {
         "columns": {
-          "$navigation": "docs-footer"
+          "$ref": "navigation/docs-footer"
         },
         "socialLinks": {
-          "$navigation": "docs-social"
+          "$ref": "navigation/docs-social"
         },
         "footNote": "A fixture layout: two columns with an outlet in each, the second one an aside."
       }
