@@ -10,7 +10,7 @@ export const groups: Array<{ label: string; names: string[] }> = [
   { label: 'Data display', names: ['Badge', 'Tag', 'Card', 'List', 'Table', 'Callout', 'Stat', 'Breadcrumb', 'Pagination', 'Toc', 'Share'] },
   { label: 'Disclosure', names: ['Collapsible', 'Accordion', 'Tabs', 'Carousel'] },
   { label: 'Overlays', names: ['Dialog', 'Sheet', 'Popover', 'Menu', 'Tooltip', 'Toast', 'Banner'] },
-  { label: 'Forms', names: ['Label', 'Field', 'Input', 'Textarea', 'Select', 'Checkbox', 'RadioGroup', 'Switch', 'Slider', 'Combobox'] },
+  { label: 'Forms', names: ['Form', 'Label', 'Field', 'Input', 'Textarea', 'Select', 'Checkbox', 'RadioGroup', 'Switch', 'Slider', 'Combobox'] },
 ];
 
 export function grouped(names: string[]): Array<{ label: string; names: string[] }> {

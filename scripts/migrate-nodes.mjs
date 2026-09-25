@@ -179,11 +179,23 @@ const VOCABULARY = {
   Cases: (p) => (p.items ? { ...p, items: mapList(p.items, (c) => move(c, 'summary', 'description')) } : p),
   Content: (p) => move(p, 'callToAction', 'actions', toActions),
   Steps: (p) => move(p, 'callToAction', 'actions', toActions),
-  Contact: (p) => move(move(move(p, 'action', 'endpoint'), 'button', 'submit'), 'description', 'note'),
+  Contact: (p) => contactFields(move(move(move(p, 'action', 'endpoint'), 'button', 'submit'), 'description', 'note')),
   Newsletter: (p) => move(move(move(p, 'text', 'subtitle'), 'action', 'endpoint'), 'button', 'submit'),
   BlogLatestPosts: blogLink,
   BlogHighlightedPosts: blogLink,
 };
+
+/** Contact's inputs, textarea and disclaimer become one `fields` list, in that order. */
+function contactFields(p) {
+  if (!('inputs' in p) && !('textarea' in p) && !('disclaimer' in p)) return p;
+  const { inputs = [], textarea, disclaimer, ...rest } = p;
+  const fields = [
+    ...inputs.map(({ type, ...f }) => ({ ...f, ...(type && type !== 'text' ? { type } : {}) })),
+    ...(textarea ? [{ name: textarea.name ?? 'message', ...(textarea.label ? { label: textarea.label } : {}), type: 'textarea', ...(textarea.placeholder ? { placeholder: textarea.placeholder } : {}), ...(textarea.rows ? { rows: textarea.rows } : {}) }] : []),
+    ...(disclaimer?.label ? [{ name: 'consent', label: disclaimer.label, type: 'checkbox' }] : []),
+  ];
+  return { ...rest, fields: [...(rest.fields ?? []), ...fields] };
+}
 
 function blogLink(p) {
   const { linkText, linkUrl, ...rest } = move(p, 'information', 'subtitle');
@@ -279,7 +291,7 @@ const roots = process.argv.slice(2).map((p) => resolve(p));
 if (roots.length === 0) roots.push(resolve('demos'), resolve('templates'), resolve('examples'));
 
 /** What the previous models look like in YAML or front matter, which is reported rather than rewritten. */
-const OLD_SHAPES = /wrapper|layout\/Main|^template:|^\s*-?\s*(stats|testimonials|members|entries|projects|prices|demos|callToAction|hasRibbon|ribbonTitle|linkText|linkUrl|information):/m;
+const OLD_SHAPES = /wrapper|layout\/Main|^template:|^\s*-?\s*(stats|testimonials|members|entries|projects|prices|demos|callToAction|hasRibbon|ribbonTitle|linkText|linkUrl|information|inputs|disclaimer):/m;
 
 let rewritten = 0;
 const markdown = [];

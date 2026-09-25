@@ -1,27 +1,50 @@
 ---
+/**
+ * One field, one promise, one line on what happens next. As a card with a
+ * title for the end of a page, or inline, the field and the button in one
+ * row, for a hero or a closing band. The Form element sends it and shows the
+ * sent state.
+ */
 import Card from 'parche:elements/Card';
-import { inline } from '../_shared/inline';
+import Form from 'parche:elements/Form';
 import Button from 'parche:elements/Button';
+import { inline } from '../_shared/inline';
+import FormSuccess from '../components/FormSuccess.astro';
 import { schema, type Props } from './Newsletter.props';
 
-const { title, subtitle, endpoint, placeholder, submit, note } = schema.parse(Astro.props) as Props;
+const { title, subtitle, layout, placeholder, submit, note, endpoint, loading, error, success } = schema.parse(Astro.props) as Props;
+// A stable id from the content, so two newsletters on one page do not clash.
+const seed = `${title ?? ''}${placeholder}${submit}`;
+let h = 5381;
+for (let i = 0; i < seed.length; i++) h = ((h << 5) + h + seed.charCodeAt(i)) >>> 0;
+const id = `newsletter-${h.toString(36)}`;
+const card = layout === 'card';
+const Frame = card ? Card : 'div';
+const frame = card ? { variant: 'canvas', radius: 'lg', padding: 'lg', shadow: 'none' } : {};
 ---
 
-<Card as="form" action={endpoint} method={endpoint ? 'post' : undefined} variant="canvas" radius="lg" padding="lg" shadow="none" class="parche-newsletter text-left">
-  <p class="mb-1.5 type-title" set:html={inline(title)} />
-  {subtitle && <p class="mb-4 text-sm leading-[1.55] text-muted" set:html={inline(subtitle)} />}
-  <div class="flex flex-wrap gap-2">
-    <label class="sr-only" for="parche-newsletter-email">Email</label>
-    <input
-      id="parche-newsletter-email"
-      type="email"
-      name="email"
-      required
-      autocomplete="email"
-      placeholder={placeholder}
-      class="min-w-[180px] flex-1 rounded-sm border border-border bg-surface px-3.5 py-3 text-[15px] leading-none text-heading placeholder:text-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-    />
-    <Button type="submit" variant="contrast" class="px-[18px] py-3 text-[15px] leading-none">{submit}</Button>
-  </div>
-  {note && <p class="mt-3 text-xs leading-[1.5] text-muted" set:html={inline(note)} />}
-</Card>
+<Frame {...frame} class:list={['parche-newsletter text-left', !card && 'mx-auto w-full max-w-[460px]']} data-layout={layout}>
+  {card && title && <p class="mb-1.5 type-title" set:html={inline(title)} />}
+  {card && subtitle && <p class="mb-4 text-sm leading-[1.55] text-muted" set:html={inline(subtitle)} />}
+  <Form {endpoint} label={title ?? 'Subscribe'} success={success?.mode ?? 'button'} loadingLabel={loading} successLabel={success?.label} errorMessage={error}>
+    <div class="parche-field flex flex-wrap gap-2">
+      <label class="sr-only" for={id}>Email</label>
+      <input
+        id={id}
+        type="email"
+        name="email"
+        required
+        autocomplete="email"
+        placeholder={placeholder}
+        class:list={[
+          'min-w-[180px] flex-1 rounded-sm border border-border bg-surface text-[15px] leading-none text-heading placeholder:text-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-[invalid=true]:border-danger',
+          card ? 'px-3.5 py-3' : 'min-w-[200px] px-4 py-3.5',
+        ]}
+      />
+      <Button type="submit" variant={card ? 'contrast' : 'primary'} class:list={['text-[15px] leading-none', card ? 'px-[18px] py-3' : 'px-[22px] py-3.5']}>{submit}</Button>
+      <p id={`${id}-error`} class="basis-full text-sm text-danger empty:hidden" data-part="error"></p>
+    </div>
+    {note && <p class:list={['mt-3 text-xs leading-[1.5] text-muted', !card && 'text-center']} set:html={inline(note)} />}
+    {success && (success.title || success.text || success.links.length > 0 || success.copy) && <FormSuccess slot="success" {success} />}
+  </Form>
+</Frame>

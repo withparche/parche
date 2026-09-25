@@ -17,38 +17,39 @@
       "props": {
         "title": "Send us a message",
         "subtitle": "Fill in the form and we will reply by email.",
-        "inputs": [
+        "submit": "Send message",
+        "fields": [
           {
-            "type": "text",
             "name": "name",
             "label": "Name",
             "placeholder": "Ada Lovelace",
             "autocomplete": "name"
           },
           {
-            "type": "email",
             "name": "email",
             "label": "Email",
             "placeholder": "ada@example.com",
-            "autocomplete": "email"
+            "autocomplete": "email",
+            "type": "email"
           },
           {
-            "type": "text",
             "name": "subject",
             "label": "Subject",
             "placeholder": "How can we help?"
+          },
+          {
+            "name": "message",
+            "label": "Message",
+            "type": "textarea",
+            "placeholder": "Tell us the details…",
+            "rows": 5
+          },
+          {
+            "name": "consent",
+            "label": "By sending this you agree that we store your message so we can reply.",
+            "type": "checkbox"
           }
-        ],
-        "textarea": {
-          "label": "Message",
-          "name": "message",
-          "rows": 5,
-          "placeholder": "Tell us the details…"
-        },
-        "disclaimer": {
-          "label": "By sending this you agree that we store your message so we can reply."
-        },
-        "submit": "Send message"
+        ]
       }
     },
     {

@@ -1,29 +1,15 @@
 import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
-import { heading, headingGroup } from '../_shared/content';
-
-const inputField = z.object({
-  type: z.string().default('text'),
-  name: z.string(),
-  label: z.string().optional(),
-  autocomplete: z.string().optional(),
-  placeholder: z.string().optional(),
-});
+import { heading, headingGroup, text } from '../_shared/content';
+import { field, sending } from '../_shared/form';
 
 export const schema = z.object({
   ...heading(),
-  inputs: z.array(inputField).default([]),
-  textarea: z.object({
-    label: z.string().optional(),
-    name: z.string().optional(),
-    placeholder: z.string().optional(),
-    rows: z.number().default(4),
-  }).optional(),
-  disclaimer: z.object({ label: z.string().optional() }).optional(),
+  fields: z.array(field).default([]).meta({ help: 'What the form asks, in order: text, email, select, textarea, checkbox…' }),
   submit: z.string().default('Send message').meta({ help: 'The submit button label.' }),
-  endpoint: z.string().optional().meta({ help: 'Where the form posts.' }),
-  note: z.string().optional().meta({ help: 'One line under the button.' }),
-  layout: z.enum(['centered', 'split']).default('centered').meta({ help: 'centered: the form under the heading · split: the heading and the booking card on the left, the form on the right.' }),
+  note: text().optional().meta({ help: 'One line under the button.' }),
+  ...sending,
+  layout: z.enum(['centered', 'split', 'plain']).default('centered').meta({ help: 'centered: the form on a card under the heading · split: the heading and the booking card on the left, the form on a card on the right · plain: the heading and the form with no card, for a column beside other content.' }),
   booking: z
     .object({
       title: z.string().default('Next available'),
@@ -40,14 +26,15 @@ export type Props = z.infer<typeof schema>;
 export const meta: WidgetMeta = {
   widget: {
     label: 'Contact',
-    description: 'Contact form with custom fields',
+    description: 'A form that says what happens next: fields from content, sending and sent states, and optional bookable slots beside it.',
     category: 'contact',
     icon: 'tabler:mail',
   },
   ui: {
     groups: [
       headingGroup,
-      { key: 'form', label: 'Form', fields: ['inputs', 'textarea', 'disclaimer', 'submit', 'endpoint', 'note'] },
+      { key: 'form', label: 'Form', fields: ['fields', 'submit', 'note'] },
+      { key: 'sending', label: 'Sending', fields: ['endpoint', 'loading', 'error', 'success'] },
     ],
   },
 };

@@ -1,0 +1,44 @@
+---
+/**
+ * What a form shows once sent, rendered on the server and revealed by the
+ * Form element: a line under the form (append), or a panel in its place
+ * (replace) with what to do next.
+ */
+import Command from 'parche:elements/Command';
+import Actions from './Actions.astro';
+import { inline } from '../_shared/inline';
+import type { Success } from '../_shared/form';
+
+interface Props {
+  success: Success;
+}
+
+const { success } = Astro.props;
+const { mode, title, text, actions, links, copy } = success;
+const extras = actions.length > 0 || links.length > 0 || copy;
+---
+
+{mode === 'replace' ? (
+  <div class="flex flex-col items-start gap-3">
+    <span class="flex size-10 items-center justify-center rounded-full bg-success-soft font-mono text-base text-success" aria-hidden="true">✓</span>
+    {title && <h3 class="font-heading text-[22px] leading-[1.25] font-semibold text-heading" set:html={inline(title)} />}
+    {text && <p class="text-[15px] leading-[1.65] text-muted" set:html={inline(text)} />}
+    {extras && (
+      <div class="mt-2 flex w-full flex-col gap-3 border-t border-border-soft pt-4">
+        <Actions {actions} size="md" />
+        {links.length > 0 && <ul class="flex flex-wrap gap-2">{links.map((l) => <li><a href={l.href} class="block rounded-sm border border-border bg-surface px-[11px] py-2 text-xs leading-none font-medium text-heading no-underline hover:border-primary">{l.text}</a></li>)}</ul>}
+        {copy && <Command variant="button" command={copy.value} copyLabel={copy.label} copiedLabel={copy.copiedLabel ?? 'Copied'} class="self-start" />}
+      </div>
+    )}
+  </div>
+) : (
+  <div class="mt-3 flex gap-3 rounded-sm border border-success bg-success-soft px-4 py-3.5">
+    <span class="font-mono text-[13px] leading-[1.55] text-success" aria-hidden="true">✓</span>
+    <div class="flex min-w-0 flex-col gap-2.5 text-sm leading-[1.55] text-heading">
+      {(title || text) && <p>{title && <strong class="font-semibold" set:html={inline(title)} />}{title && text && ' '}{text && <Fragment set:html={inline(text)} />}</p>}
+      {links.length > 0 && <ul class="flex flex-wrap gap-2">{links.map((l) => <li><a href={l.href} class="block rounded-sm border border-border bg-surface px-[11px] py-2 text-xs leading-none font-medium text-heading no-underline hover:border-primary">{l.text}</a></li>)}</ul>}
+      {copy && <Command variant="button" command={copy.value} copyLabel={copy.label} copiedLabel={copy.copiedLabel ?? 'Copied'} class="self-start" />}
+      <Actions {actions} size="sm" />
+    </div>
+  </div>
+)}

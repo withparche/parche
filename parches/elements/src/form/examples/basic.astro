@@ -1,0 +1,15 @@
+---
+import Form from '../Form.astro';
+import Input from '../../input/Input.astro';
+import Button from '../../button/Button.astro';
+---
+
+<div class="max-w-md">
+  <Form successLabel="Sent" label="Contact">
+    <div class="flex flex-col gap-4">
+      <Input name="email" type="email" label="Email" required />
+      <Button type="submit" block>Send</Button>
+    </div>
+    <p slot="success" class="mt-3 text-sm text-muted">Thanks. We reply within a day.</p>
+  </Form>
+</div>

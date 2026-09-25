@@ -1,0 +1,14 @@
+{
+  "name": "form",
+  "type": "element",
+  "files": [
+    { "path": "Form.astro", "type": "part" },
+    { "path": "form.element.ts", "type": "element" },
+    { "path": "form.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["field", "input", "button"],
+  "source": null
+}

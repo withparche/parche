@@ -1,0 +1,43 @@
+---
+/**
+ * Form — a real `<form>` around the fields and the submit button the page
+ * puts in it. Without script it posts like any form. The element upgrades
+ * it: it checks the fields with the browser's own constraints and writes the
+ * message under each invalid one, then sends with fetch and moves the root
+ * through `data-state` idle → loading → success | error. The submit button
+ * says what is happening; a failure shows an alert and never clears what was
+ * typed; success shows the `success` slot under the form or in its place.
+ * With no endpoint the send is simulated, for demos.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema } from './form.props';
+
+const { props: { endpoint, method, success, loadingLabel, successLabel, errorMessage, label }, rest, className, part } = splitProps(schema, Astro.props);
+const hasSuccess = Astro.slots.has('success');
+---
+
+<parche-form
+  class={cn('parche-form block', className)}
+  {...rest}
+  data-part={part}
+  data-state="idle"
+  data-success={success}
+  loading-label={loadingLabel}
+  success-label={successLabel}
+  data-demo={endpoint ? undefined : ''}
+>
+  <form action={endpoint} method={endpoint ? method : undefined} data-part="form" aria-label={label}>
+    <slot />
+    <div class="parche-form-error mt-3 rounded-sm border border-danger bg-danger-soft px-4 py-3 text-sm leading-[1.5] text-heading" role="alert" data-part="error" hidden>{errorMessage}</div>
+  </form>
+  {hasSuccess && (
+    <div class="parche-form-success" data-part="success" tabindex="-1" hidden>
+      <slot name="success" />
+    </div>
+  )}
+  <span class="sr-only" role="status" data-part="status"></span>
+</parche-form>
+
+<script>
+  import './form.element.ts';
+</script>

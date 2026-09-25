@@ -792,33 +792,41 @@
                 ],
                 "note": "Times in your local zone · 25 min · no sales deck"
               },
-              "inputs": [
+              "submit": "Send enquiry",
+              "note": "Form states shipped: idle, loading, field error, success, rate-limited.",
+              "fields": [
                 {
-                  "type": "text",
                   "name": "name",
                   "label": "Name",
                   "autocomplete": "name",
                   "placeholder": "Marta Ibáñez"
                 },
                 {
-                  "type": "email",
                   "name": "email",
                   "label": "Work email",
                   "autocomplete": "email",
-                  "placeholder": "marta@quietmile.com"
+                  "placeholder": "marta@quietmile.com",
+                  "type": "email"
+                },
+                {
+                  "name": "message",
+                  "label": "What are you building?",
+                  "type": "textarea",
+                  "placeholder": "Marketing site + docs for a hardware launch in November.",
+                  "rows": 3
+                },
+                {
+                  "name": "consent",
+                  "label": "I agree to the privacy policy. We keep enquiries for 12 months.",
+                  "type": "checkbox"
                 }
               ],
-              "textarea": {
-                "label": "What are you building?",
-                "name": "message",
-                "placeholder": "Marketing site + docs for a hardware launch in November.",
-                "rows": 3
-              },
-              "disclaimer": {
-                "label": "I agree to the privacy policy. We keep enquiries for 12 months."
-              },
-              "submit": "Send enquiry",
-              "note": "Form states shipped: idle, loading, field error, success, rate-limited."
+              "success": {
+                "label": "Sent ✓",
+                "mode": "append",
+                "title": "Sent.",
+                "text": "A named person replies within one working day, from a real address."
+              }
             }
           }
         ]

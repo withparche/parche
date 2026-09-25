@@ -1,13 +1,16 @@
 import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
+import { text } from '../_shared/content';
+import { sending } from '../_shared/form';
 
 export const schema = z.object({
-  title: z.string(),
-  subtitle: z.string().optional().meta({ help: 'What arrives and how often: one promise, one frequency.' }),
-  endpoint: z.string().optional().meta({ help: 'Where the form posts.' }),
+  title: text().optional(),
+  subtitle: text().optional().meta({ help: 'What arrives and how often: one promise, one frequency.' }),
+  layout: z.enum(['card', 'inline']).default('card').meta({ help: 'card: a titled card, for the end of a page or a post · inline: the field and the button in one centred row, for a hero or a closing band.' }),
   placeholder: z.string().default('you@company.com'),
   submit: z.string().default('Subscribe').meta({ help: 'The submit button label.' }),
-  note: z.string().optional().meta({ help: 'Under the field: unsubscribe, how many readers, what you never do.' }),
+  note: text().optional().meta({ help: 'Under the field: unsubscribe, how many readers, what you never do.' }),
+  ...sending,
 });
 
 export type Props = z.infer<typeof schema>;

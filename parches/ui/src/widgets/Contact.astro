@@ -1,28 +1,21 @@
 ---
 /**
- * Contact: a form, and optionally the other path, bookable slots. Centered
- * puts the form under the heading; split puts the heading and the slots on
- * the left and the form, on a card, on the right.
+ * Contact: a form that says what happens next, and optionally the other
+ * path, bookable slots. Centered puts the form on a card under the heading;
+ * split puts the heading and the slots on the left and the form, on a card,
+ * on the right; plain drops the card, for a column beside other content.
  */
 import Card from 'parche:elements/Card';
 import { inline } from '../_shared/inline';
-import Button from 'parche:elements/Button';
-import Input from 'parche:elements/Input';
-import Textarea from 'parche:elements/Textarea';
-import Checkbox from 'parche:elements/Checkbox';
 import SectionHeader from '../components/SectionHeader.astro';
+import ContactForm from '../components/ContactForm.astro';
 import { schema, type Props } from './Contact.props';
 
-const { tagline, title, subtitle, link, inputs, textarea, disclaimer, submit, endpoint, note, layout, booking } = schema.parse(Astro.props) as Props;
+const { tagline, title, subtitle, link, fields, submit, endpoint, loading, error, success, note, layout, booking } = schema.parse(Astro.props) as Props;
 // Centred, the heading sits over the form unless the content says otherwise.
-const align = (Astro.props as { align?: 'start' | 'center' }).align ?? (layout === 'split' ? 'start' : 'center');
-
-// The content gives a free-form input type; the element takes a known one.
-const inputTypes = ['text', 'email', 'url', 'tel', 'password', 'number', 'search', 'date', 'time'] as const;
-type InputType = (typeof inputTypes)[number];
-const typeOf = (type: string): InputType => (inputTypes.includes(type as InputType) ? (type as InputType) : 'text');
-const humanize = (name: string) => name.charAt(0).toUpperCase() + name.slice(1).replace(/[-_]+/g, ' ');
+const align = (Astro.props as { align?: 'start' | 'center' }).align ?? (layout === 'centered' ? 'center' : 'start');
 const split = layout === 'split';
+const form = { fields, submit, note, endpoint, loading, error, success, label: title?.replace(/<[^>]+>|[*_`=]/g, '') };
 ---
 
 {split ? (
@@ -55,37 +48,22 @@ const split = layout === 'split';
         </Card>
       )}
     </div>
-    <Card as="form" action={endpoint} method={endpoint ? 'post' : undefined} radius="lg" padding="lg" shadow="none" class="min-w-0">
-      <div class="flex flex-col gap-4">
-        {inputs.map((input) => (
-          <Input name={input.name} label={input.label ?? humanize(input.name)} type={typeOf(input.type ?? 'text')} placeholder={input.placeholder} autocomplete={input.autocomplete} />
-        ))}
-        {textarea && <Textarea name={textarea.name ?? 'message'} label={textarea.label ?? 'Message'} placeholder={textarea.placeholder} rows={textarea.rows ?? 3} grow={false} />}
-        {disclaimer?.label && <Checkbox name="disclaimer" label={disclaimer.label} />}
-        <Button type="submit" size="lg" block>{submit}</Button>
-        {note && <p class="text-xs leading-[1.5] text-muted" set:html={inline(note)} />}
-      </div>
+    <Card radius="lg" padding="lg" shadow="none" class="min-w-0">
+      <ContactForm {...form} />
     </Card>
   </div>
+) : layout === 'plain' ? (
+  <div class="parche-contact" data-layout="plain">
+    <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="none" class="mb-[26px]" />
+    {fields.length > 0 && <ContactForm {...form} />}
+  </div>
 ) : (
-  <>
+  <div class="parche-contact" data-layout="centered">
     <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="xl" />
-    {inputs.length > 0 && (
-      <div class="flex flex-col max-w-xl mx-auto rounded-lg bg-surface border border-border shadow p-4 sm:p-6 lg:p-8 w-full">
-        <form action={endpoint} method={endpoint ? 'post' : undefined}>
-          <div class="flex flex-col gap-4">
-            {inputs.map((input) => (
-              <Input name={input.name} label={input.label ?? humanize(input.name)} type={typeOf(input.type ?? 'text')} placeholder={input.placeholder} autocomplete={input.autocomplete} />
-            ))}
-            {textarea && <Textarea name={textarea.name ?? 'message'} label={textarea.label ?? 'Message'} placeholder={textarea.placeholder} rows={textarea.rows ?? 4} />}
-            {disclaimer?.label && <Checkbox name="disclaimer" label={disclaimer.label} />}
-            <div>
-              <Button type="submit" size="lg" block>{submit}</Button>
-            </div>
-            {note && <p class="text-center text-xs text-muted" set:html={inline(note)} />}
-          </div>
-        </form>
-      </div>
+    {fields.length > 0 && (
+      <Card radius="lg" padding="lg" shadow="none" class="mx-auto w-full max-w-xl">
+        <ContactForm {...form} center />
+      </Card>
     )}
-  </>
+  </div>
 )}

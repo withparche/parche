@@ -68,3 +68,35 @@ test.describe('Combobox', () => {
     await expect(page.locator('#country-datalist option')).toHaveCount(8);
   });
 });
+
+test.describe('Form', () => {
+  test('an invalid field gets the message under it and focus; a valid send shows sending then the success content', async ({ page }) => {
+    test.skip(jsDisabled(), 'the no-JS form posts natively');
+    await page.goto('/form');
+    const root = example(page, 'basic').locator('parche-form');
+    const email = root.getByLabel('Email');
+    const send = root.getByRole('button', { name: 'Send' });
+    await send.click();
+    await expect(email).toHaveAttribute('aria-invalid', 'true');
+    await expect(email).toBeFocused();
+    const describedBy = (await email.getAttribute('aria-describedby')) ?? '';
+    await expect(page.locator(`#${describedBy.split(' ').pop()}`)).not.toBeEmpty();
+    await email.fill('ada@example.com');
+    await expect(email).not.toHaveAttribute('aria-invalid', 'true');
+    await send.click();
+    await expect(root).toHaveAttribute('data-state', 'loading');
+    await expect(root).toHaveAttribute('data-state', 'success');
+    await expect(root.locator('[data-part="success"]')).toBeVisible();
+    await expect(root.getByRole('button', { name: 'Sent' })).toBeVisible();
+    await expect(email).toHaveValue('ada@example.com');
+  });
+
+  test('without script it is a native form with its fields and button', async ({ page }) => {
+    test.skip(!jsDisabled(), 'no-JS only');
+    await page.goto('/form');
+    const form = example(page, 'basic').locator('form');
+    await expect(form.getByLabel('Email')).toHaveAttribute('required', '');
+    await expect(form.getByRole('button', { name: 'Send' })).toBeVisible();
+    await expect(example(page, 'basic').locator('[data-part="success"]')).toBeHidden();
+  });
+});

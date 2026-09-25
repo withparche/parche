@@ -210,36 +210,37 @@
               "tagline": "Book",
               "title": "Pick a slot, or just call",
               "subtitle": "We answer within the hour on working days.",
-              "inputs": [
+              "submit": "Ask for a slot",
+              "fields": [
                 {
-                  "type": "text",
                   "name": "name",
                   "label": "Name",
                   "autocomplete": "name"
                 },
                 {
-                  "type": "tel",
                   "name": "phone",
                   "label": "Phone",
-                  "autocomplete": "tel"
+                  "autocomplete": "tel",
+                  "type": "tel"
                 },
                 {
-                  "type": "text",
                   "name": "address",
                   "label": "Address",
                   "autocomplete": "street-address"
+                },
+                {
+                  "name": "message",
+                  "label": "What is wrong",
+                  "type": "textarea",
+                  "placeholder": "A leak under the sink, since yesterday…",
+                  "rows": 4
+                },
+                {
+                  "name": "consent",
+                  "label": "We keep your details for this job only, 90 days.",
+                  "type": "checkbox"
                 }
-              ],
-              "textarea": {
-                "label": "What is wrong",
-                "name": "message",
-                "placeholder": "A leak under the sink, since yesterday…",
-                "rows": 4
-              },
-              "disclaimer": {
-                "label": "We keep your details for this job only, 90 days."
-              },
-              "submit": "Ask for a slot"
+              ]
             }
           }
         ]

@@ -1,0 +1,46 @@
+---
+/**
+ * The form of a Contact section: the Form element around the fields from
+ * content, the submit button and the note, with the success content ready
+ * for when it is sent.
+ */
+import Form from 'parche:elements/Form';
+import Button from 'parche:elements/Button';
+import FormFields from './FormFields.astro';
+import FormSuccess from './FormSuccess.astro';
+import { inline } from '../_shared/inline';
+import type { Field, Success } from '../_shared/form';
+
+interface Props {
+  fields: Field[];
+  submit: string;
+  note?: string;
+  endpoint?: string;
+  loading: string;
+  error?: string;
+  success?: Success;
+  label?: string;
+  /** Centre the note under a centred form. */
+  center?: boolean;
+}
+
+const { fields, submit, note, endpoint, loading, error, success, label, center = false } = Astro.props;
+---
+
+<Form
+  {endpoint}
+  {label}
+  success={success?.mode ?? 'button'}
+  loadingLabel={loading}
+  successLabel={success?.label}
+  errorMessage={error}
+>
+  <div class="flex flex-col gap-4">
+    <FormFields {fields} />
+    <Button type="submit" size="lg" block>{submit}</Button>
+    {note && <p class:list={['text-xs leading-[1.5] text-muted', center && 'text-center']} set:html={inline(note)} />}
+  </div>
+  {success && (success.title || success.text || success.actions.length > 0) && (
+    <FormSuccess slot="success" {success} />
+  )}
+</Form>
