@@ -82,3 +82,20 @@ test('Gallery: the heading, the hint beside it, thumbnails that link to their fu
   expect(html).toContain('<dialog');
   expect(html).toContain('work image · 2000×1250');
 });
+
+test('Releases: each release anchored, its changes typed, the filter over them', async () => {
+  const { default: Releases } = await import('../../src/widgets/Releases.astro');
+  const html = await render(Releases, {
+    items: [
+      { version: '3.4.0', date: '11 September 2026', latest: true, title: 'Read receipts', changes: [{ type: 'new', text: 'Per-account receipts' }, { type: 'breaking', text: '`GET /v1/notes` paginates at 50' }] },
+      { version: '3.3.2', date: '28 August 2026', changes: [{ type: 'fixed', text: 'Alt text' }] },
+    ],
+    jump: { links: [{ text: 'RSS feed', href: '/rss.xml' }] },
+  });
+  expect(html).toContain('<parche-filter');
+  expect(html).toContain('id="v3-4-0"');
+  expect(html).toContain('data-filter="new breaking"');
+  expect(html).toContain('href="#v3-3-2"');
+  expect(html).toContain('<code class="parche-code">GET /v1/notes</code>');
+  expect(html).toContain('3.3.2 · Aug');
+});

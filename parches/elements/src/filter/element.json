@@ -1,0 +1,14 @@
+{
+  "name": "filter",
+  "type": "element",
+  "files": [
+    { "path": "Filter.astro", "type": "part" },
+    { "path": "filter.element.ts", "type": "element" },
+    { "path": "filter.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": [],
+  "source": null
+}

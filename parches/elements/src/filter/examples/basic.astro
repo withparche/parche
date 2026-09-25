@@ -1,0 +1,13 @@
+---
+import Filter from '../Filter.astro';
+---
+
+<div class="max-w-2xl">
+  <Filter options={[{ value: '', label: 'Everything' }, { value: 'new', label: 'New' }, { value: 'fixed', label: 'Fixed' }, { value: 'breaking', label: 'Breaking' }]} aside="Newest first">
+    <ul class="mt-4 flex flex-col gap-3">
+      <li data-filter="new fixed">3.4.0 — read receipts; a digest fix</li>
+      <li data-filter="new">3.3.2 — Slack review</li>
+      <li data-filter="fixed">3.3.1 — alt text from Figma</li>
+    </ul>
+  </Filter>
+</div>

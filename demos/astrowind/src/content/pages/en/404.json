@@ -1,0 +1,69 @@
+{
+  "title": "Page not found",
+  "description": "The page does not exist, or it moved.",
+  "metadata": {
+    "noindex": true
+  },
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "layout": "text",
+        "size": "md",
+        "align": "start",
+        "tagline": "404",
+        "title": "This page does not exist, or it moved",
+        "subtitle": "Links break when sites grow. The pages below are the ones people usually look for; the search finds the rest.",
+        "actions": [
+          {
+            "text": "Back to the home page",
+            "href": "/"
+          },
+          {
+            "text": "Read the blog",
+            "href": "/blog",
+            "variant": "secondary"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "spacing": "sm"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Features",
+            "props": {
+              "layout": "cards",
+              "columns": "3",
+              "align": "start",
+              "items": [
+                {
+                  "eyebrow": "Template",
+                  "title": "What you get",
+                  "description": "Widgets, demos, pricing and the changelog, on the home page.",
+                  "href": "/#features"
+                },
+                {
+                  "eyebrow": "Example site",
+                  "title": "Cadence docs",
+                  "description": "A docs shell with a sidebar, code tabs and an index.",
+                  "href": "/docs"
+                },
+                {
+                  "eyebrow": "Writing",
+                  "title": "The blog",
+                  "description": "Guides on speed, tokens and landing pages.",
+                  "href": "/blog"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+---
+/**
+ * A changelog. Each release has a version chip, its date, a permalink, a
+ * title, an optional screenshot, why it matters, and typed changes (new,
+ * improved, fixed, breaking). The Filter element shows only the releases with
+ * a kind of change; a column beside them jumps to each one.
+ */
+import Filter from 'parche:elements/Filter';
+import Image from 'parche:elements/Image';
+import Placeholder from 'parche:elements/Placeholder';
+import Action from '../components/Action.astro';
+import { inline } from '../_shared/inline';
+import { schema, types, type Props } from './Releases.props';
+
+const { items, filter, labels, counts, order, jump, more } = schema.parse(Astro.props) as Props;
+const anchor = (v: string) => `v${v.replace(/[^\w]+/g, '-')}`;
+const tone = {
+  new: 'bg-success-soft text-success',
+  improved: 'bg-primary-soft text-primary',
+  fixed: 'bg-surface-2 text-muted',
+  breaking: 'bg-danger-soft text-danger',
+} as const;
+const options = [
+  { value: '', label: labels.all, count: counts?.all },
+  ...types.map((t) => ({ value: t, label: labels[t], count: counts?.[t] })),
+];
+const Wrap = filter ? Filter : 'div';
+const wrapProps = filter ? { options, aside: order, sticky: true } : {};
+---
+
+<Wrap {...wrapProps} class="parche-releases">
+  <div class:list={['grid gap-[clamp(28px,5vw,72px)] pt-8', jump && 'lg:grid-cols-[minmax(180px,240px)_minmax(0,1fr)]']}>
+    {jump && (
+      <aside class="hidden lg:block" aria-label={jump.title}>
+        <div class="sticky top-40">
+          <p class="mb-3 font-mono text-[10px] leading-none font-medium tracking-[0.14em] text-muted uppercase">{jump.title}</p>
+          <ul class="flex flex-col border-l border-border">
+            {items.map((r, i) => (
+              <li>
+                <a href={`#${anchor(r.version)}`} class:list={['-ml-px block border-l px-3 py-1.5 text-[13px] leading-[1.3] no-underline hover:text-heading', i === 0 ? 'border-primary font-medium text-heading' : 'border-transparent text-muted']}>
+                  {r.version} · {(r.date.split(' ')[1] ?? r.date).slice(0, 3)}
+                </a>
+              </li>
+            ))}
+          </ul>
+          {jump.links.length > 0 && (
+            <ul class="mt-5 flex flex-col gap-2 border-t border-border pt-5 text-[13px] leading-[1.3]">
+              {jump.links.map((l) => <li><a href={l.href} class="text-muted no-underline hover:text-heading">{l.text}</a></li>)}
+            </ul>
+          )}
+        </div>
+      </aside>
+    )}
+    <div class="min-w-0 max-w-[720px]">
+      {items.map((r) => (
+        <article id={anchor(r.version)} class="scroll-mt-40 border-b border-border py-9 first:pt-0" data-filter={[...new Set(r.changes.map((c) => c.type))].join(' ')}>
+          <header class="mb-3 flex flex-wrap items-center gap-3">
+            <span class:list={['rounded-sm border px-2 py-1 font-mono text-[13px] leading-none font-semibold', r.latest ? 'border-foreground bg-foreground text-background' : 'border-border bg-surface text-heading']}>{r.version}</span>
+            <time class="font-mono text-xs leading-none text-muted">{r.date}</time>
+            {r.latest && <span class="rounded-full bg-primary-soft px-2 py-1 font-mono text-[10px] leading-none font-medium tracking-[0.12em] text-primary uppercase">Latest</span>}
+            <a href={`#${anchor(r.version)}`} class="ml-auto font-mono text-[11px] leading-none text-muted no-underline hover:text-heading">Permalink</a>
+          </header>
+          {r.title && <h2 class="mb-4 font-heading text-[clamp(1.25rem,2.2vw,1.5rem)] leading-[1.25] font-semibold tracking-[-0.02em] text-heading" set:html={inline(r.title)} />}
+          {(r.image || r.caption) && (
+            <div class="mb-5 overflow-hidden rounded-md border border-border">
+              {r.image ? <Image src={r.image.src} alt={r.image.alt} width={1200} ratio="16/9" class="block w-full" /> : <Placeholder caption={r.caption} ratio="16/9" compact />}
+            </div>
+          )}
+          {r.summary && <p class="mb-5 text-[15px] leading-[1.65] text-muted" set:html={inline(r.summary)} />}
+          {r.changes.length > 0 && (
+            <ul class="flex flex-col gap-3">
+              {r.changes.map((c) => (
+                <li class="grid grid-cols-[78px_1fr] items-baseline gap-3">
+                  <span class:list={['justify-self-start rounded-sm px-1.5 py-1 font-mono text-[10px] leading-none font-medium tracking-[0.1em] uppercase', tone[c.type]]}>{labels[c.type]}</span>
+                  <span class="text-sm leading-[1.6] text-heading [&_a]:text-primary" set:html={inline(c.text)} />
+                </li>
+              ))}
+            </ul>
+          )}
+          {(r.links.length > 0 || r.meta) && (
+            <p class="mt-6 flex flex-wrap items-center gap-x-2.5 gap-y-1 border-t border-border pt-4 text-xs leading-[1.4] text-muted">
+              {r.links.map((l, i) => <Fragment>{i > 0 && <span aria-hidden="true">·</span>}<a href={l.href} class="text-primary no-underline hover:text-heading">{l.text}</a></Fragment>)}
+              {r.meta && <Fragment>{r.links.length > 0 && <span aria-hidden="true">·</span>}<span set:html={inline(r.meta)} /></Fragment>}
+            </p>
+          )}
+        </article>
+      ))}
+      {more && (
+        <div class="mt-9">
+          <Action action={more.action} size="md" />
+          {more.note && <p class="mt-3 text-xs leading-[1.5] text-muted" set:html={inline(more.note)} />}
+        </div>
+      )}
+    </div>
+  </div>
+</Wrap>

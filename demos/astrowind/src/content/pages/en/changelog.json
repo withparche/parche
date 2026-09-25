@@ -1,0 +1,181 @@
+{
+  "title": "Changelog",
+  "description": "Every Cadence release since 2024, written for the people who use it.",
+  "layout": "cadence",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "layout": "split",
+        "size": "md",
+        "title": "What we shipped",
+        "subtitle": "Every release since 2024, written for the people who use Cadence rather than the people who built it. We eat our own cooking: this page is published by Cadence."
+      },
+      "slots": {
+        "media": [
+          {
+            "widget": "Stats",
+            "props": {
+              "layout": "cards",
+              "items": [
+                {
+                  "value": "148",
+                  "label": "releases"
+                },
+                {
+                  "value": "every 4.2 days",
+                  "label": "median cadence, 2026"
+                },
+                {
+                  "value": "41%",
+                  "label": "of accounts read one"
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Newsletter",
+            "props": {
+              "layout": "inline",
+              "placeholder": "you@company.com",
+              "submit": "Email me releases",
+              "success": {
+                "label": "Subscribed — one email per release",
+                "mode": "button"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "releases",
+        "spacing": "sm"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Releases",
+            "props": {
+              "order": "Everything, newest first",
+              "counts": {
+                "all": 148,
+                "new": 96,
+                "improved": 71,
+                "fixed": 40,
+                "breaking": 3
+              },
+              "jump": {
+                "title": "Jump to",
+                "links": [
+                  {
+                    "text": "2025 archive · 71",
+                    "href": "/changelog#archive-2025"
+                  },
+                  {
+                    "text": "2024 archive · 44",
+                    "href": "/changelog#archive-2024"
+                  },
+                  {
+                    "text": "RSS feed",
+                    "href": "/rss.xml"
+                  },
+                  {
+                    "text": "Status page",
+                    "href": "/contact#status"
+                  }
+                ]
+              },
+              "items": [
+                {
+                  "version": "3.4.0",
+                  "date": "11 September 2026",
+                  "latest": true,
+                  "title": "Read receipts, and the feature they opened next",
+                  "caption": "read receipts screen · 1200×675",
+                  "summary": "You could already see how many people opened a note. Now you can see *which accounts*, and whether they used the feature afterwards — which is the only way to tell “nobody wants it” apart from “nobody heard about it”.",
+                  "changes": [
+                    {
+                      "type": "new",
+                      "text": "Per-account read receipts on the Team plan, with a 90-day window and CSV export."
+                    },
+                    {
+                      "type": "new",
+                      "text": "Feature-adoption link: attach a feature flag to a note and see the two curves side by side."
+                    },
+                    {
+                      "type": "improved",
+                      "text": "The editor preview now matches the published page exactly, including your custom fonts. It did not, and that was embarrassing."
+                    },
+                    {
+                      "type": "fixed",
+                      "text": "Digests sent at 07:00 could arrive twice for workspaces in UTC+13. Thank you to the two people in Auckland who reported it."
+                    },
+                    {
+                      "type": "breaking",
+                      "text": "`GET /v1/notes` now paginates at 50 instead of 200. [Migration guide](/docs) — the old behaviour stays available until 1 March 2027 with a header."
+                    }
+                  ],
+                  "links": [
+                    {
+                      "text": "Discuss this release",
+                      "href": "/contact"
+                    },
+                    {
+                      "text": "Full diff",
+                      "href": "https://github.com/arthelokyo/astrowind"
+                    }
+                  ],
+                  "meta": "Shipped by 4 people"
+                },
+                {
+                  "version": "3.3.2",
+                  "date": "28 August 2026",
+                  "title": "Slack review, and a quieter digest",
+                  "changes": [
+                    {
+                      "type": "new",
+                      "text": "Draft review in Slack: approve or comment without leaving the channel."
+                    },
+                    {
+                      "type": "improved",
+                      "text": "Digests now group by week when you ship more than three times in one, instead of sending three emails."
+                    },
+                    {
+                      "type": "fixed",
+                      "text": "Images pasted from Figma lost their alt text. They no longer do."
+                    }
+                  ]
+                },
+                {
+                  "version": "3.3.0",
+                  "date": "12 August 2026",
+                  "title": "Self-hosting, properly supported",
+                  "changes": [
+                    {
+                      "type": "new",
+                      "text": "One container, any Postgres 14+, and a documented upgrade path. [Self-hosting guide](/docs)."
+                    },
+                    {
+                      "type": "new",
+                      "text": "SSO via SAML and OIDC, on the self-hosted and Team plans. Not an enterprise upsell."
+                    }
+                  ]
+                }
+              ],
+              "more": {
+                "action": {
+                  "text": "Browse the 2025 archive · 71",
+                  "href": "/changelog#archive-2025"
+                },
+                "note": "Showing 3 of 148 · paginated rather than infinite, so every release keeps a URL a search engine can reach."
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

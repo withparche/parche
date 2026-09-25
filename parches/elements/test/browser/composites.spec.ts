@@ -198,3 +198,30 @@ test.describe('Carousel', () => {
     await expect(carousel.getByRole('group', { name: '2 of 4' })).toBeAttached();
   });
 });
+
+test.describe('Filter', () => {
+  test('an option shows only the items carrying it, counts them, and the empty state leads back', async ({ page }) => {
+    test.skip(jsDisabled(), 'without script the bar is hidden and everything shows');
+    await page.goto('/filter');
+    const root = example(page, 'basic').locator('parche-filter');
+    const items = root.locator('[data-filter]');
+    await expect(root.getByRole('button', { name: /New · 2/ })).toBeVisible();
+    await root.getByRole('button', { name: /Breaking/ }).click();
+    await expect(root.getByRole('button', { name: /Breaking/ })).toHaveAttribute('aria-pressed', 'true');
+    await expect(items.filter({ visible: true })).toHaveCount(0);
+    await expect(root.locator('[data-part="empty"]')).toBeVisible();
+    await root.getByRole('button', { name: 'Show everything' }).click();
+    await expect(items.filter({ visible: true })).toHaveCount(3);
+    await root.getByRole('button', { name: /Fixed/ }).click();
+    await expect(items.filter({ visible: true })).toHaveCount(2);
+    await expect(root.locator('[data-part="status"]')).toHaveText('Showing 2 of 3');
+  });
+
+  test('without script the bar is hidden and every item shows', async ({ page }) => {
+    test.skip(!jsDisabled(), 'no-JS only');
+    await page.goto('/filter');
+    const root = example(page, 'basic').locator('parche-filter');
+    await expect(root.locator('[data-part="bar"]')).toBeHidden();
+    await expect(root.locator('[data-filter]').filter({ visible: true })).toHaveCount(3);
+  });
+});
