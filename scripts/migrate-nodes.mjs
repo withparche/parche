@@ -278,12 +278,15 @@ function migrate(data, file) {
 const roots = process.argv.slice(2).map((p) => resolve(p));
 if (roots.length === 0) roots.push(resolve('demos'), resolve('templates'), resolve('examples'));
 
+/** What the previous models look like in YAML or front matter, which is reported rather than rewritten. */
+const OLD_SHAPES = /wrapper|layout\/Main|^template:|^\s*-?\s*(stats|testimonials|members|entries|projects|prices|demos|callToAction|hasRibbon|ribbonTitle|linkText|linkUrl|information):/m;
+
 let rewritten = 0;
 const markdown = [];
 for (const root of roots) {
   for (const file of statSync(root).isDirectory() ? files(root) : [root]) {
     if (extname(file) !== '.json') {
-      if (/wrapper|layout\/Main|^template:/m.test(readFileSync(file, 'utf8'))) markdown.push(file);
+      if (OLD_SHAPES.test(readFileSync(file, 'utf8'))) markdown.push(file);
       continue;
     }
     const data = JSON.parse(readFileSync(file, 'utf8'));
@@ -296,4 +299,4 @@ for (const root of roots) {
 }
 console.log(`[migrate] ${rewritten} file(s) rewritten`);
 for (const d of [...new Set(dropped)]) console.warn(`[migrate] ${d}`);
-for (const m of markdown) console.warn(`[migrate] front matter to edit by hand: ${m}`);
+for (const m of markdown) console.warn(`[migrate] YAML or front matter to edit by hand: ${m}`);

@@ -48,6 +48,13 @@ optional stable identifier an editor may write.
 There is no `template` any more: what a template did is a layout, a widget or
 a preset.
 
+JSON is the format of pages, layouts, presets and menus: it is what the
+builder reads and writes, what an AI is asked to produce and what the
+schemas are checked against, so everything Parche ships and scaffolds is
+JSON. The collections also accept YAML (and pages Markdown with front
+matter) with the same schema, for someone who prefers to write a page by
+hand; it renders the same page byte for byte. Nothing is YAML by default.
+
 ## The wrapper
 
 Every page root is rendered inside the **wrapper** widget, `Section`, with its

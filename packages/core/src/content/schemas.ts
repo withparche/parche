@@ -133,7 +133,7 @@ export function createCollections(options?: {
   return {
     pages: defineCollection({
       loader: glob({
-        pattern: '**/*.{json,md}',
+        pattern: '**/*.{json,md,yaml,yml}',
         base: options?.pagesBase ?? './src/content/pages',
       }),
       schema: options?.pageSchema ?? pageSchema,
