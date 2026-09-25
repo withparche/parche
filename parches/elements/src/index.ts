@@ -26,6 +26,7 @@ export default function createElements(): ParcheManifest {
       Table: el('table/Table.astro'),
       Callout: el('callout/Callout.astro'),
       Form: el('form/Form.astro'),
+      Gallery: el('gallery/Gallery.astro'),
       Tag: el('tag/Tag.astro'),
       Link: el('link/Link.astro'),
       Image: el('image/Image.astro'),

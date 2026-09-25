@@ -1,0 +1,14 @@
+{
+  "name": "gallery",
+  "type": "element",
+  "files": [
+    { "path": "Gallery.astro", "type": "part" },
+    { "path": "gallery.element.ts", "type": "element" },
+    { "path": "gallery.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["placeholder"],
+  "source": null
+}

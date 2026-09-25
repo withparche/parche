@@ -107,3 +107,34 @@ test.describe('Popover', () => {
     await expect(surface).toBeHidden();
   });
 });
+
+test.describe('Gallery', () => {
+  test('a thumbnail opens the lightbox on it; arrows wrap; Escape closes and focus returns', async ({ page }) => {
+    test.skip(jsDisabled(), 'without script a thumbnail is a plain link');
+    await page.goto('/gallery');
+    const root = example(page, 'basic').locator('parche-gallery').first();
+    const thumbs = root.locator('[data-part="trigger"]');
+    const dialog = root.locator('dialog');
+    await thumbs.nth(1).focus();
+    await page.keyboard.press('Enter');
+    await expect(dialog).toHaveAttribute('open', '');
+    await expect(dialog.locator('[data-part="count"]')).toHaveText('2 of 3');
+    await expect(dialog.locator('[data-part="title"]')).toHaveText('Pricing page');
+    await page.keyboard.press('ArrowRight');
+    await expect(dialog.locator('[data-part="count"]')).toHaveText('3 of 3');
+    await page.keyboard.press('ArrowRight');
+    await expect(dialog.locator('[data-part="count"]')).toHaveText('1 of 3');
+    await expect(dialog.locator('[data-part="stage"] [role="img"]')).toHaveCount(1);
+    await page.keyboard.press('Escape');
+    await expect(dialog).not.toHaveAttribute('open', '');
+    await expect(thumbs.nth(1)).toBeFocused();
+  });
+
+  test('without script the thumbnails are links and the captions show', async ({ page }) => {
+    test.skip(!jsDisabled(), 'no-JS only');
+    await page.goto('/gallery');
+    const root = example(page, 'basic').locator('parche-gallery').first();
+    await expect(root.locator('a[data-part="trigger"]')).toHaveCount(3);
+    await expect(root.getByText('Docs shell')).toBeVisible();
+  });
+});

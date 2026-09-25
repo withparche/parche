@@ -1,0 +1,15 @@
+---
+import Gallery from '../Gallery.astro';
+---
+
+<div class="space-y-10">
+  <Gallery
+    label="Work"
+    items={[
+      { caption: 'Release editor · 2026', placeholder: 'work image · 2000×1250' },
+      { caption: 'Pricing page', placeholder: 'work image · 2000×1250' },
+      { caption: 'Docs shell', placeholder: 'work image · 2000×1250' },
+    ]}
+  />
+  <Gallery layout="pairs" items={[{ caption: 'Kitchen leak · Deusto · 3 hours' }, { caption: 'Boiler swap · Indautxu · 1 day' }]} />
+</div>

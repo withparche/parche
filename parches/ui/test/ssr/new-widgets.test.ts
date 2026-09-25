@@ -69,3 +69,16 @@ test('Pricing: the recommended tier is marked and the comparison has one column 
   expect(html).toMatch(/<th scope="col"[^>]*bg-primary-soft[^>]*>Studio/);
   expect(html).toContain('<th scope="row"');
 });
+
+test('Gallery: the heading, the hint beside it, thumbnails that link to their full image', async () => {
+  const { default: Gallery } = await import('../../src/widgets/Gallery.astro');
+  const html = await render(Gallery, {
+    title: 'Eight pieces',
+    hint: '← → to move · Esc to close',
+    items: [{ image: { src: 'https://example.com/a.png', alt: 'A' }, full: { src: 'https://example.com/a-full.png', alt: 'A' }, caption: 'First' }, { caption: 'Second', placeholder: 'work image · 2000×1250' }],
+  });
+  expect(html).toContain('← → to move · Esc to close');
+  expect(html).toContain('href="https://example.com/a-full.png"');
+  expect(html).toContain('<dialog');
+  expect(html).toContain('work image · 2000×1250');
+});

@@ -1,0 +1,18 @@
+---
+/**
+ * A section around the Gallery element: the shared heading, an optional hint
+ * beside it (the keys the lightbox takes), and the thumbnails.
+ */
+import GalleryElement from 'parche:elements/Gallery';
+import SectionHeader from '../components/SectionHeader.astro';
+import { schema, type Props } from './Gallery.props';
+
+const { tagline, title, subtitle, link, align, hint, items, layout, ratio, lightbox } = schema.parse(Astro.props) as Props;
+---
+
+<div class="parche-gallery-section">
+  <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="md" width="lg">
+    {hint && <span slot="aside" class="font-mono text-xs leading-[1.5] text-muted">{hint}</span>}
+  </SectionHeader>
+  <GalleryElement {items} {layout} {ratio} {lightbox} label={title?.replace(/<[^>]+>|[*_`=]/g, '') || 'Gallery'} />
+</div>

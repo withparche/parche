@@ -1,0 +1,101 @@
+---
+/**
+ * Gallery — captioned thumbnails. Each is a link to its full image, so without
+ * script it simply opens; the element turns the links into a lightbox: a
+ * native modal dialog with the image, its caption, a counter and previous,
+ * next and close. The dialog traps focus, Escape and a click outside close
+ * it, and focus returns to the thumbnail. `pairs` shows a before and an
+ * after side by side instead, with no lightbox.
+ */
+import { cn, hashId, splitProps } from '@parche/elements/utils';
+import Placeholder from '../placeholder/Placeholder.astro';
+import { schema } from './gallery.props';
+
+const {
+  props: { items, layout, ratio, min, lightbox, label, closeLabel, previousLabel, nextLabel, countLabel },
+  rest,
+  className,
+  part,
+} = splitProps(schema, Astro.props);
+
+const column = min ?? { '4/3': 220, '16/10': 220, '1/1': 200, '4/5': 180, '9/16': 170 }[ratio];
+const aspect = { '4/3': 'aspect-[4/3]', '16/10': 'aspect-[16/10]', '1/1': 'aspect-square', '4/5': 'aspect-[4/5]', '9/16': 'aspect-[9/16]' }[ratio];
+const id = hashId('gallery', items.map((i) => i.caption ?? i.image?.src ?? i.placeholder ?? '').join('|'));
+const pairs = layout === 'pairs';
+const opens = lightbox && !pairs;
+const button = 'flex size-[30px] cursor-pointer items-center justify-center rounded-[7px] border border-border bg-surface text-sm leading-none text-heading hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
+---
+
+<parche-gallery class={cn('parche-gallery block', className)} {...rest} data-part={part} data-layout={layout} count-label={countLabel}>
+  <div
+    class="grid gap-[clamp(12px,1.8vw,18px)]"
+    style={`grid-template-columns:repeat(${pairs ? 'auto-fit' : 'auto-fill'},minmax(min(${pairs ? 240 : column}px,100%),1fr))`}
+  >
+    {items.map((item, i) =>
+      pairs ? (
+        <figure class="parche-gallery-item m-0 min-w-0" data-part="item">
+          <div class="grid grid-cols-2 gap-1.5">
+            {[item.before, item.after].map((pic, side) =>
+              pic ? (
+                <img src={pic.src} alt={pic.alt} loading="lazy" class:list={['block aspect-square w-full border border-border object-cover', side === 0 ? 'rounded-l-md' : 'rounded-r-md']} />
+              ) : (
+                <Placeholder caption={side === 0 ? 'before' : 'after'} ratio="1/1" compact class:list={[side === 0 ? 'rounded-l-md' : 'rounded-r-md', 'border border-border']} />
+              ),
+            )}
+          </div>
+          {item.caption && <figcaption class="mt-2.5 text-[13px] leading-[1.6] text-muted">{item.caption}</figcaption>}
+        </figure>
+      ) : (
+        <figure class="parche-gallery-item m-0 min-w-0" data-part="item">
+          {(() => {
+            const full = item.full ?? item.image;
+            const media = item.image ? (
+              <img src={item.image.src} alt={item.image.alt} loading="lazy" class={cn('block w-full object-cover', aspect)} data-full={full?.src} data-part="media" />
+            ) : (
+              <Placeholder caption={item.placeholder ?? item.caption} ratio={ratio} compact data-part="media" />
+            );
+            return opens ? (
+              <a
+                href={full?.src ?? `#${id}`}
+                class="group block cursor-zoom-in overflow-hidden rounded-md border border-border transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                data-part="trigger"
+                data-index={i}
+                aria-label={item.caption ? `${item.caption}` : undefined}
+              >
+                {media}
+              </a>
+            ) : (
+              <div class="overflow-hidden rounded-md border border-border">{media}</div>
+            );
+          })()}
+          {item.caption && <figcaption class="mt-[9px] font-mono text-xs leading-[1.5] text-muted" data-part="item-caption">{item.caption}</figcaption>}
+        </figure>
+      ),
+    )}
+  </div>
+
+  {opens && (
+    <dialog
+      id={id}
+      class="parche-gallery-lightbox m-auto w-[min(1000px,calc(100vw-2*clamp(20px,4vw,56px)))] max-w-none overflow-hidden rounded-lg border border-border bg-surface p-0 text-text backdrop:bg-(--ds-sys-color-overlay) backdrop:backdrop-blur-[4px]"
+      aria-label={label}
+      closedby="any"
+      data-part="lightbox"
+    >
+      <div class="flex items-center gap-3 border-b border-border bg-surface-2 px-4 py-3">
+        <span class="min-w-0 flex-1 truncate font-mono text-xs text-muted" data-part="title"></span>
+        <span class="font-mono text-[11px] whitespace-nowrap text-muted" data-part="count" aria-live="polite"></span>
+        <button type="button" class={button} data-part="previous" aria-label={previousLabel}>←</button>
+        <button type="button" class={button} data-part="next" aria-label={nextLabel}>→</button>
+        <button type="button" class={button} data-part="close" aria-label={closeLabel}>×</button>
+      </div>
+      <div class="bg-background [&_img]:block [&_img]:aspect-[16/10] [&_img]:w-full [&_img]:object-contain" data-part="stage"></div>
+    </dialog>
+  )}
+</parche-gallery>
+
+{opens && (
+  <script>
+    import './gallery.element.ts';
+  </script>
+)}

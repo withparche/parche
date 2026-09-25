@@ -6,7 +6,7 @@ export const groups: Array<{ label: string; names: string[] }> = [
   { label: 'Layout', names: ['Container', 'Section', 'AspectRatio', 'Divider'] },
   { label: 'Typography', names: ['Heading', 'Eyebrow', 'Prose', 'Code', 'Kbd'] },
   { label: 'Actions', names: ['Button', 'Link'] },
-  { label: 'Media', names: ['Image', 'Avatar', 'Icon', 'Video', 'Skeleton'] },
+  { label: 'Media', names: ['Image', 'Gallery', 'Avatar', 'Icon', 'Video', 'Skeleton'] },
   { label: 'Data display', names: ['Badge', 'Tag', 'Card', 'List', 'Table', 'Callout', 'Stat', 'Breadcrumb', 'Pagination', 'Toc', 'Share'] },
   { label: 'Disclosure', names: ['Collapsible', 'Accordion', 'Tabs', 'Carousel'] },
   { label: 'Overlays', names: ['Dialog', 'Sheet', 'Popover', 'Menu', 'Tooltip', 'Toast', 'Banner'] },
