@@ -3,30 +3,67 @@
     {
       "widget": "Header",
       "props": {
-        "logo": { "text": "AstroWind", "href": "/" },
-        "links": [
-          { "label": "Docs", "href": "/fixtures/docs" },
-          { "label": "Launch", "href": "/fixtures/launch" },
-          { "label": "Blog", "href": "/blog" }
-        ],
-        "actions": [{ "label": "Get template", "href": "https://github.com/arthelokyo/astrowind", "variant": "primary", "icon": "tabler:download" }]
+        "logo": {
+          "text": "AstroWind",
+          "href": "/"
+        },
+        "links": {
+          "$navigation": "docs"
+        },
+        "actions": [
+          {
+            "label": "Get template",
+            "href": "https://github.com/arthelokyo/astrowind",
+            "variant": "primary",
+            "icon": "tabler:download"
+          }
+        ]
       }
     },
     {
       "widget": "Section",
-      "props": { "width": "xl", "spacing": "sm" },
+      "props": {
+        "width": "xl",
+        "spacing": "sm"
+      },
       "slots": {
         "default": [
           {
             "widget": "Columns",
-            "props": { "ratio": "wide-start", "gap": "lg", "stack": "lg" },
+            "props": {
+              "ratio": "wide-start",
+              "gap": "lg",
+              "stack": "lg"
+            },
             "slots": {
               "default": [
-                { "widget": "Column", "slots": { "default": [{ "widget": "Outlet" }] } },
                 {
                   "widget": "Column",
-                  "props": { "as": "aside", "sticky": true, "label": "On this page" },
-                  "slots": { "default": [{ "widget": "Outlet", "props": { "name": "aside" } }] }
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Outlet"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "widget": "Column",
+                  "props": {
+                    "as": "aside",
+                    "sticky": true,
+                    "label": "On this page"
+                  },
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Outlet",
+                        "props": {
+                          "name": "aside"
+                        }
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -37,8 +74,12 @@
     {
       "widget": "Footer",
       "props": {
-        "columns": [{ "title": "Docs", "links": [{ "label": "Getting started", "href": "/fixtures/docs" }, { "label": "Launch page", "href": "/fixtures/launch" }] }],
-        "socialLinks": [{ "label": "GitHub", "href": "https://github.com/arthelokyo/astrowind", "icon": "tabler:brand-github" }],
+        "columns": {
+          "$navigation": "docs-footer"
+        },
+        "socialLinks": {
+          "$navigation": "docs-social"
+        },
         "footNote": "A fixture layout: two columns with an outlet in each, the second one an aside."
       }
     }

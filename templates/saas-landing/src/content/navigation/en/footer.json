@@ -1,0 +1,68 @@
+{
+  "label": "Footer columns",
+  "items": [
+    {
+      "title": "Product",
+      "links": [
+        {
+          "label": "Features",
+          "href": "#features"
+        },
+        {
+          "label": "Pricing",
+          "href": "#pricing"
+        },
+        {
+          "label": "Changelog",
+          "href": "#"
+        },
+        {
+          "label": "Roadmap",
+          "href": "#"
+        }
+      ]
+    },
+    {
+      "title": "Company",
+      "links": [
+        {
+          "label": "About",
+          "href": "#"
+        },
+        {
+          "label": "Blog",
+          "href": "#"
+        },
+        {
+          "label": "Careers",
+          "href": "#"
+        },
+        {
+          "label": "Contact",
+          "href": "#"
+        }
+      ]
+    },
+    {
+      "title": "Resources",
+      "links": [
+        {
+          "label": "Docs",
+          "href": "#"
+        },
+        {
+          "label": "API",
+          "href": "#"
+        },
+        {
+          "label": "Status",
+          "href": "#"
+        },
+        {
+          "label": "Support",
+          "href": "#"
+        }
+      ]
+    }
+  ]
+}

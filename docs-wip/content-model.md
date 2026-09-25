@@ -100,6 +100,25 @@ A layout is a tree of nodes with **`Outlet`** nodes where the page goes:
 `slots.aside`. An outlet may sit at any depth, inside a `Columns` for a docs
 shell. Layout roots are chrome and are not wrapped.
 
+## Menus
+
+Menus are content of their own, in the `navigation` collection: one file per
+menu and locale, `src/content/navigation/<locale>/<name>.json`, holding
+`{ "label": "Main menu", "items": [ … ] }`. The items are in the shape the
+consuming prop takes (header links, footer columns, social links). Any prop
+points at a menu instead of repeating it:
+
+```json
+{ "widget": "Header", "props": { "links": { "$navigation": "main" }, "actions": [ … ] } }
+```
+
+Before a tree renders, the renderer replaces each reference by the menu's
+items (`{locale}/{name}` first, then `{name}`), so widgets keep plain list
+schemas and any widget can take a menu. A reference to a menu that does not
+exist renders an empty list and is a content issue with its path, which fails
+a build like the others. Layouts then hold structure only, and an editor
+changes a link once for every layout that shows it.
+
 ## Declaring slots in a widget
 
 ```ts

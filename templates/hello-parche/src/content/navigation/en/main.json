@@ -1,0 +1,9 @@
+{
+  "label": "Main menu",
+  "items": [
+    {
+      "label": "Home",
+      "href": "/"
+    }
+  ]
+}

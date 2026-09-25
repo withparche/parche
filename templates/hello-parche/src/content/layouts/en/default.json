@@ -3,12 +3,9 @@
     {
       "widget": "Header",
       "props": {
-        "links": [
-          {
-            "label": "Home",
-            "href": "/"
-          }
-        ]
+        "links": {
+          "$navigation": "main"
+        }
       }
     },
     {

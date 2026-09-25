@@ -1,0 +1,50 @@
+{
+  "label": "Product menu",
+  "items": [
+    {
+      "label": "Product",
+      "children": [
+        {
+          "title": "What it is",
+          "links": [
+            {
+              "label": "Widgets",
+              "href": "#features",
+              "description": "34 sections, props-driven, no class soup"
+            },
+            {
+              "label": "Live demos",
+              "href": "#showcase",
+              "description": "Five complete sites in one repository"
+            },
+            {
+              "label": "Changelog",
+              "href": "#changelog",
+              "description": "Every release since June 2022, with dates"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Case studies",
+      "href": "#work"
+    },
+    {
+      "label": "Services",
+      "href": "#services"
+    },
+    {
+      "label": "Pricing",
+      "href": "/fixtures/pricing"
+    },
+    {
+      "label": "Blog",
+      "href": "/blog"
+    },
+    {
+      "label": "Docs",
+      "href": "/fixtures/docs"
+    }
+  ]
+}

@@ -70,111 +70,16 @@ export const pageSchema = z.object({
 });
 
 /**
- * Schema for a single navigation link (used in dropdowns, mega menus, etc.)
- */
-const navLinkSchema = z.object({
-  label: z.string(),
-  href: z.string(),
-  icon: z.string().optional(),
-  description: z.string().optional(),
-});
-
-/**
- * Schema for a group of links (used in dropdowns and mega menu columns).
- */
-const navGroupSchema = z.object({
-  title: z.string().optional(),
-  links: z.array(navLinkSchema),
-});
-
-/**
- * Schema for mega menu configuration.
- */
-const megaMenuSchema = z.object({
-  columns: z.number().min(1).max(4).default(3),
-  featured: z.object({
-    title: z.string(),
-    description: z.string().optional(),
-    image: z.string().optional(),
-    href: z.string(),
-  }).optional(),
-  footer: z.string().optional(),
-});
-
-/**
- * Schema for a top-level header link.
- * - href only → simple link
- * - children without mega → dropdown
- * - children + mega → mega menu
- */
-const headerLinkSchema = z.object({
-  label: z.string(),
-  href: z.string().optional(),
-  children: z.array(navGroupSchema).optional(),
-  mega: megaMenuSchema.optional(),
-});
-
-/**
- * Schema for a header CTA action button.
- */
-const headerActionSchema = z.object({
-  label: z.string(),
-  href: z.string(),
-  variant: z.enum(['primary', 'secondary', 'ghost']).default('primary'),
-  icon: z.string().optional(),
-});
-
-/**
- * Schema for the announcement bar above the header.
- */
-const announcementSchema = z.object({
-  text: z.string(),
-  href: z.string().optional(),
-  icon: z.string().optional(),
-  dismissible: z.boolean().default(true),
-  aside: z.string().optional(),
-  class: z.string().optional(),
-});
-
-/**
- * Schema for the header logo (text or image).
- */
-const logoSchema = z.union([
-  z.string(),
-  z.object({
-    src: z.string(),
-    alt: z.string().default('Logo'),
-    width: z.number().optional(),
-    height: z.number().optional(),
-  }),
-]);
-
-/**
- * Base schema for navigation entries.
+ * A menu in the `navigation` collection, one file per menu and locale
+ * (`navigation/en/main.json`). `items` is the list a widget prop takes, in
+ * that widget's shape: header links for a header, link columns for a footer.
+ * A prop points at it with `{ "$navigation": "main" }`; the renderer replaces
+ * the reference by the items and the widget's own schema checks them.
  */
 export const navigationSchema = z.object({
-  header: z.object({
-    logo: logoSchema.optional(),
-    links: z.array(headerLinkSchema),
-    actions: z.array(headerActionSchema).optional(),
-    announcement: announcementSchema.optional(),
-  }),
-  footer: z.object({
-    columns: z.array(
-      z.object({
-        title: z.string(),
-        links: z.array(z.object({ label: z.string(), href: z.string() })),
-      }),
-    ),
-    secondaryLinks: z.array(z.object({ label: z.string(), href: z.string() })).optional(),
-    socialLinks: z.array(z.object({
-      label: z.string(),
-      href: z.string(),
-      icon: z.string().optional(),
-    })).optional(),
-    footNote: z.string().optional(),
-    copyright: z.string().optional(),
-  }),
+  label: z.string().optional(),
+  description: z.string().optional(),
+  items: z.array(z.unknown()),
 });
 
 /**
@@ -235,7 +140,7 @@ export function createCollections(options?: {
     }),
     navigation: defineCollection({
       loader: glob({
-        pattern: '*.json',
+        pattern: '**/*.{yaml,yml,json}',
         base: options?.navigationBase ?? './src/content/navigation',
       }),
       schema: options?.navigationSchema ?? navigationSchema,

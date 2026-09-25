@@ -206,8 +206,9 @@ export const siteConfigSchema = z.object({
   }).prefault({}),
 
   // Note: header/footer nav and theme are NOT configured here.
-  // - Chrome (header/footer) is authored in the `layouts` content collection
-  //   (see content/schemas.ts navigationSchema) and passed to the layout widgets.
+  // - Chrome (header/footer) is authored in the `layouts` content collection;
+  //   its menus live in the `navigation` collection and are referenced from
+  //   props with `{ "$navigation": name }` (see utils/navigation.ts).
   // - Theming is driven by imported theme parches + the `[data-theme]` switcher,
   //   not by a config flag.
   // These fields used to live here but were consumed by nothing (a silent trap),

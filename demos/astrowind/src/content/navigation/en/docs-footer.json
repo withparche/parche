@@ -1,0 +1,18 @@
+{
+  "label": "Docs footer",
+  "items": [
+    {
+      "title": "Docs",
+      "links": [
+        {
+          "label": "Getting started",
+          "href": "/fixtures/docs"
+        },
+        {
+          "label": "Launch page",
+          "href": "/fixtures/launch"
+        }
+      ]
+    }
+  ]
+}

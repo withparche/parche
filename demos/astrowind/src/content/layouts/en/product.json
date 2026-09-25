@@ -9,53 +9,9 @@
           "mark": true
         },
         "position": "left",
-        "links": [
-          {
-            "label": "Product",
-            "children": [
-              {
-                "title": "What it is",
-                "links": [
-                  {
-                    "label": "Widgets",
-                    "href": "#features",
-                    "description": "34 sections, props-driven, no class soup"
-                  },
-                  {
-                    "label": "Live demos",
-                    "href": "#showcase",
-                    "description": "Five complete sites in one repository"
-                  },
-                  {
-                    "label": "Changelog",
-                    "href": "#changelog",
-                    "description": "Every release since June 2022, with dates"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "label": "Case studies",
-            "href": "#work"
-          },
-          {
-            "label": "Services",
-            "href": "#services"
-          },
-          {
-            "label": "Pricing",
-            "href": "/fixtures/pricing"
-          },
-          {
-            "label": "Blog",
-            "href": "/blog"
-          },
-          {
-            "label": "Docs",
-            "href": "/fixtures/docs"
-          }
-        ],
+        "links": {
+          "$navigation": "product"
+        },
         "search": {
           "label": "Search",
           "shortcut": "⌘K",
@@ -96,92 +52,9 @@
             }
           ]
         },
-        "columns": [
-          {
-            "title": "Product",
-            "links": [
-              {
-                "label": "Features",
-                "href": "#features"
-              },
-              {
-                "label": "Demos",
-                "href": "#showcase"
-              },
-              {
-                "label": "Pricing",
-                "href": "#pricing"
-              },
-              {
-                "label": "Changelog",
-                "href": "#changelog"
-              }
-            ]
-          },
-          {
-            "title": "Agencies",
-            "links": [
-              {
-                "label": "Case studies",
-                "href": "#work"
-              },
-              {
-                "label": "Services & process",
-                "href": "#services"
-              },
-              {
-                "label": "Book a call",
-                "href": "#contact"
-              },
-              {
-                "label": "Press kit",
-                "href": "#press"
-              }
-            ]
-          },
-          {
-            "title": "Resources",
-            "links": [
-              {
-                "label": "Documentation",
-                "href": "/fixtures/docs"
-              },
-              {
-                "label": "Blog",
-                "href": "/blog"
-              },
-              {
-                "label": "Skills for AI agents",
-                "href": "#skills"
-              },
-              {
-                "label": "Status",
-                "href": "#status"
-              }
-            ]
-          },
-          {
-            "title": "Legal",
-            "links": [
-              {
-                "label": "Terms",
-                "href": "/terms"
-              },
-              {
-                "label": "Privacy policy",
-                "href": "/privacy"
-              },
-              {
-                "label": "Cookie preferences",
-                "href": "#cookies"
-              },
-              {
-                "label": "MIT licence",
-                "href": "#licence"
-              }
-            ]
-          }
-        ],
+        "columns": {
+          "$navigation": "product-footer"
+        },
         "copyright": "© 2026 AstroWind · MIT licensed",
         "note": "Built with Astro 7 · 100 Lighthouse · `38 KB` median page"
       }

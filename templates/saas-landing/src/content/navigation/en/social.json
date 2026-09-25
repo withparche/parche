@@ -1,0 +1,20 @@
+{
+  "label": "Social links",
+  "items": [
+    {
+      "label": "X",
+      "href": "#",
+      "icon": "tabler:brand-x"
+    },
+    {
+      "label": "GitHub",
+      "href": "#",
+      "icon": "tabler:brand-github"
+    },
+    {
+      "label": "LinkedIn",
+      "href": "#",
+      "icon": "tabler:brand-linkedin"
+    }
+  ]
+}

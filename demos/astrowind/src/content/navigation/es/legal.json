@@ -1,0 +1,13 @@
+{
+  "label": "Legal links",
+  "items": [
+    {
+      "label": "Términos",
+      "href": "/es/terminos"
+    },
+    {
+      "label": "Privacidad",
+      "href": "/es/privacidad"
+    }
+  ]
+}
