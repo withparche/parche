@@ -6,7 +6,7 @@ import CalloutElement from 'parche:elements/Callout';
 import { inline } from '../_shared/inline';
 import { schema, type Props } from './Callout.props';
 
-const { label, title, description, items, footer, ...look } = schema.parse(Astro.props) as Props;
+const { label, title, description, items, rows, footer, ...look } = schema.parse(Astro.props) as Props;
 ---
 
 <CalloutElement
@@ -15,5 +15,6 @@ const { label, title, description, items, footer, ...look } = schema.parse(Astro
   title={inline(title)}
   description={inline(description)}
   items={items.map((i) => inline(i) ?? '')}
+  rows={rows.map((r) => ({ label: inline(r.label) ?? '', value: inline(r.value) ?? '' }))}
   footer={inline(footer)}
 />

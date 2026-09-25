@@ -55,7 +55,7 @@ const form = { fields, submit, note, endpoint, loading, error, success, label: t
 ) : layout === 'plain' ? (
   <div class="parche-contact" data-layout="plain">
     <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="none" class="mb-[26px]" />
-    {fields.length > 0 && <ContactForm {...form} />}
+    {fields.length > 0 && <ContactForm {...form} block={false} />}
   </div>
 ) : (
   <div class="parche-contact" data-layout="centered">

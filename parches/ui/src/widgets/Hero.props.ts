@@ -2,10 +2,12 @@ import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
 import { action, image } from '../_shared/content';
 
-export const layouts = ['center', 'split', 'text'] as const;
+export const layouts = ['center', 'split', 'text', 'side'] as const;
 
 export const schema = z.object({
-  layout: z.enum(layouts).default('center').meta({ help: 'center: copy above the media · split: copy left, media right · text: copy only.' }),
+  layout: z.enum(layouts).default('center').meta({ help: 'center: copy above the media · split: copy left, media right · text: copy only · side: the heading on the left, the subtitle and actions on the right, for a page intro.' }),
+  align: z.enum(['center', 'start']).default('center').meta({ help: 'Where the copy sits in center and text layouts.' }),
+  size: z.enum(['lg', 'md']).default('lg').meta({ help: 'lg for a home page, md for the title of an inner page.' }),
   tagline: z.string().optional().meta({ placeholder: 'e.g. FREE AND OPEN SOURCE' }),
   badge: z
     .object({
@@ -41,7 +43,7 @@ export const meta: WidgetMeta = {
     groups: [
       { key: 'headline', label: 'Headline', fields: ['badge', 'tagline', 'title', 'subtitle', 'content'] },
       { key: 'actions', label: 'Actions', fields: ['actions'] },
-      { key: 'layout', label: 'Layout', fields: ['layout', 'image'] },
+      { key: 'layout', label: 'Layout', fields: ['layout', 'align', 'size', 'image'] },
     ],
   },
 };

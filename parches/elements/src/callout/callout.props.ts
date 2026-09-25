@@ -11,6 +11,7 @@ export const schema = z.object({
   title: z.string().optional(),
   description: z.string().optional().meta({ input: 'textarea' }),
   items: z.array(z.string()).default([]).meta({ help: 'A list, one line each ("**Lead.** text"); in inline, links separated by dots.' }),
+  rows: z.array(z.object({ label: z.string(), value: z.string() })).default([]).meta({ help: 'Key and value rows between hairlines, in a card: hours, a budget, an address.' }),
   footer: z.string().optional().meta({ help: 'Under a rule at the bottom (card), or the quiet source at the end (inline).' }),
   link: z.object({ text: z.string(), href: z.string() }).optional(),
 });
@@ -28,8 +29,9 @@ export const meta = defineElement({
       { name: 'title', element: 'p' },
       { name: 'description', element: 'p' },
       { name: 'items', element: 'ul' },
+      { name: 'rows', element: 'dl' },
       { name: 'footer', element: 'p' },
     ],
   },
-  ui: { groups: [{ key: 'content', label: 'Content', fields: ['label', 'title', 'description', 'items', 'footer', 'link'] }, { key: 'look', label: 'Look', fields: ['tone', 'layout'] }] },
+  ui: { groups: [{ key: 'content', label: 'Content', fields: ['label', 'title', 'description', 'items', 'rows', 'footer', 'link'] }, { key: 'look', label: 'Look', fields: ['tone', 'layout'] }] },
 });

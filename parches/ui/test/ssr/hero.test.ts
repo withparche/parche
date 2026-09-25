@@ -17,7 +17,7 @@ const copy = { tagline: 'Legal', title: 'Privacy', subtitle: 'What we collect', 
 test('center: copy above the image, actions centred', async () => {
   const html = await render({ ...copy, image: { src: 'https://example.com/a.png', alt: 'A' } });
   expect(html).toContain('data-layout="center"');
-  expect(html).toContain('<h1 class="type-h1 mb-5 text-balance">Privacy</h1>');
+  expect(html).toMatch(/<h1 class="type-h1[^"]*">Privacy<\/h1>/);
   expect(html).toContain('parche-hero-media');
   expect(html).toContain('alt="A"');
   expect(html).toContain('href="#more"');
@@ -56,4 +56,16 @@ test('no image and no media slot: no media area at all', async () => {
   const html = await render(copy);
   expect(html).not.toContain('parche-hero-media');
   expect(html).not.toContain('parche-hero-proof');
+});
+
+test('side: the heading on the left, the subtitle and actions beside it; md sets a page title', async () => {
+  const html = await render({ ...copy, layout: 'side', size: 'md' });
+  expect(html).toContain('parche-hero-aside');
+  expect(html).toMatch(/<h1 class="font-heading text-\[clamp\(2\.25rem/);
+  expect(html).toMatch(/parche-hero-aside[\s\S]*What we collect[\s\S]*href="#more"/);
+});
+
+test('align start keeps a centre layout on the left', async () => {
+  const html = await render({ ...copy, align: 'start' });
+  expect(html).not.toContain('text-center');
 });

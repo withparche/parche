@@ -1,0 +1,64 @@
+{
+  "label": "Cadence docs",
+  "items": [
+    {
+      "title": "Getting started",
+      "links": [
+        {
+          "label": "Installation",
+          "href": "/docs"
+        },
+        {
+          "label": "Your first release note",
+          "href": "/docs#first-release"
+        },
+        {
+          "label": "Core concepts",
+          "href": "/docs#concepts"
+        }
+      ]
+    },
+    {
+      "title": "Guides",
+      "links": [
+        {
+          "label": "Connecting GitHub",
+          "href": "/docs#github"
+        },
+        {
+          "label": "The in-app widget",
+          "href": "/docs#widget"
+        },
+        {
+          "label": "Email digests",
+          "href": "/docs#digests"
+        },
+        {
+          "label": "Self-hosting",
+          "href": "/docs#self-hosting"
+        }
+      ]
+    },
+    {
+      "title": "Reference",
+      "links": [
+        {
+          "label": "REST API",
+          "href": "/docs#api"
+        },
+        {
+          "label": "Webhooks",
+          "href": "/docs#webhooks"
+        },
+        {
+          "label": "CLI",
+          "href": "/docs#cli"
+        },
+        {
+          "label": "Error codes",
+          "href": "/docs#errors"
+        }
+      ]
+    }
+  ]
+}

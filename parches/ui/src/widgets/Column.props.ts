@@ -5,6 +5,7 @@ export const schema = z.object({
   as: z.enum(['div', 'aside', 'section']).default('div').meta({ help: 'aside when the column is secondary content, like a sidebar.' }),
   sticky: z.boolean().default(false).meta({ help: 'Stay in view while the other columns scroll.' }),
   label: z.string().optional().meta({ help: 'Accessible name, for an aside.' }),
+  gap: z.enum(['sm', 'md']).default('md').meta({ help: 'Space between the widgets in the column: sm for a text column (docs), md between blocks.' }),
 });
 
 export type Props = z.infer<typeof schema>;

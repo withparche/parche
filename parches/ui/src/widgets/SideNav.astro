@@ -1,0 +1,30 @@
+---
+/**
+ * Grouped links down the side of a docs layout. The link to the page being
+ * read is marked with aria-current and drawn as the active one.
+ */
+import { schema, type Props } from './SideNav.props';
+
+const { items, label } = schema.parse(Astro.props) as Props;
+const here = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isHere = (href: string) => (href.split('#')[0].replace(/\/$/, '') || '/') === here && !href.includes('#');
+---
+
+<nav class="parche-sidenav flex flex-col gap-6" aria-label={label}>
+  {items.map((group) => (
+    <div>
+      {group.title && <p class="mb-2.5 px-2.5 font-mono text-[10px] leading-none font-medium tracking-[0.14em] text-muted uppercase">{group.title}</p>}
+      <ul class="flex flex-col gap-0.5">
+        {group.links.map((l) => (
+          <li>
+            <a
+              href={l.href}
+              aria-current={isHere(l.href) ? 'page' : undefined}
+              class="block rounded-r-sm border-l-2 border-transparent px-2.5 py-[7px] text-sm leading-[1.35] text-muted no-underline hover:text-heading aria-[current=page]:border-primary aria-[current=page]:bg-primary-soft aria-[current=page]:font-medium aria-[current=page]:text-heading"
+            >{l.label}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
+</nav>

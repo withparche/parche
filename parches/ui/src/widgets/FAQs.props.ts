@@ -12,6 +12,7 @@ export const schema = z.object({
   ...heading(),
   items: z.array(faqItem).default([]),
   columns: z.enum(['1', '2']).default('2').meta({ help: 'Number of columns' }),
+  open: z.enum(['first', 'all', 'none']).default('first').meta({ help: 'Which answers start open in the list layout: all, for a page where the answers are the point.' }),
   layout: z.enum(['accordion', 'list']).default('accordion').meta({ help: 'accordion: centred heading, chevrons · list: start-aligned heading, one column between hairlines, plus and minus, the first answer open.' }),
 });
 

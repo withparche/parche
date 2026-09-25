@@ -1,0 +1,142 @@
+{
+  "sections": [
+    {
+      "widget": "Header",
+      "props": {
+        "logo": {
+          "text": "Cadence",
+          "href": "/homes/saas",
+          "mark": true
+        },
+        "position": "left",
+        "links": [
+          {
+            "label": "Docs",
+            "href": "/docs"
+          },
+          {
+            "label": "Changelog",
+            "href": "/changelog"
+          }
+        ],
+        "search": {
+          "label": "Search the docs…",
+          "shortcut": "⌘K",
+          "href": "/docs"
+        },
+        "controls": {
+          "theme": "text",
+          "locale": "none"
+        },
+        "actions": [
+          {
+            "label": "Open app",
+            "href": "/pricing",
+            "variant": "primary"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "width": "xl",
+        "spacing": "sm"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Columns",
+            "props": {
+              "ratio": "sides",
+              "gap": "lg",
+              "stack": "lg"
+            },
+            "slots": {
+              "default": [
+                {
+                  "widget": "Column",
+                  "props": {
+                    "as": "aside",
+                    "sticky": true,
+                    "label": "Docs"
+                  },
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "SideNav",
+                        "props": {
+                          "items": {
+                            "$ref": "navigation/cadence-docs"
+                          },
+                          "label": "Docs"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "widget": "Column",
+                  "props": {
+                    "gap": "sm"
+                  },
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Outlet"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "widget": "Column",
+                  "props": {
+                    "as": "aside",
+                    "sticky": true,
+                    "label": "On this page"
+                  },
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Outlet",
+                        "props": {
+                          "name": "aside"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Footer",
+      "props": {
+        "layout": "brand",
+        "brand": {
+          "text": "Cadence",
+          "mark": true,
+          "description": "Release notes your customers read, from the pull requests you already merged.",
+          "links": [
+            {
+              "label": "Status · 99.97%",
+              "href": "/contact#status"
+            },
+            {
+              "label": "/rss.xml",
+              "href": "/rss.xml"
+            }
+          ]
+        },
+        "columns": {
+          "$ref": "navigation/cadence-footer"
+        },
+        "copyright": "© 2026 Cadence Software SL · Bilbao",
+        "note": "SOC 2 Type II · GDPR · EU data residency"
+      }
+    }
+  ]
+}

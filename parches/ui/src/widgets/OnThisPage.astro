@@ -1,0 +1,19 @@
+---
+/**
+ * The page's index for a docs aside: the Toc element (the heading being read
+ * is marked as the reader scrolls) and a few links under a rule.
+ */
+import Toc from 'parche:elements/Toc';
+import { schema, type Props } from './OnThisPage.props';
+
+const { title, items, links } = schema.parse(Astro.props) as Props;
+---
+
+<div class="parche-on-this-page">
+  {items.length > 0 && <Toc {items} {title} />}
+  {links.length > 0 && (
+    <ul class:list={['flex flex-col gap-2 text-[13px] leading-[1.4]', items.length > 0 && 'mt-6 border-t border-border pt-5']}>
+      {links.map((l) => <li><a href={l.href} class="text-muted no-underline hover:text-heading">{l.text}</a></li>)}
+    </ul>
+  )}
+</div>

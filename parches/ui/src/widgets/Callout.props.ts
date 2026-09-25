@@ -9,6 +9,7 @@ export const schema = z.object({
   title: text().optional(),
   description: text({ input: 'textarea' }).optional(),
   items: z.array(text()).default([]).meta({ help: 'One line each; start with **a bold lead.** when the list is reasons.' }),
+  rows: z.array(z.object({ label: text(), value: text() })).default([]).meta({ help: 'Key and value rows in a card: opening hours, budgets, an address.' }),
   footer: text().optional(),
   link: link.optional(),
 });
@@ -24,7 +25,7 @@ export const meta: WidgetMeta = {
   },
   ui: {
     groups: [
-      { key: 'content', label: 'Content', fields: ['label', 'title', 'description', 'items', 'footer', 'link'] },
+      { key: 'content', label: 'Content', fields: ['label', 'title', 'description', 'items', 'rows', 'footer', 'link'] },
       { key: 'look', label: 'Look', fields: ['tone', 'layout'] },
     ],
   },

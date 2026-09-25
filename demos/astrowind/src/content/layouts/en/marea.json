@@ -1,0 +1,54 @@
+{
+  "sections": [
+    {
+      "widget": "Header",
+      "props": {
+        "logo": {
+          "text": "Marea Studio",
+          "href": "/homes/agency",
+          "mark": true
+        },
+        "position": "left",
+        "links": {
+          "$ref": "navigation/marea"
+        },
+        "controls": {
+          "theme": "text",
+          "locale": "none"
+        },
+        "actions": [
+          {
+            "label": "Book a call",
+            "href": "/homes/agency#book",
+            "variant": "primary"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Outlet",
+      "props": {
+        "wrapper": {
+          "widget": "Section"
+        }
+      }
+    },
+    {
+      "widget": "Footer",
+      "props": {
+        "layout": "brand",
+        "brand": {
+          "text": "Marea Studio",
+          "mark": true,
+          "description": "Carrer de Pujades 100, 08005 Barcelona",
+          "links": []
+        },
+        "columns": {
+          "$ref": "navigation/marea-footer"
+        },
+        "copyright": "© 2026 Marea Studio SL · Barcelona",
+        "note": "Each case study is its own indexable page."
+      }
+    }
+  ]
+}

@@ -18,12 +18,16 @@ interface Props {
   align?: 'start' | 'center';
   /** Reading measure of the text block. */
   width?: 'sm' | 'md' | 'lg';
+  /** The heading level: 2 for a section, 1 when the section opens the page. */
+  level?: 1 | 2;
   /** Space under the header: tight 36px · sm 40 · md 44 · lg 48 · xl 56 at full width. */
   spacing?: 'none' | 'tight' | 'sm' | 'md' | 'lg' | 'xl';
   class?: string;
 }
 
-const { tagline, title, subtitle, link, align = 'start', width = 'md', spacing = 'lg', class: className } = Astro.props;
+const { tagline, title, subtitle, link, align = 'start', width = 'md', spacing = 'lg', level = 2, class: className } = Astro.props;
+const Title = level === 1 ? 'h1' : 'h2';
+const titleClass = level === 1 ? 'font-heading text-[clamp(2.25rem,4.6vw,3.25rem)] leading-[1.05] font-semibold tracking-(--ds-sys-type-h1-tracking) text-heading' : 'type-h2';
 const hasAside = Boolean(link) || Astro.slots.has('aside');
 const widths = { sm: 'max-w-[580px]', md: 'max-w-[620px]', lg: 'max-w-[660px]' };
 const spacings = {
@@ -49,7 +53,7 @@ const centered = align === 'center';
   >
     <div class:list={['min-w-0', widths[width], centered && 'mx-auto']}>
       {tagline && <Eyebrow as="p" class="mb-4" set:html={inline(tagline)} />}
-      {title && <h2 class:list={['type-h2 text-balance', subtitle && 'mb-3.5']} set:html={inline(title)} />}
+      {title && <Title class:list={[titleClass, 'text-balance', subtitle && 'mb-3.5']} set:html={inline(title)} />}
       {subtitle && <p class="text-[1.0625rem] leading-[1.6] text-pretty text-muted" set:html={inline(subtitle)} />}
     </div>
     {link && <a href={link.href} class="shrink-0 text-[15px] leading-none font-semibold whitespace-nowrap text-primary no-underline hover:text-heading">{link.text} →</a>}

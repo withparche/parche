@@ -1,44 +1,67 @@
 {
-  "title": "About us",
-  "description": "Who builds AstroWind, how it is made and what it is for.",
+  "title": "About",
+  "description": "Cadence started in 2024 as an internal script. Now nine of us work on it full time from Bilbao and Lisbon.",
+  "layout": "cadence",
   "sections": [
     {
       "widget": "Hero",
       "props": {
-        "title": "About us",
-        "subtitle": "We build the starting point we wished we had: a template that survives contact with real content, real translations and real deadlines.",
-        "image": {
-          "src": "https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-          "alt": "The team"
-        }
+        "layout": "center",
+        "title": "We built this because our own changelog was three weeks late, every time",
+        "subtitle": "Cadence started in 2024 as an internal script at a company where two of us worked. It turned merged pull requests into a draft so nobody had to write release notes at 6pm on a Friday. Other teams asked for it. Now nine of us work on it full time from Bilbao and Lisbon.",
+        "align": "start",
+        "size": "md"
+      },
+      "slots": {
+        "media": [
+          {
+            "widget": "Screenshot",
+            "props": {
+              "caption": "the team, one real photo · 2000×860",
+              "ratio": "2000/860",
+              "frame": false
+            }
+          }
+        ]
       }
     },
     {
       "widget": "Section",
       "props": {
-        "tone": "glow"
+        "id": "numbers"
       },
       "slots": {
         "default": [
           {
             "widget": "Stats",
             "props": {
+              "title": "Where we are, in numbers we can prove",
+              "subtitle": "Four figures with a source each. A round number with no source is decoration, and one implausible one makes a reader doubt the whole page.",
+              "align": "start",
+              "layout": "panels",
               "items": [
                 {
-                  "value": "180",
-                  "label": "Contributors"
+                  "value": "9",
+                  "label": "People, all full time",
+                  "href": "#team",
+                  "description": "Two cities, no offices. Everyone on the team page with their real role."
                 },
                 {
-                  "value": "64",
-                  "label": "Releases"
+                  "value": "1,180",
+                  "label": "Workspaces, 214 paying",
+                  "description": "We publish both numbers, not only the bigger one. Counted at 1 September 2026"
                 },
                 {
-                  "value": "48.4K",
-                  "label": "Sites built"
+                  "value": "Profitable",
+                  "label": "Since March 2026",
+                  "tone": "success",
+                  "description": "No outside investment. It matters because it is why we can refuse to add tracking."
                 },
                 {
-                  "value": "4",
-                  "label": "Years running"
+                  "value": "148",
+                  "label": "Releases shipped",
+                  "href": "#log",
+                  "description": "All of them on our own changelog, which is the product."
                 }
               ]
             }
@@ -47,104 +70,182 @@
       }
     },
     {
-      "widget": "Features",
+      "widget": "Section",
       "props": {
-        "layout": "list",
-        "title": "Our values",
-        "subtitle": "What we optimise for when the two options both look reasonable.",
-        "columns": "3",
-        "items": [
+        "tone": "surface",
+        "id": "decisions"
+      },
+      "slots": {
+        "default": [
           {
-            "title": "Clarity over cleverness",
-            "description": "A component someone can read in a minute beats one that saves five lines.",
-            "icon": "tabler:eye"
-          },
-          {
-            "title": "Defaults that hold",
-            "description": "The out-of-the-box result should be good enough to ship, not a starting point you must fix.",
-            "icon": "tabler:adjustments"
-          },
-          {
-            "title": "No hidden costs",
-            "description": "No tracking, no phoning home, no runtime you did not ask for.",
-            "icon": "tabler:shield-check"
+            "widget": "Features",
+            "props": {
+              "title": "Three decisions, and what each one costs us",
+              "subtitle": "A values section that any company could publish is worth nothing. These are commitments with a price attached — which is the only way to tell whether one is real.",
+              "layout": "rows",
+              "header": "side",
+              "align": "start",
+              "items": [
+                {
+                  "title": "No tracking in the widget",
+                  "description": "The in-app widget sets no third-party cookie and sends nothing to an ad network.",
+                  "footer": "Costs us: the attribution reporting three enterprise prospects asked for. We lost two of them.",
+                  "tone": "warning"
+                },
+                {
+                  "title": "Self-hosting stays fully featured",
+                  "description": "Nothing is held back to push you onto the hosted plan. SSO is not an upsell.",
+                  "footer": "Costs us: roughly a fifth of our revenue sits on a plan we cannot upsell.",
+                  "tone": "warning"
+                },
+                {
+                  "title": "We tell you when we are the wrong tool",
+                  "description": "If you ship quarterly, our pricing page says a wiki page is enough. It is on the page, not buried in a call.",
+                  "footer": "Costs us: signups. Gains us: a support load a nine-person team can carry.",
+                  "tone": "warning"
+                }
+              ]
+            }
           }
         ]
       }
     },
     {
-      "widget": "Features",
+      "widget": "Section",
       "props": {
-        "layout": "list",
-        "title": "Our achievements",
-        "subtitle": "Milestones worth remembering.",
-        "columns": "3",
-        "items": [
+        "id": "team"
+      },
+      "slots": {
+        "default": [
           {
-            "title": "Most forked Astro theme",
-            "description": "Four years running, which says more about the community than about us.",
-            "icon": "tabler:award"
-          },
-          {
-            "title": "Zero JavaScript by default",
-            "description": "Every page ships as HTML and CSS unless you explicitly opt into an island.",
-            "icon": "tabler:bolt"
-          },
-          {
-            "title": "Accessible by construction",
-            "description": "Focus states, landmarks and contrast are part of the components, not an afterthought.",
-            "icon": "tabler:accessible"
+            "widget": "Team",
+            "props": {
+              "title": "Everyone, with their real job",
+              "link": {
+                "text": "Two roles open",
+                "href": "#jobs"
+              },
+              "layout": "stacked",
+              "items": [
+                {
+                  "name": "Íñigo Aranguren",
+                  "role": "Co-founder · wrote the original script"
+                },
+                {
+                  "name": "Rita Salgado",
+                  "role": "Co-founder · answers most support email"
+                },
+                {
+                  "name": "Kwame Asante",
+                  "role": "Infrastructure · owns the status page"
+                },
+                {
+                  "name": "Hanne Vos",
+                  "role": "Design · also writes the docs"
+                }
+              ],
+              "more": {
+                "count": "+5",
+                "label": "Engineering",
+                "note": "All listed on the team page"
+              }
+            }
           }
         ]
       }
     },
     {
-      "widget": "Steps",
+      "widget": "Section",
       "props": {
-        "layout": "numbered",
-        "title": "How we work",
-        "subtitle": "The loop we repeat, release after release.",
-        "items": [
+        "tone": "surface",
+        "id": "history"
+      },
+      "slots": {
+        "default": [
           {
-            "title": "Build something real",
-            "description": "Every feature starts as a page we actually need, not as an abstraction we imagine someone will want.",
-            "icon": "tabler:hammer"
-          },
-          {
-            "title": "Find where it breaks",
-            "description": "We keep a backlog of the limits real pages hit. Nothing speculative goes in it.",
-            "icon": "tabler:bug"
-          },
-          {
-            "title": "Fix the cause",
-            "description": "Then we fix the framework rather than working around it in the page.",
-            "icon": "tabler:tool"
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Features",
-      "props": {
-        "layout": "cards",
-        "title": "Get in touch",
-        "subtitle": "Where to find us.",
-        "columns": "3",
-        "items": [
-          {
-            "title": "GitHub",
-            "description": "Issues, discussions and pull requests. The fastest route to a maintainer.",
-            "icon": "tabler:brand-github"
-          },
-          {
-            "title": "Email",
-            "description": "For anything that does not belong in public. We answer within two working days.",
-            "icon": "tabler:mail"
-          },
-          {
-            "title": "Community",
-            "description": "Ask questions and share what you have built with other people using the template.",
-            "icon": "tabler:users"
+            "widget": "Columns",
+            "props": {
+              "ratio": "equal",
+              "gap": "lg"
+            },
+            "slots": {
+              "default": [
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Timeline",
+                        "props": {
+                          "title": "How we got here",
+                          "items": [
+                            {
+                              "label": "2024",
+                              "title": "An internal script, shared with four other teams who kept asking.",
+                              "highlight": true
+                            },
+                            {
+                              "label": "2025",
+                              "title": "First paying customer in March. Both founders full time by June.",
+                              "highlight": true
+                            },
+                            {
+                              "label": "2026",
+                              "title": "Profitable in March. Self-hosting shipped in August. Nine people.",
+                              "highlight": true
+                            },
+                            {
+                              "label": "Next",
+                              "title": "Stay this size for as long as it works. [Two roles open.](#jobs)"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Features",
+                        "props": {
+                          "title": "For press and procurement",
+                          "subtitle": "Everything a journalist, an investor or a security reviewer usually has to email us for.",
+                          "align": "start",
+                          "layout": "cards",
+                          "columns": "4",
+                          "card": "canvas",
+                          "items": [
+                            {
+                              "title": "Press kit",
+                              "description": "Logos, photos, facts",
+                              "href": "#press"
+                            },
+                            {
+                              "title": "SOC 2 report",
+                              "description": "Under NDA",
+                              "href": "#soc2"
+                            },
+                            {
+                              "title": "DPA",
+                              "description": "Signed, plus subprocessors",
+                              "href": "#dpa"
+                            },
+                            {
+                              "title": "Team handbook",
+                              "description": "Public, including salaries",
+                              "href": "#handbook"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
           }
         ]
       }

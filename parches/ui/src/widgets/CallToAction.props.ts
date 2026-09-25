@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
-import { action } from '../_shared/content';
+import { text, action } from '../_shared/content';
 
 export const layouts = ['card', 'band', 'inline', 'closing'] as const;
 
@@ -9,6 +9,7 @@ export const schema = z.object({
   tagline: z.string().optional(),
   title: z.string().optional(),
   subtitle: z.string().optional().meta({ input: 'textarea' }),
+  note: text().optional().meta({ help: 'One quiet line under the actions: the next start date, what happens after you click.' }),
   actions: z.array(action).default([]),
 });
 

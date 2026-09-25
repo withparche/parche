@@ -10,7 +10,7 @@ import TableElement from 'parche:elements/Table';
 import SectionHeader from '../components/SectionHeader.astro';
 import { schema, type Props } from './Pricing.props';
 
-const { title, subtitle, tagline, link, align, items, comparison } = schema.parse(Astro.props) as Props;
+const { title, subtitle, tagline, link, align, items, note, comparison } = schema.parse(Astro.props) as Props;
 const plans = items.filter((p) => p.price || p.title);
 const featured = plans.findIndex((p) => p.recommended);
 ---
@@ -18,7 +18,7 @@ const featured = plans.findIndex((p) => p.recommended);
 <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="md" />
 
 {plans.length > 0 && (
-  <div class:list={['grid grid-cols-[repeat(auto-fit,minmax(min(260px,100%),1fr))] gap-[clamp(16px,2vw,24px)]', comparison && 'mb-[clamp(20px,3vw,32px)]']}>
+  <div class:list={['grid grid-cols-[repeat(auto-fit,minmax(min(260px,100%),1fr))] gap-[clamp(16px,2vw,24px)]', comparison && !note && 'mb-[clamp(20px,3vw,32px)]']}>
     {plans.map((p) => {
       const numeric = /^[\d.,]/.test(String(p.price ?? ''));
       const shown = p.type === 'custom' ? (p.price || "Let's talk") : `${numeric ? (p.currency ?? '$') : ''}${p.price ?? ''}`;
@@ -40,11 +40,11 @@ const featured = plans.findIndex((p) => p.recommended);
             <p class="type-figure text-heading">
               {shown}{(p.suffix || p.period) && <span class="font-body text-[15px] font-normal tracking-normal text-muted"> {p.suffix ?? p.period}</span>}
             </p>
-            {(p.note || p.subtitle) && <p class="mt-2 type-small text-muted" set:html={inline(p.note ?? p.subtitle)} />}
+            {(p.note || p.subtitle) && <p class:list={['mt-2 type-small', p.noteTone === 'success' ? 'text-success' : 'text-muted']} set:html={inline(p.note ?? p.subtitle)} />}
             {p.description && <p class="mt-2 type-small text-muted" set:html={inline(p.description)} />}
           </div>
           {p.features.length > 0 && (
-            <ul class="flex flex-col gap-[9px] text-sm leading-[1.5] text-heading">
+            <ul class="flex flex-col gap-[9px] border-t border-border-soft pt-[18px] text-sm leading-[1.5] text-heading">
               {p.features.map((f) => <li set:html={inline(f)} />)}
             </ul>
           )}
@@ -60,6 +60,8 @@ const featured = plans.findIndex((p) => p.recommended);
     })}
   </div>
 )}
+
+{note && <p class:list={['mt-4 type-small text-muted [&_a]:text-primary', comparison && 'mb-[clamp(20px,3vw,32px)]']} set:html={inline(note)} />}
 
 {comparison && plans.length > 0 && (
   <TableElement

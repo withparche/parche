@@ -1,0 +1,25 @@
+{
+  "label": "Marea menu",
+  "items": [
+    {
+      "label": "Services",
+      "href": "/services"
+    },
+    {
+      "label": "Work",
+      "href": "/homes/agency#work"
+    },
+    {
+      "label": "Process",
+      "href": "/homes/agency#process"
+    },
+    {
+      "label": "Team",
+      "href": "/homes/agency#team"
+    },
+    {
+      "label": "Budgets",
+      "href": "/homes/agency#budgets"
+    }
+  ]
+}

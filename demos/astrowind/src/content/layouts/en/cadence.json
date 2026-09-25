@@ -1,0 +1,68 @@
+{
+  "sections": [
+    {
+      "widget": "Header",
+      "props": {
+        "logo": {
+          "text": "Cadence",
+          "href": "/homes/saas",
+          "mark": true
+        },
+        "position": "left",
+        "links": {
+          "$ref": "navigation/cadence"
+        },
+        "controls": {
+          "theme": "text",
+          "locale": "none"
+        },
+        "actions": [
+          {
+            "label": "Log in",
+            "href": "/contact",
+            "variant": "ghost"
+          },
+          {
+            "label": "Start free",
+            "href": "/pricing",
+            "variant": "primary"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Outlet",
+      "props": {
+        "wrapper": {
+          "widget": "Section"
+        }
+      }
+    },
+    {
+      "widget": "Footer",
+      "props": {
+        "layout": "brand",
+        "brand": {
+          "text": "Cadence",
+          "mark": true,
+          "description": "Release notes your customers read, from the pull requests you already merged.",
+          "links": [
+            {
+              "label": "Status · 99.97%",
+              "href": "/contact#status"
+            },
+            {
+              "label": "/rss.xml",
+              "href": "/rss.xml"
+            }
+          ]
+        },
+        "columns": {
+          "$ref": "navigation/cadence-footer"
+        },
+        "copyright": "© 2026 Cadence Software SL · Bilbao",
+        "note": "SOC 2 Type II · GDPR · EU data residency"
+      }
+    }
+  ]
+}

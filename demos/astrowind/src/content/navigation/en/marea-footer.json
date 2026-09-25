@@ -1,0 +1,60 @@
+{
+  "label": "Marea footer",
+  "items": [
+    {
+      "title": "Work",
+      "links": [
+        {
+          "label": "Cadence rebrand",
+          "href": "/homes/agency#work"
+        },
+        {
+          "label": "Quietmile website",
+          "href": "/homes/agency#work"
+        },
+        {
+          "label": "Ferrolab embedded",
+          "href": "/homes/agency#work"
+        }
+      ]
+    },
+    {
+      "title": "Studio",
+      "links": [
+        {
+          "label": "About",
+          "href": "/homes/agency#team"
+        },
+        {
+          "label": "Careers · 2",
+          "href": "/homes/agency#team"
+        },
+        {
+          "label": "Journal",
+          "href": "/blog"
+        },
+        {
+          "label": "Contact",
+          "href": "/homes/agency#book"
+        }
+      ]
+    },
+    {
+      "title": "Legal",
+      "links": [
+        {
+          "label": "Terms",
+          "href": "/terms"
+        },
+        {
+          "label": "Privacy",
+          "href": "/privacy"
+        },
+        {
+          "label": "Cookie preferences",
+          "href": "/privacy#cookies"
+        }
+      ]
+    }
+  ]
+}

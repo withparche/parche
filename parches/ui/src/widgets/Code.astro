@@ -1,0 +1,31 @@
+---
+/**
+ * A code block with a copy button; with `tabs`, the same step for several
+ * tools, the reader picking one in a bar across the top of the frame (the
+ * Tabs element: without script, every tab's block is shown).
+ */
+import Tabs from 'parche:elements/Tabs';
+import CodeFrame from '../components/CodeFrame.astro';
+import { schema, type Props } from './Code.props';
+
+const { code, tabs, lang, copyLabel, copiedLabel, syncKey } = schema.parse(Astro.props) as Props;
+const items = tabs.map((t, i) => ({ value: `t${i}`, label: t.label }));
+const at = (i: number) => tabs[i];
+const name = (i: number) => (tabs[i] ? `t${i}` : `__none-${i}`);
+const copy = { lang, copyLabel, copiedLabel };
+---
+
+<div class="parche-code-block overflow-hidden rounded-md border border-border bg-surface [&_.parche-tabs-list]:w-full [&_.parche-tabs-list]:rounded-none [&_.parche-tabs-list]:border-0 [&_.parche-tabs-list]:border-b [&_.parche-tabs-list]:border-border [&_.parche-tabs-list]:bg-surface-2 [&_.parche-tabs-list]:px-2 [&_.parche-tabs-list]:py-2 [&_.parche-tabs-panels]:mt-0 [&_[role=tab]]:px-2.5 [&_[role=tab]]:py-1.5 [&_[role=tab]]:font-mono [&_[role=tab]]:text-[11px] [&_[role=tab]]:font-medium">
+  {tabs.length > 0 ? (
+    <Tabs {items} variant="pill" {syncKey} label="Tool">
+      {at(0) && <CodeFrame slot={name(0)} code={at(0).code} {...copy} />}
+      {at(1) && <CodeFrame slot={name(1)} code={at(1).code} {...copy} />}
+      {at(2) && <CodeFrame slot={name(2)} code={at(2).code} {...copy} />}
+      {at(3) && <CodeFrame slot={name(3)} code={at(3).code} {...copy} />}
+      {at(4) && <CodeFrame slot={name(4)} code={at(4).code} {...copy} />}
+      {at(5) && <CodeFrame slot={name(5)} code={at(5).code} {...copy} />}
+    </Tabs>
+  ) : (
+    code && <CodeFrame {code} {...copy} />
+  )}
+</div>

@@ -1,0 +1,22 @@
+---
+/** The pages before and after this one, as two cards across the bottom. */
+import { schema, type Props } from './PrevNext.props';
+
+const { previous, next, previousLabel, nextLabel } = schema.parse(Astro.props) as Props;
+const card = 'block rounded-md border border-border bg-surface px-4 py-3.5 no-underline transition-colors hover:border-primary';
+---
+
+<nav class="parche-prev-next grid grid-cols-[repeat(auto-fit,minmax(min(220px,100%),1fr))] gap-3 border-t border-border pt-6" aria-label="Pages">
+  {previous ? (
+    <a href={previous.href} class={card} rel="prev">
+      <span class="block font-mono text-[11px] leading-none text-muted">← {previousLabel}</span>
+      <span class="mt-2 block text-[15px] leading-[1.3] font-semibold text-heading">{previous.title}</span>
+    </a>
+  ) : <span />}
+  {next && (
+    <a href={next.href} class:list={[card, 'text-right']} rel="next">
+      <span class="block font-mono text-[11px] leading-none text-muted">{nextLabel} →</span>
+      <span class="mt-2 block text-[15px] leading-[1.3] font-semibold text-heading">{next.title}</span>
+    </a>
+  )}
+</nav>

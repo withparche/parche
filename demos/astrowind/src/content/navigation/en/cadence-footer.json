@@ -1,0 +1,89 @@
+{
+  "label": "Cadence footer",
+  "items": [
+    {
+      "title": "Product",
+      "links": [
+        {
+          "label": "How it works",
+          "href": "/homes/saas#how"
+        },
+        {
+          "label": "Pricing",
+          "href": "/pricing"
+        },
+        {
+          "label": "Our own changelog",
+          "href": "/changelog"
+        },
+        {
+          "label": "Roadmap",
+          "href": "/changelog#roadmap"
+        }
+      ]
+    },
+    {
+      "title": "Developers",
+      "links": [
+        {
+          "label": "Documentation",
+          "href": "/docs"
+        },
+        {
+          "label": "REST API",
+          "href": "/docs#api"
+        },
+        {
+          "label": "Self-hosting guide",
+          "href": "/docs#self-hosting"
+        },
+        {
+          "label": "Webhooks",
+          "href": "/docs#webhooks"
+        }
+      ]
+    },
+    {
+      "title": "Company",
+      "links": [
+        {
+          "label": "About",
+          "href": "/about"
+        },
+        {
+          "label": "Blog",
+          "href": "/blog"
+        },
+        {
+          "label": "Jobs · 2",
+          "href": "/about#jobs"
+        },
+        {
+          "label": "Contact",
+          "href": "/contact"
+        }
+      ]
+    },
+    {
+      "title": "Legal",
+      "links": [
+        {
+          "label": "Terms",
+          "href": "/terms"
+        },
+        {
+          "label": "Privacy",
+          "href": "/privacy"
+        },
+        {
+          "label": "DPA & subprocessors",
+          "href": "/privacy#dpa"
+        },
+        {
+          "label": "Cookie preferences",
+          "href": "/privacy#cookies"
+        }
+      ]
+    }
+  ]
+}

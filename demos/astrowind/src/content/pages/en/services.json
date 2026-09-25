@@ -1,166 +1,371 @@
 {
   "title": "Services",
-  "description": "What we do for you when the template alone is not enough.",
+  "description": "Six things we do, and what you get from each: what arrives, how long it takes and roughly what it costs.",
+  "layout": "marea",
   "sections": [
     {
       "widget": "Hero",
       "props": {
-        "title": "Services that get your site ==live==",
-        "subtitle": "From a two-hour review to a full redesign. We pick the smallest scope that solves your problem.",
+        "layout": "side",
+        "tagline": "Services",
+        "title": "Six things we do, and what you get from each",
+        "subtitle": "Most agency service pages list disciplines — strategy, design, development. That describes our org chart, not your outcome. Below is what arrives, how long it takes and roughly what it costs.",
         "actions": [
           {
-            "variant": "primary",
-            "text": "Request a quote",
-            "href": "/contact",
-            "icon": "tabler:arrow-right"
+            "text": "Book a 30-minute call",
+            "href": "#book",
+            "variant": "primary"
+          },
+          {
+            "text": "See budgets",
+            "href": "#packages",
+            "variant": "secondary"
           }
         ],
-        "image": {
-          "src": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80",
-          "alt": "Working"
-        }
-      }
-    },
-    {
-      "widget": "Features",
-      "props": {
-        "layout": "cards",
-        "tagline": "Services",
-        "title": "What we offer",
-        "subtitle": "Four ways to work together, from the lightest to the most involved.",
-        "columns": "2",
-        "items": [
-          {
-            "title": "Technical review",
-            "description": "Two hours over your current site: performance, accessibility and SEO, with an actionable report.",
-            "icon": "tabler:zoom-check"
-          },
-          {
-            "title": "Setup",
-            "description": "We install the template, adapt it to your brand and leave you publishing within a week.",
-            "icon": "tabler:rocket"
-          },
-          {
-            "title": "Custom theme",
-            "description": "Your identity turned into tokens, so every component inherits it with no exceptions.",
-            "icon": "tabler:palette"
-          },
-          {
-            "title": "Ongoing support",
-            "description": "A direct channel and regular reviews while your team learns the system.",
-            "icon": "tabler:heart-handshake"
-          }
-        ]
+        "size": "md"
       }
     },
     {
       "widget": "Section",
       "props": {
-        "tone": "gradient"
+        "id": "what",
+        "label": "Services"
       },
       "slots": {
         "default": [
           {
-            "widget": "Content",
+            "widget": "Features",
             "props": {
-              "columns": "1",
-              "tagline": "Method",
-              "title": "We start from the problem, not the design",
-              "content": "Before touching a colour we want to know who you are speaking to and what should happen when someone lands on the page.",
+              "layout": "cards",
+              "columns": "4",
               "items": [
                 {
-                  "title": "Understand",
-                  "description": "A short session to pin down the goal and the real constraints."
+                  "title": "Brand identity",
+                  "description": "For companies whose look no longer matches what they sell — usually after a pivot, a funding round or a new audience.",
+                  "points": [
+                    "Positioning statement and messaging matrix",
+                    "Wordmark, symbol, type and colour system",
+                    "Applied to website, product UI and deck",
+                    "Figma library and CSS variables"
+                  ],
+                  "footer": "From €55K · led by Núria",
+                  "aside": "8–14 wks"
                 },
                 {
-                  "title": "Build",
-                  "description": "Short iterations with something visible at the end of each."
+                  "title": "Website design and build",
+                  "description": "When the brand is fine and the site is what is losing you deals. We design it and we ship it — no handover to a third party who never saw the thinking.",
+                  "points": [
+                    "Message testing with five of your customers",
+                    "6–12 page designs, responsive",
+                    "Built in Astro, handed over as a repo",
+                    "Analytics and conversion events configured"
+                  ],
+                  "footer": "From €28K · led by Ivy",
+                  "aside": "4–6 wks"
                 },
                 {
-                  "title": "Hand over",
-                  "description": "You keep control: the content is files in your repository."
+                  "title": "Product UI design",
+                  "description": "The screens people use every day, not the ones in the sales deck. We work inside your repo and your constraints, with your engineers.",
+                  "points": [
+                    "Audit of what exists, with the greys counted",
+                    "Core flows redesigned, every state specified",
+                    "Component set your engineers accepted",
+                    "Accessibility to WCAG 2.2 AA, tested"
+                  ],
+                  "footer": "From €36K · led by Tomás",
+                  "aside": "6–10 wks"
+                },
+                {
+                  "title": "Design system",
+                  "description": "For teams rebuilding the same button four ways. The hard part is adoption, so half the engagement is spent on that rather than on components.",
+                  "points": [
+                    "Tokens in Figma and in code, in sync",
+                    "Components with every state, documented",
+                    "Contribution process and migration plan",
+                    "Training session with your whole team"
+                  ],
+                  "footer": "From €42K · led by Tomás",
+                  "aside": "8–12 wks"
+                },
+                {
+                  "title": "Messaging and copy",
+                  "description": "Often the cheapest fix available. Three of our clients got more from rewriting their homepage than from redesigning it, and we said so before taking the money.",
+                  "points": [
+                    "Customer interviews, recorded and quoted",
+                    "Homepage and three key pages rewritten",
+                    "A voice guide with real before-and-after"
+                  ],
+                  "footer": "From €14K · led by Samir",
+                  "aside": "3–5 wks"
+                },
+                {
+                  "title": "Embedded designer",
+                  "description": "One named designer inside your team two days a week, for companies not ready to hire. We have twice worked ourselves out of the job by running the hiring loop.",
+                  "points": [
+                    "Same person every week, in your Slack",
+                    "Design system maintained, not just used",
+                    "Monthly written review of what shipped",
+                    "One month’s notice, either way"
+                  ],
+                  "footer": "€9K / month",
+                  "aside": "Rolling"
                 }
               ],
-              "image": {
-                "src": "https://images.unsplash.com/photo-1552664688-cf412ec27db2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80",
-                "alt": "Working method"
-              },
-              "reversed": true
+              "asideStyle": "meta"
             }
           }
         ]
       }
     },
     {
-      "widget": "Content",
+      "widget": "Section",
       "props": {
-        "columns": "1",
-        "content": "And when we are done, you are not dependent on us.",
-        "items": [
+        "tone": "surface",
+        "id": "process",
+        "label": "Process"
+      },
+      "slots": {
+        "default": [
           {
-            "title": "No hidden dependencies",
-            "description": "Everything we use is open and documented."
-          },
-          {
-            "title": "Documentation included",
-            "description": "We write down how to change each thing, not just what we did."
-          },
-          {
-            "title": "Team training",
-            "description": "A final session so your team can carry on unaided."
+            "widget": "Steps",
+            "props": {
+              "layout": "columns",
+              "title": "The same five steps, whichever service",
+              "subtitle": "Including what we need from you each week, because that is the part every agency leaves out and every client discovers too late.",
+              "items": [
+                {
+                  "title": "Scoping call",
+                  "description": "Thirty minutes, no deck. We say early if we are wrong for it.",
+                  "owner": "You: 30 min"
+                },
+                {
+                  "title": "Written proposal",
+                  "description": "Scope, price, dates and what is explicitly out. Within three days.",
+                  "owner": "You: nothing"
+                },
+                {
+                  "title": "Discovery",
+                  "description": "Five calls with your customers, run by us. Projects turn on these.",
+                  "owner": "You: intros + 1 workshop"
+                },
+                {
+                  "title": "Build, weekly",
+                  "description": "Working sessions, not a reveal. A surprise at the end is a process failure.",
+                  "owner": "You: 2 h/week"
+                },
+                {
+                  "title": "Handover + 90 days",
+                  "description": "Files, tokens, rulebook, recordings — then a free review three months on.",
+                  "owner": "You: nothing"
+                }
+              ]
+            }
           }
-        ],
-        "image": {
-          "src": "https://images.unsplash.com/photo-1618835962148-cf177563c6c0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=930&q=80",
-          "alt": "Autonomy"
-        }
-      }
-    },
-    {
-      "widget": "Testimonials",
-      "props": {
-        "tagline": "Clients",
-        "title": "What they say",
-        "items": [
-          {
-            "name": "Ana Ruiz",
-            "text": "They delivered a faster site than the one we had and, for the first time, we understand how to change it.",
-            "role": "Head of Product, Northwind"
-          },
-          {
-            "name": "Marcus Lee",
-            "text": "The technical review alone was worth what the whole project cost.",
-            "role": "Eng Manager, Loop"
-          },
-          {
-            "name": "Priya Nair",
-            "text": "Translating the site into two languages stopped being a problem the day we migrated.",
-            "role": "Ops Lead, Cedar"
-          }
-        ],
-        "layout": "carousel"
+        ]
       }
     },
     {
       "widget": "Section",
       "props": {
-        "tone": "glow"
+        "id": "packages",
+        "label": "Packages"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Columns",
+            "props": {
+              "ratio": "equal",
+              "gap": "lg",
+              "align": "start"
+            },
+            "slots": {
+              "default": [
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Table",
+                        "props": {
+                          "title": "Budgets, published",
+                          "subtitle": "Publishing these cut our enquiries by a third and raised signed projects. Nobody spends two calls discovering we are three times apart.",
+                          "frame": "open",
+                          "header": "none",
+                          "columns": [
+                            {
+                              "label": "Engagement"
+                            },
+                            {
+                              "label": "Budget",
+                              "align": "end"
+                            }
+                          ],
+                          "rows": [
+                            {
+                              "cells": [
+                                "One focused service",
+                                "**€14–42K**"
+                              ]
+                            },
+                            {
+                              "cells": [
+                                "Brand + website together",
+                                "**€70–120K**"
+                              ]
+                            },
+                            {
+                              "cells": [
+                                "Embedded, rolling",
+                                "**€9K / month**"
+                              ]
+                            }
+                          ],
+                          "note": "50% on signature, 50% on handover. Thirty-day terms. We have never charged a change fee we did not warn about first."
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "widget": "Column",
+                  "props": {
+                    "as": "aside",
+                    "label": "What we turn down"
+                  },
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Callout",
+                        "props": {
+                          "tone": "warning",
+                          "layout": "card",
+                          "label": "What we turn down",
+                          "items": [
+                            "**Logo-only projects.** A mark without positioning is decoration, available for a tenth of our fee.",
+                            "**Pitches against more than three studios.** Free speculative work subsidises clients who have not decided.",
+                            "**Consumer and packaging.** Not our strength; we will send you two names who are better at it.",
+                            "**Anything under six weeks.** We would take your money and hand back a worse version of what you have."
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface",
+        "id": "case",
+        "label": "Clients"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Testimonials",
+            "props": {
+              "items": [
+                {
+                  "text": "They told us the messaging was the problem, not the design, and quoted a third of what we expected to spend. Demo requests went up 38%.",
+                  "name": "Dan Okoye",
+                  "role": "Staff engineer, Cadence",
+                  "source": "read the case study",
+                  "href": "#case"
+                },
+                {
+                  "text": "The weekly working sessions were uncomfortable and completely right. Nothing at handover was a surprise to anyone.",
+                  "name": "Sofia Grimaldi",
+                  "role": "Head of product, Quietmile",
+                  "source": "read the case study",
+                  "href": "#case"
+                }
+              ],
+              "openSlot": {
+                "label": "Open slot",
+                "text": "Reserved for a quote about the embedded engagement ending in a hire. Empty until someone says it on the record."
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "width": "md",
+        "id": "faq",
+        "label": "FAQ"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "FAQs",
+            "props": {
+              "layout": "list",
+              "columns": "1",
+              "title": "Asked before the first call",
+              "items": [
+                {
+                  "title": "Can we start with something small?",
+                  "description": "Yes, and often you should. Messaging at €14K tells both of us a lot before anyone commits to a €70K rebrand. About a third of our large projects started that way."
+                },
+                {
+                  "title": "Who actually does the work?",
+                  "description": "The person named on each service, in every session. No account manager in between, and we do not subcontract without telling you who and why."
+                },
+                {
+                  "title": "What if we need changes after handover?",
+                  "description": "The 90-day review is free and most things get fixed there. Beyond that it is €1,200 a day, quoted before the clock starts."
+                },
+                {
+                  "title": "Do you sign NDAs and work white-label?",
+                  "description": "We sign yours without negotiating it, and we work white-label for three other studios. Portfolio use is always your call and we will hold work back indefinitely."
+                },
+                {
+                  "title": "What if it is not working out?",
+                  "description": "Either side can stop after the two directions in week two. You keep everything produced and owe only the deposit. It has happened twice in seven years, both times correctly."
+                }
+              ],
+              "open": "all"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface",
+        "id": "book",
+        "label": "Book a call"
       },
       "slots": {
         "default": [
           {
             "widget": "CallToAction",
             "props": {
-              "title": "Shall we start?",
-              "subtitle": "Tell us about the project and we will say within a day whether we can help.",
+              "layout": "closing",
+              "title": "Thirty minutes, and you will know if we fit",
+              "subtitle": "You talk to Núria, not a salesperson. If the brief is not ours you leave with two other studios’ names before the call ends.",
               "actions": [
                 {
-                  "variant": "primary",
-                  "text": "Get in touch",
-                  "href": "/contact",
-                  "icon": "tabler:arrow-right"
+                  "text": "See Núria’s diary",
+                  "href": "#book",
+                  "variant": "primary"
+                },
+                {
+                  "text": "Email the brief instead",
+                  "href": "mailto:hola@mareastudio.com",
+                  "variant": "secondary"
                 }
-              ]
+              ],
+              "note": "Next start date 3 November · two slots left this year · we reply to every brief within two working days"
             }
           }
         ]

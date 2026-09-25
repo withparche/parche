@@ -1,0 +1,18 @@
+---
+/** One code block in a Code widget: the text and a copy button in the corner. */
+import Command from 'parche:elements/Command';
+
+interface Props {
+  code: string;
+  lang?: string;
+  copyLabel: string;
+  copiedLabel: string;
+}
+
+const { code, lang, copyLabel, copiedLabel } = Astro.props;
+---
+
+<div class="relative">
+  <pre class="m-0 overflow-x-auto bg-transparent px-4 py-3.5 font-mono text-[13px] leading-[1.6] text-heading" data-lang={lang}><code>{code}</code></pre>
+  <Command variant="button" command={code} copyLabel={copyLabel} copiedLabel={copiedLabel} class="absolute top-2.5 right-2.5 [&_button]:px-2.5 [&_button]:py-[5px] [&_button]:text-[11px]" />
+</div>

@@ -1,0 +1,209 @@
+{
+  "title": "Installation",
+  "description": "Get Cadence connected to a repository and publishing in about two minutes.",
+  "layout": "cadence-docs",
+  "sections": [
+    {
+      "widget": "PageHeader",
+      "props": {
+        "breadcrumb": [
+          {
+            "label": "Docs",
+            "href": "/docs"
+          },
+          {
+            "label": "Getting started",
+            "href": "/docs"
+          },
+          {
+            "label": "Installation"
+          }
+        ],
+        "title": "Installation",
+        "subtitle": "Get Cadence connected to a repository and publishing in about two minutes. You need admin access to one GitHub or GitLab repository; everything else is optional.",
+        "meta": [
+          "Updated 4 September 2026",
+          "4 min read"
+        ],
+        "link": {
+          "text": "Edit this page",
+          "href": "https://github.com/arthelokyo/astrowind"
+        }
+      }
+    },
+    {
+      "widget": "Prose",
+      "props": {
+        "markdown": "## Install the CLI\n\nThe CLI is optional but it is the fastest way to see whether Cadence reads your repository the way you expect. It runs locally and never sends your source anywhere.",
+        "width": "none"
+      }
+    },
+    {
+      "widget": "Code",
+      "props": {
+        "lang": "bash",
+        "syncKey": "pm",
+        "tabs": [
+          {
+            "label": "npm",
+            "code": "npm install -g @cadence/cli"
+          },
+          {
+            "label": "pnpm",
+            "code": "pnpm add -g @cadence/cli"
+          },
+          {
+            "label": "brew",
+            "code": "brew install cadence/tap/cadence"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Prose",
+      "props": {
+        "markdown": "Node 20 or later. If you are on an older version the installer will tell you rather than failing halfway through.\n\n## Connect a repository\n\nRun the connect command from inside the repository. It opens a browser once to authorise, then writes a `cadence.json` you should commit.",
+        "width": "none"
+      }
+    },
+    {
+      "widget": "Code",
+      "props": {
+        "lang": "bash",
+        "code": "cadence connect\ncadence preview --since v2.4.0"
+      }
+    },
+    {
+      "widget": "Callout",
+      "props": {
+        "layout": "bar",
+        "tone": "primary",
+        "label": "Tip",
+        "description": "Run `preview` before you connect anything to production. It prints the draft to your terminal without creating a release or notifying a single person."
+      }
+    },
+    {
+      "widget": "Callout",
+      "props": {
+        "layout": "bar",
+        "tone": "warning",
+        "label": "Careful",
+        "description": "If your repository squashes merge commits without preserving PR titles, the drafts will be poor. Turn on “Default to PR title” in GitHub’s merge settings first — this is the single most common cause of bad first impressions."
+      }
+    },
+    {
+      "widget": "Prose",
+      "props": {
+        "markdown": "## What gets created",
+        "width": "none"
+      }
+    },
+    {
+      "widget": "Table",
+      "props": {
+        "header": "labels",
+        "size": "sm",
+        "columns": [
+          {
+            "label": "Thing",
+            "mono": true
+          },
+          {
+            "label": "Where"
+          },
+          {
+            "label": "Safe to delete"
+          }
+        ],
+        "rows": [
+          {
+            "cells": [
+              "cadence.json",
+              "Repository root",
+              "No — commit it"
+            ]
+          },
+          {
+            "cells": [
+              ".cadence/cache",
+              "Local only",
+              {
+                "text": "Yes, anytime",
+                "tone": "success"
+              }
+            ]
+          },
+          {
+            "cells": [
+              "A GitHub App install",
+              "Your org",
+              "Revoke anytime"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "widget": "PrevNext",
+      "props": {
+        "previous": {
+          "title": "Introduction",
+          "href": "/docs"
+        },
+        "next": {
+          "title": "Your first release note",
+          "href": "/docs#first-release"
+        }
+      }
+    },
+    {
+      "widget": "Callout",
+      "props": {
+        "layout": "inline",
+        "items": [
+          "[Yes](#feedback-yes)",
+          "[No](#feedback-no)"
+        ],
+        "footer": "Per page, per version, so we can see which page broke after an update.",
+        "title": "Was this page useful?"
+      }
+    }
+  ],
+  "slots": {
+    "aside": [
+      {
+        "widget": "OnThisPage",
+        "props": {
+          "items": [
+            {
+              "text": "Install the CLI",
+              "slug": "install-the-cli"
+            },
+            {
+              "text": "Connect a repository",
+              "slug": "connect-a-repository"
+            },
+            {
+              "text": "What gets created",
+              "slug": "what-gets-created"
+            }
+          ],
+          "links": [
+            {
+              "text": "View on GitHub",
+              "href": "https://github.com/arthelokyo/astrowind"
+            },
+            {
+              "text": "Report a problem",
+              "href": "/contact"
+            },
+            {
+              "text": "Ask in Discord",
+              "href": "/contact"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

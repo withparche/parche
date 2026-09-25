@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
-import { action, actionVariants, heading, headingGroup } from '../_shared/content';
+import { action, actionVariants, heading, headingGroup, text } from '../_shared/content';
 
 /** A plan's button: primary on the recommended plan, secondary on the others, unless set. */
 const planAction = action.extend({ variant: z.enum(actionVariants).optional() });
@@ -15,7 +15,8 @@ const plan = z.object({
   period: z.string().optional().meta({ placeholder: '/ month', help: 'Optional — omit for custom/contact tiers' }),
   features: z.array(z.string()).default([]).meta({ help: 'What the plan includes, one line each.' }),
   actions: z.array(planAction).default([]),
-  note: z.string().optional().meta({ help: 'Under the price: "MIT, commercial use included".' }),
+  note: text().optional().meta({ help: 'Under the price: "MIT, commercial use included".' }),
+  noteTone: z.enum(['muted', 'success']).default('muted').meta({ help: 'success for a saving: "Two months free against monthly".' }),
   suffix: z.string().optional().meta({ help: 'After the price, smaller: "once", "/ month".' }),
   recommended: z.boolean().default(false).meta({ help: 'The recommended plan: accented border, the badge above it, the primary button.' }),
   badge: z.string().optional().meta({ placeholder: 'Popular', help: 'The label on the plan\'s top edge.' }),
@@ -24,6 +25,7 @@ const plan = z.object({
 export const schema = z.object({
   ...heading({ align: 'center' }),
   items: z.array(plan).default([]).meta({ help: 'The plans, in order.' }),
+  note: text().optional().meta({ help: 'One line under the plans: the currency, the tax, who pays nothing.' }),
   comparison: z
     .object({
       label: z.string().default('Compare'),

@@ -22,9 +22,11 @@ interface Props {
   label?: string;
   /** Centre the note under a centred form. */
   center?: boolean;
+  /** A full-width button, on a card; a plain form keeps it to its label. */
+  block?: boolean;
 }
 
-const { fields, submit, note, endpoint, loading, error, success, label, center = false } = Astro.props;
+const { fields, submit, note, endpoint, loading, error, success, label, center = false, block = true } = Astro.props;
 ---
 
 <Form
@@ -37,7 +39,7 @@ const { fields, submit, note, endpoint, loading, error, success, label, center =
 >
   <div class="flex flex-col gap-4">
     <FormFields {fields} />
-    <Button type="submit" size="lg" block>{submit}</Button>
+    <Button type="submit" size="lg" {block} class:list={[!block && 'self-start']}>{submit}</Button>
     {note && <p class:list={['text-xs leading-[1.5] text-muted', center && 'text-center']} set:html={inline(note)} />}
   </div>
   {success && (success.title || success.text || success.actions.length > 0) && (

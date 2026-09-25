@@ -18,16 +18,14 @@ import FeatureCard from '../components/FeatureCard.astro';
 import FeatureRow from '../components/FeatureRow.astro';
 import { schema, type Props } from './Features.props';
 
-const { layout, header, align, title, subtitle, tagline, link, items, columns, card, defaultIcon, image } = schema.parse(Astro.props) as Props;
+const { layout, header, align, title, subtitle, tagline, link, items, columns, card, accent, asideStyle, defaultIcon, image } = schema.parse(Astro.props) as Props;
 const side = header === 'side';
 const rich = items.some((i) => i.points.length > 0 || i.footer);
-// Cards wrap to fit: the column count sets the narrowest a column may get.
-const fitCols = {
-  '1': 'grid-cols-1',
-  '2': 'grid-cols-[repeat(auto-fit,minmax(min(280px,100%),1fr))]',
-  '3': 'grid-cols-[repeat(auto-fit,minmax(min(250px,100%),1fr))]',
-  '4': 'grid-cols-[repeat(auto-fit,minmax(min(200px,100%),1fr))]',
-}[columns];
+// Cards wrap to fit, never more across than `columns`: each track is at least
+// its minimum width and at least a 1/n share of the row.
+const n = Number(columns);
+const minimum = { 1: 0, 2: 280, 3: 250, 4: 220 }[n] ?? 250;
+const fitStyle = n === 1 ? 'grid-template-columns:minmax(0,1fr)' : `grid-template-columns:repeat(auto-fit,minmax(max(min(${minimum}px,100%),calc((100% - ${n - 1} * 22px) / ${n})),1fr))`;
 const hairline = layout === 'panels' || layout === 'tiles';
 const hasMedia = Astro.slots.has('media') || Boolean(image);
 
@@ -83,8 +81,8 @@ const gap = layout === 'list' ? 'gap-6 md:gap-8' : 'gap-8 md:gap-y-12';
       )}
     </div>
   ) : items.length > 0 && layout === 'cards' ? (
-    <div class:list={['grid gap-[clamp(16px,2.2vw,22px)]', fitCols]}>
-      {items.map((item) => <FeatureCard {item} icon={item.icon || defaultIcon} {rich} {card} />)}
+    <div class="grid gap-[clamp(16px,2.2vw,22px)]" style={fitStyle}>
+      {items.map((item) => <FeatureCard {item} icon={item.icon || defaultIcon} {rich} {card} {accent} {asideStyle} />)}
     </div>
   ) : items.length > 0 && layout === 'gallery' ? (
     <div class="grid grid-cols-[repeat(auto-fill,minmax(min(200px,100%),1fr))] gap-[clamp(12px,1.8vw,18px)]">

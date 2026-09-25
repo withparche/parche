@@ -1,25 +1,28 @@
 ---
 /**
- * A section heading + a block of prose (About/bio). Full-bleed section (the
- * DynamicRenderer wrapper handles the section + background); content sits in a
- * narrower container. Override the width with `classes.container` (raw Tailwind).
+ * Running text: the shared heading and a body in Markdown (headings with
+ * anchors, paragraphs, lists, code, quotes), set in the prose styles. `content`
+ * still takes HTML for text written before.
  */
-import { twMerge } from 'tailwind-merge';
+import SectionHeader from '../components/SectionHeader.astro';
+import { blocks } from '../_shared/blocks';
+import { schema, type Props } from './Prose.props';
 
-interface Props {
-  tagline?: string;
-  title?: string;
-  content?: string;
-  classes?: Record<string, string>;
-}
-
-const { tagline, title, content, classes = {} } = Astro.props as Props;
+const { tagline, title, subtitle, link, align, markdown, content, width, size } = schema.parse(Astro.props) as Props;
+const body = markdown ? blocks(markdown).html : content;
+const widths = { sm: 'max-w-xl mx-auto', md: 'max-w-3xl mx-auto', lg: 'max-w-4xl mx-auto', none: '' };
 ---
 
-<div class={twMerge('mx-auto max-w-3xl', classes.container)}>
-  {tagline && <p class="mb-1.5 text-base font-medium text-primary">{tagline}</p>}
-  {title && <h2 class="text-2xl font-bold text-heading">{title}</h2>}
-  {content && (
-    <div class="prose prose-neutral mt-4 max-w-none text-lg text-muted leading-relaxed" set:html={content} />
+<div class:list={['parche-prose-section', widths[width]]}>
+  <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="tight" width="lg" />
+  {body && (
+    <div
+      class:list={[
+        'prose max-w-none text-text [&_pre]:max-w-full [&_pre]:overflow-x-auto',
+        '[&_h2]:scroll-mt-24 [&_h3]:scroll-mt-24',
+        size === 'lg' ? 'text-lg leading-relaxed' : 'text-base leading-[1.7]',
+      ]}
+      set:html={body}
+    />
   )}
 </div>

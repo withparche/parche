@@ -79,7 +79,7 @@ if (import.meta.env.DEV && depth > MAX_NODE_DEPTH) {
 
 {isOutlet ? (
   outletName === 'default' ? (
-    <main id="main-content" class="flex-1">
+    <main id="main-content" class="flex-1 [.parche-column>&]:flex [.parche-column>&]:flex-col [.parche-column>&]:gap-[inherit]">
       {outletNodes.map((child) => <Self node={child} widgets={widgets} wrapper={itemWrapper} defaultWrapper={defaultWrapper} unwrapped={unwrapped} outlets={outlets} />)}
       {outletHtml && <Fragment set:html={outletHtml} />}
     </main>

@@ -1,195 +1,178 @@
 {
   "title": "Pricing",
-  "description": "Simple, transparent pricing. Choose the plan that fits how you work and change it whenever you need to.",
+  "description": "Per project, not per seat. Every price here is the price you pay — no hidden tier, no per-seat surprise at renewal.",
+  "layout": "cadence",
   "sections": [
     {
-      "widget": "Hero",
-      "props": {
-        "layout": "text",
-        "tagline": "Pricing",
-        "title": "Stellar pricing for every journey",
-        "subtitle": "Choose the plan that aligns with your goals. Change or cancel it whenever you want.",
-        "actions": []
-      }
-    },
-    {
       "widget": "Section",
       "props": {
-        "id": "pricing",
-        "tone": "gradient"
+        "id": "plans",
+        "label": "Plans",
+        "spacing": "md"
       },
       "slots": {
         "default": [
           {
-            "widget": "Pricing",
+            "widget": "Switch",
             "props": {
-              "title": "Our prices",
-              "subtitle": "Only pay for what you need.",
-              "items": [
+              "label": "Billing period",
+              "syncKey": "billing",
+              "value": "yearly",
+              "align": "start",
+              "options": [
                 {
-                  "title": "Basic",
-                  "subtitle": "Best for personal projects",
-                  "price": "29",
-                  "currency": "$",
-                  "period": "per month",
-                  "features": [
-                    "One project",
-                    "Community support",
-                    "All core widgets",
-                    "Monthly updates"
-                  ],
-                  "actions": [
-                    {
-                      "text": "Get started",
-                      "href": "#"
-                    }
-                  ]
+                  "value": "monthly",
+                  "label": "Monthly"
                 },
                 {
-                  "title": "Standard",
-                  "subtitle": "Best for small teams",
-                  "price": "69",
-                  "currency": "$",
-                  "period": "per month",
-                  "features": [
-                    "Up to ten projects",
-                    "Priority email support",
-                    "All widgets and themes",
-                    "Shared design tokens",
-                    "Weekly updates"
-                  ],
-                  "actions": [
-                    {
-                      "text": "Get started",
-                      "href": "#"
-                    }
-                  ],
-                  "recommended": true,
-                  "badge": "Popular"
-                },
-                {
-                  "title": "Premium",
-                  "subtitle": "Best for companies",
-                  "price": "199",
-                  "currency": "$",
-                  "period": "per month",
-                  "features": [
-                    "Unlimited projects",
-                    "Dedicated support channel",
-                    "Custom theme development",
-                    "Onboarding session"
-                  ],
-                  "actions": [
-                    {
-                      "text": "Get started",
-                      "href": "#"
-                    }
-                  ]
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Features",
-      "props": {
-        "layout": "list",
-        "title": "Price-related features",
-        "subtitle": "What every plan includes, regardless of size.",
-        "columns": "2",
-        "items": [
-          {
-            "title": "Tiered plans",
-            "description": "Pick the tier that matches your budget and requirements — and move between them without migrating anything.",
-            "icon": "tabler:stairs"
-          },
-          {
-            "title": "Transparent pricing",
-            "description": "The price you see is the price you pay. No hidden costs, no surprise charges at renewal.",
-            "icon": "tabler:flip-vertical"
-          },
-          {
-            "title": "No lock-in",
-            "description": "Your content is plain files in your repository. Leaving is a git clone away.",
-            "icon": "tabler:lock-open"
-          },
-          {
-            "title": "Volume discounts",
-            "description": "Annual billing and non-profit or student status both reduce the price.",
-            "icon": "tabler:discount"
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "id": "how"
-      },
-      "slots": {
-        "default": [
-          {
-            "widget": "Steps",
-            "props": {
-              "layout": "timeline",
-              "title": "From choosing a plan to a live site",
-              "items": [
-                {
-                  "title": "Pick a plan",
-                  "description": "Start on Basic if you are unsure. Upgrading later keeps everything you have already built.",
-                  "icon": "tabler:number-1"
-                },
-                {
-                  "title": "Set up your site",
-                  "description": "Clone the template, change the tokens to your brand and write your content as data.",
-                  "icon": "tabler:number-2"
-                },
-                {
-                  "title": "Publish",
-                  "description": "Build once and deploy the static output anywhere, or run it as a server when you need per-request rendering.",
-                  "icon": "tabler:number-3"
+                  "value": "yearly",
+                  "label": "Yearly · 2 months free"
                 }
               ],
-              "image": {
-                "src": "https://images.unsplash.com/photo-1536816579748-4ecb3f03d72a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80",
-                "alt": "Setting up a site"
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "id": "faq"
-      },
-      "slots": {
-        "default": [
-          {
-            "widget": "FAQs",
-            "props": {
-              "tagline": "FAQs",
-              "title": "Pricing questions, answered",
-              "columns": "2",
-              "items": [
+              "title": "Per project, not per seat",
+              "subtitle": "Seat pricing punishes you for inviting the people who should read the changelog. Every price here is the price you pay — no hidden tier, no per-seat surprise at renewal.",
+              "level": 1
+            },
+            "slots": {
+              "monthly": [
                 {
-                  "title": "Can I try it before paying?",
-                  "description": "Yes. Every plan includes a fourteen-day trial and no card is required to start."
-                },
+                  "widget": "Pricing",
+                  "props": {
+                    "items": [
+                      {
+                        "title": "Free",
+                        "price": "0",
+                        "currency": "$",
+                        "note": "One project, forever. Not a trial — there is no clock.",
+                        "features": [
+                          "1 project · unlimited releases",
+                          "Changelog page on cadence.dev/yourname",
+                          "RSS and email digest up to 500 subscribers",
+                          "Cadence badge in the footer"
+                        ],
+                        "actions": [
+                          {
+                            "text": "Start free",
+                            "href": "#signup"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "Team",
+                        "price": "29",
+                        "currency": "$",
+                        "suffix": "/month",
+                        "note": "Switch to yearly and two months are free",
+                        "recommended": true,
+                        "badge": "4 of 5 teams pick this",
+                        "features": [
+                          "Unlimited projects and editors",
+                          "Your own domain, no badge",
+                          "In-app widget and per-account read receipts",
+                          "Digest to 50,000 subscribers from your domain",
+                          "GitHub, Linear, Slack and Intercom"
+                        ],
+                        "actions": [
+                          {
+                            "text": "Start free, upgrade later",
+                            "href": "#signup"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "Self-hosted",
+                        "price": "99",
+                        "currency": "$",
+                        "suffix": "/month",
+                        "note": "Your infrastructure, your database",
+                        "features": [
+                          "Everything in Team",
+                          "One container, any Postgres 14+",
+                          "SAML and OIDC single sign-on",
+                          "Audit log and data residency wherever you host",
+                          "Named support contact, 1 business day"
+                        ],
+                        "actions": [
+                          {
+                            "text": "Talk to us",
+                            "href": "/contact"
+                          }
+                        ]
+                      }
+                    ],
+                    "note": "Prices in USD, excluding VAT. Non-profits and student projects pay nothing on Team — [just ask](/contact)."
+                  }
+                }
+              ],
+              "yearly": [
                 {
-                  "title": "What happens if I outgrow my plan?",
-                  "description": "Move to the next tier at any time. Everything you have built carries over untouched."
-                },
-                {
-                  "title": "Do you offer refunds?",
-                  "description": "If the first month does not work out, write to us and we refund it in full."
-                },
-                {
-                  "title": "Can I pay annually?",
-                  "description": "Yes, and annual billing is cheaper than paying month to month."
+                  "widget": "Pricing",
+                  "props": {
+                    "items": [
+                      {
+                        "title": "Free",
+                        "price": "0",
+                        "currency": "$",
+                        "note": "One project, forever. Not a trial — there is no clock.",
+                        "features": [
+                          "1 project · unlimited releases",
+                          "Changelog page on cadence.dev/yourname",
+                          "RSS and email digest up to 500 subscribers",
+                          "Cadence badge in the footer"
+                        ],
+                        "actions": [
+                          {
+                            "text": "Start free",
+                            "href": "#signup"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "Team",
+                        "price": "290",
+                        "currency": "$",
+                        "suffix": "/year",
+                        "note": "Two months free against monthly",
+                        "recommended": true,
+                        "badge": "4 of 5 teams pick this",
+                        "features": [
+                          "Unlimited projects and editors",
+                          "Your own domain, no badge",
+                          "In-app widget and per-account read receipts",
+                          "Digest to 50,000 subscribers from your domain",
+                          "GitHub, Linear, Slack and Intercom"
+                        ],
+                        "actions": [
+                          {
+                            "text": "Start free, upgrade later",
+                            "href": "#signup"
+                          }
+                        ],
+                        "noteTone": "success"
+                      },
+                      {
+                        "title": "Self-hosted",
+                        "price": "990",
+                        "currency": "$",
+                        "suffix": "/year",
+                        "note": "Your infrastructure, your database",
+                        "features": [
+                          "Everything in Team",
+                          "One container, any Postgres 14+",
+                          "SAML and OIDC single sign-on",
+                          "Audit log and data residency wherever you host",
+                          "Named support contact, 1 business day"
+                        ],
+                        "actions": [
+                          {
+                            "text": "Talk to us",
+                            "href": "/contact"
+                          }
+                        ]
+                      }
+                    ],
+                    "note": "Prices in USD, excluding VAT. Non-profits and student projects pay nothing on Team — [just ask](/contact)."
+                  }
                 }
               ]
             }
@@ -200,26 +183,191 @@
     {
       "widget": "Section",
       "props": {
-        "tone": "glow"
+        "id": "compare",
+        "label": "Compare",
+        "tone": "surface"
       },
       "slots": {
         "default": [
           {
-            "widget": "CallToAction",
+            "widget": "Table",
             "props": {
-              "title": "Still deciding?",
-              "subtitle": "Start on the free trial and see how far you get in an afternoon.",
-              "actions": [
+              "title": "Compared, with numbers instead of ticks",
+              "subtitle": "A row that says “Analytics ✓ ✓ ✓” tells a buyer nothing. Where the answer is a quantity, we give the quantity.",
+              "minWidth": 640,
+              "columns": [
                 {
-                  "variant": "primary",
-                  "text": "Start free trial",
-                  "href": "#pricing",
-                  "icon": "tabler:arrow-right"
+                  "label": ""
                 },
                 {
-                  "variant": "secondary",
-                  "text": "Talk to us",
-                  "href": "/contact"
+                  "label": "Free"
+                },
+                {
+                  "label": "Team",
+                  "highlight": true
+                },
+                {
+                  "label": "Self-hosted"
+                }
+              ],
+              "rows": [
+                {
+                  "cells": [
+                    "Projects",
+                    "1",
+                    "Unlimited",
+                    {
+                      "text": "Unlimited",
+                      "tone": "default"
+                    }
+                  ]
+                },
+                {
+                  "cells": [
+                    "Digest subscribers",
+                    "500",
+                    "50,000",
+                    {
+                      "text": "Your SMTP, no cap",
+                      "tone": "default"
+                    }
+                  ]
+                },
+                {
+                  "cells": [
+                    "Read receipts",
+                    "Totals only",
+                    "Per account, 90 days",
+                    {
+                      "text": "Per account, you keep it",
+                      "tone": "default"
+                    }
+                  ]
+                },
+                {
+                  "cells": [
+                    "API rate limit",
+                    "60 / hour",
+                    "5,000 / hour",
+                    {
+                      "text": "Yours to set",
+                      "tone": "default"
+                    }
+                  ]
+                },
+                {
+                  "cells": [
+                    "Support response",
+                    "Community forum",
+                    "2 business days, measured",
+                    {
+                      "text": "1 business day, named contact",
+                      "tone": "default"
+                    }
+                  ]
+                },
+                {
+                  "cells": [
+                    "Single sign-on",
+                    "No",
+                    {
+                      "text": "Google only",
+                      "tone": "muted"
+                    },
+                    {
+                      "text": "SAML and OIDC",
+                      "tone": "default"
+                    }
+                  ]
+                },
+                {
+                  "cells": [
+                    "Best when",
+                    "One product, testing us",
+                    {
+                      "text": "You ship monthly or faster",
+                      "tone": "muted"
+                    },
+                    "Policy forbids hosted tools"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "faq",
+        "label": "Questions"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Columns",
+            "props": {
+              "ratio": "equal",
+              "gap": "lg",
+              "align": "start"
+            },
+            "slots": {
+              "default": [
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Callout",
+                        "props": {
+                          "layout": "inline",
+                          "tone": "neutral",
+                          "label": "Trust, each linked to its evidence",
+                          "items": [
+                            "[SOC 2 Type II](/contact#soc2)",
+                            "[GDPR · EU residency](/contact#gdpr)",
+                            "[99.97% uptime, 90 days](/contact#status)",
+                            "[Subprocessors](/contact#subprocessors)"
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "FAQs",
+                        "props": {
+                          "title": "Pricing questions, answered",
+                          "layout": "list",
+                          "columns": "1",
+                          "items": [
+                            {
+                              "title": "Is the free plan a trial?",
+                              "description": "No, and there is no clock. One project, unlimited releases, forever, with a small badge. We would rather you outgrow it than have it expire on you."
+                            },
+                            {
+                              "title": "What happens if I exceed a limit?",
+                              "description": "We email you and nothing breaks. No overage charge appears on an invoice you did not expect — that practice belongs in the last decade."
+                            },
+                            {
+                              "title": "Can I export and leave?",
+                              "description": "Markdown with images, one click, no support ticket. Your public page can be handed over as static files you host yourself."
+                            },
+                            {
+                              "title": "We ship once a quarter. Worth paying for?",
+                              "description": "Probably not. Below about one release a month a page in your wiki does the job. Start on Free and upgrade when the wiki page goes stale."
+                            }
+                          ],
+                          "open": "all"
+                        }
+                      }
+                    ]
+                  }
                 }
               ]
             }

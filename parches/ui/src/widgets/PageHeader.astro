@@ -1,0 +1,27 @@
+---
+/**
+ * The top of a text page: where it sits (breadcrumb), the h1, the lead, and a
+ * line of facts about the page between rules (updated, read time, edit link).
+ */
+import Breadcrumb from 'parche:elements/Breadcrumb';
+import Eyebrow from 'parche:elements/Eyebrow';
+import { inline } from '../_shared/inline';
+import { schema, type Props } from './PageHeader.props';
+
+const { breadcrumb, tagline, title, subtitle, meta, link } = schema.parse(Astro.props) as Props;
+---
+
+<header class="parche-page-header mb-8">
+  {breadcrumb.length > 0 && <Breadcrumb items={breadcrumb} class="mb-5" />}
+  {tagline && <Eyebrow as="p" class="mb-4" set:html={inline(tagline)} />}
+  <h1 class="font-heading text-[clamp(2rem,4vw,2.5rem)] leading-[1.1] font-semibold tracking-[-0.03em] text-balance text-heading" set:html={inline(title)} />
+  {subtitle && <p class="mt-4 max-w-[62ch] text-[17px] leading-[1.6] text-pretty text-muted" set:html={inline(subtitle)} />}
+  {(meta.length > 0 || link) && (
+    <p class="mt-6 flex flex-wrap items-center gap-x-2.5 gap-y-1 border-y border-border py-3 font-mono text-xs leading-[1.5] text-muted">
+      {meta.map((m, i) => (
+        <Fragment>{i > 0 && <span aria-hidden="true">·</span>}<span set:html={inline(m)} /></Fragment>
+      ))}
+      {link && <Fragment>{meta.length > 0 && <span aria-hidden="true">·</span>}<a href={link.href} class="text-primary no-underline hover:text-heading">{link.text}</a></Fragment>}
+    </p>
+  )}
+</header>

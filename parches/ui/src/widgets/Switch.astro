@@ -6,14 +6,17 @@
  * variable, so up to six are forwarded by position.
  */
 import Tabs from 'parche:elements/Tabs';
+import SectionHeader from '../components/SectionHeader.astro';
 import { schema, type Props } from './Switch.props';
 
-const { options, value, syncKey, variant, label, align } = schema.parse(Astro.props) as Props;
+const { options, value, syncKey, variant, label, align, tagline, title, subtitle, level } = schema.parse(Astro.props) as Props;
+const hasHeading = Boolean(title || tagline || subtitle);
 const name = (i: number) => options[i]?.value ?? `__none-${i}`;
 ---
 
-<div class:list={['parche-switch', align === 'center' && 'text-center [&_.parche-tabs-list]:justify-center']} data-align={align}>
+<div class:list={['parche-switch', !hasHeading && align === 'center' && 'text-center [&_.parche-tabs-list]:justify-center']} data-align={align}>
   <Tabs items={options} value={value} syncKey={syncKey} variant={variant} label={label}>
+    {hasHeading && <SectionHeader slot="header" {tagline} {title} {subtitle} {level} width="sm" spacing="none" />}
     <Fragment slot={name(0)}><slot name={name(0)} /></Fragment>
     <Fragment slot={name(1)}><slot name={name(1)} /></Fragment>
     <Fragment slot={name(2)}><slot name={name(2)} /></Fragment>

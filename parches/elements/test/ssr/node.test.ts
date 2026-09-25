@@ -61,9 +61,9 @@ test('an Outlet wraps its items only when it, or the page, declares a wrapper', 
   };
   const declared = { widget: 'Outlet', props: { wrapper: { widget: 'Wrap' } } };
   const main = await render(Node, { node: declared, widgets, outlets });
-  expect(main).toContain('<main id="main-content" class="flex-1"><div data-wrap><p data-leaf>page</p></div><p data-md>body</p></main>');
+  expect(main).toMatch(/<main id="main-content" class="flex-1[^"]*"><div data-wrap><p data-leaf>page<\/p><\/div><p data-md>body<\/p><\/main>/);
   const plain = await render(Node, { node: { widget: 'Outlet' }, widgets, outlets });
-  expect(plain).toContain('<main id="main-content" class="flex-1"><p data-leaf>page</p><p data-md>body</p></main>');
+  expect(plain).toMatch(/<main id="main-content" class="flex-1[^"]*"><p data-leaf>page<\/p><p data-md>body<\/p><\/main>/);
   const byDefault = await render(Node, { node: { widget: 'Outlet', props: { wrapper: {} } }, widgets, defaultWrapper: 'Wrap', outlets });
   expect(byDefault).toContain('<div data-wrap><p data-leaf>page</p></div>');
   const pageOff = await render(Node, { node: declared, widgets, outlets: { ...outlets, wrappers: { default: false } } });

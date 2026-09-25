@@ -27,6 +27,8 @@ const aligns = { start: 'items-start', center: 'items-center', stretch: 'items-s
   .parche-columns:has(> :nth-child(4)) { --template: repeat(4, minmax(0, 1fr)); }
   .parche-columns[data-ratio="wide-start"]:not(:has(> :nth-child(3))) { --template: 2fr minmax(0, 1fr); }
   .parche-columns[data-ratio="wide-end"]:not(:has(> :nth-child(3))) { --template: minmax(0, 1fr) 2fr; }
+  /* A docs shell: navigation, the text, an index. The middle takes the rest. */
+  .parche-columns[data-ratio="sides"]:has(> :nth-child(3)):not(:has(> :nth-child(4))) { --template: minmax(180px, 240px) minmax(0, 1fr) minmax(160px, 220px); }
   @media (min-width: 40rem) { .parche-columns[data-stack="sm"] { grid-template-columns: var(--template); } }
   @media (min-width: 48rem) { .parche-columns[data-stack="md"] { grid-template-columns: var(--template); } }
   @media (min-width: 64rem) { .parche-columns[data-stack="lg"] { grid-template-columns: var(--template); } }
