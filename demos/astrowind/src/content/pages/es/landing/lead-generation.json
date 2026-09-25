@@ -7,7 +7,7 @@
       "widget": "Hero",
       "props": {
         "tagline": "Descargar la guía",
-        "title": "La guía completa para <span class='text-highlight'>publicar más rápido</span>",
+        "title": "La guía completa para ==publicar más rápido==",
         "subtitle": "Cuarenta páginas sobre reducir tiempos de entrega, escritas desde proyectos reales y no desde benchmarks. Gratis y sin muro de registro.",
         "actions": [
           {

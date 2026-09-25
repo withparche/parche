@@ -6,7 +6,7 @@ export const layouts = ['timeline', 'grid', 'numbered', 'rows'] as const;
 
 const step = z.object({
   title: z.string().optional(),
-  description: z.string().optional().meta({ input: 'textarea' }),
+  description: z.string().optional().meta({ input: 'textarea', markdown: 'inline' }),
   icon: z.string().optional().meta({ input: 'icon', help: 'Replaces the step number.' }),
   duration: z.string().optional().meta({ help: '"1 week", "3 days": how long the step takes.' }),
   owner: z.string().optional().meta({ help: 'Who is responsible: "you", "us", a role.' }),

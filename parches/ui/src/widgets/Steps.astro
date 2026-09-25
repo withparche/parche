@@ -4,6 +4,7 @@
  * slot; `grid` lays the steps out in columns under the headline; `numbered`
  * puts the headline and the call to action beside a numbered list.
  */
+import { inline } from '../_shared/inline';
 import Icon from 'parche:elements/Icon';
 import Image from 'parche:elements/Image';
 import Actions from '../components/Actions.astro';
@@ -28,8 +29,8 @@ const hasMedia = Astro.slots.has('media') || Boolean(image);
         <li class:list={['grid grid-cols-[auto_1fr_auto] items-baseline gap-[clamp(14px,2vw,24px)] border-t border-border py-5', index === items.length - 1 && 'border-b']}>
           <span class="font-mono text-xs leading-[1.4] font-medium text-primary">{String(index + 1).padStart(2, '0')}</span>
           <span>
-            {step.title && <span class="mb-1.5 block font-heading text-[17px] leading-[1.35] font-semibold text-heading" set:html={step.title} />}
-            {step.description && <span class="block text-sm leading-[1.6] text-muted" set:html={step.description} />}
+            {step.title && <span class="mb-1.5 block font-heading text-[17px] leading-[1.35] font-semibold text-heading" set:html={inline(step.title)} />}
+            {step.description && <span class="block text-sm leading-[1.6] text-muted" set:html={inline(step.description)} />}
             {step.owner && <span class="mt-1 block font-mono text-xs text-muted">{step.owner}</span>}
           </span>
           {step.duration ? <span class="font-mono text-xs leading-[1.4] whitespace-nowrap text-muted">{step.duration}</span> : <span />}
@@ -55,11 +56,11 @@ const hasMedia = Astro.slots.has('media') || Boolean(image);
                   {index !== items.length - 1 && <div class="w-px flex-1 my-1 bg-border" />}
                 </div>
                 <div class:list={['pt-1', index !== items.length - 1 && 'pb-8']}>
-                  {step.title && <p class="text-xl font-bold text-heading" set:html={step.title} />}
+                  {step.title && <p class="text-xl font-bold text-heading" set:html={inline(step.title)} />}
                   {(step.duration || step.owner) && (
                     <p class="type-caption text-muted mt-0.5">{[step.duration, step.owner].filter(Boolean).join(' · ')}</p>
                   )}
-                  {step.description && <p class="type-body text-muted mt-1" set:html={step.description} />}
+                  {step.description && <p class="type-body text-muted mt-1" set:html={inline(step.description)} />}
                 </div>
               </li>
             ))}
@@ -85,11 +86,11 @@ const hasMedia = Astro.slots.has('media') || Boolean(image);
               <div class="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-on-primary">
                 {step.icon ? <Icon name={step.icon} class="w-6 h-6" /> : <span class="text-lg font-bold leading-none">{index + 1}</span>}
               </div>
-              {step.title && <p class="text-xl font-bold text-heading" set:html={step.title} />}
+              {step.title && <p class="text-xl font-bold text-heading" set:html={inline(step.title)} />}
               {(step.duration || step.owner) && (
                 <p class="type-caption text-muted mt-0.5">{[step.duration, step.owner].filter(Boolean).join(' · ')}</p>
               )}
-              {step.description && <p class="type-body text-muted mt-2 max-w-xs mx-auto" set:html={step.description} />}
+              {step.description && <p class="type-body text-muted mt-2 max-w-xs mx-auto" set:html={inline(step.description)} />}
             </li>
           ))}
         </ol>
@@ -110,11 +111,11 @@ const hasMedia = Astro.slots.has('media') || Boolean(image);
                 {step.icon ? <Icon name={step.icon} class="w-6 h-6" /> : index + 1}
               </span>
               <div class="pt-1">
-                {step.title && <h3 class="type-label font-semibold text-heading mb-2" set:html={step.title} />}
+                {step.title && <h3 class="type-label font-semibold text-heading mb-2" set:html={inline(step.title)} />}
                 {(step.duration || step.owner) && (
                   <p class="type-caption text-muted mb-2">{[step.duration, step.owner].filter(Boolean).join(' · ')}</p>
                 )}
-                {step.description && <p class="type-body text-muted" set:html={step.description} />}
+                {step.description && <p class="type-body text-muted" set:html={inline(step.description)} />}
               </div>
             </li>
           ))}

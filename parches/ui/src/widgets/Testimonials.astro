@@ -1,4 +1,5 @@
 ---
+import { inline } from '../_shared/inline';
 import * as Carousel from 'parche:elements/Carousel';
 import Command from 'parche:elements/Command';
 import Actions from '../components/Actions.astro';
@@ -25,7 +26,7 @@ const { title, subtitle, tagline, link, align, items, layout, actions, openSlot 
     {openSlot && (
       <div class="flex flex-col gap-3 rounded-md border border-dashed border-border bg-background p-[clamp(22px,3vw,30px)]">
         <span class="font-mono text-[10px] leading-none font-medium tracking-[0.12em] text-muted uppercase">{openSlot.label}</span>
-        <p class="text-[15px] leading-[1.6] text-muted">{openSlot.text}</p>
+        <p class="text-[15px] leading-[1.6] text-muted" set:html={inline(openSlot.text)} />
         {openSlot.copy && (
           <Command variant="button" command={openSlot.copy.text} copyLabel={openSlot.copy.label} copiedLabel={openSlot.copy.copiedLabel ?? 'Copied'} class="mt-auto self-start" />
         )}

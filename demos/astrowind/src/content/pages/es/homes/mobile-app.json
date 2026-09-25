@@ -7,7 +7,7 @@
       "props": {
         "layout": "split",
         "tagline": "Móvil",
-        "title": "Tu día, <span class='text-highlight'>en el bolsillo</span>",
+        "title": "Tu día, ==en el bolsillo==",
         "subtitle": "Planifica, captura y revisa desde donde estés. Funciona sin conexión y sincroniza al volver.",
         "actions": [
           {

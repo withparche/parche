@@ -4,7 +4,7 @@ import { action, image, heading, headingGroup } from '../_shared/content';
 
 const item = z.object({
   title: z.string().optional(),
-  description: z.string().optional().meta({ input: 'textarea' }),
+  description: z.string().optional().meta({ input: 'textarea', markdown: 'inline' }),
   icon: z.string().optional().meta({ input: 'icon' }),
 });
 

@@ -17,6 +17,12 @@ export interface FieldMeta {
   placeholder?: string;
   /** Force a specific input type: 'textarea', 'icon', 'color', 'url' */
   input?: string;
+  /**
+   * The text accepts inline Markdown (**strong**, *em*, `code`, [link](url),
+   * ==highlight==, a newline as a break): the builder can offer a formatting
+   * bar and show the rendered text.
+   */
+  markdown?: 'inline';
 }
 
 /** Group definition for organising fields in the builder form */

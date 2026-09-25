@@ -1,4 +1,5 @@
 ---
+import { inline } from '../_shared/inline';
 import Image from 'parche:elements/Image';
 import Placeholder from 'parche:elements/Placeholder';
 import SectionHeader from '../components/SectionHeader.astro';
@@ -23,14 +24,14 @@ const split = layout === 'split';
         <p class="text-[15px] leading-[1.3] font-semibold text-heading">
           {m.href ? <a href={m.href} class="text-inherit no-underline hover:text-primary">{m.name}</a> : m.name}
         </p>
-        <p class="mt-1 text-[13px] leading-[1.4] text-muted">{m.role}</p>
+        <p class="mt-1 text-[13px] leading-[1.4] text-muted" set:html={inline(m.role)} />
       </li>
     ))}
     {more && (
       <li>
         <div class="mb-3 flex aspect-square items-center justify-center rounded-md border border-border bg-background font-mono text-[13px] leading-none font-medium text-muted">{more.count}</div>
         <p class="text-[15px] leading-[1.3] font-semibold text-heading">{more.label}</p>
-        {more.note && <p class="mt-1 text-[13px] leading-[1.4] text-muted">{more.note}</p>}
+        {more.note && <p class="mt-1 text-[13px] leading-[1.4] text-muted" set:html={inline(more.note)} />}
       </li>
     )}
   </ul>

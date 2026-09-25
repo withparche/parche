@@ -52,3 +52,13 @@ test('align centres the heading where the widget defaults to start', async () =>
 test('the heading fields come first in the builder form', () => {
   expect(schemas.meta.ui?.groups?.[0]).toMatchObject({ key: 'heading', fields: ['tagline', 'title', 'subtitle', 'link', 'align'] });
 });
+
+test('heading and item texts read inline Markdown', async () => {
+  const html = await render(Features, {
+    title: 'Ship the website.\nSkip ==the setup==',
+    items: [{ title: 'Fast', description: 'Run `npm run dev`, then **edit**.' }],
+  });
+  expect(html).toContain('Ship the website.<br />Skip <mark class="parche-mark">the setup</mark>');
+  expect(html).toContain('<code class="parche-code">npm run dev</code>');
+  expect(html).toContain('<strong>edit</strong>');
+});

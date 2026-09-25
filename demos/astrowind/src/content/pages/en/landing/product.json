@@ -7,7 +7,7 @@
       "widget": "Hero",
       "props": {
         "tagline": "See specifications",
-        "title": "The <span class='text-highlight'>details</span> that make the difference",
+        "title": "The ==details== that make the difference",
         "subtitle": "Specifications, materials and the honest limitations. Everything you would ask in a shop.",
         "actions": [
           {

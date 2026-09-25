@@ -4,6 +4,7 @@
  * title + date, description, tag chips and links (Website / Source / Case study).
  * Rendered in the single narrow column (resume style).
  */
+import { inline } from '../_shared/inline';
 import Container from 'parche:elements/Container';
 import SectionHeader from '../components/SectionHeader.astro';
 import Card from 'parche:elements/Card';
@@ -31,7 +32,7 @@ const containerClass = (Astro.props as { classes?: Record<string, string> }).cla
             {p.title && <h3 class="text-lg font-bold text-heading">{p.title}</h3>}
             {p.date && <p class="shrink-0 text-xs text-muted">{p.date}</p>}
           </div>
-          {p.description && <p class="mt-1.5 text-muted leading-relaxed">{p.description}</p>}
+          {p.description && <p class="mt-1.5 text-muted leading-relaxed" set:html={inline(p.description)} />}
 
           {p.tags.length > 0 && (
             <div class="mt-3 flex flex-wrap gap-1.5">

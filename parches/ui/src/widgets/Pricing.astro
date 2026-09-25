@@ -3,6 +3,7 @@
  * Pricing: the tiers as cards, the recommended one marked, and a comparison
  * table under them with one column per plan. Cards sell, the table closes.
  */
+import { inline } from '../_shared/inline';
 import Button from 'parche:elements/Button';
 import SectionHeader from '../components/SectionHeader.astro';
 import { schema, type Props } from './Pricing.props';
@@ -35,12 +36,12 @@ const tone = { default: 'font-semibold text-heading', muted: 'text-muted', succe
             <p class="font-heading text-[40px] leading-none font-semibold tracking-[-0.03em] text-heading">
               {shown}{(p.suffix || p.period) && <span class="font-body text-[15px] font-normal tracking-normal text-muted"> {p.suffix ?? p.period}</span>}
             </p>
-            {(p.note || p.subtitle) && <p class="mt-2 text-[13px] leading-[1.5] text-muted">{p.note ?? p.subtitle}</p>}
-            {p.description && <p class="mt-2 text-[13px] leading-[1.5] text-muted">{p.description}</p>}
+            {(p.note || p.subtitle) && <p class="mt-2 text-[13px] leading-[1.5] text-muted" set:html={inline(p.note ?? p.subtitle)} />}
+            {p.description && <p class="mt-2 text-[13px] leading-[1.5] text-muted" set:html={inline(p.description)} />}
           </div>
           {p.features.length > 0 && (
             <ul class="flex flex-col gap-[9px] text-sm leading-[1.5] text-heading">
-              {p.features.map((f) => <li set:html={f} />)}
+              {p.features.map((f) => <li set:html={inline(f)} />)}
             </ul>
           )}
           {p.actions.length > 0 && (

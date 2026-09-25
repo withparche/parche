@@ -1,5 +1,6 @@
 ---
 /** One demo of the Showcase: the screenshot beside what it is, three specifics and a link. */
+import { inline } from '../_shared/inline';
 import Image from 'parche:elements/Image';
 import Placeholder from 'parche:elements/Placeholder';
 
@@ -23,8 +24,8 @@ const { demo: d } = Astro.props;
       {d.image ? <Image src={d.image.src} alt={d.image.alt} width={1000} ratio="16/10" class="block w-full" /> : <Placeholder caption={d.caption} label={d.title} ratio="16/10" />}
     </div>
     <div class="min-w-0">
-      <h3 class="mb-3.5 font-heading text-[clamp(23px,2.6vw,32px)] leading-[1.2] font-semibold tracking-[-0.02em] text-heading">{d.title}</h3>
-      <p class="mb-[22px] text-base leading-[1.65] text-pretty text-muted">{d.description}</p>
+      <h3 class="mb-3.5 font-heading text-[clamp(23px,2.6vw,32px)] leading-[1.2] font-semibold tracking-[-0.02em] text-heading" set:html={inline(d.title)} />
+      <p class="mb-[22px] text-base leading-[1.65] text-pretty text-muted" set:html={inline(d.description)} />
       {d.points.length > 0 && (
         <ul class="mb-[26px] flex flex-col gap-[11px]">
           {d.points.map((p) => (

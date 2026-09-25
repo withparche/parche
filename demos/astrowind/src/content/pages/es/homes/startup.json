@@ -6,7 +6,7 @@
       "widget": "Hero",
       "props": {
         "tagline": "Fase seed",
-        "title": "Convertimos <span class='text-highlight'>ideas desordenadas</span> en productos que funcionan",
+        "title": "Convertimos ==ideas desordenadas== en productos que funcionan",
         "subtitle": "Un equipo pequeño que publica cada semana, con clientes en la sala desde el primer día.",
         "actions": [
           {

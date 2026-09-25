@@ -7,6 +7,7 @@
  * Shared by the widgets so every section heading on a page has the same
  * rhythm, set by the type tokens; widths are the design's reading measures.
  */
+import { inline } from '../_shared/inline';
 import Eyebrow from 'parche:elements/Eyebrow';
 
 interface Props {
@@ -47,9 +48,9 @@ const centered = align === 'center';
     ]}
   >
     <div class:list={['min-w-0', widths[width], centered && 'mx-auto']}>
-      {tagline && <Eyebrow as="p" class="mb-4" set:html={tagline} />}
-      {title && <h2 class:list={['type-h2 text-balance', subtitle && 'mb-3.5']} set:html={title} />}
-      {subtitle && <p class="text-[1.0625rem] leading-[1.6] text-pretty text-muted" set:html={subtitle} />}
+      {tagline && <Eyebrow as="p" class="mb-4" set:html={inline(tagline)} />}
+      {title && <h2 class:list={['type-h2 text-balance', subtitle && 'mb-3.5']} set:html={inline(title)} />}
+      {subtitle && <p class="text-[1.0625rem] leading-[1.6] text-pretty text-muted" set:html={inline(subtitle)} />}
     </div>
     {link && <a href={link.href} class="shrink-0 text-[15px] leading-none font-semibold whitespace-nowrap text-primary no-underline hover:text-heading">{link.text} →</a>}
     <slot name="aside" />

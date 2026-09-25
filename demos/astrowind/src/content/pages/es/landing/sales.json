@@ -8,7 +8,7 @@
       "props": {
         "layout": "split",
         "tagline": "Leer la historia completa",
-        "title": "Todo lo que necesitas, <span class='text-highlight'>bien explicado</span>",
+        "title": "Todo lo que necesitas, ==bien explicado==",
         "subtitle": "Tómate tu tiempo. Esta página cuenta qué hace el producto, para quién es y dónde no te va a servir.",
         "actions": [
           {

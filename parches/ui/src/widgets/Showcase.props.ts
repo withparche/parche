@@ -6,7 +6,7 @@ const demo = z.object({
   value: z.string().meta({ help: 'Identifies the demo in the URL: "saas".' }),
   label: z.string().meta({ help: 'The segment: "SaaS".' }),
   title: z.string(),
-  description: z.string().meta({ input: 'textarea' }),
+  description: z.string().meta({ input: 'textarea', markdown: 'inline' }),
   points: z.array(z.string()).default([]).meta({ help: 'Three things specific to this demo.' }),
   image: image.optional().meta({ help: 'The demo\'s screenshot. Without one, a placeholder with the caption.' }),
   caption: z.string().optional().meta({ help: '"saas demo · 1000×625".' }),

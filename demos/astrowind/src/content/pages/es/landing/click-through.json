@@ -8,7 +8,7 @@
       "props": {
         "layout": "split",
         "tagline": "Ver la oferta",
-        "title": "Una decisión, <span class='text-highlight'>un botón</span>",
+        "title": "Una decisión, ==un botón==",
         "subtitle": "Sin menús ni distracciones. Lee la oferta y decide.",
         "actions": [
           {

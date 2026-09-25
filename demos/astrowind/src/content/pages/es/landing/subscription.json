@@ -8,7 +8,7 @@
       "props": {
         "layout": "split",
         "tagline": "Suscribirme",
-        "title": "Cosas buenas, <span class='text-highlight'>cada semana</span>",
+        "title": "Cosas buenas, ==cada semana==",
         "subtitle": "Un correo, los jueves, con lo que aprendimos construyendo software esa semana. Te das de baja en un clic.",
         "actions": [
           {

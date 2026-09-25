@@ -11,7 +11,7 @@
           "text": "Free · MIT",
           "tag": "v1.0"
         },
-        "title": "Ship the website.<br />Skip the setup.",
+        "title": "Ship the website.\nSkip the setup.",
         "subtitle": "Production-ready Astro 7 + Tailwind 4: 34 widgets, a real blog pipeline, case-study and pricing systems, and green vitals before you touch anything.",
         "actions": [
           {
@@ -131,7 +131,7 @@
                 },
                 {
                   "title": "SEO and AI discovery",
-                  "description": "Canonicals, OG images, JSON-LD for articles, FAQs and breadcrumbs, sitemap, RSS and <span class='font-mono text-[13px]'>llms.txt</span>."
+                  "description": "Canonicals, OG images, JSON-LD for articles, FAQs and breadcrumbs, sitemap, RSS and `llms.txt`."
                 },
                 {
                   "title": "Forms that behave",
@@ -737,7 +737,7 @@
                 },
                 {
                   "title": "What do I need to start?",
-                  "description": "A current Node.js and a terminal. Run the create command, then <span class='font-mono text-sm'>npm run dev</span>. Site name, URL and blog options live in one config file; colours and fonts in one styles file."
+                  "description": "A current Node.js and a terminal. Run the create command, then `npm run dev`. Site name, URL and blog options live in one config file; colours and fonts in one styles file."
                 },
                 {
                   "title": "How do clients edit content after handover?",

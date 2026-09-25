@@ -5,8 +5,8 @@
     {
       "widget": "Hero",
       "props": {
-        "title": "Plantilla gratuita para <span class='hidden xl:inline'>crear webs con</span> <span class='text-highlight'>Astro 7</span> + Tailwind CSS",
-        "subtitle": "<span class='hidden sm:inline'><span class='font-semibold'>AstroWind</span> es una plantilla gratuita, personalizable y lista para producción para Astro 7 + Tailwind CSS v4.</span> Pensada para startups, pequeños negocios, webs SaaS, porfolios profesionales, webs de marketing, landings y blogs.",
+        "title": "Plantilla gratuita para <span class='hidden xl:inline'>crear webs con</span> ==Astro 7== + Tailwind CSS",
+        "subtitle": "<span class='hidden sm:inline'>**AstroWind** es una plantilla gratuita, personalizable y lista para producción para Astro 7 + Tailwind CSS v4.</span> Pensada para startups, pequeños negocios, webs SaaS, porfolios profesionales, webs de marketing, landings y blogs.",
         "actions": [
           {
             "variant": "primary",

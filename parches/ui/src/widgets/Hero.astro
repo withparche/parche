@@ -6,6 +6,7 @@
  * claim, under the actions. The measure, the gutter and the rhythm come from
  * the conf tokens, so a theme sets the page grid the hero sits on.
  */
+import { inline } from '../_shared/inline';
 import Image from 'parche:elements/Image';
 import Action from '../components/Action.astro';
 import { schema, type Props } from './Hero.props';
@@ -40,9 +41,9 @@ const Badge = badge?.href ? 'a' : 'span';
           {badge.tag && <span class="rounded-full bg-primary-soft px-[9px] py-[5px] font-mono text-[11px] leading-none font-medium text-primary">{badge.tag}</span>}
         </Badge>
       )}
-      {tagline && !badge && <p class="type-label uppercase text-primary mb-2" set:html={tagline} />}
-      {title && <h1 class="type-h1 mb-5 text-balance" set:html={title} />}
-      {subtitle && <p class:list={['type-lead mb-[30px] max-w-[36em] text-pretty', centered && 'mx-auto']} set:html={subtitle} />}
+      {tagline && !badge && <p class="type-label uppercase text-primary mb-2" set:html={inline(tagline)} />}
+      {title && <h1 class="type-h1 mb-5 text-balance" set:html={inline(title)} />}
+      {subtitle && <p class:list={['type-lead mb-[30px] max-w-[36em] text-pretty', centered && 'mx-auto']} set:html={inline(subtitle)} />}
       {content && <div class="text-muted mb-6 [&_pre]:max-w-full [&_pre]:overflow-x-auto [&_pre]:text-sm" set:html={content} />}
       {actions.length > 0 && (
         <div class:list={['flex flex-wrap gap-3', centered && 'justify-center']}>

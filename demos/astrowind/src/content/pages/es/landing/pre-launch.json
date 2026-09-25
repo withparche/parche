@@ -8,7 +8,7 @@
       "props": {
         "layout": "split",
         "tagline": "Apuntarme a la lista",
-        "title": "Algo está <span class='text-highlight'>por llegar</span>",
+        "title": "Algo está ==por llegar==",
         "subtitle": "Quedan pocas semanas. Deja tu dirección y estarás entre las primeras personas en probarlo.",
         "actions": [
           {

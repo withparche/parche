@@ -27,7 +27,7 @@ export default function createUI(): ParcheManifest {
       { name: 'ruled', label: 'Ruled' },
       { name: 'ink', label: 'Ink' },
     ],
-    styles: [path.resolve(dir, 'styles/tones.css')],
+    styles: [path.resolve(dir, 'styles/tones.css'), path.resolve(dir, 'styles/text.css')],
     widgets: {
       Section: w('Section.astro'),
       Columns: w('Columns.astro'),

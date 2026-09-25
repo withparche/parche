@@ -6,7 +6,7 @@ export const layouts = ['grid', 'cards', 'list', 'panels', 'tiles'] as const;
 
 const item = z.object({
   title: z.string().optional(),
-  description: z.string().optional().meta({ input: 'textarea' }),
+  description: z.string().optional().meta({ input: 'textarea', markdown: 'inline' }),
   icon: z.string().optional().meta({ input: 'icon' }),
   link: link.optional().meta({ help: 'A text link under the item: "Learn more".' }),
 });

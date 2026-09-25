@@ -7,7 +7,7 @@ const cardAction = action.extend({ variant: z.enum(actionVariants).default('seco
 
 const project = z.object({
   title: z.string().optional(),
-  description: z.string().optional().meta({ input: 'textarea' }),
+  description: z.string().optional().meta({ input: 'textarea', markdown: 'inline' }),
   image: z.object({ src: z.string().optional(), alt: z.string().optional() }).optional(),
   date: z.string().optional().meta({ placeholder: 'Jan 2024 - Present' }),
   tags: z.array(z.string()).default([]).meta({ help: 'Tech / category chips' }),

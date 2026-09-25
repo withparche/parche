@@ -5,7 +5,7 @@ import { heading, headingGroup } from '../_shared/content';
 const entry = z.object({
   label: z.string().meta({ help: 'The date or version in the left column: "2023", "v1.0".' }),
   title: z.string(),
-  description: z.string().optional().meta({ input: 'textarea' }),
+  description: z.string().optional().meta({ input: 'textarea', markdown: 'inline' }),
   href: z.string().optional().meta({ help: 'A link to the release notes.' }),
   highlight: z.boolean().default(false).meta({ help: 'Mark the entry: the current release.' }),
 });

@@ -3,6 +3,7 @@
  * Text and a checklist beside a media area: the `media` slot, or the `image`
  * prop when the slot is empty. With neither, the text takes the full width.
  */
+import { inline } from '../_shared/inline';
 import SectionHeader from '../components/SectionHeader.astro';
 import Icon from 'parche:elements/Icon';
 import Image from 'parche:elements/Image';
@@ -31,8 +32,8 @@ const colClass = columns === '2' ? 'grid-cols-2' : columns === '3' ? 'grid-cols-
                 <Icon name={item.icon ?? 'tabler:check'} class="w-4 h-4" />
               </span>
               <div>
-                {item.title && <p class="text-lg font-medium leading-6 text-heading ml-2">{item.title}</p>}
-                {item.description && <p class="text-muted ml-2 mt-3" set:html={item.description} />}
+                {item.title && <p class="text-lg font-medium leading-6 text-heading ml-2" set:html={inline(item.title)} />}
+                {item.description && <p class="text-muted ml-2 mt-3" set:html={inline(item.description)} />}
               </div>
             </li>
           ))}

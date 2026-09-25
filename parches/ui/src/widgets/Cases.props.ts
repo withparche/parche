@@ -12,7 +12,7 @@ const item = z.object({
   client: z.string(),
   sector: z.string().optional(),
   title: z.string(),
-  description: z.string().optional().meta({ input: 'textarea' }),
+  description: z.string().optional().meta({ input: 'textarea', markdown: 'inline' }),
   href: z.string().optional(),
   image: image.optional(),
   caption: z.string().optional().meta({ help: 'The placeholder caption until there is an image: "case shot · 900×560".' }),

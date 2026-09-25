@@ -11,7 +11,8 @@
  * Then every node's props move to the common vocabulary (VOCABULARY below):
  * the things a section lists are `items`, buttons are `actions`, a text link
  * is `link`, the arrangement is `layout`, a form posts to `endpoint` with a
- * `submit` label. Every step is idempotent: running it twice changes nothing.
+ * `submit` label, and the simple inline HTML in short texts becomes inline
+ * Markdown. Every step is idempotent: running it twice changes nothing.
  *
  * The raw-HTML backgrounds become tones: a radial gradient is `glow`, a
  * linear one `gradient`, a dot pattern `dots`. `classes.container` is read for
@@ -193,7 +194,27 @@ function blogLink(p) {
 
 function vocabulary(node) {
   const to = VOCABULARY[node.widget];
-  return to && node.props ? { ...node, props: to(node.props) } : node;
+  return to && node.props ? { ...node, props: textToMarkdown(to(node.props)) } : node.props ? { ...node, props: textToMarkdown(node.props) } : node;
+}
+
+/**
+ * Short texts accept inline Markdown now, so the HTML authors wrote to stress
+ * a word becomes Markdown: a highlight span is ==x==, a mono span `x`, a
+ * semibold span **x**, a <br> a newline. Anything else is left as written.
+ */
+const TEXT_KEYS = new Set(['tagline', 'title', 'subtitle', 'description', 'note', 'text']);
+function toMarkdown(value) {
+  return value
+    .replace(/<span class=['"]text-highlight['"]>([^<]*)<\/span>/g, '==$1==')
+    .replace(/<span class=['"]font-mono[^'"]*['"]>([^<`]*)<\/span>/g, '`$1`')
+    .replace(/<span class=['"]font-semibold['"]>([^<*]*)<\/span>/g, '**$1**')
+    .replace(/\s*<br\s*\/?>\s*/g, '\n');
+}
+function textToMarkdown(value, key) {
+  if (typeof value === 'string') return TEXT_KEYS.has(key) ? toMarkdown(value) : value;
+  if (Array.isArray(value)) return value.map((v) => textToMarkdown(v, key === 'features' ? 'text' : undefined));
+  if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, textToMarkdown(v, k)]));
+  return value;
 }
 
 /** Per-item `classes` overrides are gone: the look is the widget's style. */

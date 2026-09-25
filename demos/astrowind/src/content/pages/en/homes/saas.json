@@ -8,7 +8,7 @@
       "props": {
         "layout": "split",
         "tagline": "SaaS",
-        "title": "Where your team <span class='text-highlight'>stops chasing</span> the work",
+        "title": "Where your team ==stops chasing== the work",
         "subtitle": "Plan, track and ship from one place. Fewer tools, fewer meetings, more things finished.",
         "actions": [
           {

@@ -209,6 +209,20 @@ widget sets the default alignment that suits it (`heading({ align: 'center' })`)
 a few decide it from their layout when the content does not say (the Steps
 grid and the FAQs accordion centre, their other layouts start).
 
+## Inline Markdown in short texts
+
+Headings, subtitles, item titles and descriptions, notes and quotes read a
+small inline Markdown, so content never needs HTML to stress a word:
+`**strong**`, `*em*` or `_em_`, `` `code` ``, `[link](/path)`,
+`==highlight==` (the highlight role), and a newline for a line break. There
+are no blocks: a text that needs paragraphs or lists is a Prose body. HTML
+already in a text passes through, and Markdown is only read between tags,
+so older content keeps working; `migrate-nodes.mjs` turns the common spans
+(highlight, mono, semibold, `<br>`) into Markdown. Fields that accept it
+carry `markdown: 'inline'` in their meta (`text()` in `_shared/content.ts`),
+which the builder can read to offer formatting. The renderer is
+`parches/ui/src/_shared/inline.ts`.
+
 ## Themes on the layering
 
 `product` and `editorial` are the redesign's two directions on the same

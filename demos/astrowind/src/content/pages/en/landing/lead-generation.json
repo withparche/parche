@@ -7,7 +7,7 @@
       "widget": "Hero",
       "props": {
         "tagline": "Download the guide",
-        "title": "Get the complete guide to <span class='text-highlight'>shipping faster</span>",
+        "title": "Get the complete guide to ==shipping faster==",
         "subtitle": "Forty pages on cutting build times, written from real projects rather than benchmarks. Free, no signup wall.",
         "actions": [
           {

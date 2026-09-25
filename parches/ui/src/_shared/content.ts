@@ -16,6 +16,12 @@ export const action = z.object({
 });
 export type Action = z.infer<typeof action>;
 
+/**
+ * A short text that accepts inline Markdown (see inline.ts): a title, a
+ * subtitle, an item's description. The widget renders it with `inline()`.
+ */
+export const text = (meta: { input?: 'textarea' } = {}) => z.string().meta({ markdown: 'inline', ...meta });
+
 /** A text link: the "All case studies →" beside a heading, the "Read more" under an item. */
 export const link = z.object({
   text: z.string(),
@@ -40,8 +46,8 @@ export const align = z.enum(['start', 'center']);
 export function heading(defaults: { align?: z.infer<typeof align> } = {}) {
   return {
     tagline: z.string().optional().meta({ help: 'The eyebrow above the title: a category, a count, a date.' }),
-    title: z.string().optional().meta({ help: 'The section heading.' }),
-    subtitle: z.string().optional().meta({ input: 'textarea', help: 'One or two sentences under the title.' }),
+    title: text().optional().meta({ help: 'The section heading.' }),
+    subtitle: text({ input: 'textarea' }).optional().meta({ help: 'One or two sentences under the title.' }),
     link: link.optional().meta({ help: 'A text link at the end of the heading row: where the full list lives.' }),
     align: align.default(defaults.align ?? 'start').meta({ help: 'Where the heading sits.' }),
   };

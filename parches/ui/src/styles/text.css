@@ -1,0 +1,15 @@
+/* =================================================================
+   What inline Markdown in content renders to (src/_shared/inline.ts):
+   a highlighted word in the highlight role, code in the mono face.
+   ================================================================= */
+
+.parche-mark {
+  background: none;
+  color: var(--ds-sys-color-highlight);
+}
+
+.parche-code {
+  font-family: var(--ds-sys-font-mono);
+  font-size: 0.9em;
+  letter-spacing: 0;
+}

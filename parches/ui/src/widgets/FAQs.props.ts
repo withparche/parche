@@ -4,7 +4,7 @@ import { heading, headingGroup } from '../_shared/content';
 
 const faqItem = z.object({
   title: z.string().optional().meta({ label: 'Question' }),
-  description: z.string().optional().meta({ label: 'Answer', input: 'textarea' }),
+  description: z.string().optional().meta({ label: 'Answer', input: 'textarea', markdown: 'inline' }),
   icon: z.string().optional().meta({ input: 'icon' }),
 });
 

@@ -4,6 +4,7 @@
  * it comes from and when underneath. As cards, each is a compact bordered
  * card: the figure in the display face, the label under it.
  */
+import { inline } from '../_shared/inline';
 import SectionHeader from '../components/SectionHeader.astro';
 import Stat from 'parche:elements/Stat';
 import { schema, type Props } from './Stats.props';
@@ -41,4 +42,4 @@ const where = (s: (typeof items)[number]) => [s.source, s.date].filter(Boolean).
   </div>
 ) : null}
 
-{note && <p class="type-caption text-muted mt-6 text-center" set:html={note} />}
+{note && <p class="type-caption text-muted mt-6 text-center" set:html={inline(note)} />}

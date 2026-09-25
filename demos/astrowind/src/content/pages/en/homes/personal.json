@@ -5,7 +5,7 @@
     {
       "widget": "Hero",
       "props": {
-        "title": "Hi, I'm Alex — I build <span class='text-highlight'>calm software</span>",
+        "title": "Hi, I'm Alex — I build ==calm software==",
         "subtitle": "Fifteen years of front-end work, mostly on things that had to load fast and be read by everyone.",
         "actions": [
           {

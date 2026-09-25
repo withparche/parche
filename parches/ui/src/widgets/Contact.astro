@@ -4,6 +4,7 @@
  * puts the form under the heading; split puts the heading and the slots on
  * the left and the form, on a card, on the right.
  */
+import { inline } from '../_shared/inline';
 import Button from 'parche:elements/Button';
 import Input from 'parche:elements/Input';
 import Textarea from 'parche:elements/Textarea';
@@ -49,7 +50,7 @@ const split = layout === 'split';
               );
             })}
           </ul>
-          {booking.note && <p class="mt-3.5 text-xs leading-[1.5] text-muted">{booking.note}</p>}
+          {booking.note && <p class="mt-3.5 text-xs leading-[1.5] text-muted" set:html={inline(booking.note)} />}
         </div>
       )}
     </div>
@@ -61,7 +62,7 @@ const split = layout === 'split';
         {textarea && <Textarea name={textarea.name ?? 'message'} label={textarea.label ?? 'Message'} placeholder={textarea.placeholder} rows={textarea.rows ?? 3} grow={false} />}
         {disclaimer?.label && <Checkbox name="disclaimer" label={disclaimer.label} />}
         <Button type="submit" size="lg" block>{submit}</Button>
-        {note && <p class="text-xs leading-[1.5] text-muted" set:html={note} />}
+        {note && <p class="text-xs leading-[1.5] text-muted" set:html={inline(note)} />}
       </div>
     </form>
   </div>
@@ -80,7 +81,7 @@ const split = layout === 'split';
             <div>
               <Button type="submit" size="lg" block>{submit}</Button>
             </div>
-            {note && <p class="text-center text-xs text-muted" set:html={note} />}
+            {note && <p class="text-center text-xs text-muted" set:html={inline(note)} />}
           </div>
         </form>
       </div>

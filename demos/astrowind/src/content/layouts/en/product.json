@@ -183,7 +183,7 @@
           }
         ],
         "copyright": "© 2026 AstroWind · MIT licensed",
-        "note": "Built with Astro 7 · 100 Lighthouse · <span class='font-mono'>38 KB</span> median page"
+        "note": "Built with Astro 7 · 100 Lighthouse · `38 KB` median page"
       }
     }
   ]

@@ -6,7 +6,7 @@
       "widget": "Hero",
       "props": {
         "tagline": "Seed stage",
-        "title": "We turn <span class='text-highlight'>messy ideas</span> into working products",
+        "title": "We turn ==messy ideas== into working products",
         "subtitle": "A small team, shipping weekly, with customers in the room from day one.",
         "actions": [
           {
