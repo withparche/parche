@@ -22,6 +22,7 @@ export default function createElements(): ParcheManifest {
       Eyebrow: el('eyebrow/Eyebrow.astro'),
       Avatar: el('avatar/Avatar.astro'),
       Divider: el('divider/Divider.astro'),
+      List: el('list/List.astro'),
       Tag: el('tag/Tag.astro'),
       Link: el('link/Link.astro'),
       Image: el('image/Image.astro'),

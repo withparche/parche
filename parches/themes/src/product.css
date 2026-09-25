@@ -101,6 +101,10 @@
   --ds-comp-field-text: 15px;
   --ds-comp-label-text: 13px;
   --ds-comp-label-weight: 600;
+  /* Cards: the design's two paddings and a tighter one for small panels. */
+  --ds-comp-card-padding-sm: 18px 20px;
+  --ds-comp-card-padding-md: clamp(20px, 2.4vw, 26px);
+  --ds-comp-card-padding-lg: clamp(22px, 2.6vw, 30px);
   --ds-comp-placeholder-stripe-a: oklch(0.955 0.008 258);
   --ds-comp-placeholder-stripe-b: oklch(0.925 0.013 258);
 }

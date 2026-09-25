@@ -24,6 +24,17 @@ Header and body; a linked card with media and footer; an article with large
 padding and no shadow.
 :::
 
+## Variants and rhythm
+
+`variant`: `surface` (the raised colour, default), `canvas` (the page colour,
+for a card on a surface-toned section), `dashed` (canvas with a dashed edge,
+for a slot that is still empty). `radius`: `sm` · `md` · `lg`. `padding` reads
+`--ds-comp-card-padding-sm|md|lg` and `radius` `--ds-comp-card-radius[-sm|-lg]`,
+with the defaults inline, so a theme sets every card's rhythm in one place.
+`gap` spaces the body's children. `as` may be `form` or `figure` when the card
+is the form or the quote it frames; other attributes (`action`, `method`)
+pass through.
+
 ## Anatomy
 
 `root` (div, or `<a>` with `href`) · `media` · `body` · `header` · `footer`.

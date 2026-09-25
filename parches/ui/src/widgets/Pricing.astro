@@ -3,6 +3,7 @@
  * Pricing: the tiers as cards, the recommended one marked, and a comparison
  * table under them with one column per plan. Cards sell, the table closes.
  */
+import Card from 'parche:elements/Card';
 import { inline } from '../_shared/inline';
 import Button from 'parche:elements/Button';
 import SectionHeader from '../components/SectionHeader.astro';
@@ -22,22 +23,25 @@ const tone = { default: 'font-semibold text-heading', muted: 'text-muted', succe
       const numeric = /^[\d.,]/.test(String(p.price ?? ''));
       const shown = p.type === 'custom' ? (p.price || "Let's talk") : `${numeric ? (p.currency ?? '$') : ''}${p.price ?? ''}`;
       return (
-        <article
-          class:list={[
-            'relative flex flex-col gap-[18px] rounded-lg border bg-background p-[clamp(22px,2.5vw,30px)]',
-            p.recommended ? 'border-primary shadow-lg' : 'border-border',
-          ]}
+        <Card
+          as="article"
+          variant="canvas"
+          radius="lg"
+          padding="lg"
+          gap="md"
+          shadow="none"
+          class:list={['relative overflow-visible', p.recommended && 'border-primary shadow-lg']}
         >
           {p.badge && (
-            <span class="absolute -top-[11px] left-[clamp(22px,2.5vw,30px)] rounded-full bg-primary px-2.5 py-1.5 font-mono text-[10px] leading-none font-medium tracking-[0.14em] text-on-primary uppercase">{p.badge}</span>
+            <span class="absolute -top-[11px] left-[var(--ds-comp-card-padding-lg,clamp(1.5rem,2.8vw,2rem))] rounded-full bg-primary px-2.5 py-1.5 type-label text-on-primary">{p.badge}</span>
           )}
           <div>
             {p.title && <h3 class="mb-3 text-base leading-none font-semibold text-heading">{p.title}</h3>}
-            <p class="font-heading text-[40px] leading-none font-semibold tracking-[-0.03em] text-heading">
+            <p class="type-figure text-heading">
               {shown}{(p.suffix || p.period) && <span class="font-body text-[15px] font-normal tracking-normal text-muted"> {p.suffix ?? p.period}</span>}
             </p>
-            {(p.note || p.subtitle) && <p class="mt-2 text-[13px] leading-[1.5] text-muted" set:html={inline(p.note ?? p.subtitle)} />}
-            {p.description && <p class="mt-2 text-[13px] leading-[1.5] text-muted" set:html={inline(p.description)} />}
+            {(p.note || p.subtitle) && <p class="mt-2 type-small text-muted" set:html={inline(p.note ?? p.subtitle)} />}
+            {p.description && <p class="mt-2 type-small text-muted" set:html={inline(p.description)} />}
           </div>
           {p.features.length > 0 && (
             <ul class="flex flex-col gap-[9px] text-sm leading-[1.5] text-heading">
@@ -51,7 +55,7 @@ const tone = { default: 'font-semibold text-heading', muted: 'text-muted', succe
               ))}
             </div>
           )}
-        </article>
+        </Card>
       );
     })}
   </div>
@@ -62,7 +66,7 @@ const tone = { default: 'font-semibold text-heading', muted: 'text-muted', succe
     <table class="w-full min-w-[640px] border-collapse">
       <thead>
         <tr>
-          <th scope="col" class="border-b border-border px-5 py-[15px] text-left font-mono text-[10px] leading-none font-medium tracking-[0.14em] text-muted uppercase">{comparison.label}</th>
+          <th scope="col" class="border-b border-border px-5 py-[15px] text-left type-label text-muted">{comparison.label}</th>
           {plans.map((p, i) => (
             <th scope="col" class:list={['border-b border-border px-5 py-[15px] text-left text-sm leading-none font-semibold text-heading', i === featured && 'bg-primary-soft']}>{p.title}</th>
           ))}

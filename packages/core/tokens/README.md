@@ -39,7 +39,12 @@ names in `shadcn-compat.css` are aliases on top.
   without one keeps its light value in both modes.
 - `$type` is inherited from the group. `typography` values expand to four tokens,
   `-size`, `-weight`, `-tracking`, `-leading`, which `base.css` composes into
-  `.type-<style>`.
+  `.type-<style>`. The styles are roles, not sizes: `h1`–`h3` and `title` /
+  `title-sm` for headings down to an item's; `lead`, `body`, `body-sm`,
+  `small`, `caption` for running text; `label` (the eyebrow) and `meta` (dates,
+  sources, durations, in the mono face) for small print; `figure` and
+  `figure-sm` for numbers that are the point. Widgets use the classes rather
+  than fixed sizes, so a theme's scale reaches every section.
 - Names are kebab-case and become the CSS name joined with `-`:
   `sys.color.on-primary` is `--ds-sys-color-on-primary`.
 

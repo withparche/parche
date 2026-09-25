@@ -1,0 +1,15 @@
+---
+import List from '../List.astro';
+---
+
+<div class="max-w-xl space-y-10">
+  <List as="ol" label="Releases">
+    <li class="grid grid-cols-[86px_1fr] gap-5"><span class="type-meta">v1.0</span><span>Stable API, codemods for every change.</span></li>
+    <li class="grid grid-cols-[86px_1fr] gap-5"><span class="type-meta">v0.9</span><span>Content model on nodes and slots.</span></li>
+    <li class="grid grid-cols-[86px_1fr] gap-5"><span class="type-meta">v0.8</span><span>Tokens in three layers.</span></li>
+  </List>
+  <List variant="plain" padding="sm">
+    <li>A plain row</li>
+    <li>Another row</li>
+  </List>
+</div>

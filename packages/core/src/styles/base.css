@@ -85,6 +85,23 @@
     color: var(--color-heading);
   }
 
+  .type-title {
+    font-family: var(--ds-sys-font-heading);
+    font-size: var(--ds-sys-type-title-size);
+    font-weight: var(--ds-sys-type-title-weight);
+    letter-spacing: var(--ds-sys-type-title-tracking);
+    line-height: var(--ds-sys-type-title-leading);
+    color: var(--color-heading);
+  }
+
+  .type-title-sm {
+    font-size: var(--ds-sys-type-title-sm-size);
+    font-weight: var(--ds-sys-type-title-sm-weight);
+    letter-spacing: var(--ds-sys-type-title-sm-tracking);
+    line-height: var(--ds-sys-type-title-sm-leading);
+    color: var(--color-heading);
+  }
+
   .type-lead {
     font-family: var(--ds-sys-font-body);
     font-size: var(--ds-sys-type-lead-size);
@@ -103,6 +120,20 @@
     color: var(--color-text);
   }
 
+  .type-body-sm {
+    font-size: var(--ds-sys-type-body-sm-size);
+    font-weight: var(--ds-sys-type-body-sm-weight);
+    letter-spacing: var(--ds-sys-type-body-sm-tracking);
+    line-height: var(--ds-sys-type-body-sm-leading);
+  }
+
+  .type-small {
+    font-size: var(--ds-sys-type-small-size);
+    font-weight: var(--ds-sys-type-small-weight);
+    letter-spacing: var(--ds-sys-type-small-tracking);
+    line-height: var(--ds-sys-type-small-leading);
+  }
+
   .type-caption {
     font-size: var(--ds-sys-type-caption-size);
     font-weight: var(--ds-sys-type-caption-weight);
@@ -118,6 +149,36 @@
     line-height: var(--ds-sys-type-label-leading);
     text-transform: uppercase;
     color: var(--color-muted);
+  }
+
+  /* Facts in the mono face: dates, sources, durations, counts. */
+  .type-meta {
+    font-family: var(--ds-sys-font-mono);
+    font-size: var(--ds-sys-type-meta-size);
+    font-weight: var(--ds-sys-type-meta-weight);
+    letter-spacing: var(--ds-sys-type-meta-tracking);
+    line-height: var(--ds-sys-type-meta-leading);
+    color: var(--color-muted);
+  }
+
+  /* Numbers that are the point: a price, a stat. Colour is left to the
+     context, so a tone (success, warning) can set it. */
+  .type-figure,
+  .type-figure-sm {
+    font-family: var(--ds-sys-font-heading);
+    font-variant-numeric: tabular-nums;
+  }
+  .type-figure {
+    font-size: var(--ds-sys-type-figure-size);
+    font-weight: var(--ds-sys-type-figure-weight);
+    letter-spacing: var(--ds-sys-type-figure-tracking);
+    line-height: var(--ds-sys-type-figure-leading);
+  }
+  .type-figure-sm {
+    font-size: var(--ds-sys-type-figure-sm-size);
+    font-weight: var(--ds-sys-type-figure-sm-weight);
+    letter-spacing: var(--ds-sys-type-figure-sm-tracking);
+    line-height: var(--ds-sys-type-figure-sm-leading);
   }
 
   /* ---------------------------------------------------------------

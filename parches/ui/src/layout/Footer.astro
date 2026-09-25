@@ -56,14 +56,14 @@ const {
     </div>
     {columns.map(({ title, links }: { title: string; links: Array<{ label: string; href: string }> }) => (
       <div class="min-w-0">
-        <p class="mb-3.5 font-mono text-[10px] leading-none font-medium tracking-[0.14em] text-muted uppercase">{title}</p>
+        <p class="mb-3.5 type-label text-muted">{title}</p>
         <ul class="flex flex-col gap-2.5 text-sm leading-[1.4]">
           {links.map(({ label, href }) => <li><a href={href} class="text-heading no-underline hover:text-primary">{label}</a></li>)}
         </ul>
       </div>
     ))}
   </div>
-  <div class="mx-auto flex max-w-(--ds-conf-width-xl) flex-wrap justify-between gap-4 border-t border-border px-(--ds-conf-gutter) py-5 text-[13px] leading-[1.5] text-muted">
+  <div class="mx-auto flex max-w-(--ds-conf-width-xl) flex-wrap justify-between gap-4 border-t border-border px-(--ds-conf-gutter) py-5 type-small text-muted">
     <span>{copyright ? <Fragment set:html={inline(copyright)} /> : <>&copy; {new Date().getFullYear()} {siteName}</>}</span>
     {note && <span set:html={inline(note)} />}
   </div>

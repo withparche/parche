@@ -21,7 +21,7 @@ const where = (s: (typeof items)[number]) => [s.source, s.date].filter(Boolean).
     {items.map((s) => (
       <div class="parche-stat-item flex flex-col rounded-md border border-border bg-surface p-3.5" title={where(s) || undefined}>
         <dt class="order-2 mt-[5px] text-xs leading-[1.3] text-muted">{s.label}</dt>
-        <dd class:list={['order-1 font-heading text-[22px] leading-none font-semibold tracking-[-0.02em]', tones[s.tone]]}>
+        <dd class:list={['order-1 type-figure-sm', tones[s.tone]]}>
           {s.href ? <a href={s.href} class="text-inherit no-underline">{s.value}{s.unit}</a> : <>{s.value}{s.unit}</>}
         </dd>
       </div>
@@ -33,7 +33,7 @@ const where = (s: (typeof items)[number]) => [s.source, s.date].filter(Boolean).
       <div class="parche-stat-item">
         <Stat value={unit ? `${value}${unit}` : value} label={label} icon={icon} />
         {(source || date) && (
-          <p class="type-caption text-muted mt-1 font-mono text-xs">
+          <p class="type-meta mt-1">
             {href ? <a href={href} class="underline underline-offset-2 hover:text-heading">{[source, date].filter(Boolean).join(' · ')}</a> : [source, date].filter(Boolean).join(' · ')}
           </p>
         )}

@@ -1,0 +1,37 @@
+---
+/**
+ * List — rows between hairlines, the "divider list" of the design: rows split
+ * by a 1px border, 18–20px of vertical space, no card. The rows are the
+ * children the widget writes (`<li>`), so their content is the widget's; the
+ * list owns only the rhythm and the rules, which a theme sets through
+ * --ds-comp-list-padding-<size>.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema, type Props } from './list.props';
+
+const { props: { as: Tag, variant, padding, edges, label }, rest, className, part } = splitProps(schema, Astro.props);
+
+const paddings: Record<typeof padding, string> = {
+  none: '',
+  sm: '[&>*]:py-[var(--ds-comp-list-padding-sm,0.75rem)]',
+  md: '[&>*]:py-[var(--ds-comp-list-padding-md,1.125rem)]',
+  lg: '[&>*]:py-[var(--ds-comp-list-padding-lg,1.25rem)]',
+};
+const divided = variant === 'divided';
+---
+
+<Tag
+  class={cn(
+    'parche-list flex min-w-0 flex-col',
+    divided && 'divide-y divide-border',
+    divided && edges && 'border-y border-border',
+    paddings[padding],
+    className,
+  )}
+  aria-label={label}
+  {...rest}
+  data-part={part}
+  data-variant={variant}
+>
+  <slot />
+</Tag>

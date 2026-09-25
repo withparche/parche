@@ -7,11 +7,25 @@
 import { cn, splitProps } from '@parche/elements/utils';
 import { schema, type Props } from './card.props';
 
-const { props: { as, href, padding, shadow, border, interactive: interactiveProp }, rest, className, part } = splitProps(schema, Astro.props);
+const { props: { as, variant, radius, href, padding, gap, shadow, border, interactive: interactiveProp }, rest, className, part } = splitProps(schema, Astro.props);
 
 const interactive = href ? true : interactiveProp;
 const Tag = href ? 'a' : as;
-const paddings: Record<typeof padding, string> = { none: '', sm: 'p-4', md: 'p-4 md:p-6', lg: 'p-6 md:p-8' };
+// Paddings and radii are component tokens with the defaults inline, so a
+// theme gives every card in every widget its rhythm in one place.
+const paddings: Record<typeof padding, string> = {
+  none: '',
+  sm: 'p-[var(--ds-comp-card-padding-sm,1rem)]',
+  md: 'p-[var(--ds-comp-card-padding-md,clamp(1rem,2.4vw,1.5rem))]',
+  lg: 'p-[var(--ds-comp-card-padding-lg,clamp(1.5rem,2.8vw,2rem))]',
+};
+const radii: Record<typeof radius, string> = {
+  sm: 'rounded-[var(--ds-comp-card-radius-sm,var(--radius-sm))]',
+  md: 'rounded-[var(--ds-comp-card-radius,var(--radius-md))]',
+  lg: 'rounded-[var(--ds-comp-card-radius-lg,var(--radius-lg))]',
+};
+const variants: Record<typeof variant, string> = { surface: 'bg-surface', canvas: 'bg-background', dashed: 'bg-background border-dashed' };
+const gaps: Record<typeof gap, string> = { none: '', sm: 'gap-3', md: 'gap-4.5' };
 const shadows: Record<typeof shadow, string> = { none: '', sm: 'shadow-sm', md: 'shadow-md' };
 const hasMedia = Astro.slots.has('media');
 const hasHeader = Astro.slots.has('header');
@@ -21,7 +35,9 @@ const hasFooter = Astro.slots.has('footer');
 <Tag
   href={href}
   class={cn(
-    'parche-card flex flex-col overflow-hidden rounded-md bg-surface text-text',
+    'parche-card flex flex-col overflow-hidden text-text',
+    variants[variant],
+    radii[radius],
     border && 'border border-border',
     shadows[shadow],
     interactive && 'transition-shadow hover:shadow-md',
@@ -31,9 +47,10 @@ const hasFooter = Astro.slots.has('footer');
   {...rest}
   data-part={part}
   data-state={interactive ? 'interactive' : undefined}
+  data-variant={variant}
 >
   {hasMedia && <div class="parche-card-media" data-part="media"><slot name="media" /></div>}
-  <div class={cn('parche-card-body flex flex-1 flex-col', paddings[padding])} data-part="body">
+  <div class={cn('parche-card-body flex flex-1 flex-col', paddings[padding], gaps[gap])} data-part="body">
     {hasHeader && <div class="parche-card-header mb-3" data-part="header"><slot name="header" /></div>}
     <slot />
     {hasFooter && <div class="parche-card-footer mt-4 border-t border-border pt-4" data-part="footer"><slot name="footer" /></div>}

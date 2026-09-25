@@ -1,5 +1,6 @@
 ---
 /** One demo of the Showcase: the screenshot beside what it is, three specifics and a link. */
+import Card from 'parche:elements/Card';
 import { inline } from '../_shared/inline';
 import Image from 'parche:elements/Image';
 import Placeholder from 'parche:elements/Placeholder';
@@ -20,9 +21,9 @@ const { demo: d } = Astro.props;
 
 {d && (
   <div class="grid grid-cols-[repeat(auto-fit,minmax(min(300px,100%),1fr))] items-center gap-[clamp(20px,3vw,44px)]">
-    <div class="min-w-0 overflow-hidden rounded-lg border border-border bg-background">
+    <Card variant="canvas" radius="lg" padding="none" shadow="none" class="min-w-0">
       {d.image ? <Image src={d.image.src} alt={d.image.alt} width={1000} ratio="16/10" class="block w-full" /> : <Placeholder caption={d.caption} label={d.title} ratio="16/10" />}
-    </div>
+    </Card>
     <div class="min-w-0">
       <h3 class="mb-3.5 font-heading text-[clamp(23px,2.6vw,32px)] leading-[1.2] font-semibold tracking-[-0.02em] text-heading" set:html={inline(d.title)} />
       <p class="mb-[22px] text-base leading-[1.65] text-pretty text-muted" set:html={inline(d.description)} />
@@ -30,7 +31,7 @@ const { demo: d } = Astro.props;
         <ul class="mb-[26px] flex flex-col gap-[11px]">
           {d.points.map((p) => (
             <li class="flex items-start gap-3">
-              <span class="font-mono text-xs leading-[1.5] font-medium text-primary" aria-hidden="true">✓</span>
+              <span class="type-meta font-medium text-primary" aria-hidden="true">✓</span>
               <span class="text-[15px] leading-[1.5] text-heading">{p}</span>
             </li>
           ))}

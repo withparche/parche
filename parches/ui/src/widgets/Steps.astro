@@ -4,6 +4,7 @@
  * slot; `grid` lays the steps out in columns under the headline; `numbered`
  * puts the headline and the call to action beside a numbered list.
  */
+import List from 'parche:elements/List';
 import { inline } from '../_shared/inline';
 import Icon from 'parche:elements/Icon';
 import Image from 'parche:elements/Image';
@@ -24,19 +25,19 @@ const hasMedia = Astro.slots.has('media') || Boolean(image);
     <Actions {actions} />
   </div>
   {items.length > 0 && (
-    <ol class="flex min-w-0 flex-col">
+    <List as="ol" padding="lg" class="min-w-0">
       {items.map((step, index) => (
-        <li class:list={['grid grid-cols-[auto_1fr_auto] items-baseline gap-[clamp(14px,2vw,24px)] border-t border-border py-5', index === items.length - 1 && 'border-b']}>
-          <span class="font-mono text-xs leading-[1.4] font-medium text-primary">{String(index + 1).padStart(2, '0')}</span>
+        <li class="grid grid-cols-[auto_1fr_auto] items-baseline gap-[clamp(14px,2vw,24px)]">
+          <span class="type-meta font-medium text-primary">{String(index + 1).padStart(2, '0')}</span>
           <span>
-            {step.title && <span class="mb-1.5 block font-heading text-[17px] leading-[1.35] font-semibold text-heading" set:html={inline(step.title)} />}
+            {step.title && <span class="mb-1.5 block type-title" set:html={inline(step.title)} />}
             {step.description && <span class="block text-sm leading-[1.6] text-muted" set:html={inline(step.description)} />}
-            {step.owner && <span class="mt-1 block font-mono text-xs text-muted">{step.owner}</span>}
+            {step.owner && <span class="mt-1 block type-meta">{step.owner}</span>}
           </span>
-          {step.duration ? <span class="font-mono text-xs leading-[1.4] whitespace-nowrap text-muted">{step.duration}</span> : <span />}
+          {step.duration ? <span class="type-meta whitespace-nowrap">{step.duration}</span> : <span />}
         </li>
       ))}
-    </ol>
+    </List>
   )}
 </div>
 ) : (

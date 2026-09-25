@@ -1,4 +1,5 @@
 ---
+import Card from 'parche:elements/Card';
 import { inline } from '../_shared/inline';
 import * as Carousel from 'parche:elements/Carousel';
 import Command from 'parche:elements/Command';
@@ -24,13 +25,13 @@ const { title, subtitle, tagline, link, align, items, layout, actions, openSlot 
   <div class="grid grid-cols-[repeat(auto-fit,minmax(min(280px,100%),1fr))] gap-[clamp(16px,2vw,22px)]">
     {items.map((item) => <TestimonialCard {...item} />)}
     {openSlot && (
-      <div class="flex flex-col gap-3 rounded-md border border-dashed border-border bg-background p-[clamp(22px,3vw,30px)]">
-        <span class="font-mono text-[10px] leading-none font-medium tracking-[0.12em] text-muted uppercase">{openSlot.label}</span>
-        <p class="text-[15px] leading-[1.6] text-muted" set:html={inline(openSlot.text)} />
+      <Card variant="dashed" padding="lg" gap="sm" shadow="none">
+        <span class="type-label text-muted">{openSlot.label}</span>
+        <p class="type-body-sm text-muted" set:html={inline(openSlot.text)} />
         {openSlot.copy && (
           <Command variant="button" command={openSlot.copy.text} copyLabel={openSlot.copy.label} copiedLabel={openSlot.copy.copiedLabel ?? 'Copied'} class="mt-auto self-start" />
         )}
-      </div>
+      </Card>
     )}
   </div>
 ) : null}

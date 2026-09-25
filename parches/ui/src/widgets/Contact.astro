@@ -4,6 +4,7 @@
  * puts the form under the heading; split puts the heading and the slots on
  * the left and the form, on a card, on the right.
  */
+import Card from 'parche:elements/Card';
 import { inline } from '../_shared/inline';
 import Button from 'parche:elements/Button';
 import Input from 'parche:elements/Input';
@@ -29,7 +30,7 @@ const split = layout === 'split';
     <div class="min-w-0">
       <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="none" class="mb-[26px]" />
       {booking && (
-        <div class="rounded-md border border-border bg-surface px-5 py-[18px]">
+        <Card padding="sm" shadow="none">
           <div class="mb-3.5 flex flex-wrap items-center justify-between gap-4">
             <span class="text-[15px] leading-none font-semibold text-heading">{booking.title}</span>
             {booking.badge && <span class="rounded-full bg-success-soft px-[9px] py-[5px] font-mono text-[11px] leading-none font-medium text-success">{booking.badge}</span>}
@@ -51,10 +52,10 @@ const split = layout === 'split';
             })}
           </ul>
           {booking.note && <p class="mt-3.5 text-xs leading-[1.5] text-muted" set:html={inline(booking.note)} />}
-        </div>
+        </Card>
       )}
     </div>
-    <form action={endpoint} method={endpoint ? 'post' : undefined} class="min-w-0 rounded-lg border border-border bg-surface p-[clamp(22px,3vw,32px)]">
+    <Card as="form" action={endpoint} method={endpoint ? 'post' : undefined} radius="lg" padding="lg" shadow="none" class="min-w-0">
       <div class="flex flex-col gap-4">
         {inputs.map((input) => (
           <Input name={input.name} label={input.label ?? humanize(input.name)} type={typeOf(input.type ?? 'text')} placeholder={input.placeholder} autocomplete={input.autocomplete} />
@@ -64,7 +65,7 @@ const split = layout === 'split';
         <Button type="submit" size="lg" block>{submit}</Button>
         {note && <p class="text-xs leading-[1.5] text-muted" set:html={inline(note)} />}
       </div>
-    </form>
+    </Card>
   </div>
 ) : (
   <>

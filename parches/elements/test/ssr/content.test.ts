@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { render, scriptCount } from './_render';
 import Heading from '../../src/heading/Heading.astro';
 import Card from '../../src/card/Card.astro';
+import List from '../../src/list/List.astro';
 import Kbd from '../../src/kbd/Kbd.astro';
 import Code from '../../src/code/Code.astro';
 import Prose from '../../src/prose/Prose.astro';
@@ -38,6 +39,36 @@ describe('Card', () => {
     const html = await render(Card, { href: '/x' }, { default: 'Body' });
     expect(html).toMatch(/<a[^>]+href="\/x"[^>]*data-state="interactive"/);
     expect(html).toMatch(/outline-ring/);
+  });
+  it('variants pick the canvas, a dashed edge, a radius and padding from component tokens', async () => {
+    const canvas = await render(Card, { variant: 'canvas', radius: 'lg', padding: 'lg', gap: 'md' }, { default: 'Body' });
+    expect(canvas).toMatch(/data-variant="canvas"/);
+    expect(canvas).toContain('bg-background');
+    expect(canvas).toContain('--ds-comp-card-radius-lg');
+    expect(canvas).toContain('--ds-comp-card-padding-lg');
+    expect(canvas).toContain('gap-4.5');
+    const dashed = await render(Card, { variant: 'dashed' }, { default: 'Slot' });
+    expect(dashed).toContain('border-dashed');
+  });
+  it('can be the form or the figure it frames, with their attributes', async () => {
+    const form = await render(Card, { as: 'form', action: '/subscribe', method: 'post' }, { default: 'Fields' });
+    expect(form).toMatch(/<form[^>]+action="\/subscribe"[^>]+method="post"/);
+    expect(await render(Card, { as: 'figure' }, { default: 'Quote' })).toMatch(/^\s*<figure/);
+  });
+});
+
+describe('List', () => {
+  it('is a real list whose rows are split by hairlines, with the edges ruled', async () => {
+    const html = await render(List, { as: 'ol', label: 'Releases' }, { default: '<li>One</li><li>Two</li>' });
+    expect(html).toMatch(/<ol[^>]+parche-list[^>]+divide-y divide-border[^>]+border-y/);
+    expect(html).toContain('aria-label="Releases"');
+    expect(html).toContain('--ds-comp-list-padding-md');
+  });
+  it('plain drops the rules; edges=false keeps them only between rows', async () => {
+    expect(await render(List, { variant: 'plain' }, { default: '<li>One</li>' })).not.toContain('divide-y');
+    const inner = await render(List, { edges: false }, { default: '<li>One</li>' });
+    expect(inner).toContain('divide-y');
+    expect(inner).not.toContain('border-y');
   });
 });
 
