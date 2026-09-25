@@ -3,6 +3,7 @@ import { render, scriptCount } from './_render';
 import Heading from '../../src/heading/Heading.astro';
 import Card from '../../src/card/Card.astro';
 import List from '../../src/list/List.astro';
+import Table from '../../src/table/Table.astro';
 import Kbd from '../../src/kbd/Kbd.astro';
 import Code from '../../src/code/Code.astro';
 import Prose from '../../src/prose/Prose.astro';
@@ -141,5 +142,35 @@ describe('Pagination', () => {
     const html = await render(Pagination, { current: 2, total: 3, base: '/blog/', numbers: false });
     expect(html).toMatch(/<a href="\/blog"[^>]*data-part="prev"/);
     expect(html).not.toMatch(/data-part="page"/);
+  });
+});
+
+describe('Table', () => {
+  const columns = [{ label: 'Compare' }, { label: 'Free' }, { label: 'Team', highlight: true }];
+  it('names columns and rows, keeps plain values quiet and states the highlighted column', async () => {
+    const html = await render(Table, { columns, rows: [{ cells: ['Seats', '1', '10'] }], caption: 'Plans' });
+    expect(html).toContain('aria-label="Plans"');
+    expect(html).toMatch(/<th scope="col"[^>]*bg-primary-soft[^>]*>Team<\/th>/);
+    expect(html).toMatch(/<th scope="row"[^>]*>Seats<\/th>/);
+    expect(html).toMatch(/<td[^>]*font-normal text-muted[^>]*>1<\/td>/);
+    expect(html).toMatch(/<td[^>]*font-semibold text-heading[^>]*>10<\/td>/);
+    expect(html).toContain('min-width:620px');
+  });
+  it('a cell tone and a row tone win over the column', async () => {
+    const html = await render(Table, { columns, rows: [{ cells: ['SSO', { text: 'None', tone: 'warning' }, 'Yes'], tone: 'warning' }] });
+    expect(html).toMatch(/<tr class="bg-warning-soft" data-part="row" data-state="warning">/);
+    expect(html).toMatch(/text-warning[^>]*>None</);
+  });
+  it('an open frame is key and value rows between hairlines, with a total', async () => {
+    const html = await render(Table, { frame: 'open', columns: [{ label: '' }, { label: '', mono: true }], rows: [{ cells: ['Mon–Fri', '08–20'] }], footer: ['Total', '5 days'] });
+    expect(html).toContain('data-frame="open"');
+    expect(html).not.toContain('<thead');
+    expect(html).toMatch(/font-mono[^>]*>08–20</);
+    expect(html).toContain('data-part="foot"');
+  });
+  it('header none drops the head; sticky keeps the row labels in view', async () => {
+    const html = await render(Table, { columns, header: 'none', stickyFirst: true, rows: [{ cells: ['A', 'b', 'c'] }] });
+    expect(html).not.toContain('<thead');
+    expect(html).toMatch(/<th scope="row"[^>]*sticky left-0/);
   });
 });

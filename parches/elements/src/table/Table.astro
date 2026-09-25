@@ -1,0 +1,155 @@
+---
+/**
+ * Table — facts in rows and columns, with quantities rather than ticks. One
+ * shell: a bordered card that scrolls sideways below its minimum width (never
+ * stacks), a header naming what is compared, row labels as row headers, and
+ * values that are quiet (muted) unless stated: a highlighted column states its
+ * values, and a cell or a row can carry a tone. `frame="open"` drops the box
+ * for key and value lists between hairlines.
+ *
+ * Cell text is rendered as HTML so a widget can pass inline Markdown already
+ * turned into markup.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema, tones } from './table.props';
+
+const {
+  props: { columns, rows, footer, header, size, frame, variant, radius, stickyFirst, minWidth, caption },
+  rest,
+  className,
+  part,
+} = splitProps(schema, Astro.props);
+
+type Tone = (typeof tones)[number];
+type Cell = string | { text: string; tone?: Tone };
+
+const open = frame === 'open';
+const count = Math.max(columns.length, ...rows.map((r) => r.cells.length), 1);
+const width = minWidth ?? (open ? undefined : count <= 2 ? 520 : count === 3 ? 620 : count === 4 ? 680 : 900);
+
+const pad = {
+  sm: { th: 'px-4 py-3', td: 'px-4 py-3', text: 'text-[13px]' },
+  md: { th: 'px-[18px] py-3.5', td: 'px-[18px] py-[13px]', text: 'text-sm' },
+  lg: { th: 'px-5 py-[15px]', td: 'px-5 py-3.5', text: 'text-sm' },
+}[size];
+const label = 'font-mono text-[10px] leading-none font-medium tracking-[0.12em] text-muted uppercase';
+const toneText: Record<Tone, string> = {
+  default: 'font-semibold text-heading',
+  muted: 'font-normal text-muted',
+  success: 'font-semibold text-success',
+  warning: 'font-semibold text-warning',
+  danger: 'font-semibold text-danger',
+  primary: 'font-semibold text-primary',
+};
+const toneRow: Partial<Record<Tone, string>> = { success: 'bg-success-soft', warning: 'bg-warning-soft', danger: 'bg-danger-soft', primary: 'bg-primary-soft', muted: '' };
+
+const text = (c: Cell | undefined) => (c == null ? '' : typeof c === 'string' ? c : c.text);
+// A plain value is quiet unless its column is the one being argued for, or its
+// row carries a tone; an explicit tone always wins.
+const toneOf = (c: Cell | undefined, col: number, rowTone?: Tone): Tone =>
+  (typeof c === 'object' && c?.tone) || (rowTone && rowTone !== 'default' ? rowTone : undefined) || (columns[col]?.highlight ? 'default' : 'muted');
+const alignOf = (col: number) => (columns[col]?.align === 'end' ? 'text-right' : 'text-left');
+const sticky = stickyFirst ? 'sticky left-0 z-[1] whitespace-nowrap bg-(--table-bg)' : '';
+const bg = variant === 'surface' ? 'bg-surface' : 'bg-background';
+const bgVar = variant === 'surface' ? 'var(--ds-sys-color-surface)' : 'var(--ds-sys-color-background)';
+---
+
+{open ? (
+  <div class={cn('parche-table', className)} {...rest} data-part={part} data-frame="open">
+    <table class="w-full border-collapse" data-part="table" aria-label={caption}>
+      <tbody>
+        {rows.map((row, r) => (
+          <tr class:list={['border-t border-border', r === rows.length - 1 && !footer && 'border-b', row.tone && toneRow[row.tone]]} data-part="row" data-state={row.tone ?? 'default'}>
+            {row.cells.map((c, i) =>
+              i === 0 ? (
+                <th scope="row" class="py-[13px] pr-4 text-left text-[15px] leading-[1.5] font-normal text-heading" set:html={text(c)} />
+              ) : (
+                <td
+                  class:list={[
+                    'py-[13px] text-right whitespace-nowrap',
+                    columns[i]?.mono ? 'font-mono text-[13px] font-medium text-muted' : ['text-[15px]', toneText[typeof c === 'object' && c.tone ? c.tone : row.tone ?? 'default']],
+                  ]}
+                  set:html={text(c)}
+                />
+              ),
+            )}
+          </tr>
+        ))}
+      </tbody>
+      {footer && (
+        <tfoot data-part="foot">
+          <tr class="border-t border-b border-border">
+            {footer.map((c, i) => (i === 0 ? <th scope="row" class="pt-3.5 pb-[13px] text-left text-[15px] font-semibold text-heading" set:html={text(c)} /> : <td class="pt-3.5 pb-[13px] text-right text-[15px] font-semibold whitespace-nowrap text-heading" set:html={text(c)} />))}
+          </tr>
+        </tfoot>
+      )}
+    </table>
+  </div>
+) : (
+  <div
+    class={cn('parche-table overflow-auto border border-border', bg, radius === 'lg' ? 'rounded-[var(--ds-comp-table-radius-lg,var(--radius-lg))]' : 'rounded-[var(--ds-comp-table-radius,var(--radius-md))]', className)}
+    style={`--table-bg:${bgVar}`}
+    {...rest}
+    data-part={part}
+    data-frame="card"
+  >
+    <table class={cn('w-full border-collapse', pad.text)} style={width ? `min-width:${width}px` : undefined} data-part="table" aria-label={caption}>
+      {columns.some((c) => c.width) && (
+        <colgroup>{columns.map((c) => <col style={c.width ? `width:${c.width}` : undefined} />)}</colgroup>
+      )}
+      {header !== 'none' && columns.length > 0 && (
+        <thead data-part="head">
+          <tr>
+            {columns.map((c, i) => (
+              <th
+                scope="col"
+                class:list={[
+                  'border-b border-border', pad.th, alignOf(i),
+                  header === 'labels' || i === 0 ? label : 'text-[13px] leading-[1.3] font-semibold text-heading',
+                  c.highlight && 'bg-primary-soft',
+                  i === 0 && sticky,
+                ]}
+                set:html={c.label}
+              />
+            ))}
+          </tr>
+        </thead>
+      )}
+      <tbody>
+        {rows.map((row, r) => {
+          const last = r === rows.length - 1 && !footer;
+          return (
+            <tr class:list={[row.tone && toneRow[row.tone]]} data-part="row" data-state={row.tone ?? 'default'}>
+              {row.cells.map((c, i) =>
+                i === 0 ? (
+                  <th
+                    scope="row"
+                    class:list={[
+                      pad.td, 'text-left leading-[1.4] font-medium text-heading',
+                      columns[0]?.mono && 'font-mono font-normal',
+                      !last && 'border-b border-border-soft',
+                      sticky, stickyFirst && 'font-semibold',
+                    ]}
+                    set:html={text(c)}
+                  />
+                ) : (
+                  <td
+                    class:list={[pad.td, alignOf(i), 'leading-[1.4]', toneText[toneOf(c, i, row.tone)], columns[i]?.mono && 'font-mono text-[13px]', !last && 'border-b border-border-soft']}
+                    set:html={text(c)}
+                  />
+                ),
+              )}
+            </tr>
+          );
+        })}
+      </tbody>
+      {footer && (
+        <tfoot data-part="foot">
+          <tr class="border-t border-border">
+            {footer.map((c, i) => (i === 0 ? <th scope="row" class:list={[pad.td, 'text-left font-semibold text-heading', sticky]} set:html={text(c)} /> : <td class:list={[pad.td, alignOf(i), 'font-semibold text-heading']} set:html={text(c)} />))}
+          </tr>
+        </tfoot>
+      )}
+    </table>
+  </div>
+)}

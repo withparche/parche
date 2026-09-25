@@ -1,0 +1,22 @@
+---
+import Table from '../Table.astro';
+---
+
+<div class="max-w-3xl space-y-10">
+  <Table
+    caption="Plans compared"
+    columns={[{ label: 'Compare' }, { label: 'Free' }, { label: 'Team', highlight: true }, { label: 'Agency' }]}
+    rows={[
+      { cells: ['Projects', '1', 'Unlimited', 'Unlimited'] },
+      { cells: ['Seats', '1', '10', { text: 'Unlimited', tone: 'success' }] },
+      { cells: ['Support', 'Community', 'Email, 1 day', 'Named engineer'] },
+      { cells: ['Known gap', { text: 'No SSO', tone: 'warning' }, 'SSO', 'SSO'], tone: 'warning' },
+    ]}
+  />
+  <Table
+    frame="open"
+    caption="Opening hours"
+    columns={[{ label: 'Day' }, { label: 'Hours', mono: true }]}
+    rows={[{ cells: ['Monday to Friday', '08:00–20:00'] }, { cells: ['Saturday', '09:00–14:00'] }]}
+  />
+</div>

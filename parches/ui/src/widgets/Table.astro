@@ -1,0 +1,26 @@
+---
+/**
+ * A section around the Table element: the shared heading, the table, and a
+ * note under it for the source and the caveat. Cell text reads inline Markdown.
+ */
+import TableElement from 'parche:elements/Table';
+import SectionHeader from '../components/SectionHeader.astro';
+import { inline } from '../_shared/inline';
+import { schema, type Props } from './Table.props';
+
+const { tagline, title, subtitle, link, align, columns, rows, footer, note, ...look } = schema.parse(Astro.props) as Props;
+type Cell = Props['rows'][number]['cells'][number];
+const md = (c: Cell): Cell => (typeof c === 'string' ? (inline(c) ?? '') : { ...c, text: inline(c.text) ?? '' });
+---
+
+<div class="parche-table-section">
+  <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="md" width="lg" />
+  <TableElement
+    {...look}
+    caption={title?.replace(/<[^>]+>|[*_`=]/g, '')}
+    columns={columns.map((c) => ({ ...c, label: inline(c.label) ?? '' }))}
+    rows={rows.map((r) => ({ ...r, cells: r.cells.map(md) }))}
+    footer={footer?.map(md)}
+  />
+  {note && <p class="mt-4 max-w-[72ch] type-body-sm text-muted" set:html={inline(note)} />}
+</div>

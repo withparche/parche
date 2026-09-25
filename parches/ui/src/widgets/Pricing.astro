@@ -6,13 +6,13 @@
 import Card from 'parche:elements/Card';
 import { inline } from '../_shared/inline';
 import Button from 'parche:elements/Button';
+import TableElement from 'parche:elements/Table';
 import SectionHeader from '../components/SectionHeader.astro';
 import { schema, type Props } from './Pricing.props';
 
 const { title, subtitle, tagline, link, align, items, comparison } = schema.parse(Astro.props) as Props;
 const plans = items.filter((p) => p.price || p.title);
 const featured = plans.findIndex((p) => p.recommended);
-const tone = { default: 'font-semibold text-heading', muted: 'text-muted', success: 'font-semibold text-success' } as const;
 ---
 
 <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="md" />
@@ -62,26 +62,12 @@ const tone = { default: 'font-semibold text-heading', muted: 'text-muted', succe
 )}
 
 {comparison && plans.length > 0 && (
-  <div class="overflow-auto rounded-lg border border-border bg-background">
-    <table class="w-full min-w-[640px] border-collapse">
-      <thead>
-        <tr>
-          <th scope="col" class="border-b border-border px-5 py-[15px] text-left type-label text-muted">{comparison.label}</th>
-          {plans.map((p, i) => (
-            <th scope="col" class:list={['border-b border-border px-5 py-[15px] text-left text-sm leading-none font-semibold text-heading', i === featured && 'bg-primary-soft']}>{p.title}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {comparison.rows.map((row, r) => (
-          <tr>
-            <th scope="row" class:list={['px-5 py-3.5 text-left text-sm leading-[1.4] font-medium text-heading', r < comparison.rows.length - 1 && 'border-b border-border-soft']}>{row.feature}</th>
-            {row.values.map((v) => (
-              <td class:list={['px-5 py-3.5 text-sm leading-[1.4]', tone[v.tone], r < comparison.rows.length - 1 && 'border-b border-border-soft']}>{v.text}</td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
+  <TableElement
+    size="lg"
+    radius="lg"
+    minWidth={640}
+    caption={comparison.label}
+    columns={[{ label: comparison.label }, ...plans.map((p, i) => ({ label: p.title ?? '', highlight: i === featured }))]}
+    rows={comparison.rows.map((row) => ({ cells: [row.feature, ...row.values.map((v) => ({ text: inline(v.text) ?? '', tone: v.tone }))] }))}
+  />
 )}

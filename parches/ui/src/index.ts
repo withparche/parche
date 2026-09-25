@@ -31,6 +31,7 @@ export default function createUI(): ParcheManifest {
     styles: [path.resolve(dir, 'styles/tones.css'), path.resolve(dir, 'styles/text.css')],
     widgets: {
       Section: w('Section.astro'),
+      Table: w('Table.astro'),
       Columns: w('Columns.astro'),
       Column: w('Column.astro'),
       Switch: w('Switch.astro'),
@@ -83,7 +84,7 @@ export default function createUI(): ParcheManifest {
       'blog/ToBlogLink': w('blog/ToBlogLink.astro'),
     },
     requires: {
-      elements: ['Accordion', 'Tabs', 'Command', 'Frame', 'Placeholder', 'List', 'Avatar', 'Badge', 'Banner', 'Breadcrumb', 'Button', 'Card', 'Carousel', 'Checkbox', 'Collapsible', 'Container', 'Divider', 'Heading', 'Icon', 'Image', 'Input', 'Link', 'Menu', 'Pagination', 'Popover', 'Section', 'Share', 'Sheet', 'Stat', 'Tag', 'Textarea', 'Toc'],
+      elements: ['Accordion', 'Tabs', 'Command', 'Frame', 'Placeholder', 'List', 'Table', 'Avatar', 'Badge', 'Banner', 'Breadcrumb', 'Button', 'Card', 'Carousel', 'Checkbox', 'Collapsible', 'Container', 'Divider', 'Heading', 'Icon', 'Image', 'Input', 'Link', 'Menu', 'Pagination', 'Popover', 'Section', 'Share', 'Sheet', 'Stat', 'Tag', 'Textarea', 'Toc'],
     },
   };
 }
