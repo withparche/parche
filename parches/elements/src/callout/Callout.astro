@@ -1,0 +1,96 @@
+---
+/**
+ * Callout — a notice set apart from the flow. The tone says what kind (a
+ * caveat is warning, a guarantee success, a tip primary) and colours the
+ * border, the soft background and the label; the text stays in the reading
+ * colours. Three shapes: a card with a label, text, a list and a footer; a
+ * bar with a rule on the left, for a tip inside prose; an inline row, for a
+ * trust line or a live signal with its source.
+ *
+ * Text is rendered as HTML so a widget can pass inline Markdown as markup.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema, tones } from './callout.props';
+
+const { props: { tone, layout, label, title, description, items, footer, link }, rest, className, part } = splitProps(schema, Astro.props);
+type Tone = (typeof tones)[number];
+
+const box: Record<Tone, string> = {
+  neutral: 'border-border bg-surface-2',
+  primary: 'border-primary bg-primary-soft',
+  success: 'border-success bg-success-soft',
+  warning: 'border-warning bg-warning-soft',
+  danger: 'border-danger bg-danger-soft',
+};
+const ink: Record<Tone, string> = { neutral: 'text-muted', primary: 'text-primary', success: 'text-success', warning: 'text-warning', danger: 'text-danger' };
+const dot: Record<Tone, string> = { neutral: 'bg-muted', primary: 'bg-primary', success: 'bg-success', warning: 'bg-warning', danger: 'bg-danger' };
+const labelClass = cn('font-mono text-[10px] leading-none font-medium tracking-[0.14em] uppercase', ink[tone]);
+---
+
+{layout === 'inline' ? (
+  <aside
+    class={cn('parche-callout flex flex-wrap items-center gap-x-3.5 gap-y-2 rounded-[var(--ds-comp-callout-radius,var(--radius-md))] border px-5 py-4', tone === 'neutral' ? box.neutral : 'border-border bg-background', className)}
+    {...rest}
+    data-part={part}
+    data-state={tone}
+    data-layout="inline"
+  >
+    {tone !== 'neutral' && <span class={cn('size-2 shrink-0 rounded-full', dot[tone])} aria-hidden="true" />}
+    {label && <span class="text-sm leading-none whitespace-nowrap text-muted" data-part="label" set:html={label} />}
+    {title && <span class="text-sm leading-[1.4] font-semibold text-heading" data-part="title" set:html={title} />}
+    {description && <span class="text-sm leading-[1.4] font-medium text-heading" data-part="description" set:html={description} />}
+    {items.length > 0 && (
+      <ul class="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[13px] leading-none font-medium" data-part="items">
+        {items.map((it, i) => (
+          <li class="flex items-center gap-2.5">
+            {i > 0 && <span class="text-muted" aria-hidden="true">·</span>}
+            <span set:html={it} />
+          </li>
+        ))}
+      </ul>
+    )}
+    {footer && <span class="min-w-[180px] flex-1 font-mono text-xs leading-[1.4] text-muted" data-part="footer" set:html={footer} />}
+    {link && <a href={link.href} class="ml-auto text-[13px] leading-none font-medium text-primary no-underline hover:text-heading">{link.text} →</a>}
+  </aside>
+) : layout === 'bar' ? (
+  <aside
+    class={cn('parche-callout rounded-r-[var(--ds-comp-callout-radius,var(--radius-md))] border-l-[3px] px-[18px] py-4', box[tone], className)}
+    {...rest}
+    data-part={part}
+    data-state={tone}
+    data-layout="bar"
+  >
+    {label && <p class={cn(labelClass, 'mb-[9px] tracking-[0.12em]')} data-part="label" set:html={label} />}
+    {(title || description) && (
+      <p class="text-[15px] leading-[1.65] text-text" data-part="description">
+        {title && <strong class="font-semibold text-heading" data-part="title" set:html={title} />}{title && description && ' '}
+        {description && <Fragment set:html={description} />}
+      </p>
+    )}
+    {items.length > 0 && (
+      <ul class="mt-2 flex list-disc flex-col gap-1.5 pl-5 text-[15px] leading-[1.6] text-text" data-part="items">
+        {items.map((it) => <li set:html={it} />)}
+      </ul>
+    )}
+    {footer && <p class="mt-3 text-[13px] leading-[1.6] text-muted" data-part="footer" set:html={footer} />}
+  </aside>
+) : (
+  <aside
+    class={cn('parche-callout flex flex-col rounded-[var(--ds-comp-callout-radius-lg,var(--radius-lg))] border p-[var(--ds-comp-callout-padding,clamp(1.375rem,2.6vw,1.875rem))]', box[tone], className)}
+    {...rest}
+    data-part={part}
+    data-state={tone}
+    data-layout="card"
+  >
+    {label && <p class={cn(labelClass, 'mb-4')} data-part="label" set:html={label} />}
+    {title && <p class="mb-2 font-heading text-lg leading-[1.35] font-semibold text-heading" data-part="title" set:html={title} />}
+    {description && <p class="max-w-[80ch] text-[15px] leading-[1.6] text-text" data-part="description" set:html={description} />}
+    {items.length > 0 && (
+      <ul class:list={['flex flex-col gap-3.5 text-[15px] leading-[1.6] text-text [&_strong]:font-semibold [&_strong]:text-heading', description && 'mt-3.5']} data-part="items">
+        {items.map((it) => <li set:html={it} />)}
+      </ul>
+    )}
+    {link && <a href={link.href} class="mt-3.5 self-start text-sm leading-none font-semibold text-primary no-underline hover:text-heading">{link.text} →</a>}
+    {footer && <p class="mt-[18px] border-t border-border pt-4 text-[13px] leading-[1.6] text-muted" data-part="footer" set:html={footer} />}
+  </aside>
+)}

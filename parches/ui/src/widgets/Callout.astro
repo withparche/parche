@@ -1,0 +1,19 @@
+---
+/**
+ * The Callout element in page content, with inline Markdown in its texts.
+ */
+import CalloutElement from 'parche:elements/Callout';
+import { inline } from '../_shared/inline';
+import { schema, type Props } from './Callout.props';
+
+const { label, title, description, items, footer, ...look } = schema.parse(Astro.props) as Props;
+---
+
+<CalloutElement
+  {...look}
+  label={inline(label)}
+  title={inline(title)}
+  description={inline(description)}
+  items={items.map((i) => inline(i) ?? '')}
+  footer={inline(footer)}
+/>

@@ -1,0 +1,16 @@
+---
+import Callout from '../Callout.astro';
+---
+
+<div class="max-w-2xl space-y-6">
+  <Callout
+    tone="warning"
+    label="What we turn down"
+    items={['<strong>Rebrands without research.</strong> We start from interviews or we do not start.', '<strong>Fixed bids under six weeks.</strong> They end in cut corners.']}
+    footer="We would rather refer you than do it badly."
+  />
+  <Callout tone="success" label="Guarantee" title="Sixty days, no questions" description="If it does not ship a page you can use, we refund the licence." />
+  <Callout layout="bar" tone="primary" label="Tip" description="Run <code>npm run check</code> before every commit." />
+  <Callout layout="inline" tone="success" description="Downloaded 2,140 times this week" footer="npm · 7 days" link={{ text: 'Changelog', href: '#changelog' }} />
+  <Callout layout="inline" label="Trust" items={['<a href="#">SOC 2 report</a>', '<a href="#">DPA</a>', '<a href="#">Status</a>']} footer="Audited March 2026" />
+</div>

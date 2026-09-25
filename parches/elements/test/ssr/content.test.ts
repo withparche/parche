@@ -4,6 +4,7 @@ import Heading from '../../src/heading/Heading.astro';
 import Card from '../../src/card/Card.astro';
 import List from '../../src/list/List.astro';
 import Table from '../../src/table/Table.astro';
+import Callout from '../../src/callout/Callout.astro';
 import Kbd from '../../src/kbd/Kbd.astro';
 import Code from '../../src/code/Code.astro';
 import Prose from '../../src/prose/Prose.astro';
@@ -172,5 +173,23 @@ describe('Table', () => {
     const html = await render(Table, { columns, header: 'none', stickyFirst: true, rows: [{ cells: ['A', 'b', 'c'] }] });
     expect(html).not.toContain('<thead');
     expect(html).toMatch(/<th scope="row"[^>]*sticky left-0/);
+  });
+});
+
+describe('Callout', () => {
+  it('a card colours its edge, background and label by tone, and lists its items', async () => {
+    const html = await render(Callout, { tone: 'warning', label: 'What we turn down', items: ['<strong>A.</strong> b'], footer: 'Refer instead.' });
+    expect(html).toMatch(/<aside[^>]*border-warning bg-warning-soft[^>]*data-state="warning"[^>]*data-layout="card"/);
+    expect(html).toMatch(/text-warning[^>]*data-part="label"/);
+    expect(html).toContain('<li><strong>A.</strong> b</li>');
+    expect(html).toContain('data-part="footer"');
+  });
+  it('a bar leads with the title in bold; inline shows a tone dot and dotted links', async () => {
+    const bar = await render(Callout, { layout: 'bar', tone: 'primary', title: 'Tip.', description: 'Check first.' });
+    expect(bar).toMatch(/border-l-\[3px\]/);
+    expect(bar).toMatch(/<strong[^>]*>Tip\.<\/strong> Check first\./);
+    const row = await render(Callout, { layout: 'inline', tone: 'success', description: 'Live', items: ['<a href="#a">A</a>', '<a href="#b">B</a>'] });
+    expect(row).toContain('bg-success');
+    expect(row.match(/aria-hidden="true">·</g)?.length).toBe(1);
   });
 });
