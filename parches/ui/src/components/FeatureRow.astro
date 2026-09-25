@@ -1,0 +1,37 @@
+---
+/**
+ * One Features item as a row between hairlines: the eyebrow as a left column
+ * (a week range, a year), the title and text in the middle, the aside as a
+ * right column (a figure, a duration). A tone colours the eyebrow and footer.
+ */
+import { inline } from '../_shared/inline';
+import type { Props as FeaturesProps } from '../widgets/Features.props';
+
+interface Props {
+  item: FeaturesProps['items'][number];
+  hasEyebrow: boolean;
+  hasAside: boolean;
+}
+
+const { item, hasEyebrow, hasAside } = Astro.props;
+const toneInk: Record<string, string> = { neutral: 'text-muted', primary: 'text-primary', success: 'text-success', warning: 'text-warning', danger: 'text-danger' };
+const cols = hasEyebrow && hasAside ? 'grid-cols-[auto_1fr_auto]' : hasEyebrow ? 'grid-cols-[auto_1fr]' : hasAside ? 'grid-cols-[1fr_auto]' : 'grid-cols-1';
+const Title = item.href ? 'a' : 'span';
+---
+
+<li class:list={['grid items-baseline gap-x-[clamp(14px,2vw,26px)]', cols]}>
+  {hasEyebrow && <span class:list={['font-mono text-xs leading-[1.6] font-medium whitespace-nowrap', item.tone === 'neutral' ? 'text-primary' : toneInk[item.tone]]} set:html={inline(item.eyebrow) ?? ''} />}
+  <span class="min-w-0">
+    {item.title && (
+      <Title href={item.href} class:list={['block type-title', item.description && 'mb-1.5', item.href && 'no-underline hover:text-primary']} set:html={inline(item.title)} />
+    )}
+    {item.description && <span class="block type-body-sm text-muted" set:html={inline(item.description)} />}
+    {item.points.length > 0 && (
+      <ul class="mt-2 flex flex-col gap-1.5 text-sm leading-[1.55] text-heading">
+        {item.points.map((p) => <li set:html={inline(p)} />)}
+      </ul>
+    )}
+    {item.footer && <span class:list={['mt-2 block font-mono text-[13px] leading-[1.55]', item.tone === 'neutral' ? 'text-muted' : toneInk[item.tone]]} set:html={inline(item.footer)} />}
+  </span>
+  {hasAside && <span class="text-right font-mono text-[13px] leading-[1.4] whitespace-nowrap text-muted" set:html={inline(item.aside) ?? ''} />}
+</li>

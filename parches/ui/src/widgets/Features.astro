@@ -1,32 +1,56 @@
 ---
 /**
  * The one features widget. `layout` picks how an item is drawn: an icon badge
- * beside the text, a card, or a compact list row. The `media` slot (or the
- * `image` prop) sits between the headline and the items.
+ * beside the text, a card, a compact list row, a cell between hairlines, a
+ * row with side columns, or an image tile. An item carries the design's
+ * anatomy (eyebrow, title and aside, description, points, footer, image,
+ * tone), and each layout draws what it has. The `media` slot (or the `image`
+ * prop) sits between the headline and the items; `header: side` puts the
+ * heading in a column beside them.
  */
 import { inline } from '../_shared/inline';
 import SectionHeader from '../components/SectionHeader.astro';
 import Icon from 'parche:elements/Icon';
 import Image from 'parche:elements/Image';
-import Card from 'parche:elements/Card';
 import Button from 'parche:elements/Button';
+import List from 'parche:elements/List';
+import FeatureCard from '../components/FeatureCard.astro';
+import FeatureRow from '../components/FeatureRow.astro';
 import { schema, type Props } from './Features.props';
 
-const { layout, align, title, subtitle, tagline, link, items, columns, defaultIcon, image } = schema.parse(Astro.props) as Props;
+const { layout, header, align, title, subtitle, tagline, link, items, columns, card, defaultIcon, image } = schema.parse(Astro.props) as Props;
+const side = header === 'side';
+const rich = items.some((i) => i.points.length > 0 || i.footer);
+// Cards wrap to fit: the column count sets the narrowest a column may get.
+const fitCols = {
+  '1': 'grid-cols-1',
+  '2': 'grid-cols-[repeat(auto-fit,minmax(min(280px,100%),1fr))]',
+  '3': 'grid-cols-[repeat(auto-fit,minmax(min(250px,100%),1fr))]',
+  '4': 'grid-cols-[repeat(auto-fit,minmax(min(200px,100%),1fr))]',
+}[columns];
 const hairline = layout === 'panels' || layout === 'tiles';
 const hasMedia = Astro.slots.has('media') || Boolean(image);
 
 const gridCols =
-  columns === '4'
+  columns === '1'
+    ? 'grid-cols-1'
+    : columns === '4'
     ? 'lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2'
     : columns === '3'
       ? 'lg:grid-cols-3 sm:grid-cols-2'
       : 'sm:grid-cols-2';
-const gap = layout === 'cards' ? 'gap-4 md:gap-6' : layout === 'list' ? 'gap-6 md:gap-8' : 'gap-8 md:gap-y-12';
+const gap = layout === 'list' ? 'gap-6 md:gap-8' : 'gap-8 md:gap-y-12';
 ---
 
-<div class="parche-features" data-layout={layout}>
-  <SectionHeader {tagline} {title} {subtitle} {link} {align} width={align === 'start' ? 'lg' : 'md'} spacing={layout === 'tiles' ? 'sm' : 'xl'} />
+<div class:list={['parche-features', side && 'grid grid-cols-[repeat(auto-fit,minmax(min(290px,100%),1fr))] gap-[clamp(24px,4vw,56px)]']} data-layout={layout}>
+  {side ? (
+    <div class="min-w-0">
+      <SectionHeader {tagline} {title} {subtitle} {link} align="start" width="lg" spacing="none" />
+    </div>
+  ) : (
+    <SectionHeader {tagline} {title} {subtitle} {link} {align} width={align === 'start' ? 'lg' : 'md'} spacing={layout === 'tiles' ? 'sm' : 'xl'} />
+  )}
+  <div class="min-w-0">
 
   {hasMedia && (
     <div class="parche-features-media mb-8 md:mb-12">
@@ -46,7 +70,7 @@ const gap = layout === 'cards' ? 'gap-4 md:gap-6' : layout === 'list' ? 'gap-6 m
       {items.map((item, i) =>
         layout === 'panels' ? (
           <div class="bg-surface p-[clamp(22px,3vw,34px)]">
-            <div class="mb-[18px] font-mono text-[11px] leading-none font-medium text-primary">{String(i + 1).padStart(2, '0')}</div>
+            <div class="mb-[18px] font-mono text-[11px] leading-none font-medium text-primary" set:html={inline(item.eyebrow) ?? String(i + 1).padStart(2, '0')} />
             {item.title && <h3 class="mb-2.5 font-heading text-(length:--ds-sys-type-h3-size) leading-[1.3] font-semibold tracking-[-0.015em] text-heading" set:html={inline(item.title)} />}
             {item.description && <p class="type-body-sm text-muted" set:html={inline(item.description)} />}
           </div>
@@ -58,6 +82,27 @@ const gap = layout === 'cards' ? 'gap-4 md:gap-6' : layout === 'list' ? 'gap-6 m
         ),
       )}
     </div>
+  ) : items.length > 0 && layout === 'cards' ? (
+    <div class:list={['grid gap-[clamp(16px,2.2vw,22px)]', fitCols]}>
+      {items.map((item) => <FeatureCard {item} icon={item.icon || defaultIcon} {rich} {card} />)}
+    </div>
+  ) : items.length > 0 && layout === 'gallery' ? (
+    <div class="grid grid-cols-[repeat(auto-fill,minmax(min(200px,100%),1fr))] gap-[clamp(12px,1.8vw,18px)]">
+      {items.map((item) => {
+        const Tile = item.href ? 'a' : 'div';
+        return (
+          <Tile href={item.href} class="group block text-inherit no-underline">
+            {item.image && <Image src={item.image.src} alt={item.image.alt} width={480} ratio="4/5" class="mb-3 block w-full rounded-md border border-border transition-colors group-hover:border-primary" />}
+            {item.title && <p class="font-heading text-base leading-[1.3] font-semibold text-heading group-hover:text-primary" set:html={inline(item.title)} />}
+            {item.description && <p class="mt-1 type-small text-muted" set:html={inline(item.description)} />}
+          </Tile>
+        );
+      })}
+    </div>
+  ) : items.length > 0 && layout === 'rows' ? (
+    <List as="ul" padding={items.some((i) => i.description) ? 'lg' : 'md'}>
+      {items.map((item) => <FeatureRow {item} hasEyebrow={items.some((i) => i.eyebrow)} hasAside={items.some((i) => i.aside)} />)}
+    </List>
   ) : items.length > 0 && (
     <div class:list={['grid mx-auto', gap, gridCols]}>
       {items.map((item) => {
@@ -73,12 +118,7 @@ const gap = layout === 'cards' ? 'gap-4 md:gap-6' : layout === 'list' ? 'gap-6 m
             )}
           </Fragment>
         );
-        return layout === 'cards' ? (
-          <Card padding="md" class="flex flex-col">
-            {iconName && <Icon name={iconName} class="w-12 h-12 mb-6 text-primary" />}
-            {body}
-          </Card>
-        ) : (
+        return (
           <div class="flex flex-row max-w-full sm:max-w-md">
             {iconName && (
               layout === 'grid' ? (
@@ -97,4 +137,5 @@ const gap = layout === 'cards' ? 'gap-4 md:gap-6' : layout === 'list' ? 'gap-6 m
       })}
     </div>
   )}
+  </div>
 </div>

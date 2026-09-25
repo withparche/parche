@@ -1,0 +1,72 @@
+---
+/**
+ * One Features item on a card, in the design's anatomy: image, eyebrow,
+ * title with an aside (a price), description, points under a rule, and a
+ * footer pinned to the bottom under another. A tone colours the edge, the
+ * background and the eyebrow; `featured` accents the edge and lifts it; an
+ * `href` makes the whole card the link. Rich cards (points or a footer) take
+ * the larger radius and padding.
+ */
+import Card from 'parche:elements/Card';
+import Icon from 'parche:elements/Icon';
+import Image from 'parche:elements/Image';
+import Button from 'parche:elements/Button';
+import { inline } from '../_shared/inline';
+import type { Props as FeaturesProps } from '../widgets/Features.props';
+
+interface Props {
+  item: FeaturesProps['items'][number];
+  icon?: string;
+  rich: boolean;
+  card: 'surface' | 'canvas';
+}
+
+const { item, icon, rich, card } = Astro.props;
+const tone = item.tone;
+const toneBox: Record<string, string> = {
+  neutral: '',
+  primary: 'border-primary bg-primary-soft',
+  success: 'border-success bg-success-soft',
+  warning: 'border-warning bg-warning-soft',
+  danger: 'border-danger bg-danger-soft',
+};
+const toneInk: Record<string, string> = { neutral: 'text-muted', primary: 'text-primary', success: 'text-success', warning: 'text-warning', danger: 'text-danger' };
+const eyebrowInk = item.featured && tone === 'neutral' ? 'text-primary' : toneInk[tone];
+---
+
+<Card
+  as={item.href ? undefined : 'article'}
+  href={item.href}
+  variant={card}
+  radius={rich ? 'lg' : 'md'}
+  padding={rich ? 'lg' : 'md'}
+  shadow={item.featured ? 'md' : 'none'}
+  class:list={['h-full', toneBox[tone], item.featured && 'border-primary', item.href && 'text-inherit hover:border-primary']}
+  data-tone={tone}
+>
+  {item.image && <Image slot="media" src={item.image.src} alt={item.image.alt} width={640} ratio="16/10" class="block w-full" />}
+  {icon && <Icon name={icon} class="mb-5 h-10 w-10 text-primary" />}
+  {item.eyebrow && <p class:list={['mb-3 font-mono text-[10px] leading-none font-medium tracking-[0.13em] uppercase', eyebrowInk]} set:html={inline(item.eyebrow)} />}
+  {(item.title || item.aside) && (
+    <div class="mb-2.5 flex items-baseline justify-between gap-3">
+      {item.title && <h3 class="font-heading text-(length:--ds-sys-type-h3-size) leading-[1.3] font-semibold tracking-[-0.015em] text-heading" set:html={inline(item.title)} />}
+      {item.aside && <span class="shrink-0 font-heading text-[17px] leading-none font-semibold whitespace-nowrap text-primary" set:html={inline(item.aside)} />}
+    </div>
+  )}
+  {item.description && <p class="type-body-sm text-muted" set:html={inline(item.description)} />}
+  {item.points.length > 0 && (
+    <ul class:list={['flex flex-col gap-2 text-sm leading-[1.55] text-heading', item.description && 'mt-3.5 border-t border-border-soft pt-3.5']}>
+      {item.points.map((p) => <li set:html={inline(p)} />)}
+    </ul>
+  )}
+  {item.link?.text && !item.href && (
+    <div class="mt-4">
+      <Button variant="link" href={item.link.href} class="font-semibold">{item.link.text}</Button>
+    </div>
+  )}
+  {item.footer && (
+    <div class="mt-auto pt-4">
+      <p class:list={['border-t pt-3 font-mono text-[13px] leading-[1.4]', tone === 'neutral' ? 'border-border-soft text-muted' : ['border-border', toneInk[tone]]]} set:html={inline(item.footer)} />
+    </div>
+  )}
+</Card>
