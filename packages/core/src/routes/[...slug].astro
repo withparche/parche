@@ -17,7 +17,7 @@ import {
   resolvePageFromSlug,
 } from 'parche:utils/i18n';
 import { resolveMetadata } from 'parche:utils/metadata';
-import { resolveLayout } from 'parche:utils/layout';
+import { resolveLayout, outletWrapper } from 'parche:utils/layout';
 
 export async function getStaticPaths() {
   const slugMap = await buildSlugMap();
@@ -200,6 +200,8 @@ const layoutSections = await resolveLayout(layoutName, locale, defaultLocale);
 const pageSlots: Record<string, any[]> = mode === 'page' && pageData
   ? { default: pageData.sections ?? [], ...(pageData.slots ?? {}) }
   : {};
+// A page may wrap its sections its own way, over what the layout's outlet says.
+const pageWrappers = mode === 'page' && pageData?.wrapper !== undefined ? { default: pageData.wrapper } : undefined;
 ---
 
 <BaseLayout metadata={metadata} config={siteConfig} lang={locale}>
@@ -229,11 +231,11 @@ const pageSlots: Record<string, any[]> = mode === 'page' && pageData
       )}
 
       {appExtras.sections?.length > 0 && (
-        <NodeRenderer nodes={appExtras.sections} wrap />
+        <NodeRenderer nodes={appExtras.sections} wrapper={outletWrapper(layoutSections)} />
       )}
     </LayoutRenderer>
   ) : (
-    <LayoutRenderer layoutSections={layoutSections} pageSlots={pageSlots}>
+    <LayoutRenderer layoutSections={layoutSections} pageSlots={pageSlots} pageWrappers={pageWrappers}>
       {/* A Markdown page's body renders after its sections, in the page's own outlet. */}
       {PageMarkdownContent && (
         <div class="mx-auto max-w-4xl px-4 md:px-6 pb-12 md:pb-16 prose">

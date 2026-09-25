@@ -5,9 +5,10 @@ import { z } from 'zod';
  * the nodes that fill them. Pages, layouts and presets are all trees of
  * nodes; there is one schema, one renderer and one validator for the three.
  *
- * A root node (one directly in a page or a layout) is wrapped in the
- * registry's wrapper widget unless the widget's meta declares `wrapper: false`.
- * A nested node is never wrapped. Which widgets may fill a slot, and how many,
+ * Nothing is wrapped by default. A list of nodes (a layout's Outlet, a page)
+ * may declare a wrapper that each of its items is rendered in, unless the
+ * item's widget declares `wrapper: false` (content/wrapper.ts). A nested node
+ * is never wrapped. Which widgets may fill a slot, and how many,
  * is declared by the widget in its `.props.ts` and checked by the build, not
  * here: zod does not know the registry.
  */

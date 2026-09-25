@@ -57,23 +57,37 @@ hand; it renders the same page byte for byte. Nothing is YAML by default.
 
 ## The wrapper
 
-Every page root is rendered inside the **wrapper** widget, `Section`, with its
-default props, unless the widget's meta says `wrapper: false` (a Hero, a
-banner: anything that owns its own width and padding). To change the band a
-root sits in, write the `Section` node yourself:
+Nothing is wrapped by default. A tree renders as written, and a node inside
+a slot is never wrapped. A wrapper belongs to a **list**: the classic page is
+a list of widgets that each want the same band around them (the measure, the
+rhythm, sometimes an anchor), so the list says so once. Usually that is the
+layout's outlet, which covers every page using the layout:
+
+```json
+{ "widget": "Outlet", "props": { "wrapper": { "widget": "Section", "props": { "spacing": "md" } } } }
+```
+
+Every item of that list is rendered inside `Section` with those props. A
+page can wrap its own sections differently with `"wrapper": { … }` next to
+`sections`, or `"wrapper": false` for none. `widget` may be left out when a
+parche names a default (`ui` declares `wrapper: 'Section'` in its manifest),
+but writing it keeps the JSON self-explanatory.
+
+An item that needs other props writes the wrapper itself:
 
 ```json
 {
   "widget": "Section",
-  "props": { "tone": "muted", "id": "pricing", "label": "Pricing" },
+  "props": { "tone": "surface", "id": "pricing" },
   "slots": { "default": [ { "widget": "Pricing", "props": { … } } ] }
 }
 ```
 
-`Section` is a widget like any other, declared by the `ui` parche with
-`wrapper: 'Section'` in its manifest. A site or parche may declare another
-widget with a default slot as the wrapper. Core knows no widget names: with no
-declaration, roots render bare.
+It is not wrapped again, and it takes the list's props as its defaults, so it
+writes only what differs. A widget whose meta says `wrapper: false` (a
+full-bleed Hero, the Header) is left bare in a wrapped list. A wrapper that
+names an unknown widget or an unregistered tone is a content issue with its
+path, like any other.
 
 `Section`'s props: `tone`, `width` (`sm` … `full`), `spacing` (`none` …
 `lg`), `id` (the anchor) and `label` (what navigation calls it).

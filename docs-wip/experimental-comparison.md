@@ -29,9 +29,11 @@ otherwise, measured on 2026-09-23 at the branch head.
 - **Widgets contain widgets.** Slots in the JSON are the widget's Astro
   slots. A Hero takes a form or a switcher where its image was; a docs shell
   is two columns with an outlet in each. No composite language was needed.
-- **The wrapper is a widget.** `Section` is declared by `ui` and read by
-  core by name. A site can declare another. Tones replace 46 raw gradients
-  with seven names, each a rule on tokens.
+- **The wrapper is a widget, and a list's choice.** Nothing is wrapped by
+  default; a layout's outlet (or a page) declares the widget its items sit
+  in, `Section` with its props, and an item that needs more writes the
+  `Section` itself, inheriting the list's props. Tones replace 46 raw
+  gradients with seven names, each a rule on tokens.
 - **Themes move more.** Product and Editorial retune colour, type, radius,
   shadow, rhythm and measure from one file each, because Section and
   Container read the conf tokens.
@@ -47,9 +49,9 @@ otherwise, measured on 2026-09-23 at the branch head.
 
 - **Content is about 10 % larger and has 74 more nodes.** Every root that
   had an anchor or a background is now an explicit `Section` node around the
-  widget. That was the decision to start without a `wrapper` shorthand; the
-  cost is now measured, and the shorthand can be added later if it matters
-  (it cannot be removed once content uses it).
+  widget. The decision stands: there is no per-node shorthand. The wrapper
+  is declared per list, and an explicit `Section` writes only what differs
+  from it.
 - **Every consumer of the old names changed.** Tokens (21 files, a codemod),
   section fields (48 content files, a script), five widget names, the chrome
   prefix, the `template` page field. Both scripts stay in `scripts/` for

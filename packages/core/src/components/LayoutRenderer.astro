@@ -3,18 +3,22 @@
  * Renders a layout around page content. A layout is a tree of nodes with
  * `Outlet` nodes where the page goes: the unnamed outlet takes the page's
  * `sections` (and whatever this component is given as children), a named one
- * takes the page's `slots[name]`. Layout roots are chrome and are not wrapped.
+ * takes the page's `slots[name]`. Layout roots are chrome and are not wrapped;
+ * an outlet's items are, when the outlet (or the page) declares a wrapper.
  */
 import NodeRenderer from './NodeRenderer.astro';
 import type { Node } from '../content/node';
+import type { WrapperSpec } from '../content/wrapper';
 
 interface Props {
   layoutSections: Node[];
   /** Page trees by outlet name; `default` is the page's `sections`. */
   pageSlots?: Record<string, Node[]>;
+  /** The page's own wrapper per outlet, over the layout's. */
+  pageWrappers?: Record<string, WrapperSpec>;
 }
 
-const { layoutSections, pageSlots = {} } = Astro.props;
+const { layoutSections, pageSlots = {}, pageWrappers } = Astro.props;
 
 // Children (a resolver's template, a Markdown body) go after the default
 // outlet's nodes. Rendered here, once, and placed by the Outlet node.
@@ -22,4 +26,4 @@ const html: Record<string, string> = {};
 if (Astro.slots.has('default')) html.default = await Astro.slots.render('default');
 ---
 
-<NodeRenderer nodes={layoutSections} outlets={{ nodes: pageSlots, html }} />
+<NodeRenderer nodes={layoutSections} outlets={{ nodes: pageSlots, html, wrappers: pageWrappers }} />

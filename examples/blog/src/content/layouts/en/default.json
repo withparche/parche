@@ -29,7 +29,12 @@
       }
     },
     {
-      "widget": "Outlet"
+      "widget": "Outlet",
+      "props": {
+        "wrapper": {
+          "widget": "Section"
+        }
+      }
     },
     {
       "widget": "Footer",

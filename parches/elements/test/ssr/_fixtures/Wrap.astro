@@ -1,1 +1,4 @@
-<div data-wrap><slot /></div>
+---
+const { tone, id } = Astro.props;
+---
+<div data-wrap data-tone={tone} id={id}><slot /></div>

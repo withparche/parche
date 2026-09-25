@@ -65,6 +65,11 @@ export const pageSchema = z.object({
   metadata: metadataSchema.optional(),
   sections: z.array(nodeSchema).optional(),
   slots: z.record(z.string(), z.array(nodeSchema)).optional(),
+  /**
+   * How this page's `sections` are wrapped, over what the layout's outlet
+   * declares: `{ widget?, props? }`, or `false` for none (content/wrapper.ts).
+   */
+  wrapper: z.union([z.literal(false), z.object({ widget: z.string().optional(), props: z.record(z.string(), z.unknown()).optional() })]).optional(),
   body: z.string().optional(),
   formLabels: z.record(z.string(), z.string()).optional(),
 });

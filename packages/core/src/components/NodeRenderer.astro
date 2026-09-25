@@ -1,9 +1,10 @@
 ---
 /**
  * Renders a tree of nodes: loads only the widgets the tree references, resolves
- * `@/assets/…` paths at any depth, and hands each root to `Node`, which wraps
- * it in the registry's wrapper widget when `wrap` is set (page roots) and
- * fills the widget's slots from the node's.
+ * `@/assets/…` paths at any depth, and hands each root to `Node`, which fills
+ * the widget's slots from the node's. Nothing is wrapped unless a list says
+ * so: an Outlet's `wrapper`, a page's, or the `wrapper` given here for these
+ * roots (see content/wrapper.ts).
  */
 import { loadWidgets } from 'parche:registry/widgets';
 import { wrapper as wrapperName, unwrapped } from 'parche:config/layout';
@@ -12,49 +13,59 @@ import { expandPresets } from '../utils/presets.js';
 import { resolveRefs } from '../utils/refs.js';
 import type { Node as NodeData } from '../content/node';
 import { widgetNames } from '../content/node';
+import { listWrapper, outletWrappers, type WrapperSpec } from '../content/wrapper';
 import Node from './Node.astro';
 
 interface Props {
   nodes: NodeData[];
-  /** Wrap each root in the wrapper widget (page content). Layout chrome is not wrapped. */
-  wrap?: boolean;
-  /** Content for `Outlet` nodes, when rendering a layout. */
-  outlets?: { nodes: Record<string, NodeData[]>; html: Record<string, string> };
+  /** The wrapper of these roots as a list, as an Outlet would declare it. */
+  wrapper?: WrapperSpec;
+  /** Content for `Outlet` nodes, when rendering a layout, and a page's own wrappers for them. */
+  outlets?: { nodes: Record<string, NodeData[]>; html: Record<string, string>; wrappers?: Record<string, WrapperSpec> };
+  /** Where these nodes sit, for content issue paths: `sections` for page content, `layout` for a layout. */
+  base?: string;
 }
 
-const { nodes: givenNodes, wrap = false, outlets: givenOutlets } = Astro.props;
+const { nodes: givenNodes, wrapper: rootSpec, outlets: givenOutlets, base: givenBase } = Astro.props;
+const wrap = rootSpec !== undefined;
 
 // Presets first: a `Preset` node becomes the saved tree it names, so what
 // follows sees only real widgets.
 // Then references: a `$ref` or `$collection` value becomes the content it names.
 const locale = (Astro.locals as any).parche?.locale as string | undefined;
 const expand = async (tree: NodeData[], base: string) => resolveRefs(await expandPresets(tree, locale), locale, base);
-const root = await expand(givenNodes, wrap ? 'sections' : 'layout');
+const base = givenBase ?? (givenOutlets ? 'layout' : 'sections');
+const root = await expand(givenNodes, base);
 const rawNodes = root.nodes;
 const outletResults = givenOutlets
   ? await Promise.all(Object.entries(givenOutlets.nodes).map(async ([k, v]) => [k, await expand(v, k === 'default' ? 'sections' : `slots.${k}`)] as const))
   : [];
 const rawOutlets = givenOutlets
-  ? { nodes: Object.fromEntries(outletResults.map(([k, r]) => [k, r.nodes])), html: givenOutlets.html }
+  ? { nodes: Object.fromEntries(outletResults.map(([k, r]) => [k, r.nodes])), html: givenOutlets.html, wrappers: givenOutlets.wrappers }
   : undefined;
 const refIssues = [...root.issues, ...outletResults.flatMap(([, r]) => r.issues)];
 
+// The wrappers the lists declare: each Outlet's (or the page's over it), and
+// the one given for these roots.
+const outletDecls = outletWrappers(rawNodes).map((o) => ({ ...o, spec: rawOutlets?.wrappers?.[o.name] ?? o.spec }));
+const declared = [
+  ...outletDecls.map((o) => ({ path: `${o.path}.props.wrapper`, wrapper: listWrapper(o.spec, wrapperName) })),
+  ...(wrap ? [{ path: 'wrapper', wrapper: listWrapper(rootSpec, wrapperName) }] : []),
+];
+const rootWrapper = wrap ? listWrapper(rootSpec, wrapperName) : null;
+
 // Everything the render will touch, loaded once: the tree, the outlet trees
-// and the wrapper. Widgets not referenced are never imported.
+// and the wrappers. Widgets not referenced are never imported.
 const outletTrees = Object.values(rawOutlets?.nodes ?? {}).flat();
 const names = widgetNames([...rawNodes, ...outletTrees]);
-if (wrapperName) names.push(wrapperName);
-const widgets = await loadWidgets(names);
+for (const d of declared) if (d.wrapper) names.push(d.wrapper.name);
+const widgets = await loadWidgets([...new Set(names)]);
 
 const nodes = await resolveAssets(rawNodes);
 const outlets = rawOutlets
   ? { nodes: await resolveAssets(rawOutlets.nodes), html: rawOutlets.html }
   : undefined;
 
-const wrapper = wrapperName && widgets[wrapperName] ? { name: wrapperName, component: widgets[wrapperName] } : null;
-if (import.meta.env.DEV && wrapperName && !wrapper) {
-  console.warn(`[parche] The wrapper widget "${wrapperName}" is declared but not registered; roots render bare.`);
-}
 
 // Check the trees against the catalog: slots a widget does not declare,
 // widgets a slot does not allow, counts, depth, tones. In dev every issue is
@@ -68,9 +79,15 @@ if (import.meta.env.DEV || Astro.isPrerendered) {
     import('../content/validate.js'),
   ]);
   const ctx = { widgets: widgetMeta as any, tones: tones.map((t) => t.name), wrapper: wrapperName };
+  // A list's wrapper is checked like a node of that widget: it must exist and
+  // its tone must be registered.
+  const wrapperIssues = declared.flatMap(({ path, wrapper: w }) =>
+    w ? validateTree([{ widget: w.name, props: w.props }], { ...ctx, wrapper: w.name }, path).map((i) => ({ ...i, path })) : [],
+  );
   const issues = [
     ...refIssues,
-    ...validateTree(rawNodes, ctx, wrap ? 'sections' : 'layout'),
+    ...wrapperIssues,
+    ...validateTree(rawNodes, ctx, base),
     ...Object.entries(rawOutlets?.nodes ?? {}).flatMap(([name, tree]) => validateTree(tree, ctx, name === 'default' ? 'sections' : `slots.${name}`)),
   ];
   if (issues.length && !import.meta.env.DEV) {
@@ -82,4 +99,4 @@ if (import.meta.env.DEV || Astro.isPrerendered) {
 }
 ---
 
-{nodes.map((node) => <Node node={node} widgets={widgets} wrapper={wrapper} unwrapped={unwrapped} wrap={wrap} outlets={outlets} />)}
+{nodes.map((node) => <Node node={node} widgets={widgets} wrapper={rootWrapper} defaultWrapper={wrapperName} unwrapped={unwrapped} outlets={outlets} />)}

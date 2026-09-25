@@ -1,5 +1,6 @@
 import { getCollection } from 'astro:content';
 import type { Node } from '../content/node.js';
+import { outletWrappers, type WrapperSpec } from '../content/wrapper.js';
 
 /** The base layout when a site has none: the page and nothing else. */
 const BASE_LAYOUT_SECTIONS: Node[] = [{ widget: 'Outlet' }];
@@ -53,4 +54,13 @@ export async function resolveLayout(
     index.get(`${defaultLocale}/default`);
 
   return entry ? entry.data.sections : BASE_LAYOUT_SECTIONS;
+}
+
+/**
+ * The wrapper a layout's outlet declares for its list (content/wrapper.ts), for
+ * content rendered into that outlet outside the page's own `sections`: a
+ * resolver's extra sections sit in the same list and get the same band.
+ */
+export function outletWrapper(layoutSections: Node[], name = 'default'): WrapperSpec {
+  return outletWrappers(layoutSections).find((o) => o.name === name)?.spec ?? false;
 }

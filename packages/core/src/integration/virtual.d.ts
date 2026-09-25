@@ -42,7 +42,6 @@ declare module 'parche:registry/resolvers' {
       sections: Array<{
         widget: string;
         props?: Record<string, any>;
-        wrapper?: false | { classes?: Record<string, unknown>; [key: string]: unknown };
       }>;
     };
   } | null>;
@@ -71,7 +70,7 @@ declare module 'parche:config/themes' {
 }
 
 declare module 'parche:config/layout' {
-  /** The wrapper widget for page roots (`Section`), or null when none is declared. */
+  /** The widget a list's wrapper uses when it names none (`Section`), or null. */
   export const wrapper: string | null;
   /** Widgets whose meta declares `wrapper: false`: never wrapped, even as roots. */
   export const unwrapped: string[];
@@ -185,16 +184,9 @@ declare module 'parche:utils/site' {
 }
 
 declare module 'parche:utils/layout' {
-  interface Section {
-    widget: string;
-    props?: Record<string, unknown>;
-    wrapper?: false | {
-      id?: string;
-      isDark?: boolean;
-      bg?: string;
-      classes?: Record<string, unknown>;
-      as?: string;
-    };
-  }
-  export function resolveLayout(name: string, locale: string, defaultLocale: string): Promise<Section[]>;
+  import type { Node } from '@parche/astro/content';
+  type WrapperSpec = false | { widget?: string; props?: Record<string, unknown> };
+  export function resolveLayout(name: string, locale: string, defaultLocale: string): Promise<Node[]>;
+  /** The wrapper a layout's outlet declares for its list, or false. */
+  export function outletWrapper(layoutSections: Node[], name?: string): WrapperSpec;
 }

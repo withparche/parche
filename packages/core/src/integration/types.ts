@@ -52,8 +52,8 @@ export interface WidgetMeta {
     icon?: string;
     thumbnail?: string;
     tags?: string[];
-    /** `false` when the widget renders full-bleed and must not be wrapped in
-     *  the registry's wrapper widget when it is a page root (a Hero, a banner). */
+    /** `false` when the widget renders full-bleed and is left bare in a list
+     *  that wraps its items (a Hero, a banner). */
     wrapper?: false;
     /** `true` for chrome (Header, Footer): in the catalog, so the validator
      *  knows it, but not offered in the builder palette. */
@@ -195,10 +195,11 @@ export interface ParcheManifest {
   /** Widgets to register: virtual ID suffix → absolute path (parche:widgets/{name}) */
   widgets?: Record<string, string>;
   /**
-   * The widget every page root is wrapped in (`Section`): a widget with a
-   * default slot, registered in `widgets` by this or another parche. The last
-   * parche to declare one wins. Core knows no widget names, so with no
-   * declaration roots render bare.
+   * The widget a list's wrapper uses when it names none (`Section`): a widget
+   * with a default slot, registered in `widgets` by this or another parche.
+   * It wraps nothing by itself: a layout's Outlet or a page declares
+   * `wrapper: {}` to wrap its items (content/wrapper.ts). The last parche to
+   * declare one wins.
    */
   wrapper?: string;
   /**
@@ -348,7 +349,7 @@ export interface ResolvedRegistry {
   modules: Record<string, string>;
   /** Set of virtual IDs that use named exports (export *) instead of default */
   namedExportModules: Set<string>;
-  /** The wrapper widget for page roots, or null when no parche declares one. */
+  /** The widget a list's wrapper uses when it names none, or null. */
   wrapper: string | null;
   /** Section tones: core's four plus every parche's. */
   tones: Array<{ name: string; label: string }>;

@@ -11,28 +11,35 @@
  */
 import type { Node } from '../content/node';
 import { MAX_NODE_DEPTH } from '../content/node';
+import { listWrapper, type ListWrapper, type WrapperSpec } from '../content/wrapper';
 
 interface Outlets {
-  /** Page trees by outlet name, rendered as roots (wrapped). */
+  /** Page trees by outlet name. */
   nodes: Record<string, Node[]>;
   /** Pre-rendered content by outlet name, placed after the nodes. */
   html: Record<string, string>;
+  /** A page's own wrapper for an outlet's list, over the one the layout declares. */
+  wrappers?: Record<string, WrapperSpec>;
 }
 
 interface Props {
   node: Node;
   widgets: Record<string, any>;
-  /** The wrapper widget for roots, or null when nothing declares one. */
-  wrapper: { name: string; component: any } | null;
-  /** Widgets whose meta says `wrapper: false`: never wrapped, even as roots. */
+  /**
+   * The wrapper of the list this node is an item of, or null. Only an
+   * outlet's list (or a renderer given one) has a wrapper; a node in a slot
+   * never does, so nothing below the first level is wrapped.
+   */
+  wrapper?: ListWrapper | null;
+  /** The widget a wrapper uses when it names none: the registry's. */
+  defaultWrapper?: string | null;
+  /** Widgets whose meta says `wrapper: false`: never wrapped, even in a wrapped list. */
   unwrapped?: string[];
-  /** Wrapped at depth 0 (a page root); a layout root or a nested node is not. */
-  wrap?: boolean;
   outlets?: Outlets;
   depth?: number;
 }
 
-const { node, widgets, wrapper, unwrapped = [], wrap = false, outlets, depth = 0 } = Astro.props;
+const { node, widgets, wrapper = null, defaultWrapper = null, unwrapped = [], outlets, depth = 0 } = Astro.props;
 const Self = Astro.self;
 
 const isOutlet = node.widget === 'Outlet';
@@ -40,8 +47,17 @@ const outletName = (node.props?.name as string | undefined) ?? 'default';
 const outletNodes = isOutlet ? (outlets?.nodes[outletName] ?? []) : [];
 const outletHtml = isOutlet ? (outlets?.html[outletName] ?? '') : '';
 
+// An outlet declares how the items of its list are wrapped: the page's own
+// choice first, then the layout's. Absent, the items render bare.
+const itemWrapper = isOutlet
+  ? listWrapper(outlets?.wrappers?.[outletName] ?? (node.props?.wrapper as WrapperSpec | undefined), defaultWrapper)
+  : null;
+
 const Widget = isOutlet ? null : widgets[node.widget];
-const props = node.props ?? {};
+// An item that is the wrapper widget itself is the explicit form: it is not
+// wrapped again, and takes the list's wrapper props as its defaults.
+const isWrapperItem = wrapper !== null && node.widget === wrapper.name;
+const props = isWrapperItem ? { ...wrapper!.props, ...(node.props ?? {}) } : (node.props ?? {});
 
 // Only filled slots become fragments; an empty list leaves the widget's own
 // fallback content in place.
@@ -53,8 +69,8 @@ if (filled.length > MAX_SLOTS) {
 const slotName = (i: number) => filled[i]?.[0] ?? `__unfilled-${i}`;
 const slotNodes = (i: number) => filled[i]?.[1] ?? [];
 
-const wrapped = wrap && depth === 0 && !isOutlet && wrapper !== null && node.widget !== wrapper.name && !unwrapped.includes(node.widget);
-const Wrapper = wrapped ? wrapper!.component : null;
+const wrapped = wrapper !== null && !isOutlet && !isWrapperItem && !unwrapped.includes(node.widget);
+const Wrapper = wrapped ? widgets[wrapper!.name] : null;
 
 if (import.meta.env.DEV && depth > MAX_NODE_DEPTH) {
   console.warn(`[parche] "${node.widget}" sits ${depth} levels deep; trees are meant to stop at ${MAX_NODE_DEPTH}.`);
@@ -64,12 +80,12 @@ if (import.meta.env.DEV && depth > MAX_NODE_DEPTH) {
 {isOutlet ? (
   outletName === 'default' ? (
     <main id="main-content" class="flex-1">
-      {outletNodes.map((child) => <Self node={child} widgets={widgets} wrapper={wrapper} unwrapped={unwrapped} wrap outlets={outlets} />)}
+      {outletNodes.map((child) => <Self node={child} widgets={widgets} wrapper={itemWrapper} defaultWrapper={defaultWrapper} unwrapped={unwrapped} outlets={outlets} />)}
       {outletHtml && <Fragment set:html={outletHtml} />}
     </main>
   ) : (
     <Fragment>
-      {outletNodes.map((child) => <Self node={child} widgets={widgets} wrapper={wrapper} unwrapped={unwrapped} wrap outlets={outlets} />)}
+      {outletNodes.map((child) => <Self node={child} widgets={widgets} wrapper={itemWrapper} defaultWrapper={defaultWrapper} unwrapped={unwrapped} outlets={outlets} />)}
       {outletHtml && <Fragment set:html={outletHtml} />}
     </Fragment>
   )
@@ -83,18 +99,18 @@ if (import.meta.env.DEV && depth > MAX_NODE_DEPTH) {
     </div>
   ) : null
 ) : Wrapper ? (
-  <Wrapper>
-    <Self node={node} widgets={widgets} wrapper={wrapper} unwrapped={unwrapped} outlets={outlets} depth={depth} />
+  <Wrapper {...wrapper!.props}>
+    <Self node={node} widgets={widgets} defaultWrapper={defaultWrapper} unwrapped={unwrapped} outlets={outlets} depth={depth} />
   </Wrapper>
 ) : filled.length === 0 ? (
   <Widget {...props} />
 ) : (
   <Widget {...props}>
-    <Fragment slot={slotName(0)}>{slotNodes(0).map((child) => <Self node={child} widgets={widgets} wrapper={wrapper} unwrapped={unwrapped} outlets={outlets} depth={depth + 1} />)}</Fragment>
-    <Fragment slot={slotName(1)}>{slotNodes(1).map((child) => <Self node={child} widgets={widgets} wrapper={wrapper} unwrapped={unwrapped} outlets={outlets} depth={depth + 1} />)}</Fragment>
-    <Fragment slot={slotName(2)}>{slotNodes(2).map((child) => <Self node={child} widgets={widgets} wrapper={wrapper} unwrapped={unwrapped} outlets={outlets} depth={depth + 1} />)}</Fragment>
-    <Fragment slot={slotName(3)}>{slotNodes(3).map((child) => <Self node={child} widgets={widgets} wrapper={wrapper} unwrapped={unwrapped} outlets={outlets} depth={depth + 1} />)}</Fragment>
-    <Fragment slot={slotName(4)}>{slotNodes(4).map((child) => <Self node={child} widgets={widgets} wrapper={wrapper} unwrapped={unwrapped} outlets={outlets} depth={depth + 1} />)}</Fragment>
-    <Fragment slot={slotName(5)}>{slotNodes(5).map((child) => <Self node={child} widgets={widgets} wrapper={wrapper} unwrapped={unwrapped} outlets={outlets} depth={depth + 1} />)}</Fragment>
+    <Fragment slot={slotName(0)}>{slotNodes(0).map((child) => <Self node={child} widgets={widgets} defaultWrapper={defaultWrapper} unwrapped={unwrapped} outlets={outlets} depth={depth + 1} />)}</Fragment>
+    <Fragment slot={slotName(1)}>{slotNodes(1).map((child) => <Self node={child} widgets={widgets} defaultWrapper={defaultWrapper} unwrapped={unwrapped} outlets={outlets} depth={depth + 1} />)}</Fragment>
+    <Fragment slot={slotName(2)}>{slotNodes(2).map((child) => <Self node={child} widgets={widgets} defaultWrapper={defaultWrapper} unwrapped={unwrapped} outlets={outlets} depth={depth + 1} />)}</Fragment>
+    <Fragment slot={slotName(3)}>{slotNodes(3).map((child) => <Self node={child} widgets={widgets} defaultWrapper={defaultWrapper} unwrapped={unwrapped} outlets={outlets} depth={depth + 1} />)}</Fragment>
+    <Fragment slot={slotName(4)}>{slotNodes(4).map((child) => <Self node={child} widgets={widgets} defaultWrapper={defaultWrapper} unwrapped={unwrapped} outlets={outlets} depth={depth + 1} />)}</Fragment>
+    <Fragment slot={slotName(5)}>{slotNodes(5).map((child) => <Self node={child} widgets={widgets} defaultWrapper={defaultWrapper} unwrapped={unwrapped} outlets={outlets} depth={depth + 1} />)}</Fragment>
   </Widget>
 )}

@@ -15,8 +15,9 @@ export default function createUI(): ParcheManifest {
     name: 'ui',
     // Let Tailwind scan these components' classes, even installed from npm.
     content: [path.resolve(dir, '**/*.astro')],
-    // Every page root is wrapped in Section unless the widget's meta says
-    // `wrapper: false`; the tones are the values Section's `tone` accepts.
+    // The widget a list's wrapper uses when it names none: a layout's outlet
+    // declares `wrapper: { widget: 'Section', props }` to wrap its items. The
+    // tones are the values Section's `tone` accepts.
     wrapper: 'Section',
     tones: [
       { name: 'glow', label: 'Glow' },

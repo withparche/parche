@@ -17,7 +17,7 @@ export type Props = z.infer<typeof schema>;
 export const meta: WidgetMeta = {
   widget: {
     label: 'Section',
-    description: 'The band a page root sits in: tone, measure, rhythm and anchor. Every root gets one unless its widget declares otherwise.',
+    description: 'The band a widget sits in: tone, measure, rhythm and anchor. A layout declares it as the wrapper of its page list; written by hand, it takes the list props as defaults.',
     category: 'layout',
     icon: 'tabler:section',
     // The wrapper does not wrap itself.
