@@ -37,7 +37,7 @@
           {
             "widget": "Features",
             "props": {
-              "style": "cards",
+              "layout": "cards",
               "tagline": "Qué hacemos",
               "title": "Tres cosas, bien hechas",
               "columns": "3",
@@ -73,7 +73,7 @@
           {
             "widget": "Stats",
             "props": {
-              "stats": [
+              "items": [
                 {
                   "value": "12K",
                   "label": "Usuarios semanales"
@@ -111,7 +111,7 @@
     {
       "widget": "Features",
       "props": {
-        "style": "list",
+        "layout": "list",
         "title": "Por qué se cambian",
         "columns": "3",
         "items": [

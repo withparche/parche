@@ -18,7 +18,7 @@ const base = {
     { title: 'Scope', description: 'A call', duration: '1 week', owner: 'you' },
     { title: 'Build', description: 'The site', icon: 'tabler:hammer' },
   ],
-  callToAction: { text: 'Book a call', href: '#book' },
+  actions: [{ text: 'Book a call', href: '#book' }],
 };
 
 test('timeline: a numbered line, duration and owner, the media slot or the image beside it', async () => {

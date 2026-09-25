@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
-import { action, image } from '../_shared/content';
+import { action, image, heading, headingGroup } from '../_shared/content';
 
 export const layouts = ['timeline', 'grid', 'numbered', 'rows'] as const;
 
@@ -14,11 +14,9 @@ const step = z.object({
 
 export const schema = z.object({
   layout: z.enum(layouts).default('timeline').meta({ help: 'timeline: a vertical line beside the media · grid: columns under the headline · numbered: headline and CTA beside a numbered list · rows: headline and CTA beside rows between hairlines, the duration at the right.' }),
-  tagline: z.string().optional(),
-  title: z.string().optional(),
-  subtitle: z.string().optional().meta({ input: 'textarea' }),
+  ...heading(),
   items: z.array(step).default([]),
-  callToAction: action.optional(),
+  actions: z.array(action).default([]).meta({ help: 'Beside or under the steps: book the call, start the trial.' }),
   reversed: z.boolean().default(false).meta({ help: 'Swap the two columns.' }),
   image: image.optional().meta({ help: 'Beside the timeline when the media slot is empty.' }),
 });
@@ -37,8 +35,8 @@ export const meta: WidgetMeta = {
   },
   ui: {
     groups: [
-      { key: 'headline', label: 'Headline', fields: ['tagline', 'title', 'subtitle'] },
-      { key: 'content', label: 'Steps', fields: ['items', 'callToAction'] },
+      headingGroup,
+      { key: 'content', label: 'Steps', fields: ['items', 'actions'] },
       { key: 'layout', label: 'Layout', fields: ['layout', 'reversed', 'image'] },
     ],
   },

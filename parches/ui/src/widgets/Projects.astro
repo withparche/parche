@@ -5,24 +5,24 @@
  * Rendered in the single narrow column (resume style).
  */
 import Container from 'parche:elements/Container';
-import Heading from 'parche:elements/Heading';
+import SectionHeader from '../components/SectionHeader.astro';
 import Card from 'parche:elements/Card';
 import Image from 'parche:elements/Image';
 import Tag from 'parche:elements/Tag';
-import Button from 'parche:elements/Button';
-import type { Props } from './Projects.props';
+import Action from '../components/Action.astro';
+import { schema, type Props } from './Projects.props';
 
-const { tagline, title, subtitle, columns = '2', projects = [] } = Astro.props as Props;
+const { tagline, title, subtitle, link, align, columns, items } = schema.parse(Astro.props) as Props;
 const colClass = columns === '3' ? 'sm:grid-cols-3' : 'sm:grid-cols-2';
 const containerClass = (Astro.props as { classes?: Record<string, string> }).classes?.container;
 ---
 
 <Container width="sm" padding={false} class={containerClass}>
-  <Heading {tagline} {title} {subtitle} width="sm" spacing={false} />
+  <SectionHeader {tagline} {title} {subtitle} {link} {align} width="sm" spacing="none" />
 
-  {projects.length > 0 && (
+  {items.length > 0 && (
     <div class:list={['mt-10 grid gap-4', colClass]}>
-      {projects.map((p) => (
+      {items.map((p) => (
         <Card as="article" padding="sm" shadow="none" interactive class="rounded-xl">
           {p.image?.src && (
             <Image slot="media" src={p.image.src} alt={p.image.alt ?? p.title ?? ''} width={640} ratio="16/9" class="border-b border-border" />
@@ -39,13 +39,9 @@ const containerClass = (Astro.props as { classes?: Record<string, string> }).cla
             </div>
           )}
 
-          {p.links.length > 0 && (
+          {p.actions.length > 0 && (
             <div class="mt-4 flex flex-wrap gap-2">
-              {p.links.map((l) =>
-                l.href && l.label && (
-                  <Button variant="secondary" size="sm" href={l.href} icon={l.icon}>{l.label}</Button>
-                )
-              )}
+              {p.actions.map((a) => a.href && <Action action={a} size="sm" />)}
             </div>
           )}
         </Card>

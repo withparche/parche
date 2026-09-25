@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
+import { heading, headingGroup } from '../_shared/content';
 
 const inputField = z.object({
   type: z.string().default('text'),
@@ -10,10 +11,7 @@ const inputField = z.object({
 });
 
 export const schema = z.object({
-  tagline: z.string().optional(),
-  title: z.string().optional(),
-  subtitle: z.string().optional().meta({ input: 'textarea' }),
-  description: z.string().optional().meta({ input: 'textarea' }),
+  ...heading(),
   inputs: z.array(inputField).default([]),
   textarea: z.object({
     label: z.string().optional(),
@@ -22,8 +20,8 @@ export const schema = z.object({
     rows: z.number().default(4),
   }).optional(),
   disclaimer: z.object({ label: z.string().optional() }).optional(),
-  button: z.string().optional().meta({ placeholder: 'Send message' }),
-  action: z.string().optional().meta({ help: 'Where the form posts.' }),
+  submit: z.string().default('Send message').meta({ help: 'The submit button label.' }),
+  endpoint: z.string().optional().meta({ help: 'Where the form posts.' }),
   note: z.string().optional().meta({ help: 'One line under the button.' }),
   layout: z.enum(['centered', 'split']).default('centered').meta({ help: 'centered: the form under the heading · split: the heading and the booking card on the left, the form on the right.' }),
   booking: z
@@ -48,8 +46,8 @@ export const meta: WidgetMeta = {
   },
   ui: {
     groups: [
-      { key: 'headline', label: 'Headline', fields: ['tagline', 'title', 'subtitle', 'description'] },
-      { key: 'form', label: 'Form', fields: ['inputs', 'textarea', 'disclaimer', 'button'] },
+      headingGroup,
+      { key: 'form', label: 'Form', fields: ['inputs', 'textarea', 'disclaimer', 'submit', 'endpoint', 'note'] },
     ],
   },
 };

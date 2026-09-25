@@ -7,13 +7,13 @@ import Button from 'parche:elements/Button';
 import SectionHeader from '../components/SectionHeader.astro';
 import { schema, type Props } from './Pricing.props';
 
-const { title, subtitle, tagline, prices, align, comparison } = schema.parse(Astro.props) as Props;
-const plans = prices.filter((p) => p.price || p.title);
-const featured = plans.findIndex((p) => p.hasRibbon);
+const { title, subtitle, tagline, link, align, items, comparison } = schema.parse(Astro.props) as Props;
+const plans = items.filter((p) => p.price || p.title);
+const featured = plans.findIndex((p) => p.recommended);
 const tone = { default: 'font-semibold text-heading', muted: 'text-muted', success: 'font-semibold text-success' } as const;
 ---
 
-<SectionHeader {tagline} {title} {subtitle} align={align} spacing="md" />
+<SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="md" />
 
 {plans.length > 0 && (
   <div class:list={['grid grid-cols-[repeat(auto-fit,minmax(min(260px,100%),1fr))] gap-[clamp(16px,2vw,24px)]', comparison && 'mb-[clamp(20px,3vw,32px)]']}>
@@ -24,11 +24,11 @@ const tone = { default: 'font-semibold text-heading', muted: 'text-muted', succe
         <article
           class:list={[
             'relative flex flex-col gap-[18px] rounded-lg border bg-background p-[clamp(22px,2.5vw,30px)]',
-            p.hasRibbon ? 'border-primary shadow-lg' : 'border-border',
+            p.recommended ? 'border-primary shadow-lg' : 'border-border',
           ]}
         >
-          {p.hasRibbon && p.ribbonTitle && (
-            <span class="absolute -top-[11px] left-[clamp(22px,2.5vw,30px)] rounded-full bg-primary px-2.5 py-1.5 font-mono text-[10px] leading-none font-medium tracking-[0.14em] text-on-primary uppercase">{p.ribbonTitle}</span>
+          {p.badge && (
+            <span class="absolute -top-[11px] left-[clamp(22px,2.5vw,30px)] rounded-full bg-primary px-2.5 py-1.5 font-mono text-[10px] leading-none font-medium tracking-[0.14em] text-on-primary uppercase">{p.badge}</span>
           )}
           <div>
             {p.title && <h3 class="mb-3 text-base leading-none font-semibold text-heading">{p.title}</h3>}
@@ -38,13 +38,17 @@ const tone = { default: 'font-semibold text-heading', muted: 'text-muted', succe
             {(p.note || p.subtitle) && <p class="mt-2 text-[13px] leading-[1.5] text-muted">{p.note ?? p.subtitle}</p>}
             {p.description && <p class="mt-2 text-[13px] leading-[1.5] text-muted">{p.description}</p>}
           </div>
-          {p.items.length > 0 && (
+          {p.features.length > 0 && (
             <ul class="flex flex-col gap-[9px] text-sm leading-[1.5] text-heading">
-              {p.items.map((it) => (it.description || it.title) && <li>{it.description ?? it.title}</li>)}
+              {p.features.map((f) => <li set:html={f} />)}
             </ul>
           )}
-          {p.callToAction?.href && p.callToAction?.text && (
-            <Button href={p.callToAction.href} variant={p.hasRibbon ? 'primary' : 'secondary'} block class="mt-auto p-3 text-[15px] leading-none">{p.callToAction.text}</Button>
+          {p.actions.length > 0 && (
+            <div class="mt-auto flex flex-col gap-2">
+              {p.actions.map((a) => a.text && (
+                <Button href={a.href} target={a.target} variant={a.variant === 'tertiary' ? 'secondary' : (a.variant ?? (p.recommended ? 'primary' : 'secondary'))} block class="p-3 text-[15px] leading-none">{a.text}</Button>
+              ))}
+            </div>
           )}
         </article>
       );

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
+import { heading, headingGroup } from '../_shared/content';
 
 const faqItem = z.object({
   title: z.string().optional().meta({ label: 'Question' }),
@@ -8,9 +9,7 @@ const faqItem = z.object({
 });
 
 export const schema = z.object({
-  tagline: z.string().optional(),
-  title: z.string().optional(),
-  subtitle: z.string().optional().meta({ input: 'textarea' }),
+  ...heading(),
   items: z.array(faqItem).default([]),
   columns: z.enum(['1', '2']).default('2').meta({ help: 'Number of columns' }),
   layout: z.enum(['accordion', 'list']).default('accordion').meta({ help: 'accordion: centred heading, chevrons · list: start-aligned heading, one column between hairlines, plus and minus, the first answer open.' }),
@@ -27,7 +26,7 @@ export const meta: WidgetMeta = {
   },
   ui: {
     groups: [
-      { key: 'headline', label: 'Headline', fields: ['tagline', 'title', 'subtitle'] },
+      headingGroup,
       { key: 'content', label: 'Questions', fields: ['items'] },
       { key: 'layout', label: 'Layout', fields: ['columns'] },
     ],

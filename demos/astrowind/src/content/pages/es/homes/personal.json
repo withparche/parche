@@ -84,7 +84,7 @@
     {
       "widget": "Features",
       "props": {
-        "style": "list",
+        "layout": "list",
         "title": "Trabajos destacados",
         "columns": "3",
         "items": [
@@ -110,7 +110,7 @@
       "widget": "Testimonials",
       "props": {
         "title": "Lo que dicen",
-        "testimonials": [
+        "items": [
           {
             "name": "Ana Ruiz",
             "text": "Alex nos dejó un sistema que podíamos seguir usando, algo menos común de lo que debería.",

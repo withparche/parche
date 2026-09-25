@@ -1,10 +1,11 @@
 ---
-import Heading from 'parche:elements/Heading';
 import Accordion from 'parche:elements/Accordion';
 import SectionHeader from '../components/SectionHeader.astro';
 import { schema, type Props } from './FAQs.props';
 
-const { tagline, title, subtitle, items, columns, layout } = schema.parse(Astro.props) as Props;
+const { tagline, title, subtitle, link, items, columns, layout } = schema.parse(Astro.props) as Props;
+// The accordion centres its heading over the columns unless the content says otherwise.
+const align = (Astro.props as { align?: 'start' | 'center' }).align ?? (layout === 'accordion' ? 'center' : 'start');
 
 // Accordion is the disclosure list; two columns are two accordions, each
 // exclusive on its own (a native `details name` group per column).
@@ -17,12 +18,12 @@ const groups = columns === '1' || entries.length < 2 ? [entries] : [entries.slic
 
 {layout === 'list' ? (
   <div class="parche-faqs" data-layout="list">
-    <SectionHeader {tagline} {title} {subtitle} spacing="md" />
+    <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="md" />
     {entries.length > 0 && <Accordion items={entries} marker="plus" size="lg" class="border-y border-border" />}
   </div>
 ) : (
   <>
-    <Heading {tagline} {title} {subtitle} />
+    <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="xl" />
     <div class:list={['grid gap-x-12 gap-y-4', columns === '1' ? 'max-w-4xl mx-auto grid-cols-1' : 'grid-cols-1 md:grid-cols-2']}>
       {groups.map((group) => group.length > 0 && <Accordion items={group} />)}
     </div>

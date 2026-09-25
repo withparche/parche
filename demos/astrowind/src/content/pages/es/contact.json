@@ -48,13 +48,13 @@
         "disclaimer": {
           "label": "Al enviar aceptas que guardemos tu mensaje para poder responderte."
         },
-        "button": "Enviar mensaje"
+        "submit": "Enviar mensaje"
       }
     },
     {
       "widget": "Features",
       "props": {
-        "style": "cards",
+        "layout": "cards",
         "title": "Otras vías",
         "subtitle": "Si el formulario no es lo tuyo.",
         "columns": "3",

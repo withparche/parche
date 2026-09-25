@@ -145,28 +145,24 @@
             "props": {
               "tagline": "Pricing",
               "title": "Pricing that scales with you",
-              "prices": [
+              "items": [
                 {
                   "title": "Free",
                   "subtitle": "To get started",
                   "price": "0",
                   "currency": "$",
                   "period": "per month",
-                  "items": [
-                    {
-                      "description": "Up to 3 projects"
-                    },
-                    {
-                      "description": "Unlimited docs"
-                    },
-                    {
-                      "description": "Community support"
-                    }
+                  "features": [
+                    "Up to 3 projects",
+                    "Unlimited docs",
+                    "Community support"
                   ],
-                  "callToAction": {
-                    "text": "Get started",
-                    "href": "#"
-                  }
+                  "actions": [
+                    {
+                      "text": "Get started",
+                      "href": "#"
+                    }
+                  ]
                 },
                 {
                   "title": "Team",
@@ -174,47 +170,37 @@
                   "price": "12",
                   "currency": "$",
                   "period": "per user / month",
-                  "hasRibbon": true,
-                  "ribbonTitle": "Popular",
-                  "items": [
-                    {
-                      "description": "Unlimited projects"
-                    },
-                    {
-                      "description": "Automations and roadmaps"
-                    },
-                    {
-                      "description": "Integrations"
-                    },
-                    {
-                      "description": "Priority support"
-                    }
+                  "recommended": true,
+                  "badge": "Popular",
+                  "features": [
+                    "Unlimited projects",
+                    "Automations and roadmaps",
+                    "Integrations",
+                    "Priority support"
                   ],
-                  "callToAction": {
-                    "text": "Start free trial",
-                    "href": "#"
-                  }
+                  "actions": [
+                    {
+                      "text": "Start free trial",
+                      "href": "#"
+                    }
+                  ]
                 },
                 {
                   "title": "Enterprise",
                   "subtitle": "For organizations at scale",
                   "type": "custom",
                   "description": "Volume pricing tailored to your organization.",
-                  "items": [
-                    {
-                      "description": "SSO y SCIM"
-                    },
-                    {
-                      "description": "Advanced permissions"
-                    },
-                    {
-                      "description": "Dedicated success manager"
-                    }
+                  "features": [
+                    "SSO y SCIM",
+                    "Advanced permissions",
+                    "Dedicated success manager"
                   ],
-                  "callToAction": {
-                    "text": "Contact sales",
-                    "href": "/contact"
-                  }
+                  "actions": [
+                    {
+                      "text": "Contact sales",
+                      "href": "/contact"
+                    }
+                  ]
                 }
               ]
             }

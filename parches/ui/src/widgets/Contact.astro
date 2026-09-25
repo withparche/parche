@@ -4,7 +4,6 @@
  * puts the form under the heading; split puts the heading and the slots on
  * the left and the form, on a card, on the right.
  */
-import Heading from 'parche:elements/Heading';
 import Button from 'parche:elements/Button';
 import Input from 'parche:elements/Input';
 import Textarea from 'parche:elements/Textarea';
@@ -12,7 +11,9 @@ import Checkbox from 'parche:elements/Checkbox';
 import SectionHeader from '../components/SectionHeader.astro';
 import { schema, type Props } from './Contact.props';
 
-const { tagline, title, subtitle, description, inputs, textarea, disclaimer, button, action, note, layout, booking } = schema.parse(Astro.props) as Props;
+const { tagline, title, subtitle, link, inputs, textarea, disclaimer, submit, endpoint, note, layout, booking } = schema.parse(Astro.props) as Props;
+// Centred, the heading sits over the form unless the content says otherwise.
+const align = (Astro.props as { align?: 'start' | 'center' }).align ?? (layout === 'split' ? 'start' : 'center');
 
 // The content gives a free-form input type; the element takes a known one.
 const inputTypes = ['text', 'email', 'url', 'tel', 'password', 'number', 'search', 'date', 'time'] as const;
@@ -25,7 +26,7 @@ const split = layout === 'split';
 {split ? (
   <div class="parche-contact grid grid-cols-[repeat(auto-fit,minmax(min(300px,100%),1fr))] items-start gap-[clamp(28px,4vw,56px)]" data-layout="split">
     <div class="min-w-0">
-      <SectionHeader {tagline} {title} {subtitle} spacing="none" class="mb-[26px]" />
+      <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="none" class="mb-[26px]" />
       {booking && (
         <div class="rounded-md border border-border bg-surface px-5 py-[18px]">
           <div class="mb-3.5 flex flex-wrap items-center justify-between gap-4">
@@ -52,24 +53,24 @@ const split = layout === 'split';
         </div>
       )}
     </div>
-    <form action={action} method={action ? 'post' : undefined} class="min-w-0 rounded-lg border border-border bg-surface p-[clamp(22px,3vw,32px)]">
+    <form action={endpoint} method={endpoint ? 'post' : undefined} class="min-w-0 rounded-lg border border-border bg-surface p-[clamp(22px,3vw,32px)]">
       <div class="flex flex-col gap-4">
         {inputs.map((input) => (
           <Input name={input.name} label={input.label ?? humanize(input.name)} type={typeOf(input.type ?? 'text')} placeholder={input.placeholder} autocomplete={input.autocomplete} />
         ))}
         {textarea && <Textarea name={textarea.name ?? 'message'} label={textarea.label ?? 'Message'} placeholder={textarea.placeholder} rows={textarea.rows ?? 3} grow={false} />}
         {disclaimer?.label && <Checkbox name="disclaimer" label={disclaimer.label} />}
-        <Button type="submit" size="lg" block>{button ?? 'Send message'}</Button>
+        <Button type="submit" size="lg" block>{submit}</Button>
         {note && <p class="text-xs leading-[1.5] text-muted" set:html={note} />}
       </div>
     </form>
   </div>
 ) : (
   <>
-    <Heading {tagline} {title} {subtitle} />
+    <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="xl" />
     {inputs.length > 0 && (
       <div class="flex flex-col max-w-xl mx-auto rounded-lg bg-surface border border-border shadow p-4 sm:p-6 lg:p-8 w-full">
-        <form action={action} method={action ? 'post' : undefined}>
+        <form action={endpoint} method={endpoint ? 'post' : undefined}>
           <div class="flex flex-col gap-4">
             {inputs.map((input) => (
               <Input name={input.name} label={input.label ?? humanize(input.name)} type={typeOf(input.type ?? 'text')} placeholder={input.placeholder} autocomplete={input.autocomplete} />
@@ -77,9 +78,8 @@ const split = layout === 'split';
             {textarea && <Textarea name={textarea.name ?? 'message'} label={textarea.label ?? 'Message'} placeholder={textarea.placeholder} rows={textarea.rows ?? 4} />}
             {disclaimer?.label && <Checkbox name="disclaimer" label={disclaimer.label} />}
             <div>
-              <Button type="submit" size="lg" block>{button ?? 'Send message'}</Button>
+              <Button type="submit" size="lg" block>{submit}</Button>
             </div>
-            {description && <p class="text-center type-body text-muted" set:html={description} />}
             {note && <p class="text-center text-xs text-muted" set:html={note} />}
           </div>
         </form>

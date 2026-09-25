@@ -6,14 +6,49 @@
 import { z } from 'zod';
 
 /** A call to action: what a button in content looks like. */
+export const actionVariants = ['primary', 'secondary', 'contrast', 'tertiary', 'link'] as const;
 export const action = z.object({
-  variant: z.enum(['primary', 'secondary', 'contrast', 'tertiary', 'link']).default('primary'),
+  variant: z.enum(actionVariants).default('primary'),
   text: z.string().optional(),
   href: z.string().optional().meta({ placeholder: 'https://...' }),
   target: z.string().optional().meta({ placeholder: '_blank' }),
   icon: z.string().optional().meta({ input: 'icon' }),
 });
 export type Action = z.infer<typeof action>;
+
+/** A text link: the "All case studies →" beside a heading, the "Read more" under an item. */
+export const link = z.object({
+  text: z.string(),
+  href: z.string().meta({ placeholder: '/path or https://...' }),
+});
+export type Link = z.infer<typeof link>;
+
+/** Where a section's heading sits. */
+export const align = z.enum(['start', 'center']);
+
+/**
+ * The heading every section widget opens with, spread into its schema so the
+ * four fields mean the same everywhere and the builder draws one form:
+ *
+ *   export const schema = z.object({ ...heading(), items: … });
+ *   export const schema = z.object({ ...heading({ align: 'center' }), … });
+ *
+ * The vocabulary around it (see docs-wip/content-model.md): the things a
+ * section lists are `items`; buttons are `actions`, always a list; a text link
+ * is `link`; the arrangement is `layout`, a visual flavour `variant`.
+ */
+export function heading(defaults: { align?: z.infer<typeof align> } = {}) {
+  return {
+    tagline: z.string().optional().meta({ help: 'The eyebrow above the title: a category, a count, a date.' }),
+    title: z.string().optional().meta({ help: 'The section heading.' }),
+    subtitle: z.string().optional().meta({ input: 'textarea', help: 'One or two sentences under the title.' }),
+    link: link.optional().meta({ help: 'A text link at the end of the heading row: where the full list lives.' }),
+    align: align.default(defaults.align ?? 'start').meta({ help: 'Where the heading sits.' }),
+  };
+}
+
+/** The builder group for the heading fields, first in every section widget. */
+export const headingGroup = { key: 'heading', label: 'Heading', fields: ['tagline', 'title', 'subtitle', 'link', 'align'] };
 
 /** An image by path (`@/assets/images/…` resolves at render) or URL. */
 export const image = z.object({

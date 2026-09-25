@@ -8,6 +8,11 @@
  *   { widget: 'layout/Main' }           → { widget: 'Outlet' }
  *   page.template                        → dropped (page templates are gone)
  *
+ * Then every node's props move to the common vocabulary (VOCABULARY below):
+ * the things a section lists are `items`, buttons are `actions`, a text link
+ * is `link`, the arrangement is `layout`, a form posts to `endpoint` with a
+ * `submit` label. Every step is idempotent: running it twice changes nothing.
+ *
  * The raw-HTML backgrounds become tones: a radial gradient is `glow`, a
  * linear one `gradient`, a dot pattern `dots`. `classes.container` is read for
  * a narrower measure (max-w-3xl → sm, max-w-5xl → md) and a tighter rhythm
@@ -27,7 +32,7 @@ function* files(dir) {
     const p = join(dir, name);
     if (statSync(p).isDirectory()) {
       if (!SKIP.has(name)) yield* files(p);
-    } else if (['.json', '.md', '.yaml', '.yml'].includes(extname(name)) && /[\\/]src[\\/]content[\\/](pages|layouts)[\\/]/.test(p)) {
+    } else if (['.json', '.md', '.yaml', '.yml'].includes(extname(name)) && /[\\/]src[\\/]content[\\/](pages|layouts|presets)[\\/]/.test(p)) {
       yield p;
     }
   }
@@ -71,18 +76,19 @@ const RENAMES = {
   // Proof shapes: a number says where it comes from, a quote who said it.
   Stats: (props) => ({
     widget: 'Stats',
-    props: {
+    props: !props.stats ? props : {
       ...props,
-      stats: (props.stats ?? []).map(({ amount, title, ...rest }) => ({ value: amount ?? '', label: title ?? '', ...rest })),
+      stats: props.stats.map(({ amount, title, ...rest }) => ({ value: amount ?? '', label: title ?? '', ...rest })),
     },
   }),
   Testimonials: (props) => ({
     widget: 'Testimonials',
-    props: {
+    props: !props.testimonials ? props : {
       ...props,
-      testimonials: (props.testimonials ?? []).map(({ testimonial, job, image, ...rest }) => ({
+      testimonials: props.testimonials.map(({ testimonial, job, image, ...rest }) => ({
         ...rest,
-        text: testimonial ?? '',
+        // Only the legacy field moves: a quote already in the new shape keeps its text.
+        ...(testimonial !== undefined ? { text: testimonial } : {}),
         ...(job ? { role: job } : {}),
         ...(image?.src ? { avatar: { src: image.src, alt: image.alt ?? '' } } : {}),
       })),
@@ -104,6 +110,92 @@ const RENAMES = {
   }),
 };
 
+/**
+ * Renames `from` to `to` in place, keeping the key where the author put it,
+ * unless `to` is already set; drops `from` either way.
+ */
+function move(props, from, to, map = (v) => v) {
+  if (!(from in props)) return props;
+  const keep = !(to in props) && props[from] !== undefined;
+  const out = {};
+  for (const [k, v] of Object.entries(props)) {
+    if (k !== from) out[k] = v;
+    else if (keep) {
+      const mapped = map(v);
+      if (mapped !== undefined) out[to] = mapped;
+    }
+  }
+  return out;
+}
+
+/** A single legacy `callToAction` becomes a one-button `actions` list. */
+const toActions = (cta) => (cta && (cta.text || cta.icon) ? [cta] : []);
+const mapList = (list, fn) => (Array.isArray(list) ? list.map(fn) : list);
+
+/**
+ * The common vocabulary, per widget. Each entry takes props and returns props;
+ * props already in the new shape pass through unchanged.
+ */
+const VOCABULARY = {
+  Features: (p) => {
+    const next = move(p, 'style', 'layout');
+    return {
+      ...next,
+      ...(next.items ? { items: mapList(next.items, (i) => move(i, 'callToAction', 'link', (c) => (c?.text ? { text: c.text, href: c.href ?? '#' } : undefined))) } : {}),
+    };
+  },
+  Stats: (p) => move(p, 'stats', 'items'),
+  Testimonials: (p) => move(move(p, 'testimonials', 'items'), 'callToAction', 'actions', toActions),
+  Team: (p) => move(p, 'members', 'items'),
+  Timeline: (p) => move(p, 'entries', 'items'),
+  Projects: (p) => {
+    const next = move(p, 'projects', 'items');
+    return next.items
+      ? { ...next, items: mapList(next.items, (item) => move(item, 'links', 'actions', (links) => links.map(({ label, ...l }) => ({ ...l, text: label })))) }
+      : next;
+  },
+  Pricing: (p) => {
+    const next = move(p, 'prices', 'items');
+    if (!Array.isArray(next.items)) return next;
+    return {
+      ...next,
+      items: next.items.map((plan) => {
+        let out = move(plan, 'callToAction', 'actions', toActions);
+        out = move(out, 'hasRibbon', 'recommended');
+        out = move(out, 'ribbonTitle', 'badge');
+        if (Array.isArray(out.items) && !out.features) {
+          out = move(out, 'items', 'features', (items) => items.map((f) => (typeof f === 'string' ? f : f.description ?? f.title ?? '')).filter(Boolean));
+        }
+        if (out.recommended === false) delete out.recommended;
+        return out;
+      }),
+    };
+  },
+  Showcase: (p) => {
+    const next = move(p, 'demos', 'items');
+    return next.items ? { ...next, items: mapList(next.items, (d) => move(d, 'body', 'description')) } : next;
+  },
+  Cases: (p) => (p.items ? { ...p, items: mapList(p.items, (c) => move(c, 'summary', 'description')) } : p),
+  Content: (p) => move(p, 'callToAction', 'actions', toActions),
+  Steps: (p) => move(p, 'callToAction', 'actions', toActions),
+  Contact: (p) => move(move(move(p, 'action', 'endpoint'), 'button', 'submit'), 'description', 'note'),
+  Newsletter: (p) => move(move(move(p, 'text', 'subtitle'), 'action', 'endpoint'), 'button', 'submit'),
+  BlogLatestPosts: blogLink,
+  BlogHighlightedPosts: blogLink,
+};
+
+function blogLink(p) {
+  const { linkText, linkUrl, ...rest } = move(p, 'information', 'subtitle');
+  if (linkText === undefined && linkUrl === undefined) return rest;
+  if (linkText === '') return { ...rest, link: false };
+  return { ...rest, link: { text: linkText ?? 'View all posts', ...(linkUrl ? { href: linkUrl } : {}) } };
+}
+
+function vocabulary(node) {
+  const to = VOCABULARY[node.widget];
+  return to && node.props ? { ...node, props: to(node.props) } : node;
+}
+
 /** Per-item `classes` overrides are gone: the look is the widget's style. */
 function stripItemClasses(props) {
   if (!Array.isArray(props.items)) return props;
@@ -122,8 +214,10 @@ function migrateNode(section, file) {
   const { wrapper, ...rest } = section;
   if (rest.widget === 'layout/Main') return { widget: 'Outlet' };
   if (rest.wrapper !== undefined) delete rest.wrapper;
-  Object.assign(rest, rename(rest));
-  if (Array.isArray(rest.slots?.default)) rest.slots.default = rest.slots.default.map((n) => migrateNode(n, file));
+  Object.assign(rest, vocabulary(rename(rest)));
+  for (const [name, list] of Object.entries(rest.slots ?? {})) {
+    if (Array.isArray(list)) rest.slots[name] = list.map((n) => migrateNode(n, file));
+  }
   if (wrapper === undefined || wrapper === false) return rest;
   const props = {};
   if (wrapper.id) props.id = wrapper.id;
@@ -137,12 +231,19 @@ function migrateNode(section, file) {
 
 function migrate(data, file) {
   let changed = false;
-  if (Array.isArray(data.sections)) {
+  // Page sections, a preset's tree, and nodes in a page's named outlets.
+  const lists = [
+    [data, 'sections'],
+    [data, 'tree'],
+    ...Object.keys(data.slots ?? {}).map((name) => [data.slots, name]),
+  ];
+  for (const [owner, key] of lists) {
+    if (!Array.isArray(owner[key])) continue;
     // Snapshot first: a nested rewrite mutates the slot arrays in place.
-    const before = JSON.stringify(data.sections);
-    const next = data.sections.map((s) => migrateNode(s, file));
+    const before = JSON.stringify(owner[key]);
+    const next = owner[key].map((s) => migrateNode(s, file));
     if (JSON.stringify(next) !== before) {
-      data.sections = next;
+      owner[key] = next;
       changed = true;
     }
   }

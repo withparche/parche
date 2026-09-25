@@ -37,7 +37,7 @@
           {
             "widget": "Features",
             "props": {
-              "style": "cards",
+              "layout": "cards",
               "tagline": "What we do",
               "title": "Three things, done properly",
               "columns": "3",
@@ -73,7 +73,7 @@
           {
             "widget": "Stats",
             "props": {
-              "stats": [
+              "items": [
                 {
                   "value": "12K",
                   "label": "Weekly users"
@@ -111,7 +111,7 @@
     {
       "widget": "Features",
       "props": {
-        "style": "list",
+        "layout": "list",
         "title": "Why teams switch",
         "columns": "3",
         "items": [

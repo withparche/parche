@@ -20,9 +20,9 @@ async function render(Component: any, props: Record<string, unknown>) {
 test('Showcase: the heading shares the row with a segmented switcher, one panel per demo', async () => {
   const html = await render(Showcase, {
     title: 'Five sites',
-    demos: [
-      { value: 'saas', label: 'SaaS', title: 'SaaS demo', body: 'Pricing and docs', points: ['One', 'Two'], caption: 'saas · 1000×625', link: { text: 'Open', href: '/saas' } },
-      { value: 'agency', label: 'Agency', title: 'Agency demo', body: 'Cases', points: [] },
+    items: [
+      { value: 'saas', label: 'SaaS', title: 'SaaS demo', description: 'Pricing and docs', points: ['One', 'Two'], caption: 'saas · 1000×625', link: { text: 'Open', href: '/saas' } },
+      { value: 'agency', label: 'Agency', title: 'Agency demo', description: 'Cases', points: [] },
     ],
   });
   expect(html).toContain('data-part="header"');
@@ -45,11 +45,11 @@ test('Cases: client and sector, the title and three results with a tone', async 
 });
 
 test('Team, Timeline and Newsletter render their parts', async () => {
-  const team = await render(Team, { title: 'Maintainers', members: [{ name: 'L. Fontana', role: 'Accessibility' }], more: { count: '+180', label: 'Contributors' } });
+  const team = await render(Team, { title: 'Maintainers', items: [{ name: 'L. Fontana', role: 'Accessibility' }], more: { count: '+180', label: 'Contributors' } });
   expect(team).toContain('L. Fontana');
   expect(team).toContain('+180');
   expect(team).toContain('aria-label="L. Fontana"');
-  const timeline = await render(Timeline, { title: 'Changelog', entries: [{ label: '2026', title: 'v1.0', highlight: true }] });
+  const timeline = await render(Timeline, { title: 'Changelog', items: [{ label: '2026', title: 'v1.0', highlight: true }] });
   expect(timeline).toMatch(/text-primary[^>]*>2026/);
   const news = await render(Newsletter, { title: 'New articles', note: 'Unsubscribe any time' });
   expect(news).toContain('type="email"');
@@ -58,9 +58,9 @@ test('Team, Timeline and Newsletter render their parts', async () => {
 
 test('Pricing: the recommended tier is marked and the comparison has one column per plan', async () => {
   const html = await render(Pricing, {
-    prices: [
+    items: [
       { title: 'Free', type: 'custom', price: 'Free' },
-      { title: 'Studio', price: '149', suffix: 'once', hasRibbon: true, ribbonTitle: 'Most picked' },
+      { title: 'Studio', price: '149', suffix: 'once', recommended: true, badge: 'Most picked' },
     ],
     comparison: { rows: [{ feature: 'Widgets', values: [{ text: '34', tone: 'muted' }, { text: '46' }] }] },
   });

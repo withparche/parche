@@ -3,29 +3,25 @@
  * Text and a checklist beside a media area: the `media` slot, or the `image`
  * prop when the slot is empty. With neither, the text takes the full width.
  */
-import Heading from 'parche:elements/Heading';
+import SectionHeader from '../components/SectionHeader.astro';
 import Icon from 'parche:elements/Icon';
 import Image from 'parche:elements/Image';
-import Action from '../components/Action.astro';
+import Actions from '../components/Actions.astro';
 import { schema, type Props } from './Content.props';
 
-const { tagline, title, subtitle, content, image, items, columns, reversed, callToAction } = schema.parse(Astro.props) as Props;
+const { tagline, title, subtitle, link, align, content, image, items, columns, reversed, actions } = schema.parse(Astro.props) as Props;
 const hasMedia = Astro.slots.has('media') || Boolean(image);
 const colClass = columns === '2' ? 'grid-cols-2' : columns === '3' ? 'grid-cols-3' : 'grid-cols-1';
 ---
 
 <div class="parche-content">
-  <Heading {title} {subtitle} {tagline} width="sm" />
+  <SectionHeader {tagline} {title} {subtitle} {link} {align} width="lg" spacing="xl" />
 
   <div class:list={['md:flex md:gap-16', reversed && 'md:flex-row-reverse']}>
     <div class:list={['self-center min-w-0', hasMedia ? 'md:basis-1/2' : 'w-full']}>
       {content && <div class="mb-12 text-lg text-muted [&_pre]:max-w-full [&_pre]:overflow-x-auto [&_pre]:text-sm" set:html={content} />}
 
-      {callToAction?.text && (
-        <div class="mb-8">
-          <Action action={{ variant: 'link', ...callToAction }} />
-        </div>
-      )}
+      <Actions {actions} class="mb-8" />
 
       {items.length > 0 && (
         <ul class:list={['grid gap-y-4 md:gap-y-8 gap-x-8', colClass]}>

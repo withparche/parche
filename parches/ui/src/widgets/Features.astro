@@ -1,6 +1,6 @@
 ---
 /**
- * The one features widget. `style` picks how an item is drawn: an icon badge
+ * The one features widget. `layout` picks how an item is drawn: an icon badge
  * beside the text, a card, or a compact list row. The `media` slot (or the
  * `image` prop) sits between the headline and the items.
  */
@@ -11,8 +11,8 @@ import Card from 'parche:elements/Card';
 import Button from 'parche:elements/Button';
 import { schema, type Props } from './Features.props';
 
-const { style, align, title, subtitle, tagline, items, columns, defaultIcon, image } = schema.parse(Astro.props) as Props;
-const hairline = style === 'panels' || style === 'tiles';
+const { layout, align, title, subtitle, tagline, link, items, columns, defaultIcon, image } = schema.parse(Astro.props) as Props;
+const hairline = layout === 'panels' || layout === 'tiles';
 const hasMedia = Astro.slots.has('media') || Boolean(image);
 
 const gridCols =
@@ -21,11 +21,11 @@ const gridCols =
     : columns === '3'
       ? 'lg:grid-cols-3 sm:grid-cols-2'
       : 'sm:grid-cols-2';
-const gap = style === 'cards' ? 'gap-4 md:gap-6' : style === 'list' ? 'gap-6 md:gap-8' : 'gap-8 md:gap-y-12';
+const gap = layout === 'cards' ? 'gap-4 md:gap-6' : layout === 'list' ? 'gap-6 md:gap-8' : 'gap-8 md:gap-y-12';
 ---
 
-<div class="parche-features" data-style={style}>
-  <SectionHeader {tagline} {title} {subtitle} align={align} width={align === 'start' ? 'lg' : 'md'} spacing={style === 'tiles' ? 'sm' : 'xl'} />
+<div class="parche-features" data-layout={layout}>
+  <SectionHeader {tagline} {title} {subtitle} {link} {align} width={align === 'start' ? 'lg' : 'md'} spacing={layout === 'tiles' ? 'sm' : 'xl'} />
 
   {hasMedia && (
     <div class="parche-features-media mb-8 md:mb-12">
@@ -39,11 +39,11 @@ const gap = style === 'cards' ? 'gap-4 md:gap-6' : style === 'list' ? 'gap-6 md:
     <div
       class:list={[
         'grid gap-px overflow-hidden rounded-lg border border-border bg-border',
-        style === 'panels' ? 'grid-cols-[repeat(auto-fit,minmax(min(270px,100%),1fr))]' : 'grid-cols-[repeat(auto-fill,minmax(min(180px,100%),1fr))]',
+        layout === 'panels' ? 'grid-cols-[repeat(auto-fit,minmax(min(270px,100%),1fr))]' : 'grid-cols-[repeat(auto-fill,minmax(min(180px,100%),1fr))]',
       ]}
     >
       {items.map((item, i) =>
-        style === 'panels' ? (
+        layout === 'panels' ? (
           <div class="bg-surface p-[clamp(22px,3vw,34px)]">
             <div class="mb-[18px] font-mono text-[11px] leading-none font-medium text-primary">{String(i + 1).padStart(2, '0')}</div>
             {item.title && <h3 class="mb-2.5 font-heading text-(length:--ds-sys-type-h3-size) leading-[1.3] font-semibold tracking-[-0.015em] text-heading" set:html={item.title} />}
@@ -63,16 +63,16 @@ const gap = style === 'cards' ? 'gap-4 md:gap-6' : style === 'list' ? 'gap-6 md:
         const iconName = item.icon || defaultIcon;
         const body = (
           <Fragment>
-            {item.title && <h3 class:list={['text-heading', style === 'list' ? 'text-lg font-semibold' : 'font-bold text-xl md:text-[1.3rem]', style === 'cards' && 'mb-2']} set:html={item.title} />}
-            {item.description && <p class:list={['text-muted type-body', style === 'cards' ? 'grow' : item.title ? (style === 'list' ? 'mt-0.5' : 'mt-3') : '']} set:html={item.description} />}
-            {item.callToAction?.text && (
-              <div class:list={[style === 'cards' ? 'mt-4' : style === 'list' ? 'mt-2' : 'mt-3']}>
-                <Button variant="link" href={item.callToAction.href} class="font-semibold">{item.callToAction.text}</Button>
+            {item.title && <h3 class:list={['text-heading', layout === 'list' ? 'text-lg font-semibold' : 'font-bold text-xl md:text-[1.3rem]', layout === 'cards' && 'mb-2']} set:html={item.title} />}
+            {item.description && <p class:list={['text-muted type-body', layout === 'cards' ? 'grow' : item.title ? (layout === 'list' ? 'mt-0.5' : 'mt-3') : '']} set:html={item.description} />}
+            {item.link?.text && (
+              <div class:list={[layout === 'cards' ? 'mt-4' : layout === 'list' ? 'mt-2' : 'mt-3']}>
+                <Button variant="link" href={item.link.href} class="font-semibold">{item.link.text}</Button>
               </div>
             )}
           </Fragment>
         );
-        return style === 'cards' ? (
+        return layout === 'cards' ? (
           <Card padding="md" class="flex flex-col">
             {iconName && <Icon name={iconName} class="w-12 h-12 mb-6 text-primary" />}
             {body}
@@ -80,7 +80,7 @@ const gap = style === 'cards' ? 'gap-4 md:gap-6' : style === 'list' ? 'gap-6 md:
         ) : (
           <div class="flex flex-row max-w-full sm:max-w-md">
             {iconName && (
-              style === 'grid' ? (
+              layout === 'grid' ? (
                 <div class="flex items-center justify-center rounded-full bg-primary text-on-primary w-10 h-10 p-2 md:w-12 md:h-12 md:p-3 mr-4 rtl:ml-4 rtl:mr-0 shrink-0">
                   <Icon name={iconName} class="size-full" />
                 </div>
@@ -90,7 +90,7 @@ const gap = style === 'cards' ? 'gap-4 md:gap-6' : style === 'list' ? 'gap-6 md:
                 </div>
               )
             )}
-            <div class:list={[style === 'grid' && 'mt-0.5']}>{body}</div>
+            <div class:list={[layout === 'grid' && 'mt-0.5']}>{body}</div>
           </div>
         );
       })}

@@ -234,7 +234,7 @@
           {
             "widget": "Features",
             "props": {
-              "style": "cards",
+              "layout": "cards",
               "tagline": "Components",
               "title": "Most used widgets",
               "subtitle": "Provides frequently used components for building websites using Tailwind CSS v4.",
@@ -295,7 +295,7 @@
       "widget": "BlogLatestPosts",
       "props": {
         "title": "Find out more content in our blog",
-        "information": "The blog is used to display AstroWind documentation. Each new article is an important step towards becoming an expert in creating a website using Astro 7 + Tailwind CSS v4."
+        "subtitle": "The blog is used to display AstroWind documentation. Each new article is an important step towards becoming an expert in creating a website using Astro 7 + Tailwind CSS v4."
       }
     },
     {
@@ -353,7 +353,7 @@
           {
             "widget": "Stats",
             "props": {
-              "stats": [
+              "items": [
                 {
                   "value": "132K",
                   "label": "Downloads"

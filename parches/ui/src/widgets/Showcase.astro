@@ -10,13 +10,13 @@ import SectionHeader from '../components/SectionHeader.astro';
 import ShowcasePanel from '../components/ShowcasePanel.astro';
 import { schema, type Props } from './Showcase.props';
 
-const { tagline, title, subtitle, demos, syncKey, label } = schema.parse(Astro.props) as Props;
+const { tagline, title, subtitle, link, align, items: demos, syncKey, label } = schema.parse(Astro.props) as Props;
 const items = demos.map((d) => ({ value: d.value, label: d.label }));
 const name = (i: number) => demos[i]?.value ?? `__none-${i}`;
 ---
 
 <Tabs items={items} variant="pill" syncKey={syncKey} label={label} class="parche-showcase">
-  <SectionHeader slot="header" {tagline} {title} {subtitle} width="sm" spacing="none" />
+  <SectionHeader slot="header" {tagline} {title} {subtitle} {link} {align} width="sm" spacing="none" />
   <ShowcasePanel slot={name(0)} demo={demos[0]} />
   <ShowcasePanel slot={name(1)} demo={demos[1]} />
   <ShowcasePanel slot={name(2)} demo={demos[2]} />

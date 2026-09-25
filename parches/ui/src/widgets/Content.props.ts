@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
-import { action, image } from '../_shared/content';
+import { action, image, heading, headingGroup } from '../_shared/content';
 
 const item = z.object({
   title: z.string().optional(),
@@ -9,14 +9,12 @@ const item = z.object({
 });
 
 export const schema = z.object({
-  tagline: z.string().optional(),
-  title: z.string().optional(),
-  subtitle: z.string().optional().meta({ input: 'textarea' }),
+  ...heading({ align: 'center' }),
   content: z.string().optional().meta({ input: 'textarea', help: 'Rich text / HTML.' }),
   items: z.array(item).default([]),
   columns: z.enum(['1', '2', '3']).default('1').meta({ help: 'Columns for the items list.' }),
   reversed: z.boolean().default(false).meta({ help: 'Media on the left, text on the right.' }),
-  callToAction: action.optional(),
+  actions: z.array(action).default([]).meta({ help: 'Under the text, before the checklist.' }),
   image: image.optional().meta({ help: 'Beside the text when the media slot is empty.' }),
 });
 
@@ -34,8 +32,8 @@ export const meta: WidgetMeta = {
   },
   ui: {
     groups: [
-      { key: 'headline', label: 'Headline', fields: ['tagline', 'title', 'subtitle'] },
-      { key: 'body', label: 'Body', fields: ['content', 'items', 'callToAction'] },
+      headingGroup,
+      { key: 'body', label: 'Body', fields: ['content', 'items', 'actions'] },
       { key: 'layout', label: 'Layout', fields: ['columns', 'reversed', 'image'] },
     ],
   },

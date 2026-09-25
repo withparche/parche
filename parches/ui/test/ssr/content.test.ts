@@ -11,7 +11,7 @@ async function render(props: Record<string, unknown>, slots?: Record<string, str
   return container.renderToString(Content, { props, slots });
 }
 
-const base = { title: 'Why it works', content: '<p>Six units.</p>', items: [{ title: 'Fast', description: 'Ships' }], callToAction: { text: 'More', href: '#more' } };
+const base = { title: 'Why it works', content: '<p>Six units.</p>', items: [{ title: 'Fast', description: 'Ships' }], actions: [{ text: 'More', href: '#more' }] };
 
 test('without media the text takes the full width; with an image or a slot it takes half', async () => {
   const bare = await render(base);

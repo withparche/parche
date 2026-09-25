@@ -1,27 +1,19 @@
 import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
-import { image } from '../_shared/content';
+import { image, link, heading, headingGroup } from '../_shared/content';
 
-export const styles = ['grid', 'cards', 'list', 'panels', 'tiles'] as const;
+export const layouts = ['grid', 'cards', 'list', 'panels', 'tiles'] as const;
 
 const item = z.object({
   title: z.string().optional(),
   description: z.string().optional().meta({ input: 'textarea' }),
   icon: z.string().optional().meta({ input: 'icon' }),
-  callToAction: z
-    .object({
-      text: z.string().optional().meta({ placeholder: 'Learn more' }),
-      href: z.string().optional().meta({ label: 'URL', placeholder: 'https://...' }),
-    })
-    .optional(),
+  link: link.optional().meta({ help: 'A text link under the item: "Learn more".' }),
 });
 
 export const schema = z.object({
-  style: z.enum(styles).default('grid').meta({ help: 'grid: icon badge beside the text · cards: each item on a card · list: a compact list · panels: numbered cells between hairlines · tiles: small name-and-role cells between hairlines.' }),
-  align: z.enum(['center', 'start']).default('center').meta({ help: 'Where the heading sits.' }),
-  tagline: z.string().optional().meta({ placeholder: 'e.g. FEATURES' }),
-  title: z.string().optional().meta({ help: 'Main heading of the section' }),
-  subtitle: z.string().optional().meta({ input: 'textarea' }),
+  ...heading({ align: 'center' }),
+  layout: z.enum(layouts).default('grid').meta({ help: 'grid: icon badge beside the text · cards: each item on a card · list: a compact list · panels: numbered cells between hairlines · tiles: small name-and-role cells between hairlines.' }),
   items: z.array(item).default([]),
   columns: z.enum(['2', '3', '4']).default('2').meta({ help: 'Number of grid columns' }),
   defaultIcon: z.string().optional().meta({ input: 'icon', help: 'Fallback icon when an item has none' }),
@@ -42,9 +34,9 @@ export const meta: WidgetMeta = {
   },
   ui: {
     groups: [
-      { key: 'headline', label: 'Headline', fields: ['tagline', 'title', 'subtitle'] },
+      headingGroup,
       { key: 'content', label: 'Content', fields: ['items'] },
-      { key: 'layout', label: 'Layout', fields: ['style', 'align', 'columns', 'defaultIcon', 'image'] },
+      { key: 'layout', label: 'Layout', fields: ['layout', 'columns', 'defaultIcon', 'image'] },
     ],
   },
 };

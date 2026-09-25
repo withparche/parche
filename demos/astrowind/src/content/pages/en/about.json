@@ -23,7 +23,7 @@
           {
             "widget": "Stats",
             "props": {
-              "stats": [
+              "items": [
                 {
                   "value": "180",
                   "label": "Contributors"
@@ -49,7 +49,7 @@
     {
       "widget": "Features",
       "props": {
-        "style": "list",
+        "layout": "list",
         "title": "Our values",
         "subtitle": "What we optimise for when the two options both look reasonable.",
         "columns": "3",
@@ -75,7 +75,7 @@
     {
       "widget": "Features",
       "props": {
-        "style": "list",
+        "layout": "list",
         "title": "Our achievements",
         "subtitle": "Milestones worth remembering.",
         "columns": "3",
@@ -126,7 +126,7 @@
     {
       "widget": "Features",
       "props": {
-        "style": "cards",
+        "layout": "cards",
         "title": "Get in touch",
         "subtitle": "Where to find us.",
         "columns": "3",

@@ -32,7 +32,7 @@
     {
       "widget": "Features",
       "props": {
-        "style": "list",
+        "layout": "list",
         "title": "Built for the phone, not shrunk to fit",
         "columns": "3",
         "items": [
@@ -97,7 +97,7 @@
           {
             "widget": "Stats",
             "props": {
-              "stats": [
+              "items": [
                 {
                   "value": "480K",
                   "label": "Downloads"
@@ -124,7 +124,7 @@
       "widget": "Testimonials",
       "props": {
         "title": "From the stores",
-        "testimonials": [
+        "items": [
           {
             "name": "Ana Ruiz",
             "text": "The only app I have kept on my home screen for more than a month.",

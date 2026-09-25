@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
-import { sourcedNumber } from '../_shared/content';
+import { sourcedNumber, heading, headingGroup } from '../_shared/content';
 
 const stat = sourcedNumber.extend({
   icon: z.string().optional().meta({ input: 'icon' }),
@@ -8,10 +8,8 @@ const stat = sourcedNumber.extend({
 });
 
 export const schema = z.object({
-  tagline: z.string().optional(),
-  title: z.string().optional(),
-  subtitle: z.string().optional().meta({ input: 'textarea' }),
-  stats: z.array(stat).default([]),
+  ...heading({ align: 'center' }),
+  items: z.array(stat).default([]),
   layout: z.enum(['figures', 'cards']).default('figures').meta({ help: 'figures: large numbers in a row · cards: compact bordered cards, for beside a screenshot or under a hero.' }),
   note: z.string().optional().meta({ help: 'One line under the numbers: the window, the method, the caveat.' }),
 });
@@ -27,8 +25,8 @@ export const meta: WidgetMeta = {
   },
   ui: {
     groups: [
-      { key: 'headline', label: 'Headline', fields: ['tagline', 'title', 'subtitle'] },
-      { key: 'content', label: 'Numbers', fields: ['stats', 'note'] },
+      headingGroup,
+      { key: 'content', label: 'Numbers', fields: ['items', 'note'] },
       { key: 'layout', label: 'Layout', fields: ['layout'] },
     ],
   },

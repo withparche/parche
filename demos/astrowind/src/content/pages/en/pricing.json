@@ -25,31 +25,25 @@
             "props": {
               "title": "Our prices",
               "subtitle": "Only pay for what you need.",
-              "prices": [
+              "items": [
                 {
                   "title": "Basic",
                   "subtitle": "Best for personal projects",
                   "price": "29",
                   "currency": "$",
                   "period": "per month",
-                  "items": [
-                    {
-                      "description": "One project"
-                    },
-                    {
-                      "description": "Community support"
-                    },
-                    {
-                      "description": "All core widgets"
-                    },
-                    {
-                      "description": "Monthly updates"
-                    }
+                  "features": [
+                    "One project",
+                    "Community support",
+                    "All core widgets",
+                    "Monthly updates"
                   ],
-                  "callToAction": {
-                    "text": "Get started",
-                    "href": "#"
-                  }
+                  "actions": [
+                    {
+                      "text": "Get started",
+                      "href": "#"
+                    }
+                  ]
                 },
                 {
                   "title": "Standard",
@@ -57,29 +51,21 @@
                   "price": "69",
                   "currency": "$",
                   "period": "per month",
-                  "items": [
+                  "features": [
+                    "Up to ten projects",
+                    "Priority email support",
+                    "All widgets and themes",
+                    "Shared design tokens",
+                    "Weekly updates"
+                  ],
+                  "actions": [
                     {
-                      "description": "Up to ten projects"
-                    },
-                    {
-                      "description": "Priority email support"
-                    },
-                    {
-                      "description": "All widgets and themes"
-                    },
-                    {
-                      "description": "Shared design tokens"
-                    },
-                    {
-                      "description": "Weekly updates"
+                      "text": "Get started",
+                      "href": "#"
                     }
                   ],
-                  "callToAction": {
-                    "text": "Get started",
-                    "href": "#"
-                  },
-                  "hasRibbon": true,
-                  "ribbonTitle": "Popular"
+                  "recommended": true,
+                  "badge": "Popular"
                 },
                 {
                   "title": "Premium",
@@ -87,24 +73,18 @@
                   "price": "199",
                   "currency": "$",
                   "period": "per month",
-                  "items": [
-                    {
-                      "description": "Unlimited projects"
-                    },
-                    {
-                      "description": "Dedicated support channel"
-                    },
-                    {
-                      "description": "Custom theme development"
-                    },
-                    {
-                      "description": "Onboarding session"
-                    }
+                  "features": [
+                    "Unlimited projects",
+                    "Dedicated support channel",
+                    "Custom theme development",
+                    "Onboarding session"
                   ],
-                  "callToAction": {
-                    "text": "Get started",
-                    "href": "#"
-                  }
+                  "actions": [
+                    {
+                      "text": "Get started",
+                      "href": "#"
+                    }
+                  ]
                 }
               ]
             }
@@ -115,7 +95,7 @@
     {
       "widget": "Features",
       "props": {
-        "style": "list",
+        "layout": "list",
         "title": "Price-related features",
         "subtitle": "What every plan includes, regardless of size.",
         "columns": "2",

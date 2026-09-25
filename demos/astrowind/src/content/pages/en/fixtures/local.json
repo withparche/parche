@@ -10,8 +10,17 @@
         "title": "Plumbers in Bilbao, at your door within two hours",
         "subtitle": "Leaks, boilers and blockages. Fixed price quoted before we start, and if we cannot fix it the callout is free.",
         "actions": [
-          { "text": "Tap to call · 944 00 00 00", "href": "tel:+34944000000", "variant": "primary", "icon": "tabler:phone" },
-          { "text": "Book a slot instead", "href": "#book", "variant": "secondary" }
+          {
+            "text": "Tap to call · 944 00 00 00",
+            "href": "tel:+34944000000",
+            "variant": "primary",
+            "icon": "tabler:phone"
+          },
+          {
+            "text": "Book a slot instead",
+            "href": "#book",
+            "variant": "secondary"
+          }
         ]
       },
       "slots": {
@@ -19,10 +28,28 @@
           {
             "widget": "Stats",
             "props": {
-              "stats": [
-                { "value": "4.8", "unit": " ★", "label": "Google reviews", "source": "317 reviews", "date": "Sept 2026", "href": "https://maps.google.com" },
-                { "value": "2", "unit": "h", "label": "Median arrival", "source": "job log", "date": "last 90 days" },
-                { "value": "0", "unit": " €", "label": "If we cannot fix it", "source": "our terms" }
+              "items": [
+                {
+                  "value": "4.8",
+                  "label": "Google reviews",
+                  "unit": " ★",
+                  "source": "317 reviews",
+                  "date": "Sept 2026",
+                  "href": "https://maps.google.com"
+                },
+                {
+                  "value": "2",
+                  "label": "Median arrival",
+                  "unit": "h",
+                  "source": "job log",
+                  "date": "last 90 days"
+                },
+                {
+                  "value": "0",
+                  "label": "If we cannot fix it",
+                  "unit": " €",
+                  "source": "our terms"
+                }
               ]
             }
           }
@@ -31,23 +58,51 @@
     },
     {
       "widget": "Section",
-      "props": { "tone": "muted", "id": "services", "label": "Services" },
+      "props": {
+        "tone": "muted",
+        "id": "services",
+        "label": "Services"
+      },
       "slots": {
         "default": [
           {
             "widget": "Features",
             "props": {
-              "style": "list",
+              "layout": "list",
               "columns": "3",
               "tagline": "What we do",
               "title": "What we do, and what it costs",
               "items": [
-                { "title": "Leaks and burst pipes", "description": "From 85 €. Same day.", "icon": "tabler:droplet" },
-                { "title": "Boilers", "description": "Repair from 120 €; replacement quoted on site.", "icon": "tabler:flame" },
-                { "title": "Blockages", "description": "From 95 €, camera inspection included.", "icon": "tabler:bath" },
-                { "title": "Bathrooms", "description": "Full refits, quoted after a visit.", "icon": "tabler:tool" },
-                { "title": "Radiators", "description": "Bleeding, balancing, replacement.", "icon": "tabler:temperature" },
-                { "title": "Emergencies", "description": "24/7, with the night rate stated before we come.", "icon": "tabler:alert-triangle" }
+                {
+                  "title": "Leaks and burst pipes",
+                  "description": "From 85 €. Same day.",
+                  "icon": "tabler:droplet"
+                },
+                {
+                  "title": "Boilers",
+                  "description": "Repair from 120 €; replacement quoted on site.",
+                  "icon": "tabler:flame"
+                },
+                {
+                  "title": "Blockages",
+                  "description": "From 95 €, camera inspection included.",
+                  "icon": "tabler:bath"
+                },
+                {
+                  "title": "Bathrooms",
+                  "description": "Full refits, quoted after a visit.",
+                  "icon": "tabler:tool"
+                },
+                {
+                  "title": "Radiators",
+                  "description": "Bleeding, balancing, replacement.",
+                  "icon": "tabler:temperature"
+                },
+                {
+                  "title": "Emergencies",
+                  "description": "24/7, with the night rate stated before we come.",
+                  "icon": "tabler:alert-triangle"
+                }
               ]
             }
           }
@@ -56,7 +111,10 @@
     },
     {
       "widget": "Section",
-      "props": { "id": "process", "label": "What happens" },
+      "props": {
+        "id": "process",
+        "label": "What happens"
+      },
       "slots": {
         "default": [
           {
@@ -65,10 +123,28 @@
               "layout": "grid",
               "title": "What happens when you call",
               "items": [
-                { "title": "A person answers", "description": "No menu, no queue. We ask three questions.", "duration": "1 minute" },
-                { "title": "A fixed price", "description": "Quoted before the van leaves.", "duration": "5 minutes", "owner": "us" },
-                { "title": "At your door", "description": "Median two hours, tracked by text.", "duration": "2 hours", "owner": "us" },
-                { "title": "Fixed, or free", "description": "You pay the quote, or nothing.", "owner": "you" }
+                {
+                  "title": "A person answers",
+                  "description": "No menu, no queue. We ask three questions.",
+                  "duration": "1 minute"
+                },
+                {
+                  "title": "A fixed price",
+                  "description": "Quoted before the van leaves.",
+                  "duration": "5 minutes",
+                  "owner": "us"
+                },
+                {
+                  "title": "At your door",
+                  "description": "Median two hours, tracked by text.",
+                  "duration": "2 hours",
+                  "owner": "us"
+                },
+                {
+                  "title": "Fixed, or free",
+                  "description": "You pay the quote, or nothing.",
+                  "owner": "you"
+                }
               ]
             }
           }
@@ -77,7 +153,10 @@
     },
     {
       "widget": "Section",
-      "props": { "id": "reviews", "label": "Reviews" },
+      "props": {
+        "id": "reviews",
+        "label": "Reviews"
+      },
       "slots": {
         "default": [
           {
@@ -85,10 +164,31 @@
             "props": {
               "tagline": "Reviews",
               "title": "4.8 from 317 Google reviews",
-              "testimonials": [
-                { "text": "Boiler down on a Sunday, fixed by two. Price was the price they said.", "name": "Ane Etxeberria", "role": "Getxo", "date": "August 2026", "source": "Google", "href": "https://maps.google.com" },
-                { "text": "Camera found the blockage in ten minutes. Second time we use them.", "name": "Jon Aranburu", "role": "Barakaldo", "date": "July 2026", "source": "Google", "href": "https://maps.google.com" },
-                { "text": "Clean, quick, and they explained what they did.", "name": "Marta Ruiz", "role": "Bilbao", "date": "June 2026", "source": "Google", "href": "https://maps.google.com" }
+              "items": [
+                {
+                  "text": "Boiler down on a Sunday, fixed by two. Price was the price they said.",
+                  "name": "Ane Etxeberria",
+                  "role": "Getxo",
+                  "date": "August 2026",
+                  "source": "Google",
+                  "href": "https://maps.google.com"
+                },
+                {
+                  "text": "Camera found the blockage in ten minutes. Second time we use them.",
+                  "name": "Jon Aranburu",
+                  "role": "Barakaldo",
+                  "date": "July 2026",
+                  "source": "Google",
+                  "href": "https://maps.google.com"
+                },
+                {
+                  "text": "Clean, quick, and they explained what they did.",
+                  "name": "Marta Ruiz",
+                  "role": "Bilbao",
+                  "date": "June 2026",
+                  "source": "Google",
+                  "href": "https://maps.google.com"
+                }
               ]
             }
           }
@@ -97,7 +197,11 @@
     },
     {
       "widget": "Section",
-      "props": { "tone": "glow", "id": "book", "label": "Book" },
+      "props": {
+        "tone": "glow",
+        "id": "book",
+        "label": "Book"
+      },
       "slots": {
         "default": [
           {
@@ -107,13 +211,35 @@
               "title": "Pick a slot, or just call",
               "subtitle": "We answer within the hour on working days.",
               "inputs": [
-                { "type": "text", "name": "name", "label": "Name", "autocomplete": "name" },
-                { "type": "tel", "name": "phone", "label": "Phone", "autocomplete": "tel" },
-                { "type": "text", "name": "address", "label": "Address", "autocomplete": "street-address" }
+                {
+                  "type": "text",
+                  "name": "name",
+                  "label": "Name",
+                  "autocomplete": "name"
+                },
+                {
+                  "type": "tel",
+                  "name": "phone",
+                  "label": "Phone",
+                  "autocomplete": "tel"
+                },
+                {
+                  "type": "text",
+                  "name": "address",
+                  "label": "Address",
+                  "autocomplete": "street-address"
+                }
               ],
-              "textarea": { "label": "What is wrong", "name": "message", "placeholder": "A leak under the sink, since yesterday…", "rows": 4 },
-              "disclaimer": { "label": "We keep your details for this job only, 90 days." },
-              "button": "Ask for a slot"
+              "textarea": {
+                "label": "What is wrong",
+                "name": "message",
+                "placeholder": "A leak under the sink, since yesterday…",
+                "rows": 4
+              },
+              "disclaimer": {
+                "label": "We keep your details for this job only, 90 days."
+              },
+              "submit": "Ask for a slot"
             }
           }
         ]

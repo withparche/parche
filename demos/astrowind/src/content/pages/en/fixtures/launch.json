@@ -79,7 +79,7 @@
           {
             "widget": "Stats",
             "props": {
-              "stats": [
+              "items": [
                 {
                   "value": "6.1K",
                   "label": "GitHub stars",
@@ -88,15 +88,15 @@
                 },
                 {
                   "value": "0.4",
-                  "unit": "s",
                   "label": "Median LCP",
+                  "unit": "s",
                   "source": "CrUX p75",
                   "date": "28 days"
                 },
                 {
                   "value": "38",
-                  "unit": "KB",
                   "label": "Client JS on a page",
+                  "unit": "KB",
                   "source": "build-smoke"
                 },
                 {
@@ -122,7 +122,7 @@
           {
             "widget": "Features",
             "props": {
-              "style": "cards",
+              "layout": "cards",
               "columns": "3",
               "tagline": "What ships",
               "title": "Count it before you clone it",
@@ -204,10 +204,12 @@
                   "owner": "us"
                 }
               ],
-              "callToAction": {
-                "text": "Book a scoping call",
-                "href": "/contact"
-              }
+              "actions": [
+                {
+                  "text": "Book a scoping call",
+                  "href": "/contact"
+                }
+              ]
             }
           }
         ]
@@ -228,7 +230,7 @@
               "tagline": "Field data, not a lab score",
               "title": "Core Web Vitals from real visitors",
               "subtitle": "28-day field percentiles from sites in production, with the threshold next to each number.",
-              "stats": [
+              "items": [
                 {
                   "value": "0.9s",
                   "label": "LCP · good under 2.5s"

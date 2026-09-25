@@ -1,13 +1,12 @@
 ---
-import type { Props } from './Brands.props';
-import Heading from 'parche:elements/Heading';
+import { schema, type Props } from './Brands.props';
+import SectionHeader from '../components/SectionHeader.astro';
 import Icon from 'parche:elements/Icon';
 import Card from 'parche:elements/Card';
 import Image from 'parche:elements/Image';
 import * as Carousel from 'parche:elements/Carousel';
 
-const { tagline, title, subtitle, icons = [], images = [], names = [], label, link, layout = 'wrap' } = Astro.props;
-const hasHeadline = Boolean(tagline || title || subtitle);
+const { tagline, title, subtitle, link, align, icons, images, names, label, layout } = schema.parse(Astro.props) as Props;
 
 const brands = [
   ...icons.map((icon) => ({ icon })),
@@ -15,7 +14,7 @@ const brands = [
 ];
 ---
 
-{layout !== 'strip' && hasHeadline && <Heading {tagline} {title} {subtitle} />}
+{layout !== 'strip' && <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="xl" />}
 
 {layout === 'strip' ? (
   <div class="parche-brands-strip flex flex-wrap items-center gap-[clamp(18px,3vw,44px)] py-5" data-layout="strip">

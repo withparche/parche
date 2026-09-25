@@ -1,13 +1,11 @@
 import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
+import { action, actionVariants, heading, headingGroup } from '../_shared/content';
 
-const pricingItem = z.object({
-  title: z.string().optional(),
-  description: z.string().optional(),
-  icon: z.string().optional().meta({ input: 'icon' }),
-});
+/** A plan's button: primary on the recommended plan, secondary on the others, unless set. */
+const planAction = action.extend({ variant: z.enum(actionVariants).optional() });
 
-const pricePlan = z.object({
+const plan = z.object({
   title: z.string().optional(),
   subtitle: z.string().optional(),
   description: z.string().optional().meta({ input: 'textarea' }),
@@ -15,23 +13,17 @@ const pricePlan = z.object({
   price: z.string().optional().meta({ placeholder: '29', help: 'Numeric price for standard plans; ignored for a custom tier' }),
   currency: z.string().optional().meta({ placeholder: '$', help: 'Currency symbol shown before a numeric price' }),
   period: z.string().optional().meta({ placeholder: '/ month', help: 'Optional — omit for custom/contact tiers' }),
-  items: z.array(pricingItem).default([]),
-  callToAction: z.object({
-    text: z.string().optional().meta({ placeholder: 'Get started' }),
-    href: z.string().optional().meta({ placeholder: 'https://...' }),
-  }).optional(),
+  features: z.array(z.string()).default([]).meta({ help: 'What the plan includes, one line each.' }),
+  actions: z.array(planAction).default([]),
   note: z.string().optional().meta({ help: 'Under the price: "MIT, commercial use included".' }),
   suffix: z.string().optional().meta({ help: 'After the price, smaller: "once", "/ month".' }),
-  hasRibbon: z.boolean().default(false).meta({ help: 'The recommended tier: accented border, the label above it.' }),
-  ribbonTitle: z.string().optional().meta({ placeholder: 'Popular' }),
+  recommended: z.boolean().default(false).meta({ help: 'The recommended plan: accented border, the badge above it, the primary button.' }),
+  badge: z.string().optional().meta({ placeholder: 'Popular', help: 'The label on the plan\'s top edge.' }),
 });
 
 export const schema = z.object({
-  tagline: z.string().optional(),
-  title: z.string().optional(),
-  subtitle: z.string().optional().meta({ input: 'textarea' }),
-  prices: z.array(pricePlan).default([]),
-  align: z.enum(['center', 'start']).default('center').meta({ help: 'Where the heading sits.' }),
+  ...heading({ align: 'center' }),
+  items: z.array(plan).default([]).meta({ help: 'The plans, in order.' }),
   comparison: z
     .object({
       label: z.string().default('Compare'),
@@ -57,8 +49,8 @@ export const meta: WidgetMeta = {
   },
   ui: {
     groups: [
-      { key: 'headline', label: 'Headline', fields: ['tagline', 'title', 'subtitle'] },
-      { key: 'content', label: 'Plans', fields: ['prices'] },
+      headingGroup,
+      { key: 'content', label: 'Plans', fields: ['items', 'comparison'] },
     ],
   },
 };

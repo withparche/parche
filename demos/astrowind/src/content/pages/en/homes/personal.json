@@ -84,7 +84,7 @@
     {
       "widget": "Features",
       "props": {
-        "style": "list",
+        "layout": "list",
         "title": "Selected work",
         "columns": "3",
         "items": [
@@ -110,7 +110,7 @@
       "widget": "Testimonials",
       "props": {
         "title": "Kind words",
-        "testimonials": [
+        "items": [
           {
             "name": "Ana Ruiz",
             "text": "Alex left us with a system we could keep using, which is rarer than it should be.",

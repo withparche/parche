@@ -165,7 +165,7 @@
               "title": "Check out my latest work",
               "subtitle": "A few projects I'm proud of — from design systems to full products.",
               "columns": "2",
-              "projects": [
+              "items": [
                 {
                   "title": "Nimbus",
                   "date": "2025",
@@ -179,16 +179,16 @@
                     "Astro",
                     "TypeScript"
                   ],
-                  "links": [
+                  "actions": [
                     {
-                      "label": "Website",
                       "href": "#",
-                      "icon": "tabler:world"
+                      "icon": "tabler:world",
+                      "text": "Website"
                     },
                     {
-                      "label": "Source",
                       "href": "#",
-                      "icon": "tabler:brand-github"
+                      "icon": "tabler:brand-github",
+                      "text": "Source"
                     }
                   ]
                 },
@@ -205,16 +205,16 @@
                     "React",
                     "Docs"
                   ],
-                  "links": [
+                  "actions": [
                     {
-                      "label": "Website",
                       "href": "#",
-                      "icon": "tabler:world"
+                      "icon": "tabler:world",
+                      "text": "Website"
                     },
                     {
-                      "label": "Source",
                       "href": "#",
-                      "icon": "tabler:brand-github"
+                      "icon": "tabler:brand-github",
+                      "text": "Source"
                     }
                   ]
                 },
@@ -231,11 +231,11 @@
                     "Brand",
                     "Figma"
                   ],
-                  "links": [
+                  "actions": [
                     {
-                      "label": "Website",
                       "href": "#",
-                      "icon": "tabler:world"
+                      "icon": "tabler:world",
+                      "text": "Website"
                     }
                   ]
                 },
@@ -252,16 +252,16 @@
                     "TypeScript",
                     "D3"
                   ],
-                  "links": [
+                  "actions": [
                     {
-                      "label": "Website",
                       "href": "#",
-                      "icon": "tabler:world"
+                      "icon": "tabler:world",
+                      "text": "Website"
                     },
                     {
-                      "label": "Source",
                       "href": "#",
-                      "icon": "tabler:brand-github"
+                      "icon": "tabler:brand-github",
+                      "text": "Source"
                     }
                   ]
                 }
@@ -284,7 +284,7 @@
             "props": {
               "tagline": "Kind words",
               "title": "What people say",
-              "testimonials": [
+              "items": [
                 {
                   "name": "Ana Ruiz",
                   "text": "Alex is the rare designer who can also ship the code. Our velocity doubled.",

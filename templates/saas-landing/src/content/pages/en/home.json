@@ -138,7 +138,7 @@
             "widget": "Stats",
             "props": {
               "title": "Teams get more done with Parche",
-              "stats": [
+              "items": [
                 {
                   "value": "12k+",
                   "label": "Teams onboarded",
@@ -215,53 +215,43 @@
               "tagline": "Pricing",
               "title": "Simple pricing that scales with you",
               "subtitle": "Start free. Upgrade when your team grows. Cancel anytime.",
-              "prices": [
+              "items": [
                 {
                   "title": "Free",
                   "subtitle": "For individuals getting started",
                   "price": "0",
                   "period": "/ month",
-                  "items": [
-                    {
-                      "description": "Up to 3 projects"
-                    },
-                    {
-                      "description": "Unlimited docs"
-                    },
-                    {
-                      "description": "Community support"
-                    }
+                  "features": [
+                    "Up to 3 projects",
+                    "Unlimited docs",
+                    "Community support"
                   ],
-                  "callToAction": {
-                    "text": "Get started",
-                    "href": "#"
-                  }
+                  "actions": [
+                    {
+                      "text": "Get started",
+                      "href": "#"
+                    }
+                  ]
                 },
                 {
                   "title": "Team",
                   "subtitle": "For growing teams",
                   "price": "12",
                   "period": "/ user / month",
-                  "hasRibbon": true,
-                  "ribbonTitle": "Popular",
-                  "items": [
-                    {
-                      "description": "Unlimited projects"
-                    },
-                    {
-                      "description": "Automations & roadmaps"
-                    },
-                    {
-                      "description": "40+ integrations"
-                    },
-                    {
-                      "description": "Priority support"
-                    }
+                  "recommended": true,
+                  "badge": "Popular",
+                  "features": [
+                    "Unlimited projects",
+                    "Automations & roadmaps",
+                    "40+ integrations",
+                    "Priority support"
                   ],
-                  "callToAction": {
-                    "text": "Start free trial",
-                    "href": "#"
-                  }
+                  "actions": [
+                    {
+                      "text": "Start free trial",
+                      "href": "#"
+                    }
+                  ]
                 },
                 {
                   "title": "Enterprise",
@@ -269,24 +259,18 @@
                   "type": "custom",
                   "price": "Custom",
                   "description": "Volume pricing tailored to your organization.",
-                  "items": [
-                    {
-                      "description": "SSO & SCIM"
-                    },
-                    {
-                      "description": "Advanced permissions"
-                    },
-                    {
-                      "description": "Dedicated success manager"
-                    },
-                    {
-                      "description": "99.99% uptime SLA"
-                    }
+                  "features": [
+                    "SSO & SCIM",
+                    "Advanced permissions",
+                    "Dedicated success manager",
+                    "99.99% uptime SLA"
                   ],
-                  "callToAction": {
-                    "text": "Contact sales",
-                    "href": "#"
-                  }
+                  "actions": [
+                    {
+                      "text": "Contact sales",
+                      "href": "#"
+                    }
+                  ]
                 }
               ]
             }
@@ -299,7 +283,7 @@
       "props": {
         "tagline": "Loved by teams",
         "title": "Don't take our word for it",
-        "testimonials": [
+        "items": [
           {
             "name": "Ana Ruiz",
             "text": "We replaced three tools with Parche and cut our weekly sync in half. It just feels calmer.",

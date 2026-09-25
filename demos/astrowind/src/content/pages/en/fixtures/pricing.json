@@ -13,7 +13,11 @@
     },
     {
       "widget": "Section",
-      "props": { "id": "plans", "label": "Plans", "spacing": "sm" },
+      "props": {
+        "id": "plans",
+        "label": "Plans",
+        "spacing": "sm"
+      },
       "slots": {
         "default": [
           {
@@ -23,8 +27,14 @@
               "syncKey": "billing",
               "value": "yearly",
               "options": [
-                { "value": "monthly", "label": "Monthly" },
-                { "value": "yearly", "label": "Yearly · two months free" }
+                {
+                  "value": "monthly",
+                  "label": "Monthly"
+                },
+                {
+                  "value": "yearly",
+                  "label": "Yearly · two months free"
+                }
               ]
             },
             "slots": {
@@ -32,10 +42,60 @@
                 {
                   "widget": "Pricing",
                   "props": {
-                    "prices": [
-                      { "title": "Free", "subtitle": "One project", "price": "0", "currency": "€", "period": "per month", "items": [{ "description": "1 project" }, { "description": "Community support" }], "callToAction": { "text": "Start free", "href": "#get" } },
-                      { "title": "Studio", "subtitle": "Most picked by agencies", "price": "39", "currency": "€", "period": "per month", "hasRibbon": true, "ribbonTitle": "Most picked", "items": [{ "description": "Unlimited projects" }, { "description": "The builder" }, { "description": "Email support, 1 business day" }], "callToAction": { "text": "Start Studio", "href": "#get" } },
-                      { "title": "Done with you", "subtitle": "We build the first site", "type": "custom", "items": [{ "description": "Everything in Studio" }, { "description": "A scoping call" }, { "description": "Launch support" }], "callToAction": { "text": "Talk to us", "href": "/contact" } }
+                    "items": [
+                      {
+                        "title": "Free",
+                        "subtitle": "One project",
+                        "price": "0",
+                        "currency": "€",
+                        "period": "per month",
+                        "features": [
+                          "1 project",
+                          "Community support"
+                        ],
+                        "actions": [
+                          {
+                            "text": "Start free",
+                            "href": "#get"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "Studio",
+                        "subtitle": "Most picked by agencies",
+                        "price": "39",
+                        "currency": "€",
+                        "period": "per month",
+                        "recommended": true,
+                        "badge": "Most picked",
+                        "features": [
+                          "Unlimited projects",
+                          "The builder",
+                          "Email support, 1 business day"
+                        ],
+                        "actions": [
+                          {
+                            "text": "Start Studio",
+                            "href": "#get"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "Done with you",
+                        "subtitle": "We build the first site",
+                        "type": "custom",
+                        "features": [
+                          "Everything in Studio",
+                          "A scoping call",
+                          "Launch support"
+                        ],
+                        "actions": [
+                          {
+                            "text": "Talk to us",
+                            "href": "/contact"
+                          }
+                        ]
+                      }
                     ]
                   }
                 }
@@ -44,10 +104,60 @@
                 {
                   "widget": "Pricing",
                   "props": {
-                    "prices": [
-                      { "title": "Free", "subtitle": "One project", "price": "0", "currency": "€", "period": "per year", "items": [{ "description": "1 project" }, { "description": "Community support" }], "callToAction": { "text": "Start free", "href": "#get" } },
-                      { "title": "Studio", "subtitle": "Most picked by agencies", "price": "390", "currency": "€", "period": "per year", "hasRibbon": true, "ribbonTitle": "Two months free", "items": [{ "description": "Unlimited projects" }, { "description": "The builder" }, { "description": "Email support, 1 business day" }], "callToAction": { "text": "Start Studio", "href": "#get" } },
-                      { "title": "Done with you", "subtitle": "We build the first site", "type": "custom", "items": [{ "description": "Everything in Studio" }, { "description": "A scoping call" }, { "description": "Launch support" }], "callToAction": { "text": "Talk to us", "href": "/contact" } }
+                    "items": [
+                      {
+                        "title": "Free",
+                        "subtitle": "One project",
+                        "price": "0",
+                        "currency": "€",
+                        "period": "per year",
+                        "features": [
+                          "1 project",
+                          "Community support"
+                        ],
+                        "actions": [
+                          {
+                            "text": "Start free",
+                            "href": "#get"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "Studio",
+                        "subtitle": "Most picked by agencies",
+                        "price": "390",
+                        "currency": "€",
+                        "period": "per year",
+                        "recommended": true,
+                        "badge": "Two months free",
+                        "features": [
+                          "Unlimited projects",
+                          "The builder",
+                          "Email support, 1 business day"
+                        ],
+                        "actions": [
+                          {
+                            "text": "Start Studio",
+                            "href": "#get"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "Done with you",
+                        "subtitle": "We build the first site",
+                        "type": "custom",
+                        "features": [
+                          "Everything in Studio",
+                          "A scoping call",
+                          "Launch support"
+                        ],
+                        "actions": [
+                          {
+                            "text": "Talk to us",
+                            "href": "/contact"
+                          }
+                        ]
+                      }
                     ]
                   }
                 }
@@ -57,10 +167,19 @@
         ]
       }
     },
-    { "widget": "Preset", "props": { "name": "faq-agencies" } },
+    {
+      "widget": "Preset",
+      "props": {
+        "name": "faq-agencies"
+      }
+    },
     {
       "widget": "Section",
-      "props": { "tone": "dark", "id": "get", "label": "Get it" },
+      "props": {
+        "tone": "dark",
+        "id": "get",
+        "label": "Get it"
+      },
       "slots": {
         "default": [
           {
@@ -69,7 +188,13 @@
               "layout": "band",
               "title": "Start with the free tier",
               "subtitle": "No card. Upgrade when the second project arrives.",
-              "actions": [{ "text": "Create a project", "href": "https://github.com/withparche/parche", "variant": "primary" }]
+              "actions": [
+                {
+                  "text": "Create a project",
+                  "href": "https://github.com/withparche/parche",
+                  "variant": "primary"
+                }
+              ]
             }
           }
         ]

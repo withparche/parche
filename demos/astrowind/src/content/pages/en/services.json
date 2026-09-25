@@ -24,7 +24,7 @@
     {
       "widget": "Features",
       "props": {
-        "style": "cards",
+        "layout": "cards",
         "tagline": "Services",
         "title": "What we offer",
         "subtitle": "Four ways to work together, from the lightest to the most involved.",
@@ -121,7 +121,7 @@
       "props": {
         "tagline": "Clients",
         "title": "What they say",
-        "testimonials": [
+        "items": [
           {
             "name": "Ana Ruiz",
             "text": "They delivered a faster site than the one we had and, for the first time, we understand how to change it.",

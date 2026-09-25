@@ -1,0 +1,23 @@
+---
+/**
+ * A row of calls to action from the widgets' `actions` list: wraps on narrow
+ * screens, renders nothing when the list is empty.
+ */
+import Action from './Action.astro';
+import type { Action as ActionData } from '../_shared/content';
+
+interface Props {
+  actions: ActionData[];
+  size?: 'sm' | 'md' | 'lg';
+  class?: string;
+}
+
+const { actions, size, class: className } = Astro.props;
+const shown = actions.filter((a) => a.text || a.icon);
+---
+
+{shown.length > 0 && (
+  <div class:list={['parche-actions flex flex-wrap gap-3', className]}>
+    {shown.map((a) => <Action action={a} {size} />)}
+  </div>
+)}

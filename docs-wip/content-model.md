@@ -138,8 +138,14 @@ never loads on a request.
 `wrapper` objects become explicit `Section` nodes (`bg` gradients become the
 `glow`, `gradient` and `dots` tones, `classes.container` becomes `width` and
 `spacing`), `wrapper: false` is dropped, `layout/Main` becomes `Outlet`, and
-`template` is removed. Front matter in Markdown pages is reported for hand
-editing.
+`template` is removed. Then every node's props move to the common vocabulary
+below (`stats`, `testimonials`, `members`, `entries`, `projects`, `prices`,
+`demos` → `items`; `callToAction` → `actions`; Features `style` → `layout`;
+Pricing `hasRibbon`/`ribbonTitle` → `recommended`/`badge` and a plan's
+`items` → `features`; form `action`/`button` → `endpoint`/`submit`; blog
+`linkText`/`linkUrl`/`information` → `link`/`subtitle`). Renamed keys stay
+where the author put them, and running the script twice changes nothing.
+Front matter in Markdown pages is reported for hand editing.
 
 ## Presets
 
@@ -166,8 +172,9 @@ The locale's preset wins over the plain name.
 
 A widget is one purpose; differences of shape are a prop, structure is a
 slot. `Hero` has `layout: center | split | text` and the slots `media` and
-`proof`; `Features` has `style: grid | cards | list` and a `media` slot;
-`Steps` has `layout: timeline | grid | numbered` and a `media` slot;
+`proof`; `Features` has `layout: grid | cards | list | panels | tiles` and
+a `media` slot; `Steps` has `layout: timeline | grid | numbered | rows` and a
+`media` slot;
 `Content` has a `media` slot; `CallToAction` has `layout: card | band |
 inline`. The containers are `Columns` (two to four `Column`), `Column`, and
 `Switch`, a segmented control with one slot per option: its meta declares
@@ -178,6 +185,29 @@ Content shapes shared by the widgets live in `parches/ui/src/_shared/content.ts`
 `verifiedQuote` (text, name, role, avatar, date, source, href),
 `responseTime`, and `collectionRef`, a reference a widget may accept in place
 of an inline list once the renderer resolves it.
+
+## One vocabulary for props
+
+The same idea has the same name in every widget, so an author learns it once
+and the builder edits it with one form:
+
+| Prop | Means | Shape |
+|---|---|---|
+| `tagline`, `title`, `subtitle`, `link`, `align` | The section's heading | `heading()` in `_shared/content.ts`, spread into the schema |
+| `items` | The things a section lists: features, numbers, quotes, people, plans, demos, entries | an array of the widget's item shape |
+| `actions` | Buttons, at any level, always a list | `action[]` (`variant`, `text`, `href`, `target`, `icon`) |
+| `link` | One text link: beside a heading, under an item | `{ text, href }` |
+| `description` | An item's body text | string, inline HTML allowed |
+| `layout` | How the widget arranges its content | an enum per widget |
+| `variant` | A visual flavour of the same arrangement | an enum per element |
+| `endpoint`, `submit` | Where a form posts, the submit label | strings |
+| `badge`, `note` | A short label on an edge; one line under the content | strings |
+
+Every section widget opens with the heading, rendered by one component
+(`SectionHeader`), and lists `headingGroup` first in its builder groups. A
+widget sets the default alignment that suits it (`heading({ align: 'center' })`);
+a few decide it from their layout when the content does not say (the Steps
+grid and the FAQs accordion centre, their other layouts start).
 
 ## Themes on the layering
 

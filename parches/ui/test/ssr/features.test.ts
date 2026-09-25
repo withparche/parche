@@ -1,5 +1,5 @@
 /**
- * The Features widget on the node model: three styles, the media slot above
+ * The Features widget on the node model: five layouts, the media slot above
  * the items, the image as its fallback.
  */
 import { test, expect } from 'vitest';
@@ -15,22 +15,22 @@ async function render(props: Record<string, unknown>, slots?: Record<string, str
 const base = {
   title: 'What you get',
   items: [
-    { title: 'Fast', description: 'Ships in a day', icon: 'tabler:bolt', callToAction: { text: 'More', href: '#fast' } },
+    { title: 'Fast', description: 'Ships in a day', icon: 'tabler:bolt', link: { text: 'More', href: '#fast' } },
     { title: 'Small', description: 'Tiny bundle' },
   ],
 };
 
 test('grid: an icon badge beside each item; cards: each item on a card; list: compact rows', async () => {
   const grid = await render(base);
-  expect(grid).toContain('data-style="grid"');
+  expect(grid).toContain('data-layout="grid"');
   expect(grid).toContain('rounded-full bg-primary text-on-primary');
   expect(grid).toContain('href="#fast"');
-  const cards = await render({ ...base, style: 'cards' });
-  expect(cards).toContain('data-style="cards"');
+  const cards = await render({ ...base, layout: 'cards' });
+  expect(cards).toContain('data-layout="cards"');
   expect(cards).toContain('parche-card');
   expect(cards).not.toContain('rounded-full bg-primary');
-  const list = await render({ ...base, style: 'list' });
-  expect(list).toContain('data-style="list"');
+  const list = await render({ ...base, layout: 'list' });
+  expect(list).toContain('data-layout="list"');
   expect(list).toContain('text-lg font-semibold');
 });
 

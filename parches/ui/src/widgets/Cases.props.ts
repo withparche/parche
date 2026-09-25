@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
-import { image } from '../_shared/content';
+import { image, heading, headingGroup } from '../_shared/content';
 
 const result = z.object({
   value: z.string().meta({ help: '"−71%", "9 d", "2.1×".' }),
@@ -12,7 +12,7 @@ const item = z.object({
   client: z.string(),
   sector: z.string().optional(),
   title: z.string(),
-  summary: z.string().optional().meta({ input: 'textarea' }),
+  description: z.string().optional().meta({ input: 'textarea' }),
   href: z.string().optional(),
   image: image.optional(),
   caption: z.string().optional().meta({ help: 'The placeholder caption until there is an image: "case shot · 900×560".' }),
@@ -20,10 +20,7 @@ const item = z.object({
 });
 
 export const schema = z.object({
-  tagline: z.string().optional(),
-  title: z.string().optional(),
-  subtitle: z.string().optional().meta({ input: 'textarea' }),
-  link: z.object({ text: z.string(), href: z.string() }).optional().meta({ help: 'Where all the case studies are.' }),
+  ...heading(),
   items: z.array(item).default([]),
 });
 
@@ -35,5 +32,11 @@ export const meta: WidgetMeta = {
     description: 'Case studies as evidence: client and sector, what was done, and three measured results under each.',
     category: 'social-proof',
     icon: 'tabler:briefcase',
+  },
+  ui: {
+    groups: [
+      headingGroup,
+      { key: 'content', label: 'Cases', fields: ['items'] },
+    ],
   },
 };

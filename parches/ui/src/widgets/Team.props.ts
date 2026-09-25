@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
-import { image } from '../_shared/content';
+import { image, heading, headingGroup } from '../_shared/content';
 
 const member = z.object({
   name: z.string(),
@@ -10,10 +10,8 @@ const member = z.object({
 });
 
 export const schema = z.object({
-  tagline: z.string().optional(),
-  title: z.string().optional(),
-  subtitle: z.string().optional().meta({ input: 'textarea' }),
-  members: z.array(member).default([]),
+  ...heading(),
+  items: z.array(member).default([]),
   more: z
     .object({ count: z.string().meta({ help: '"+180".' }), label: z.string(), note: z.string().optional() })
     .optional()
@@ -29,5 +27,12 @@ export const meta: WidgetMeta = {
     description: 'Named people with a checkable credential each, and a tile for everyone else.',
     category: 'about',
     icon: 'tabler:users',
+  },
+  ui: {
+    groups: [
+      headingGroup,
+      { key: 'content', label: 'People', fields: ['items', 'more'] },
+      { key: 'layout', label: 'Layout', fields: ['layout'] },
+    ],
   },
 };

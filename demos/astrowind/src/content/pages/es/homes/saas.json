@@ -145,28 +145,24 @@
             "props": {
               "tagline": "Precios",
               "title": "Precios que crecen contigo",
-              "prices": [
+              "items": [
                 {
                   "title": "Gratis",
                   "subtitle": "Para empezar",
                   "price": "0",
                   "currency": "$",
                   "period": "al mes",
-                  "items": [
-                    {
-                      "description": "Hasta 3 proyectos"
-                    },
-                    {
-                      "description": "Documentos ilimitados"
-                    },
-                    {
-                      "description": "Soporte de la comunidad"
-                    }
+                  "features": [
+                    "Hasta 3 proyectos",
+                    "Documentos ilimitados",
+                    "Soporte de la comunidad"
                   ],
-                  "callToAction": {
-                    "text": "Empezar",
-                    "href": "#"
-                  }
+                  "actions": [
+                    {
+                      "text": "Empezar",
+                      "href": "#"
+                    }
+                  ]
                 },
                 {
                   "title": "Equipo",
@@ -174,47 +170,37 @@
                   "price": "12",
                   "currency": "$",
                   "period": "por persona y mes",
-                  "hasRibbon": true,
-                  "ribbonTitle": "Popular",
-                  "items": [
-                    {
-                      "description": "Proyectos ilimitados"
-                    },
-                    {
-                      "description": "Automatizaciones y hojas de ruta"
-                    },
-                    {
-                      "description": "Integraciones"
-                    },
-                    {
-                      "description": "Soporte prioritario"
-                    }
+                  "recommended": true,
+                  "badge": "Popular",
+                  "features": [
+                    "Proyectos ilimitados",
+                    "Automatizaciones y hojas de ruta",
+                    "Integraciones",
+                    "Soporte prioritario"
                   ],
-                  "callToAction": {
-                    "text": "Probar gratis",
-                    "href": "#"
-                  }
+                  "actions": [
+                    {
+                      "text": "Probar gratis",
+                      "href": "#"
+                    }
+                  ]
                 },
                 {
                   "title": "Corporativo",
                   "subtitle": "Para organizaciones grandes",
                   "type": "custom",
                   "description": "Precio a medida según volumen.",
-                  "items": [
-                    {
-                      "description": "SSO y SCIM"
-                    },
-                    {
-                      "description": "Permisos avanzados"
-                    },
-                    {
-                      "description": "Gestor de cuenta"
-                    }
+                  "features": [
+                    "SSO y SCIM",
+                    "Permisos avanzados",
+                    "Gestor de cuenta"
                   ],
-                  "callToAction": {
-                    "text": "Hablar con ventas",
-                    "href": "/es/contacto"
-                  }
+                  "actions": [
+                    {
+                      "text": "Hablar con ventas",
+                      "href": "/es/contacto"
+                    }
+                  ]
                 }
               ]
             }

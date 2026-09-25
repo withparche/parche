@@ -4,24 +4,23 @@
  * slot; `grid` lays the steps out in columns under the headline; `numbered`
  * puts the headline and the call to action beside a numbered list.
  */
-import Heading from 'parche:elements/Heading';
 import Icon from 'parche:elements/Icon';
 import Image from 'parche:elements/Image';
-import Action from '../components/Action.astro';
+import Actions from '../components/Actions.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import { schema, type Props } from './Steps.props';
 
-const { layout, title, subtitle, tagline, items, callToAction, reversed, image } = schema.parse(Astro.props) as Props;
-const hasHeadline = Boolean(title || subtitle || tagline);
+const { layout, title, subtitle, tagline, link, items, actions, reversed, image } = schema.parse(Astro.props) as Props;
+// The grid centres its heading over the columns unless the content says otherwise.
+const align = (Astro.props as { align?: 'start' | 'center' }).align ?? (layout === 'grid' ? 'center' : 'start');
 const hasMedia = Astro.slots.has('media') || Boolean(image);
-const cta = callToAction?.text ? callToAction : null;
 ---
 
 {layout === 'rows' ? (
 <div class="parche-steps grid grid-cols-[repeat(auto-fit,minmax(min(290px,100%),1fr))] gap-[clamp(32px,5vw,72px)]" data-layout="rows">
   <div class="min-w-0">
-    <SectionHeader {tagline} {title} {subtitle} spacing="none" class="mb-[26px]" width="lg" />
-    {cta && <Action action={cta} />}
+    <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="none" class="mb-[26px]" width="lg" />
+    <Actions {actions} />
   </div>
   {items.length > 0 && (
     <ol class="flex min-w-0 flex-col">
@@ -44,7 +43,7 @@ const cta = callToAction?.text ? callToAction : null;
   {layout === 'timeline' ? (
     <div class:list={['flex flex-col gap-8 md:gap-12', hasMedia && 'md:flex-row', hasMedia && reversed && 'md:flex-row-reverse']}>
       <div class:list={['md:py-4 md:self-center', hasMedia && 'md:basis-1/2']}>
-        {hasHeadline && <Heading {title} {subtitle} {tagline} align="start" spacing={false} class="rtl:text-right mb-8" />}
+        <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="none" class="mb-8" />
         {items.length > 0 && (
           <ol>
             {items.map((step, index) => (
@@ -66,7 +65,7 @@ const cta = callToAction?.text ? callToAction : null;
             ))}
           </ol>
         )}
-        {cta && <div class="mt-8"><Action action={cta} /></div>}
+        <Actions {actions} class="mt-8" />
       </div>
       {hasMedia && (
         <div class="parche-steps-media relative md:basis-1/2">
@@ -78,7 +77,7 @@ const cta = callToAction?.text ? callToAction : null;
     </div>
   ) : layout === 'grid' ? (
     <div>
-      {hasHeadline && <Heading {title} {subtitle} {tagline} spacing={false} class="mb-12" />}
+      <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="none" class="mb-12" />
       {items.length > 0 && (
         <ol class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((step, index) => (
@@ -95,13 +94,13 @@ const cta = callToAction?.text ? callToAction : null;
           ))}
         </ol>
       )}
-      {cta && <div class="mt-10 text-center"><Action action={cta} /></div>}
+      <Actions {actions} class="mt-10 justify-center" />
     </div>
   ) : (
     <div class:list={['flex flex-col gap-8 md:gap-12 md:flex-row', reversed && 'md:flex-row-reverse']}>
       <div class="w-full lg:w-1/2">
-        {hasHeadline && <Heading {title} {subtitle} {tagline} align="start" spacing={false} class="rtl:text-right mb-4 md:mb-8" />}
-        {cta && <Action action={cta} />}
+        <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="none" class="mb-4 md:mb-8" />
+        <Actions {actions} />
       </div>
       {items.length > 0 && (
         <ol class="w-full lg:w-1/2 space-y-10">

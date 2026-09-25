@@ -7,35 +7,14 @@
 import { getCollection } from 'astro:content';
 import { resolveAssets } from 'parche:utils/assets';
 import { getBlogLinkContext, postHref, postLocale, localizePath } from '../lib/blog-links.js';
-import Container from 'parche:elements/Container';
-import Section from 'parche:elements/Section';
-import Link from 'parche:elements/Link';
+import SectionHeader from '../components/SectionHeader.astro';
 import BlogPostCardGrid from 'parche:widgets/blog/BlogPostCardGrid';
+import { schema, type Props } from './BlogLatestPosts.props';
 
-interface Props {
-  title?: string;
-  linkText?: string;
-  linkUrl?: string;
-  information?: string;
-  count?: number;
-  id?: string;
-  class?: string;
-  background?: string;
-}
-
-const {
-  title = 'Latest Posts',
-  linkText = 'View all posts',
-  linkUrl,
-  information,
-  count = 4,
-  id,
-  class: className = '',
-  background,
-} = Astro.props;
+const { tagline, title, subtitle, link, align, count } = schema.parse(Astro.props) as Props;
 
 // Fetch latest posts
-let resolvedLinkUrl = linkUrl ?? '/blog';
+let resolvedLinkUrl = (link && link.href) || '/blog';
 let posts: Array<{
   title: string;
   description?: string;
@@ -46,7 +25,7 @@ let posts: Array<{
 try {
   const { postPattern, listing, defaultLocale } = await getBlogLinkContext();
   const locale = Astro.currentLocale ?? defaultLocale;
-  resolvedLinkUrl = linkUrl ?? localizePath(listing, locale, defaultLocale);
+  resolvedLinkUrl = (link && link.href) || localizePath(listing, locale, defaultLocale);
 
   const allPosts = await getCollection('posts');
   const sorted = allPosts
@@ -73,28 +52,12 @@ try {
 ---
 
 {posts.length > 0 && (
-  <Section {id} class={className} {background}>
-    <Container>
-      <div class="flex flex-col lg:justify-between lg:flex-row mb-8">
-        {title && (
-          <div class="md:max-w-sm">
-            <h2 class="text-3xl font-bold tracking-tight sm:text-4xl sm:leading-none font-heading text-heading mb-2" set:html={title} />
-            {linkText && resolvedLinkUrl && (
-              <Link href={resolvedLinkUrl} variant="arrow" class="mb-6 lg:mb-0">{linkText}</Link>
-            )}
-          </div>
-        )}
-
-        {information && (
-          <p class="text-muted lg:text-sm lg:max-w-md" set:html={information} />
-        )}
-      </div>
-
-      <div class="grid gap-6 row-gap-5 md:grid-cols-2 lg:grid-cols-4 -mb-6">
-        {posts.map((post) => (
-          <BlogPostCardGrid title={post.title} description={post.description} href={post.href} image={post.image} />
-        ))}
-      </div>
-    </Container>
-  </Section>
+  <div class="parche-blog-posts">
+    <SectionHeader {tagline} {title} {subtitle} link={link ? { text: link.text, href: resolvedLinkUrl } : undefined} {align} spacing="lg" />
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      {posts.map((post) => (
+        <BlogPostCardGrid title={post.title} description={post.description} href={post.href} image={post.image} />
+      ))}
+    </div>
+  </div>
 )}

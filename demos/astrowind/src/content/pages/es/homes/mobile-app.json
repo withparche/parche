@@ -32,7 +32,7 @@
     {
       "widget": "Features",
       "props": {
-        "style": "list",
+        "layout": "list",
         "title": "Pensada para el móvil, no encogida para caber",
         "columns": "3",
         "items": [
@@ -97,7 +97,7 @@
           {
             "widget": "Stats",
             "props": {
-              "stats": [
+              "items": [
                 {
                   "value": "480K",
                   "label": "Descargas"
@@ -124,7 +124,7 @@
       "widget": "Testimonials",
       "props": {
         "title": "Desde las tiendas",
-        "testimonials": [
+        "items": [
           {
             "name": "Ana Ruiz",
             "text": "La única app que he mantenido en la pantalla de inicio más de un mes.",

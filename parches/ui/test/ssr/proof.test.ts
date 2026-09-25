@@ -16,7 +16,7 @@ async function render(Component: any, props: Record<string, unknown>) {
 test('Stats shows value and unit, and the source and date under each number, linked when there is a report', async () => {
   const html = await render(Stats, {
     title: 'Core Web Vitals',
-    stats: [
+    items: [
       { value: '0.9', unit: 's', label: 'LCP', source: 'p75 · 41,200 sessions', date: '28 days', href: 'https://example.com/crux' },
       { value: '42', unit: 'ms', label: 'INP' },
     ],
@@ -33,7 +33,7 @@ test('Stats shows value and unit, and the source and date under each number, lin
 test('Testimonials carries name, role, date and a link to where the quote was said', async () => {
   const html = await render(Testimonials, {
     title: 'Every quote links to where it was said',
-    testimonials: [
+    items: [
       { text: 'Bounce went down 64% the week after launch.', name: 'Marta Ruiz', role: 'Head of Growth, Formular', date: 'March 2026', source: 'G2 review', href: 'https://example.com/review' },
     ],
   });

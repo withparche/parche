@@ -41,7 +41,7 @@
             "widget": "Stats",
             "props": {
               "layout": "cards",
-              "stats": [
+              "items": [
                 {
                   "value": "6.1K",
                   "label": "GitHub stars",
@@ -115,7 +115,7 @@
           {
             "widget": "Features",
             "props": {
-              "style": "panels",
+              "layout": "panels",
               "align": "start",
               "tagline": "What you get",
               "title": "Everything a client site needs, already wired.",
@@ -167,13 +167,13 @@
               "title": "Five complete sites in one repository.",
               "syncKey": "demo",
               "label": "Demo",
-              "demos": [
+              "items": [
                 {
                   "value": "saas",
                   "label": "SaaS",
                   "caption": "saas demo · 1000×625",
                   "title": "SaaS — pricing, changelog, docs",
-                  "body": "The full funnel: feature grid, three-tier pricing with comparison, changelog and a docs section with sidebar search.",
+                  "description": "The full funnel: feature grid, three-tier pricing with comparison, changelog and a docs section with sidebar search.",
                   "points": [
                     "Pricing table with per-plan feature matrix",
                     "Docs layout with Pagefind search built in",
@@ -189,7 +189,7 @@
                   "label": "Startup",
                   "caption": "startup demo · 1000×625",
                   "title": "Startup — story, team, traction",
-                  "body": "For the seed-stage site that has to look funded: narrative sections, verified metrics, team credentials and an investor-ready press kit page.",
+                  "description": "For the seed-stage site that has to look funded: narrative sections, verified metrics, team credentials and an investor-ready press kit page.",
                   "points": [
                     "Metrics block with source notes, not vanity numbers",
                     "Team and advisors with real bios",
@@ -205,7 +205,7 @@
                   "label": "Mobile app",
                   "caption": "mobile app demo · 1000×625",
                   "title": "Mobile app — store-ready landing",
-                  "body": "Device frames, feature carousel, store badges, review wall and an app-privacy table that satisfies both stores.",
+                  "description": "Device frames, feature carousel, store badges, review wall and an app-privacy table that satisfies both stores.",
                   "points": [
                     "Screenshot gallery with keyboard navigation",
                     "Review wall sourced from a JSON file",
@@ -221,7 +221,7 @@
                   "label": "Agency",
                   "caption": "agency demo · 1000×625",
                   "title": "Agency — case studies and services",
-                  "body": "The direction most agencies ask for: portfolio grid with results, services and process, rates, and a booking-backed contact page.",
+                  "description": "The direction most agencies ask for: portfolio grid with results, services and process, rates, and a booking-backed contact page.",
                   "points": [
                     "Case study collection with a results block",
                     "Process widget with deliverables and owners",
@@ -261,7 +261,7 @@
                   "client": "Northwind",
                   "sector": "SaaS",
                   "title": "Marketing site off the CMS, onto Git",
-                  "summary": "Six locales, 90 pages, one build. The SEO team stopped filing tickets about the site.",
+                  "description": "Six locales, 90 pages, one build. The SEO team stopped filing tickets about the site.",
                   "caption": "case shot · 900×560",
                   "results": [
                     {
@@ -283,7 +283,7 @@
                   "client": "Calderón & Co",
                   "sector": "Agency",
                   "title": "One template, eleven client sites",
-                  "summary": "A shared token file per brand. Clients edit Markdown and nothing breaks.",
+                  "description": "A shared token file per brand. Clients edit Markdown and nothing breaks.",
                   "caption": "case shot · 900×560",
                   "results": [
                     {
@@ -305,7 +305,7 @@
                   "client": "Ferrolab",
                   "sector": "Hardware",
                   "title": "Docs, blog and store on one stack",
-                  "summary": "Sidebar docs with search, 140 posts migrated, checkout on the edge.",
+                  "description": "Sidebar docs with search, 140 posts migrated, checkout on the edge.",
                   "caption": "case shot · 900×560",
                   "results": [
                     {
@@ -371,11 +371,13 @@
               "tagline": "Services & process",
               "title": "A process page your client can actually follow.",
               "subtitle": "The four-step widget ships with fields for deliverables, duration and who is responsible — the three things missing from every template timeline.",
-              "callToAction": {
-                "text": "Book a scoping call",
-                "href": "#contact",
-                "variant": "contrast"
-              },
+              "actions": [
+                {
+                  "text": "Book a scoping call",
+                  "href": "#contact",
+                  "variant": "contrast"
+                }
+              ],
               "items": [
                 {
                   "title": "Discovery & content audit",
@@ -406,7 +408,7 @@
     {
       "widget": "Features",
       "props": {
-        "style": "tiles",
+        "layout": "tiles",
         "align": "start",
         "tagline": "Integrations",
         "title": "Plugs into the stack you already bill for.",
@@ -462,27 +464,23 @@
               "tagline": "Pricing",
               "title": "The template is free. The extras are optional.",
               "subtitle": "A real three-tier widget with a comparison table, so you can charge for your own work without rebuilding it.",
-              "prices": [
+              "items": [
                 {
                   "title": "Open source",
                   "type": "custom",
                   "price": "Free",
                   "note": "MIT, commercial use included",
-                  "items": [
-                    {
-                      "description": "All 34 widgets and 5 demos"
-                    },
-                    {
-                      "description": "Blog, docs and RSS pipeline"
-                    },
-                    {
-                      "description": "Community support"
-                    }
+                  "features": [
+                    "All 34 widgets and 5 demos",
+                    "Blog, docs and RSS pipeline",
+                    "Community support"
                   ],
-                  "callToAction": {
-                    "text": "Clone it",
-                    "href": "#get"
-                  }
+                  "actions": [
+                    {
+                      "text": "Clone it",
+                      "href": "#get"
+                    }
+                  ]
                 },
                 {
                   "title": "Studio",
@@ -490,50 +488,38 @@
                   "currency": "$",
                   "suffix": "once",
                   "note": "Per agency, unlimited client sites",
-                  "hasRibbon": true,
-                  "ribbonTitle": "Most picked",
-                  "items": [
-                    {
-                      "description": "12 extra agency widgets"
-                    },
-                    {
-                      "description": "Case study & proposal templates"
-                    },
-                    {
-                      "description": "Figma token kit, brand presets"
-                    },
-                    {
-                      "description": "Private issue queue, 48 h"
-                    }
+                  "recommended": true,
+                  "badge": "Most picked",
+                  "features": [
+                    "12 extra agency widgets",
+                    "Case study & proposal templates",
+                    "Figma token kit, brand presets",
+                    "Private issue queue, 48 h"
                   ],
-                  "callToAction": {
-                    "text": "Get Studio",
-                    "href": "#get"
-                  }
+                  "actions": [
+                    {
+                      "text": "Get Studio",
+                      "href": "#get"
+                    }
+                  ]
                 },
                 {
                   "title": "Done with you",
                   "type": "custom",
                   "price": "From $6K",
                   "note": "Fixed scope, 4–5 weeks",
-                  "items": [
-                    {
-                      "description": "Everything in Studio"
-                    },
-                    {
-                      "description": "Design and build with your team"
-                    },
-                    {
-                      "description": "Migration, redirects, analytics"
-                    },
-                    {
-                      "description": "Editor training and handover"
-                    }
+                  "features": [
+                    "Everything in Studio",
+                    "Design and build with your team",
+                    "Migration, redirects, analytics",
+                    "Editor training and handover"
                   ],
-                  "callToAction": {
-                    "text": "Book a call",
-                    "href": "#contact"
-                  }
+                  "actions": [
+                    {
+                      "text": "Book a call",
+                      "href": "#contact"
+                    }
+                  ]
                 }
               ],
               "comparison": {
@@ -615,7 +601,7 @@
         "tagline": "Proof",
         "title": "Every quote links to where it was said",
         "subtitle": "A testimonial nobody can check is decoration. Two verified below, and the third slot left visibly open — which is what the widget does when you have not collected it yet.",
-        "testimonials": [
+        "items": [
           {
             "text": "We replaced a four-week site build with a weekend. The blog pipeline alone paid for the switch.",
             "name": "Marta Ibáñez",
@@ -658,7 +644,7 @@
               "tagline": "Maintainers",
               "title": "Named people, public track record.",
               "subtitle": "Four years of releases from the same small group, plus 180 contributors. Credentials matter when a client asks who maintains this.",
-              "members": [
+              "items": [
                 {
                   "name": "Arthelo Kyo",
                   "role": "Creator · 2,100 commits"
@@ -700,7 +686,7 @@
                 "text": "Full changelog and RSS",
                 "href": "#changelog"
               },
-              "entries": [
+              "items": [
                 {
                   "label": "2022",
                   "title": "First commit, Astro 1.0 beta",
@@ -832,7 +818,7 @@
               "disclaimer": {
                 "label": "I agree to the privacy policy. We keep enquiries for 12 months."
               },
-              "button": "Send enquiry",
+              "submit": "Send enquiry",
               "note": "Form states shipped: idle, loading, field error, success, rate-limited."
             }
           }
@@ -874,7 +860,7 @@
                   "widget": "Newsletter",
                   "props": {
                     "title": "New articles in your inbox",
-                    "text": "Notes on Astro, Tailwind and the template. Roughly monthly. Nothing else.",
+                    "subtitle": "Notes on Astro, Tailwind and the template. Roughly monthly. Nothing else.",
                     "note": "One-click unsubscribe. 4,100 readers. We never share your address."
                   }
                 }

@@ -19,10 +19,11 @@ interface ActionData {
 
 interface Props {
   action: ActionData;
+  size?: 'sm' | 'md' | 'lg';
   class?: string;
 }
 
-const { action, class: className } = Astro.props;
+const { action, size = 'lg', class: className } = Astro.props;
 const { variant = 'primary', text, href, target, icon } = action;
 const buttonVariant = variant === 'tertiary' ? 'secondary' : variant;
 // A trailing arrow (→, ↗) is set in the mono face, smaller, as a glyph rather than a word.
@@ -31,7 +32,7 @@ const label = arrow ? text!.slice(0, -2) : text;
 ---
 
 {(text || icon) && (
-  <Button variant={buttonVariant} size="lg" href={href} target={target} icon={icon} iconPosition="end" label={text ? undefined : icon} class={className}>
+  <Button variant={buttonVariant} {size} href={href} target={target} icon={icon} iconPosition="end" label={text ? undefined : icon} class={className}>
     {label}{arrow && <span class="font-mono text-[0.8em]" aria-hidden="true">{arrow}</span>}
   </Button>
 )}

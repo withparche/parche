@@ -24,7 +24,7 @@
           {
             "widget": "Stats",
             "props": {
-              "stats": [
+              "items": [
                 {
                   "value": "180",
                   "label": "Personas que contribuyen"
@@ -50,7 +50,7 @@
     {
       "widget": "Features",
       "props": {
-        "style": "list",
+        "layout": "list",
         "title": "Nuestros valores",
         "subtitle": "Qué priorizamos cuando las dos opciones parecen razonables.",
         "columns": "3",
@@ -76,7 +76,7 @@
     {
       "widget": "Features",
       "props": {
-        "style": "list",
+        "layout": "list",
         "title": "Nuestros logros",
         "subtitle": "Hitos que merece la pena recordar.",
         "columns": "3",
@@ -127,7 +127,7 @@
     {
       "widget": "Features",
       "props": {
-        "style": "cards",
+        "layout": "cards",
         "title": "Habla con nosotros",
         "subtitle": "Dónde encontrarnos.",
         "columns": "3",

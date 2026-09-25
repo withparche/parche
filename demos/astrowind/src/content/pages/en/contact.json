@@ -48,13 +48,13 @@
         "disclaimer": {
           "label": "By sending this you agree that we store your message so we can reply."
         },
-        "button": "Send message"
+        "submit": "Send message"
       }
     },
     {
       "widget": "Features",
       "props": {
-        "style": "cards",
+        "layout": "cards",
         "title": "Other channels",
         "subtitle": "If a form is not your thing.",
         "columns": "3",

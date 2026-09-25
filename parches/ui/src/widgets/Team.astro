@@ -4,16 +4,16 @@ import Placeholder from 'parche:elements/Placeholder';
 import SectionHeader from '../components/SectionHeader.astro';
 import { schema, type Props } from './Team.props';
 
-const { tagline, title, subtitle, members, more, layout } = schema.parse(Astro.props) as Props;
+const { tagline, title, subtitle, link, align, items, more, layout } = schema.parse(Astro.props) as Props;
 const split = layout === 'split';
 ---
 
 <div class:list={['parche-team', split && 'grid grid-cols-[repeat(auto-fit,minmax(min(290px,100%),1fr))] gap-[clamp(32px,5vw,72px)]']} data-layout={layout}>
   <div class="min-w-0">
-    <SectionHeader {tagline} {title} {subtitle} spacing={split ? 'none' : 'md'} width="lg" />
+    <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing={split ? 'none' : 'md'} width="lg" />
   </div>
   <ul class="grid min-w-0 grid-cols-[repeat(auto-fill,minmax(min(150px,100%),1fr))] gap-[clamp(16px,2vw,22px)]">
-    {members.map((m) => (
+    {items.map((m) => (
       <li>
         {m.image ? (
           <Image src={m.image.src} alt={m.image.alt || m.name} width={300} ratio="1/1" class="mb-3 block w-full rounded-md border border-border" />

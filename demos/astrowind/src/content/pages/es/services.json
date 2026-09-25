@@ -24,7 +24,7 @@
     {
       "widget": "Features",
       "props": {
-        "style": "cards",
+        "layout": "cards",
         "tagline": "Servicios",
         "title": "Qué ofrecemos",
         "subtitle": "Cuatro formas de trabajar juntos, de la más ligera a la más completa.",
@@ -121,7 +121,7 @@
       "props": {
         "tagline": "Clientes",
         "title": "Lo que dicen",
-        "testimonials": [
+        "items": [
           {
             "name": "Ana Ruiz",
             "text": "Nos entregaron una web más rápida que la anterior y, por primera vez, entendemos cómo cambiarla.",

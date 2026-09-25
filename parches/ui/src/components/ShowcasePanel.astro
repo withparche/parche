@@ -6,7 +6,7 @@ import Placeholder from 'parche:elements/Placeholder';
 interface Props {
   demo?: {
     title: string;
-    body: string;
+    description: string;
     points: string[];
     image?: { src: string; alt: string };
     caption?: string;
@@ -24,7 +24,7 @@ const { demo: d } = Astro.props;
     </div>
     <div class="min-w-0">
       <h3 class="mb-3.5 font-heading text-[clamp(23px,2.6vw,32px)] leading-[1.2] font-semibold tracking-[-0.02em] text-heading">{d.title}</h3>
-      <p class="mb-[22px] text-base leading-[1.65] text-pretty text-muted">{d.body}</p>
+      <p class="mb-[22px] text-base leading-[1.65] text-pretty text-muted">{d.description}</p>
       {d.points.length > 0 && (
         <ul class="mb-[26px] flex flex-col gap-[11px]">
           {d.points.map((p) => (

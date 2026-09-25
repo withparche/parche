@@ -25,31 +25,25 @@
             "props": {
               "title": "Nuestros precios",
               "subtitle": "Paga solo por lo que necesitas.",
-              "prices": [
+              "items": [
                 {
                   "title": "Básico",
                   "subtitle": "Ideal para proyectos personales",
                   "price": "29",
                   "currency": "$",
                   "period": "al mes",
-                  "items": [
-                    {
-                      "description": "Un proyecto"
-                    },
-                    {
-                      "description": "Soporte de la comunidad"
-                    },
-                    {
-                      "description": "Todos los widgets básicos"
-                    },
-                    {
-                      "description": "Actualizaciones mensuales"
-                    }
+                  "features": [
+                    "Un proyecto",
+                    "Soporte de la comunidad",
+                    "Todos los widgets básicos",
+                    "Actualizaciones mensuales"
                   ],
-                  "callToAction": {
-                    "text": "Empezar",
-                    "href": "#"
-                  }
+                  "actions": [
+                    {
+                      "text": "Empezar",
+                      "href": "#"
+                    }
+                  ]
                 },
                 {
                   "title": "Estándar",
@@ -57,29 +51,21 @@
                   "price": "69",
                   "currency": "$",
                   "period": "al mes",
-                  "items": [
+                  "features": [
+                    "Hasta diez proyectos",
+                    "Soporte prioritario por correo",
+                    "Todos los widgets y temas",
+                    "Tokens de diseño compartidos",
+                    "Actualizaciones semanales"
+                  ],
+                  "actions": [
                     {
-                      "description": "Hasta diez proyectos"
-                    },
-                    {
-                      "description": "Soporte prioritario por correo"
-                    },
-                    {
-                      "description": "Todos los widgets y temas"
-                    },
-                    {
-                      "description": "Tokens de diseño compartidos"
-                    },
-                    {
-                      "description": "Actualizaciones semanales"
+                      "text": "Empezar",
+                      "href": "#"
                     }
                   ],
-                  "callToAction": {
-                    "text": "Empezar",
-                    "href": "#"
-                  },
-                  "hasRibbon": true,
-                  "ribbonTitle": "Popular"
+                  "recommended": true,
+                  "badge": "Popular"
                 },
                 {
                   "title": "Premium",
@@ -87,24 +73,18 @@
                   "price": "199",
                   "currency": "$",
                   "period": "al mes",
-                  "items": [
-                    {
-                      "description": "Proyectos ilimitados"
-                    },
-                    {
-                      "description": "Canal de soporte dedicado"
-                    },
-                    {
-                      "description": "Desarrollo de tema a medida"
-                    },
-                    {
-                      "description": "Sesión de puesta en marcha"
-                    }
+                  "features": [
+                    "Proyectos ilimitados",
+                    "Canal de soporte dedicado",
+                    "Desarrollo de tema a medida",
+                    "Sesión de puesta en marcha"
                   ],
-                  "callToAction": {
-                    "text": "Empezar",
-                    "href": "#"
-                  }
+                  "actions": [
+                    {
+                      "text": "Empezar",
+                      "href": "#"
+                    }
+                  ]
                 }
               ]
             }
@@ -115,7 +95,7 @@
     {
       "widget": "Features",
       "props": {
-        "style": "list",
+        "layout": "list",
         "title": "Qué incluye el precio",
         "subtitle": "Lo que llevan todos los planes, sea cual sea su tamaño.",
         "columns": "2",

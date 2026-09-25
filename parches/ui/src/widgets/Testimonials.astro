@@ -1,27 +1,27 @@
 ---
 import * as Carousel from 'parche:elements/Carousel';
 import Command from 'parche:elements/Command';
-import Action from '../components/Action.astro';
+import Actions from '../components/Actions.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import TestimonialCard from '../components/TestimonialCard.astro';
 import { schema, type Props } from './Testimonials.props';
 
-const { title, subtitle, tagline, testimonials, layout, align, callToAction, openSlot } = schema.parse(Astro.props) as Props;
+const { title, subtitle, tagline, link, align, items, layout, actions, openSlot } = schema.parse(Astro.props) as Props;
 ---
 
-<SectionHeader {tagline} {title} {subtitle} align={align} spacing="tight" />
+<SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="tight" />
 
-{testimonials.length > 0 && layout === 'carousel' ? (
-  <Carousel.Root count={testimonials.length} label={title ?? 'Testimonials'} perView={3}>
-    {testimonials.map((item, i) => (
-      <Carousel.Slide index={i} total={testimonials.length}>
+{items.length > 0 && layout === 'carousel' ? (
+  <Carousel.Root count={items.length} label={title ?? 'Testimonials'} perView={3}>
+    {items.map((item, i) => (
+      <Carousel.Slide index={i} total={items.length}>
         <TestimonialCard {...item} />
       </Carousel.Slide>
     ))}
   </Carousel.Root>
-) : (testimonials.length > 0 || openSlot) ? (
+) : (items.length > 0 || openSlot) ? (
   <div class="grid grid-cols-[repeat(auto-fit,minmax(min(280px,100%),1fr))] gap-[clamp(16px,2vw,22px)]">
-    {testimonials.map((item) => <TestimonialCard {...item} />)}
+    {items.map((item) => <TestimonialCard {...item} />)}
     {openSlot && (
       <div class="flex flex-col gap-3 rounded-md border border-dashed border-border bg-background p-[clamp(22px,3vw,30px)]">
         <span class="font-mono text-[10px] leading-none font-medium tracking-[0.12em] text-muted uppercase">{openSlot.label}</span>
@@ -34,8 +34,4 @@ const { title, subtitle, tagline, testimonials, layout, align, callToAction, ope
   </div>
 ) : null}
 
-{callToAction?.text && (
-  <div class="flex justify-center mt-8 md:mt-12">
-    <Action action={callToAction} />
-  </div>
-)}
+<Actions {actions} class="mt-8 justify-center md:mt-12" />
