@@ -5,23 +5,29 @@
       "props": {
         "logo": {
           "text": "AstroWind",
-          "href": "/"
+          "href": "/",
+          "mark": true
         },
+        "position": "left",
         "links": {
           "$ref": "navigation/main"
         },
+        "search": {
+          "label": "Search",
+          "shortcut": "⌘K",
+          "href": "/blog"
+        },
+        "controls": {
+          "theme": "text",
+          "locale": "code"
+        },
         "actions": [
           {
-            "label": "Download",
-            "href": "https://github.com/arthelokyo/astrowind",
+            "label": "Get template",
+            "href": "#get",
             "variant": "primary"
           }
-        ],
-        "announcement": {
-          "text": "AstroWind 2.0 is out — <strong>Astro 7</strong> + Tailwind CSS v4.",
-          "href": "/blog",
-          "dismissible": true
-        }
+        ]
       }
     },
     {
@@ -35,14 +41,27 @@
     {
       "widget": "Footer",
       "props": {
-        "siteName": "AstroWind",
+        "layout": "brand",
+        "brand": {
+          "text": "AstroWind",
+          "mark": true,
+          "description": "The open-source Astro template for sites that have to perform.",
+          "links": [
+            {
+              "label": "/rss.xml",
+              "href": "/rss.xml"
+            },
+            {
+              "label": "GitHub",
+              "href": "https://github.com/arthelokyo/astrowind"
+            }
+          ]
+        },
         "columns": {
           "$ref": "navigation/footer"
         },
-        "socialLinks": {
-          "$ref": "navigation/social"
-        },
-        "footNote": "Made by <a class=\"text-primary hover:underline\" href=\"https://github.com/arthelokyo\">arthelokyo</a> · All rights reserved."
+        "copyright": "© 2026 AstroWind · MIT licensed",
+        "note": "Built with Astro 7 · 100 Lighthouse · `38 KB` median page"
       }
     }
   ]

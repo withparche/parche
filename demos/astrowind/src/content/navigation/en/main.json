@@ -2,169 +2,49 @@
   "label": "Main menu",
   "items": [
     {
-      "label": "Homes",
+      "label": "Product",
       "children": [
         {
+          "title": "What it is",
           "links": [
             {
-              "label": "SaaS",
-              "href": "/homes/saas",
-              "description": "A product landing page with pricing"
-            },
-            {
-              "label": "Startup",
-              "href": "/homes/startup",
-              "description": "Metrics, brands and social proof"
-            },
-            {
-              "label": "Mobile App",
-              "href": "/homes/mobile-app",
-              "description": "Store badges and screenshots"
-            },
-            {
-              "label": "Personal",
-              "href": "/homes/personal",
-              "description": "A quieter, editorial home"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "label": "Pages",
-      "mega": {
-        "columns": 3,
-        "featured": {
-          "title": "See the pricing",
-          "description": "Three plans, no hidden costs. Start free and move up when you outgrow it.",
-          "image": "@/assets/images/hero-image.png",
-          "href": "/pricing"
-        },
-        "footer": "Looking for something else? <a class=\"text-primary hover:underline\" href=\"/contact\">Ask us directly</a>."
-      },
-      "children": [
-        {
-          "title": "Company",
-          "links": [
-            {
-              "label": "About us",
-              "href": "/about",
-              "icon": "tabler:users",
-              "description": "Who builds this and how"
-            },
-            {
-              "label": "Services",
-              "href": "/services",
-              "icon": "tabler:briefcase",
-              "description": "What we do for you"
-            },
-            {
-              "label": "Contact",
-              "href": "/contact",
-              "icon": "tabler:mail",
-              "description": "We answer within two days"
-            }
-          ]
-        },
-        {
-          "title": "Product",
-          "links": [
-            {
-              "label": "Features",
+              "label": "Widgets",
               "href": "/#features",
-              "icon": "tabler:sparkles",
-              "description": "What you get with AstroWind"
+              "description": "34 sections, props-driven, no class soup"
             },
             {
-              "label": "Pricing",
-              "href": "/pricing",
-              "icon": "tabler:currency-dollar",
-              "description": "Plans and what they include"
+              "label": "Live demos",
+              "href": "/#showcase",
+              "description": "Five complete sites in one repository"
             },
             {
-              "label": "Blog",
-              "href": "/blog",
-              "icon": "tabler:news",
-              "description": "Guides and documentation"
-            }
-          ]
-        },
-        {
-          "title": "Legal",
-          "links": [
-            {
-              "label": "Terms",
-              "href": "/terms",
-              "icon": "tabler:file-text",
-              "description": "The licence and the fine print"
-            },
-            {
-              "label": "Privacy policy",
-              "href": "/privacy",
-              "icon": "tabler:shield-lock",
-              "description": "What we collect: very little"
+              "label": "Changelog",
+              "href": "/#changelog",
+              "description": "Every release since June 2022, with dates"
             }
           ]
         }
       ]
     },
     {
-      "label": "Landing",
-      "children": [
-        {
-          "links": [
-            {
-              "label": "Lead Generation",
-              "href": "/landing/lead-generation"
-            },
-            {
-              "label": "Long-form Sales",
-              "href": "/landing/sales"
-            },
-            {
-              "label": "Click-Through",
-              "href": "/landing/click-through"
-            },
-            {
-              "label": "Product Details",
-              "href": "/landing/product"
-            },
-            {
-              "label": "Coming Soon",
-              "href": "/landing/pre-launch"
-            },
-            {
-              "label": "Subscription",
-              "href": "/landing/subscription"
-            }
-          ]
-        }
-      ]
+      "label": "Case studies",
+      "href": "/#work"
+    },
+    {
+      "label": "Services",
+      "href": "/#services"
+    },
+    {
+      "label": "Pricing",
+      "href": "/fixtures/pricing"
     },
     {
       "label": "Blog",
-      "children": [
-        {
-          "links": [
-            {
-              "label": "Blog list",
-              "href": "/blog"
-            },
-            {
-              "label": "Article",
-              "href": "/get-started-website-with-astro-tailwind-css"
-            },
-            {
-              "label": "Category page",
-              "href": "/blog/category/tutorials"
-            },
-            {
-              "label": "Tag page",
-              "href": "/blog/tag/astro"
-            }
-          ]
-        }
-      ]
+      "href": "/blog"
+    },
+    {
+      "label": "Docs",
+      "href": "/fixtures/docs"
     }
   ]
 }

@@ -40,7 +40,7 @@ export default defineConfig({
     }),
     icon(),
   ],
-  i18n: { defaultLocale: 'en', locales: ['en', 'es'], routing: 'manual' },
+  i18n: { defaultLocale: 'en', locales: ['en'], routing: 'manual' },
   image: { remotePatterns: [{ protocol: 'https' }] },
   vite: { plugins: [tailwindcss()] },
 });
