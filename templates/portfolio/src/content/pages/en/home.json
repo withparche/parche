@@ -3,363 +3,318 @@
   "description": "Product designer and developer crafting calm, useful software. Selected work, experience and ways to get in touch.",
   "sections": [
     {
-      "widget": "Section",
-      "props": {
-        "spacing": "sm"
+      "widget": "ProfileHero",
+      "wrapper": {
+        "props": {
+          "spacing": "sm"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "name": "Hi, I'm Alex",
+        "tagline": "Product Designer & Developer",
+        "bio": "I design and build calm, useful software. Currently focused on developer tools and design systems.",
+        "avatar": {
+          "src": "@/assets/images/portrait.svg",
+          "alt": "Alex Rivera"
+        }
+      }
+    },
+    {
+      "widget": "Prose",
+      "wrapper": {
+        "props": {
+          "spacing": "sm"
+        }
+      },
+      "props": {
+        "title": "About",
+        "content": "<p>For the last 8 years I've helped startups turn fuzzy ideas into products people actually enjoy using. I move comfortably between Figma and the codebase, which means fewer things get lost in translation. I care about the job the user is hiring the product to do — and about shipping.</p>"
+      }
+    },
+    {
+      "widget": "ResumeList",
+      "wrapper": {
+        "props": {
+          "spacing": "sm"
+        }
+      },
+      "props": {
+        "title": "Work Experience",
+        "variant": "list",
+        "items": [
           {
-            "widget": "ProfileHero",
-            "props": {
-              "name": "Hi, I'm Alex",
-              "tagline": "Product Designer & Developer",
-              "bio": "I design and build calm, useful software. Currently focused on developer tools and design systems.",
-              "avatar": {
-                "src": "@/assets/images/portrait.svg",
-                "alt": "Alex Rivera"
+            "title": "Nimbus Labs",
+            "subtitle": "Lead Product Designer",
+            "meta": "2023 - Present"
+          },
+          {
+            "title": "Orbit Inc.",
+            "subtitle": "Design Systems Lead",
+            "meta": "2021 - 2023"
+          },
+          {
+            "title": "Cedar",
+            "subtitle": "Product Designer",
+            "meta": "2018 - 2021"
+          },
+          {
+            "title": "Freelance",
+            "subtitle": "Designer & Developer",
+            "meta": "2016 - 2018"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "ResumeList",
+      "wrapper": {
+        "props": {
+          "spacing": "sm"
+        }
+      },
+      "props": {
+        "title": "Education",
+        "variant": "list",
+        "items": [
+          {
+            "title": "University of the Arts",
+            "subtitle": "BFA, Interaction Design",
+            "meta": "2012 - 2016"
+          },
+          {
+            "title": "Recurse Center",
+            "subtitle": "Programming retreat",
+            "meta": "2017"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "SkillsPills",
+      "wrapper": {
+        "props": {
+          "spacing": "sm"
+        }
+      },
+      "props": {
+        "title": "Skills",
+        "skills": [
+          {
+            "name": "Figma",
+            "icon": "tabler:brand-figma"
+          },
+          "Design Systems",
+          {
+            "name": "TypeScript",
+            "icon": "tabler:brand-typescript"
+          },
+          {
+            "name": "React",
+            "icon": "tabler:brand-react"
+          },
+          {
+            "name": "Tailwind CSS",
+            "icon": "tabler:brand-tailwind"
+          },
+          {
+            "name": "Node.js",
+            "icon": "tabler:brand-nodejs"
+          },
+          "Prototyping",
+          "Accessibility",
+          "Brand"
+        ]
+      }
+    },
+    {
+      "widget": "Projects",
+      "wrapper": {
+        "props": {
+          "spacing": "sm"
+        }
+      },
+      "props": {
+        "tagline": "My Projects",
+        "title": "Check out my latest work",
+        "subtitle": "A few projects I'm proud of — from design systems to full products.",
+        "columns": "2",
+        "items": [
+          {
+            "title": "Nimbus",
+            "date": "2025",
+            "description": "Reimagined email triage for a productivity startup. Led design and built the front end.",
+            "image": {
+              "src": "@/assets/images/work1.svg",
+              "alt": "Nimbus"
+            },
+            "tags": [
+              "Product Design",
+              "Astro",
+              "TypeScript"
+            ],
+            "actions": [
+              {
+                "href": "#",
+                "icon": "tabler:world",
+                "text": "Website"
+              },
+              {
+                "href": "#",
+                "icon": "tabler:brand-github",
+                "text": "Source"
               }
-            }
+            ]
+          },
+          {
+            "title": "Orbit",
+            "date": "2024",
+            "description": "A cross-platform design system adopted by 40+ engineers, cutting UI build time in half.",
+            "image": {
+              "src": "@/assets/images/work2.svg",
+              "alt": "Orbit"
+            },
+            "tags": [
+              "Design System",
+              "React",
+              "Docs"
+            ],
+            "actions": [
+              {
+                "href": "#",
+                "icon": "tabler:world",
+                "text": "Website"
+              },
+              {
+                "href": "#",
+                "icon": "tabler:brand-github",
+                "text": "Source"
+              }
+            ]
+          },
+          {
+            "title": "Sunbeam",
+            "date": "2023",
+            "description": "A friendly budgeting app with a warm, approachable visual language.",
+            "image": {
+              "src": "@/assets/images/work3.svg",
+              "alt": "Sunbeam"
+            },
+            "tags": [
+              "Mobile",
+              "Brand",
+              "Figma"
+            ],
+            "actions": [
+              {
+                "href": "#",
+                "icon": "tabler:world",
+                "text": "Website"
+              }
+            ]
+          },
+          {
+            "title": "Trailhead",
+            "date": "2022",
+            "description": "An analytics dashboard turning messy data into clear, actionable charts.",
+            "image": {
+              "src": "@/assets/images/work4.svg",
+              "alt": "Trailhead"
+            },
+            "tags": [
+              "Data Viz",
+              "TypeScript",
+              "D3"
+            ],
+            "actions": [
+              {
+                "href": "#",
+                "icon": "tabler:world",
+                "text": "Website"
+              },
+              {
+                "href": "#",
+                "icon": "tabler:brand-github",
+                "text": "Source"
+              }
+            ]
           }
         ]
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "spacing": "sm"
+      "widget": "Testimonials",
+      "wrapper": {
+        "props": {
+          "width": "sm",
+          "spacing": "sm"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "tagline": "Kind words",
+        "title": "What people say",
+        "items": [
           {
-            "widget": "Prose",
-            "props": {
-              "title": "About",
-              "content": "<p>For the last 8 years I've helped startups turn fuzzy ideas into products people actually enjoy using. I move comfortably between Figma and the codebase, which means fewer things get lost in translation. I care about the job the user is hiring the product to do — and about shipping.</p>"
-            }
+            "name": "Ana Ruiz",
+            "text": "Alex is the rare designer who can also ship the code. Our velocity doubled.",
+            "role": "CTO, Nimbus Labs"
+          },
+          {
+            "name": "Marcus Lee",
+            "text": "The design system Alex built is still the backbone of everything we make.",
+            "role": "Head of Eng, Orbit"
+          },
+          {
+            "name": "Priya Nair",
+            "text": "Thoughtful, fast, and genuinely nice to work with. Would hire again in a heartbeat.",
+            "role": "Founder, Cedar"
           }
         ]
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "spacing": "sm"
+      "widget": "ResumeList",
+      "wrapper": {
+        "props": {
+          "spacing": "sm"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "title": "Hackathons",
+        "subtitle": "I like building things fast, with good people.",
+        "variant": "timeline",
+        "items": [
           {
-            "widget": "ResumeList",
-            "props": {
-              "title": "Work Experience",
-              "variant": "list",
-              "items": [
-                {
-                  "title": "Nimbus Labs",
-                  "subtitle": "Lead Product Designer",
-                  "meta": "2023 - Present"
-                },
-                {
-                  "title": "Orbit Inc.",
-                  "subtitle": "Design Systems Lead",
-                  "meta": "2021 - 2023"
-                },
-                {
-                  "title": "Cedar",
-                  "subtitle": "Product Designer",
-                  "meta": "2018 - 2021"
-                },
-                {
-                  "title": "Freelance",
-                  "subtitle": "Designer & Developer",
-                  "meta": "2016 - 2018"
-                }
-              ]
-            }
+            "meta": "Nov 2023",
+            "title": "Hack the North",
+            "location": "Waterloo, ON",
+            "description": "Built an AR bedtime-story app for kids in 36 hours. Top 10 finalist."
+          },
+          {
+            "meta": "Mar 2023",
+            "title": "SFHacks",
+            "location": "San Francisco, CA",
+            "description": "A real-time campus events app for students. Best design award."
+          },
+          {
+            "meta": "Sep 2022",
+            "title": "DeveloperWeek",
+            "location": "Remote",
+            "description": "A tool that aggregates crypto sentiment from social media."
           }
         ]
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "spacing": "sm"
+      "widget": "Prose",
+      "wrapper": {
+        "props": {
+          "spacing": "sm"
+        }
       },
-      "slots": {
-        "default": [
-          {
-            "widget": "ResumeList",
-            "props": {
-              "title": "Education",
-              "variant": "list",
-              "items": [
-                {
-                  "title": "University of the Arts",
-                  "subtitle": "BFA, Interaction Design",
-                  "meta": "2012 - 2016"
-                },
-                {
-                  "title": "Recurse Center",
-                  "subtitle": "Programming retreat",
-                  "meta": "2017"
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
       "props": {
-        "spacing": "sm"
-      },
-      "slots": {
-        "default": [
-          {
-            "widget": "SkillsPills",
-            "props": {
-              "title": "Skills",
-              "skills": [
-                {
-                  "name": "Figma",
-                  "icon": "tabler:brand-figma"
-                },
-                "Design Systems",
-                {
-                  "name": "TypeScript",
-                  "icon": "tabler:brand-typescript"
-                },
-                {
-                  "name": "React",
-                  "icon": "tabler:brand-react"
-                },
-                {
-                  "name": "Tailwind CSS",
-                  "icon": "tabler:brand-tailwind"
-                },
-                {
-                  "name": "Node.js",
-                  "icon": "tabler:brand-nodejs"
-                },
-                "Prototyping",
-                "Accessibility",
-                "Brand"
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "spacing": "sm"
-      },
-      "slots": {
-        "default": [
-          {
-            "widget": "Projects",
-            "props": {
-              "tagline": "My Projects",
-              "title": "Check out my latest work",
-              "subtitle": "A few projects I'm proud of — from design systems to full products.",
-              "columns": "2",
-              "items": [
-                {
-                  "title": "Nimbus",
-                  "date": "2025",
-                  "description": "Reimagined email triage for a productivity startup. Led design and built the front end.",
-                  "image": {
-                    "src": "@/assets/images/work1.svg",
-                    "alt": "Nimbus"
-                  },
-                  "tags": [
-                    "Product Design",
-                    "Astro",
-                    "TypeScript"
-                  ],
-                  "actions": [
-                    {
-                      "href": "#",
-                      "icon": "tabler:world",
-                      "text": "Website"
-                    },
-                    {
-                      "href": "#",
-                      "icon": "tabler:brand-github",
-                      "text": "Source"
-                    }
-                  ]
-                },
-                {
-                  "title": "Orbit",
-                  "date": "2024",
-                  "description": "A cross-platform design system adopted by 40+ engineers, cutting UI build time in half.",
-                  "image": {
-                    "src": "@/assets/images/work2.svg",
-                    "alt": "Orbit"
-                  },
-                  "tags": [
-                    "Design System",
-                    "React",
-                    "Docs"
-                  ],
-                  "actions": [
-                    {
-                      "href": "#",
-                      "icon": "tabler:world",
-                      "text": "Website"
-                    },
-                    {
-                      "href": "#",
-                      "icon": "tabler:brand-github",
-                      "text": "Source"
-                    }
-                  ]
-                },
-                {
-                  "title": "Sunbeam",
-                  "date": "2023",
-                  "description": "A friendly budgeting app with a warm, approachable visual language.",
-                  "image": {
-                    "src": "@/assets/images/work3.svg",
-                    "alt": "Sunbeam"
-                  },
-                  "tags": [
-                    "Mobile",
-                    "Brand",
-                    "Figma"
-                  ],
-                  "actions": [
-                    {
-                      "href": "#",
-                      "icon": "tabler:world",
-                      "text": "Website"
-                    }
-                  ]
-                },
-                {
-                  "title": "Trailhead",
-                  "date": "2022",
-                  "description": "An analytics dashboard turning messy data into clear, actionable charts.",
-                  "image": {
-                    "src": "@/assets/images/work4.svg",
-                    "alt": "Trailhead"
-                  },
-                  "tags": [
-                    "Data Viz",
-                    "TypeScript",
-                    "D3"
-                  ],
-                  "actions": [
-                    {
-                      "href": "#",
-                      "icon": "tabler:world",
-                      "text": "Website"
-                    },
-                    {
-                      "href": "#",
-                      "icon": "tabler:brand-github",
-                      "text": "Source"
-                    }
-                  ]
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "width": "sm",
-        "spacing": "sm"
-      },
-      "slots": {
-        "default": [
-          {
-            "widget": "Testimonials",
-            "props": {
-              "tagline": "Kind words",
-              "title": "What people say",
-              "items": [
-                {
-                  "name": "Ana Ruiz",
-                  "text": "Alex is the rare designer who can also ship the code. Our velocity doubled.",
-                  "role": "CTO, Nimbus Labs"
-                },
-                {
-                  "name": "Marcus Lee",
-                  "text": "The design system Alex built is still the backbone of everything we make.",
-                  "role": "Head of Eng, Orbit"
-                },
-                {
-                  "name": "Priya Nair",
-                  "text": "Thoughtful, fast, and genuinely nice to work with. Would hire again in a heartbeat.",
-                  "role": "Founder, Cedar"
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "spacing": "sm"
-      },
-      "slots": {
-        "default": [
-          {
-            "widget": "ResumeList",
-            "props": {
-              "title": "Hackathons",
-              "subtitle": "I like building things fast, with good people.",
-              "variant": "timeline",
-              "items": [
-                {
-                  "meta": "Nov 2023",
-                  "title": "Hack the North",
-                  "location": "Waterloo, ON",
-                  "description": "Built an AR bedtime-story app for kids in 36 hours. Top 10 finalist."
-                },
-                {
-                  "meta": "Mar 2023",
-                  "title": "SFHacks",
-                  "location": "San Francisco, CA",
-                  "description": "A real-time campus events app for students. Best design award."
-                },
-                {
-                  "meta": "Sep 2022",
-                  "title": "DeveloperWeek",
-                  "location": "Remote",
-                  "description": "A tool that aggregates crypto sentiment from social media."
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "spacing": "sm"
-      },
-      "slots": {
-        "default": [
-          {
-            "widget": "Prose",
-            "props": {
-              "tagline": "Contact",
-              "title": "Get in touch",
-              "content": "<p>I'm open to select freelance and full-time work. The best way to reach me is by email at <a href='mailto:hello@example.com' class='text-primary hover:underline'>hello@example.com</a> — or find me on the socials.</p>"
-            }
-          }
-        ]
+        "tagline": "Contact",
+        "title": "Get in touch",
+        "content": "<p>I'm open to select freelance and full-time work. The best way to reach me is by email at <a href='mailto:hello@example.com' class='text-primary hover:underline'>hello@example.com</a> — or find me on the socials.</p>"
       }
     }
   ]

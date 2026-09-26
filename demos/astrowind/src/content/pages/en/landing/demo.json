@@ -124,62 +124,57 @@
       }
     },
     {
-      "widget": "Section",
+      "widget": "Columns",
+      "wrapper": {
+        "props": {
+          "id": "budget",
+          "label": "Budget"
+        }
+      },
       "props": {
-        "id": "budget",
-        "label": "Budget"
+        "ratio": "equal",
+        "gap": "lg"
       },
       "slots": {
         "default": [
           {
-            "widget": "Columns",
-            "props": {
-              "ratio": "equal",
-              "gap": "lg"
-            },
+            "widget": "Column",
             "slots": {
               "default": [
                 {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
+                  "widget": "Stats",
+                  "props": {
+                    "title": "Budget, before you ask",
+                    "subtitle": "Hiding pricing until the call wastes both calendars. A range with what moves it is the honest middle ground between a price list and “contact us”.",
+                    "align": "start",
+                    "layout": "panels",
+                    "items": [
                       {
-                        "widget": "Stats",
-                        "props": {
-                          "title": "Budget, before you ask",
-                          "subtitle": "Hiding pricing until the call wastes both calendars. A range with what moves it is the honest middle ground between a price list and “contact us”.",
-                          "align": "start",
-                          "layout": "panels",
-                          "items": [
-                            {
-                              "value": "$6K – $18K",
-                              "label": "Fixed scope, four to six weeks.",
-                              "description": "Moves with the page count, the number of locales and whether content migration is ours or yours."
-                            }
-                          ]
-                        }
+                        "value": "$6K – $18K",
+                        "label": "Fixed scope, four to six weeks.",
+                        "description": "Moves with the page count, the number of locales and whether content migration is ours or yours."
                       }
                     ]
                   }
-                },
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Column",
+            "slots": {
+              "default": [
                 {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
-                      {
-                        "widget": "Brands",
-                        "props": {
-                          "layout": "strip",
-                          "label": "Teams who booked this call",
-                          "names": [
-                            "Northwind",
-                            "Ferrolab",
-                            "Quietmile"
-                          ],
-                          "note": "Filtered to buyers who look like you: 30–120 page marketing sites, one or two developers, an SEO team asking hard questions."
-                        }
-                      }
-                    ]
+                  "widget": "Brands",
+                  "props": {
+                    "layout": "strip",
+                    "label": "Teams who booked this call",
+                    "names": [
+                      "Northwind",
+                      "Ferrolab",
+                      "Quietmile"
+                    ],
+                    "note": "Filtered to buyers who look like you: 30–120 page marketing sites, one or two developers, an SEO team asking hard questions."
                   }
                 }
               ]

@@ -22,36 +22,31 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "features"
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "id": "features"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "tagline": "Tokens",
+        "title": "Themed by variables",
+        "subtitle": "Colors, radii, surfaces and typography all resolve from tokens.",
+        "items": [
           {
-            "widget": "Features",
-            "props": {
-              "tagline": "Tokens",
-              "title": "Themed by variables",
-              "subtitle": "Colors, radii, surfaces and typography all resolve from tokens.",
-              "items": [
-                {
-                  "title": "Primary & surfaces",
-                  "description": "Buttons, links and accents follow --ph color tokens.",
-                  "icon": "tabler:palette"
-                },
-                {
-                  "title": "Radii & spacing",
-                  "description": "Rounded corners and rhythm come from the token scale.",
-                  "icon": "tabler:border-radius"
-                },
-                {
-                  "title": "Dark mode",
-                  "description": "Each theme ships coherent light and dark variants.",
-                  "icon": "tabler:moon"
-                }
-              ]
-            }
+            "title": "Primary & surfaces",
+            "description": "Buttons, links and accents follow --ph color tokens.",
+            "icon": "tabler:palette"
+          },
+          {
+            "title": "Radii & spacing",
+            "description": "Rounded corners and rhythm come from the token scale.",
+            "icon": "tabler:border-radius"
+          },
+          {
+            "title": "Dark mode",
+            "description": "Each theme ships coherent light and dark variants.",
+            "icon": "tabler:moon"
           }
         ]
       }

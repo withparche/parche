@@ -26,220 +26,200 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "numbers"
+      "widget": "Stats",
+      "wrapper": {
+        "props": {
+          "id": "numbers"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "title": "Where we are, in numbers we can prove",
+        "subtitle": "Four figures with a source each. A round number with no source is decoration, and one implausible one makes a reader doubt the whole page.",
+        "align": "start",
+        "layout": "panels",
+        "items": [
           {
-            "widget": "Stats",
-            "props": {
-              "title": "Where we are, in numbers we can prove",
-              "subtitle": "Four figures with a source each. A round number with no source is decoration, and one implausible one makes a reader doubt the whole page.",
-              "align": "start",
-              "layout": "panels",
-              "items": [
-                {
-                  "value": "9",
-                  "label": "People, all full time",
-                  "href": "#team",
-                  "description": "Two cities, no offices. Everyone on the team page with their real role."
-                },
-                {
-                  "value": "1,180",
-                  "label": "Workspaces, 214 paying",
-                  "description": "We publish both numbers, not only the bigger one. Counted at 1 September 2026"
-                },
-                {
-                  "value": "Profitable",
-                  "label": "Since March 2026",
-                  "tone": "success",
-                  "description": "No outside investment. It matters because it is why we can refuse to add tracking."
-                },
-                {
-                  "value": "148",
-                  "label": "Releases shipped",
-                  "href": "#log",
-                  "description": "All of them on our own changelog, which is the product."
-                }
-              ]
-            }
+            "value": "9",
+            "label": "People, all full time",
+            "href": "#team",
+            "description": "Two cities, no offices. Everyone on the team page with their real role."
+          },
+          {
+            "value": "1,180",
+            "label": "Workspaces, 214 paying",
+            "description": "We publish both numbers, not only the bigger one. Counted at 1 September 2026"
+          },
+          {
+            "value": "Profitable",
+            "label": "Since March 2026",
+            "tone": "success",
+            "description": "No outside investment. It matters because it is why we can refuse to add tracking."
+          },
+          {
+            "value": "148",
+            "label": "Releases shipped",
+            "href": "#log",
+            "description": "All of them on our own changelog, which is the product."
           }
         ]
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "tone": "surface",
-        "id": "decisions"
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "tone": "surface",
+          "id": "decisions"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "title": "Three decisions, and what each one costs us",
+        "subtitle": "A values section that any company could publish is worth nothing. These are commitments with a price attached — which is the only way to tell whether one is real.",
+        "layout": "rows",
+        "header": "side",
+        "align": "start",
+        "items": [
           {
-            "widget": "Features",
-            "props": {
-              "title": "Three decisions, and what each one costs us",
-              "subtitle": "A values section that any company could publish is worth nothing. These are commitments with a price attached — which is the only way to tell whether one is real.",
-              "layout": "rows",
-              "header": "side",
-              "align": "start",
-              "items": [
-                {
-                  "title": "No tracking in the widget",
-                  "description": "The in-app widget sets no third-party cookie and sends nothing to an ad network.",
-                  "footer": "Costs us: the attribution reporting three enterprise prospects asked for. We lost two of them.",
-                  "tone": "warning"
-                },
-                {
-                  "title": "Self-hosting stays fully featured",
-                  "description": "Nothing is held back to push you onto the hosted plan. SSO is not an upsell.",
-                  "footer": "Costs us: roughly a fifth of our revenue sits on a plan we cannot upsell.",
-                  "tone": "warning"
-                },
-                {
-                  "title": "We tell you when we are the wrong tool",
-                  "description": "If you ship quarterly, our pricing page says a wiki page is enough. It is on the page, not buried in a call.",
-                  "footer": "Costs us: signups. Gains us: a support load a nine-person team can carry.",
-                  "tone": "warning"
-                }
-              ]
-            }
+            "title": "No tracking in the widget",
+            "description": "The in-app widget sets no third-party cookie and sends nothing to an ad network.",
+            "footer": "Costs us: the attribution reporting three enterprise prospects asked for. We lost two of them.",
+            "tone": "warning"
+          },
+          {
+            "title": "Self-hosting stays fully featured",
+            "description": "Nothing is held back to push you onto the hosted plan. SSO is not an upsell.",
+            "footer": "Costs us: roughly a fifth of our revenue sits on a plan we cannot upsell.",
+            "tone": "warning"
+          },
+          {
+            "title": "We tell you when we are the wrong tool",
+            "description": "If you ship quarterly, our pricing page says a wiki page is enough. It is on the page, not buried in a call.",
+            "footer": "Costs us: signups. Gains us: a support load a nine-person team can carry.",
+            "tone": "warning"
           }
         ]
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "team"
+      "widget": "Team",
+      "wrapper": {
+        "props": {
+          "id": "team"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "title": "Everyone, with their real job",
+        "link": {
+          "text": "Two roles open",
+          "href": "#jobs"
+        },
+        "layout": "stacked",
+        "items": [
           {
-            "widget": "Team",
-            "props": {
-              "title": "Everyone, with their real job",
-              "link": {
-                "text": "Two roles open",
-                "href": "#jobs"
-              },
-              "layout": "stacked",
-              "items": [
-                {
-                  "name": "Íñigo Aranguren",
-                  "role": "Co-founder · wrote the original script"
-                },
-                {
-                  "name": "Rita Salgado",
-                  "role": "Co-founder · answers most support email"
-                },
-                {
-                  "name": "Kwame Asante",
-                  "role": "Infrastructure · owns the status page"
-                },
-                {
-                  "name": "Hanne Vos",
-                  "role": "Design · also writes the docs"
-                }
-              ],
-              "more": {
-                "count": "+5",
-                "label": "Engineering",
-                "note": "All listed on the team page"
-              }
-            }
+            "name": "Íñigo Aranguren",
+            "role": "Co-founder · wrote the original script"
+          },
+          {
+            "name": "Rita Salgado",
+            "role": "Co-founder · answers most support email"
+          },
+          {
+            "name": "Kwame Asante",
+            "role": "Infrastructure · owns the status page"
+          },
+          {
+            "name": "Hanne Vos",
+            "role": "Design · also writes the docs"
           }
-        ]
+        ],
+        "more": {
+          "count": "+5",
+          "label": "Engineering",
+          "note": "All listed on the team page"
+        }
       }
     },
     {
-      "widget": "Section",
+      "widget": "Columns",
+      "wrapper": {
+        "props": {
+          "tone": "surface",
+          "id": "history"
+        }
+      },
       "props": {
-        "tone": "surface",
-        "id": "history"
+        "ratio": "equal",
+        "gap": "lg"
       },
       "slots": {
         "default": [
           {
-            "widget": "Columns",
-            "props": {
-              "ratio": "equal",
-              "gap": "lg"
-            },
+            "widget": "Column",
             "slots": {
               "default": [
                 {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
+                  "widget": "Timeline",
+                  "props": {
+                    "title": "How we got here",
+                    "items": [
                       {
-                        "widget": "Timeline",
-                        "props": {
-                          "title": "How we got here",
-                          "items": [
-                            {
-                              "label": "2024",
-                              "title": "An internal script, shared with four other teams who kept asking.",
-                              "highlight": true
-                            },
-                            {
-                              "label": "2025",
-                              "title": "First paying customer in March. Both founders full time by June.",
-                              "highlight": true
-                            },
-                            {
-                              "label": "2026",
-                              "title": "Profitable in March. Self-hosting shipped in August. Nine people.",
-                              "highlight": true
-                            },
-                            {
-                              "label": "Next",
-                              "title": "Stay this size for as long as it works. [Two roles open.](#jobs)"
-                            }
-                          ]
-                        }
+                        "label": "2024",
+                        "title": "An internal script, shared with four other teams who kept asking.",
+                        "highlight": true
+                      },
+                      {
+                        "label": "2025",
+                        "title": "First paying customer in March. Both founders full time by June.",
+                        "highlight": true
+                      },
+                      {
+                        "label": "2026",
+                        "title": "Profitable in March. Self-hosting shipped in August. Nine people.",
+                        "highlight": true
+                      },
+                      {
+                        "label": "Next",
+                        "title": "Stay this size for as long as it works. [Two roles open.](#jobs)"
                       }
                     ]
                   }
-                },
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Column",
+            "slots": {
+              "default": [
                 {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
+                  "widget": "Features",
+                  "props": {
+                    "title": "For press and procurement",
+                    "subtitle": "Everything a journalist, an investor or a security reviewer usually has to email us for.",
+                    "align": "start",
+                    "layout": "cards",
+                    "columns": "4",
+                    "card": "canvas",
+                    "items": [
                       {
-                        "widget": "Features",
-                        "props": {
-                          "title": "For press and procurement",
-                          "subtitle": "Everything a journalist, an investor or a security reviewer usually has to email us for.",
-                          "align": "start",
-                          "layout": "cards",
-                          "columns": "4",
-                          "card": "canvas",
-                          "items": [
-                            {
-                              "title": "Press kit",
-                              "description": "Logos, photos, facts",
-                              "href": "#press"
-                            },
-                            {
-                              "title": "SOC 2 report",
-                              "description": "Under NDA",
-                              "href": "#soc2"
-                            },
-                            {
-                              "title": "DPA",
-                              "description": "Signed, plus subprocessors",
-                              "href": "#dpa"
-                            },
-                            {
-                              "title": "Team handbook",
-                              "description": "Public, including salaries",
-                              "href": "#handbook"
-                            }
-                          ]
-                        }
+                        "title": "Press kit",
+                        "description": "Logos, photos, facts",
+                        "href": "#press"
+                      },
+                      {
+                        "title": "SOC 2 report",
+                        "description": "Under NDA",
+                        "href": "#soc2"
+                      },
+                      {
+                        "title": "DPA",
+                        "description": "Signed, plus subprocessors",
+                        "href": "#dpa"
+                      },
+                      {
+                        "title": "Team handbook",
+                        "description": "Public, including salaries",
+                        "href": "#handbook"
                       }
                     ]
                   }

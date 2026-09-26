@@ -116,74 +116,69 @@
       }
     },
     {
-      "widget": "Section",
+      "widget": "Columns",
+      "wrapper": {
+        "props": {
+          "id": "recording",
+          "label": "Recording"
+        }
+      },
       "props": {
-        "id": "recording",
-        "label": "Recording"
+        "ratio": "equal",
+        "gap": "lg",
+        "align": "center"
       },
       "slots": {
         "default": [
           {
-            "widget": "Columns",
-            "props": {
-              "ratio": "equal",
-              "gap": "lg",
-              "align": "center"
-            },
+            "widget": "Column",
             "slots": {
               "default": [
                 {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
-                      {
-                        "widget": "CallToAction",
-                        "props": {
-                          "layout": "stacked",
-                          "tagline": "After the event",
-                          "title": "This page becomes the recording",
-                          "subtitle": "Same URL, new content: the video, a transcript, the repository and the chapter list. Every inbound link keeps working, and the transcript is the richest keyword surface on the site."
-                        }
-                      }
-                    ]
+                  "widget": "CallToAction",
+                  "props": {
+                    "layout": "stacked",
+                    "tagline": "After the event",
+                    "title": "This page becomes the recording",
+                    "subtitle": "Same URL, new content: the video, a transcript, the repository and the chapter list. Every inbound link keeps working, and the transcript is the richest keyword surface on the site."
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Column",
+            "slots": {
+              "default": [
+                {
+                  "widget": "Screenshot",
+                  "props": {
+                    "frame": false,
+                    "caption": "recording player · 1280×720",
+                    "ratio": "16/9"
                   }
                 },
                 {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
+                  "widget": "Features",
+                  "props": {
+                    "layout": "strip",
+                    "columns": "4",
+                    "items": [
                       {
-                        "widget": "Screenshot",
-                        "props": {
-                          "frame": false,
-                          "caption": "recording player · 1280×720",
-                          "ratio": "16/9"
-                        }
+                        "title": "00:00",
+                        "description": "audit"
                       },
                       {
-                        "widget": "Features",
-                        "props": {
-                          "layout": "strip",
-                          "columns": "4",
-                          "items": [
-                            {
-                              "title": "00:00",
-                              "description": "audit"
-                            },
-                            {
-                              "title": "08:12",
-                              "description": "rebuild"
-                            },
-                            {
-                              "title": "25:40",
-                              "description": "migration"
-                            },
-                            {
-                              "title": "38:05",
-                              "description": "deploy"
-                            }
-                          ]
-                        }
+                        "title": "08:12",
+                        "description": "rebuild"
+                      },
+                      {
+                        "title": "25:40",
+                        "description": "migration"
+                      },
+                      {
+                        "title": "38:05",
+                        "description": "deploy"
                       }
                     ]
                   }

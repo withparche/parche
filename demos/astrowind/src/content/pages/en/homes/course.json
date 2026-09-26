@@ -77,538 +77,493 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "outcomes",
-        "label": "Outcomes",
-        "tone": "surface"
+      "widget": "Stats",
+      "wrapper": {
+        "props": {
+          "id": "outcomes",
+          "label": "Outcomes",
+          "tone": "surface"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "panels",
+        "align": "start",
+        "tagline": "Outcomes",
+        "title": "Four numbers, and the report they come from",
+        "subtitle": "Cohorts 1 to 11, 214 students. Surveyed six months after finishing, 81% responded. [Full methodology and raw counts](/homes/course#report) — including the people who did not finish.",
+        "items": [
           {
-            "widget": "Stats",
-            "props": {
-              "layout": "panels",
-              "align": "start",
-              "tagline": "Outcomes",
-              "title": "Four numbers, and the report they come from",
-              "subtitle": "Cohorts 1 to 11, 214 students. Surveyed six months after finishing, 81% responded. [Full methodology and raw counts](/homes/course#report) — including the people who did not finish.",
-              "items": [
-                {
-                  "value": "87%",
-                  "label": "Finished the twelve weeks",
-                  "description": "186 of 214. The prerequisites exist to keep this number honest."
-                },
-                {
-                  "value": "71%",
-                  "label": "Shipped their system to production",
-                  "tone": "success",
-                  "description": "Self-reported at six months, with a link to the work in most cases."
-                },
-                {
-                  "value": "41",
-                  "label": "Changed role or were promoted",
-                  "description": "Of 173 respondents. We do not claim we caused it — most were already looking."
-                },
-                {
-                  "value": "4.6 / 5",
-                  "label": "Would recommend it",
-                  "description": "The recurring complaint: the workload is heavier than six hours in weeks 7 to 9."
-                }
-              ],
-              "card": "canvas"
-            }
+            "value": "87%",
+            "label": "Finished the twelve weeks",
+            "description": "186 of 214. The prerequisites exist to keep this number honest."
+          },
+          {
+            "value": "71%",
+            "label": "Shipped their system to production",
+            "tone": "success",
+            "description": "Self-reported at six months, with a link to the work in most cases."
+          },
+          {
+            "value": "41",
+            "label": "Changed role or were promoted",
+            "description": "Of 173 respondents. We do not claim we caused it — most were already looking."
+          },
+          {
+            "value": "4.6 / 5",
+            "label": "Would recommend it",
+            "description": "The recurring complaint: the workload is heavier than six hours in weeks 7 to 9."
+          }
+        ],
+        "card": "canvas"
+      }
+    },
+    {
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "id": "fit",
+          "label": "Who it is for"
+        }
+      },
+      "props": {
+        "layout": "cards",
+        "columns": "2",
+        "items": [
+          {
+            "eyebrow": "This is for you if",
+            "points": [
+              "You design product screens daily and have two or more years doing it",
+              "Your team keeps rebuilding the same button in four slightly different ways",
+              "You can read CSS, even if you would not call yourself a developer",
+              "You have a real product to build the system for — yours, or the one we provide"
+            ],
+            "eyebrowTone": "success"
+          },
+          {
+            "eyebrow": "This is not for you if",
+            "tone": "warning",
+            "points": [
+              "You are changing career into design — start somewhere else, we will suggest two",
+              "You want a certificate rather than a shipped system",
+              "You cannot protect six hours a week for twelve weeks, including two live evenings",
+              "You are looking for a job guarantee. We do not offer one, and be careful with anyone who does"
+            ],
+            "footer": "Turning people away is why 87% finish. A course that accepts everyone reports a completion rate it would rather not publish.",
+            "eyebrowTone": "warning"
           }
         ]
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "fit",
-        "label": "Who it is for"
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "id": "curriculum",
+          "label": "Curriculum",
+          "tone": "surface"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "rows",
+        "align": "start",
+        "tagline": "Curriculum",
+        "title": "Six modules, each ending in something you can do",
+        "subtitle": "Module titles are not a curriculum. This is what you will be able to do at the end of each fortnight.",
+        "items": [
           {
-            "widget": "Features",
-            "props": {
-              "layout": "cards",
-              "columns": "2",
-              "items": [
-                {
-                  "eyebrow": "This is for you if",
-                  "points": [
-                    "You design product screens daily and have two or more years doing it",
-                    "Your team keeps rebuilding the same button in four slightly different ways",
-                    "You can read CSS, even if you would not call yourself a developer",
-                    "You have a real product to build the system for — yours, or the one we provide"
-                  ],
-                  "eyebrowTone": "success"
-                },
-                {
-                  "eyebrow": "This is not for you if",
-                  "tone": "warning",
-                  "points": [
-                    "You are changing career into design — start somewhere else, we will suggest two",
-                    "You want a certificate rather than a shipped system",
-                    "You cannot protect six hours a week for twelve weeks, including two live evenings",
-                    "You are looking for a job guarantee. We do not offer one, and be careful with anyone who does"
-                  ],
-                  "footer": "Turning people away is why 87% finish. A course that accepts everyone reports a completion rate it would rather not publish.",
-                  "eyebrowTone": "warning"
-                }
-              ]
-            }
+            "eyebrow": "Weeks 1–2",
+            "title": "Audit what you already have",
+            "description": "Inventory every component and every colour in the product. Most students find between forty and ninety greys.",
+            "footer": "You finish with: an audit document your team will actually read"
+          },
+          {
+            "eyebrow": "Weeks 3–4",
+            "title": "Tokens that survive a redesign",
+            "description": "Naming, tiers, theming and dark mode. Why semantic tokens beat literal ones, and where that rule breaks.",
+            "footer": "You finish with: a token set in Figma and in CSS, in sync"
+          },
+          {
+            "eyebrow": "Weeks 5–6",
+            "title": "Components and their states",
+            "description": "The states everyone forgets: loading, empty, error, too-long text, and the one where the API is slow.",
+            "footer": "You finish with: twelve components with every state specified"
+          },
+          {
+            "eyebrow": "Weeks 7–8",
+            "title": "Accessibility as a build step",
+            "description": "Contrast, focus order, keyboard paths and screen reader testing. Done while building, not audited afterwards.",
+            "footer": "You finish with: a component set that passes WCAG 2.2 AA"
+          },
+          {
+            "eyebrow": "Weeks 9–10",
+            "title": "Handover, versioning and adoption",
+            "description": "The hard part. Getting engineers to use it, versioning without breaking them, and what to do when someone ships a one-off.",
+            "footer": "You finish with: a contribution process and a migration plan"
+          },
+          {
+            "eyebrow": "Weeks 11–12",
+            "title": "Defend it in front of engineers",
+            "description": "A real review with two senior engineers who did not build it and will ask why. This is the part graduates say mattered most.",
+            "footer": "You finish with: a shipped system and the argument for it"
           }
-        ]
+        ],
+        "accent": true
       }
     },
     {
-      "widget": "Section",
+      "widget": "Columns",
+      "wrapper": {
+        "props": {
+          "id": "teachers",
+          "label": "Who teaches"
+        }
+      },
       "props": {
-        "id": "curriculum",
-        "label": "Curriculum",
-        "tone": "surface"
+        "ratio": "equal",
+        "gap": "lg",
+        "align": "start"
       },
       "slots": {
         "default": [
           {
-            "widget": "Features",
-            "props": {
-              "layout": "rows",
-              "align": "start",
-              "tagline": "Curriculum",
-              "title": "Six modules, each ending in something you can do",
-              "subtitle": "Module titles are not a curriculum. This is what you will be able to do at the end of each fortnight.",
-              "items": [
-                {
-                  "eyebrow": "Weeks 1–2",
-                  "title": "Audit what you already have",
-                  "description": "Inventory every component and every colour in the product. Most students find between forty and ninety greys.",
-                  "footer": "You finish with: an audit document your team will actually read"
-                },
-                {
-                  "eyebrow": "Weeks 3–4",
-                  "title": "Tokens that survive a redesign",
-                  "description": "Naming, tiers, theming and dark mode. Why semantic tokens beat literal ones, and where that rule breaks.",
-                  "footer": "You finish with: a token set in Figma and in CSS, in sync"
-                },
-                {
-                  "eyebrow": "Weeks 5–6",
-                  "title": "Components and their states",
-                  "description": "The states everyone forgets: loading, empty, error, too-long text, and the one where the API is slow.",
-                  "footer": "You finish with: twelve components with every state specified"
-                },
-                {
-                  "eyebrow": "Weeks 7–8",
-                  "title": "Accessibility as a build step",
-                  "description": "Contrast, focus order, keyboard paths and screen reader testing. Done while building, not audited afterwards.",
-                  "footer": "You finish with: a component set that passes WCAG 2.2 AA"
-                },
-                {
-                  "eyebrow": "Weeks 9–10",
-                  "title": "Handover, versioning and adoption",
-                  "description": "The hard part. Getting engineers to use it, versioning without breaking them, and what to do when someone ships a one-off.",
-                  "footer": "You finish with: a contribution process and a migration plan"
-                },
-                {
-                  "eyebrow": "Weeks 11–12",
-                  "title": "Defend it in front of engineers",
-                  "description": "A real review with two senior engineers who did not build it and will ask why. This is the part graduates say mattered most.",
-                  "footer": "You finish with: a shipped system and the argument for it"
-                }
-              ],
-              "accent": true
-            }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "id": "teachers",
-        "label": "Who teaches"
-      },
-      "slots": {
-        "default": [
-          {
-            "widget": "Columns",
-            "props": {
-              "ratio": "equal",
-              "gap": "lg",
-              "align": "start"
-            },
+            "widget": "Column",
             "slots": {
               "default": [
                 {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
-                      {
-                        "widget": "Prose",
-                        "props": {
-                          "tagline": "Who teaches",
-                          "title": "Two people, both in every session",
-                          "subtitle": "Not a platform with rotating instructors. The same two run every cohort, and you can see their work.",
-                          "width": "none"
-                        }
-                      }
-                    ]
-                  }
-                },
-                {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
-                      {
-                        "widget": "Team",
-                        "props": {
-                          "layout": "rows",
-                          "items": [
-                            {
-                              "name": "Lena Ostrowska",
-                              "role": "Built and maintained the design system at a 400-person fintech for four years, through two rebrands and one framework migration. Writes the tokens module because she got it wrong the first time."
-                            },
-                            {
-                              "name": "Marcus Feld",
-                              "role": "Staff front-end engineer. He is in the room so the system you design is one an engineer will accept, and he runs the week 11 review as the person asking the awkward questions."
-                            }
-                          ]
-                        }
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "id": "sample",
-        "label": "Sample lesson",
-        "tone": "surface"
-      },
-      "slots": {
-        "default": [
-          {
-            "widget": "Columns",
-            "props": {
-              "ratio": "equal",
-              "gap": "lg",
-              "align": "center"
-            },
-            "slots": {
-              "default": [
-                {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
-                      {
-                        "widget": "Screenshot",
-                        "props": {
-                          "caption": "lesson video · 52 min · 1600×900",
-                          "ratio": "16/9",
-                          "frame": false
-                        }
-                      }
-                    ]
-                  }
-                },
-                {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
-                      {
-                        "widget": "CallToAction",
-                        "props": {
-                          "layout": "stacked",
-                          "title": "Watch a whole session before you apply",
-                          "subtitle": "Week four, unedited, fifty-two minutes — including the part where a student disagrees with Lena and she changes her mind. No email required, no gate.",
-                          "note": "A real lesson converts better than any description of one, and it disqualifies the wrong applicant for free.",
-                          "actions": [
-                            {
-                              "text": "Watch the session",
-                              "href": "/homes/course#sample",
-                              "variant": "primary"
-                            }
-                          ]
-                        }
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "id": "graduates",
-        "label": "Graduates"
-      },
-      "slots": {
-        "default": [
-          {
-            "widget": "Testimonials",
-            "props": {
-              "align": "start",
-              "title": "Three graduates, and what they shipped",
-              "items": [
-                {
-                  "text": "I went in maintaining a Figma file nobody used. I came out with tokens in the codebase and the engineers asking me for changes instead of working around me.",
-                  "name": "Ines Falcão",
-                  "role": "Cohort 7 · now design systems lead"
-                },
-                {
-                  "text": "The engineer review in week eleven was brutal and it is the only reason the thing survived contact with our repo.",
-                  "name": "Wouter Bakker",
-                  "role": "Cohort 9 · product designer, logistics"
-                },
-                {
-                  "text": "Weeks seven to nine were far more than six hours. Worth it, but I would have arranged my life differently had I known.",
-                  "name": "Aiko Tanaka",
-                  "role": "Cohort 10 · senior designer, health tech"
-                }
-              ],
-              "note": "The third one is a complaint, left in on purpose — it is also the most common piece of feedback we get, and hiding it would mean students arrive unprepared for weeks seven to nine."
-            }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "id": "price",
-        "label": "Dates & price",
-        "tone": "surface"
-      },
-      "slots": {
-        "default": [
-          {
-            "widget": "Columns",
-            "props": {
-              "ratio": "equal",
-              "gap": "lg",
-              "align": "start"
-            },
-            "slots": {
-              "default": [
-                {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
-                      {
-                        "widget": "Table",
-                        "props": {
-                          "title": "Dates, price and how people pay",
-                          "frame": "open",
-                          "header": "none",
-                          "columns": [
-                            {
-                              "label": "Cohort"
-                            },
-                            {
-                              "label": "Places",
-                              "align": "end"
-                            }
-                          ],
-                          "rows": [
-                            {
-                              "cells": [
-                                "**Cohort 12** · 6 Oct — 19 Dec",
-                                {
-                                  "text": "7 of 24 left",
-                                  "tone": "warning"
-                                }
-                              ]
-                            },
-                            {
-                              "cells": [
-                                "**Cohort 13** · 19 Jan — 3 Apr",
-                                {
-                                  "text": "Open",
-                                  "tone": "success"
-                                }
-                              ]
-                            },
-                            {
-                              "cells": [
-                                "**Cohort 14** · April",
-                                {
-                                  "text": "Waiting list",
-                                  "tone": "muted"
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      },
-                      {
-                        "widget": "Table",
-                        "props": {
-                          "frame": "open",
-                          "header": "none",
-                          "columns": [
-                            {
-                              "label": "How you pay"
-                            },
-                            {
-                              "label": "Amount",
-                              "align": "end"
-                            }
-                          ],
-                          "rows": [
-                            {
-                              "cells": [
-                                "Pay in full",
-                                "**€2,400**"
-                              ]
-                            },
-                            {
-                              "cells": [
-                                "Four monthly payments",
-                                "**4 × €625**"
-                              ]
-                            },
-                            {
-                              "cells": [
-                                "Employer pays",
-                                "**Invoice, 30 days**"
-                              ]
-                            },
-                            {
-                              "cells": [
-                                "Need-based places",
-                                "**3 per cohort, free**"
-                              ]
-                            }
-                          ],
-                          "note": "The three funded places are decided by a separate form and are not first come, first served. [How to apply for one](/homes/course#bursary)."
-                        }
-                      }
-                    ]
-                  }
-                },
-                {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
-                      {
-                        "widget": "Callout",
-                        "props": {
-                          "tone": "primary",
-                          "layout": "card",
-                          "label": "Refund policy, in plain words",
-                          "description": "Leave before the end of week two and you get everything back, no reason needed, no form to argue with. After week two we refund pro rata up to week six.",
-                          "footer": "If a cohort is cancelled by us, you are refunded in full within five working days and offered the next one at no cost."
-                        }
-                      },
-                      {
-                        "widget": "Callout",
-                        "props": {
-                          "tone": "neutral",
-                          "layout": "card",
-                          "label": "Also worth knowing",
-                          "items": [
-                            "Sessions are recorded and yours for two years",
-                            "Miss two live sessions and you can still finish; miss four and we move you to the next cohort free",
-                            "Access to the alumni space continues after you finish, including the job board"
-                          ]
-                        }
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "id": "faq",
-        "label": "Questions",
-        "width": "md"
-      },
-      "slots": {
-        "default": [
-          {
-            "widget": "FAQs",
-            "props": {
-              "layout": "list",
-              "columns": "1",
-              "open": "all",
-              "title": "Asked before applying",
-              "items": [
-                {
-                  "title": "What if I cannot make a live session?",
-                  "description": "Everything is recorded and posted within two hours. The live part matters because that is where your work gets critiqued, so two misses is fine and four means we move you — free — to the next cohort."
-                },
-                {
-                  "title": "Is there a certificate?",
-                  "description": "Yes, and it is worth very little. What you show people is the system you built and the recording of you defending it. If a certificate is the goal, we are the wrong course."
-                },
-                {
-                  "title": "Can my employer pay?",
-                  "description": "Most do. We invoice on thirty-day terms and send a one-page justification you can forward to your manager — it is the same document that gets approved about nine times out of ten."
-                },
-                {
-                  "title": "Do I need a company to build the system for?",
-                  "description": "It works better if you do, because adoption is the hard part. If you do not, we give you a real product with real constraints and a real engineer to argue with."
-                },
-                {
-                  "title": "Will this get me a job?",
-                  "description": "We do not know, and nobody honest does. Forty-one of 173 respondents changed role or were promoted within six months; most were already looking. Treat any course promising a guarantee with suspicion."
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "id": "apply",
-        "label": "Apply",
-        "tone": "surface",
-        "width": "md"
-      },
-      "slots": {
-        "default": [
-          {
-            "widget": "CallToAction",
-            "props": {
-              "layout": "closing",
-              "size": "md",
-              "title": "Apply for cohort 12",
-              "subtitle": "Four questions, about ten minutes. We answer every application within three working days, including the noes and why."
-            },
-            "slots": {
-              "below": [
-                {
-                  "widget": "Newsletter",
+                  "widget": "Prose",
                   "props": {
-                    "layout": "inline",
-                    "align": "center",
-                    "placeholder": "you@company.com",
-                    "submit": "Start the application",
-                    "note": "7 places left · applications close 26 September · no payment until you are accepted"
+                    "tagline": "Who teaches",
+                    "title": "Two people, both in every session",
+                    "subtitle": "Not a platform with rotating instructors. The same two run every cohort, and you can see their work.",
+                    "width": "none"
                   }
                 }
               ]
+            }
+          },
+          {
+            "widget": "Column",
+            "slots": {
+              "default": [
+                {
+                  "widget": "Team",
+                  "props": {
+                    "layout": "rows",
+                    "items": [
+                      {
+                        "name": "Lena Ostrowska",
+                        "role": "Built and maintained the design system at a 400-person fintech for four years, through two rebrands and one framework migration. Writes the tokens module because she got it wrong the first time."
+                      },
+                      {
+                        "name": "Marcus Feld",
+                        "role": "Staff front-end engineer. He is in the room so the system you design is one an engineer will accept, and he runs the week 11 review as the person asking the awkward questions."
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Columns",
+      "wrapper": {
+        "props": {
+          "id": "sample",
+          "label": "Sample lesson",
+          "tone": "surface"
+        }
+      },
+      "props": {
+        "ratio": "equal",
+        "gap": "lg",
+        "align": "center"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Column",
+            "slots": {
+              "default": [
+                {
+                  "widget": "Screenshot",
+                  "props": {
+                    "caption": "lesson video · 52 min · 1600×900",
+                    "ratio": "16/9",
+                    "frame": false
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Column",
+            "slots": {
+              "default": [
+                {
+                  "widget": "CallToAction",
+                  "props": {
+                    "layout": "stacked",
+                    "title": "Watch a whole session before you apply",
+                    "subtitle": "Week four, unedited, fifty-two minutes — including the part where a student disagrees with Lena and she changes her mind. No email required, no gate.",
+                    "note": "A real lesson converts better than any description of one, and it disqualifies the wrong applicant for free.",
+                    "actions": [
+                      {
+                        "text": "Watch the session",
+                        "href": "/homes/course#sample",
+                        "variant": "primary"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Testimonials",
+      "wrapper": {
+        "props": {
+          "id": "graduates",
+          "label": "Graduates"
+        }
+      },
+      "props": {
+        "align": "start",
+        "title": "Three graduates, and what they shipped",
+        "items": [
+          {
+            "text": "I went in maintaining a Figma file nobody used. I came out with tokens in the codebase and the engineers asking me for changes instead of working around me.",
+            "name": "Ines Falcão",
+            "role": "Cohort 7 · now design systems lead"
+          },
+          {
+            "text": "The engineer review in week eleven was brutal and it is the only reason the thing survived contact with our repo.",
+            "name": "Wouter Bakker",
+            "role": "Cohort 9 · product designer, logistics"
+          },
+          {
+            "text": "Weeks seven to nine were far more than six hours. Worth it, but I would have arranged my life differently had I known.",
+            "name": "Aiko Tanaka",
+            "role": "Cohort 10 · senior designer, health tech"
+          }
+        ],
+        "note": "The third one is a complaint, left in on purpose — it is also the most common piece of feedback we get, and hiding it would mean students arrive unprepared for weeks seven to nine."
+      }
+    },
+    {
+      "widget": "Columns",
+      "wrapper": {
+        "props": {
+          "id": "price",
+          "label": "Dates & price",
+          "tone": "surface"
+        }
+      },
+      "props": {
+        "ratio": "equal",
+        "gap": "lg",
+        "align": "start"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Column",
+            "slots": {
+              "default": [
+                {
+                  "widget": "Table",
+                  "props": {
+                    "title": "Dates, price and how people pay",
+                    "frame": "open",
+                    "header": "none",
+                    "columns": [
+                      {
+                        "label": "Cohort"
+                      },
+                      {
+                        "label": "Places",
+                        "align": "end"
+                      }
+                    ],
+                    "rows": [
+                      {
+                        "cells": [
+                          "**Cohort 12** · 6 Oct — 19 Dec",
+                          {
+                            "text": "7 of 24 left",
+                            "tone": "warning"
+                          }
+                        ]
+                      },
+                      {
+                        "cells": [
+                          "**Cohort 13** · 19 Jan — 3 Apr",
+                          {
+                            "text": "Open",
+                            "tone": "success"
+                          }
+                        ]
+                      },
+                      {
+                        "cells": [
+                          "**Cohort 14** · April",
+                          {
+                            "text": "Waiting list",
+                            "tone": "muted"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "widget": "Table",
+                  "props": {
+                    "frame": "open",
+                    "header": "none",
+                    "columns": [
+                      {
+                        "label": "How you pay"
+                      },
+                      {
+                        "label": "Amount",
+                        "align": "end"
+                      }
+                    ],
+                    "rows": [
+                      {
+                        "cells": [
+                          "Pay in full",
+                          "**€2,400**"
+                        ]
+                      },
+                      {
+                        "cells": [
+                          "Four monthly payments",
+                          "**4 × €625**"
+                        ]
+                      },
+                      {
+                        "cells": [
+                          "Employer pays",
+                          "**Invoice, 30 days**"
+                        ]
+                      },
+                      {
+                        "cells": [
+                          "Need-based places",
+                          "**3 per cohort, free**"
+                        ]
+                      }
+                    ],
+                    "note": "The three funded places are decided by a separate form and are not first come, first served. [How to apply for one](/homes/course#bursary)."
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Column",
+            "slots": {
+              "default": [
+                {
+                  "widget": "Callout",
+                  "props": {
+                    "tone": "primary",
+                    "layout": "card",
+                    "label": "Refund policy, in plain words",
+                    "description": "Leave before the end of week two and you get everything back, no reason needed, no form to argue with. After week two we refund pro rata up to week six.",
+                    "footer": "If a cohort is cancelled by us, you are refunded in full within five working days and offered the next one at no cost."
+                  }
+                },
+                {
+                  "widget": "Callout",
+                  "props": {
+                    "tone": "neutral",
+                    "layout": "card",
+                    "label": "Also worth knowing",
+                    "items": [
+                      "Sessions are recorded and yours for two years",
+                      "Miss two live sessions and you can still finish; miss four and we move you to the next cohort free",
+                      "Access to the alumni space continues after you finish, including the job board"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "FAQs",
+      "wrapper": {
+        "props": {
+          "id": "faq",
+          "label": "Questions",
+          "width": "md"
+        }
+      },
+      "props": {
+        "layout": "list",
+        "columns": "1",
+        "open": "all",
+        "title": "Asked before applying",
+        "items": [
+          {
+            "title": "What if I cannot make a live session?",
+            "description": "Everything is recorded and posted within two hours. The live part matters because that is where your work gets critiqued, so two misses is fine and four means we move you — free — to the next cohort."
+          },
+          {
+            "title": "Is there a certificate?",
+            "description": "Yes, and it is worth very little. What you show people is the system you built and the recording of you defending it. If a certificate is the goal, we are the wrong course."
+          },
+          {
+            "title": "Can my employer pay?",
+            "description": "Most do. We invoice on thirty-day terms and send a one-page justification you can forward to your manager — it is the same document that gets approved about nine times out of ten."
+          },
+          {
+            "title": "Do I need a company to build the system for?",
+            "description": "It works better if you do, because adoption is the hard part. If you do not, we give you a real product with real constraints and a real engineer to argue with."
+          },
+          {
+            "title": "Will this get me a job?",
+            "description": "We do not know, and nobody honest does. Forty-one of 173 respondents changed role or were promoted within six months; most were already looking. Treat any course promising a guarantee with suspicion."
+          }
+        ]
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "wrapper": {
+        "props": {
+          "id": "apply",
+          "label": "Apply",
+          "tone": "surface",
+          "width": "md"
+        }
+      },
+      "props": {
+        "layout": "closing",
+        "size": "md",
+        "title": "Apply for cohort 12",
+        "subtitle": "Four questions, about ten minutes. We answer every application within three working days, including the noes and why."
+      },
+      "slots": {
+        "below": [
+          {
+            "widget": "Newsletter",
+            "props": {
+              "layout": "inline",
+              "align": "center",
+              "placeholder": "you@company.com",
+              "submit": "Start the application",
+              "note": "7 places left · applications close 26 September · no payment until you are accepted"
             }
           }
         ]

@@ -26,8 +26,9 @@ export interface Issue {
 /**
  * Checks a tree against the widget catalog: every widget exists, every slot
  * a node fills is one its widget declares, what fills it is allowed there and
- * counted within `min` and `max`, the tree stays within the depth limit, and
- * a wrapper's tone is a registered one. Pure, so the CLI, the build and the
+ * counted within `min` and `max`, the tree stays within the depth limit, a
+ * node's own wrapper is a widget with a default slot, and a wrapper's tone is
+ * a registered one. Pure, so the CLI, the build and the
  * dev renderer report the same things.
  */
 export function validateTree(nodes: Node[], ctx: ValidateContext, base = 'sections'): Issue[] {
@@ -46,10 +47,26 @@ export function validateTree(nodes: Node[], ctx: ValidateContext, base = 'sectio
     if (depth > maxDepth) {
       issues.push({ path, message: `"${node.widget}" is ${depth} levels deep; the limit is ${maxDepth}` });
     }
-    if (ctx.wrapper && node.widget === ctx.wrapper && ctx.tones) {
-      const tone = node.props?.tone;
-      if (typeof tone === 'string' && !ctx.tones.includes(tone)) {
-        issues.push({ path, message: `tone "${tone}" is not registered (known: ${ctx.tones.join(', ')})` });
+    const checkTone = (props: Record<string, unknown> | undefined, at: string) => {
+      const tone = props?.tone;
+      if (ctx.tones && typeof tone === 'string' && !ctx.tones.includes(tone)) {
+        issues.push({ path: at, message: `tone "${tone}" is not registered (known: ${ctx.tones.join(', ')})` });
+      }
+    };
+    if (ctx.wrapper && node.widget === ctx.wrapper) checkTone(node.props, path);
+    // A node's own wrapper: a registered widget that has somewhere to put it.
+    if (node.wrapper) {
+      const at = `${path}.wrapper`;
+      const name = node.wrapper.widget ?? ctx.wrapper;
+      const wrapperShape = name ? ctx.widgets[name] : undefined;
+      if (!name) {
+        issues.push({ path: at, message: 'names no widget, and no parche registers a default wrapper' });
+      } else if (!wrapperShape) {
+        issues.push({ path: at, message: `unknown wrapper widget "${name}"` });
+      } else if (!wrapperShape.slots?.default && !wrapperShape.slots?.['*']) {
+        issues.push({ path: at, message: `"${name}" cannot wrap: it declares no default slot (a JSON widget has none)` });
+      } else if (name === ctx.wrapper) {
+        checkTone(node.wrapper.props, at);
       }
     }
     for (const [slot, children] of Object.entries(node.slots ?? {})) {

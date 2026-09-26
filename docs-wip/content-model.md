@@ -75,21 +75,43 @@ page can wrap its own sections differently with `"wrapper": { … }` next to
 parche names a default (`ui` declares `wrapper: 'Section'` in its manifest),
 but writing it keeps the JSON self-explanatory.
 
-An item that needs other props writes the wrapper itself:
+An item that needs other props says so on itself, with its own `wrapper`,
+the same object a list declares:
+
+```jsonc
+// The list's wrapper widget (Section), with these props over the list's.
+{ "widget": "Pricing", "wrapper": { "props": { "tone": "surface", "id": "pricing" } }, "props": { … } }
+
+// Another wrapper widget, with only its own props.
+{ "widget": "Features", "wrapper": { "widget": "Band", "props": { "angle": 3 } }, "props": { … } }
+
+// No wrapper for this item.
+{ "widget": "Gallery", "wrapper": false, "props": { … } }
+```
+
+The wrapper is decoration, not composition: it holds only that node and
+does not count toward the depth limit. It works in any list, a slot's too,
+and an explicit wrapper applies even to a widget that is bare by default.
+The wrapper widget must be registered and declare a `default` slot; a JSON
+widget has no slots, so it cannot be one. A `$prop` inside a JSON widget's
+tree works in `wrapper.props` as in `props`.
+
+Writing the wrapper as a node is still valid, and it is the form for a band
+that holds several widgets:
 
 ```json
 {
   "widget": "Section",
   "props": { "tone": "surface", "id": "pricing" },
-  "slots": { "default": [ { "widget": "Pricing", "props": { … } } ] }
+  "slots": { "default": [ { "widget": "Pricing", "props": { … } }, { "widget": "Callout", "props": { … } } ] }
 }
 ```
 
 It is not wrapped again, and it takes the list's props as its defaults, so it
 writes only what differs. A widget whose meta says `wrapper: false` (a
-full-bleed Hero, the Header) is left bare in a wrapped list. A wrapper that
-names an unknown widget or an unregistered tone is a content issue with its
-path, like any other.
+full-bleed Hero, the Header) is left bare in a wrapped list unless the item
+asks. A wrapper that names an unknown widget, one with no default slot, or an
+unregistered tone is a content issue with its path, like any other.
 
 `Section`'s props: `tone`, `width` (`sm` … `full`), `spacing` (`none` …
 `lg`), `id` (the anchor) and `label` (what navigation calls it).

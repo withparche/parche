@@ -49,168 +49,153 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "spacing": "sm"
+      "widget": "Callout",
+      "wrapper": {
+        "props": {
+          "spacing": "sm"
+        }
       },
-      "slots": {
-        "default": [
-          {
-            "widget": "Callout",
-            "props": {
-              "layout": "inline",
-              "tone": "primary",
-              "label": "Why it works",
-              "description": "A sales headline promises a transformation, not a feature. The subtitle tells the reader what the page will do for them if they keep scrolling."
-            }
-          }
-        ]
+      "props": {
+        "layout": "inline",
+        "tone": "primary",
+        "label": "Why it works",
+        "description": "A sales headline promises a transformation, not a feature. The subtitle tells the reader what the page will do for them if they keep scrolling."
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "tone": "surface",
-        "id": "reader"
+      "widget": "Switch",
+      "wrapper": {
+        "props": {
+          "tone": "surface",
+          "id": "reader"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "tagline": "Who is reading this",
+        "title": "The argument changes with the reader",
+        "label": "Who is reading this",
+        "syncKey": "reader",
+        "options": [
           {
-            "widget": "Switch",
-            "props": {
-              "tagline": "Who is reading this",
-              "title": "The argument changes with the reader",
-              "label": "Who is reading this",
-              "syncKey": "reader",
-              "options": [
-                {
-                  "value": "dev",
-                  "label": "Developer"
-                },
-                {
-                  "value": "mkt",
-                  "label": "Marketer"
-                },
-                {
-                  "value": "agency",
-                  "label": "Agency"
-                }
-              ]
-            },
-            "slots": {
-              "dev": [
-                {
-                  "widget": "Features",
-                  "props": {
-                    "layout": "cards",
-                    "columns": "3",
-                    "card": "canvas",
-                    "items": [
-                      {
-                        "eyebrow": "What breaks today",
-                        "description": "You inherit the marketing site and every change is an afternoon."
-                      },
-                      {
-                        "eyebrow": "What changes",
-                        "eyebrowTone": "primary",
-                        "description": "Content lives in typed collections, so a wrong edit fails the build instead of the live page. No CMS webhook to debug at 18:00 on a Friday, and the whole site is a folder you can read in one sitting."
-                      },
-                      {
-                        "eyebrow": "Your objection first",
-                        "description": "“I do not want another abstraction layer.” There is none: it is Astro components and CSS variables. Delete the widgets you do not use and nothing breaks.",
-                        "footer": "Ferrolab moved 140 posts with zero redirect gaps (sample figure)."
-                      }
-                    ]
-                  }
-                }
-              ],
-              "mkt": [
-                {
-                  "widget": "Features",
-                  "props": {
-                    "layout": "cards",
-                    "columns": "3",
-                    "card": "canvas",
-                    "items": [
-                      {
-                        "eyebrow": "What breaks today",
-                        "description": "You cannot publish a landing page without booking developer time."
-                      },
-                      {
-                        "eyebrow": "What changes",
-                        "eyebrowTone": "primary",
-                        "description": "Eleven landing types, each a page of Markdown and props. Copy, replace the words, publish. The pages ship with the events already wired, so you get numbers on day one rather than after a ticket."
-                      },
-                      {
-                        "eyebrow": "Your objection first",
-                        "description": "“Will I need a developer to change anything?” For copy, images and new pages: no. For a new section type: yes, once — then it is yours forever.",
-                        "footer": "Northwind grew organic traffic 38% in one quarter (sample figure)."
-                      }
-                    ]
-                  }
-                }
-              ],
-              "agency": [
-                {
-                  "widget": "Features",
-                  "props": {
-                    "layout": "cards",
-                    "columns": "3",
-                    "card": "canvas",
-                    "items": [
-                      {
-                        "eyebrow": "What breaks today",
-                        "description": "Every client site starts from a different half-finished codebase."
-                      },
-                      {
-                        "eyebrow": "What changes",
-                        "eyebrowTone": "primary",
-                        "description": "One repository, one token file per brand, eleven page types. Clients edit Markdown and cannot break the build. Handover is the repo plus a vitals report, and the licence lets you charge whatever your work is worth."
-                      },
-                      {
-                        "eyebrow": "Your objection first",
-                        "description": "“Can I use it commercially, under my own brand?” Yes. MIT, no attribution, unlimited client sites. That is the most common use of it.",
-                        "footer": "Calderón & Co shipped eleven client sites, 60% fewer build hours (sample figure)."
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
+            "value": "dev",
+            "label": "Developer"
+          },
+          {
+            "value": "mkt",
+            "label": "Marketer"
+          },
+          {
+            "value": "agency",
+            "label": "Agency"
           }
         ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "id": "problem"
       },
       "slots": {
-        "default": [
+        "dev": [
           {
             "widget": "Features",
             "props": {
-              "layout": "rows",
-              "header": "side",
-              "tagline": "02 · The problem",
-              "title": "Traffic that reads the headline and leaves",
-              "subtitle": "A reader who recognises their own situation in the first screen keeps reading. Describe the problem precisely and without exaggeration — the credibility earned here pays for every claim below.",
+              "layout": "cards",
+              "columns": "3",
+              "card": "canvas",
               "items": [
                 {
-                  "title": "Short pages assume the visitor already wants it",
-                  "description": "They do not. For anything unfamiliar or expensive, two paragraphs leave every doubt intact."
+                  "eyebrow": "What breaks today",
+                  "description": "You inherit the marketing site and every change is an afternoon."
                 },
                 {
-                  "title": "Feature lists do not change minds",
-                  "description": "A list says what the product has. It never says what the buyer’s week looks like afterwards."
+                  "eyebrow": "What changes",
+                  "eyebrowTone": "primary",
+                  "description": "Content lives in typed collections, so a wrong edit fails the build instead of the live page. No CMS webhook to debug at 18:00 on a Friday, and the whole site is a folder you can read in one sitting."
                 },
                 {
-                  "title": "The call carries the whole weight",
-                  "description": "When the page does not persuade, a human has to — one conversation at a time. That does not scale."
+                  "eyebrow": "Your objection first",
+                  "description": "“I do not want another abstraction layer.” There is none: it is Astro components and CSS variables. Delete the widgets you do not use and nothing breaks.",
+                  "footer": "Ferrolab moved 140 posts with zero redirect gaps (sample figure)."
                 }
               ]
             }
+          }
+        ],
+        "mkt": [
+          {
+            "widget": "Features",
+            "props": {
+              "layout": "cards",
+              "columns": "3",
+              "card": "canvas",
+              "items": [
+                {
+                  "eyebrow": "What breaks today",
+                  "description": "You cannot publish a landing page without booking developer time."
+                },
+                {
+                  "eyebrow": "What changes",
+                  "eyebrowTone": "primary",
+                  "description": "Eleven landing types, each a page of Markdown and props. Copy, replace the words, publish. The pages ship with the events already wired, so you get numbers on day one rather than after a ticket."
+                },
+                {
+                  "eyebrow": "Your objection first",
+                  "description": "“Will I need a developer to change anything?” For copy, images and new pages: no. For a new section type: yes, once — then it is yours forever.",
+                  "footer": "Northwind grew organic traffic 38% in one quarter (sample figure)."
+                }
+              ]
+            }
+          }
+        ],
+        "agency": [
+          {
+            "widget": "Features",
+            "props": {
+              "layout": "cards",
+              "columns": "3",
+              "card": "canvas",
+              "items": [
+                {
+                  "eyebrow": "What breaks today",
+                  "description": "Every client site starts from a different half-finished codebase."
+                },
+                {
+                  "eyebrow": "What changes",
+                  "eyebrowTone": "primary",
+                  "description": "One repository, one token file per brand, eleven page types. Clients edit Markdown and cannot break the build. Handover is the repo plus a vitals report, and the licence lets you charge whatever your work is worth."
+                },
+                {
+                  "eyebrow": "Your objection first",
+                  "description": "“Can I use it commercially, under my own brand?” Yes. MIT, no attribution, unlimited client sites. That is the most common use of it.",
+                  "footer": "Calderón & Co shipped eleven client sites, 60% fewer build hours (sample figure)."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "id": "problem"
+        }
+      },
+      "props": {
+        "layout": "rows",
+        "header": "side",
+        "tagline": "02 · The problem",
+        "title": "Traffic that reads the headline and leaves",
+        "subtitle": "A reader who recognises their own situation in the first screen keeps reading. Describe the problem precisely and without exaggeration — the credibility earned here pays for every claim below.",
+        "items": [
+          {
+            "title": "Short pages assume the visitor already wants it",
+            "description": "They do not. For anything unfamiliar or expensive, two paragraphs leave every doubt intact."
+          },
+          {
+            "title": "Feature lists do not change minds",
+            "description": "A list says what the product has. It never says what the buyer’s week looks like afterwards."
+          },
+          {
+            "title": "The call carries the whole weight",
+            "description": "When the page does not persuade, a human has to — one conversation at a time. That does not scale."
           }
         ]
       }
@@ -244,50 +229,45 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "tone": "surface",
-        "id": "benefits"
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "tone": "surface",
+          "id": "benefits"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "cards",
+        "columns": "4",
+        "card": "canvas",
+        "align": "start",
+        "tagline": "04 · Benefits",
+        "title": "What the buyer gets, stated as outcomes",
+        "subtitle": "Each one written the way a customer would describe it to a colleague, not the way a spec sheet would. If a line could appear on a competitor’s page unchanged, it is not a benefit.",
+        "items": [
           {
-            "widget": "Features",
-            "props": {
-              "layout": "cards",
-              "columns": "4",
-              "card": "canvas",
-              "align": "start",
-              "tagline": "04 · Benefits",
-              "title": "What the buyer gets, stated as outcomes",
-              "subtitle": "Each one written the way a customer would describe it to a colleague, not the way a spec sheet would. If a line could appear on a competitor’s page unchanged, it is not a benefit.",
-              "items": [
-                {
-                  "title": "Fewer calls that start from zero",
-                  "description": "Prospects arrive having read the argument. The call confirms scope and price; it does not convince."
-                },
-                {
-                  "title": "Objections handled at 3 a.m.",
-                  "description": "Price, time, fit and risk are answered on the page, in the order they actually come up."
-                },
-                {
-                  "title": "A structure you can measure",
-                  "description": "Scroll depth per block tells you where the argument loses people. You fix that block, not the whole page."
-                },
-                {
-                  "title": "Copy that survives a redesign",
-                  "description": "The order and the headlines carry the sale. Visuals can change without rewriting the pitch."
-                },
-                {
-                  "title": "Reusable for every offer",
-                  "description": "The same nine blocks fit a course, a service or a product. Only the copy changes."
-                },
-                {
-                  "title": "Built with widgets you already have",
-                  "description": "Nine components from the template’s widgets folder. No custom code, no new dependency."
-                }
-              ]
-            }
+            "title": "Fewer calls that start from zero",
+            "description": "Prospects arrive having read the argument. The call confirms scope and price; it does not convince."
+          },
+          {
+            "title": "Objections handled at 3 a.m.",
+            "description": "Price, time, fit and risk are answered on the page, in the order they actually come up."
+          },
+          {
+            "title": "A structure you can measure",
+            "description": "Scroll depth per block tells you where the argument loses people. You fix that block, not the whole page."
+          },
+          {
+            "title": "Copy that survives a redesign",
+            "description": "The order and the headlines carry the sale. Visuals can change without rewriting the pitch."
+          },
+          {
+            "title": "Reusable for every offer",
+            "description": "The same nine blocks fit a course, a service or a product. Only the copy changes."
+          },
+          {
+            "title": "Built with widgets you already have",
+            "description": "Nine components from the template’s widgets folder. No custom code, no new dependency."
           }
         ]
       }
@@ -627,119 +607,104 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "tone": "surface"
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "tone": "surface"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "cards",
+        "header": "side",
+        "columns": "1",
+        "card": "canvas",
+        "tagline": "Honesty block",
+        "title": "Who this is not for",
+        "subtitle": "Saying who should not buy is the cheapest credibility on a long page, and it filters the calls you did not want. Almost no template ships this block; almost every good sales page has one.",
+        "items": [
           {
-            "widget": "Features",
-            "props": {
-              "layout": "cards",
-              "header": "side",
-              "columns": "1",
-              "card": "canvas",
-              "tagline": "Honesty block",
-              "title": "Who this is not for",
-              "subtitle": "Saying who should not buy is the cheapest credibility on a long page, and it filters the calls you did not want. Almost no template ships this block; almost every good sales page has one.",
-              "items": [
-                {
-                  "title": "You sell something people already understand",
-                  "description": "Then a short page converts better. Use the click-through or product type instead."
-                },
-                {
-                  "title": "You have no proof yet, of any kind",
-                  "description": "Nine blocks of argument with nothing to back them reads as pressure. Get one customer first."
-                },
-                {
-                  "title": "Your traffic is all cold and paid",
-                  "description": "A long page needs a visitor willing to read. Warm it up with the lead-generation type first."
-                }
-              ]
-            }
+            "title": "You sell something people already understand",
+            "description": "Then a short page converts better. Use the click-through or product type instead."
+          },
+          {
+            "title": "You have no proof yet, of any kind",
+            "description": "Nine blocks of argument with nothing to back them reads as pressure. Get one customer first."
+          },
+          {
+            "title": "Your traffic is all cold and paid",
+            "description": "A long page needs a visitor willing to read. Warm it up with the lead-generation type first."
           }
         ]
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "width": "md"
+      "widget": "FAQs",
+      "wrapper": {
+        "props": {
+          "width": "md"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "list",
+        "columns": "1",
+        "open": "all",
+        "tagline": "08 · Objections",
+        "title": "The questions that stop people from buying",
+        "items": [
           {
-            "widget": "FAQs",
-            "props": {
-              "layout": "list",
-              "columns": "1",
-              "open": "all",
-              "tagline": "08 · Objections",
-              "title": "The questions that stop people from buying",
-              "items": [
-                {
-                  "title": "When should a landing page be long instead of short?",
-                  "description": "When the decision is expensive, unfamiliar or emotional: a course, a service, a considered purchase. Short pages work for offers people already understand. Length is not the goal; answering every question before it is asked is."
-                },
-                {
-                  "title": "Does anyone read a page this long?",
-                  "description": "Buyers do, and skimmers read the headings. That is why every heading here carries the argument on its own — read only the H2s and you still get the pitch."
-                },
-                {
-                  "title": "How many calls to action should it have?",
-                  "description": "One offer, repeated three times: after the promise, after the proof, and at the end. Two different offers on one page split attention and lower both."
-                },
-                {
-                  "title": "Where do price and guarantee go?",
-                  "description": "After the value is clear and the proof has landed. Price before benefits feels expensive; a guarantee right after the price removes the last excuse to wait."
-                },
-                {
-                  "title": "Is it not manipulative to write this way?",
-                  "description": "Order and clarity are not manipulation. Invented proof, fake scarcity and a countdown that resets are — and none of them appear in this structure."
-                },
-                {
-                  "title": "How do I know which block is failing?",
-                  "description": "Scroll depth per block, and the offer click rate of visitors who reached it. Name those events before launch, so the first week already answers it."
-                },
-                {
-                  "title": "How do I adapt this page to my product with AstroWind?",
-                  "description": "Copy the page, keep the order of the nine blocks and replace the copy block by block: your promise, your problem, your proof, your price. Every block is a widget from the template, so nothing needs new code."
-                },
-                {
-                  "title": "Are the numbers and testimonials on this page real?",
-                  "description": "No. The case study, the customer figures, the quote and the plan prices are samples, labelled as such. Use only measured results and real customers’ words, with permission, on your own page — invented proof is the fastest way to lose the sale."
-                }
-              ],
-              "subtitle": "Answered here so the page, not a salesperson, handles them. The same answers feed a FAQ rich result in search."
-            }
+            "title": "When should a landing page be long instead of short?",
+            "description": "When the decision is expensive, unfamiliar or emotional: a course, a service, a considered purchase. Short pages work for offers people already understand. Length is not the goal; answering every question before it is asked is."
+          },
+          {
+            "title": "Does anyone read a page this long?",
+            "description": "Buyers do, and skimmers read the headings. That is why every heading here carries the argument on its own — read only the H2s and you still get the pitch."
+          },
+          {
+            "title": "How many calls to action should it have?",
+            "description": "One offer, repeated three times: after the promise, after the proof, and at the end. Two different offers on one page split attention and lower both."
+          },
+          {
+            "title": "Where do price and guarantee go?",
+            "description": "After the value is clear and the proof has landed. Price before benefits feels expensive; a guarantee right after the price removes the last excuse to wait."
+          },
+          {
+            "title": "Is it not manipulative to write this way?",
+            "description": "Order and clarity are not manipulation. Invented proof, fake scarcity and a countdown that resets are — and none of them appear in this structure."
+          },
+          {
+            "title": "How do I know which block is failing?",
+            "description": "Scroll depth per block, and the offer click rate of visitors who reached it. Name those events before launch, so the first week already answers it."
+          },
+          {
+            "title": "How do I adapt this page to my product with AstroWind?",
+            "description": "Copy the page, keep the order of the nine blocks and replace the copy block by block: your promise, your problem, your proof, your price. Every block is a widget from the template, so nothing needs new code."
+          },
+          {
+            "title": "Are the numbers and testimonials on this page real?",
+            "description": "No. The case study, the customer figures, the quote and the plan prices are samples, labelled as such. Use only measured results and real customers’ words, with permission, on your own page — invented proof is the fastest way to lose the sale."
           }
-        ]
+        ],
+        "subtitle": "Answered here so the page, not a salesperson, handles them. The same answers feed a FAQ rich result in search."
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "tone": "surface"
+      "widget": "CallToAction",
+      "wrapper": {
+        "props": {
+          "tone": "surface"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "closing",
+        "size": "md",
+        "tagline": "09 · Close",
+        "title": "Same ask, one last time",
+        "subtitle": "You reached the end, so you are the most convinced reader on the page. The action has not changed.",
+        "actions": [
           {
-            "widget": "CallToAction",
-            "props": {
-              "layout": "closing",
-              "size": "md",
-              "tagline": "09 · Close",
-              "title": "Same ask, one last time",
-              "subtitle": "You reached the end, so you are the most convinced reader on the page. The action has not changed.",
-              "actions": [
-                {
-                  "variant": "primary",
-                  "text": "See the offer",
-                  "href": "#offer"
-                }
-              ]
-            }
+            "variant": "primary",
+            "text": "See the offer",
+            "href": "#offer"
           }
         ]
       }

@@ -203,126 +203,116 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "compare",
-        "label": "Same site, both ways"
+      "widget": "Compare",
+      "wrapper": {
+        "props": {
+          "id": "compare",
+          "label": "Same site, both ways"
+        }
       },
-      "slots": {
-        "default": [
-          {
-            "widget": "Compare",
-            "props": {
-              "tagline": "Same site, both ways",
-              "title": "Drag to compare the same page",
-              "subtitle": "Same viewport, same content, same day. The load time and page weight are labelled on each side — without those numbers this is a style opinion.",
-              "before": {
-                "label": "before · 4.1 s · 820 KB",
-                "tone": "warning",
-                "placeholder": "The site-builder version"
-              },
-              "after": {
-                "label": "after · 0.4 s · 38 KB",
-                "tone": "success",
-                "placeholder": "The same page on this template"
-              },
-              "ratio": "16/9"
-            }
-          }
-        ]
+      "props": {
+        "tagline": "Same site, both ways",
+        "title": "Drag to compare the same page",
+        "subtitle": "Same viewport, same content, same day. The load time and page weight are labelled on each side — without those numbers this is a style opinion.",
+        "before": {
+          "label": "before · 4.1 s · 820 KB",
+          "tone": "warning",
+          "placeholder": "The site-builder version"
+        },
+        "after": {
+          "label": "after · 0.4 s · 38 KB",
+          "tone": "success",
+          "placeholder": "The same page on this template"
+        },
+        "ratio": "16/9"
       }
     },
     {
-      "widget": "Section",
+      "widget": "Columns",
+      "wrapper": {
+        "props": {
+          "id": "migrating",
+          "label": "Migrating",
+          "tone": "surface"
+        }
+      },
       "props": {
-        "id": "migrating",
-        "label": "Migrating",
-        "tone": "surface"
+        "gap": "lg",
+        "align": "start"
       },
       "slots": {
         "default": [
           {
-            "widget": "Columns",
-            "props": {
-              "gap": "lg",
-              "align": "start"
-            },
+            "widget": "Column",
             "slots": {
               "default": [
                 {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
+                  "widget": "CallToAction",
+                  "props": {
+                    "layout": "stacked",
+                    "title": "Migrating, with the effort named",
+                    "subtitle": "A comparison page that does not say how hard switching is has only done half the job. These are real hours, from real migrations.",
+                    "actions": [
                       {
-                        "widget": "CallToAction",
-                        "props": {
-                          "layout": "stacked",
-                          "title": "Migrating, with the effort named",
-                          "subtitle": "A comparison page that does not say how hard switching is has only done half the job. These are real hours, from real migrations.",
-                          "actions": [
-                            {
-                              "variant": "secondary",
-                              "text": "Have us do it on a call",
-                              "href": "/contact"
-                            }
-                          ]
-                        }
+                        "variant": "secondary",
+                        "text": "Have us do it on a call",
+                        "href": "/contact"
                       }
                     ]
                   }
-                },
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Column",
+            "slots": {
+              "default": [
                 {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
+                  "widget": "Table",
+                  "props": {
+                    "frame": "open",
+                    "header": "none",
+                    "columns": [
                       {
-                        "widget": "Table",
-                        "props": {
-                          "frame": "open",
-                          "header": "none",
-                          "columns": [
-                            {
-                              "label": "Task"
-                            },
-                            {
-                              "label": "Effort",
-                              "align": "end",
-                              "mono": true
-                            }
-                          ],
-                          "rows": [
-                            {
-                              "cells": [
-                                "Content and page structure",
-                                "6–10 h"
-                              ]
-                            },
-                            {
-                              "cells": [
-                                "Brand tokens and type",
-                                "2–3 h"
-                              ]
-                            },
-                            {
-                              "cells": [
-                                "Blog import and taxonomy",
-                                "4–8 h"
-                              ]
-                            },
-                            {
-                              "cells": [
-                                "Redirects and search console",
-                                "2–4 h"
-                              ]
-                            },
-                            {
-                              "cells": [
-                                "Forms, analytics, consent",
-                                "3–5 h"
-                              ]
-                            }
-                          ]
-                        }
+                        "label": "Task"
+                      },
+                      {
+                        "label": "Effort",
+                        "align": "end",
+                        "mono": true
+                      }
+                    ],
+                    "rows": [
+                      {
+                        "cells": [
+                          "Content and page structure",
+                          "6–10 h"
+                        ]
+                      },
+                      {
+                        "cells": [
+                          "Brand tokens and type",
+                          "2–3 h"
+                        ]
+                      },
+                      {
+                        "cells": [
+                          "Blog import and taxonomy",
+                          "4–8 h"
+                        ]
+                      },
+                      {
+                        "cells": [
+                          "Redirects and search console",
+                          "2–4 h"
+                        ]
+                      },
+                      {
+                        "cells": [
+                          "Forms, analytics, consent",
+                          "3–5 h"
+                        ]
                       }
                     ]
                   }

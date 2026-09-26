@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { WrapperSpec } from './wrapper.js';
 
 /**
  * The node: one widget with its props and, when the widget declares slots,
@@ -7,8 +8,9 @@ import { z } from 'zod';
  *
  * Nothing is wrapped by default. A list of nodes (a layout's Outlet, a page)
  * may declare a wrapper that each of its items is rendered in, unless the
- * item's widget declares `wrapper: false` (content/wrapper.ts). A nested node
- * is never wrapped. Which widgets may fill a slot, and how many,
+ * item's widget declares `wrapper: false` (content/wrapper.ts). A node may
+ * also say how it is wrapped itself, in any list, with its own `wrapper`.
+ * Which widgets may fill a slot, and how many,
  * is declared by the widget in its `.props.ts` and checked by the build, not
  * here: zod does not know the registry.
  */
@@ -18,6 +20,14 @@ export interface Node {
   props?: Record<string, unknown>;
   /** Slot name → the nodes that fill it. `default` is the widget's unnamed slot. */
   slots?: Record<string, Node[]>;
+  /**
+   * How this node is wrapped, over its list's wrapper: `{ props }` is the
+   * list's wrapper widget (Section by default) with these props on top of the
+   * list's; `{ widget, props }` is another widget, with only these props;
+   * `false` is no wrapper. It is decoration, not composition: the wrapper
+   * does not count toward the depth limit, and it holds only this node.
+   */
+  wrapper?: WrapperSpec;
   /** A note for whoever edits the page next; never rendered. */
   notes?: string;
   /** Optional stable identifier, written by an editor, never required by hand. */
@@ -29,6 +39,9 @@ export const nodeSchema: z.ZodType<Node> = z.lazy(() =>
     widget: z.string().min(1),
     props: z.record(z.string(), z.unknown()).optional(),
     slots: z.record(z.string(), z.array(nodeSchema)).optional(),
+    wrapper: z
+      .union([z.literal(false), z.object({ widget: z.string().min(1).optional(), props: z.record(z.string(), z.unknown()).optional() }).strict()])
+      .optional(),
     notes: z.string().optional(),
     id: z.string().optional(),
   }),
@@ -50,6 +63,9 @@ export function* walkNodes(nodes: Node[], depth = 0): Generator<{ node: Node; de
 /** Every widget name a tree references, deduped, for the lazy widget loader. */
 export function widgetNames(nodes: Node[]): string[] {
   const out = new Set<string>();
-  for (const { node } of walkNodes(nodes)) out.add(node.widget);
+  for (const { node } of walkNodes(nodes)) {
+    out.add(node.widget);
+    if (node.wrapper && node.wrapper.widget) out.add(node.wrapper.widget);
+  }
   return [...out];
 }

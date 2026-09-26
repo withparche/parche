@@ -28,39 +28,34 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "spacing": "sm"
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "spacing": "sm"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "cards",
+        "columns": "3",
+        "align": "start",
+        "items": [
           {
-            "widget": "Features",
-            "props": {
-              "layout": "cards",
-              "columns": "3",
-              "align": "start",
-              "items": [
-                {
-                  "eyebrow": "Template",
-                  "title": "What you get",
-                  "description": "Widgets, demos, pricing and the changelog, on the home page.",
-                  "href": "/#features"
-                },
-                {
-                  "eyebrow": "Example site",
-                  "title": "Cadence docs",
-                  "description": "A docs shell with a sidebar, code tabs and an index.",
-                  "href": "/docs"
-                },
-                {
-                  "eyebrow": "Writing",
-                  "title": "The blog",
-                  "description": "Guides on speed, tokens and landing pages.",
-                  "href": "/blog"
-                }
-              ]
-            }
+            "eyebrow": "Template",
+            "title": "What you get",
+            "description": "Widgets, demos, pricing and the changelog, on the home page.",
+            "href": "/#features"
+          },
+          {
+            "eyebrow": "Example site",
+            "title": "Cadence docs",
+            "description": "A docs shell with a sidebar, code tabs and an index.",
+            "href": "/docs"
+          },
+          {
+            "eyebrow": "Writing",
+            "title": "The blog",
+            "description": "Guides on speed, tokens and landing pages.",
+            "href": "/blog"
           }
         ]
       }

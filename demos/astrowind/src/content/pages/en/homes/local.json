@@ -75,156 +75,146 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "services",
-        "label": "Services & prices",
-        "tone": "surface"
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "id": "services",
+          "label": "Services & prices",
+          "tone": "surface"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "cards",
+        "align": "start",
+        "columns": "4",
+        "card": "canvas",
+        "title": "What we do, and what it costs",
+        "subtitle": "Prices from, including VAT and the first hour. You get the final figure before we touch anything — no surprises on the invoice.",
+        "items": [
           {
-            "widget": "Features",
-            "props": {
-              "layout": "cards",
-              "align": "start",
-              "columns": "4",
-              "card": "canvas",
-              "title": "What we do, and what it costs",
-              "subtitle": "Prices from, including VAT and the first hour. You get the final figure before we touch anything — no surprises on the invoice.",
-              "items": [
-                {
-                  "title": "Leak, found and fixed",
-                  "aside": "from €90",
-                  "description": "Thermal camera, no breaking walls to look. Same-day in almost every case."
-                },
-                {
-                  "title": "Boiler repair",
-                  "aside": "from €120",
-                  "description": "All major brands. Parts in the van for the eight most common failures."
-                },
-                {
-                  "title": "Blocked drain",
-                  "aside": "from €75",
-                  "description": "Camera inspection included, so you see what it was rather than taking our word."
-                },
-                {
-                  "title": "Bathroom refit",
-                  "aside": "quoted",
-                  "description": "Free visit, written quote in 48 hours, fixed price. Typically 5–9 working days."
-                }
-              ]
-            }
+            "title": "Leak, found and fixed",
+            "aside": "from €90",
+            "description": "Thermal camera, no breaking walls to look. Same-day in almost every case."
+          },
+          {
+            "title": "Boiler repair",
+            "aside": "from €120",
+            "description": "All major brands. Parts in the van for the eight most common failures."
+          },
+          {
+            "title": "Blocked drain",
+            "aside": "from €75",
+            "description": "Camera inspection included, so you see what it was rather than taking our word."
+          },
+          {
+            "title": "Bathroom refit",
+            "aside": "quoted",
+            "description": "Free visit, written quote in 48 hours, fixed price. Typically 5–9 working days."
           }
         ]
       }
     },
     {
-      "widget": "Section",
+      "widget": "Columns",
+      "wrapper": {
+        "props": {
+          "id": "area",
+          "label": "Area"
+        }
+      },
       "props": {
-        "id": "area",
-        "label": "Area"
+        "ratio": "equal",
+        "gap": "lg",
+        "align": "start"
       },
       "slots": {
         "default": [
           {
-            "widget": "Columns",
-            "props": {
-              "ratio": "equal",
-              "gap": "lg",
-              "align": "start"
-            },
+            "widget": "Column",
             "slots": {
               "default": [
                 {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
+                  "widget": "Table",
+                  "props": {
+                    "title": "Where we go, and when",
+                    "subtitle": "If you are outside this list, call anyway — we will tell you honestly whether it is worth our travel or whether you want somebody closer.",
+                    "frame": "open",
+                    "header": "none",
+                    "columns": [
                       {
-                        "widget": "Table",
-                        "props": {
-                          "title": "Where we go, and when",
-                          "subtitle": "If you are outside this list, call anyway — we will tell you honestly whether it is worth our travel or whether you want somebody closer.",
-                          "frame": "open",
-                          "header": "none",
-                          "columns": [
-                            {
-                              "label": "Day"
-                            },
-                            {
-                              "label": "Hours",
-                              "align": "end",
-                              "mono": true
-                            }
-                          ],
-                          "rows": [
-                            {
-                              "cells": [
-                                "Monday to Friday",
-                                "08:00 — 20:00"
-                              ]
-                            },
-                            {
-                              "cells": [
-                                "Saturday",
-                                "09:00 — 14:00"
-                              ]
-                            },
-                            {
-                              "cells": [
-                                "Sunday",
-                                "Emergencies only"
-                              ]
-                            },
-                            {
-                              "cells": [
-                                "Out of hours surcharge",
-                                "€30"
-                              ]
-                            }
-                          ]
-                        }
+                        "label": "Day"
                       },
                       {
-                        "widget": "Callout",
-                        "props": {
-                          "layout": "inline",
-                          "items": [
-                            "Bilbao",
-                            "Getxo",
-                            "Barakaldo",
-                            "Portugalete",
-                            "Santurtzi",
-                            "Leioa"
-                          ]
-                        }
+                        "label": "Hours",
+                        "align": "end",
+                        "mono": true
+                      }
+                    ],
+                    "rows": [
+                      {
+                        "cells": [
+                          "Monday to Friday",
+                          "08:00 — 20:00"
+                        ]
+                      },
+                      {
+                        "cells": [
+                          "Saturday",
+                          "09:00 — 14:00"
+                        ]
+                      },
+                      {
+                        "cells": [
+                          "Sunday",
+                          "Emergencies only"
+                        ]
+                      },
+                      {
+                        "cells": [
+                          "Out of hours surcharge",
+                          "€30"
+                        ]
                       }
                     ]
                   }
                 },
                 {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
-                      {
-                        "widget": "Screenshot",
-                        "props": {
-                          "caption": "service-area map · 1000×750",
-                          "ratio": "4/3",
-                          "frame": false
-                        }
-                      },
-                      {
-                        "widget": "Callout",
-                        "props": {
-                          "layout": "card",
-                          "label": "Find us",
-                          "title": "Vela Fontanería SL",
-                          "description": "Calle Autonomía 44, bajo\n48012 Bilbao, Bizkaia\n[944 00 00 00](tel:+34944000000) · [hola@velafontaneria.es](mailto:hola@velafontaneria.es)",
-                          "footer": "This block is marked up as LocalBusiness structured data and matches the Google profile exactly — that match is what wins the map pack."
-                        }
-                      }
+                  "widget": "Callout",
+                  "props": {
+                    "layout": "inline",
+                    "items": [
+                      "Bilbao",
+                      "Getxo",
+                      "Barakaldo",
+                      "Portugalete",
+                      "Santurtzi",
+                      "Leioa"
                     ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Column",
+            "slots": {
+              "default": [
+                {
+                  "widget": "Screenshot",
+                  "props": {
+                    "caption": "service-area map · 1000×750",
+                    "ratio": "4/3",
+                    "frame": false
+                  }
+                },
+                {
+                  "widget": "Callout",
+                  "props": {
+                    "layout": "card",
+                    "label": "Find us",
+                    "title": "Vela Fontanería SL",
+                    "description": "Calle Autonomía 44, bajo\n48012 Bilbao, Bizkaia\n[944 00 00 00](tel:+34944000000) · [hola@velafontaneria.es](mailto:hola@velafontaneria.es)",
+                    "footer": "This block is marked up as LocalBusiness structured data and matches the Google profile exactly — that match is what wins the map pack."
                   }
                 }
               ]
@@ -234,107 +224,92 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "tone": "surface"
+      "widget": "Steps",
+      "wrapper": {
+        "props": {
+          "tone": "surface"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "columns",
+        "title": "What happens when you call",
+        "items": [
           {
-            "widget": "Steps",
-            "props": {
-              "layout": "columns",
-              "title": "What happens when you call",
-              "items": [
-                {
-                  "title": "A person answers",
-                  "description": "Not a menu. Usually Iker or Nerea, who will ask two questions and give you a window."
-                },
-                {
-                  "title": "We look, then we quote",
-                  "description": "Fixed price before any work starts. If you say no, you pay the €45 callout and nothing else."
-                },
-                {
-                  "title": "Fixed, cleaned up, invoiced",
-                  "description": "Two-year guarantee on labour, in writing, and we take the old parts away with us."
-                }
-              ]
-            }
+            "title": "A person answers",
+            "description": "Not a menu. Usually Iker or Nerea, who will ask two questions and give you a window."
+          },
+          {
+            "title": "We look, then we quote",
+            "description": "Fixed price before any work starts. If you say no, you pay the €45 callout and nothing else."
+          },
+          {
+            "title": "Fixed, cleaned up, invoiced",
+            "description": "Two-year guarantee on labour, in writing, and we take the old parts away with us."
           }
         ]
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "reviews",
-        "label": "Reviews"
+      "widget": "Testimonials",
+      "wrapper": {
+        "props": {
+          "id": "reviews",
+          "label": "Reviews"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "align": "start",
+        "title": "4.8 from 317 Google reviews",
+        "link": {
+          "text": "Read them on Google",
+          "href": "/homes/local#google"
+        },
+        "items": [
           {
-            "widget": "Testimonials",
-            "props": {
-              "align": "start",
-              "title": "4.8 from 317 Google reviews",
-              "link": {
-                "text": "Read them on Google",
-                "href": "/homes/local#google"
-              },
-              "items": [
-                {
-                  "text": "Called at eight in the morning with water coming through the ceiling. Here by ten, fixed by noon, and the price was the price they said.",
-                  "name": "Amaia G.",
-                  "source": "Google",
-                  "date": "March 2026",
-                  "rating": 5
-                },
-                {
-                  "text": "They told me the boiler was worth repairing rather than replacing, which cost them a much bigger job. That is why I am writing this.",
-                  "name": "Javier M.",
-                  "source": "Google",
-                  "date": "January 2026",
-                  "rating": 5
-                },
-                {
-                  "text": "Good work, but they arrived at the end of the window rather than the start. Would still call again.",
-                  "name": "Rosa E.",
-                  "source": "Google",
-                  "date": "November 2025",
-                  "rating": 4
-                }
-              ],
-              "note": "A four-star review left in place on purpose. An all-five-star wall reads as filtered, and buyers now scan for the critical ones first.",
-              "avatars": false
-            }
+            "text": "Called at eight in the morning with water coming through the ceiling. Here by ten, fixed by noon, and the price was the price they said.",
+            "name": "Amaia G.",
+            "source": "Google",
+            "date": "March 2026",
+            "rating": 5
+          },
+          {
+            "text": "They told me the boiler was worth repairing rather than replacing, which cost them a much bigger job. That is why I am writing this.",
+            "name": "Javier M.",
+            "source": "Google",
+            "date": "January 2026",
+            "rating": 5
+          },
+          {
+            "text": "Good work, but they arrived at the end of the window rather than the start. Would still call again.",
+            "name": "Rosa E.",
+            "source": "Google",
+            "date": "November 2025",
+            "rating": 4
           }
-        ]
+        ],
+        "note": "A four-star review left in place on purpose. An all-five-star wall reads as filtered, and buyers now scan for the critical ones first.",
+        "avatars": false
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "tone": "surface"
+      "widget": "Gallery",
+      "wrapper": {
+        "props": {
+          "tone": "surface"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "pairs",
+        "title": "Recent jobs, before and after",
+        "items": [
           {
-            "widget": "Gallery",
-            "props": {
-              "layout": "pairs",
-              "title": "Recent jobs, before and after",
-              "items": [
-                {
-                  "caption": "Kitchen leak behind the units · Deusto · 3 hours"
-                },
-                {
-                  "caption": "Bathroom refit · Getxo · 7 working days"
-                },
-                {
-                  "caption": "Community drain, 12 flats · Barakaldo · one morning"
-                }
-              ]
-            }
+            "caption": "Kitchen leak behind the units · Deusto · 3 hours"
+          },
+          {
+            "caption": "Bathroom refit · Getxo · 7 working days"
+          },
+          {
+            "caption": "Community drain, 12 flats · Barakaldo · one morning"
           }
         ]
       }

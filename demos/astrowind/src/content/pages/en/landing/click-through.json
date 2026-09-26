@@ -312,30 +312,25 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "tone": "surface"
+      "widget": "CallToAction",
+      "wrapper": {
+        "props": {
+          "tone": "surface"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "closing",
+        "size": "md",
+        "title": "Nothing left to explain",
+        "subtitle": "This page is part of the free AstroWind template: Astro + Tailwind CSS, every block a reusable widget. Third placement, same button, same words: this is the click the page exists for.",
+        "actions": [
           {
-            "widget": "CallToAction",
-            "props": {
-              "layout": "closing",
-              "size": "md",
-              "title": "Nothing left to explain",
-              "subtitle": "This page is part of the free AstroWind template: Astro + Tailwind CSS, every block a reusable widget. Third placement, same button, same words: this is the click the page exists for.",
-              "actions": [
-                {
-                  "variant": "primary",
-                  "text": "Continue to the template",
-                  "href": "https://github.com/arthelokyo/astrowind"
-                }
-              ],
-              "note": "One destination, three placements"
-            }
+            "variant": "primary",
+            "text": "Continue to the template",
+            "href": "https://github.com/arthelokyo/astrowind"
           }
-        ]
+        ],
+        "note": "One destination, three placements"
       }
     }
   ]

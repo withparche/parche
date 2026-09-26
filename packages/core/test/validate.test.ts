@@ -72,3 +72,27 @@ test('min, max, depth and tones are checked', () => {
   assert.ok(m.some((x) => /tone "neon" is not registered/.test(x)));
   assert.ok(m.some((x) => /4 levels deep; the limit is 3/.test(x)));
 });
+
+test("a node's own wrapper must be a known widget with a default slot, and its tone registered", () => {
+  const ok = validateTree([{ widget: 'Prose', wrapper: { props: { id: 'a', tone: 'muted' } } }, { widget: 'Image', wrapper: { widget: 'Column' } }, { widget: 'Prose', wrapper: false }], ctx);
+  assert.deepEqual(ok, []);
+  const bad = validateTree(
+    [
+      { widget: 'Prose', wrapper: { widget: 'Nope' } },
+      { widget: 'Prose', wrapper: { widget: 'Image' } },
+      { widget: 'Prose', wrapper: { props: { tone: 'neon' } } },
+    ],
+    ctx,
+  );
+  assert.deepEqual(bad.map((i) => i.path), ['sections[0].wrapper', 'sections[1].wrapper', 'sections[2].wrapper']);
+  assert.match(bad[0].message, /unknown wrapper widget "Nope"/);
+  assert.match(bad[1].message, /"Image" cannot wrap/);
+  assert.match(bad[2].message, /tone "neon" is not registered/);
+  // No default wrapper to fall back on.
+  assert.match(validateTree([{ widget: 'Prose', wrapper: { props: {} } }], { ...ctx, wrapper: null })[0].message, /names no widget/);
+});
+
+test('a wrapper does not count toward the depth limit', () => {
+  const deep = [{ widget: 'Section', slots: { default: [{ widget: 'Columns', slots: { default: [{ widget: 'Column', slots: { default: [{ widget: 'Prose', wrapper: { widget: 'Section' } }] } }, { widget: 'Column' }] } }] } }];
+  assert.deepEqual(validateTree(deep, ctx), []);
+});

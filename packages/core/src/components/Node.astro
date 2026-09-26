@@ -11,7 +11,7 @@
  */
 import type { Node } from '../content/node';
 import { MAX_NODE_DEPTH } from '../content/node';
-import { listWrapper, type ListWrapper, type WrapperSpec } from '../content/wrapper';
+import { listWrapper, nodeWrapper, type ListWrapper, type WrapperSpec } from '../content/wrapper';
 import { instantiate, parseUse, type JsonWidget } from '../content/json-widgets';
 
 interface Outlets {
@@ -77,8 +77,13 @@ if (filled.length > MAX_SLOTS) {
 const slotName = (i: number) => filled[i]?.[0] ?? `__unfilled-${i}`;
 const slotNodes = (i: number) => filled[i]?.[1] ?? [];
 
-const wrapped = wrapper !== null && !isOutlet && !isWrapperItem && !unwrapped.includes(node.widget);
-const Wrapper = wrapped ? widgets[wrapper!.name] : null;
+// The node's own wrapper, when it names one, over the list's; an explicit one
+// applies even to a widget that is not wrapped by default.
+const own = isOutlet ? null : node.wrapper === undefined ? undefined : nodeWrapper(node.wrapper, wrapper, defaultWrapper);
+const effective = own !== undefined ? own : wrapper !== null && !isOutlet && !isWrapperItem && !unwrapped.includes(node.widget) ? wrapper : null;
+const Wrapper = effective ? widgets[effective.name] : null;
+// Inside its wrapper the node renders bare: nothing wraps it twice.
+const inner = effective ? { ...node, wrapper: false as const } : node;
 
 if (import.meta.env.DEV && depth > MAX_NODE_DEPTH) {
   console.warn(`[parche] "${node.widget}" sits ${depth} levels deep; trees are meant to stop at ${MAX_NODE_DEPTH}.`);
@@ -107,8 +112,8 @@ if (import.meta.env.DEV && depth > MAX_NODE_DEPTH) {
     </div>
   ) : null
 ) : Wrapper ? (
-  <Wrapper {...wrapper!.props}>
-    <Self node={node} widgets={widgets} defaultWrapper={defaultWrapper} unwrapped={unwrapped} outlets={outlets} definitions={definitions} depth={depth} />
+  <Wrapper {...effective!.props}>
+    <Self node={inner} widgets={widgets} defaultWrapper={defaultWrapper} unwrapped={unwrapped} outlets={outlets} definitions={definitions} depth={depth} />
   </Wrapper>
 ) : definition ? (
   <Fragment>{expanded.map((child) => <Self node={child} widgets={widgets} defaultWrapper={defaultWrapper} unwrapped={unwrapped} outlets={outlets} definitions={definitions} />)}</Fragment>

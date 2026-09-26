@@ -52,347 +52,317 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "tone": "band",
-        "spacing": "none",
-        "width": "xl"
+      "widget": "Brands",
+      "wrapper": {
+        "props": {
+          "tone": "band",
+          "spacing": "none",
+          "width": "xl"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "strip",
+        "label": "Worked with",
+        "names": [
+          "Cadence",
+          "Northwind",
+          "Ferrolab",
+          "Höok",
+          "Quietmile"
+        ],
+        "note": "31 projects since 2019 · 11 repeat clients"
+      }
+    },
+    {
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "id": "services",
+          "label": "Services"
+        }
+      },
+      "props": {
+        "layout": "cards",
+        "columns": "3",
+        "tagline": "Services",
+        "title": "Three engagements, and what actually lands in your inbox",
+        "subtitle": "“Brand strategy” tells a buyer nothing about what they receive. These are the deliverables, named.",
+        "items": [
           {
-            "widget": "Brands",
-            "props": {
-              "layout": "strip",
-              "label": "Worked with",
-              "names": [
-                "Cadence",
-                "Northwind",
-                "Ferrolab",
-                "Höok",
-                "Quietmile"
-              ],
-              "note": "31 projects since 2019 · 11 repeat clients"
-            }
+            "eyebrow": "8–14 weeks",
+            "title": "Full rebrand",
+            "description": "For companies whose identity no longer matches what they sell.",
+            "points": [
+              "Positioning statement and messaging matrix",
+              "Wordmark, symbol, full type and colour system",
+              "Applied to website, product UI and deck",
+              "Figma library plus CSS variables",
+              "Two-hour recorded handover with your team"
+            ]
+          },
+          {
+            "eyebrow": "4–6 weeks",
+            "title": "Website rebuild",
+            "description": "When the brand is fine and the site is the thing losing you deals.",
+            "points": [
+              "Message testing with five of your customers",
+              "Six to twelve page designs, responsive",
+              "Built in Astro, handed over as a repo",
+              "Analytics and conversion events configured",
+              "Thirty days of fixes after launch"
+            ]
+          },
+          {
+            "eyebrow": "Rolling · 2 days a week",
+            "title": "Embedded design",
+            "description": "A designer inside your team, for companies not ready to hire one.",
+            "points": [
+              "One named designer, in your Slack and standups",
+              "Design system maintained, not just used",
+              "Monthly written review of what shipped",
+              "One month’s notice either way"
+            ]
           }
         ]
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "services",
-        "label": "Services"
+      "widget": "Cases",
+      "wrapper": {
+        "props": {
+          "tone": "surface",
+          "id": "work",
+          "label": "Work"
+        }
       },
-      "slots": {
-        "default": [
-          {
-            "widget": "Features",
-            "props": {
-              "layout": "cards",
-              "columns": "3",
-              "tagline": "Services",
-              "title": "Three engagements, and what actually lands in your inbox",
-              "subtitle": "“Brand strategy” tells a buyer nothing about what they receive. These are the deliverables, named.",
-              "items": [
-                {
-                  "eyebrow": "8–14 weeks",
-                  "title": "Full rebrand",
-                  "description": "For companies whose identity no longer matches what they sell.",
-                  "points": [
-                    "Positioning statement and messaging matrix",
-                    "Wordmark, symbol, full type and colour system",
-                    "Applied to website, product UI and deck",
-                    "Figma library plus CSS variables",
-                    "Two-hour recorded handover with your team"
-                  ]
-                },
-                {
-                  "eyebrow": "4–6 weeks",
-                  "title": "Website rebuild",
-                  "description": "When the brand is fine and the site is the thing losing you deals.",
-                  "points": [
-                    "Message testing with five of your customers",
-                    "Six to twelve page designs, responsive",
-                    "Built in Astro, handed over as a repo",
-                    "Analytics and conversion events configured",
-                    "Thirty days of fixes after launch"
-                  ]
-                },
-                {
-                  "eyebrow": "Rolling · 2 days a week",
-                  "title": "Embedded design",
-                  "description": "A designer inside your team, for companies not ready to hire one.",
-                  "points": [
-                    "One named designer, in your Slack and standups",
-                    "Design system maintained, not just used",
-                    "Monthly written review of what shipped",
-                    "One month’s notice either way"
-                  ]
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
       "props": {
-        "tone": "surface",
-        "id": "work",
-        "label": "Work"
-      },
-      "slots": {
-        "default": [
+        "tagline": "Selected work",
+        "title": "Three projects, problem first",
+        "subtitle": "A grid of pretty pictures cannot be evaluated. What was wrong, what we did, what changed.",
+        "items": [
           {
-            "widget": "Cases",
-            "props": {
-              "tagline": "Selected work",
-              "title": "Three projects, problem first",
-              "subtitle": "A grid of pretty pictures cannot be evaluated. What was wrong, what we did, what changed.",
-              "items": [
-                {
-                  "client": "Cadence",
-                  "sector": "developer tools · Series A",
-                  "title": "Sounded like a side project, sold like enterprise software",
-                  "description": "They were losing deals at procurement, not at the demo. We rewrote the positioning around reliability rather than speed, rebuilt the identity to match, and produced the security and trust pages their buyers kept asking for.",
-                  "caption": "Cadence rebrand · 1800×770",
-                  "results": [
-                    {
-                      "value": "+38%",
-                      "label": "Demo requests, 90 days",
-                      "tone": "success"
-                    },
-                    {
-                      "value": "−3 wks",
-                      "label": "Median sales cycle"
-                    }
-                  ],
-                  "featured": true,
-                  "footer": "11 weeks · rebrand and website",
-                  "quote": {
-                    "text": "The positioning work was worth more than the logo, and we did not know that going in.",
-                    "name": "Dan Okoye",
-                    "role": "Staff engineer, Cadence"
-                  }
-                },
-                {
-                  "client": "Quietmile",
-                  "sector": "logistics software",
-                  "title": "A homepage that finally said what they sold",
-                  "description": "Five of their customers described the product better than their own site did. We used their words, nearly verbatim.",
-                  "results": [
-                    {
-                      "value": "2.4×",
-                      "label": "signups",
-                      "tone": "success"
-                    }
-                  ],
-                  "footer": "5 weeks · website rebuild"
-                },
-                {
-                  "client": "Ferrolab",
-                  "sector": "industrial software",
-                  "title": "Eleven months embedded, then we worked ourselves out of it",
-                  "description": "We built the system, ran the hiring loop and handed over to the person they hired. The best outcome an embedded engagement can have.",
-                  "results": [
-                    {
-                      "value": "1",
-                      "label": "designer hired",
-                      "tone": "success"
-                    }
-                  ],
-                  "footer": "11 months · embedded design"
-                }
-              ],
-              "results": "top"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "tone": "ruled",
-        "id": "process",
-        "label": "Process"
-      },
-      "slots": {
-        "default": [
-          {
-            "widget": "Steps",
-            "props": {
-              "layout": "rows",
-              "header": "top",
-              "tagline": "Process",
-              "title": "Who does the work, and what we need from you",
-              "subtitle": "No account manager between you and the people designing. The named lead is in every session.",
-              "items": [
-                {
-                  "title": "Discovery, and interviews with your customers",
-                  "description": "Five calls with people who pay you, run by us. Almost every project turns on something said in these. **You owe:** the introductions, and one workshop.",
-                  "duration": "weeks 1–2"
-                },
-                {
-                  "title": "Positioning, agreed in writing before any design",
-                  "description": "One page: who it is for, what it replaces, why it wins. We do not open Figma until you have signed it off. **You owe:** a decision, not a committee.",
-                  "duration": "week 3"
-                },
-                {
-                  "title": "Two directions, applied to real surfaces",
-                  "description": "Not mood boards — your actual homepage, your product UI and your deck, in both routes. **You owe:** one 90-minute review with whoever can say yes.",
-                  "duration": "weeks 4–6"
-                },
-                {
-                  "title": "Build out, with your engineers in the room",
-                  "description": "Weekly working sessions rather than a reveal at the end. A surprise at handover is a process failure. **You owe:** one engineer, two hours a week.",
-                  "duration": "weeks 7–12"
-                },
-                {
-                  "title": "Handover, then a review 90 days later",
-                  "description": "Figma library, tokens, a rulebook and recorded walkthroughs — then a free session three months on, when the real questions arrive. **You owe:** nothing.",
-                  "duration": "week 13"
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "tone": "surface",
-        "id": "team",
-        "label": "Team"
-      },
-      "slots": {
-        "default": [
-          {
-            "widget": "Team",
-            "props": {
-              "layout": "stacked",
-              "tagline": "Team",
-              "title": "Nine people, and you meet the ones on your project",
-              "subtitle": "Agencies are bought on people. Hiding them behind a stock photo of a meeting room is a decision, and a poor one.",
-              "items": [
-                {
-                  "name": "Núria Colom",
-                  "role": "Founder, strategy · 14 years, ex-agency side"
-                },
-                {
-                  "name": "Tomás Rey",
-                  "role": "Design lead · type and identity systems"
-                },
-                {
-                  "name": "Ivy Delacroix",
-                  "role": "Engineering · Astro, design tokens, handover"
-                },
-                {
-                  "name": "Samir Haddad",
-                  "role": "Writer · positioning and product copy"
-                }
-              ],
-              "more": {
-                "count": "+5",
-                "label": "Design and production",
-                "note": "Two roles open · see careers"
+            "client": "Cadence",
+            "sector": "developer tools · Series A",
+            "title": "Sounded like a side project, sold like enterprise software",
+            "description": "They were losing deals at procurement, not at the demo. We rewrote the positioning around reliability rather than speed, rebuilt the identity to match, and produced the security and trust pages their buyers kept asking for.",
+            "caption": "Cadence rebrand · 1800×770",
+            "results": [
+              {
+                "value": "+38%",
+                "label": "Demo requests, 90 days",
+                "tone": "success"
+              },
+              {
+                "value": "−3 wks",
+                "label": "Median sales cycle"
               }
+            ],
+            "featured": true,
+            "footer": "11 weeks · rebrand and website",
+            "quote": {
+              "text": "The positioning work was worth more than the logo, and we did not know that going in.",
+              "name": "Dan Okoye",
+              "role": "Staff engineer, Cadence"
             }
+          },
+          {
+            "client": "Quietmile",
+            "sector": "logistics software",
+            "title": "A homepage that finally said what they sold",
+            "description": "Five of their customers described the product better than their own site did. We used their words, nearly verbatim.",
+            "results": [
+              {
+                "value": "2.4×",
+                "label": "signups",
+                "tone": "success"
+              }
+            ],
+            "footer": "5 weeks · website rebuild"
+          },
+          {
+            "client": "Ferrolab",
+            "sector": "industrial software",
+            "title": "Eleven months embedded, then we worked ourselves out of it",
+            "description": "We built the system, ran the hiring loop and handed over to the person they hired. The best outcome an embedded engagement can have.",
+            "results": [
+              {
+                "value": "1",
+                "label": "designer hired",
+                "tone": "success"
+              }
+            ],
+            "footer": "11 months · embedded design"
+          }
+        ],
+        "results": "top"
+      }
+    },
+    {
+      "widget": "Steps",
+      "wrapper": {
+        "props": {
+          "tone": "ruled",
+          "id": "process",
+          "label": "Process"
+        }
+      },
+      "props": {
+        "layout": "rows",
+        "header": "top",
+        "tagline": "Process",
+        "title": "Who does the work, and what we need from you",
+        "subtitle": "No account manager between you and the people designing. The named lead is in every session.",
+        "items": [
+          {
+            "title": "Discovery, and interviews with your customers",
+            "description": "Five calls with people who pay you, run by us. Almost every project turns on something said in these. **You owe:** the introductions, and one workshop.",
+            "duration": "weeks 1–2"
+          },
+          {
+            "title": "Positioning, agreed in writing before any design",
+            "description": "One page: who it is for, what it replaces, why it wins. We do not open Figma until you have signed it off. **You owe:** a decision, not a committee.",
+            "duration": "week 3"
+          },
+          {
+            "title": "Two directions, applied to real surfaces",
+            "description": "Not mood boards — your actual homepage, your product UI and your deck, in both routes. **You owe:** one 90-minute review with whoever can say yes.",
+            "duration": "weeks 4–6"
+          },
+          {
+            "title": "Build out, with your engineers in the room",
+            "description": "Weekly working sessions rather than a reveal at the end. A surprise at handover is a process failure. **You owe:** one engineer, two hours a week.",
+            "duration": "weeks 7–12"
+          },
+          {
+            "title": "Handover, then a review 90 days later",
+            "description": "Figma library, tokens, a rulebook and recorded walkthroughs — then a free session three months on, when the real questions arrive. **You owe:** nothing.",
+            "duration": "week 13"
           }
         ]
       }
     },
     {
-      "widget": "Section",
+      "widget": "Team",
+      "wrapper": {
+        "props": {
+          "tone": "surface",
+          "id": "team",
+          "label": "Team"
+        }
+      },
       "props": {
-        "tone": "ruled",
-        "id": "budgets",
-        "label": "Budgets"
+        "layout": "stacked",
+        "tagline": "Team",
+        "title": "Nine people, and you meet the ones on your project",
+        "subtitle": "Agencies are bought on people. Hiding them behind a stock photo of a meeting room is a decision, and a poor one.",
+        "items": [
+          {
+            "name": "Núria Colom",
+            "role": "Founder, strategy · 14 years, ex-agency side"
+          },
+          {
+            "name": "Tomás Rey",
+            "role": "Design lead · type and identity systems"
+          },
+          {
+            "name": "Ivy Delacroix",
+            "role": "Engineering · Astro, design tokens, handover"
+          },
+          {
+            "name": "Samir Haddad",
+            "role": "Writer · positioning and product copy"
+          }
+        ],
+        "more": {
+          "count": "+5",
+          "label": "Design and production",
+          "note": "Two roles open · see careers"
+        }
+      }
+    },
+    {
+      "widget": "Columns",
+      "wrapper": {
+        "props": {
+          "tone": "ruled",
+          "id": "budgets",
+          "label": "Budgets"
+        }
+      },
+      "props": {
+        "ratio": "equal",
+        "gap": "lg",
+        "align": "start"
       },
       "slots": {
         "default": [
           {
-            "widget": "Columns",
+            "widget": "Column",
+            "slots": {
+              "default": [
+                {
+                  "widget": "Table",
+                  "props": {
+                    "tagline": "Budgets",
+                    "title": "Where we sit, so you can rule us out in ten seconds",
+                    "subtitle": "Most agencies hide this and then spend two calls discovering the gap. Publishing the band is the single highest-leverage thing we did for enquiry quality — total enquiries fell by a third, signed projects went up.",
+                    "frame": "open",
+                    "header": "none",
+                    "columns": [
+                      {
+                        "label": "Engagement"
+                      },
+                      {
+                        "label": "Budget",
+                        "align": "end"
+                      }
+                    ],
+                    "rows": [
+                      {
+                        "cells": [
+                          "Full rebrand",
+                          "**€55–120K**"
+                        ]
+                      },
+                      {
+                        "cells": [
+                          "Website rebuild",
+                          "**€28–60K**"
+                        ]
+                      },
+                      {
+                        "cells": [
+                          "Embedded design",
+                          "**€9K / month**"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Column",
             "props": {
-              "ratio": "equal",
-              "gap": "lg",
-              "align": "start"
+              "as": "aside",
+              "label": "What we turn down"
             },
             "slots": {
               "default": [
                 {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
-                      {
-                        "widget": "Table",
-                        "props": {
-                          "tagline": "Budgets",
-                          "title": "Where we sit, so you can rule us out in ten seconds",
-                          "subtitle": "Most agencies hide this and then spend two calls discovering the gap. Publishing the band is the single highest-leverage thing we did for enquiry quality — total enquiries fell by a third, signed projects went up.",
-                          "frame": "open",
-                          "header": "none",
-                          "columns": [
-                            {
-                              "label": "Engagement"
-                            },
-                            {
-                              "label": "Budget",
-                              "align": "end"
-                            }
-                          ],
-                          "rows": [
-                            {
-                              "cells": [
-                                "Full rebrand",
-                                "**€55–120K**"
-                              ]
-                            },
-                            {
-                              "cells": [
-                                "Website rebuild",
-                                "**€28–60K**"
-                              ]
-                            },
-                            {
-                              "cells": [
-                                "Embedded design",
-                                "**€9K / month**"
-                              ]
-                            }
-                          ]
-                        }
-                      }
-                    ]
-                  }
-                },
-                {
-                  "widget": "Column",
+                  "widget": "Callout",
                   "props": {
-                    "as": "aside",
-                    "label": "What we turn down"
-                  },
-                  "slots": {
-                    "default": [
-                      {
-                        "widget": "Callout",
-                        "props": {
-                          "tone": "warning",
-                          "layout": "card",
-                          "label": "What we turn down",
-                          "items": [
-                            "**Logo-only projects.** A mark without positioning is decoration, and you can buy decoration for a tenth of our fee.",
-                            "**Pitches with more than three studios.** Free speculative work is how agencies subsidise clients who have not decided.",
-                            "**Consumer brands and packaging.** Good work exists there; we are not the ones to do it, and we will send you two names who are.",
-                            "**Anything under six weeks.** We would take your money and give you a worse version of what you already have."
-                          ],
-                          "footer": "Publishing the no is what makes the yes believable. It is also the section clients ask us to delete, every time."
-                        }
-                      }
-                    ]
+                    "tone": "warning",
+                    "layout": "card",
+                    "label": "What we turn down",
+                    "items": [
+                      "**Logo-only projects.** A mark without positioning is decoration, and you can buy decoration for a tenth of our fee.",
+                      "**Pitches with more than three studios.** Free speculative work is how agencies subsidise clients who have not decided.",
+                      "**Consumer brands and packaging.** Good work exists there; we are not the ones to do it, and we will send you two names who are.",
+                      "**Anything under six weeks.** We would take your money and give you a worse version of what you already have."
+                    ],
+                    "footer": "Publishing the no is what makes the yes believable. It is also the section clients ask us to delete, every time."
                   }
                 }
               ]
@@ -402,109 +372,99 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "tone": "surface",
-        "spacing": "sm"
+      "widget": "Brands",
+      "wrapper": {
+        "props": {
+          "tone": "surface",
+          "spacing": "sm"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "strip",
+        "label": "Recognition",
+        "names": [
           {
-            "widget": "Brands",
-            "props": {
-              "layout": "strip",
-              "label": "Recognition",
-              "names": [
-                {
-                  "name": "D&AD Wood Pencil",
-                  "note": "Brand systems, 2025"
-                },
-                {
-                  "name": "Webby nominee",
-                  "note": "B2B websites, 2026"
-                },
-                {
-                  "name": "It’s Nice That",
-                  "note": "Studio profile, March 2026"
-                },
-                {
-                  "name": "Talk · Offf Barcelona",
-                  "note": "“Positioning before pixels”, 2026"
-                }
-              ]
-            }
+            "name": "D&AD Wood Pencil",
+            "note": "Brand systems, 2025"
+          },
+          {
+            "name": "Webby nominee",
+            "note": "B2B websites, 2026"
+          },
+          {
+            "name": "It’s Nice That",
+            "note": "Studio profile, March 2026"
+          },
+          {
+            "name": "Talk · Offf Barcelona",
+            "note": "“Positioning before pixels”, 2026"
           }
         ]
       }
     },
     {
-      "widget": "Section",
+      "widget": "Columns",
+      "wrapper": {
+        "props": {
+          "tone": "ruled",
+          "id": "book",
+          "label": "Book a call"
+        }
+      },
       "props": {
-        "tone": "ruled",
-        "id": "book",
-        "label": "Book a call"
+        "ratio": "equal",
+        "gap": "lg",
+        "align": "center"
       },
       "slots": {
         "default": [
           {
-            "widget": "Columns",
+            "widget": "Column",
+            "slots": {
+              "default": [
+                {
+                  "widget": "CallToAction",
+                  "props": {
+                    "layout": "stacked",
+                    "title": "Thirty minutes, and you will know if we fit",
+                    "subtitle": "You talk to Núria, not to a salesperson. If the brief is not ours, you get two other studios’ names before the call ends.",
+                    "actions": [
+                      {
+                        "text": "See Núria’s diary",
+                        "href": "#book",
+                        "variant": "primary"
+                      },
+                      {
+                        "text": "Or email us the brief",
+                        "href": "mailto:hola@mareastudio.com",
+                        "variant": "secondary"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Column",
             "props": {
-              "ratio": "equal",
-              "gap": "lg",
-              "align": "center"
+              "as": "aside",
+              "label": "Before you book"
             },
             "slots": {
               "default": [
                 {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
-                      {
-                        "widget": "CallToAction",
-                        "props": {
-                          "layout": "stacked",
-                          "title": "Thirty minutes, and you will know if we fit",
-                          "subtitle": "You talk to Núria, not to a salesperson. If the brief is not ours, you get two other studios’ names before the call ends.",
-                          "actions": [
-                            {
-                              "text": "See Núria’s diary",
-                              "href": "#book",
-                              "variant": "primary"
-                            },
-                            {
-                              "text": "Or email us the brief",
-                              "href": "mailto:hola@mareastudio.com",
-                              "variant": "secondary"
-                            }
-                          ]
-                        }
-                      }
-                    ]
-                  }
-                },
-                {
-                  "widget": "Column",
+                  "widget": "Callout",
                   "props": {
-                    "as": "aside",
-                    "label": "Before you book"
-                  },
-                  "slots": {
-                    "default": [
-                      {
-                        "widget": "Callout",
-                        "props": {
-                          "tone": "neutral",
-                          "layout": "card",
-                          "label": "Before you book",
-                          "items": [
-                            "Next start date: **3 November**",
-                            "Two project slots left in 2026",
-                            "We reply to every brief within two working days, including the noes"
-                          ],
-                          "footer": "A diary link converts better than a contact form: the visitor gets certainty instead of an inbox they cannot see into."
-                        }
-                      }
-                    ]
+                    "tone": "neutral",
+                    "layout": "card",
+                    "label": "Before you book",
+                    "items": [
+                      "Next start date: **3 November**",
+                      "Two project slots left in 2026",
+                      "We reply to every brief within two working days, including the noes"
+                    ],
+                    "footer": "A diary link converts better than a contact form: the visitor gets certainty instead of an inbox they cannot see into."
                   }
                 }
               ]

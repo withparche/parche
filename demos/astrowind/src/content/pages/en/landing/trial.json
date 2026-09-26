@@ -92,116 +92,111 @@
       }
     },
     {
-      "widget": "Section",
+      "widget": "Switch",
+      "wrapper": {
+        "props": {
+          "id": "tour",
+          "label": "Tour"
+        }
+      },
       "props": {
-        "id": "tour",
-        "label": "Tour"
+        "tagline": "Tour · four screens",
+        "title": "See the four files that matter",
+        "subtitle": "Real screens, including the plain ones. Click a step — this is the closest a page can get to letting you use the thing, and it beats a hero video because it survives being screenshotted and linked.",
+        "label": "Tour step",
+        "syncKey": "step",
+        "variant": "pill",
+        "options": [
+          {
+            "value": "config",
+            "label": "1 · config.yaml"
+          },
+          {
+            "value": "styles",
+            "label": "2 · CustomStyles.astro"
+          },
+          {
+            "value": "props",
+            "label": "3 · widget props"
+          },
+          {
+            "value": "build",
+            "label": "4 · npm run build"
+          }
+        ]
       },
       "slots": {
-        "default": [
+        "config": [
           {
-            "widget": "Switch",
+            "widget": "TourStep",
             "props": {
-              "tagline": "Tour · four screens",
-              "title": "See the four files that matter",
-              "subtitle": "Real screens, including the plain ones. Click a step — this is the closest a page can get to letting you use the thing, and it beats a hero video because it survives being screenshotted and linked.",
-              "label": "Tour step",
-              "syncKey": "step",
-              "variant": "pill",
-              "options": [
+              "url": "src/config.yaml · 1200×760",
+              "title": "One file for the whole site",
+              "badge": "Step 1 of 4",
+              "caption": "real screenshot goes here",
+              "ratio": "16/10",
+              "subtitle": "Name, URL, metadata, blog on or off, language. Change it once and every page follows — this is the file a client can safely be shown.",
+              "actions": [
                 {
-                  "value": "config",
-                  "label": "1 · config.yaml"
-                },
-                {
-                  "value": "styles",
-                  "label": "2 · CustomStyles.astro"
-                },
-                {
-                  "value": "props",
-                  "label": "3 · widget props"
-                },
-                {
-                  "value": "build",
-                  "label": "4 · npm run build"
+                  "text": "Run it yourself",
+                  "href": "#top"
                 }
               ]
-            },
-            "slots": {
-              "config": [
+            }
+          }
+        ],
+        "styles": [
+          {
+            "widget": "TourStep",
+            "props": {
+              "url": "CustomStyles.astro · 1200×760",
+              "title": "Two colour scales, light and dark",
+              "badge": "Step 2 of 4",
+              "caption": "real screenshot goes here",
+              "ratio": "16/10",
+              "subtitle": "Paste your brand hexes here and the entire site rebrands, including third-party shadcn-style components that read the same tokens.",
+              "actions": [
                 {
-                  "widget": "TourStep",
-                  "props": {
-                    "url": "src/config.yaml · 1200×760",
-                    "title": "One file for the whole site",
-                    "badge": "Step 1 of 4",
-                    "caption": "real screenshot goes here",
-                    "ratio": "16/10",
-                    "subtitle": "Name, URL, metadata, blog on or off, language. Change it once and every page follows — this is the file a client can safely be shown.",
-                    "actions": [
-                      {
-                        "text": "Run it yourself",
-                        "href": "#top"
-                      }
-                    ]
-                  }
+                  "text": "Run it yourself",
+                  "href": "#top"
                 }
-              ],
-              "styles": [
+              ]
+            }
+          }
+        ],
+        "props": [
+          {
+            "widget": "TourStep",
+            "props": {
+              "url": "widget props · 1200×760",
+              "title": "Sections are props, not markup",
+              "badge": "Step 3 of 4",
+              "caption": "real screenshot goes here",
+              "ratio": "16/10",
+              "subtitle": "A hero is a component call with a headline, a subtitle and an image. No class soup to unpick when the client asks for a different order.",
+              "actions": [
                 {
-                  "widget": "TourStep",
-                  "props": {
-                    "url": "CustomStyles.astro · 1200×760",
-                    "title": "Two colour scales, light and dark",
-                    "badge": "Step 2 of 4",
-                    "caption": "real screenshot goes here",
-                    "ratio": "16/10",
-                    "subtitle": "Paste your brand hexes here and the entire site rebrands, including third-party shadcn-style components that read the same tokens.",
-                    "actions": [
-                      {
-                        "text": "Run it yourself",
-                        "href": "#top"
-                      }
-                    ]
-                  }
+                  "text": "Run it yourself",
+                  "href": "#top"
                 }
-              ],
-              "props": [
+              ]
+            }
+          }
+        ],
+        "build": [
+          {
+            "widget": "TourStep",
+            "props": {
+              "url": "terminal · npm run build · 1200×760",
+              "title": "A static folder at the end",
+              "badge": "Step 4 of 4",
+              "caption": "real screenshot goes here",
+              "ratio": "16/10",
+              "subtitle": "38 KB median page, zero JS on static routes, and nothing to patch on a Friday. Deploy it anywhere that serves files.",
+              "actions": [
                 {
-                  "widget": "TourStep",
-                  "props": {
-                    "url": "widget props · 1200×760",
-                    "title": "Sections are props, not markup",
-                    "badge": "Step 3 of 4",
-                    "caption": "real screenshot goes here",
-                    "ratio": "16/10",
-                    "subtitle": "A hero is a component call with a headline, a subtitle and an image. No class soup to unpick when the client asks for a different order.",
-                    "actions": [
-                      {
-                        "text": "Run it yourself",
-                        "href": "#top"
-                      }
-                    ]
-                  }
-                }
-              ],
-              "build": [
-                {
-                  "widget": "TourStep",
-                  "props": {
-                    "url": "terminal · npm run build · 1200×760",
-                    "title": "A static folder at the end",
-                    "badge": "Step 4 of 4",
-                    "caption": "real screenshot goes here",
-                    "ratio": "16/10",
-                    "subtitle": "38 KB median page, zero JS on static routes, and nothing to patch on a Friday. Deploy it anywhere that serves files.",
-                    "actions": [
-                      {
-                        "text": "Run it yourself",
-                        "href": "#top"
-                      }
-                    ]
-                  }
+                  "text": "Run it yourself",
+                  "href": "#top"
                 }
               ]
             }
@@ -210,74 +205,64 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "tone": "surface"
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "tone": "surface"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "title": "What you can do before you decide anything",
+        "align": "start",
+        "layout": "cards",
+        "columns": "4",
+        "card": "canvas",
+        "items": [
           {
-            "widget": "Features",
-            "props": {
-              "title": "What you can do before you decide anything",
-              "align": "start",
-              "layout": "cards",
-              "columns": "4",
-              "card": "canvas",
-              "items": [
-                {
-                  "title": "Ship a real page",
-                  "description": "Not a sandbox with fake data. The demo site is production code, and the page you edit is the page you deploy."
-                },
-                {
-                  "title": "Use every widget",
-                  "description": "All 34, no locked sections, no watermark. Nothing is held back for a paid tier that does not exist."
-                },
-                {
-                  "title": "Deploy it",
-                  "description": "To your own host, under your own domain, for a client, on day one. MIT means exactly that."
-                },
-                {
-                  "title": "Leave",
-                  "description": "Delete the account and the code keeps working. That is the difference between a template and a platform."
-                }
-              ]
-            }
+            "title": "Ship a real page",
+            "description": "Not a sandbox with fake data. The demo site is production code, and the page you edit is the page you deploy."
+          },
+          {
+            "title": "Use every widget",
+            "description": "All 34, no locked sections, no watermark. Nothing is held back for a paid tier that does not exist."
+          },
+          {
+            "title": "Deploy it",
+            "description": "To your own host, under your own domain, for a client, on day one. MIT means exactly that."
+          },
+          {
+            "title": "Leave",
+            "description": "Delete the account and the code keeps working. That is the difference between a template and a platform."
           }
         ]
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "faq",
-        "width": "md"
+      "widget": "FAQs",
+      "wrapper": {
+        "props": {
+          "id": "faq",
+          "width": "md"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "tagline": "FAQ",
+        "title": "Asked before signing up",
+        "layout": "list",
+        "columns": "1",
+        "open": "all",
+        "items": [
           {
-            "widget": "FAQs",
-            "props": {
-              "tagline": "FAQ",
-              "title": "Asked before signing up",
-              "layout": "list",
-              "columns": "1",
-              "open": "all",
-              "items": [
-                {
-                  "title": "What happens on day 14?",
-                  "description": "Nothing. There is no clock — this is the honest version of a trial page. If your product does expire, say the date, say what you keep, and say it here rather than in an email on day 13."
-                },
-                {
-                  "title": "Do I need the account at all?",
-                  "description": "No. It syncs brand presets between machines; everything else works from the repository. A trial page that admits its signup is optional converts worse and retains far better."
-                },
-                {
-                  "title": "Where does my data live?",
-                  "description": "EU region, deletable from the account page, and no analytics until you accept them. The compliance strip above is the short version your buyer’s IT reviewer will look for."
-                }
-              ]
-            }
+            "title": "What happens on day 14?",
+            "description": "Nothing. There is no clock — this is the honest version of a trial page. If your product does expire, say the date, say what you keep, and say it here rather than in an email on day 13."
+          },
+          {
+            "title": "Do I need the account at all?",
+            "description": "No. It syncs brand presets between machines; everything else works from the repository. A trial page that admits its signup is optional converts worse and retains far better."
+          },
+          {
+            "title": "Where does my data live?",
+            "description": "EU region, deletable from the account page, and no analytics until you accept them. The compliance strip above is the short version your buyer’s IT reviewer will look for."
           }
         ]
       }

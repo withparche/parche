@@ -4,369 +4,354 @@
   "layout": "cadence",
   "sections": [
     {
-      "widget": "Section",
+      "widget": "Switch",
+      "wrapper": {
+        "props": {
+          "id": "plans",
+          "label": "Plans",
+          "spacing": "md"
+        }
+      },
       "props": {
-        "id": "plans",
-        "label": "Plans",
-        "spacing": "md"
+        "label": "Billing period",
+        "syncKey": "billing",
+        "value": "yearly",
+        "align": "start",
+        "options": [
+          {
+            "value": "monthly",
+            "label": "Monthly"
+          },
+          {
+            "value": "yearly",
+            "label": "Yearly · 2 months free"
+          }
+        ],
+        "title": "Per project, not per seat",
+        "subtitle": "Seat pricing punishes you for inviting the people who should read the changelog. Every price here is the price you pay — no hidden tier, no per-seat surprise at renewal.",
+        "level": 1
       },
       "slots": {
-        "default": [
+        "monthly": [
           {
-            "widget": "Switch",
+            "widget": "Pricing",
             "props": {
-              "label": "Billing period",
-              "syncKey": "billing",
-              "value": "yearly",
-              "align": "start",
-              "options": [
+              "items": [
                 {
-                  "value": "monthly",
-                  "label": "Monthly"
+                  "title": "Free",
+                  "price": "0",
+                  "currency": "$",
+                  "note": "One project, forever. Not a trial — there is no clock.",
+                  "features": [
+                    "1 project · unlimited releases",
+                    "Changelog page on cadence.dev/yourname",
+                    "RSS and email digest up to 500 subscribers",
+                    "Cadence badge in the footer"
+                  ],
+                  "actions": [
+                    {
+                      "text": "Start free",
+                      "href": "#signup"
+                    }
+                  ]
                 },
                 {
-                  "value": "yearly",
-                  "label": "Yearly · 2 months free"
+                  "title": "Team",
+                  "price": "29",
+                  "currency": "$",
+                  "suffix": "/month",
+                  "note": "Switch to yearly and two months are free",
+                  "recommended": true,
+                  "badge": "4 of 5 teams pick this",
+                  "features": [
+                    "Unlimited projects and editors",
+                    "Your own domain, no badge",
+                    "In-app widget and per-account read receipts",
+                    "Digest to 50,000 subscribers from your domain",
+                    "GitHub, Linear, Slack and Intercom"
+                  ],
+                  "actions": [
+                    {
+                      "text": "Start free, upgrade later",
+                      "href": "#signup"
+                    }
+                  ]
+                },
+                {
+                  "title": "Self-hosted",
+                  "price": "99",
+                  "currency": "$",
+                  "suffix": "/month",
+                  "note": "Your infrastructure, your database",
+                  "features": [
+                    "Everything in Team",
+                    "One container, any Postgres 14+",
+                    "SAML and OIDC single sign-on",
+                    "Audit log and data residency wherever you host",
+                    "Named support contact, 1 business day"
+                  ],
+                  "actions": [
+                    {
+                      "text": "Talk to us",
+                      "href": "/contact"
+                    }
+                  ]
                 }
               ],
-              "title": "Per project, not per seat",
-              "subtitle": "Seat pricing punishes you for inviting the people who should read the changelog. Every price here is the price you pay — no hidden tier, no per-seat surprise at renewal.",
-              "level": 1
-            },
-            "slots": {
-              "monthly": [
+              "note": "Prices in USD, excluding VAT. Non-profits and student projects pay nothing on Team — [just ask](/contact)."
+            }
+          }
+        ],
+        "yearly": [
+          {
+            "widget": "Pricing",
+            "props": {
+              "items": [
                 {
-                  "widget": "Pricing",
-                  "props": {
-                    "items": [
-                      {
-                        "title": "Free",
-                        "price": "0",
-                        "currency": "$",
-                        "note": "One project, forever. Not a trial — there is no clock.",
-                        "features": [
-                          "1 project · unlimited releases",
-                          "Changelog page on cadence.dev/yourname",
-                          "RSS and email digest up to 500 subscribers",
-                          "Cadence badge in the footer"
-                        ],
-                        "actions": [
-                          {
-                            "text": "Start free",
-                            "href": "#signup"
-                          }
-                        ]
-                      },
-                      {
-                        "title": "Team",
-                        "price": "29",
-                        "currency": "$",
-                        "suffix": "/month",
-                        "note": "Switch to yearly and two months are free",
-                        "recommended": true,
-                        "badge": "4 of 5 teams pick this",
-                        "features": [
-                          "Unlimited projects and editors",
-                          "Your own domain, no badge",
-                          "In-app widget and per-account read receipts",
-                          "Digest to 50,000 subscribers from your domain",
-                          "GitHub, Linear, Slack and Intercom"
-                        ],
-                        "actions": [
-                          {
-                            "text": "Start free, upgrade later",
-                            "href": "#signup"
-                          }
-                        ]
-                      },
-                      {
-                        "title": "Self-hosted",
-                        "price": "99",
-                        "currency": "$",
-                        "suffix": "/month",
-                        "note": "Your infrastructure, your database",
-                        "features": [
-                          "Everything in Team",
-                          "One container, any Postgres 14+",
-                          "SAML and OIDC single sign-on",
-                          "Audit log and data residency wherever you host",
-                          "Named support contact, 1 business day"
-                        ],
-                        "actions": [
-                          {
-                            "text": "Talk to us",
-                            "href": "/contact"
-                          }
-                        ]
-                      }
-                    ],
-                    "note": "Prices in USD, excluding VAT. Non-profits and student projects pay nothing on Team — [just ask](/contact)."
-                  }
+                  "title": "Free",
+                  "price": "0",
+                  "currency": "$",
+                  "note": "One project, forever. Not a trial — there is no clock.",
+                  "features": [
+                    "1 project · unlimited releases",
+                    "Changelog page on cadence.dev/yourname",
+                    "RSS and email digest up to 500 subscribers",
+                    "Cadence badge in the footer"
+                  ],
+                  "actions": [
+                    {
+                      "text": "Start free",
+                      "href": "#signup"
+                    }
+                  ]
+                },
+                {
+                  "title": "Team",
+                  "price": "290",
+                  "currency": "$",
+                  "suffix": "/year",
+                  "note": "Two months free against monthly",
+                  "recommended": true,
+                  "badge": "4 of 5 teams pick this",
+                  "features": [
+                    "Unlimited projects and editors",
+                    "Your own domain, no badge",
+                    "In-app widget and per-account read receipts",
+                    "Digest to 50,000 subscribers from your domain",
+                    "GitHub, Linear, Slack and Intercom"
+                  ],
+                  "actions": [
+                    {
+                      "text": "Start free, upgrade later",
+                      "href": "#signup"
+                    }
+                  ],
+                  "noteTone": "success"
+                },
+                {
+                  "title": "Self-hosted",
+                  "price": "990",
+                  "currency": "$",
+                  "suffix": "/year",
+                  "note": "Your infrastructure, your database",
+                  "features": [
+                    "Everything in Team",
+                    "One container, any Postgres 14+",
+                    "SAML and OIDC single sign-on",
+                    "Audit log and data residency wherever you host",
+                    "Named support contact, 1 business day"
+                  ],
+                  "actions": [
+                    {
+                      "text": "Talk to us",
+                      "href": "/contact"
+                    }
+                  ]
                 }
               ],
-              "yearly": [
-                {
-                  "widget": "Pricing",
-                  "props": {
-                    "items": [
-                      {
-                        "title": "Free",
-                        "price": "0",
-                        "currency": "$",
-                        "note": "One project, forever. Not a trial — there is no clock.",
-                        "features": [
-                          "1 project · unlimited releases",
-                          "Changelog page on cadence.dev/yourname",
-                          "RSS and email digest up to 500 subscribers",
-                          "Cadence badge in the footer"
-                        ],
-                        "actions": [
-                          {
-                            "text": "Start free",
-                            "href": "#signup"
-                          }
-                        ]
-                      },
-                      {
-                        "title": "Team",
-                        "price": "290",
-                        "currency": "$",
-                        "suffix": "/year",
-                        "note": "Two months free against monthly",
-                        "recommended": true,
-                        "badge": "4 of 5 teams pick this",
-                        "features": [
-                          "Unlimited projects and editors",
-                          "Your own domain, no badge",
-                          "In-app widget and per-account read receipts",
-                          "Digest to 50,000 subscribers from your domain",
-                          "GitHub, Linear, Slack and Intercom"
-                        ],
-                        "actions": [
-                          {
-                            "text": "Start free, upgrade later",
-                            "href": "#signup"
-                          }
-                        ],
-                        "noteTone": "success"
-                      },
-                      {
-                        "title": "Self-hosted",
-                        "price": "990",
-                        "currency": "$",
-                        "suffix": "/year",
-                        "note": "Your infrastructure, your database",
-                        "features": [
-                          "Everything in Team",
-                          "One container, any Postgres 14+",
-                          "SAML and OIDC single sign-on",
-                          "Audit log and data residency wherever you host",
-                          "Named support contact, 1 business day"
-                        ],
-                        "actions": [
-                          {
-                            "text": "Talk to us",
-                            "href": "/contact"
-                          }
-                        ]
-                      }
-                    ],
-                    "note": "Prices in USD, excluding VAT. Non-profits and student projects pay nothing on Team — [just ask](/contact)."
-                  }
-                }
-              ]
+              "note": "Prices in USD, excluding VAT. Non-profits and student projects pay nothing on Team — [just ask](/contact)."
             }
           }
         ]
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "compare",
-        "label": "Compare",
-        "tone": "surface"
+      "widget": "Table",
+      "wrapper": {
+        "props": {
+          "id": "compare",
+          "label": "Compare",
+          "tone": "surface"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "title": "Compared, with numbers instead of ticks",
+        "subtitle": "A row that says “Analytics ✓ ✓ ✓” tells a buyer nothing. Where the answer is a quantity, we give the quantity.",
+        "minWidth": 640,
+        "columns": [
           {
-            "widget": "Table",
-            "props": {
-              "title": "Compared, with numbers instead of ticks",
-              "subtitle": "A row that says “Analytics ✓ ✓ ✓” tells a buyer nothing. Where the answer is a quantity, we give the quantity.",
-              "minWidth": 640,
-              "columns": [
-                {
-                  "label": ""
-                },
-                {
-                  "label": "Free"
-                },
-                {
-                  "label": "Team",
-                  "highlight": true
-                },
-                {
-                  "label": "Self-hosted"
-                }
-              ],
-              "rows": [
-                {
-                  "cells": [
-                    "Projects",
-                    "1",
-                    "Unlimited",
-                    {
-                      "text": "Unlimited",
-                      "tone": "default"
-                    }
-                  ]
-                },
-                {
-                  "cells": [
-                    "Digest subscribers",
-                    "500",
-                    "50,000",
-                    {
-                      "text": "Your SMTP, no cap",
-                      "tone": "default"
-                    }
-                  ]
-                },
-                {
-                  "cells": [
-                    "Read receipts",
-                    "Totals only",
-                    "Per account, 90 days",
-                    {
-                      "text": "Per account, you keep it",
-                      "tone": "default"
-                    }
-                  ]
-                },
-                {
-                  "cells": [
-                    "API rate limit",
-                    "60 / hour",
-                    "5,000 / hour",
-                    {
-                      "text": "Yours to set",
-                      "tone": "default"
-                    }
-                  ]
-                },
-                {
-                  "cells": [
-                    "Support response",
-                    "Community forum",
-                    "2 business days, measured",
-                    {
-                      "text": "1 business day, named contact",
-                      "tone": "default"
-                    }
-                  ]
-                },
-                {
-                  "cells": [
-                    "Single sign-on",
-                    "No",
-                    {
-                      "text": "Google only",
-                      "tone": "muted"
-                    },
-                    {
-                      "text": "SAML and OIDC",
-                      "tone": "default"
-                    }
-                  ]
-                },
-                {
-                  "cells": [
-                    "Best when",
-                    "One product, testing us",
-                    {
-                      "text": "You ship monthly or faster",
-                      "tone": "muted"
-                    },
-                    "Policy forbids hosted tools"
-                  ]
-                }
-              ]
-            }
+            "label": ""
+          },
+          {
+            "label": "Free"
+          },
+          {
+            "label": "Team",
+            "highlight": true
+          },
+          {
+            "label": "Self-hosted"
+          }
+        ],
+        "rows": [
+          {
+            "cells": [
+              "Projects",
+              "1",
+              "Unlimited",
+              {
+                "text": "Unlimited",
+                "tone": "default"
+              }
+            ]
+          },
+          {
+            "cells": [
+              "Digest subscribers",
+              "500",
+              "50,000",
+              {
+                "text": "Your SMTP, no cap",
+                "tone": "default"
+              }
+            ]
+          },
+          {
+            "cells": [
+              "Read receipts",
+              "Totals only",
+              "Per account, 90 days",
+              {
+                "text": "Per account, you keep it",
+                "tone": "default"
+              }
+            ]
+          },
+          {
+            "cells": [
+              "API rate limit",
+              "60 / hour",
+              "5,000 / hour",
+              {
+                "text": "Yours to set",
+                "tone": "default"
+              }
+            ]
+          },
+          {
+            "cells": [
+              "Support response",
+              "Community forum",
+              "2 business days, measured",
+              {
+                "text": "1 business day, named contact",
+                "tone": "default"
+              }
+            ]
+          },
+          {
+            "cells": [
+              "Single sign-on",
+              "No",
+              {
+                "text": "Google only",
+                "tone": "muted"
+              },
+              {
+                "text": "SAML and OIDC",
+                "tone": "default"
+              }
+            ]
+          },
+          {
+            "cells": [
+              "Best when",
+              "One product, testing us",
+              {
+                "text": "You ship monthly or faster",
+                "tone": "muted"
+              },
+              "Policy forbids hosted tools"
+            ]
           }
         ]
       }
     },
     {
-      "widget": "Section",
+      "widget": "Columns",
+      "wrapper": {
+        "props": {
+          "id": "faq",
+          "label": "Questions"
+        }
+      },
       "props": {
-        "id": "faq",
-        "label": "Questions"
+        "ratio": "equal",
+        "gap": "lg",
+        "align": "start"
       },
       "slots": {
         "default": [
           {
-            "widget": "Columns",
-            "props": {
-              "ratio": "equal",
-              "gap": "lg",
-              "align": "start"
-            },
+            "widget": "Column",
             "slots": {
               "default": [
                 {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
-                      {
-                        "widget": "Callout",
-                        "props": {
-                          "layout": "inline",
-                          "tone": "neutral",
-                          "label": "Trust, each linked to its evidence",
-                          "items": [
-                            "[SOC 2 Type II](/contact#soc2)",
-                            "[GDPR · EU residency](/contact#gdpr)",
-                            "[99.97% uptime, 90 days](/contact#status)",
-                            "[Subprocessors](/contact#subprocessors)"
-                          ]
-                        }
-                      }
+                  "widget": "Callout",
+                  "props": {
+                    "layout": "inline",
+                    "tone": "neutral",
+                    "label": "Trust, each linked to its evidence",
+                    "items": [
+                      "[SOC 2 Type II](/contact#soc2)",
+                      "[GDPR · EU residency](/contact#gdpr)",
+                      "[99.97% uptime, 90 days](/contact#status)",
+                      "[Subprocessors](/contact#subprocessors)"
                     ]
                   }
-                },
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Column",
+            "slots": {
+              "default": [
                 {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
+                  "widget": "FAQs",
+                  "props": {
+                    "title": "Pricing questions, answered",
+                    "layout": "list",
+                    "columns": "1",
+                    "items": [
                       {
-                        "widget": "FAQs",
-                        "props": {
-                          "title": "Pricing questions, answered",
-                          "layout": "list",
-                          "columns": "1",
-                          "items": [
-                            {
-                              "title": "Is the free plan a trial?",
-                              "description": "No, and there is no clock. One project, unlimited releases, forever, with a small badge. We would rather you outgrow it than have it expire on you."
-                            },
-                            {
-                              "title": "What happens if I exceed a limit?",
-                              "description": "We email you and nothing breaks. No overage charge appears on an invoice you did not expect — that practice belongs in the last decade."
-                            },
-                            {
-                              "title": "Can I export and leave?",
-                              "description": "Markdown with images, one click, no support ticket. Your public page can be handed over as static files you host yourself."
-                            },
-                            {
-                              "title": "We ship once a quarter. Worth paying for?",
-                              "description": "Probably not. Below about one release a month a page in your wiki does the job. Start on Free and upgrade when the wiki page goes stale."
-                            }
-                          ],
-                          "open": "all"
-                        }
+                        "title": "Is the free plan a trial?",
+                        "description": "No, and there is no clock. One project, unlimited releases, forever, with a small badge. We would rather you outgrow it than have it expire on you."
+                      },
+                      {
+                        "title": "What happens if I exceed a limit?",
+                        "description": "We email you and nothing breaks. No overage charge appears on an invoice you did not expect — that practice belongs in the last decade."
+                      },
+                      {
+                        "title": "Can I export and leave?",
+                        "description": "Markdown with images, one click, no support ticket. Your public page can be handed over as static files you host yourself."
+                      },
+                      {
+                        "title": "We ship once a quarter. Worth paying for?",
+                        "description": "Probably not. Below about one release a month a page in your wiki does the job. Start on Free and upgrade when the wiki page goes stale."
                       }
-                    ]
+                    ],
+                    "open": "all"
                   }
                 }
               ]

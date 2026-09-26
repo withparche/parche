@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { listWrapper, outletWrappers } from '../src/content/wrapper.ts';
+import { listWrapper, nodeWrapper, outletWrappers } from '../src/content/wrapper.ts';
 
 test('nothing is wrapped unless a list declares it', () => {
   assert.equal(listWrapper(undefined, 'Section'), null);
@@ -22,4 +22,19 @@ test('outletWrappers finds every outlet, nested ones included, with its path', (
     { name: 'default', spec: { widget: 'Section' }, path: 'layout[1].slots.default[0]' },
     { name: 'aside', spec: undefined, path: 'layout[1].slots.default[1]' },
   ]);
+});
+
+test("a node's own wrapper: its props over the list's, another widget alone, or none", () => {
+  const list = { name: 'Section', props: { spacing: 'md', tone: 'default' } };
+  // Absent: the list's, as it is.
+  assert.equal(nodeWrapper(undefined, list, 'Section'), list);
+  // Props only: the list's widget, its props as defaults.
+  assert.deepEqual(nodeWrapper({ props: { id: 'faq', tone: 'muted' } }, list, 'Section'), { name: 'Section', props: { spacing: 'md', tone: 'muted', id: 'faq' } });
+  // Another widget: only its own props.
+  assert.deepEqual(nodeWrapper({ widget: 'Band', props: { angle: 3 } }, list, 'Section'), { name: 'Band', props: { angle: 3 } });
+  // false: bare.
+  assert.equal(nodeWrapper(false, list, 'Section'), null);
+  // In a list with no wrapper (a slot), props alone take the registry default.
+  assert.deepEqual(nodeWrapper({ props: { id: 'x' } }, null, 'Section'), { name: 'Section', props: { id: 'x' } });
+  assert.equal(nodeWrapper({ props: { id: 'x' } }, null, null), null);
 });

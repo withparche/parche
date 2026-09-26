@@ -30,180 +30,170 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "spacing": "sm"
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "spacing": "sm"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "cards",
+        "columns": "4",
+        "items": [
           {
-            "widget": "Features",
-            "props": {
-              "layout": "cards",
-              "columns": "4",
-              "items": [
-                {
-                  "eyebrow": "Support",
-                  "title": "Something is broken",
-                  "description": "Bugs, imports that failed, digests that did not send. Goes to whoever is on rota, not a queue.",
-                  "footer": "Median 3h 10m · 30 days",
-                  "href": "#support"
-                },
-                {
-                  "eyebrow": "Security",
-                  "title": "Report a vulnerability",
-                  "description": "security@cadence.dev, PGP key published. Safe harbour for good-faith research, and we pay bounties.",
-                  "footer": "Acknowledged within 24h, always",
-                  "href": "#security",
-                  "tone": "danger"
-                },
-                {
-                  "eyebrow": "Buying",
-                  "title": "Procurement and invoicing",
-                  "description": "Vendor questionnaires, DPAs, purchase orders. No salesperson — you get the engineer who can answer.",
-                  "footer": "Median 1 business day",
-                  "href": "#sales"
-                },
-                {
-                  "eyebrow": "Press",
-                  "title": "Journalists and analysts",
-                  "description": "Founders answer these directly. Logos, photos and the company facts are in the press kit already.",
-                  "footer": "Same day on weekdays",
-                  "href": "#press"
-                }
-              ],
-              "accent": true
-            }
+            "eyebrow": "Support",
+            "title": "Something is broken",
+            "description": "Bugs, imports that failed, digests that did not send. Goes to whoever is on rota, not a queue.",
+            "footer": "Median 3h 10m · 30 days",
+            "href": "#support"
+          },
+          {
+            "eyebrow": "Security",
+            "title": "Report a vulnerability",
+            "description": "security@cadence.dev, PGP key published. Safe harbour for good-faith research, and we pay bounties.",
+            "footer": "Acknowledged within 24h, always",
+            "href": "#security",
+            "tone": "danger"
+          },
+          {
+            "eyebrow": "Buying",
+            "title": "Procurement and invoicing",
+            "description": "Vendor questionnaires, DPAs, purchase orders. No salesperson — you get the engineer who can answer.",
+            "footer": "Median 1 business day",
+            "href": "#sales"
+          },
+          {
+            "eyebrow": "Press",
+            "title": "Journalists and analysts",
+            "description": "Founders answer these directly. Logos, photos and the company facts are in the press kit already.",
+            "footer": "Same day on weekdays",
+            "href": "#press"
           }
-        ]
+        ],
+        "accent": true
       }
     },
     {
-      "widget": "Section",
+      "widget": "Columns",
+      "wrapper": {
+        "props": {
+          "id": "support",
+          "label": "Write to us",
+          "tone": "surface"
+        }
+      },
       "props": {
-        "id": "support",
-        "label": "Write to us",
-        "tone": "surface"
+        "ratio": "equal",
+        "gap": "lg"
       },
       "slots": {
         "default": [
           {
-            "widget": "Columns",
+            "widget": "Column",
+            "slots": {
+              "default": [
+                {
+                  "widget": "Contact",
+                  "props": {
+                    "layout": "plain",
+                    "title": "Or just write to us here",
+                    "subtitle": "Four fields. Everything in this form lands in the same inbox three people read, and we answer every message — including the ones we cannot help with.",
+                    "fields": [
+                      {
+                        "name": "topic",
+                        "label": "What is this about?",
+                        "type": "select",
+                        "options": [
+                          "Something is broken",
+                          "A question about the product",
+                          "Procurement or invoicing",
+                          "Press",
+                          "Something else"
+                        ]
+                      },
+                      {
+                        "name": "email",
+                        "label": "Your email",
+                        "type": "email",
+                        "placeholder": "you@company.com",
+                        "autocomplete": "email",
+                        "required": true
+                      },
+                      {
+                        "name": "workspace",
+                        "label": "Workspace, if you have one",
+                        "placeholder": "cadence.dev/acme — optional, but it speeds us up"
+                      },
+                      {
+                        "name": "message",
+                        "label": "What is happening",
+                        "type": "textarea",
+                        "rows": 4,
+                        "placeholder": "The Thursday digest went out twice. Workspace acme, around 07:00 CET.",
+                        "required": true
+                      }
+                    ],
+                    "submit": "Send it",
+                    "note": "We never add you to a mailing list from this form. [What we do with it](#privacy).",
+                    "success": {
+                      "label": "Sent — reply within a day",
+                      "mode": "button"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Column",
             "props": {
-              "ratio": "equal",
-              "gap": "lg"
+              "as": "aside",
+              "label": "Hours, faster channels and the legal entity"
             },
             "slots": {
               "default": [
                 {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
+                  "widget": "Callout",
+                  "props": {
+                    "label": "When we are around",
+                    "rows": [
                       {
-                        "widget": "Contact",
-                        "props": {
-                          "layout": "plain",
-                          "title": "Or just write to us here",
-                          "subtitle": "Four fields. Everything in this form lands in the same inbox three people read, and we answer every message — including the ones we cannot help with.",
-                          "fields": [
-                            {
-                              "name": "topic",
-                              "label": "What is this about?",
-                              "type": "select",
-                              "options": [
-                                "Something is broken",
-                                "A question about the product",
-                                "Procurement or invoicing",
-                                "Press",
-                                "Something else"
-                              ]
-                            },
-                            {
-                              "name": "email",
-                              "label": "Your email",
-                              "type": "email",
-                              "placeholder": "you@company.com",
-                              "autocomplete": "email",
-                              "required": true
-                            },
-                            {
-                              "name": "workspace",
-                              "label": "Workspace, if you have one",
-                              "placeholder": "cadence.dev/acme — optional, but it speeds us up"
-                            },
-                            {
-                              "name": "message",
-                              "label": "What is happening",
-                              "type": "textarea",
-                              "rows": 4,
-                              "placeholder": "The Thursday digest went out twice. Workspace acme, around 07:00 CET.",
-                              "required": true
-                            }
-                          ],
-                          "submit": "Send it",
-                          "note": "We never add you to a mailing list from this form. [What we do with it](#privacy).",
-                          "success": {
-                            "label": "Sent — reply within a day",
-                            "mode": "button"
-                          }
-                        }
+                        "label": "Monday to Friday",
+                        "value": "08:00 — 18:00 CET"
+                      },
+                      {
+                        "label": "Weekends",
+                        "value": "Outages only"
+                      },
+                      {
+                        "label": "Languages",
+                        "value": "EN · ES · PT"
+                      },
+                      {
+                        "label": "Closed",
+                        "value": "24 Dec — 1 Jan"
                       }
                     ]
                   }
                 },
                 {
-                  "widget": "Column",
+                  "widget": "Callout",
                   "props": {
-                    "as": "aside",
-                    "label": "Hours, faster channels and the legal entity"
-                  },
-                  "slots": {
-                    "default": [
-                      {
-                        "widget": "Callout",
-                        "props": {
-                          "label": "When we are around",
-                          "rows": [
-                            {
-                              "label": "Monday to Friday",
-                              "value": "08:00 — 18:00 CET"
-                            },
-                            {
-                              "label": "Weekends",
-                              "value": "Outages only"
-                            },
-                            {
-                              "label": "Languages",
-                              "value": "EN · ES · PT"
-                            },
-                            {
-                              "label": "Closed",
-                              "value": "24 Dec — 1 Jan"
-                            }
-                          ]
-                        }
-                      },
-                      {
-                        "widget": "Callout",
-                        "props": {
-                          "label": "Faster than writing to us",
-                          "items": [
-                            "[The docs](#docs) — search with ⌘K, most answers are there",
-                            "[Status page](#status) — check before reporting an outage",
-                            "[Community forum](#community) — 2,400 people, we read it daily"
-                          ]
-                        }
-                      },
-                      {
-                        "widget": "Callout",
-                        "props": {
-                          "label": "The legal entity",
-                          "title": "Cadence Software SL",
-                          "description": "Calle Ercilla 22, 3º\n48011 Bilbao, Spain\nVAT ESB12345678",
-                          "footer": "A registered address, not a mailbox, and it matches every listing we have. Procurement checks this."
-                        }
-                      }
+                    "label": "Faster than writing to us",
+                    "items": [
+                      "[The docs](#docs) — search with ⌘K, most answers are there",
+                      "[Status page](#status) — check before reporting an outage",
+                      "[Community forum](#community) — 2,400 people, we read it daily"
                     ]
+                  }
+                },
+                {
+                  "widget": "Callout",
+                  "props": {
+                    "label": "The legal entity",
+                    "title": "Cadence Software SL",
+                    "description": "Calle Ercilla 22, 3º\n48011 Bilbao, Spain\nVAT ESB12345678",
+                    "footer": "A registered address, not a mailbox, and it matches every listing we have. Procurement checks this."
                   }
                 }
               ]

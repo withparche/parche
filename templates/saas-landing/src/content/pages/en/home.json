@@ -48,53 +48,48 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "features",
-        "tone": "dots"
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "id": "features",
+          "tone": "dots"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "tagline": "Features",
+        "title": "Everything your team needs, in one place",
+        "subtitle": "Stop stitching five tools together. Parche replaces the busywork with one connected workspace.",
+        "columns": "3",
+        "items": [
           {
-            "widget": "Features",
-            "props": {
-              "tagline": "Features",
-              "title": "Everything your team needs, in one place",
-              "subtitle": "Stop stitching five tools together. Parche replaces the busywork with one connected workspace.",
-              "columns": "3",
-              "items": [
-                {
-                  "title": "Boards & tasks",
-                  "description": "Plan sprints on flexible boards, with sub-tasks, dependencies and custom fields.",
-                  "icon": "tabler:layout-kanban"
-                },
-                {
-                  "title": "Docs that link",
-                  "description": "Write specs and notes that stay connected to the work they describe.",
-                  "icon": "tabler:file-text"
-                },
-                {
-                  "title": "Roadmaps",
-                  "description": "Turn strategy into timelines your whole company can follow.",
-                  "icon": "tabler:map"
-                },
-                {
-                  "title": "Automations",
-                  "description": "Automate the repetitive steps — assignments, status changes, reminders.",
-                  "icon": "tabler:bolt"
-                },
-                {
-                  "title": "AI summaries",
-                  "description": "Catch up on any project with a one-click summary of what changed.",
-                  "icon": "tabler:sparkles"
-                },
-                {
-                  "title": "Integrations",
-                  "description": "Connect GitHub, Slack, Figma and 40+ tools your team already uses.",
-                  "icon": "tabler:plug"
-                }
-              ]
-            }
+            "title": "Boards & tasks",
+            "description": "Plan sprints on flexible boards, with sub-tasks, dependencies and custom fields.",
+            "icon": "tabler:layout-kanban"
+          },
+          {
+            "title": "Docs that link",
+            "description": "Write specs and notes that stay connected to the work they describe.",
+            "icon": "tabler:file-text"
+          },
+          {
+            "title": "Roadmaps",
+            "description": "Turn strategy into timelines your whole company can follow.",
+            "icon": "tabler:map"
+          },
+          {
+            "title": "Automations",
+            "description": "Automate the repetitive steps — assignments, status changes, reminders.",
+            "icon": "tabler:bolt"
+          },
+          {
+            "title": "AI summaries",
+            "description": "Catch up on any project with a one-click summary of what changed.",
+            "icon": "tabler:sparkles"
+          },
+          {
+            "title": "Integrations",
+            "description": "Connect GitHub, Slack, Figma and 40+ tools your team already uses.",
+            "icon": "tabler:plug"
           }
         ]
       }
@@ -128,152 +123,137 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "tone": "glow"
+      "widget": "Stats",
+      "wrapper": {
+        "props": {
+          "tone": "glow"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "title": "Teams get more done with Parche",
+        "items": [
           {
-            "widget": "Stats",
-            "props": {
-              "title": "Teams get more done with Parche",
-              "items": [
-                {
-                  "value": "12k+",
-                  "label": "Teams onboarded",
-                  "icon": "tabler:users-group"
-                },
-                {
-                  "value": "38%",
-                  "label": "Less time in meetings",
-                  "icon": "tabler:clock"
-                },
-                {
-                  "value": "4.9/5",
-                  "label": "Average rating",
-                  "icon": "tabler:star"
-                },
-                {
-                  "value": "99.98%",
-                  "label": "Uptime",
-                  "icon": "tabler:server-bolt"
-                }
-              ]
-            }
+            "value": "12k+",
+            "label": "Teams onboarded",
+            "icon": "tabler:users-group"
+          },
+          {
+            "value": "38%",
+            "label": "Less time in meetings",
+            "icon": "tabler:clock"
+          },
+          {
+            "value": "4.9/5",
+            "label": "Average rating",
+            "icon": "tabler:star"
+          },
+          {
+            "value": "99.98%",
+            "label": "Uptime",
+            "icon": "tabler:server-bolt"
           }
         ]
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "how"
+      "widget": "Steps",
+      "wrapper": {
+        "props": {
+          "id": "how"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "timeline",
+        "tagline": "How it works",
+        "title": "Up and running in an afternoon",
+        "image": {
+          "src": "@/assets/images/workflow.svg",
+          "alt": "Parche workflow board"
+        },
+        "items": [
           {
-            "widget": "Steps",
-            "props": {
-              "layout": "timeline",
-              "tagline": "How it works",
-              "title": "Up and running in an afternoon",
-              "image": {
-                "src": "@/assets/images/workflow.svg",
-                "alt": "Parche workflow board"
-              },
-              "items": [
-                {
-                  "title": "Import your work",
-                  "description": "Bring tasks and docs over from Jira, Trello or Notion in a couple of clicks."
-                },
-                {
-                  "title": "Invite your team",
-                  "description": "Set up spaces and permissions, and get everyone in the same place."
-                },
-                {
-                  "title": "Ship",
-                  "description": "Plan, track and release — with automations doing the busywork."
-                }
-              ]
-            }
+            "title": "Import your work",
+            "description": "Bring tasks and docs over from Jira, Trello or Notion in a couple of clicks."
+          },
+          {
+            "title": "Invite your team",
+            "description": "Set up spaces and permissions, and get everyone in the same place."
+          },
+          {
+            "title": "Ship",
+            "description": "Plan, track and release — with automations doing the busywork."
           }
         ]
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "pricing",
-        "tone": "gradient"
+      "widget": "Pricing",
+      "wrapper": {
+        "props": {
+          "id": "pricing",
+          "tone": "gradient"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "tagline": "Pricing",
+        "title": "Simple pricing that scales with you",
+        "subtitle": "Start free. Upgrade when your team grows. Cancel anytime.",
+        "items": [
           {
-            "widget": "Pricing",
-            "props": {
-              "tagline": "Pricing",
-              "title": "Simple pricing that scales with you",
-              "subtitle": "Start free. Upgrade when your team grows. Cancel anytime.",
-              "items": [
-                {
-                  "title": "Free",
-                  "subtitle": "For individuals getting started",
-                  "price": "0",
-                  "period": "/ month",
-                  "features": [
-                    "Up to 3 projects",
-                    "Unlimited docs",
-                    "Community support"
-                  ],
-                  "actions": [
-                    {
-                      "text": "Get started",
-                      "href": "#"
-                    }
-                  ]
-                },
-                {
-                  "title": "Team",
-                  "subtitle": "For growing teams",
-                  "price": "12",
-                  "period": "/ user / month",
-                  "recommended": true,
-                  "badge": "Popular",
-                  "features": [
-                    "Unlimited projects",
-                    "Automations & roadmaps",
-                    "40+ integrations",
-                    "Priority support"
-                  ],
-                  "actions": [
-                    {
-                      "text": "Start free trial",
-                      "href": "#"
-                    }
-                  ]
-                },
-                {
-                  "title": "Enterprise",
-                  "subtitle": "For organizations at scale",
-                  "type": "custom",
-                  "price": "Custom",
-                  "description": "Volume pricing tailored to your organization.",
-                  "features": [
-                    "SSO & SCIM",
-                    "Advanced permissions",
-                    "Dedicated success manager",
-                    "99.99% uptime SLA"
-                  ],
-                  "actions": [
-                    {
-                      "text": "Contact sales",
-                      "href": "#"
-                    }
-                  ]
-                }
-              ]
-            }
+            "title": "Free",
+            "subtitle": "For individuals getting started",
+            "price": "0",
+            "period": "/ month",
+            "features": [
+              "Up to 3 projects",
+              "Unlimited docs",
+              "Community support"
+            ],
+            "actions": [
+              {
+                "text": "Get started",
+                "href": "#"
+              }
+            ]
+          },
+          {
+            "title": "Team",
+            "subtitle": "For growing teams",
+            "price": "12",
+            "period": "/ user / month",
+            "recommended": true,
+            "badge": "Popular",
+            "features": [
+              "Unlimited projects",
+              "Automations & roadmaps",
+              "40+ integrations",
+              "Priority support"
+            ],
+            "actions": [
+              {
+                "text": "Start free trial",
+                "href": "#"
+              }
+            ]
+          },
+          {
+            "title": "Enterprise",
+            "subtitle": "For organizations at scale",
+            "type": "custom",
+            "price": "Custom",
+            "description": "Volume pricing tailored to your organization.",
+            "features": [
+              "SSO & SCIM",
+              "Advanced permissions",
+              "Dedicated success manager",
+              "99.99% uptime SLA"
+            ],
+            "actions": [
+              {
+                "text": "Contact sales",
+                "href": "#"
+              }
+            ]
           }
         ]
       }
@@ -303,67 +283,57 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "faq"
+      "widget": "FAQs",
+      "wrapper": {
+        "props": {
+          "id": "faq"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "tagline": "FAQ",
+        "title": "Questions, answered",
+        "columns": "2",
+        "items": [
           {
-            "widget": "FAQs",
-            "props": {
-              "tagline": "FAQ",
-              "title": "Questions, answered",
-              "columns": "2",
-              "items": [
-                {
-                  "title": "Can I try it before paying?",
-                  "description": "Yes — the Free plan is genuinely free forever, and every paid plan includes a 14-day trial."
-                },
-                {
-                  "title": "Can I import my existing data?",
-                  "description": "Parche imports from Jira, Trello, Asana and Notion, keeping your structure intact."
-                },
-                {
-                  "title": "Is my data secure?",
-                  "description": "Data is encrypted in transit and at rest. Enterprise adds SSO, SCIM and audit logs."
-                },
-                {
-                  "title": "Do you offer discounts?",
-                  "description": "We offer discounts for non-profits, students and annual billing."
-                }
-              ]
-            }
+            "title": "Can I try it before paying?",
+            "description": "Yes — the Free plan is genuinely free forever, and every paid plan includes a 14-day trial."
+          },
+          {
+            "title": "Can I import my existing data?",
+            "description": "Parche imports from Jira, Trello, Asana and Notion, keeping your structure intact."
+          },
+          {
+            "title": "Is my data secure?",
+            "description": "Data is encrypted in transit and at rest. Enterprise adds SSO, SCIM and audit logs."
+          },
+          {
+            "title": "Do you offer discounts?",
+            "description": "We offer discounts for non-profits, students and annual billing."
           }
         ]
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "tone": "glow"
+      "widget": "CallToAction",
+      "wrapper": {
+        "props": {
+          "tone": "glow"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "title": "Bring calm to how your team works",
+        "subtitle": "Join 12,000+ teams shipping better work with Parche. Free to start, no credit card required.",
+        "actions": [
           {
-            "widget": "CallToAction",
-            "props": {
-              "title": "Bring calm to how your team works",
-              "subtitle": "Join 12,000+ teams shipping better work with Parche. Free to start, no credit card required.",
-              "actions": [
-                {
-                  "variant": "primary",
-                  "text": "Start free",
-                  "href": "#",
-                  "icon": "tabler:arrow-right"
-                },
-                {
-                  "variant": "secondary",
-                  "text": "Talk to sales",
-                  "href": "#"
-                }
-              ]
-            }
+            "variant": "primary",
+            "text": "Start free",
+            "href": "#",
+            "icon": "tabler:arrow-right"
+          },
+          {
+            "variant": "secondary",
+            "text": "Talk to sales",
+            "href": "#"
           }
         ]
       }

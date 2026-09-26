@@ -59,10 +59,22 @@
               "align": "start",
               "syncKey": "answers",
               "options": [
-                { "value": "lead", "label": "Yes, and it ships now" },
-                { "value": "prelaunch", "label": "Yes, but not yet" },
-                { "value": "sales", "label": "No, and it ships now" },
-                { "value": "click", "label": "No, and not yet" }
+                {
+                  "value": "lead",
+                  "label": "Yes, and it ships now"
+                },
+                {
+                  "value": "prelaunch",
+                  "label": "Yes, but not yet"
+                },
+                {
+                  "value": "sales",
+                  "label": "No, and it ships now"
+                },
+                {
+                  "value": "click",
+                  "label": "No, and not yet"
+                }
               ]
             },
             "slots": {
@@ -74,7 +86,10 @@
                     "label": "Recommendation",
                     "title": "Lead generation",
                     "description": "The thing exists and you need contact details before the sale. Trade something concrete for an email and keep the form in the first screen.",
-                    "link": { "text": "Open this page", "href": "/landing/lead-generation" }
+                    "link": {
+                      "text": "Open this page",
+                      "href": "/landing/lead-generation"
+                    }
                   }
                 }
               ],
@@ -86,7 +101,10 @@
                     "label": "Recommendation",
                     "title": "Pre-launch / coming soon",
                     "description": "You need email addresses for something that does not exist yet. One field, three honest facts, and a date or a window you will not reset.",
-                    "link": { "text": "Open this page", "href": "/landing/pre-launch" }
+                    "link": {
+                      "text": "Open this page",
+                      "href": "/landing/pre-launch"
+                    }
                   }
                 }
               ],
@@ -103,7 +121,10 @@
                       "A comparing buyer → [product details](/landing/product)",
                       "Recurring → [subscription](/landing/subscription)"
                     ],
-                    "link": { "text": "Open this page", "href": "/landing/sales" }
+                    "link": {
+                      "text": "Open this page",
+                      "href": "/landing/sales"
+                    }
                   }
                 }
               ],
@@ -115,7 +136,10 @@
                     "label": "Recommendation",
                     "title": "Click-through bridge",
                     "description": "Nothing to collect and nothing to buy here: your job is to supply the context the destination lacks, then hand the visitor over.",
-                    "link": { "text": "Open this page", "href": "/landing/click-through" }
+                    "link": {
+                      "text": "Open this page",
+                      "href": "/landing/click-through"
+                    }
                   }
                 }
               ]
@@ -125,170 +149,292 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "matrix",
-        "label": "All eleven"
+      "widget": "Table",
+      "wrapper": {
+        "props": {
+          "id": "matrix",
+          "label": "All eleven"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "title": "All eleven, side by side",
+        "subtitle": "Same seven questions, eleven different answers. This matrix is the fastest way to see what actually makes a type a type.",
+        "size": "sm",
+        "stickyFirst": true,
+        "minWidth": 900,
+        "columns": [
           {
-            "widget": "Table",
-            "props": {
-              "title": "All eleven, side by side",
-              "subtitle": "Same seven questions, eleven different answers. This matrix is the fastest way to see what actually makes a type a type.",
-              "size": "sm",
-              "stickyFirst": true,
-              "minWidth": 900,
-              "columns": [
-                { "label": "Type" },
-                { "label": "Primary action" },
-                { "label": "Form fields" },
-                { "label": "Price on page" },
-                { "label": "Length" },
-                { "label": "Proof needed" },
-                { "label": "Repeat the CTA" },
-                { "label": "One metric" }
-              ],
-              "rows": [
-                { "cells": ["**[Lead generation](/landing/lead-generation)**", "Submit a form", "2 + consent", "No", "Medium", "Logos + 2 quotes", "Twice", "Form completion"] },
-                { "cells": ["**[Long-form sales](/landing/sales)**", "Buy the offer", "0 (checkout)", "Yes, after proof", "Long, nine blocks", "Case study + quotes", "Three times", "Offer click rate"] },
-                { "cells": ["**[Click-through](/landing/click-through)**", "Click through", "0", "No", "Short, 2–3 screens", "1–2 quotes", "Three times, same label", "CTR to destination"] },
-                { "cells": ["**[Product details](/landing/product)**", "Download or buy", "0", "Yes, near the top", "Long, three depths", "Specs + owner quotes", "Twice", "Spec-block reach"] },
-                { "cells": ["**[Pre-launch](/landing/pre-launch)**", "Join the waitlist", "1", "Early price only", "Short", "One real teaser", "Once, in the hero", "Signups per day"] },
-                { "cells": ["**[Subscription](/landing/subscription)**", "Start a plan", "0 (checkout)", "Yes, with a switch", "Medium", "Tenure, not praise", "Twice", "Yearly plan share"] },
-                { "cells": ["**[Free trial](/landing/trial)**", "Create an account", "1 or SSO", "Yes — free, stated", "Medium", "Product tour", "Twice", "Signup → activated"] },
-                { "cells": ["**[Book a demo](/landing/demo)**", "Book a slot", "3, split in steps", "A range, honestly", "Short", "Filtered logos + a face", "Once, the slot picker", "Booked → attended"] },
-                { "cells": ["**[Webinar](/landing/webinar)**", "Register", "1", "Free, or the ticket", "Medium", "Speakers with credentials", "Twice", "Registered → attended"] },
-                { "cells": ["**[Comparison](/landing/comparison)**", "Start a trial", "0", "All three, compared", "Long, one table", "Dated claims", "Twice", "Organic → trial start"] },
-                { "cells": ["**[Thank-you](/landing/thank-you)**", "One next step", "Optional profiling", "No", "Very short", "None needed", "Once, and a referral ask", "Second action taken"] }
-              ]
-            }
+            "label": "Type"
+          },
+          {
+            "label": "Primary action"
+          },
+          {
+            "label": "Form fields"
+          },
+          {
+            "label": "Price on page"
+          },
+          {
+            "label": "Length"
+          },
+          {
+            "label": "Proof needed"
+          },
+          {
+            "label": "Repeat the CTA"
+          },
+          {
+            "label": "One metric"
+          }
+        ],
+        "rows": [
+          {
+            "cells": [
+              "**[Lead generation](/landing/lead-generation)**",
+              "Submit a form",
+              "2 + consent",
+              "No",
+              "Medium",
+              "Logos + 2 quotes",
+              "Twice",
+              "Form completion"
+            ]
+          },
+          {
+            "cells": [
+              "**[Long-form sales](/landing/sales)**",
+              "Buy the offer",
+              "0 (checkout)",
+              "Yes, after proof",
+              "Long, nine blocks",
+              "Case study + quotes",
+              "Three times",
+              "Offer click rate"
+            ]
+          },
+          {
+            "cells": [
+              "**[Click-through](/landing/click-through)**",
+              "Click through",
+              "0",
+              "No",
+              "Short, 2–3 screens",
+              "1–2 quotes",
+              "Three times, same label",
+              "CTR to destination"
+            ]
+          },
+          {
+            "cells": [
+              "**[Product details](/landing/product)**",
+              "Download or buy",
+              "0",
+              "Yes, near the top",
+              "Long, three depths",
+              "Specs + owner quotes",
+              "Twice",
+              "Spec-block reach"
+            ]
+          },
+          {
+            "cells": [
+              "**[Pre-launch](/landing/pre-launch)**",
+              "Join the waitlist",
+              "1",
+              "Early price only",
+              "Short",
+              "One real teaser",
+              "Once, in the hero",
+              "Signups per day"
+            ]
+          },
+          {
+            "cells": [
+              "**[Subscription](/landing/subscription)**",
+              "Start a plan",
+              "0 (checkout)",
+              "Yes, with a switch",
+              "Medium",
+              "Tenure, not praise",
+              "Twice",
+              "Yearly plan share"
+            ]
+          },
+          {
+            "cells": [
+              "**[Free trial](/landing/trial)**",
+              "Create an account",
+              "1 or SSO",
+              "Yes — free, stated",
+              "Medium",
+              "Product tour",
+              "Twice",
+              "Signup → activated"
+            ]
+          },
+          {
+            "cells": [
+              "**[Book a demo](/landing/demo)**",
+              "Book a slot",
+              "3, split in steps",
+              "A range, honestly",
+              "Short",
+              "Filtered logos + a face",
+              "Once, the slot picker",
+              "Booked → attended"
+            ]
+          },
+          {
+            "cells": [
+              "**[Webinar](/landing/webinar)**",
+              "Register",
+              "1",
+              "Free, or the ticket",
+              "Medium",
+              "Speakers with credentials",
+              "Twice",
+              "Registered → attended"
+            ]
+          },
+          {
+            "cells": [
+              "**[Comparison](/landing/comparison)**",
+              "Start a trial",
+              "0",
+              "All three, compared",
+              "Long, one table",
+              "Dated claims",
+              "Twice",
+              "Organic → trial start"
+            ]
+          },
+          {
+            "cells": [
+              "**[Thank-you](/landing/thank-you)**",
+              "One next step",
+              "Optional profiling",
+              "No",
+              "Very short",
+              "None needed",
+              "Once, and a referral ask",
+              "Second action taken"
+            ]
           }
         ]
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "classic",
-        "label": "The classic six",
-        "tone": "surface"
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "id": "classic",
+          "label": "The classic six",
+          "tone": "surface"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "title": "The classic six",
+        "align": "start",
+        "layout": "cards",
+        "columns": "3",
+        "card": "canvas",
+        "items": [
           {
-            "widget": "Features",
-            "props": {
-              "title": "The classic six",
-              "align": "start",
-              "layout": "cards",
-              "columns": "3",
-              "card": "canvas",
-              "items": [
-                {
-                  "eyebrow": "/landing/lead-generation",
-                  "title": "Lead generation",
-                  "description": "Trade something concrete for an email address, and nothing else.",
-                  "footer": "Form completion rate",
-                  "href": "/landing/lead-generation"
-                },
-                {
-                  "eyebrow": "/landing/sales",
-                  "title": "Long-form sales",
-                  "description": "Make the whole argument in order, so the call confirms instead of convincing.",
-                  "footer": "Offer click rate",
-                  "href": "/landing/sales"
-                },
-                {
-                  "eyebrow": "/landing/click-through",
-                  "title": "Click-through bridge",
-                  "description": "Supply the context the checkout lacks, then hand the visitor over.",
-                  "footer": "CTR to destination",
-                  "href": "/landing/click-through"
-                },
-                {
-                  "eyebrow": "/landing/product",
-                  "title": "Product details",
-                  "description": "Inform a comparing buyer completely, organised by depth.",
-                  "footer": "Spec-block reach",
-                  "href": "/landing/product"
-                },
-                {
-                  "eyebrow": "/landing/pre-launch",
-                  "title": "Pre-launch",
-                  "description": "Earn one email with three honest facts: what, when, why now.",
-                  "footer": "Signups per day",
-                  "href": "/landing/pre-launch"
-                },
-                {
-                  "eyebrow": "/landing/subscription",
-                  "title": "Subscription",
-                  "description": "Sell the second month, and make leaving visibly easy.",
-                  "footer": "Yearly plan share",
-                  "href": "/landing/subscription"
-                }
-              ]
-            }
+            "eyebrow": "/landing/lead-generation",
+            "title": "Lead generation",
+            "description": "Trade something concrete for an email address, and nothing else.",
+            "footer": "Form completion rate",
+            "href": "/landing/lead-generation"
+          },
+          {
+            "eyebrow": "/landing/sales",
+            "title": "Long-form sales",
+            "description": "Make the whole argument in order, so the call confirms instead of convincing.",
+            "footer": "Offer click rate",
+            "href": "/landing/sales"
+          },
+          {
+            "eyebrow": "/landing/click-through",
+            "title": "Click-through bridge",
+            "description": "Supply the context the checkout lacks, then hand the visitor over.",
+            "footer": "CTR to destination",
+            "href": "/landing/click-through"
+          },
+          {
+            "eyebrow": "/landing/product",
+            "title": "Product details",
+            "description": "Inform a comparing buyer completely, organised by depth.",
+            "footer": "Spec-block reach",
+            "href": "/landing/product"
+          },
+          {
+            "eyebrow": "/landing/pre-launch",
+            "title": "Pre-launch",
+            "description": "Earn one email with three honest facts: what, when, why now.",
+            "footer": "Signups per day",
+            "href": "/landing/pre-launch"
+          },
+          {
+            "eyebrow": "/landing/subscription",
+            "title": "Subscription",
+            "description": "Sell the second month, and make leaving visibly easy.",
+            "footer": "Yearly plan share",
+            "href": "/landing/subscription"
           }
         ]
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "beyond",
-        "label": "Beyond the classic six"
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "id": "beyond",
+          "label": "Beyond the classic six"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "tagline": "Beyond the classic six",
+        "title": "Five types people actually build in 2026",
+        "subtitle": "The taxonomy everyone teaches was written before self-serve signup, before calendar embeds and before comparison pages became the highest-intent traffic on a SaaS site. These five close that gap.",
+        "align": "start",
+        "layout": "cards",
+        "columns": "3",
+        "items": [
           {
-            "widget": "Features",
-            "props": {
-              "tagline": "Beyond the classic six",
-              "title": "Five types people actually build in 2026",
-              "subtitle": "The taxonomy everyone teaches was written before self-serve signup, before calendar embeds and before comparison pages became the highest-intent traffic on a SaaS site. These five close that gap.",
-              "align": "start",
-              "layout": "cards",
-              "columns": "3",
-              "items": [
-                {
-                  "eyebrow": "/landing/trial",
-                  "title": "Free trial / signup",
-                  "description": "The conversion is an account, not an email: no-card promise, signup in the page, day-14 stated up front.",
-                  "footer": "Signup → activated",
-                  "href": "/landing/trial"
-                },
-                {
-                  "eyebrow": "/landing/demo",
-                  "title": "Book a demo",
-                  "description": "The only type where the form is a qualification instrument. Real slots, two questions, a face.",
-                  "footer": "Slots booked / shown",
-                  "href": "/landing/demo"
-                },
-                {
-                  "eyebrow": "/landing/webinar",
-                  "title": "Webinar / event",
-                  "description": "A dated page with a timezone problem and an afterlife: the same URL becomes the recording.",
-                  "footer": "Registered → attended",
-                  "href": "/landing/webinar"
-                },
-                {
-                  "eyebrow": "/landing/comparison",
-                  "title": "Comparison page",
-                  "description": "Highest organic intent there is, strictest honesty rules. The competitor wins a row, on purpose.",
-                  "footer": "Organic → trial start",
-                  "href": "/landing/comparison"
-                },
-                {
-                  "eyebrow": "/landing/thank-you",
-                  "title": "Thank-you page",
-                  "description": "The missing half of every funnel: deliver, say what comes next, ask once, fire the event.",
-                  "footer": "Second action taken",
-                  "href": "/landing/thank-you"
-                }
-              ]
-            }
+            "eyebrow": "/landing/trial",
+            "title": "Free trial / signup",
+            "description": "The conversion is an account, not an email: no-card promise, signup in the page, day-14 stated up front.",
+            "footer": "Signup → activated",
+            "href": "/landing/trial"
+          },
+          {
+            "eyebrow": "/landing/demo",
+            "title": "Book a demo",
+            "description": "The only type where the form is a qualification instrument. Real slots, two questions, a face.",
+            "footer": "Slots booked / shown",
+            "href": "/landing/demo"
+          },
+          {
+            "eyebrow": "/landing/webinar",
+            "title": "Webinar / event",
+            "description": "A dated page with a timezone problem and an afterlife: the same URL becomes the recording.",
+            "footer": "Registered → attended",
+            "href": "/landing/webinar"
+          },
+          {
+            "eyebrow": "/landing/comparison",
+            "title": "Comparison page",
+            "description": "Highest organic intent there is, strictest honesty rules. The competitor wins a row, on purpose.",
+            "footer": "Organic → trial start",
+            "href": "/landing/comparison"
+          },
+          {
+            "eyebrow": "/landing/thank-you",
+            "title": "Thank-you page",
+            "description": "The missing half of every funnel: deliver, say what comes next, ask once, fire the event.",
+            "footer": "Second action taken",
+            "href": "/landing/thank-you"
           }
         ]
       }

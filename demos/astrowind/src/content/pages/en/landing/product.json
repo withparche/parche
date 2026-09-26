@@ -63,182 +63,162 @@
       }
     },
     {
-      "widget": "Section",
+      "widget": "Callout",
+      "wrapper": {
+        "props": {
+          "id": "why",
+          "label": "Why it works",
+          "spacing": "sm"
+        }
+      },
       "props": {
-        "id": "why",
+        "layout": "inline",
+        "tone": "primary",
         "label": "Why it works",
-        "spacing": "sm"
+        "description": "A product page starts with the product in one sentence and one image. The product on this page is real: the AstroWind template. Everything below is what a buyer would want to know about it."
+      }
+    },
+    {
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "id": "overview",
+          "label": "Overview"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "panels",
+        "align": "start",
+        "columns": "3",
+        "tagline": "Three questions, answered first",
+        "title": "What it is, who it is for, what you need",
+        "subtitle": "A visitor comparing products wants the summary before the detail. Answer what, who and what-do-I-need in the first screen after the hero; the specifications can wait.",
+        "items": [
           {
-            "widget": "Callout",
-            "props": {
-              "layout": "inline",
-              "tone": "primary",
-              "label": "Why it works",
-              "description": "A product page starts with the product in one sentence and one image. The product on this page is real: the AstroWind template. Everything below is what a buyer would want to know about it."
-            }
+            "eyebrow": "What it is",
+            "description": "A free, open-source website template for Astro and Tailwind CSS: pages, widgets, a blog, SEO and image optimisation, ready to customise."
+          },
+          {
+            "eyebrow": "Who it is for",
+            "description": "Developers, studios and small teams who want a fast, well-structured site without designing every section from scratch: startups, SaaS, portfolios, marketing sites, blogs."
+          },
+          {
+            "eyebrow": "What you need",
+            "description": "Node.js 22.22 or newer, a code editor and about ten minutes. No account, no licence key."
           }
         ]
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "overview",
-        "label": "Overview"
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "id": "features",
+          "label": "Features",
+          "tone": "surface"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "cards",
+        "align": "start",
+        "columns": "4",
+        "card": "canvas",
+        "accent": true,
+        "tagline": "Key features",
+        "title": "What it does, in the buyer’s terms",
+        "subtitle": "Described by the outcome each one produces. The exhaustive list lives in the specifications below — this is the layer for a buyer who is still comparing.",
+        "items": [
           {
-            "widget": "Features",
-            "props": {
-              "layout": "panels",
-              "align": "start",
-              "columns": "3",
-              "tagline": "Three questions, answered first",
-              "title": "What it is, who it is for, what you need",
-              "subtitle": "A visitor comparing products wants the summary before the detail. Answer what, who and what-do-I-need in the first screen after the hero; the specifications can wait.",
-              "items": [
-                {
-                  "eyebrow": "What it is",
-                  "description": "A free, open-source website template for Astro and Tailwind CSS: pages, widgets, a blog, SEO and image optimisation, ready to customise."
-                },
-                {
-                  "eyebrow": "Who it is for",
-                  "description": "Developers, studios and small teams who want a fast, well-structured site without designing every section from scratch: startups, SaaS, portfolios, marketing sites, blogs."
-                },
-                {
-                  "eyebrow": "What you need",
-                  "description": "Node.js 22.22 or newer, a code editor and about ten minutes. No account, no licence key."
-                }
-              ]
-            }
+            "eyebrow": "01",
+            "title": "34 widgets, all production-used",
+            "description": "Hero, features, steps, pricing, testimonials, FAQ, stats, contact and more. Every page on this site is built from them, including this one."
+          },
+          {
+            "eyebrow": "02",
+            "title": "A blog that reads like documentation",
+            "description": "Markdown and MDX with a typed schema, categories, tags, RSS and taxonomy pages generated at build time."
+          },
+          {
+            "eyebrow": "03",
+            "title": "Rebrand from one token file",
+            "description": "Light and dark colours, type and radii as CSS variables, shadcn/ui-compatible so external components follow the theme. RTL, metadata, Open Graph images, sitemap and responsive images need no extra setup."
+          },
+          {
+            "eyebrow": "04",
+            "title": "Ready for coding assistants",
+            "description": "An `AGENTS.md` and step-by-step skills, so Claude Code, Codex or Cursor edits the right file the first time instead of rewriting your site."
           }
         ]
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "features",
-        "label": "Features",
-        "tone": "surface"
+      "widget": "Table",
+      "wrapper": {
+        "props": {
+          "id": "specs",
+          "label": "Specifications"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "tagline": "Specifications",
+        "title": "Specs are where trust is won",
+        "subtitle": "The buyer who reads this far is deciding. Give them the exact versions, requirements and contents, in a list they can scan and compare against the alternative.",
+        "link": {
+          "text": "Browse the source on GitHub",
+          "href": "https://github.com/arthelokyo/astrowind"
+        },
+        "header": "none",
+        "columns": [
           {
-            "widget": "Features",
-            "props": {
-              "layout": "cards",
-              "align": "start",
-              "columns": "4",
-              "card": "canvas",
-              "accent": true,
-              "tagline": "Key features",
-              "title": "What it does, in the buyer’s terms",
-              "subtitle": "Described by the outcome each one produces. The exhaustive list lives in the specifications below — this is the layer for a buyer who is still comparing.",
-              "items": [
-                {
-                  "eyebrow": "01",
-                  "title": "34 widgets, all production-used",
-                  "description": "Hero, features, steps, pricing, testimonials, FAQ, stats, contact and more. Every page on this site is built from them, including this one."
-                },
-                {
-                  "eyebrow": "02",
-                  "title": "A blog that reads like documentation",
-                  "description": "Markdown and MDX with a typed schema, categories, tags, RSS and taxonomy pages generated at build time."
-                },
-                {
-                  "eyebrow": "03",
-                  "title": "Rebrand from one token file",
-                  "description": "Light and dark colours, type and radii as CSS variables, shadcn/ui-compatible so external components follow the theme. RTL, metadata, Open Graph images, sitemap and responsive images need no extra setup."
-                },
-                {
-                  "eyebrow": "04",
-                  "title": "Ready for coding assistants",
-                  "description": "An `AGENTS.md` and step-by-step skills, so Claude Code, Codex or Cursor edits the right file the first time instead of rewriting your site."
-                }
-              ]
-            }
+            "label": "Specification",
+            "width": "34%"
+          },
+          {
+            "label": "Value"
           }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "id": "specs",
-        "label": "Specifications"
-      },
-      "slots": {
-        "default": [
+        ],
+        "rows": [
           {
-            "widget": "Table",
-            "props": {
-              "tagline": "Specifications",
-              "title": "Specs are where trust is won",
-              "subtitle": "The buyer who reads this far is deciding. Give them the exact versions, requirements and contents, in a list they can scan and compare against the alternative.",
-              "link": {
-                "text": "Browse the source on GitHub",
-                "href": "https://github.com/arthelokyo/astrowind"
-              },
-              "header": "none",
-              "columns": [
-                {
-                  "label": "Specification",
-                  "width": "34%"
-                },
-                {
-                  "label": "Value"
-                }
-              ],
-              "rows": [
-                {
-                  "cells": [
-                    "Framework",
-                    "Astro 7.x, static output; adapters for on-demand pages"
-                  ]
-                },
-                {
-                  "cells": [
-                    "Styling",
-                    "Tailwind CSS 4, CSS-first config, shadcn/ui-compatible tokens"
-                  ]
-                },
-                {
-                  "cells": [
-                    "Tooling",
-                    "TypeScript, ESLint, Prettier — `npm run check` runs all three"
-                  ]
-                },
-                {
-                  "cells": [
-                    "Content",
-                    "Markdown and MDX with a typed schema; six demo posts"
-                  ]
-                },
-                {
-                  "cells": [
-                    "Pages included",
-                    "8 home demos, 11 landing pages and their hub, about, services, pricing, contact, 404, terms, privacy"
-                  ]
-                },
-                {
-                  "cells": [
-                    "Median page weight",
-                    "38 KB, zero JS on static routes"
-                  ]
-                },
-                {
-                  "cells": [
-                    "Requirements",
-                    "Node.js 22.22+; deploys to any static host, Dockerfile with nginx included"
-                  ]
-                }
-              ]
-            }
+            "cells": [
+              "Framework",
+              "Astro 7.x, static output; adapters for on-demand pages"
+            ]
+          },
+          {
+            "cells": [
+              "Styling",
+              "Tailwind CSS 4, CSS-first config, shadcn/ui-compatible tokens"
+            ]
+          },
+          {
+            "cells": [
+              "Tooling",
+              "TypeScript, ESLint, Prettier — `npm run check` runs all three"
+            ]
+          },
+          {
+            "cells": [
+              "Content",
+              "Markdown and MDX with a typed schema; six demo posts"
+            ]
+          },
+          {
+            "cells": [
+              "Pages included",
+              "8 home demos, 11 landing pages and their hub, about, services, pricing, contact, 404, terms, privacy"
+            ]
+          },
+          {
+            "cells": [
+              "Median page weight",
+              "38 KB, zero JS on static routes"
+            ]
+          },
+          {
+            "cells": [
+              "Requirements",
+              "Node.js 22.22+; deploys to any static host, Dockerfile with nginx included"
+            ]
           }
         ]
       }
@@ -303,137 +283,127 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "compare",
-        "label": "Compared with"
+      "widget": "Table",
+      "wrapper": {
+        "props": {
+          "id": "compare",
+          "label": "Compared with"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "tagline": "Compared with",
+        "title": "The three things a buyer is choosing between",
+        "subtitle": "A comparing buyer is already comparing — doing it for them, honestly, keeps them on the page instead of in a search tab.",
+        "columns": [
           {
-            "widget": "Table",
-            "props": {
-              "tagline": "Compared with",
-              "title": "The three things a buyer is choosing between",
-              "subtitle": "A comparing buyer is already comparing — doing it for them, honestly, keeps them on the page instead of in a search tab.",
-              "columns": [
-                {
-                  "label": ""
-                },
-                {
-                  "label": "This template",
-                  "highlight": true
-                },
-                {
-                  "label": "Paid theme"
-                },
-                {
-                  "label": "Site builder"
-                }
-              ],
-              "rows": [
-                {
-                  "cells": [
-                    "Price",
-                    {
-                      "text": "Free, MIT",
-                      "tone": "success"
-                    },
-                    "$49–$99 once",
-                    "$16–$49 / month"
-                  ]
-                },
-                {
-                  "cells": [
-                    "You own the code",
-                    {
-                      "text": "Yes",
-                      "tone": "success"
-                    },
-                    "Licence-bound",
-                    "No, export only"
-                  ]
-                },
-                {
-                  "cells": [
-                    "Median page weight",
-                    {
-                      "text": "38 KB",
-                      "tone": "success"
-                    },
-                    "180–400 KB",
-                    "600 KB+"
-                  ]
-                },
-                {
-                  "cells": [
-                    "Editing without a developer",
-                    {
-                      "text": "Markdown or a CMS adapter",
-                      "tone": "muted"
-                    },
-                    "Depends on the theme",
-                    {
-                      "text": "Its strongest point",
-                      "tone": "default"
-                    }
-                  ]
-                },
-                {
-                  "cells": [
-                    "Support",
-                    {
-                      "text": "Community, public issues",
-                      "tone": "muted"
-                    },
-                    "Author, usually email",
-                    "Paid, with an SLA"
-                  ]
-                }
-              ],
-              "note": "If you need someone to edit the site with no developer nearby, a builder is genuinely the better answer. Saying so is what makes the other four rows believable."
-            }
+            "label": ""
+          },
+          {
+            "label": "This template",
+            "highlight": true
+          },
+          {
+            "label": "Paid theme"
+          },
+          {
+            "label": "Site builder"
           }
-        ]
+        ],
+        "rows": [
+          {
+            "cells": [
+              "Price",
+              {
+                "text": "Free, MIT",
+                "tone": "success"
+              },
+              "$49–$99 once",
+              "$16–$49 / month"
+            ]
+          },
+          {
+            "cells": [
+              "You own the code",
+              {
+                "text": "Yes",
+                "tone": "success"
+              },
+              "Licence-bound",
+              "No, export only"
+            ]
+          },
+          {
+            "cells": [
+              "Median page weight",
+              {
+                "text": "38 KB",
+                "tone": "success"
+              },
+              "180–400 KB",
+              "600 KB+"
+            ]
+          },
+          {
+            "cells": [
+              "Editing without a developer",
+              {
+                "text": "Markdown or a CMS adapter",
+                "tone": "muted"
+              },
+              "Depends on the theme",
+              {
+                "text": "Its strongest point",
+                "tone": "default"
+              }
+            ]
+          },
+          {
+            "cells": [
+              "Support",
+              {
+                "text": "Community, public issues",
+                "tone": "muted"
+              },
+              "Author, usually email",
+              "Paid, with an SLA"
+            ]
+          }
+        ],
+        "note": "If you need someone to edit the site with no developer nearby, a builder is genuinely the better answer. Saying so is what makes the other four rows believable."
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "get",
-        "label": "Getting started",
-        "tone": "surface"
+      "widget": "Steps",
+      "wrapper": {
+        "props": {
+          "id": "get",
+          "label": "Getting started",
+          "tone": "surface"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "numbered",
+        "title": "From download to a running site in three steps",
+        "subtitle": "A product page should show the first minutes of ownership. Fewer surprises after the purchase, fewer returns.",
+        "actions": [
           {
-            "widget": "Steps",
-            "props": {
-              "layout": "numbered",
-              "title": "From download to a running site in three steps",
-              "subtitle": "A product page should show the first minutes of ownership. Fewer surprises after the purchase, fewer returns.",
-              "actions": [
-                {
-                  "variant": "primary",
-                  "text": "Get the template",
-                  "href": "https://github.com/arthelokyo/astrowind"
-                }
-              ],
-              "items": [
-                {
-                  "title": "Create the project",
-                  "description": "Run `npm create astro@latest -- --template arthelokyo/astrowind`, then `npm install` and `npm run dev`."
-                },
-                {
-                  "title": "Make it yours",
-                  "description": "Name, URL and metadata in one config file; colours and fonts in one styles file; replace the logo."
-                },
-                {
-                  "title": "Build and deploy",
-                  "description": "`npm run build` produces a static folder for Vercel, Netlify, Cloudflare, GitHub Pages or your own server."
-                }
-              ]
-            }
+            "variant": "primary",
+            "text": "Get the template",
+            "href": "https://github.com/arthelokyo/astrowind"
+          }
+        ],
+        "items": [
+          {
+            "title": "Create the project",
+            "description": "Run `npm create astro@latest -- --template arthelokyo/astrowind`, then `npm install` and `npm run dev`."
+          },
+          {
+            "title": "Make it yours",
+            "description": "Name, URL and metadata in one config file; colours and fonts in one styles file; replace the logo."
+          },
+          {
+            "title": "Build and deploy",
+            "description": "`npm run build` produces a static folder for Vercel, Netlify, Cloudflare, GitHub Pages or your own server."
           }
         ]
       }
@@ -492,41 +462,36 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "reviews",
-        "label": "Proof",
-        "tone": "surface"
+      "widget": "Testimonials",
+      "wrapper": {
+        "props": {
+          "id": "reviews",
+          "label": "Proof",
+          "tone": "surface"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "tagline": "Proof",
+        "title": "What owners say goes here",
+        "subtitle": "Placeholders on purpose. On a product page, quotes should mention concrete use: what was built, how long it took, what surprised them.",
+        "items": [
           {
-            "widget": "Testimonials",
-            "props": {
-              "tagline": "Proof",
-              "title": "What owners say goes here",
-              "subtitle": "Placeholders on purpose. On a product page, quotes should mention concrete use: what was built, how long it took, what surprised them.",
-              "items": [
-                {
-                  "text": "A quote naming what the customer built with the product and how long it took them.",
-                  "name": "Customer name",
-                  "role": "Role, company (sample testimonial)"
-                },
-                {
-                  "text": "A quote about a specification that mattered: a requirement met, a limit that was not a problem.",
-                  "name": "Customer name",
-                  "role": "Role, company (sample testimonial)"
-                },
-                {
-                  "text": "A short one comparing it with the alternative the customer considered.",
-                  "name": "Customer name",
-                  "role": "Role, company (sample testimonial)"
-                }
-              ],
-              "note": "Replace each with a real quote you can link to: name, role, date and where it was said."
-            }
+            "text": "A quote naming what the customer built with the product and how long it took them.",
+            "name": "Customer name",
+            "role": "Role, company (sample testimonial)"
+          },
+          {
+            "text": "A quote about a specification that mattered: a requirement met, a limit that was not a problem.",
+            "name": "Customer name",
+            "role": "Role, company (sample testimonial)"
+          },
+          {
+            "text": "A short one comparing it with the alternative the customer considered.",
+            "name": "Customer name",
+            "role": "Role, company (sample testimonial)"
           }
-        ]
+        ],
+        "note": "Replace each with a real quote you can link to: name, role, date and where it was said."
       }
     },
     {
@@ -602,35 +567,30 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "close",
-        "label": "Get the template",
-        "tone": "surface"
+      "widget": "CallToAction",
+      "wrapper": {
+        "props": {
+          "id": "close",
+          "label": "Get the template",
+          "tone": "surface"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "closing",
+        "size": "md",
+        "title": "Get the product this page describes",
+        "subtitle": "This page is part of the free AstroWind template: Astro + Tailwind CSS, every block a reusable widget. Download it, replace the product, keep the three depths.",
+        "actions": [
           {
-            "widget": "CallToAction",
-            "props": {
-              "layout": "closing",
-              "size": "md",
-              "title": "Get the product this page describes",
-              "subtitle": "This page is part of the free AstroWind template: Astro + Tailwind CSS, every block a reusable widget. Download it, replace the product, keep the three depths.",
-              "actions": [
-                {
-                  "variant": "primary",
-                  "text": "Get the template",
-                  "href": "https://github.com/arthelokyo/astrowind",
-                  "icon": "tabler:download"
-                },
-                {
-                  "variant": "secondary",
-                  "text": "Read the guide",
-                  "href": "/landing"
-                }
-              ]
-            }
+            "variant": "primary",
+            "text": "Get the template",
+            "href": "https://github.com/arthelokyo/astrowind",
+            "icon": "tabler:download"
+          },
+          {
+            "variant": "secondary",
+            "text": "Read the guide",
+            "href": "/landing"
           }
         ]
       }

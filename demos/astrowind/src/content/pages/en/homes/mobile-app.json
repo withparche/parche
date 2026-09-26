@@ -110,39 +110,34 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "screens",
-        "label": "Screens",
-        "tone": "surface"
+      "widget": "Gallery",
+      "wrapper": {
+        "props": {
+          "id": "screens",
+          "label": "Screens",
+          "tone": "surface"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "title": "Every screen, captioned",
+        "subtitle": "An app page sells the screens. These are real, including the first-night empty state nobody likes to show.",
+        "ratio": "9/16",
+        "lightbox": false,
+        "items": [
           {
-            "widget": "Gallery",
-            "props": {
-              "title": "Every screen, captioned",
-              "subtitle": "An app page sells the screens. These are real, including the first-night empty state nobody likes to show.",
-              "ratio": "9/16",
-              "lightbox": false,
-              "items": [
-                {
-                  "caption": "tonight · recording"
-                },
-                {
-                  "caption": "morning report"
-                },
-                {
-                  "caption": "week trend"
-                },
-                {
-                  "caption": "noise events"
-                },
-                {
-                  "caption": "first night · empty state"
-                }
-              ]
-            }
+            "caption": "tonight · recording"
+          },
+          {
+            "caption": "morning report"
+          },
+          {
+            "caption": "week trend"
+          },
+          {
+            "caption": "noise events"
+          },
+          {
+            "caption": "first night · empty state"
           }
         ]
       }
@@ -175,191 +170,181 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "data",
-        "label": "Your data",
-        "tone": "surface"
+      "widget": "Table",
+      "wrapper": {
+        "props": {
+          "id": "data",
+          "label": "Your data",
+          "tone": "surface"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "tagline": "Your data",
+        "title": "The table both app stores now ask for",
+        "subtitle": "Stating it on the website, not only in the store listing, is the whole point.",
+        "columns": [
           {
-            "widget": "Table",
-            "props": {
-              "tagline": "Your data",
-              "title": "The table both app stores now ask for",
-              "subtitle": "Stating it on the website, not only in the store listing, is the whole point.",
-              "columns": [
-                {
-                  "label": "Data"
-                },
-                {
-                  "label": "Collected"
-                },
-                {
-                  "label": "Leaves the device"
-                },
-                {
-                  "label": "Linked to you"
-                }
-              ],
-              "rows": [
-                {
-                  "cells": [
-                    "Audio while recording",
-                    {
-                      "text": "Analysed, never stored",
-                      "tone": "muted"
-                    },
-                    {
-                      "text": "**No**",
-                      "tone": "success"
-                    },
-                    {
-                      "text": "No",
-                      "tone": "muted"
-                    }
-                  ]
-                },
-                {
-                  "cells": [
-                    "Movement",
-                    {
-                      "text": "Yes, on device",
-                      "tone": "muted"
-                    },
-                    {
-                      "text": "**No**",
-                      "tone": "success"
-                    },
-                    {
-                      "text": "No",
-                      "tone": "muted"
-                    }
-                  ]
-                },
-                {
-                  "cells": [
-                    "Crash reports",
-                    {
-                      "text": "Only if you opt in",
-                      "tone": "muted"
-                    },
-                    {
-                      "text": "Yes, when opted in",
-                      "tone": "muted"
-                    },
-                    {
-                      "text": "No",
-                      "tone": "muted"
-                    }
-                  ]
-                },
-                {
-                  "cells": [
-                    "Purchase receipt",
-                    {
-                      "text": "By the store, not us",
-                      "tone": "muted"
-                    },
-                    {
-                      "text": "Store only",
-                      "tone": "muted"
-                    },
-                    {
-                      "text": "By the store",
-                      "tone": "muted"
-                    }
-                  ]
-                }
-              ],
-              "note": "No advertising SDK, no analytics by default, and no third party in the list because there is no third party. [Read the full policy](/privacy) — it is two pages.",
-              "frame": "card",
-              "variant": "canvas",
-              "minWidth": 620
-            }
+            "label": "Data"
+          },
+          {
+            "label": "Collected"
+          },
+          {
+            "label": "Leaves the device"
+          },
+          {
+            "label": "Linked to you"
           }
-        ]
+        ],
+        "rows": [
+          {
+            "cells": [
+              "Audio while recording",
+              {
+                "text": "Analysed, never stored",
+                "tone": "muted"
+              },
+              {
+                "text": "**No**",
+                "tone": "success"
+              },
+              {
+                "text": "No",
+                "tone": "muted"
+              }
+            ]
+          },
+          {
+            "cells": [
+              "Movement",
+              {
+                "text": "Yes, on device",
+                "tone": "muted"
+              },
+              {
+                "text": "**No**",
+                "tone": "success"
+              },
+              {
+                "text": "No",
+                "tone": "muted"
+              }
+            ]
+          },
+          {
+            "cells": [
+              "Crash reports",
+              {
+                "text": "Only if you opt in",
+                "tone": "muted"
+              },
+              {
+                "text": "Yes, when opted in",
+                "tone": "muted"
+              },
+              {
+                "text": "No",
+                "tone": "muted"
+              }
+            ]
+          },
+          {
+            "cells": [
+              "Purchase receipt",
+              {
+                "text": "By the store, not us",
+                "tone": "muted"
+              },
+              {
+                "text": "Store only",
+                "tone": "muted"
+              },
+              {
+                "text": "By the store",
+                "tone": "muted"
+              }
+            ]
+          }
+        ],
+        "note": "No advertising SDK, no analytics by default, and no third party in the list because there is no third party. [Read the full policy](/privacy) — it is two pages.",
+        "frame": "card",
+        "variant": "canvas",
+        "minWidth": 620
       }
     },
     {
-      "widget": "Section",
+      "widget": "Columns",
+      "wrapper": {
+        "props": {
+          "id": "price",
+          "label": "Price"
+        }
+      },
       "props": {
-        "id": "price",
-        "label": "Price"
+        "ratio": "wide-start",
+        "gap": "sm",
+        "align": "stretch"
       },
       "slots": {
         "default": [
           {
-            "widget": "Columns",
-            "props": {
-              "ratio": "wide-start",
-              "gap": "sm",
-              "align": "stretch"
-            },
+            "widget": "Column",
             "slots": {
               "default": [
                 {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
+                  "widget": "Pricing",
+                  "props": {
+                    "items": [
                       {
-                        "widget": "Pricing",
-                        "props": {
-                          "items": [
-                            {
-                              "title": "Free",
-                              "price": "0",
-                              "currency": "$",
-                              "features": [
-                                "Nightly tracking and morning report",
-                                "Seven days of history",
-                                "No ads, ever"
-                              ]
-                            },
-                            {
-                              "title": "One-time unlock",
-                              "price": "24",
-                              "currency": "$",
-                              "suffix": "once",
-                              "note": "Not a subscription. We do not want your sleep on a monthly plan.",
-                              "noteTone": "success",
-                              "recommended": true,
-                              "features": [
-                                "Unlimited history and trends",
-                                "CSV and Apple Health export",
-                                "Noise events with timestamps",
-                                "Every future update included"
-                              ],
-                              "actions": [
-                                {
-                                  "variant": "primary",
-                                  "text": "Unlock in the app",
-                                  "href": "/homes/mobile-app#download"
-                                }
-                              ]
-                            }
-                          ]
-                        }
+                        "title": "Free",
+                        "price": "0",
+                        "currency": "$",
+                        "features": [
+                          "Nightly tracking and morning report",
+                          "Seven days of history",
+                          "No ads, ever"
+                        ]
+                      },
+                      {
+                        "title": "One-time unlock",
+                        "price": "24",
+                        "currency": "$",
+                        "suffix": "once",
+                        "note": "Not a subscription. We do not want your sleep on a monthly plan.",
+                        "noteTone": "success",
+                        "recommended": true,
+                        "features": [
+                          "Unlimited history and trends",
+                          "CSV and Apple Health export",
+                          "Noise events with timestamps",
+                          "Every future update included"
+                        ],
+                        "actions": [
+                          {
+                            "variant": "primary",
+                            "text": "Unlock in the app",
+                            "href": "/homes/mobile-app#download"
+                          }
+                        ]
                       }
                     ]
                   }
-                },
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Column",
+            "slots": {
+              "default": [
                 {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
-                      {
-                        "widget": "Callout",
-                        "props": {
-                          "tone": "neutral",
-                          "layout": "card",
-                          "label": "Refunds",
-                          "title": "Fourteen days, through the store",
-                          "description": "Ask the store or write to us and we will do it for you. No form, no reason required, and no dark pattern between you and the button."
-                        }
-                      }
-                    ]
+                  "widget": "Callout",
+                  "props": {
+                    "tone": "neutral",
+                    "layout": "card",
+                    "label": "Refunds",
+                    "title": "Fourteen days, through the store",
+                    "description": "Ask the store or write to us and we will do it for you. No form, no reason required, and no dark pattern between you and the button."
                   }
                 }
               ]
@@ -369,37 +354,32 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "download",
-        "label": "Download",
-        "tone": "surface"
+      "widget": "CallToAction",
+      "wrapper": {
+        "props": {
+          "id": "download",
+          "label": "Download",
+          "tone": "surface"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "closing",
+        "size": "lg",
+        "title": "Try it tonight",
+        "subtitle": "Free to install, no account, and the first report arrives with your alarm.",
+        "actions": [
           {
-            "widget": "CallToAction",
-            "props": {
-              "layout": "closing",
-              "size": "lg",
-              "title": "Try it tonight",
-              "subtitle": "Free to install, no account, and the first report arrives with your alarm.",
-              "actions": [
-                {
-                  "variant": "contrast",
-                  "text": "App Store",
-                  "href": "/homes/mobile-app#download"
-                },
-                {
-                  "variant": "contrast",
-                  "text": "Google Play",
-                  "href": "/homes/mobile-app#download"
-                }
-              ],
-              "note": "On a desktop? The link sends the store page to your phone instead."
-            }
+            "variant": "contrast",
+            "text": "App Store",
+            "href": "/homes/mobile-app#download"
+          },
+          {
+            "variant": "contrast",
+            "text": "Google Play",
+            "href": "/homes/mobile-app#download"
           }
-        ]
+        ],
+        "note": "On a desktop? The link sends the store page to your phone instead."
       }
     }
   ]

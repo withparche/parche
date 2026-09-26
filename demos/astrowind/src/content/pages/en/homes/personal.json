@@ -41,294 +41,148 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "work",
-        "tone": "surface"
+      "widget": "Cases",
+      "wrapper": {
+        "props": {
+          "id": "work",
+          "tone": "surface"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "title": "Three projects, with the result stated first",
+        "items": [
           {
-            "widget": "Cases",
-            "props": {
-              "title": "Three projects, with the result stated first",
-              "items": [
-                {
-                  "client": "GreenVogue",
-                  "sector": "fashion e-commerce",
-                  "title": "A checkout that stopped apologising for itself",
-                  "description": "Identity, product photography direction and a friendlier checkout. Measured ninety days after launch against the previous quarter.",
-                  "caption": "identity system · 900×600",
-                  "results": [
-                    {
-                      "value": "+24%",
-                      "label": "conversion",
-                      "tone": "success"
-                    }
-                  ],
-                  "footer": "6 weeks · with their two developers"
-                },
-                {
-                  "client": "ArtWave Fusion",
-                  "sector": "music festival",
-                  "title": "One typographic system, forty-two artists",
-                  "description": "A poster kit the organisers filled in themselves for every act, without my involvement after week three. Two weeks earlier than the previous edition.",
-                  "caption": "poster series · 900×600",
-                  "results": [
-                    {
-                      "value": "Sold out",
-                      "label": "in 11 days",
-                      "tone": "success"
-                    }
-                  ],
-                  "footer": "3 weeks · kit handed over in Figma"
-                },
-                {
-                  "client": "Tramline",
-                  "sector": "early-stage fund",
-                  "title": "An identity that works at 16 pixels",
-                  "description": "Mark, palette, stationery and the web tokens. Designed from the favicon outwards, which is the size it is seen at most.",
-                  "caption": "brand kit · 900×600",
-                  "results": [
-                    {
-                      "value": "3",
-                      "label": "design awards",
-                      "tone": "success"
-                    }
-                  ],
-                  "footer": "5 weeks · tokens shipped as CSS variables"
-                }
-              ],
-              "layout": "rows",
-              "results": "top"
-            }
+            "client": "GreenVogue",
+            "sector": "fashion e-commerce",
+            "title": "A checkout that stopped apologising for itself",
+            "description": "Identity, product photography direction and a friendlier checkout. Measured ninety days after launch against the previous quarter.",
+            "caption": "identity system · 900×600",
+            "results": [
+              {
+                "value": "+24%",
+                "label": "conversion",
+                "tone": "success"
+              }
+            ],
+            "footer": "6 weeks · with their two developers"
+          },
+          {
+            "client": "ArtWave Fusion",
+            "sector": "music festival",
+            "title": "One typographic system, forty-two artists",
+            "description": "A poster kit the organisers filled in themselves for every act, without my involvement after week three. Two weeks earlier than the previous edition.",
+            "caption": "poster series · 900×600",
+            "results": [
+              {
+                "value": "Sold out",
+                "label": "in 11 days",
+                "tone": "success"
+              }
+            ],
+            "footer": "3 weeks · kit handed over in Figma"
+          },
+          {
+            "client": "Tramline",
+            "sector": "early-stage fund",
+            "title": "An identity that works at 16 pixels",
+            "description": "Mark, palette, stationery and the web tokens. Designed from the favicon outwards, which is the size it is seen at most.",
+            "caption": "brand kit · 900×600",
+            "results": [
+              {
+                "value": "3",
+                "label": "design awards",
+                "tone": "success"
+              }
+            ],
+            "footer": "5 weeks · tokens shipped as CSS variables"
           }
-        ]
+        ],
+        "layout": "rows",
+        "results": "top"
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "spacing": "sm"
+      "widget": "Brands",
+      "wrapper": {
+        "props": {
+          "spacing": "sm"
+        }
       },
-      "slots": {
-        "default": [
-          {
-            "widget": "Brands",
-            "props": {
-              "layout": "strip",
-              "label": "Clients since 2018",
-              "names": [
-                "GreenVogue",
-                "ArtWave",
-                "Tramline",
-                "Quietmile",
-                "Höok",
-                "Ferrolab"
-              ],
-              "note": "19 identity systems · 6 of them for software"
-            }
-          }
-        ]
+      "props": {
+        "layout": "strip",
+        "label": "Clients since 2018",
+        "names": [
+          "GreenVogue",
+          "ArtWave",
+          "Tramline",
+          "Quietmile",
+          "Höok",
+          "Ferrolab"
+        ],
+        "note": "19 identity systems · 6 of them for software"
       }
     },
     {
-      "widget": "Section",
+      "widget": "Columns",
+      "wrapper": {
+        "props": {
+          "id": "about"
+        }
+      },
       "props": {
-        "id": "about"
+        "ratio": "equal",
+        "gap": "lg",
+        "align": "start"
       },
       "slots": {
         "default": [
           {
-            "widget": "Columns",
-            "props": {
-              "ratio": "equal",
-              "gap": "lg",
-              "align": "start"
-            },
+            "widget": "Column",
             "slots": {
               "default": [
                 {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
-                      {
-                        "widget": "Screenshot",
-                        "props": {
-                          "caption": "portrait · 800×1000",
-                          "ratio": "4/5",
-                          "frame": false
-                        }
-                      }
-                    ]
-                  }
-                },
-                {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
-                      {
-                        "widget": "Features",
-                        "props": {
-                          "layout": "rows",
-                          "align": "start",
-                          "title": "What I am actually good at",
-                          "subtitle": "Adjectives are free, so here is each skill with the thing it produced. If a client needs illustration or motion, I say so and recommend someone.",
-                          "items": [
-                            {
-                              "title": "Identity systems",
-                              "aside": "19 shipped since 2018"
-                            },
-                            {
-                              "title": "Design tokens and handover",
-                              "aside": "CSS variables, not a PDF"
-                            },
-                            {
-                              "title": "Typography and print",
-                              "aside": "42-poster series, no reprints"
-                            },
-                            {
-                              "title": "Working with developers",
-                              "aside": "I open pull requests"
-                            },
-                            {
-                              "title": "Illustration and motion",
-                              "aside": "Not me — I will refer you",
-                              "tone": "muted"
-                            }
-                          ]
-                        }
-                      }
-                    ]
+                  "widget": "Screenshot",
+                  "props": {
+                    "caption": "portrait · 800×1000",
+                    "ratio": "4/5",
+                    "frame": false
                   }
                 }
               ]
             }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "tone": "surface"
-      },
-      "slots": {
-        "default": [
+          },
           {
-            "widget": "Testimonials",
-            "props": {
-              "items": [
-                {
-                  "text": "She handed over tokens our developers merged the same week. No PDF, no guessing, no follow-up invoice.",
-                  "name": "Mark Thompson",
-                  "role": "Creative director, GreenVogue",
-                  "date": "11 Jun 2026",
-                  "source": "on LinkedIn",
-                  "href": "#source"
-                },
-                {
-                  "text": "We produced posters for forty-two acts ourselves after she left. That was the point, and almost nobody delivers it.",
-                  "name": "Laura Simmons",
-                  "role": "Director, ArtWave Fusion",
-                  "date": "3 Sep 2026",
-                  "source": "festival blog",
-                  "href": "#source"
-                }
-              ],
-              "note": "Two quotes, both linked to where they were said. Seven unverifiable ones in a row read as decoration.",
-              "avatars": false
-            }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "id": "cv",
-        "tone": "surface"
-      },
-      "slots": {
-        "default": [
-          {
-            "widget": "Columns",
-            "props": {
-              "ratio": "equal",
-              "gap": "lg",
-              "align": "start"
-            },
+            "widget": "Column",
             "slots": {
               "default": [
                 {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
+                  "widget": "Features",
+                  "props": {
+                    "layout": "rows",
+                    "align": "start",
+                    "title": "What I am actually good at",
+                    "subtitle": "Adjectives are free, so here is each skill with the thing it produced. If a client needs illustration or motion, I say so and recommend someone.",
+                    "items": [
                       {
-                        "widget": "Features",
-                        "props": {
-                          "layout": "rows",
-                          "align": "start",
-                          "tagline": "Experience",
-                          "title": "Eight years, three places",
-                          "items": [
-                            {
-                              "title": "Independent · brand design",
-                              "aside": "2023 — now",
-                              "description": "New York, remote. Nineteen identity systems, six for software companies. Two studios retain me white-label."
-                            },
-                            {
-                              "title": "Senior designer · ABC Design Studio",
-                              "aside": "2021 — 2023",
-                              "description": "Led four rebrands and built the studio’s first token-based handover process, which is still in use."
-                            },
-                            {
-                              "title": "Junior designer · XYZ Creative",
-                              "aside": "2018 — 2021",
-                              "description": "Los Angeles. Campaign collateral and packaging, and where I learned to work to a press deadline."
-                            }
-                          ]
-                        }
-                      }
-                    ]
-                  }
-                },
-                {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
+                        "title": "Identity systems",
+                        "aside": "19 shipped since 2018"
+                      },
                       {
-                        "widget": "Features",
-                        "props": {
-                          "layout": "rows",
-                          "align": "start",
-                          "tagline": "Education & teaching",
-                          "title": "Trained, and still teaching",
-                          "items": [
-                            {
-                              "title": "MFA, Graphic Design",
-                              "aside": "2018 — 2020",
-                              "description": "NYU School of Design. Thesis on variable type in identity systems."
-                            },
-                            {
-                              "title": "BA, Graphic Design",
-                              "aside": "2014 — 2018",
-                              "description": "NYU School of Design."
-                            },
-                            {
-                              "title": "Visiting critic · SVA",
-                              "aside": "2024 — now",
-                              "description": "Identity systems, spring semester. Twelve students a year, and the best reason I have to keep my own process tidy."
-                            }
-                          ],
-                          "actions": [
-                            {
-                              "variant": "secondary",
-                              "text": "Download the one-page CV ↓",
-                              "href": "/homes/personal#cv"
-                            }
-                          ]
-                        }
+                        "title": "Design tokens and handover",
+                        "aside": "CSS variables, not a PDF"
+                      },
+                      {
+                        "title": "Typography and print",
+                        "aside": "42-poster series, no reprints"
+                      },
+                      {
+                        "title": "Working with developers",
+                        "aside": "I open pull requests"
+                      },
+                      {
+                        "title": "Illustration and motion",
+                        "aside": "Not me — I will refer you",
+                        "tone": "muted"
                       }
                     ]
                   }
@@ -340,48 +194,164 @@
       }
     },
     {
-      "widget": "Section",
+      "widget": "Testimonials",
+      "wrapper": {
+        "props": {
+          "tone": "surface"
+        }
+      },
       "props": {
-        "id": "gallery"
+        "items": [
+          {
+            "text": "She handed over tokens our developers merged the same week. No PDF, no guessing, no follow-up invoice.",
+            "name": "Mark Thompson",
+            "role": "Creative director, GreenVogue",
+            "date": "11 Jun 2026",
+            "source": "on LinkedIn",
+            "href": "#source"
+          },
+          {
+            "text": "We produced posters for forty-two acts ourselves after she left. That was the point, and almost nobody delivers it.",
+            "name": "Laura Simmons",
+            "role": "Director, ArtWave Fusion",
+            "date": "3 Sep 2026",
+            "source": "festival blog",
+            "href": "#source"
+          }
+        ],
+        "note": "Two quotes, both linked to where they were said. Seven unverifiable ones in a row read as decoration.",
+        "avatars": false
+      }
+    },
+    {
+      "widget": "Columns",
+      "wrapper": {
+        "props": {
+          "id": "cv",
+          "tone": "surface"
+        }
+      },
+      "props": {
+        "ratio": "equal",
+        "gap": "lg",
+        "align": "start"
       },
       "slots": {
         "default": [
           {
-            "widget": "Gallery",
-            "props": {
-              "tagline": "Gallery",
-              "title": "Eight pieces, including the rejected ones",
-              "subtitle": "Click any image. The wall of routes that did not get chosen is the one people ask about most.",
-              "hint": "← → to move · Esc to close",
-              "layout": "grid",
-              "ratio": "4/3",
-              "items": [
+            "widget": "Column",
+            "slots": {
+              "default": [
                 {
-                  "caption": "GreenVogue · packaging system"
-                },
-                {
-                  "caption": "GreenVogue · checkout screens"
-                },
-                {
-                  "caption": "ArtWave · poster 14 of 42"
-                },
-                {
-                  "caption": "ArtWave · programme spreads"
-                },
-                {
-                  "caption": "Tramline · mark at 16px and 400px"
-                },
-                {
-                  "caption": "Tramline · stationery"
-                },
-                {
-                  "caption": "Quietmile · wayfinding test print"
-                },
-                {
-                  "caption": "Studio wall · rejected routes"
+                  "widget": "Features",
+                  "props": {
+                    "layout": "rows",
+                    "align": "start",
+                    "tagline": "Experience",
+                    "title": "Eight years, three places",
+                    "items": [
+                      {
+                        "title": "Independent · brand design",
+                        "aside": "2023 — now",
+                        "description": "New York, remote. Nineteen identity systems, six for software companies. Two studios retain me white-label."
+                      },
+                      {
+                        "title": "Senior designer · ABC Design Studio",
+                        "aside": "2021 — 2023",
+                        "description": "Led four rebrands and built the studio’s first token-based handover process, which is still in use."
+                      },
+                      {
+                        "title": "Junior designer · XYZ Creative",
+                        "aside": "2018 — 2021",
+                        "description": "Los Angeles. Campaign collateral and packaging, and where I learned to work to a press deadline."
+                      }
+                    ]
+                  }
                 }
               ]
             }
+          },
+          {
+            "widget": "Column",
+            "slots": {
+              "default": [
+                {
+                  "widget": "Features",
+                  "props": {
+                    "layout": "rows",
+                    "align": "start",
+                    "tagline": "Education & teaching",
+                    "title": "Trained, and still teaching",
+                    "items": [
+                      {
+                        "title": "MFA, Graphic Design",
+                        "aside": "2018 — 2020",
+                        "description": "NYU School of Design. Thesis on variable type in identity systems."
+                      },
+                      {
+                        "title": "BA, Graphic Design",
+                        "aside": "2014 — 2018",
+                        "description": "NYU School of Design."
+                      },
+                      {
+                        "title": "Visiting critic · SVA",
+                        "aside": "2024 — now",
+                        "description": "Identity systems, spring semester. Twelve students a year, and the best reason I have to keep my own process tidy."
+                      }
+                    ],
+                    "actions": [
+                      {
+                        "variant": "secondary",
+                        "text": "Download the one-page CV ↓",
+                        "href": "/homes/personal#cv"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Gallery",
+      "wrapper": {
+        "props": {
+          "id": "gallery"
+        }
+      },
+      "props": {
+        "tagline": "Gallery",
+        "title": "Eight pieces, including the rejected ones",
+        "subtitle": "Click any image. The wall of routes that did not get chosen is the one people ask about most.",
+        "hint": "← → to move · Esc to close",
+        "layout": "grid",
+        "ratio": "4/3",
+        "items": [
+          {
+            "caption": "GreenVogue · packaging system"
+          },
+          {
+            "caption": "GreenVogue · checkout screens"
+          },
+          {
+            "caption": "ArtWave · poster 14 of 42"
+          },
+          {
+            "caption": "ArtWave · programme spreads"
+          },
+          {
+            "caption": "Tramline · mark at 16px and 400px"
+          },
+          {
+            "caption": "Tramline · stationery"
+          },
+          {
+            "caption": "Quietmile · wayfinding test print"
+          },
+          {
+            "caption": "Studio wall · rejected routes"
           }
         ]
       }
@@ -424,117 +394,102 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "tone": "surface",
-        "spacing": "sm"
+      "widget": "Brands",
+      "wrapper": {
+        "props": {
+          "tone": "surface",
+          "spacing": "sm"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "strip",
+        "label": "Recognition",
+        "names": [
           {
-            "widget": "Brands",
-            "props": {
-              "layout": "strip",
-              "label": "Recognition",
-              "names": [
-                {
-                  "name": "D&AD Wood Pencil",
-                  "note": "Branding, 2025"
-                },
-                {
-                  "name": "Type Directors Club",
-                  "note": "Certificate, 2024"
-                },
-                {
-                  "name": "Talk · Brand New Conf",
-                  "note": "“Designing from the favicon out”, 2026"
-                },
-                {
-                  "name": "Teaching · SVA",
-                  "note": "Identity systems, spring semester"
-                }
-              ]
-            }
+            "name": "D&AD Wood Pencil",
+            "note": "Branding, 2025"
+          },
+          {
+            "name": "Type Directors Club",
+            "note": "Certificate, 2024"
+          },
+          {
+            "name": "Talk · Brand New Conf",
+            "note": "“Designing from the favicon out”, 2026"
+          },
+          {
+            "name": "Teaching · SVA",
+            "note": "Identity systems, spring semester"
           }
         ]
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "services"
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "id": "services"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "cards",
+        "columns": "3",
+        "align": "start",
+        "tagline": "Ways to work together",
+        "title": "Three shapes a project usually takes",
+        "subtitle": "Scope and duration, so you can tell which one you are asking for. Costs depend on scope and locales — I quote in writing after the first call, and I will say early if the budget and the brief do not match.",
+        "items": [
           {
-            "widget": "Features",
-            "props": {
-              "layout": "cards",
-              "columns": "3",
-              "align": "start",
-              "tagline": "Ways to work together",
-              "title": "Three shapes a project usually takes",
-              "subtitle": "Scope and duration, so you can tell which one you are asking for. Costs depend on scope and locales — I quote in writing after the first call, and I will say early if the budget and the brief do not match.",
-              "items": [
-                {
-                  "eyebrow": "4–6 weeks",
-                  "title": "Full identity system",
-                  "description": "Mark, palette, type, application to three real surfaces, CSS variables and the handover session with your developers."
-                },
-                {
-                  "eyebrow": "1–3 weeks",
-                  "title": "One focused piece",
-                  "description": "A poster kit, a pitch-deck system, a landing page, a packaging range. Useful when the identity already exists and one surface is letting it down."
-                },
-                {
-                  "eyebrow": "Two days a month",
-                  "title": "Ongoing design partner",
-                  "description": "For teams with a system and no designer: reviews, new surfaces, and keeping the rules current. Rolling, one month’s notice either way."
-                }
-              ]
-            }
+            "eyebrow": "4–6 weeks",
+            "title": "Full identity system",
+            "description": "Mark, palette, type, application to three real surfaces, CSS variables and the handover session with your developers."
+          },
+          {
+            "eyebrow": "1–3 weeks",
+            "title": "One focused piece",
+            "description": "A poster kit, a pitch-deck system, a landing page, a packaging range. Useful when the identity already exists and one surface is letting it down."
+          },
+          {
+            "eyebrow": "Two days a month",
+            "title": "Ongoing design partner",
+            "description": "For teams with a system and no designer: reviews, new surfaces, and keeping the rules current. Rolling, one month’s notice either way."
           }
         ]
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "tone": "surface"
+      "widget": "FAQs",
+      "wrapper": {
+        "props": {
+          "tone": "surface"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "list",
+        "open": "all",
+        "columns": "1",
+        "tagline": "FAQ",
+        "title": "The five things clients ask before signing",
+        "items": [
           {
-            "widget": "FAQs",
-            "props": {
-              "layout": "list",
-              "open": "all",
-              "columns": "1",
-              "tagline": "FAQ",
-              "title": "The five things clients ask before signing",
-              "items": [
-                {
-                  "title": "Who owns the files?",
-                  "description": "You do, in full, on final payment — source files included, not just exports. I keep the right to show the work in my portfolio, and I will hold it back until you launch if you ask."
-                },
-                {
-                  "title": "How many revisions are included?",
-                  "description": "Two scheduled rounds per stage, which is what the estimate is built on. Extra rounds are €600 a day and I tell you before the clock starts, never after."
-                },
-                {
-                  "title": "Do you work with in-house teams or agencies?",
-                  "description": "Both, and I am comfortable being the second pair of hands rather than the lead. I have worked white-label for three studios; ask and I will say which."
-                },
-                {
-                  "title": "Remote, NDAs, invoicing?",
-                  "description": "Remote by default, two or three days on site if the project needs it. I sign your NDA without negotiating it. Fifty per cent up front, the rest on handover, thirty-day terms, EU VAT invoice."
-                },
-                {
-                  "title": "What if it is not working out?",
-                  "description": "Either of us can stop after the two directions in week two. You keep everything produced and owe nothing beyond the deposit. It has happened twice in eight years and both times it was the right call."
-                }
-              ]
-            }
+            "title": "Who owns the files?",
+            "description": "You do, in full, on final payment — source files included, not just exports. I keep the right to show the work in my portfolio, and I will hold it back until you launch if you ask."
+          },
+          {
+            "title": "How many revisions are included?",
+            "description": "Two scheduled rounds per stage, which is what the estimate is built on. Extra rounds are €600 a day and I tell you before the clock starts, never after."
+          },
+          {
+            "title": "Do you work with in-house teams or agencies?",
+            "description": "Both, and I am comfortable being the second pair of hands rather than the lead. I have worked white-label for three studios; ask and I will say which."
+          },
+          {
+            "title": "Remote, NDAs, invoicing?",
+            "description": "Remote by default, two or three days on site if the project needs it. I sign your NDA without negotiating it. Fifty per cent up front, the rest on handover, thirty-day terms, EU VAT invoice."
+          },
+          {
+            "title": "What if it is not working out?",
+            "description": "Either of us can stop after the two directions in week two. You keep everything produced and owe nothing beyond the deposit. It has happened twice in eight years and both times it was the right call."
           }
         ]
       }
@@ -573,55 +528,50 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "hire",
-        "tone": "surface",
-        "width": "sm"
+      "widget": "Contact",
+      "wrapper": {
+        "props": {
+          "id": "hire",
+          "tone": "surface",
+          "width": "sm"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "plain",
+        "title": "Tell me what you are building",
+        "subtitle": "Three fields. I reply within two working days, and I will tell you if I am the wrong person for it.",
+        "fields": [
           {
-            "widget": "Contact",
-            "props": {
-              "layout": "plain",
-              "title": "Tell me what you are building",
-              "subtitle": "Three fields. I reply within two working days, and I will tell you if I am the wrong person for it.",
-              "fields": [
-                {
-                  "name": "name",
-                  "label": "Your name",
-                  "type": "text",
-                  "placeholder": "Marta Ibáñez",
-                  "autocomplete": "name",
-                  "required": true
-                },
-                {
-                  "name": "email",
-                  "label": "Email",
-                  "type": "email",
-                  "placeholder": "you@company.com",
-                  "autocomplete": "email",
-                  "required": true
-                },
-                {
-                  "name": "project",
-                  "label": "The project, and roughly when",
-                  "type": "textarea",
-                  "rows": 3,
-                  "placeholder": "Rebrand before a launch in February. Budget around €12K.",
-                  "required": true
-                }
-              ],
-              "submit": "Send it",
-              "note": "Or find me on Dribbble and Behance. Next availability: 6 October.",
-              "success": {
-                "label": "Sent — I reply within two working days",
-                "mode": "button"
-              }
-            }
+            "name": "name",
+            "label": "Your name",
+            "type": "text",
+            "placeholder": "Marta Ibáñez",
+            "autocomplete": "name",
+            "required": true
+          },
+          {
+            "name": "email",
+            "label": "Email",
+            "type": "email",
+            "placeholder": "you@company.com",
+            "autocomplete": "email",
+            "required": true
+          },
+          {
+            "name": "project",
+            "label": "The project, and roughly when",
+            "type": "textarea",
+            "rows": 3,
+            "placeholder": "Rebrand before a launch in February. Budget around €12K.",
+            "required": true
           }
-        ]
+        ],
+        "submit": "Send it",
+        "note": "Or find me on Dribbble and Behance. Next availability: 6 October.",
+        "success": {
+          "label": "Sent — I reply within two working days",
+          "mode": "button"
+        }
       }
     }
   ]

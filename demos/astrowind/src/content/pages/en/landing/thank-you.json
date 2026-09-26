@@ -102,45 +102,40 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "tone": "surface"
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "tone": "surface"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "title": "Nearest types to this one",
+        "link": {
+          "text": "All eleven types",
+          "href": "/landing"
+        },
+        "align": "start",
+        "layout": "cards",
+        "columns": "3",
+        "card": "canvas",
+        "items": [
           {
-            "widget": "Features",
-            "props": {
-              "title": "Nearest types to this one",
-              "link": {
-                "text": "All eleven types",
-                "href": "/landing"
-              },
-              "align": "start",
-              "layout": "cards",
-              "columns": "3",
-              "card": "canvas",
-              "items": [
-                {
-                  "eyebrow": "/landing/lead-generation",
-                  "title": "Lead generation",
-                  "description": "When you need the email before the sale.",
-                  "href": "/landing/lead-generation"
-                },
-                {
-                  "eyebrow": "/landing/webinar",
-                  "title": "Webinar",
-                  "description": "When the offer has a date and a replay.",
-                  "href": "/landing/webinar"
-                },
-                {
-                  "eyebrow": "/landing/trial",
-                  "title": "Free trial",
-                  "description": "When the conversion is an account.",
-                  "href": "/landing/trial"
-                }
-              ]
-            }
+            "eyebrow": "/landing/lead-generation",
+            "title": "Lead generation",
+            "description": "When you need the email before the sale.",
+            "href": "/landing/lead-generation"
+          },
+          {
+            "eyebrow": "/landing/webinar",
+            "title": "Webinar",
+            "description": "When the offer has a date and a replay.",
+            "href": "/landing/webinar"
+          },
+          {
+            "eyebrow": "/landing/trial",
+            "title": "Free trial",
+            "description": "When the conversion is an account.",
+            "href": "/landing/trial"
           }
         ]
       }

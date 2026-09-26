@@ -114,6 +114,7 @@ export function instantiate(tree: Node[], props: Record<string, unknown>): Node[
   return tree.map((node) => ({
     ...node,
     ...(node.props ? { props: substitute(node.props, props) as Record<string, unknown> } : {}),
+    ...(node.wrapper && node.wrapper.props ? { wrapper: { ...node.wrapper, props: substitute(node.wrapper.props, props) as Record<string, unknown> } } : {}),
     ...(node.slots
       ? { slots: Object.fromEntries(Object.entries(node.slots).map(([slot, kids]) => [slot, instantiate(kids, props)])) }
       : {}),
@@ -131,6 +132,7 @@ export function placeholders(tree: Node[], base = 'tree'): { prop: string; path:
   tree.forEach((node, i) => {
     const at = `${base}[${i}]`;
     walk(node.props, `${at}.props`);
+    if (node.wrapper && node.wrapper.props) walk(node.wrapper.props, `${at}.wrapper.props`);
     for (const [slot, kids] of Object.entries(node.slots ?? {})) out.push(...placeholders(kids, `${at}.slots.${slot}`));
   });
   return out;

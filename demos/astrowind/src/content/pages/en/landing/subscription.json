@@ -63,22 +63,17 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "spacing": "sm"
+      "widget": "Callout",
+      "wrapper": {
+        "props": {
+          "spacing": "sm"
+        }
       },
-      "slots": {
-        "default": [
-          {
-            "widget": "Callout",
-            "props": {
-              "layout": "inline",
-              "tone": "primary",
-              "label": "Why it works",
-              "description": "A subscription is a promise repeated every month. The hero states the promise; the next block shows what actually arrives, so the price that follows has something to be compared with."
-            }
-          }
-        ]
+      "props": {
+        "layout": "inline",
+        "tone": "primary",
+        "label": "Why it works",
+        "description": "A subscription is a promise repeated every month. The hero states the promise; the next block shows what actually arrives, so the price that follows has something to be compared with."
       }
     },
     {
@@ -361,246 +356,214 @@
       }
     },
     {
-      "widget": "Section",
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "tone": "surface"
+        }
+      },
       "props": {
-        "tone": "surface"
+        "layout": "tiles",
+        "align": "start",
+        "columns": "4",
+        "tagline": "Retention",
+        "title": "What makes subscribers stay",
+        "subtitle": "Promise the things that reduce churn, and only the ones you deliver. A subscription page that over-promises here is buying churn at full price.",
+        "items": [
+          {
+            "title": "A fast first win",
+            "description": "A page shipped in the first session, before the second charge is near."
+          },
+          {
+            "title": "A predictable rhythm",
+            "description": "First Monday, every month. Irregular delivery reads as neglect even when the total is the same."
+          },
+          {
+            "title": "Visible new value",
+            "description": "A changelog and a “new this month” email. Nobody should wonder what they paid for."
+          },
+          {
+            "title": "A pause option",
+            "description": "Pausing keeps a subscriber who would otherwise cancel. Offer it before the cancel button, not instead of it."
+          },
+          {
+            "title": "Transparent billing",
+            "description": "A reminder before every renewal, receipts that explain themselves, no silent price change."
+          },
+          {
+            "title": "An exit without friction",
+            "description": "One-click cancellation is the strongest reason to sign up. Make it true and say it."
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "tone": "ruled"
+        }
+      },
+      "props": {
+        "layout": "cards",
+        "align": "start",
+        "columns": "3",
+        "card": "canvas",
+        "accent": true,
+        "tagline": "How it works",
+        "title": "Subscribe, receive, manage",
+        "subtitle": "Three steps, so the visitor knows what happens after the button and how they stay in control of it.",
+        "items": [
+          {
+            "eyebrow": "01",
+            "title": "Subscribe",
+            "description": "Pick monthly or yearly, pay once, get immediate access to the full back catalogue. The confirmation email states the next charge date."
+          },
+          {
+            "eyebrow": "02",
+            "title": "Receive",
+            "description": "A new pack on the first Monday, a “new this month” email, and a changelog so you can always see what you paid for."
+          },
+          {
+            "eyebrow": "03",
+            "title": "Manage",
+            "description": "Switch plans, pause or cancel from the account page. Every change takes effect at the end of the paid period."
+          }
+        ],
+        "actions": [
+          {
+            "variant": "secondary",
+            "text": "See the plans",
+            "href": "#plans"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Testimonials",
+      "wrapper": {
+        "props": {
+          "tone": "surface"
+        }
+      },
+      "props": {
+        "align": "start",
+        "tagline": "Proof",
+        "title": "Quotes from people who renewed",
+        "subtitle": "Placeholders on purpose. On a subscription page the best proof is tenure: quotes that mention how long someone has stayed and why.",
+        "items": [
+          {
+            "text": "A quote that mentions how many months the subscriber has stayed and what keeps them.",
+            "name": "Subscriber name",
+            "role": "Role, subscriber since month/year (sample testimonial)"
+          },
+          {
+            "text": "A quote about the first win: what they got done in the first week.",
+            "name": "Subscriber name",
+            "role": "Role, subscriber since month/year (sample testimonial)"
+          },
+          {
+            "text": "A quote from someone who paused and came back. Nothing says “easy to leave” like someone who left and returned.",
+            "name": "Subscriber name",
+            "role": "Role, subscriber since month/year (sample testimonial)"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "FAQs",
+      "wrapper": {
+        "props": {
+          "tone": "ruled",
+          "width": "md"
+        }
+      },
+      "props": {
+        "layout": "list",
+        "columns": "1",
+        "open": "first",
+        "tagline": "FAQ",
+        "title": "Questions people ask before they subscribe",
+        "items": [
+          {
+            "title": "How is this different from a pricing page?",
+            "description": "A pricing page compares plans for someone who already decided to buy. This page has to sell the recurring relationship first: what arrives every month, why it stays valuable, and how easy it is to leave."
+          },
+          {
+            "title": "Monthly or yearly first?",
+            "description": "Show both, highlight yearly, and state the saving in plain units — “two months free”, not “17% off”. Let the monthly price anchor the value before the discount lands."
+          },
+          {
+            "title": "How prominent should the cancellation policy be?",
+            "description": "Right under the plans, in one plain sentence: how to cancel, when it takes effect, what you keep. A policy you have to look for reads as a policy you will have to fight."
+          },
+          {
+            "title": "What happens if I cancel mid-month?",
+            "description": "Access runs to the end of the period you paid for, and the packs you already downloaded stay yours under the same licence. No clawback, no partial refund to chase."
+          },
+          {
+            "title": "Trial or money-back window?",
+            "description": "One of the two, never both. A trial suits products people need to use to understand; a refund window suits content. Say it once, near the price, and honour it without friction."
+          },
+          {
+            "title": "How do I adapt this page with AstroWind?",
+            "description": "Replace the plans, the pack previews and the sample numbers and quotes with your own. Keep the order: what arrives before the price, the cancellation policy right under the plans."
+          }
+        ],
+        "subtitle": "Billing, cancellation and value questions, answered before checkout."
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "wrapper": {
+        "props": {
+          "tone": "surface"
+        }
+      },
+      "props": {
+        "layout": "closing",
+        "size": "md",
+        "tagline": "Not ready yet?",
+        "title": "Get the retention checklist by email",
+        "subtitle": "One email with the six practices above as a checklist. No sequence, no follow-ups — the plans will still be here."
       },
       "slots": {
-        "default": [
+        "below": [
           {
-            "widget": "Features",
+            "widget": "Newsletter",
             "props": {
-              "layout": "tiles",
-              "align": "start",
-              "columns": "4",
-              "tagline": "Retention",
-              "title": "What makes subscribers stay",
-              "subtitle": "Promise the things that reduce churn, and only the ones you deliver. A subscription page that over-promises here is buying churn at full price.",
-              "items": [
-                {
-                  "title": "A fast first win",
-                  "description": "A page shipped in the first session, before the second charge is near."
-                },
-                {
-                  "title": "A predictable rhythm",
-                  "description": "First Monday, every month. Irregular delivery reads as neglect even when the total is the same."
-                },
-                {
-                  "title": "Visible new value",
-                  "description": "A changelog and a “new this month” email. Nobody should wonder what they paid for."
-                },
-                {
-                  "title": "A pause option",
-                  "description": "Pausing keeps a subscriber who would otherwise cancel. Offer it before the cancel button, not instead of it."
-                },
-                {
-                  "title": "Transparent billing",
-                  "description": "A reminder before every renewal, receipts that explain themselves, no silent price change."
-                },
-                {
-                  "title": "An exit without friction",
-                  "description": "One-click cancellation is the strongest reason to sign up. Make it true and say it."
-                }
-              ]
+              "layout": "inline",
+              "align": "center",
+              "placeholder": "you@company.com",
+              "submit": "Send it",
+              "note": "One email, then nothing unless you subscribe. This form is a template: give it an endpoint to connect it to your email tool.",
+              "success": {
+                "mode": "append",
+                "title": "The checklist is on its way.",
+                "text": "One email, the six practices. Nothing else follows unless you subscribe."
+              }
             }
           }
         ]
       }
     },
     {
-      "widget": "Section",
+      "widget": "CallToAction",
+      "wrapper": {},
       "props": {
-        "tone": "ruled"
-      },
-      "slots": {
-        "default": [
+        "layout": "card",
+        "title": "Build your subscription page",
+        "subtitle": "This page is part of the free AstroWind template: Astro + Tailwind CSS, every block a reusable widget. Replace the plans, keep value before price.",
+        "actions": [
           {
-            "widget": "Features",
-            "props": {
-              "layout": "cards",
-              "align": "start",
-              "columns": "3",
-              "card": "canvas",
-              "accent": true,
-              "tagline": "How it works",
-              "title": "Subscribe, receive, manage",
-              "subtitle": "Three steps, so the visitor knows what happens after the button and how they stay in control of it.",
-              "items": [
-                {
-                  "eyebrow": "01",
-                  "title": "Subscribe",
-                  "description": "Pick monthly or yearly, pay once, get immediate access to the full back catalogue. The confirmation email states the next charge date."
-                },
-                {
-                  "eyebrow": "02",
-                  "title": "Receive",
-                  "description": "A new pack on the first Monday, a “new this month” email, and a changelog so you can always see what you paid for."
-                },
-                {
-                  "eyebrow": "03",
-                  "title": "Manage",
-                  "description": "Switch plans, pause or cancel from the account page. Every change takes effect at the end of the paid period."
-                }
-              ],
-              "actions": [
-                {
-                  "variant": "secondary",
-                  "text": "See the plans",
-                  "href": "#plans"
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "tone": "surface"
-      },
-      "slots": {
-        "default": [
+            "variant": "primary",
+            "text": "Get the template",
+            "href": "https://github.com/arthelokyo/astrowind"
+          },
           {
-            "widget": "Testimonials",
-            "props": {
-              "align": "start",
-              "tagline": "Proof",
-              "title": "Quotes from people who renewed",
-              "subtitle": "Placeholders on purpose. On a subscription page the best proof is tenure: quotes that mention how long someone has stayed and why.",
-              "items": [
-                {
-                  "text": "A quote that mentions how many months the subscriber has stayed and what keeps them.",
-                  "name": "Subscriber name",
-                  "role": "Role, subscriber since month/year (sample testimonial)"
-                },
-                {
-                  "text": "A quote about the first win: what they got done in the first week.",
-                  "name": "Subscriber name",
-                  "role": "Role, subscriber since month/year (sample testimonial)"
-                },
-                {
-                  "text": "A quote from someone who paused and came back. Nothing says “easy to leave” like someone who left and returned.",
-                  "name": "Subscriber name",
-                  "role": "Role, subscriber since month/year (sample testimonial)"
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "tone": "ruled",
-        "width": "md"
-      },
-      "slots": {
-        "default": [
-          {
-            "widget": "FAQs",
-            "props": {
-              "layout": "list",
-              "columns": "1",
-              "open": "first",
-              "tagline": "FAQ",
-              "title": "Questions people ask before they subscribe",
-              "items": [
-                {
-                  "title": "How is this different from a pricing page?",
-                  "description": "A pricing page compares plans for someone who already decided to buy. This page has to sell the recurring relationship first: what arrives every month, why it stays valuable, and how easy it is to leave."
-                },
-                {
-                  "title": "Monthly or yearly first?",
-                  "description": "Show both, highlight yearly, and state the saving in plain units — “two months free”, not “17% off”. Let the monthly price anchor the value before the discount lands."
-                },
-                {
-                  "title": "How prominent should the cancellation policy be?",
-                  "description": "Right under the plans, in one plain sentence: how to cancel, when it takes effect, what you keep. A policy you have to look for reads as a policy you will have to fight."
-                },
-                {
-                  "title": "What happens if I cancel mid-month?",
-                  "description": "Access runs to the end of the period you paid for, and the packs you already downloaded stay yours under the same licence. No clawback, no partial refund to chase."
-                },
-                {
-                  "title": "Trial or money-back window?",
-                  "description": "One of the two, never both. A trial suits products people need to use to understand; a refund window suits content. Say it once, near the price, and honour it without friction."
-                },
-                {
-                  "title": "How do I adapt this page with AstroWind?",
-                  "description": "Replace the plans, the pack previews and the sample numbers and quotes with your own. Keep the order: what arrives before the price, the cancellation policy right under the plans."
-                }
-              ],
-              "subtitle": "Billing, cancellation and value questions, answered before checkout."
-            }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "tone": "surface"
-      },
-      "slots": {
-        "default": [
-          {
-            "widget": "CallToAction",
-            "props": {
-              "layout": "closing",
-              "size": "md",
-              "tagline": "Not ready yet?",
-              "title": "Get the retention checklist by email",
-              "subtitle": "One email with the six practices above as a checklist. No sequence, no follow-ups — the plans will still be here."
-            },
-            "slots": {
-              "below": [
-                {
-                  "widget": "Newsletter",
-                  "props": {
-                    "layout": "inline",
-                    "align": "center",
-                    "placeholder": "you@company.com",
-                    "submit": "Send it",
-                    "note": "One email, then nothing unless you subscribe. This form is a template: give it an endpoint to connect it to your email tool.",
-                    "success": {
-                      "mode": "append",
-                      "title": "The checklist is on its way.",
-                      "text": "One email, the six practices. Nothing else follows unless you subscribe."
-                    }
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {},
-      "slots": {
-        "default": [
-          {
-            "widget": "CallToAction",
-            "props": {
-              "layout": "card",
-              "title": "Build your subscription page",
-              "subtitle": "This page is part of the free AstroWind template: Astro + Tailwind CSS, every block a reusable widget. Replace the plans, keep value before price.",
-              "actions": [
-                {
-                  "variant": "primary",
-                  "text": "Get the template",
-                  "href": "https://github.com/arthelokyo/astrowind"
-                },
-                {
-                  "variant": "secondary",
-                  "text": "Read the guide",
-                  "href": "/landing"
-                }
-              ]
-            }
+            "variant": "secondary",
+            "text": "Read the guide",
+            "href": "/landing"
           }
         ]
       }

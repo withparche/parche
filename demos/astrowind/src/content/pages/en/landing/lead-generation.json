@@ -233,84 +233,74 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "tone": "surface",
-        "width": "md"
+      "widget": "FAQs",
+      "wrapper": {
+        "props": {
+          "tone": "surface",
+          "width": "md"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "tagline": "FAQ",
+        "title": "Asked before filling in a form",
+        "subtitle": "Answering them here saves a sales call and gives search engines a rich result.",
+        "layout": "list",
+        "columns": "1",
+        "open": "first",
+        "items": [
           {
-            "widget": "FAQs",
-            "props": {
-              "tagline": "FAQ",
-              "title": "Asked before filling in a form",
-              "subtitle": "Answering them here saves a sales call and gives search engines a rich result.",
-              "layout": "list",
-              "columns": "1",
-              "open": "first",
-              "items": [
-                {
-                  "title": "What is a lead generation landing page?",
-                  "description": "A single page with one goal: exchange something valuable — a guide, a demo, a quote, a trial — for a visitor’s contact details. Unlike a homepage it has no competing navigation and one call to action repeated throughout."
-                },
-                {
-                  "title": "How many fields should the form have?",
-                  "description": "As few as your follow-up needs. Name and email are enough for a download; add company or budget only when sales will actually use them. Every extra required field lowers completion."
-                },
-                {
-                  "title": "Above the fold or at the end?",
-                  "description": "Both, and the same offer. In the first screen for visitors who arrive convinced, repeated after the proof for those who need the full story. Two placements, one offer."
-                },
-                {
-                  "title": "What is a good conversion rate?",
-                  "description": "It depends on the source. Cold paid traffic often converts in the low single digits; warm email or retargeting can reach 10–20%. Compare against your own baseline and change one thing at a time."
-                },
-                {
-                  "title": "How do I make the form actually send submissions?",
-                  "description": "The form is a template. Point it at Netlify Forms, Formspree or your own endpoint; the fields, the consent box and the success message stay as they are."
-                },
-                {
-                  "title": "Does this page work for GDPR / privacy consent?",
-                  "description": "The form ships with a consent checkbox linked to the privacy policy. Keep the label explicit about what you send and how often, and store the consent alongside the lead."
-                }
-              ]
-            }
+            "title": "What is a lead generation landing page?",
+            "description": "A single page with one goal: exchange something valuable — a guide, a demo, a quote, a trial — for a visitor’s contact details. Unlike a homepage it has no competing navigation and one call to action repeated throughout."
+          },
+          {
+            "title": "How many fields should the form have?",
+            "description": "As few as your follow-up needs. Name and email are enough for a download; add company or budget only when sales will actually use them. Every extra required field lowers completion."
+          },
+          {
+            "title": "Above the fold or at the end?",
+            "description": "Both, and the same offer. In the first screen for visitors who arrive convinced, repeated after the proof for those who need the full story. Two placements, one offer."
+          },
+          {
+            "title": "What is a good conversion rate?",
+            "description": "It depends on the source. Cold paid traffic often converts in the low single digits; warm email or retargeting can reach 10–20%. Compare against your own baseline and change one thing at a time."
+          },
+          {
+            "title": "How do I make the form actually send submissions?",
+            "description": "The form is a template. Point it at Netlify Forms, Formspree or your own endpoint; the fields, the consent box and the success message stay as they are."
+          },
+          {
+            "title": "Does this page work for GDPR / privacy consent?",
+            "description": "The form ships with a consent checkbox linked to the privacy policy. Keep the label explicit about what you send and how often, and store the consent alongside the lead."
           }
         ]
       }
     },
     {
-      "widget": "Section",
+      "widget": "CallToAction",
+      "wrapper": {
+        "props": {
+          "id": "get"
+        }
+      },
       "props": {
-        "id": "get"
+        "layout": "closing",
+        "size": "md",
+        "title": "Get the landing page checklist",
+        "subtitle": "Same offer as the top of the page, one email, no sequence you did not ask for. Nothing new down here — that is the point."
       },
       "slots": {
-        "default": [
+        "below": [
           {
-            "widget": "CallToAction",
+            "widget": "Newsletter",
             "props": {
-              "layout": "closing",
-              "size": "md",
-              "title": "Get the landing page checklist",
-              "subtitle": "Same offer as the top of the page, one email, no sequence you did not ask for. Nothing new down here — that is the point."
-            },
-            "slots": {
-              "below": [
-                {
-                  "widget": "Newsletter",
-                  "props": {
-                    "layout": "inline",
-                    "placeholder": "you@company.com",
-                    "submit": "Send me the checklist",
-                    "success": {
-                      "mode": "append",
-                      "title": "It is in your inbox.",
-                      "text": "From `hello@astrowind.dev`, subject “Your landing page checklist”."
-                    }
-                  }
-                }
-              ]
+              "layout": "inline",
+              "placeholder": "you@company.com",
+              "submit": "Send me the checklist",
+              "success": {
+                "mode": "append",
+                "title": "It is in your inbox.",
+                "text": "From `hello@astrowind.dev`, subject “Your landing page checklist”."
+              }
             }
           }
         ]

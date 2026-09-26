@@ -93,122 +93,112 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "what",
-        "label": "What we build",
-        "tone": "ruled"
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "id": "what",
+          "label": "What we build",
+          "tone": "ruled"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "rows",
+        "header": "side",
+        "align": "start",
+        "tagline": "What we build",
+        "title": "One machine, three things it does differently",
+        "subtitle": "We are not building a platform. We build one pallet mover and the controller that runs a fleet of them.",
+        "items": [
           {
-            "widget": "Features",
-            "props": {
-              "layout": "rows",
-              "header": "side",
-              "align": "start",
-              "tagline": "What we build",
-              "title": "One machine, three things it does differently",
-              "subtitle": "We are not building a platform. We build one pallet mover and the controller that runs a fleet of them.",
-              "items": [
-                {
-                  "title": "It expects the floor to be wrong",
-                  "description": "Wet patches, missing markings, pallets off-position. It re-plans instead of stopping and paging a human."
-                },
-                {
-                  "title": "It yields to people, visibly",
-                  "description": "A projected floor marking shows where it is going next. Near-miss reports from drivers stopped in week two."
-                },
-                {
-                  "title": "It runs on the WMS you already have",
-                  "description": "Adapters for the three systems our customers use. No rip-and-replace, no eighteen-month integration."
-                }
-              ]
-            }
+            "title": "It expects the floor to be wrong",
+            "description": "Wet patches, missing markings, pallets off-position. It re-plans instead of stopping and paging a human."
+          },
+          {
+            "title": "It yields to people, visibly",
+            "description": "A projected floor marking shows where it is going next. Near-miss reports from drivers stopped in week two."
+          },
+          {
+            "title": "It runs on the WMS you already have",
+            "description": "Adapters for the three systems our customers use. No rip-and-replace, no eighteen-month integration."
           }
         ]
       }
     },
     {
-      "widget": "Section",
+      "widget": "Columns",
+      "wrapper": {
+        "props": {
+          "id": "team",
+          "label": "Team",
+          "tone": "surface"
+        }
+      },
       "props": {
-        "id": "team",
-        "label": "Team",
-        "tone": "surface"
+        "ratio": "equal",
+        "gap": "lg",
+        "align": "start"
       },
       "slots": {
         "default": [
           {
-            "widget": "Columns",
-            "props": {
-              "ratio": "equal",
-              "gap": "lg",
-              "align": "start"
-            },
+            "widget": "Column",
             "slots": {
               "default": [
                 {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
+                  "widget": "Features",
+                  "props": {
+                    "layout": "rows",
+                    "align": "start",
+                    "tagline": "Backed by",
+                    "title": "Named investors, not a logo wall",
+                    "items": [
                       {
-                        "widget": "Features",
-                        "props": {
-                          "layout": "rows",
-                          "align": "start",
-                          "tagline": "Backed by",
-                          "title": "Named investors, not a logo wall",
-                          "items": [
-                            {
-                              "title": "Tramline Ventures",
-                              "description": "Led the seed · board seat, Ana Iriarte"
-                            },
-                            {
-                              "title": "Kessler Industrial",
-                              "description": "Strategic · introduced our first customer"
-                            },
-                            {
-                              "title": "Four angels",
-                              "description": "Operators from warehousing and logistics · names on request"
-                            }
-                          ]
-                        }
+                        "title": "Tramline Ventures",
+                        "description": "Led the seed · board seat, Ana Iriarte"
+                      },
+                      {
+                        "title": "Kessler Industrial",
+                        "description": "Strategic · introduced our first customer"
+                      },
+                      {
+                        "title": "Four angels",
+                        "description": "Operators from warehousing and logistics · names on request"
                       }
                     ]
                   }
-                },
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Column",
+            "slots": {
+              "default": [
                 {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
+                  "widget": "Team",
+                  "props": {
+                    "layout": "stacked",
+                    "tagline": "Team",
+                    "title": "Who you would actually work with",
+                    "items": [
                       {
-                        "widget": "Team",
-                        "props": {
-                          "layout": "stacked",
-                          "tagline": "Team",
-                          "title": "Who you would actually work with",
-                          "items": [
-                            {
-                              "name": "Ane Zubiri",
-                              "role": "CEO · nine years in warehouse automation"
-                            },
-                            {
-                              "name": "Joost de Vries",
-                              "role": "CTO · built the first controller at Delft"
-                            },
-                            {
-                              "name": "Marta Sáenz",
-                              "role": "Field engineering · on your floor, not on a call"
-                            }
-                          ],
-                          "more": {
-                            "count": "+8",
-                            "label": "Engineering and ops",
-                            "note": "Four roles open right now"
-                          }
-                        }
+                        "name": "Ane Zubiri",
+                        "role": "CEO · nine years in warehouse automation"
+                      },
+                      {
+                        "name": "Joost de Vries",
+                        "role": "CTO · built the first controller at Delft"
+                      },
+                      {
+                        "name": "Marta Sáenz",
+                        "role": "Field engineering · on your floor, not on a call"
                       }
-                    ]
+                    ],
+                    "more": {
+                      "count": "+8",
+                      "label": "Engineering and ops",
+                      "note": "Four roles open right now"
+                    }
                   }
                 }
               ]
@@ -218,79 +208,69 @@
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "roadmap",
-        "label": "Roadmap",
-        "tone": "ruled"
+      "widget": "Features",
+      "wrapper": {
+        "props": {
+          "id": "roadmap",
+          "label": "Roadmap",
+          "tone": "ruled"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "rows",
+        "align": "start",
+        "tagline": "Public roadmap",
+        "title": "Dated, and we mark it when it slips",
+        "subtitle": "A roadmap without a slipped item is a roadmap nobody is keeping honest.",
+        "items": [
           {
-            "widget": "Features",
-            "props": {
-              "layout": "rows",
-              "align": "start",
-              "tagline": "Public roadmap",
-              "title": "Dated, and we mark it when it slips",
-              "subtitle": "A roadmap without a slipped item is a roadmap nobody is keeping honest.",
-              "items": [
-                {
-                  "eyebrow": "Q4 2026",
-                  "title": "Multi-floor handoff",
-                  "description": "Lifts and ramps, one fleet across levels.",
-                  "aside": "on track",
-                  "asideTone": "success"
-                },
-                {
-                  "eyebrow": "Q1 2027",
-                  "title": "Write access in the fleet API",
-                  "description": "Queue and re-prioritise moves from your own systems.",
-                  "aside": "slipped 6 wks",
-                  "asideTone": "warning"
-                },
-                {
-                  "eyebrow": "Q2 2027",
-                  "title": "Cold-storage certification",
-                  "description": "Minus twenty-five degrees, certified rather than claimed.",
-                  "aside": "scoping",
-                  "asideTone": "muted"
-                }
-              ]
-            }
+            "eyebrow": "Q4 2026",
+            "title": "Multi-floor handoff",
+            "description": "Lifts and ramps, one fleet across levels.",
+            "aside": "on track",
+            "asideTone": "success"
+          },
+          {
+            "eyebrow": "Q1 2027",
+            "title": "Write access in the fleet API",
+            "description": "Queue and re-prioritise moves from your own systems.",
+            "aside": "slipped 6 wks",
+            "asideTone": "warning"
+          },
+          {
+            "eyebrow": "Q2 2027",
+            "title": "Cold-storage certification",
+            "description": "Minus twenty-five degrees, certified rather than claimed.",
+            "aside": "scoping",
+            "asideTone": "muted"
           }
         ]
       }
     },
     {
-      "widget": "Section",
-      "props": {
-        "id": "visit",
-        "label": "Site visits",
-        "tone": "surface"
+      "widget": "CallToAction",
+      "wrapper": {
+        "props": {
+          "id": "visit",
+          "label": "Site visits",
+          "tone": "surface"
+        }
       },
-      "slots": {
-        "default": [
+      "props": {
+        "layout": "closing",
+        "size": "md",
+        "title": "Come and stand next to one",
+        "subtitle": "Site visits every other Thursday in Rotterdam: two hours, your questions, no deck. Or we bring one to your floor for a week.",
+        "actions": [
           {
-            "widget": "CallToAction",
-            "props": {
-              "layout": "closing",
-              "size": "md",
-              "title": "Come and stand next to one",
-              "subtitle": "Site visits every other Thursday in Rotterdam: two hours, your questions, no deck. Or we bring one to your floor for a week.",
-              "actions": [
-                {
-                  "variant": "primary",
-                  "text": "Book a site visit",
-                  "href": "#visit"
-                },
-                {
-                  "variant": "secondary",
-                  "text": "Or see the four open roles",
-                  "href": "#team"
-                }
-              ]
-            }
+            "variant": "primary",
+            "text": "Book a site visit",
+            "href": "#visit"
+          },
+          {
+            "variant": "secondary",
+            "text": "Or see the four open roles",
+            "href": "#team"
           }
         ]
       }

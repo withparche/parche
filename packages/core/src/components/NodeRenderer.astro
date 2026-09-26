@@ -14,7 +14,7 @@ import { resolveRefs } from '../utils/refs.js';
 import { loadJsonWidgets } from '../utils/json-widgets.js';
 import { usedJsonWidgets, checkDefinition, checkUses, type JsonWidget } from '../content/json-widgets';
 import type { Node as NodeData } from '../content/node';
-import { widgetNames } from '../content/node';
+import { walkNodes, widgetNames } from '../content/node';
 import { listWrapper, outletWrappers, type WrapperSpec } from '../content/wrapper';
 import Node from './Node.astro';
 
@@ -77,6 +77,9 @@ const definitionTrees = Object.values(rawDefinitions).flatMap((d) => d.tree);
 // the JSON widgets' trees and the wrappers. Widgets not referenced are never imported.
 const names = widgetNames([...rawNodes, ...outletTrees, ...definitionTrees]).filter((n) => !(n in rawDefinitions));
 for (const d of declared) if (d.wrapper) names.push(d.wrapper.name);
+// A node that asks for the default wrapper by props alone needs it loaded too.
+const asksDefault = [...walkNodes([...rawNodes, ...outletTrees, ...definitionTrees])].some(({ node }) => node.wrapper && !node.wrapper.widget);
+if (asksDefault && wrapperName) names.push(wrapperName);
 const widgets = await loadWidgets([...new Set(names)]);
 
 const nodes = await resolveAssets(rawNodes);
