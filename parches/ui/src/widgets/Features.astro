@@ -63,11 +63,9 @@ const gap = layout === 'list' ? 'gap-6 md:gap-8' : 'gap-8 md:gap-y-12';
   {items.length > 0 && hairline ? (
     <div
       class:list={[
-        // Hairlines from a 1px gap over the border colour. The cells wrap and
-        // grow to fill their row, so an incomplete last row leaves no gap
-        // that would show that colour as a grey block.
-        'flex flex-wrap gap-px overflow-hidden rounded-lg border border-border bg-border',
-        layout === 'panels' ? '*:flex-[1_1_min(270px,100%)]' : '*:flex-[1_1_min(180px,100%)]',
+        'grid gap-px overflow-hidden rounded-lg border border-border bg-border',
+        // auto-fit, not auto-fill: an empty track would show the border colour as a grey cell.
+        layout === 'panels' ? 'grid-cols-[repeat(auto-fit,minmax(min(270px,100%),1fr))]' : 'grid-cols-[repeat(auto-fit,minmax(min(180px,100%),1fr))]',
       ]}
     >
       {items.map((item, i) =>
