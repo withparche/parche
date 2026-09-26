@@ -4,6 +4,7 @@
 // the scoped SSR icon set. Run from the repo root: `node test/assert-dist.mjs`.
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+import { sitePages, walkHtml } from './page-js.mjs';
 
 const ROOT = process.cwd();
 
@@ -13,42 +14,39 @@ const ROOT = process.cwd();
 const LAZY = /^(floating-ui|invoker|popover-fn)\./;
 const LAZY_MAX = 40_000;
 
-// Baselines measured on a good build; thresholds leave a small margin. The
-// eager budget of a site with the ui parche is Astro's ClientRouter (~16 KB)
-// plus the elements its Header and widgets are built on: Sheet, Collapsible,
-// Menu and Popover for the navigation, Banner for the announcement, Stat,
-// Toc and Share for the widgets that use them (~11 KB together). The ui
-// parche itself ships no script. Raised to 38 KB when Switch brought the Tabs
-// element script into every ui site's output (~2 KB, loaded only by pages
-// that render a Switch). The templates with a form and the playground take
-// 2 KB more for the Form element (~1.3 KB: in-place validation, sending and
-// sent states), and 2 KB more for the Gallery lightbox (~1.6 KB). Like the
-// others, each script is emitted once and loaded only by pages that use it.
-// 2 KB more for the Filter (~1 KB) that a changelog or catalogue filters with.
-// 6 KB more for the campaign elements a landing page uses: StickyBar (~0.9 KB),
-// Countdown (~1 KB), Compare (~0.3 KB) and Calculator with its formula
-// reader (~3.4 KB).
-// 5 KB more for the blog's LoadMore (~1.4 KB) and Search (~3 KB, the field and
-// results; the Pagefind index itself loads only on the search page).
-// 4 KB more for Consent (~1.9 KB with the shared consent helpers) and AdSlot
-// (~1.6 KB), which load only on pages that place them.
+// Client JS is budgeted per page: what the heaviest page of a static site
+// downloads before it runs (test/page-js.mjs: its module scripts, inline
+// modules and every chunk they import statically, once each). Each element's
+// script is emitted once and loaded only by pages that render it, so a new
+// element costs the pages that use it, not every site; the sum of all chunks
+// in _astro/ said nothing about any page.
+//
+// Measured on a good build, with a margin of about 8%. A page with the ui
+// parche starts at ~21 KB: Astro's ClientRouter (~16 KB) and the header's
+// elements (Menu, Sheet, Collapsible, Popover on the shared base). The
+// heaviest are the pages with the most interactive widgets (the demo's home,
+// a post with its table of contents and share, the Calculator page).
+// `node test/page-js.mjs <project>` lists the pages, heaviest first.
+//
+// SSR projects have no built HTML to read: they keep a budget on the total
+// of their client chunks (`clientJsMax`).
 const PROJECTS = {
-  'demos/astrowind': { kind: 'static', clientJsMax: 60_500 },
-  'examples/blog': { kind: 'static', clientJsMax: 60_500 },
-  'examples/custom-widget': { kind: 'static', clientJsMax: 60_500 },
-  'examples/i18n': { kind: 'static', clientJsMax: 60_500 },
-  'examples/import-widget': { kind: 'static', clientJsMax: 6_000 },
-  'examples/markdown-pages': { kind: 'static', clientJsMax: 60_500 },
+  'demos/astrowind': { kind: 'static', pageJsMax: 36_500 }, // 33.7 KB on /
+  'examples/blog': { kind: 'static', pageJsMax: 27_500 }, // 25.3 KB on /search/
+  'examples/custom-widget': { kind: 'static', pageJsMax: 23_500 }, // 21.5 KB
+  'examples/i18n': { kind: 'static', pageJsMax: 29_500 }, // 27.3 KB
+  'examples/import-widget': { kind: 'static', pageJsMax: 1_000 }, // no JS at all
+  'examples/markdown-pages': { kind: 'static', pageJsMax: 23_500 }, // 21.5 KB
   'examples/react': { kind: 'static', skipClientBudget: true }, // ships React islands
   'examples/shadcn': { kind: 'static', skipClientBudget: true }, // ships React islands
   // The SSR examples serve /elements: every interactive element's script.
   'examples/ssr-cloudflare': { kind: 'ssr', clientJsMax: 69_000 },
   'examples/ssr-node': { kind: 'ssr', clientJsMax: 69_000 },
-  'examples/themes': { kind: 'static', clientJsMax: 60_500 },
-  // The elements playground: every element page must build; the eager budget
-  // grows with each interactive element's declared cost (see the elements plan).
-  'parches/elements/playground': { kind: 'static', clientJsMax: 69_000 },
-  'templates/portfolio': { kind: 'static', clientJsMax: 60_500 },
+  'examples/themes': { kind: 'static', pageJsMax: 27_500 }, // 25.3 KB
+  // The elements playground: one page per element; the heaviest is the
+  // Calculator's (its formula reader).
+  'parches/elements/playground': { kind: 'static', pageJsMax: 36_500 }, // 33.5 KB on /calculator/
+  'templates/portfolio': { kind: 'static', pageJsMax: 18_000 }, // 16.4 KB: the ClientRouter
   'templates/saas-landing': {
     kind: 'ssr',
     clientJsMax: 60_500,
@@ -71,19 +69,21 @@ function jsBytes(dir, match = () => true) {
 }
 
 function checkClientBudget(proj, cfg, dir) {
-  const eager = jsBytes(dir, (f) => !LAZY.test(f));
-  check(eager <= cfg.clientJsMax, `${proj}: client JS ${eager}B > ${cfg.clientJsMax}B budget (0-JS-to-client regression?)`);
+  if (cfg.clientJsMax) {
+    const eager = jsBytes(dir, (f) => !LAZY.test(f));
+    check(eager <= cfg.clientJsMax, `${proj}: client JS ${eager}B > ${cfg.clientJsMax}B budget (0-JS-to-client regression?)`);
+  }
   const lazy = jsBytes(dir, (f) => LAZY.test(f));
   check(lazy <= LAZY_MAX, `${proj}: lazy JS ${lazy}B > ${LAZY_MAX}B budget`);
 }
 
-function walkHtml(dir, acc = []) {
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const full = join(dir, entry.name);
-    if (entry.isDirectory()) walkHtml(full, acc);
-    else if (entry.name.endsWith('.html')) acc.push(full);
-  }
-  return acc;
+function checkPageBudget(proj, cfg, dist) {
+  const [heaviest] = sitePages(dist);
+  if (!heaviest) return;
+  check(
+    heaviest.bytes <= cfg.pageJsMax,
+    `${proj}: ${heaviest.page} loads ${heaviest.bytes}B of JS (${heaviest.gzip}B gzipped) > ${cfg.pageJsMax}B per-page budget — \`node test/page-js.mjs ${proj}\` lists the pages`,
+  );
 }
 
 for (const [proj, cfg] of Object.entries(PROJECTS)) {
@@ -120,7 +120,10 @@ for (const [proj, cfg] of Object.entries(PROJECTS)) {
     const htmls = walkHtml(dist);
     check(htmls.length > 0, `${proj}: no HTML built`);
 
-    if (!cfg.skipClientBudget) checkClientBudget(proj, cfg, join(dist, '_astro'));
+    if (!cfg.skipClientBudget) {
+      checkClientBudget(proj, cfg, join(dist, '_astro'));
+      checkPageBudget(proj, cfg, dist);
+    }
 
     const withMissing = htmls.filter((h) => readFileSync(h, 'utf8').includes('data-parche-missing-widget'));
     check(withMissing.length === 0, `${proj}: ${withMissing.length} page(s) with unresolved widgets`);
