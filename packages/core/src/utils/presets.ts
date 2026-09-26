@@ -1,5 +1,6 @@
 import { getCollection } from 'astro:content';
 import type { Node } from '../content/node.js';
+import { walkNodes } from '../content/node.js';
 
 /**
  * Presets: saved subtrees in the `presets` collection. A page inserts one by
@@ -38,7 +39,9 @@ const MAX_EXPANSIONS = 3;
 
 /** Replace every `Preset` node in the trees by its tree, recursively. */
 export async function expandPresets(nodes: Node[], locale?: string, depth = 0): Promise<Node[]> {
-  if (!nodes.some((n) => n.widget === 'Preset' || n.slots)) return nodes;
+  // Only a tree that uses a preset somewhere reads the collection: a site
+  // without presets is never told it has none.
+  if (![...walkNodes(nodes)].some(({ node }) => node.widget === 'Preset')) return nodes;
   const index = await getIndex();
   const out: Node[] = [];
   for (const node of nodes) {

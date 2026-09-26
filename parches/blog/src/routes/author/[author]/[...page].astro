@@ -4,7 +4,7 @@
  * Works in both static and SSR modes.
  */
 import BlogPage from '../../../components/BlogPage.astro';
-import { baseContext, toCards, toPage } from '../../../utils/context.js';
+import { baseContext, toCards, toPage, writersContext } from '../../../utils/context.js';
 import config from 'parche:config';
 import blogConfig from 'parche:app/blog';
 import { getCollection, getEntry } from 'astro:content';
@@ -128,6 +128,7 @@ const context = {
     links,
     count: page.total,
   },
+  writers: await writersContext(opts),
 };
 
 const metadata = {

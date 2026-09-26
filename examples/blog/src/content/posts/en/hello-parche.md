@@ -5,6 +5,9 @@ excerpt: A first post rendered by the @parche/astro-blog app — routes, RSS and
 image:
   src: https://placehold.co/1200x630/6366f1/ffffff?text=Hello+Parche
   alt: Hello Parche
+series:
+  name: getting-started
+  order: 1
 category: Guides
 tags:
   - parche

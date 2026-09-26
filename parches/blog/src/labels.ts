@@ -88,6 +88,13 @@ export interface BlogLabels {
   publishes: string;
   writtenBy: string;
   moreFrom: string;
+  /** Series and author pages. Placeholders: {published}, {total}, {n}, {date}. */
+  seriesPublished: string;
+  seriesDue: string;
+  seriesComplete: string;
+  seriesFollow: string;
+  writingTitle: string;
+  otherWriters: string;
 }
 
 /** English defaults — the strings that were hardcoded across routes and widgets. */
@@ -145,6 +152,12 @@ export const DEFAULT_LABELS: BlogLabels = {
   publishes: 'Publishes {date}',
   writtenBy: 'Written by {name}',
   moreFrom: 'More from {name}',
+  seriesPublished: 'Series · {published} of {total} published',
+  seriesDue: 'Ongoing · part {n} due {date}',
+  seriesComplete: 'Complete',
+  seriesFollow: 'Upcoming parts are listed with their date, so readers know the series is alive.',
+  writingTitle: 'Writing',
+  otherWriters: 'Other writers',
 };
 
 /** Per-locale overrides, e.g. `{ es: { listingTitle: 'Blog' } }`. */

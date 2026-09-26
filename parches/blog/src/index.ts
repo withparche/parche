@@ -113,8 +113,11 @@ export default function createBlog(config?: BlogConfig): ParcheManifest {
         'blog/AuthorBox',
         'blog/ReadNext',
         'blog/TOC',
-        // The series page, until it has a view.
-        'blog/Breadcrumbs',
+        'blog/SeriesParts',
+        'blog/AuthorProfile',
+        'blog/Writers',
+        'Columns',
+        'Column',
       ],
     },
     ...(useResolver ? { resolver: { entrypoint: resolverPath } } : {}),

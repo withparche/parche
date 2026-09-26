@@ -2,6 +2,6 @@ import { createCollections } from '@parche/astro/content';
 import { createBlogCollections } from '@parche/astro-blog/content';
 
 const { pages, layouts } = createCollections();
-const { posts, authors } = createBlogCollections();
+const { posts, authors, series } = createBlogCollections();
 
-export const collections = { pages, layouts, posts, authors };
+export const collections = { pages, layouts, posts, authors, series };

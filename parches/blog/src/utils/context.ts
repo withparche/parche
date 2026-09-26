@@ -4,12 +4,13 @@
  * string resolved, the page, the terms with their counts, the term or author
  * the page is about. Routes differ only in which posts they query.
  */
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import { resolveAssets } from 'parche:utils/assets';
 import { calculateReadingTime } from './reading-time.js';
 import { getPublishedPosts } from './post-helpers.js';
 import { findRelatedPosts } from './related-posts.js';
 import { extractTOC } from './toc.js';
+import { formatDate } from './dates.js';
 import { createTaxonomyResolver } from './taxonomy.js';
 import { resolvePostPermalink, resolveTaxonomyPermalink, resolveAuthorHref, localizePath, type ResolvedBlogConfig } from '../types.js';
 import { resolveLabels, format } from '../labels.js';
@@ -24,17 +25,33 @@ export interface ContextOptions {
   showDrafts: boolean;
 }
 
+/**
+ * A series described in the `series` collection: `{locale}/{name}`, then
+ * `{name}`. Read from the list, not with getEntry, so a series without a file
+ * (or a site without the collection) is not reported as missing.
+ */
+async function describedSeries(name: string, locale: string): Promise<any> {
+  let entries: any[] = [];
+  try {
+    entries = await getCollection('series' as any);
+  } catch {
+    return null;
+  }
+  return entries.find((e) => e.id === `${locale}/${name}`) ?? entries.find((e) => e.id === name) ?? null;
+}
+
 /** Author entries by key, looked up once per render: `{locale}/{key}`, then `{key}`. */
 async function authorLookup(locale: string) {
+  let entries: any[] = [];
+  try {
+    entries = await getCollection('authors' as any);
+  } catch {
+    entries = [];
+  }
   const cache = new Map<string, any>();
   return async (key: string) => {
     if (cache.has(key)) return cache.get(key);
-    let entry: any = null;
-    try {
-      entry = (await getEntry('authors' as any, `${locale}/${key}`)) ?? (await getEntry('authors' as any, key));
-    } catch {
-      entry = null;
-    }
+    const entry = entries.find((e) => e.id === `${locale}/${key}`) ?? entries.find((e) => e.id === key);
     const data = entry ? { ...entry.data, key: entry.data.urlSlug ?? key } : null;
     cache.set(key, data);
     return data;
@@ -68,7 +85,7 @@ export async function toCards(posts: Post[], o: ContextOptions) {
       href: resolvePostPermalink(cfg.permalinks.post, post, locale, defaultLocale),
       ...(d.image ? { image: d.image } : {}),
       date: d.publishDate.toISOString(),
-      dateText: d.publishDate.toLocaleDateString(dateLocale, cfg.dateFormat),
+      dateText: formatDate(d.publishDate, dateLocale, cfg.dateFormat),
       authors,
       ...(d.category
         ? { category: { name: tax.titleFor('categories', d.category), href: resolveTaxonomyPermalink(cfg.permalinks.category, tax.slugFor('categories', d.category), locale, defaultLocale) } }
@@ -169,12 +186,7 @@ export async function articleContext(entry: Post, html: string, url: string, o: 
   let series;
   if (d.series) {
     const name = d.series.name;
-    let described: any = null;
-    try {
-      described = (await getEntry('series' as any, `${locale}/${name}`)) ?? (await getEntry('series' as any, name));
-    } catch {
-      described = null;
-    }
+    const described = await describedSeries(name, locale);
     const parts = all.filter((p: Post) => p.data.series?.name === name).sort((a: Post, b: Post) => a.data.series.order - b.data.series.order);
     const upcoming = (described?.data?.status ?? 'ongoing') === 'ongoing' ? (described?.data?.upcoming ?? []) : [];
     const at = parts.findIndex((p: Post) => p.id === entry.id);
@@ -191,7 +203,7 @@ export async function articleContext(entry: Post, html: string, url: string, o: 
       ...(next
         ? { next: { title: next.data.title, href: resolvePostPermalink(cfg.permalinks.post, next, locale, defaultLocale) } }
         : soon
-          ? { next: { title: soon.title, ...(soon.date ? { dateText: soon.date.toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric' }) } : {}) } }
+          ? { next: { title: soon.title, ...(soon.date ? { dateText: formatDate(soon.date, locale, { year: 'numeric', month: 'long', day: 'numeric' }) } : {}) } }
           : {}),
     };
   }
@@ -205,7 +217,7 @@ export async function articleContext(entry: Post, html: string, url: string, o: 
       post: {
         ...card,
         ...(d.image ? { image: (await resolveAssets(d.image)) as any } : {}),
-        ...(d.modifiedDate ? { modifiedText: d.modifiedDate.toLocaleDateString(locale, cfg.dateFormat) } : {}),
+        ...(d.modifiedDate ? { modifiedText: formatDate(d.modifiedDate, locale, cfg.dateFormat) } : {}),
       },
       html,
       toc: extractTOC(html)
@@ -217,4 +229,63 @@ export async function articleContext(entry: Post, html: string, url: string, o: 
       related,
     },
   };
+}
+
+/**
+ * A series page's context: its title and description (from the `series`
+ * collection when the series is described there), the published parts in
+ * order and the announced ones with their date.
+ */
+export async function seriesContext(name: string, posts: Post[], o: ContextOptions) {
+  const { cfg, locale, defaultLocale } = o;
+  const described = await describedSeries(name, locale);
+  const ordered = [...posts].sort((a: Post, b: Post) => a.data.series.order - b.data.series.order);
+  const status: 'ongoing' | 'complete' = described?.data?.status ?? 'ongoing';
+  const upcoming = status === 'ongoing' ? (described?.data?.upcoming ?? []) : [];
+  const dateText = (d: Date) => formatDate(d, locale, cfg.dateFormat);
+  const parts = [
+    ...ordered.map((p: Post, i: number) => ({
+      n: i + 1,
+      title: p.data.title,
+      href: resolvePostPermalink(cfg.permalinks.post, p, locale, defaultLocale),
+      dateText: dateText(p.data.publishDate),
+      upcoming: false,
+    })),
+    ...upcoming.map((u: any, i: number) => ({
+      n: ordered.length + i + 1,
+      title: u.title,
+      ...(u.date ? { dateText: formatDate(u.date, locale, { year: 'numeric', month: 'long' }) } : {}),
+      upcoming: true,
+    })),
+  ];
+  return {
+    title: described?.data?.title ?? name,
+    ...(described?.data?.description ? { description: described.data.description } : {}),
+    status,
+    published: ordered.length,
+    total: parts.length,
+    parts,
+  };
+}
+
+/** Every writer of the locale with at least one post, most published first. */
+export async function writersContext(o: ContextOptions) {
+  const { cfg, locale, defaultLocale, showDrafts } = o;
+  const all = getPublishedPosts(await getCollection('posts'), showDrafts, locale);
+  const author = await authorLookup(locale);
+  const counts = new Map<string, number>();
+  for (const p of all) for (const key of p.data.authors ?? []) counts.set(key, (counts.get(key) ?? 0) + 1);
+  const writers = [];
+  for (const [key, count] of [...counts].sort((a, b) => b[1] - a[1])) {
+    const a = await author(key);
+    writers.push({
+      key: a?.key ?? key,
+      name: a?.name ?? key,
+      ...(a?.role ? { role: a.role } : {}),
+      ...(a?.avatar ? { avatar: a.avatar } : {}),
+      href: resolveAuthorHref(cfg, a?.key ?? key, locale, defaultLocale),
+      count,
+    });
+  }
+  return resolveAssets(writers);
 }

@@ -15,6 +15,9 @@ import SeriesBox from '../../src/widgets/blog/SeriesBox.astro';
 import AuthorBox from '../../src/widgets/blog/AuthorBox.astro';
 import ReadNext from '../../src/widgets/blog/ReadNext.astro';
 import TOC from '../../src/widgets/blog/TOC.astro';
+import SeriesParts from '../../src/widgets/blog/SeriesParts.astro';
+import AuthorProfile from '../../src/widgets/blog/AuthorProfile.astro';
+import Writers from '../../src/widgets/blog/Writers.astro';
 import type { BlogArticle, BlogCard, BlogContext } from '../../src/lib/blog-context';
 
 let container: AstroContainer | null = null;
@@ -171,4 +174,37 @@ test('ReadNext lists the related posts, and nothing when there are none', async 
 test("TOC reads the post's outline; one section is not worth a table", async () => {
   expect(await render(TOC, {}, post())).toContain('href="#two"');
   expect(await render(TOC, {}, post({ toc: [{ text: 'One', slug: 'one' }] }))).not.toContain('href="#one"');
+});
+
+const series = { title: 'Variable fonts', description: 'Five essays.', status: 'ongoing' as const, published: 2, total: 3, parts: [
+  { n: 1, title: 'One file', href: '/one', dateText: '2 Mar 2026', upcoming: false },
+  { n: 2, title: 'Kerning', href: '/two', dateText: '30 May 2026', upcoming: false },
+  { n: 3, title: 'Axes', dateText: 'October 2026', upcoming: true },
+] };
+
+test('a series page: how many parts are out, when the next is due, the parts in order', async () => {
+  const labels = { seriesPublished: 'Series · {published} of {total} published', seriesDue: 'Ongoing · part {n} due {date}', seriesComplete: 'Complete' };
+  const header = await render(PageHeader, { size: 'md' }, ctx({ view: 'series', series, labels }));
+  expect(header).toContain('Series · 2 of 3 published');
+  expect(header).toMatch(/<h1[^>]*>Variable fonts<\/h1>/);
+  expect(header).toContain('Ongoing · part 3 due October 2026');
+  expect(await render(PageHeader, {}, ctx({ view: 'series', series: { ...series, status: 'complete' }, labels }))).toContain('Complete');
+  const parts = await render(SeriesParts, {}, ctx({ series }));
+  expect(parts).toContain('href="/two"');
+  expect(parts).not.toContain('href="/three"');
+  expect(parts).toContain('October 2026');
+});
+
+test("AuthorProfile shows the page's author; Writers lists the others", async () => {
+  const author = { name: 'Jane Doe', role: 'Editor', bio: 'Writes things.', links: [{ label: 'GitHub', href: 'https://github.com/jane' }], count: 5 };
+  const profile = await render(AuthorProfile, {}, ctx({ view: 'author', author, labels: { postsCount: '{count} posts', authorLabel: 'Author' } }));
+  expect(profile).toMatch(/<h1[^>]*>Jane Doe<\/h1>/);
+  expect(profile).toContain('rel="me noopener"');
+  expect(profile).toContain('5 posts');
+  const writers = await render(Writers, {}, ctx({ author, writers: [
+    { key: 'jane', name: 'Jane Doe', href: '/blog/author/jane', count: 5 },
+    { key: 'mark', name: 'Mark Rivera', role: 'Engineer', href: '/blog/author/mark', count: 3 },
+  ] }));
+  expect(writers).toContain('Mark Rivera');
+  expect(writers).not.toContain('href="/blog/author/jane"');
 });

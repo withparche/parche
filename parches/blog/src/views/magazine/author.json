@@ -5,20 +5,49 @@
       "slots": {
         "default": [
           {
-            "widget": "blog/PageHeader",
+            "widget": "Columns",
             "props": {
-              "size": "md"
+              "ratio": "wide-end",
+              "gap": "lg",
+              "align": "start"
+            },
+            "slots": {
+              "default": [
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "blog/AuthorProfile"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "blog/PostList",
+                        "props": {
+                          "layout": "rows",
+                          "title": {
+                            "$label": "writingTitle"
+                          },
+                          "density": "compact"
+                        }
+                      },
+                      {
+                        "widget": "blog/Pagination"
+                      },
+                      {
+                        "widget": "blog/Writers"
+                      }
+                    ]
+                  }
+                }
+              ]
             }
-          },
-          {
-            "widget": "blog/PostList",
-            "props": {
-              "layout": "rows",
-              "density": "compact"
-            }
-          },
-          {
-            "widget": "blog/Pagination"
           }
         ]
       }

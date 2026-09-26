@@ -1,6 +1,4 @@
 {
-  "title": "About Jane Doe",
-  "description": "Jane Doe writes this blog: Astro, design systems and shipping fast.",
   "sections": [
     {
       "widget": "Section",
@@ -10,10 +8,13 @@
       "slots": {
         "default": [
           {
-            "widget": "blog/AuthorProfile",
+            "widget": "blog/PageHeader",
             "props": {
-              "author": "jane"
+              "size": "md"
             }
+          },
+          {
+            "widget": "blog/SeriesParts"
           }
         ]
       }

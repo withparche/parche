@@ -1,0 +1,56 @@
+---
+/**
+ * A writer, as the page's subject: portrait, "Author", name, role, bio, their
+ * links and how many posts. On an author page it reads the page's author; on
+ * any other page (the About page of a one-writer blog) `author` names the
+ * entry to show.
+ */
+import { getEntry } from 'astro:content';
+import Avatar from 'parche:elements/Avatar';
+import { blogContext } from '../../lib/blog-context';
+import { schema, type Props } from './AuthorProfile.props';
+
+const p = schema.parse(Astro.props) as Props;
+const ctx = blogContext(Astro.locals);
+const labels = ctx?.labels ?? {};
+let a = ctx?.author;
+if (p.author) {
+  const locale = Astro.currentLocale;
+  let entry: any = null;
+  try {
+    entry = (locale ? await getEntry('authors' as any, `${locale}/${p.author}`) : null) ?? (await getEntry('authors' as any, p.author));
+  } catch {
+    entry = null;
+  }
+  if (entry) {
+    const d = entry.data;
+    const social = (d.social ?? {}) as Record<string, string | undefined>;
+    a = {
+      name: d.name,
+      role: d.role,
+      bio: d.bio,
+      avatar: d.avatar,
+      links: [...(d.website ? [{ label: 'Website', href: d.website }] : []), ...Object.entries(social).filter(([, h]) => h).map(([k, h]) => ({ label: k.charAt(0).toUpperCase() + k.slice(1), href: h! }))],
+      count: 0,
+    };
+  }
+}
+const H = p.heading;
+const count = a?.count ? (labels.postsCount ?? '{count} posts').replace('{count}', String(a.count)) : undefined;
+---
+
+{a && (
+  <div class="parche-author-profile">
+    <Avatar size="xl" name={a.name} src={a.avatar?.src} class="mb-6 size-[clamp(96px,11vw,140px)]" />
+    <p class="mb-3 font-mono text-[10px] leading-none font-medium tracking-[0.16em] text-primary uppercase">{labels.authorLabel ?? 'Author'}</p>
+    <H class="font-heading text-[clamp(34px,4.4vw,52px)] leading-[1.02] font-semibold tracking-[-0.03em] text-heading">{a.name}</H>
+    {a.role && <p class="mt-3 text-sm text-muted">{a.role}</p>}
+    {a.bio && <p class="mt-5 text-base leading-[1.65] text-pretty text-text">{a.bio}</p>}
+    {a.links.length > 0 && (
+      <ul class="mt-6 flex list-none flex-wrap gap-2 p-0">
+        {a.links.map((l) => <li><a href={l.href} rel="me noopener" class="inline-flex rounded-sm border border-border bg-surface px-3 py-1.5 text-[13px] font-medium text-heading no-underline hover:border-primary">{l.label}</a></li>)}
+      </ul>
+    )}
+    {count && <p class="mt-6 border-t border-border pt-4 font-mono text-xs text-muted">{count}</p>}
+  </div>
+)}

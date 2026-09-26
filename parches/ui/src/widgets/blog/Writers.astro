@@ -1,0 +1,30 @@
+---
+/** The blog's other writers as small cards: portrait, name, role, a link to their page. */
+import Avatar from 'parche:elements/Avatar';
+import { blogContext } from '../../lib/blog-context';
+import { schema, type Props } from './Writers.props';
+
+const p = schema.parse(Astro.props) as Props;
+const ctx = blogContext(Astro.locals);
+const writers = (ctx?.writers ?? []).filter((w) => w.name !== ctx?.author?.name);
+const title = p.title ?? ctx?.labels?.otherWriters ?? 'Other writers';
+---
+
+{writers.length > 0 && (
+  <div class="parche-writers">
+    <p class="mb-3 font-mono text-[10px] leading-none tracking-[0.16em] text-muted uppercase">{title}</p>
+    <ul class="grid list-none grid-cols-[repeat(auto-fill,minmax(min(210px,100%),1fr))] gap-3 p-0">
+      {writers.map((w) => (
+        <li>
+          <a href={w.href} class="flex items-center gap-3 rounded-lg border border-border bg-surface px-4 py-3 no-underline hover:border-primary">
+            <Avatar size="sm" name={w.name} src={w.avatar?.src} />
+            <span class="leading-tight">
+              <span class="block text-sm font-semibold text-heading">{w.name}</span>
+              {w.role && <span class="text-xs text-muted">{w.role}</span>}
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}

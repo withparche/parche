@@ -12,9 +12,19 @@ const p = schema.parse(Astro.props) as Props;
 const ctx = blogContext(Astro.locals);
 const labels = ctx?.labels ?? {};
 const kind = ctx?.term?.kind === 'tags' ? labels.tagLabel ?? 'Tag' : ctx?.term?.kind === 'categories' ? labels.categoryLabel ?? 'Category' : ctx?.author ? labels.authorLabel ?? 'Author' : undefined;
-const title = p.title ?? (ctx?.term ? (ctx.term.kind === 'tags' ? `#${ctx.term.name}` : ctx.term.name) : ctx?.author?.name ?? ctx?.listing.title);
-const subtitle = p.subtitle ?? ctx?.term?.description ?? ctx?.author?.bio;
-const tagline = p.tagline;
+const series = ctx?.series;
+const fill = (t: string | undefined, v: Record<string, string | number>) => Object.entries(v).reduce((a, [k, x]) => a.replaceAll(`{${k}}`, String(x)), t ?? '');
+const title = p.title ?? series?.title ?? (ctx?.term ? (ctx.term.kind === 'tags' ? `#${ctx.term.name}` : ctx.term.name) : ctx?.author?.name ?? ctx?.listing.title);
+const subtitle = p.subtitle ?? series?.description ?? ctx?.term?.description ?? ctx?.author?.bio;
+const tagline = p.tagline ?? (series ? fill(labels.seriesPublished ?? 'Series · {published} of {total} published', { published: series.published, total: series.total }) : undefined);
+const due = series?.parts.find((x) => x.upcoming);
+const note = series
+  ? series.status === 'complete'
+    ? labels.seriesComplete ?? 'Complete'
+    : due?.dateText
+      ? fill(labels.seriesDue ?? 'Ongoing · part {n} due {date}', { n: due.n, date: due.dateText })
+      : undefined
+  : undefined;
 const center = p.align === 'center';
 // On a term or author page: a trail back to the listing, and how many posts it holds.
 const trail = !p.tagline && kind && ctx ? { href: ctx.listing.href, title: ctx.listing.title, kind } : undefined;
@@ -46,4 +56,5 @@ const count = trail && ctx?.page ? (labels.postsCount ?? '{count} posts').replac
       {count && <p class="font-mono text-xs text-muted">{count}</p>}
     </div>
   )}
+  {note && <p class="mt-3 font-mono text-[13px] text-muted">{note}</p>}
 </header>

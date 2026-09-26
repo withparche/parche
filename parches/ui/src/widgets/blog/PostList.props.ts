@@ -18,6 +18,7 @@ export const schema = z.object({
   readingTime: toggle(),
   category: toggle(),
   tags: toggle(),
+  title: z.string().optional().meta({ help: 'A heading over the list: "Writing" on an author page.' }),
   empty: z.string().optional().meta({ help: 'What an empty list says. Default: the blog label.' }),
   /** Posts to show instead of the page's (a fixed list on a home page). */
   posts: z.array(z.any()).optional(),
@@ -36,7 +37,7 @@ export const meta: WidgetMeta = {
     groups: [
       { key: 'layout', label: 'Layout', fields: ['layout', 'density', 'columns'] },
       { key: 'show', label: 'Show', fields: ['date', 'excerpt', 'image', 'author', 'readingTime', 'category', 'tags'] },
-      { key: 'content', label: 'Content', fields: ['empty'] },
+      { key: 'content', label: 'Content', fields: ['title', 'empty'] },
     ],
   },
 };

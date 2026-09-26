@@ -80,6 +80,17 @@ export interface BlogContext {
   };
   /** On an article page. */
   article?: BlogArticle;
+  /** On an author page: every writer, for "Other writers". */
+  writers?: { key: string; name: string; role?: string; avatar?: { src: string; alt?: string }; href: string; count: number }[];
+  /** On a series page. */
+  series?: {
+    title: string;
+    description?: string;
+    status: 'ongoing' | 'complete';
+    published: number;
+    total: number;
+    parts: { n: number; title: string; href?: string; dateText?: string; upcoming: boolean }[];
+  };
 }
 
 /** What an article page knows about its post. */

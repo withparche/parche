@@ -5,6 +5,9 @@ excerpt: How Parche separates the elements from the widget library, and why it m
 image:
   src: https://placehold.co/1200x630/0ea5e9/ffffff?text=Elements
   alt: Elements and widgets
+series:
+  name: getting-started
+  order: 2
 category: Architecture
 tags:
   - parche

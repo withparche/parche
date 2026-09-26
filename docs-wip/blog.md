@@ -157,6 +157,31 @@ permalink and on a root-level one.
 Personal and newsletter articles are one column; company and magazine carry
 the table of contents beside the text.
 
+### Author and series pages
+
+The `author` view puts the writer beside their posts: `blog/AuthorProfile`
+(portrait, name, role, bio, links, post count) in one column, and
+`blog/PostList` titled "Writing", the pagination and `blog/Writers` ("Other
+writers") in the other. On a one-writer blog there are no author pages; the
+About page (`aboutPath`) can show the same profile with
+`{ "widget": "blog/AuthorProfile", "props": { "author": "jane" } }`.
+
+The `series` view is `blog/PageHeader` ("Series · 2 of 3 published", the
+title, the description and "Ongoing · part 3 due October 2026") over
+`blog/SeriesParts`, the parts numbered with their dates; announced parts are
+marked. Describe a series once in `src/content/series/<key>.json`:
+
+```json
+{ "title": "Getting started with Parche", "description": "…", "status": "ongoing",
+  "upcoming": [{ "title": "Themes as tokens", "date": "2026-10-15" }] }
+```
+
+and join a post to it with `series: { name: getting-started, order: 2 }`.
+
+Dates without a time (every frontmatter date) are UTC midnight and are
+formatted in UTC, so a post dated 2026-08-01 reads 1 August wherever the site
+is built; a `timeZone` in `dateFormat` wins.
+
 ## Content
 
 - Posts: `featured: true` puts a post in `blog/Featured`; `issue: 142` numbers
@@ -167,6 +192,6 @@ the table of contents beside the text.
 
 ## Not built yet
 
-The author and series pages, archive, subscribe and search pages,
+The archive, subscribe and search pages,
 placements for ads and other elements, consent, comments, and structured
 data per page. See the plan in the session notes; each lands in this file.

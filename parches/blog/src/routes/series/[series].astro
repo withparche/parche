@@ -3,23 +3,16 @@
  * Series overview page.
  * Works in both static and SSR modes.
  */
-import 'parche:config/styles';
-import BaseLayout from 'parche:layouts/BaseLayout';
-import LayoutRenderer from 'parche:LayoutRenderer';
-import { showPanel } from 'parche:config/themes';
-import ThemePanel from 'parche:components/ThemePanel';
-import Breadcrumbs from 'parche:widgets/blog/Breadcrumbs';
+import BlogPage from '../../components/BlogPage.astro';
+import { baseContext, seriesContext } from '../../utils/context.js';
 import config from 'parche:config';
 import blogConfig from 'parche:app/blog';
 import { queryPostsBySeries, queryAllSeries } from '../../utils/blog-query.js';
-import { resolvePostPermalink, localizePath } from '../../types.js';
-import { resolveLayout } from 'parche:utils/layout';
-import { defaultLocale } from 'parche:config/i18n';
+import { defaultLocale, locales } from 'parche:config/i18n';
+import { resolveTaxonomyPermalink } from '../../types.js';
+import { getRouteAlternates, toAbsolute } from '../../utils/alternates.js';
 import { localizeSiteConfig } from 'parche:utils/site';
-import { resolveAssets } from 'parche:utils/assets';
 import { resolveLabels, format } from '../../labels.js';
-import Container from 'parche:elements/Container';
-import Section from 'parche:elements/Section';
 
 const cfg = blogConfig as any;
 const permalinks = cfg.permalinks;
@@ -60,59 +53,28 @@ if (posts.length === 0) {
 
 const site = localizeSiteConfig(config, locale);
 const labels = resolveLabels(cfg.labels, locale, defaultLocale);
-const layoutSections = await resolveLayout('default', locale, defaultLocale);
+const alternates = toAbsolute(
+  await getRouteAlternates({
+    path: resolveTaxonomyPermalink(permalinks.series, seriesName),
+    locales: locales as string[],
+    defaultLocale,
+    hasContent: async (l) => (await queryPostsBySeries({ seriesName, locale: l, showDrafts })).length > 0,
+  }),
+  Astro.site,
+);
+
+const opts = { cfg, locale, defaultLocale, showDrafts };
+const series = await seriesContext(seriesName, posts, opts);
+const context = { ...(await baseContext('series', opts)), posts: [], series };
 
 const metadata = {
-  title: `${format(labels.seriesTitle, { value: seriesName })} — ${site.brand.name}`,
-  description: format(labels.seriesDescription, { value: seriesName }),
+  title: `${series.title} — ${site.brand.name}`,
+  description: series.description ?? format(labels.seriesDescription, { value: series.title }),
   noindex: false,
   nofollow: false,
   ogType: 'website' as const,
   twitterCard: 'summary_large_image' as const,
 };
-
-const breadcrumbs = [
-  { label: labels.home, href: localizePath('/', locale, defaultLocale) },
-  { label: labels.blog, href: localizePath(permalinks.listing, locale, defaultLocale) },
-  { label: format(labels.seriesTitle, { value: seriesName }) },
-];
 ---
 
-<BaseLayout metadata={metadata} config={site} lang={locale}>
-  <LayoutRenderer layoutSections={layoutSections}>
-    <Section class="!py-4">
-      <Container class="max-w-4xl">
-        <Breadcrumbs items={breadcrumbs} />
-      </Container>
-    </Section>
-
-    <Section>
-      <Container class="max-w-4xl">
-        <h1 class="type-h1 mb-4">{seriesName}</h1>
-        <p class="type-body text-muted mb-8">{format(labels.seriesCount, { count: posts.length })}</p>
-
-        <ol class="space-y-4">
-          {posts.map((post: any, index: number) => (
-            <li class="flex gap-4 items-start p-4 rounded-xl border border-border hover:bg-surface transition-colors">
-              <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-sm">
-                {index + 1}
-              </span>
-              <div class="flex-1">
-                <a
-                  href={resolvePostPermalink(permalinks.post, post, locale, defaultLocale)}
-                  class="type-h4 text-heading hover:text-primary transition-colors"
-                >
-                  {post.data.title}
-                </a>
-                {post.data.description && (
-                  <p class="text-sm text-muted mt-1">{post.data.description}</p>
-                )}
-              </div>
-            </li>
-          ))}
-        </ol>
-      </Container>
-    </Section>
-  </LayoutRenderer>
-  {showPanel && <ThemePanel />}
-</BaseLayout>
+<BlogPage view="series" {context} {metadata} {site} {locale} {defaultLocale} {alternates} />
