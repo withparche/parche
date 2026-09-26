@@ -1,3 +1,4 @@
 src/content
 .astro
 dist
+src/parche.tokens.json

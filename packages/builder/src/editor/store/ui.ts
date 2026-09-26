@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { Catalog } from './types';
 
-export type PanelId = 'pages' | 'outline' | 'widgets';
+export type PanelId = 'pages' | 'outline' | 'widgets' | 'design';
 export type Viewport = 'desktop' | 'tablet' | 'mobile';
 
 interface UiState {
@@ -17,6 +17,10 @@ interface UiState {
   previewRev: number;
   /** Edit: a click selects. Browse: the page behaves as a visitor's. */
   previewMode: 'edit' | 'browse';
+  /** The preview seen under another theme or colour scheme; '' is the site's own. */
+  previewTheme: string;
+  previewScheme: '' | 'light' | 'dark';
+  setPreviewLook: (look: { theme?: string; scheme?: '' | 'light' | 'dark' }) => void;
   /** Why the preview could not render the drafts, when it could not. */
   previewError: string | null;
   setPreviewMode: (m: 'edit' | 'browse') => void;
@@ -49,6 +53,9 @@ export const useUi = create<UiState>((set) => ({
   previewRev: 0,
   previewMode: 'edit',
   previewError: null,
+  previewTheme: '',
+  previewScheme: '',
+  setPreviewLook: (look) => set((s) => ({ previewTheme: look.theme ?? s.previewTheme, previewScheme: look.scheme ?? s.previewScheme })),
   setPreviewMode: (previewMode) => set({ previewMode }),
   setPreviewError: (previewError) => set({ previewError }),
   bumpPreview: () => set((s) => ({ previewRev: s.previewRev + 1 })),

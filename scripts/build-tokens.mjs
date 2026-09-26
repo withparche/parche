@@ -6,7 +6,8 @@
  *   ref.json  → generated/ref.css   --ds-ref-*  + the Tailwind bridge for ramps, radii, shadows
  *   sys.json  → generated/sys.css   --ds-sys-*  light in :root, dark in .dark, + the role bridge
  *   conf.json → generated/conf.css  --ds-conf-*
- *   all       → generated/tokens.json (flat name → value, both modes) and tokens.d.ts
+ *   all       → generated/tokens.json (flat name → value, both modes), tokens.d.ts,
+ *               and tokens.meta.json (name → layer, type, group, description)
  *
  * A token's $value may be a CSS string, a number, a fontFamily array, a
  * typography object, or a reference "{group.path.to.token}" that becomes
@@ -196,6 +197,19 @@ function block(selector, decls, comment) {
 
 // ---- catalog --------------------------------------------------------------
 write('tokens.json', JSON.stringify(flat, null, 2) + '\n');
+// What a tool shows beside each name (the visual builder's token editor):
+// its layer, its type, the group it sits in and what it is for.
+{
+  const meta = {};
+  for (const g of groups) {
+    for (const { path, type, token } of walk(files[g])) {
+      for (const [n] of emit(g, path, type, token.$value)) {
+        meta[n] = { layer: g, type: type ?? null, group: path[0], ...(token.$description ? { description: token.$description } : {}) };
+      }
+    }
+  }
+  write('tokens.meta.json', JSON.stringify(meta, null, 2) + '\n');
+}
 write(
   'tokens.d.ts',
   header('types', 'Every token name, for .props.ts `tokens` lists and the contract test.', '//') +

@@ -1,7 +1,9 @@
 import fs from 'node:fs';
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { Plugin } from 'vite';
 import type { ResolvedRegistry } from './types.js';
+import { tokensToCss, validateOverrides } from '../config/token-overrides.js';
 
 /**
  * Resolve a bare specifier to an absolute path from @parche/astro's own location.
@@ -78,6 +80,8 @@ const THEMES_CONFIG_ID = 'parche:config/themes';
 const THEMES_CONFIG_VIRTUAL = '\0parche:config/themes';
 const STYLES_CONFIG_ID = 'parche:config/styles';
 const STYLES_CONFIG_VIRTUAL = '\0parche:config/styles';
+const TOKEN_OVERRIDES_ID = 'parche:config/token-overrides.css';
+const TOKEN_OVERRIDES_VIRTUAL = '\0parche:config/token-overrides.css';
 const LAYOUT_CONFIG_ID = 'parche:config/layout';
 const LAYOUT_CONFIG_VIRTUAL = '\0parche:config/layout';
 
@@ -86,6 +90,7 @@ const LAYOUT_CONFIG_VIRTUAL = '\0parche:config/layout';
 // Tailwind v4 only honors @source in the root's own cascade, and only absolute
 // paths reach sibling packages once installed from npm.
 const BASE_CSS_PATH = fileURLToPath(new URL('../styles/base.css', import.meta.url));
+const TOKENS_CATALOG_PATH = fileURLToPath(new URL('../styles/generated/tokens.json', import.meta.url));
 const WIDGET_SCHEMAS_ID = 'parche:registry/widgetSchemas';
 const WIDGET_SCHEMAS_VIRTUAL = '\0parche:registry/widgetSchemas';
 const ELEMENTS_ID = 'parche:registry/elements';
@@ -224,7 +229,36 @@ function generateLayoutConfigModule(registry: ResolvedRegistry): string {
  * base look ships via BaseLayout's own base.css regardless.
  */
 function generateStylesModule(registry: ResolvedRegistry): string {
-  return registry.styleEntries.map((p) => `import ${JSON.stringify(p)};`).join('\n') + '\n';
+  // The site's own token values come last, so they win where they are scoped.
+  return [...registry.styleEntries.map((p) => `import ${JSON.stringify(p)};`), `import ${JSON.stringify(TOKEN_OVERRIDES_ID)};`].join('\n') + '\n';
+}
+
+/** The token names the generated catalog knows, to check a site's overrides against. */
+let knownTokens: Set<string> | null = null;
+function tokenNames(): Set<string> {
+  if (knownTokens) return knownTokens;
+  try {
+    const catalog = JSON.parse(fs.readFileSync(TOKENS_CATALOG_PATH, 'utf-8')) as Record<string, Record<string, string>>;
+    knownTokens = new Set([...Object.keys(catalog.light ?? {}), ...Object.keys(catalog.dark ?? {})]);
+  } catch {
+    knownTokens = new Set();
+  }
+  return knownTokens;
+}
+
+/** `src/parche.tokens.json` as CSS; nothing when the file is absent. Problems are warned about, and left out. */
+function generateTokenOverrides(registry: ResolvedRegistry): string {
+  if (!fs.existsSync(registry.tokenOverridesPath)) return '';
+  let raw: unknown;
+  try {
+    raw = JSON.parse(fs.readFileSync(registry.tokenOverridesPath, 'utf-8'));
+  } catch (e) {
+    console.warn(`[parche] src/parche.tokens.json is not valid JSON: ${(e as Error).message}`);
+    return '';
+  }
+  const { overrides, issues } = validateOverrides(raw, tokenNames());
+  for (const i of issues) console.warn(`[parche] src/parche.tokens.json ${i.path}: ${i.message} (left out)`);
+  return tokensToCss(overrides);
 }
 
 /**
@@ -500,6 +534,24 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
     name: 'vite-plugin-parche',
     enforce: 'pre',
 
+    // The token overrides file may appear, change or go while the server
+    // runs (the builder writes it): its CSS module reloads each time.
+    configureServer(server) {
+      const reload = (file: string) => {
+        if (path.resolve(file) !== registry.tokenOverridesPath) return;
+        for (const env of Object.values(server.environments ?? {})) {
+          const mod = env.moduleGraph.getModuleById(TOKEN_OVERRIDES_VIRTUAL);
+          if (mod) {
+            env.moduleGraph.invalidateModule(mod);
+            void server.reloadModule(mod);
+          }
+        }
+      };
+      server.watcher.on('add', reload);
+      server.watcher.on('change', reload);
+      server.watcher.on('unlink', reload);
+    },
+
     resolveId(id) {
       if (id === WIDGET_MAP_ID) return WIDGET_MAP_VIRTUAL;
       if (id === TEMPLATE_MAP_ID) return TEMPLATE_MAP_VIRTUAL;
@@ -508,6 +560,7 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
       if (id === HEAD_CONFIG_ID) return HEAD_CONFIG_VIRTUAL;
       if (id === THEMES_CONFIG_ID) return THEMES_CONFIG_VIRTUAL;
       if (id === STYLES_CONFIG_ID) return STYLES_CONFIG_VIRTUAL;
+      if (id === TOKEN_OVERRIDES_ID) return TOKEN_OVERRIDES_VIRTUAL;
       if (id === LAYOUT_CONFIG_ID) return LAYOUT_CONFIG_VIRTUAL;
 
       if (id === WIDGET_SCHEMAS_ID) return WIDGET_SCHEMAS_VIRTUAL;
@@ -545,6 +598,10 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
       if (id === HEAD_CONFIG_VIRTUAL) return `export const headLinks = ${JSON.stringify(registry.headLinks ?? [])};\nexport const siteSearch = ${JSON.stringify(registry.siteSearch ?? null)};\n`;
       if (id === THEMES_CONFIG_VIRTUAL) return generateThemesConfigModule(registry);
       if (id === STYLES_CONFIG_VIRTUAL) return generateStylesModule(registry);
+      if (id === TOKEN_OVERRIDES_VIRTUAL) {
+        if (fs.existsSync(registry.tokenOverridesPath)) this.addWatchFile(registry.tokenOverridesPath);
+        return generateTokenOverrides(registry);
+      }
       if (id === LAYOUT_CONFIG_VIRTUAL) return generateLayoutConfigModule(registry);
       if (id === RESOLVERS_VIRTUAL) return generateResolversModule(registry);
       if (id === WIDGET_SCHEMAS_VIRTUAL) {

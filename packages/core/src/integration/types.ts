@@ -408,6 +408,8 @@ export interface ParcheUserConfig {
 export type ParchePreset = Omit<ParcheUserConfig, 'extends'>;
 
 export interface ResolvedRegistry {
+  /** The site's own token values (`src/parche.tokens.json`), which may not exist yet. */
+  tokenOverridesPath: string;
   /** Map of virtual module ID → absolute file path */
   modules: Record<string, string>;
   /** Set of virtual IDs that use named exports (export *) instead of default */

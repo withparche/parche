@@ -44,7 +44,7 @@ export default function builder(options: BuilderOptions): AstroIntegration {
 
         injectRoute({ pattern: '/_parche/builder', entrypoint: route('editor.ts'), prerender: false });
         injectRoute({ pattern: '/_parche/builder/assets/[...file]', entrypoint: route('editor-assets.ts'), prerender: false });
-        for (const api of ['catalog', 'docs', 'doc', 'validate', 'events', 'icons', 'assets', 'links', 'drafts']) {
+        for (const api of ['catalog', 'docs', 'doc', 'validate', 'events', 'icons', 'assets', 'links', 'drafts', 'tokens']) {
           injectRoute({ pattern: `/_parche/api/${api}`, entrypoint: route(`api/${api}.ts`), prerender: false });
         }
 

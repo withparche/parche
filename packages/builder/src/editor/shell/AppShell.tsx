@@ -14,10 +14,11 @@ import PreviewFrame from '../preview/PreviewFrame';
 import WidgetsPanel from '../panels/WidgetsPanel';
 import PagesPanel from '../panels/PagesPanel';
 import OutlinePanel from '../panels/OutlinePanel';
+import DesignPanel from '../panels/DesignPanel';
 import Inspector from '../inspector/Inspector';
 import { DesktopIcon, MobileIcon, RedoIcon, TabletIcon, UndoIcon } from './icons';
 
-const panels: Record<PanelId, FC> = { pages: PagesPanel, outline: OutlinePanel, widgets: WidgetsPanel };
+const panels: Record<PanelId, FC> = { pages: PagesPanel, outline: OutlinePanel, widgets: WidgetsPanel, design: DesignPanel };
 const viewports: { id: Viewport; label: string; Icon: FC<{ size?: number }> }[] = [
   { id: 'desktop', label: 'Desktop', Icon: DesktopIcon },
   { id: 'tablet', label: 'Tablet, 768px', Icon: TabletIcon },

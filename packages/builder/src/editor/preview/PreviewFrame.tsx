@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useUi } from '../store/ui';
 import { previewToken, usePreview } from './usePreview';
 import { useDocs } from '../store/documents';
@@ -23,13 +23,19 @@ export default function PreviewFrame({ src, rev, onReload }: { src: string; rev:
   const themes = useUi((s) => s.catalog?.themes);
   // Look at the page under another theme or scheme, without touching the site:
   // set on the frame's <html>, which the in-place refresh leaves alone.
-  const [theme, setTheme] = useState<string>('');
-  const [scheme, setScheme] = useState<'' | 'light' | 'dark'>('');
+  const theme = useUi((s) => s.previewTheme);
+  const scheme = useUi((s) => s.previewScheme);
+  const setLook = useUi((s) => s.setPreviewLook);
   const applyLook = () => {
     const html = frame.current?.contentDocument?.documentElement;
     if (!html || !frame.current?.contentWindow?.location.pathname.startsWith('/_parche/preview/')) return;
-    if (theme) html.setAttribute('data-theme', theme);
-    if (scheme) html.classList.toggle('dark', scheme === 'dark');
+    // Remember the page's own theme and scheme once, to go back to them.
+    if (html.dataset.siteTheme === undefined) html.dataset.siteTheme = html.getAttribute('data-theme') ?? '';
+    if (html.dataset.siteDark === undefined) html.dataset.siteDark = String(html.classList.contains('dark'));
+    const t = theme || html.dataset.siteTheme;
+    if (t) html.setAttribute('data-theme', t);
+    else html.removeAttribute('data-theme');
+    html.classList.toggle('dark', scheme ? scheme === 'dark' : html.dataset.siteDark === 'true');
   };
   useEffect(applyLook, [theme, scheme]);
   return (
@@ -44,14 +50,14 @@ export default function PreviewFrame({ src, rev, onReload }: { src: string; rev:
         </div>
         <span className="truncate font-mono">{src}</span>
         {themes && themes.list.length > 1 && (
-          <select aria-label="Preview theme" value={theme} onChange={(e) => setTheme(e.target.value)} className="rounded border border-border bg-background px-1 py-0.5 text-[11px]">
+          <select aria-label="Preview theme" value={theme} onChange={(e) => setLook({ theme: e.target.value })} className="rounded border border-border bg-background px-1 py-0.5 text-[11px]">
             <option value="">{themes.default ? `${themes.default} (site)` : 'Site theme'}</option>
             {themes.list.filter((t) => t.value !== themes.default).map((t) => (
               <option key={t.value} value={t.value}>{t.label}</option>
             ))}
           </select>
         )}
-        <select aria-label="Preview colour scheme" value={scheme} onChange={(e) => setScheme(e.target.value as '' | 'light' | 'dark')} className="rounded border border-border bg-background px-1 py-0.5 text-[11px]">
+        <select aria-label="Preview colour scheme" value={scheme} onChange={(e) => setLook({ scheme: e.target.value as '' | 'light' | 'dark' })} className="rounded border border-border bg-background px-1 py-0.5 text-[11px]">
           <option value="">Scheme: site</option>
           <option value="light">Light</option>
           <option value="dark">Dark</option>

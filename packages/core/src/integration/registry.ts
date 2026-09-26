@@ -481,6 +481,7 @@ export function createRegistry(
     siteSearch,
     buildDone,
     styleEntries,
+    tokenOverridesPath: path.join(rootDir, 'src', 'parche.tokens.json'),
     contentGlobs,
     apps,
     resolvers,

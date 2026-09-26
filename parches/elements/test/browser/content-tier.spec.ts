@@ -68,8 +68,11 @@ test.describe('Toc', () => {
   test('links jump to their headings without script', async ({ page }) => {
     await page.goto('/toc');
     // A section's link: always shown (a subsection's folds away while another section is read).
-    await example(page, 'basic').getByRole('link', { name: 'Themes' }).click();
-    // The hash can land a moment after the click (Firefox): wait for it.
+    // Followed from the keyboard: a click can land on stale coordinates while
+    // Firefox smooth-scrolls the link into view under a loaded run.
+    const link = example(page, 'basic').getByRole('link', { name: 'Themes' });
+    await expect(link).toHaveAttribute('href', '#ex-toc-themes');
+    await link.press('Enter');
     await expect(page).toHaveURL(/#ex-toc-themes$/);
   });
 });

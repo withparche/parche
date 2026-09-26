@@ -454,3 +454,24 @@ markup. Each overrides sys roles and type styles, ref radii (and shadows,
 for Editorial), and the conf knobs the Section element and the Container
 read for rhythm and measure; neither touches an element. The Product theme
 is the demo's default look.
+
+## A site's own token values
+
+A site can set token values of its own without writing a theme, in
+`src/parche.tokens.json`, over the base look or over one theme, light and
+dark:
+
+```json
+{
+  "base": { "light": { "--ds-sys-color-primary": "oklch(0.52 0.15 150)" } },
+  "themes": { "product": { "dark": { "--ds-sys-color-surface": "oklch(0.2 0.02 260)" } } }
+}
+```
+
+Core serves it as the last stylesheet (`parche:config/token-overrides.css`),
+with the selectors the tokens and themes use themselves, so a value wins
+where it is scoped; in dev a change to the file reloads that CSS alone.
+Names are checked against the generated catalog (any `--ds-comp-*` passes:
+components declare their own) and values must stay values (no `;`, `{`,
+`}` or `</`); what fails is left out with a warning. The visual builder's
+Design panel writes this file.

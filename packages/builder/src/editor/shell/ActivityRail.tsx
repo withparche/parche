@@ -1,11 +1,12 @@
 import type { FC } from 'react';
 import { useUi, type PanelId } from '../store/ui';
-import { OutlineIcon, PagesIcon, WidgetsIcon } from './icons';
+import { OutlineIcon, PagesIcon, PaletteIcon, WidgetsIcon } from './icons';
 
 const items: { id: PanelId; label: string; Icon: FC<{ size?: number }> }[] = [
   { id: 'pages', label: 'Pages', Icon: PagesIcon },
   { id: 'outline', label: 'Outline', Icon: OutlineIcon },
   { id: 'widgets', label: 'Widgets', Icon: WidgetsIcon },
+  { id: 'design', label: 'Design', Icon: PaletteIcon },
 ];
 
 /** The left rail: one button per panel; the active one is marked and pressed. */

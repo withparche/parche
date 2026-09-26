@@ -4,6 +4,14 @@ import { useDocs, isDirty } from '../store/documents';
 import { useSelection } from '../store/selection';
 import { useUi } from '../store/ui';
 import type { PreviewApi } from '../../preview-client/index';
+import { draftCss, tokensDirty, useTokens } from '../store/tokens';
+
+/** Unsaved token values as CSS; once saved, the site's own CSS carries them. */
+const tokenCss = () => (tokensDirty(useTokens.getState()) ? draftCss() : '');
+
+/** The preview client of the frame now shown, for panels that talk to the page (tokens). */
+let active: PreviewApi | null = null;
+export const previewClient = () => active;
 
 export const previewToken = document.querySelector<HTMLMetaElement>('meta[name="parche-builder-preview-token"]')?.content ?? '';
 
@@ -54,6 +62,8 @@ export function usePreview(frame: React.RefObject<HTMLIFrameElement | null>) {
   // The selection, both ways.
   useEffect(() => useSelection.subscribe((s) => client.current?.select(s.node)), []);
   useEffect(() => useUi.subscribe((s) => client.current?.setMode(s.previewMode)), []);
+  // Unsaved token values show at once, over the page's own.
+  useEffect(() => useTokens.subscribe(() => client.current?.setTokens(tokenCss())), []);
 
   /** Called on every load of the frame (a navigation, or Astro's reload after a save). */
   const onLoad = () => {
@@ -64,6 +74,8 @@ export function usePreview(frame: React.RefObject<HTMLIFrameElement | null>) {
       const c = win.__parchePreview;
       if (!c) return;
       client.current = c;
+      active = c;
+      c.setTokens(tokenCss());
       c.onSelect = (id) => useSelection.getState().select(id);
       c.describe = (id) => {
         const { docs, current } = useDocs.getState();

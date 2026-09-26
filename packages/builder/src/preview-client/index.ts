@@ -22,6 +22,10 @@ export interface PreviewApi {
   onNavigate?: (path: string) => void;
   /** A node's name for the overlay's label, from the editor's catalog. */
   describe?: (id: string) => string;
+  /** Unsaved token values, as CSS, over the page's own (a style kept after every other). */
+  setTokens(css: string): void;
+  /** What each token resolves to on this page now, light or dark as the page is. */
+  computed(names: string[]): Record<string, string>;
 }
 
 declare global {
@@ -222,6 +226,22 @@ const api: PreviewApi = {
     mode = m;
     hovered = null;
     schedule();
+  },
+  setTokens(css) {
+    let style = document.getElementById('parche-builder-tokens') as HTMLStyleElement | null;
+    if (!css) return style?.remove();
+    if (!style) {
+      style = document.createElement('style');
+      style.id = 'parche-builder-tokens';
+    }
+    style.textContent = css;
+    // Last in <head>, so it wins where it is scoped; the refresh never removes it.
+    document.head.append(style);
+    schedule();
+  },
+  computed(names) {
+    const cs = getComputedStyle(document.documentElement);
+    return Object.fromEntries(names.map((n) => [n, cs.getPropertyValue(n).trim()]));
   },
 };
 window.__parchePreview = api;

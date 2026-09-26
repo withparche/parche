@@ -1,0 +1,1016 @@
+{
+  "--ds-ref-color-neutral-50": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-neutral-100": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-neutral-200": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-neutral-300": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-neutral-400": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-neutral-500": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-neutral-600": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-neutral-700": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-neutral-800": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-neutral-900": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-neutral-950": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-primary-50": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-primary-100": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-primary-200": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-primary-300": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-primary-400": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-primary-500": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-primary-600": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-primary-700": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-primary-800": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-primary-900": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-primary-950": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-secondary-50": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-secondary-100": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-secondary-200": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-secondary-300": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-secondary-400": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-secondary-500": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-secondary-600": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-secondary-700": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-secondary-800": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-secondary-900": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-secondary-950": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-accent-50": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-accent-100": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-accent-200": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-accent-300": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-accent-400": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-accent-500": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-accent-600": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-accent-700": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-accent-800": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-accent-900": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-accent-950": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-success-50": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-success-100": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-success-200": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-success-300": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-success-400": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-success-500": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-success-600": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-success-700": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-success-800": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-success-900": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-success-950": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-warning-50": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-warning-100": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-warning-200": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-warning-300": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-warning-400": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-warning-500": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-warning-600": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-warning-700": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-warning-800": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-warning-900": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-warning-950": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-danger-50": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-danger-100": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-danger-200": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-danger-300": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-danger-400": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-danger-500": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-danger-600": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-danger-700": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-danger-800": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-danger-900": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-color-danger-950": {
+    "layer": "ref",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-ref-radius-xs": {
+    "layer": "ref",
+    "type": "dimension",
+    "group": "radius"
+  },
+  "--ds-ref-radius-sm": {
+    "layer": "ref",
+    "type": "dimension",
+    "group": "radius"
+  },
+  "--ds-ref-radius-md": {
+    "layer": "ref",
+    "type": "dimension",
+    "group": "radius"
+  },
+  "--ds-ref-radius-lg": {
+    "layer": "ref",
+    "type": "dimension",
+    "group": "radius"
+  },
+  "--ds-ref-radius-xl": {
+    "layer": "ref",
+    "type": "dimension",
+    "group": "radius"
+  },
+  "--ds-ref-radius-2xl": {
+    "layer": "ref",
+    "type": "dimension",
+    "group": "radius"
+  },
+  "--ds-ref-radius-full": {
+    "layer": "ref",
+    "type": "dimension",
+    "group": "radius"
+  },
+  "--ds-ref-shadow-xs": {
+    "layer": "ref",
+    "type": "shadow",
+    "group": "shadow"
+  },
+  "--ds-ref-shadow-sm": {
+    "layer": "ref",
+    "type": "shadow",
+    "group": "shadow"
+  },
+  "--ds-ref-shadow-md": {
+    "layer": "ref",
+    "type": "shadow",
+    "group": "shadow"
+  },
+  "--ds-ref-shadow-lg": {
+    "layer": "ref",
+    "type": "shadow",
+    "group": "shadow"
+  },
+  "--ds-ref-shadow-xl": {
+    "layer": "ref",
+    "type": "shadow",
+    "group": "shadow"
+  },
+  "--ds-ref-shadow-2xl": {
+    "layer": "ref",
+    "type": "shadow",
+    "group": "shadow"
+  },
+  "--ds-ref-font-sans": {
+    "layer": "ref",
+    "type": "fontFamily",
+    "group": "font"
+  },
+  "--ds-ref-font-mono": {
+    "layer": "ref",
+    "type": "fontFamily",
+    "group": "font"
+  },
+  "--ds-sys-color-background": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color",
+    "description": "The page canvas."
+  },
+  "--ds-sys-color-foreground": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color",
+    "description": "Default ink on the canvas."
+  },
+  "--ds-sys-color-surface": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color",
+    "description": "Cards, menus, dialogs, inputs."
+  },
+  "--ds-sys-color-surface-hover": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color",
+    "description": "Hover on a surface: menu items, ghost buttons."
+  },
+  "--ds-sys-color-surface-2": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color",
+    "description": "A second surface: tab tracks, table headers, chips, code blocks. Light enough that muted text reads at AA on it."
+  },
+  "--ds-sys-color-on-surface": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color",
+    "description": "Text on a surface."
+  },
+  "--ds-sys-color-primary": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color",
+    "description": "The brand colour: primary buttons, links, active states."
+  },
+  "--ds-sys-color-primary-hover": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color",
+    "description": "Primary under the pointer: buttons, active links."
+  },
+  "--ds-sys-color-link": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color",
+    "description": "Links in running text. Points at primary; a theme may separate them."
+  },
+  "--ds-sys-color-on-primary": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color",
+    "description": "Text on primary."
+  },
+  "--ds-sys-color-primary-soft": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color",
+    "description": "Tinted surface under primary text: badges, callouts, selected rows."
+  },
+  "--ds-sys-color-muted": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color",
+    "description": "Secondary text."
+  },
+  "--ds-sys-color-border": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color",
+    "description": "Hairlines and control borders."
+  },
+  "--ds-sys-color-border-soft": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color",
+    "description": "Inner dividers, lighter than border."
+  },
+  "--ds-sys-color-heading": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color",
+    "description": "Headings."
+  },
+  "--ds-sys-color-text": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color",
+    "description": "Body text."
+  },
+  "--ds-sys-color-highlight": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color",
+    "description": "A second accent for emphasis (v1 purple)."
+  },
+  "--ds-sys-color-ring": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color",
+    "description": "Every focus-visible outline."
+  },
+  "--ds-sys-color-overlay": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color",
+    "description": "Dialog and sheet backdrop."
+  },
+  "--ds-sys-color-success": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-sys-color-on-success": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-sys-color-success-soft": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-sys-color-warning": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-sys-color-on-warning": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-sys-color-warning-soft": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-sys-color-danger": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-sys-color-on-danger": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-sys-color-danger-soft": {
+    "layer": "sys",
+    "type": "color",
+    "group": "color"
+  },
+  "--ds-sys-font-heading": {
+    "layer": "sys",
+    "type": "fontFamily",
+    "group": "font",
+    "description": "Headings and display text."
+  },
+  "--ds-sys-font-body": {
+    "layer": "sys",
+    "type": "fontFamily",
+    "group": "font",
+    "description": "Body and UI text."
+  },
+  "--ds-sys-font-mono": {
+    "layer": "sys",
+    "type": "fontFamily",
+    "group": "font",
+    "description": "Code, eyebrows, meta."
+  },
+  "--ds-sys-type-h1-size": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-h1-weight": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-h1-tracking": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-h1-leading": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-h2-size": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-h2-weight": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-h2-tracking": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-h2-leading": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-h3-size": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-h3-weight": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-h3-tracking": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-h3-leading": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-title-size": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "An item heading inside a section: a step, a release, a case."
+  },
+  "--ds-sys-type-title-weight": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "An item heading inside a section: a step, a release, a case."
+  },
+  "--ds-sys-type-title-tracking": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "An item heading inside a section: a step, a release, a case."
+  },
+  "--ds-sys-type-title-leading": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "An item heading inside a section: a step, a release, a case."
+  },
+  "--ds-sys-type-title-sm-size": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "A small item heading: a tile, a person, a plan name."
+  },
+  "--ds-sys-type-title-sm-weight": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "A small item heading: a tile, a person, a plan name."
+  },
+  "--ds-sys-type-title-sm-tracking": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "A small item heading: a tile, a person, a plan name."
+  },
+  "--ds-sys-type-title-sm-leading": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "A small item heading: a tile, a person, a plan name."
+  },
+  "--ds-sys-type-lead-size": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "The paragraph under a headline."
+  },
+  "--ds-sys-type-lead-weight": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "The paragraph under a headline."
+  },
+  "--ds-sys-type-lead-tracking": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "The paragraph under a headline."
+  },
+  "--ds-sys-type-lead-leading": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "The paragraph under a headline."
+  },
+  "--ds-sys-type-body-size": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-body-weight": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-body-tracking": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-body-leading": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-body-sm-size": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "An item description under its title."
+  },
+  "--ds-sys-type-body-sm-weight": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "An item description under its title."
+  },
+  "--ds-sys-type-body-sm-tracking": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "An item description under its title."
+  },
+  "--ds-sys-type-body-sm-leading": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "An item description under its title."
+  },
+  "--ds-sys-type-small-size": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "Secondary lines: a role, a note under a price, a hint."
+  },
+  "--ds-sys-type-small-weight": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "Secondary lines: a role, a note under a price, a hint."
+  },
+  "--ds-sys-type-small-tracking": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "Secondary lines: a role, a note under a price, a hint."
+  },
+  "--ds-sys-type-small-leading": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "Secondary lines: a role, a note under a price, a hint."
+  },
+  "--ds-sys-type-caption-size": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-caption-weight": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-caption-tracking": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-caption-leading": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-label-size": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-label-weight": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-label-tracking": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-label-leading": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type"
+  },
+  "--ds-sys-type-meta-size": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "Facts about a thing in the mono face: a date, a source, a duration."
+  },
+  "--ds-sys-type-meta-weight": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "Facts about a thing in the mono face: a date, a source, a duration."
+  },
+  "--ds-sys-type-meta-tracking": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "Facts about a thing in the mono face: a date, a source, a duration."
+  },
+  "--ds-sys-type-meta-leading": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "Facts about a thing in the mono face: a date, a source, a duration."
+  },
+  "--ds-sys-type-figure-size": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "A number that is the point: a price, a headline stat."
+  },
+  "--ds-sys-type-figure-weight": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "A number that is the point: a price, a headline stat."
+  },
+  "--ds-sys-type-figure-tracking": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "A number that is the point: a price, a headline stat."
+  },
+  "--ds-sys-type-figure-leading": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "A number that is the point: a price, a headline stat."
+  },
+  "--ds-sys-type-figure-sm-size": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "A number in a card or a row of results."
+  },
+  "--ds-sys-type-figure-sm-weight": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "A number in a card or a row of results."
+  },
+  "--ds-sys-type-figure-sm-tracking": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "A number in a card or a row of results."
+  },
+  "--ds-sys-type-figure-sm-leading": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "A number in a card or a row of results."
+  },
+  "--ds-conf-radius-scale": {
+    "layer": "conf",
+    "type": "number",
+    "group": "radius",
+    "description": "Multiplier applied to every ref radius. Corporate sets 0, Playful 1.5."
+  },
+  "--ds-conf-motion-fast": {
+    "layer": "conf",
+    "type": "duration",
+    "group": "motion",
+    "description": "Hover and focus transitions."
+  },
+  "--ds-conf-motion-base": {
+    "layer": "conf",
+    "type": "duration",
+    "group": "motion",
+    "description": "Open and close of overlays and panels."
+  },
+  "--ds-conf-motion-slow": {
+    "layer": "conf",
+    "type": "duration",
+    "group": "motion",
+    "description": "Entry of large surfaces."
+  },
+  "--ds-conf-width-sm": {
+    "layer": "conf",
+    "type": "dimension",
+    "group": "width"
+  },
+  "--ds-conf-width-md": {
+    "layer": "conf",
+    "type": "dimension",
+    "group": "width"
+  },
+  "--ds-conf-width-lg": {
+    "layer": "conf",
+    "type": "dimension",
+    "group": "width"
+  },
+  "--ds-conf-width-xl": {
+    "layer": "conf",
+    "type": "dimension",
+    "group": "width"
+  },
+  "--ds-conf-spacing-sm": {
+    "layer": "conf",
+    "type": "dimension",
+    "group": "spacing"
+  },
+  "--ds-conf-spacing-md": {
+    "layer": "conf",
+    "type": "dimension",
+    "group": "spacing"
+  },
+  "--ds-conf-spacing-lg": {
+    "layer": "conf",
+    "type": "dimension",
+    "group": "spacing"
+  },
+  "--ds-conf-gutter": {
+    "layer": "conf",
+    "type": "dimension",
+    "group": "gutter",
+    "description": "Horizontal padding outside the measure: the Container's and the header's side gutter."
+  }
+}

@@ -38,6 +38,14 @@ preview client into the frame (same origin): it outlines the node under the
 pointer, selects on click (Select mode) or lets the page behave (Browse),
 and can show the page under another theme or colour scheme.
 
+## Design
+
+The Design panel edits the site's own token values, over the base look or
+one theme, light or dark: every token with its base value, the value the
+page uses now, and a reset. A change shows in the preview at once; Save
+writes `src/parche.tokens.json`, which core turns into the site's last
+stylesheet.
+
 ## How it is built
 
 - `src/integration.ts` — the integration (dev only), built with tsup for the CLI.
