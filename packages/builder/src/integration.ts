@@ -1,3 +1,4 @@
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { AstroIntegration } from 'astro';
 import { session } from './server/session.js';
@@ -40,12 +41,33 @@ export default function builder(options: BuilderOptions): AstroIntegration {
 
         injectRoute({ pattern: '/_parche/builder', entrypoint: route('editor.ts'), prerender: false });
         injectRoute({ pattern: '/_parche/builder/assets/[...file]', entrypoint: route('editor-assets.ts'), prerender: false });
-        injectRoute({ pattern: '/_parche/api/catalog', entrypoint: route('api/catalog.ts'), prerender: false });
+        for (const api of ['catalog', 'docs', 'doc', 'validate', 'events', 'icons', 'assets', 'links']) {
+          injectRoute({ pattern: `/_parche/api/${api}`, entrypoint: route(`api/${api}.ts`), prerender: false });
+        }
 
         // The editor has its own chrome; the dev toolbar would sit on top of the preview.
         updateConfig({ devToolbar: { enabled: false } });
       },
-      'astro:server:setup': ({ logger }) => {
+      'astro:server:setup': ({ server, logger }) => {
+        // Changes on disk reach the open editors as events: a document by its
+        // collection and id, a widget's props file as a catalog change.
+        const s = session();
+        const content = path.join(s.root, 'src', 'content');
+        const emit = (file: string) => {
+          if (file.endsWith('.props.ts')) {
+            for (const l of s.listeners) l({ type: 'catalog-changed' });
+            return;
+          }
+          const rel = path.relative(content, file);
+          if (rel.startsWith('..') || path.isAbsolute(rel)) return;
+          const [collection, ...rest] = rel.split(path.sep);
+          if (!rest.length) return;
+          const id = rest.join('/').replace(/\.(json|md|mdx|ya?ml)$/, '');
+          for (const l of s.listeners) l({ type: 'file-changed', collection, id });
+        };
+        server.watcher.on('change', emit);
+        server.watcher.on('add', emit);
+        server.watcher.on('unlink', emit);
         logger.info('editor at /_parche/builder');
       },
     },

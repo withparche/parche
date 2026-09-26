@@ -2,6 +2,7 @@ import type { AstroIntegration } from 'astro';
 import { fileURLToPath } from 'node:url';
 import { resolveSiteUrl, resolveI18n } from '../utils/site.js';
 import { toAstroFonts } from '../config/fonts.js';
+import { setDevInfo } from '../dev/info.js';
 import { tryLoadSiteConfig, resolveSiteConfigPath } from './load-site-config.js';
 import path from 'node:path';
 import fs from 'node:fs';
@@ -206,6 +207,13 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
         const configFile = resolveSiteConfigPath(rootDirEarly, resolved.config);
         const siteConfig =
           prepared.inlineSiteConfig ?? (await tryLoadSiteConfig(rootDirEarly, resolved.config));
+        if (command === 'dev') {
+          setDevInfo({
+            root: rootDirEarly,
+            siteConfigPath: prepared.inlineSiteConfig ? null : configFile,
+            siteConfigMode: prepared.inlineSiteConfig ? 'inline' : 'json',
+          });
+        }
         if (configFile) {
           // Pin the probed file so the registry does not fall back to a .ts path
           // that may not exist — the config can just as well be parche.config.json.

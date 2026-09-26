@@ -1,0 +1,11 @@
+{
+  "label": "Memo",
+  "description": "A titled band of text, written in JSON.",
+  "category": "content",
+  "props": {
+    "type": "object",
+    "properties": { "title": { "type": "string", "minLength": 1 } },
+    "required": ["title"]
+  },
+  "tree": [{ "widget": "Features", "props": { "title": { "$prop": "title" }, "items": [] } }]
+}

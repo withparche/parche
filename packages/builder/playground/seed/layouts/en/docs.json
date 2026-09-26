@@ -1,0 +1,8 @@
+{
+  "sections": [
+    { "widget": "Header", "props": { "links": { "$ref": "navigation/main" } } },
+    { "widget": "Outlet", "props": { "wrapper": { "widget": "Section" } } },
+    { "widget": "Outlet", "props": { "name": "aside" } },
+    { "widget": "Footer", "props": { "footNote": "Builder fixture." } }
+  ]
+}

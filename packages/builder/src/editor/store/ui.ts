@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { Catalog } from './types';
 
-export type PanelId = 'pages' | 'widgets';
+export type PanelId = 'pages' | 'outline' | 'widgets';
 export type Viewport = 'desktop' | 'tablet' | 'mobile';
 
 interface UiState {
@@ -13,6 +13,10 @@ interface UiState {
   dark: boolean;
   /** The widget whose details the right panel shows (from the catalog). */
   inspected: string | null;
+  /** Bumped to reload the preview by hand (a saved page reloads by itself: it is a dev page). */
+  previewRev: number;
+  bumpPreview: () => void;
+  setPanel: (p: PanelId | null) => void;
   setCatalog: (c: Catalog) => void;
   setCatalogError: (e: string) => void;
   togglePanel: (p: PanelId) => void;
@@ -32,10 +36,13 @@ const storedDark = (() => {
 export const useUi = create<UiState>((set) => ({
   catalog: null,
   catalogError: null,
-  panel: 'widgets',
+  panel: 'pages',
   viewport: 'desktop',
   dark: storedDark,
   inspected: null,
+  previewRev: 0,
+  bumpPreview: () => set((s) => ({ previewRev: s.previewRev + 1 })),
+  setPanel: (panel) => set({ panel }),
   setCatalog: (catalog) => set({ catalog, catalogError: null }),
   setCatalogError: (catalogError) => set({ catalogError }),
   togglePanel: (p) => set((s) => ({ panel: s.panel === p ? null : p })),

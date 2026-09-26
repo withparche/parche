@@ -31,18 +31,33 @@ function sameSecret(given: string | null, expected: string): boolean {
   return a.length === b.length && timingSafeEqual(a, b);
 }
 
-/** Null when the request may proceed, else the reason it may not. */
-export function refuse(request: Request, s: GuardSession): string | null {
+/**
+ * The checks that need no token: this machine, this origin, no cross-site
+ * request. Enough for the one kind of request an <img> makes, which cannot
+ * carry a header: reading one of the project's own images or icons.
+ */
+export function refuseForeign(request: Request, s: Pick<GuardSession, 'host'>): string | null {
   const url = new URL(request.url);
   const host = (request.headers.get('host') ?? url.host).replace(/:\d+$/, '');
   if (!s.host && !LOCAL_HOSTS.has(host)) return `host "${host}" is not this machine`;
-
   const origin = request.headers.get('origin');
   if (origin && origin !== url.origin) return `origin "${origin}" is not this server`;
   const site = request.headers.get('sec-fetch-site');
   if (site && site !== 'same-origin' && site !== 'none') return `cross-site request (${site})`;
+  return null;
+}
 
-  if (!sameSecret(request.headers.get('x-parche-builder'), s.token)) return 'missing or wrong session token';
+/**
+ * Null when the request may proceed, else the reason it may not. The token
+ * comes in the header; `queryToken` also accepts it as `?t=` for the one
+ * client that cannot set headers and only reads (EventSource).
+ */
+export function refuse(request: Request, s: GuardSession, opts: { queryToken?: boolean } = {}): string | null {
+  const foreign = refuseForeign(request, s);
+  if (foreign) return foreign;
+
+  const given = request.headers.get('x-parche-builder') ?? (opts.queryToken && request.method === 'GET' ? new URL(request.url).searchParams.get('t') : null);
+  if (!sameSecret(given, s.token)) return 'missing or wrong session token';
 
   if (MUTATIONS.has(request.method) && !(request.headers.get('content-type') ?? '').startsWith('application/json')) {
     return 'a change must be sent as application/json';

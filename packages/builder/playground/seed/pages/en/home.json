@@ -1,0 +1,39 @@
+{
+  "title": "Home",
+  "description": "The builder's fixture home.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "title": "Fixture home",
+        "subtitle": "Edited by the builder's tests.",
+        "actions": [{ "text": "Read the docs", "href": "/docs" }]
+      },
+      "slots": {
+        "proof": [{ "widget": "Stats", "props": { "items": [{ "value": "12", "label": "Widgets" }] } }]
+      }
+    },
+    {
+      "widget": "Features",
+      "wrapper": { "props": { "id": "features", "tone": "muted" } },
+      "props": {
+        "title": "What is here",
+        "items": [
+          { "title": "Slots", "description": "A Hero with numbers under it." },
+          { "title": "Wrappers", "description": "This band is muted." }
+        ]
+      }
+    },
+    {
+      "widget": "Pricing",
+      "props": {
+        "title": "Plans",
+        "periods": { "options": [{ "value": "monthly", "label": "Monthly" }, { "value": "yearly", "label": "Yearly" }], "value": "yearly" },
+        "items": [
+          { "title": "Free", "price": "0" },
+          { "title": "Team", "price": { "monthly": "29", "yearly": "290" }, "suffix": { "monthly": "/month", "yearly": "/year" }, "recommended": true }
+        ]
+      }
+    }
+  ]
+}

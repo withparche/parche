@@ -1,0 +1,7 @@
+{
+  "label": "Main menu",
+  "items": [
+    { "label": "Home", "href": "/" },
+    { "label": "Docs", "href": "/docs" }
+  ]
+}

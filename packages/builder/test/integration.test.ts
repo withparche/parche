@@ -18,7 +18,8 @@ test('the builder refuses anything but astro dev, so no build can contain it', (
 
 test('under dev it adds only /_parche routes, never prerendered, and turns the dev toolbar off', () => {
   const { routes, updates } = setup('dev');
-  assert.ok(routes.length > 0);
+  assert.ok(routes.length >= 10);
+  assert.ok(routes.some((r) => r.pattern === '/_parche/api/doc'));
   for (const r of routes) {
     assert.match(r.pattern, /^\/_parche\//);
     assert.equal(r.prerender, false);

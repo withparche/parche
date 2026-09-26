@@ -1,9 +1,10 @@
 import type { FC } from 'react';
 import { useUi, type PanelId } from '../store/ui';
-import { PagesIcon, WidgetsIcon } from './icons';
+import { OutlineIcon, PagesIcon, WidgetsIcon } from './icons';
 
 const items: { id: PanelId; label: string; Icon: FC<{ size?: number }> }[] = [
   { id: 'pages', label: 'Pages', Icon: PagesIcon },
+  { id: 'outline', label: 'Outline', Icon: OutlineIcon },
   { id: 'widgets', label: 'Widgets', Icon: WidgetsIcon },
 ];
 

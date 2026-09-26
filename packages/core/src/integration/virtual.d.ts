@@ -22,6 +22,29 @@ declare module 'parche:registry/widgets' {
   ): Promise<Record<string, import('astro').AstroComponentFactory>>;
 }
 
+declare module 'parche:registry/widgetSchemas' {
+  /** Props as JSON Schema per widget (from z.toJSONSchema), for forms. */
+  export const widgetSchemas: Record<string, Record<string, unknown>>;
+  /** The widget's meta as the catalog carries it: label, slots, wrapper, groups… */
+  export const widgetMeta: Record<
+    string,
+    {
+      label: string;
+      category: string;
+      description: string;
+      icon: string;
+      defaultProps: Record<string, unknown>;
+      defaultVariants: { props: Record<string, unknown> }[];
+      slots: NonNullable<import('./types.js').WidgetMeta['slots']>;
+      wrapper: boolean;
+      hidden: boolean;
+      ui: NonNullable<import('./types.js').WidgetMeta['ui']>;
+    }
+  >;
+  /** The zod schema itself, to validate props as the widget will (refinements included). */
+  export const widgetPropSchemas: Record<string, import('zod').ZodType>;
+}
+
 declare module 'parche:registry/templates' {
   export const templateMap: Record<string, import('astro').AstroComponentFactory>;
 }

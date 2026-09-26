@@ -9,7 +9,9 @@
     "./styles": "./src/styles/base.css",
     "./styles/generated/*": "./src/styles/generated/*",
     "./content": "./src/content/index.ts",
-    "./schemas": "./src/content/schemas.ts"
+    "./content/pure": "./src/content/pure.ts",
+    "./schemas": "./src/content/schemas.ts",
+    "./dev": "./src/dev/index.ts"
   },
   "dependencies": {
     "tailwind-merge": "catalog:",

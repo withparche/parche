@@ -14,6 +14,9 @@ export const TabletIcon = (p: P) => (<svg {...base(p)}><rect x="4" y="2" width="
 export const MobileIcon = (p: P) => (<svg {...base(p)}><rect x="5" y="2" width="14" height="20" rx="2" /><path d="M12 18h.01" /></svg>);
 export const SunIcon = (p: P) => (<svg {...base(p)}><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></svg>);
 export const MoonIcon = (p: P) => (<svg {...base(p)}><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></svg>);
+export const OutlineIcon = (p: P) => (<svg {...base(p)}><path d="M3 6h18" /><path d="M7 12h14" /><path d="M11 18h10" /><path d="M3 12h.01" /><path d="M7 18h.01" /></svg>);
+export const UndoIcon = (p: P) => (<svg {...base(p)}><path d="M3 7v6h6" /><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6.69 3L3 13" /></svg>);
+export const RedoIcon = (p: P) => (<svg {...base(p)}><path d="M21 7v6h-6" /><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6.69 3L21 13" /></svg>);
 export const CloseIcon = (p: P) => (<svg {...base({ strokeWidth: 2.5, ...p })}><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>);
 export const SearchIcon = (p: P) => (<svg {...base(p)}><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>);
 export const ChevronIcon = (p: P) => (<svg {...base(p)}><path d="m9 18 6-6-6-6" /></svg>);

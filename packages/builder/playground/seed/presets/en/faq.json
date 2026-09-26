@@ -1,0 +1,4 @@
+{
+  "label": "Common questions",
+  "tree": [{ "widget": "FAQs", "props": { "title": "Questions", "items": [{ "title": "Is it free?", "description": "Yes." }] } }]
+}

@@ -12,6 +12,12 @@ export interface CatalogWidget {
 
 export interface Catalog {
   widgets: Record<string, CatalogWidget>;
+  /** The site's widgets written in JSON (content/widgets): no slots; their props are a JSON Schema. */
+  jsonWidgets: Record<string, Omit<CatalogWidget, 'slots' | 'ui' | 'hidden'>>;
+  layouts: { id: string; locale: string; name: string; outlets: string[] }[];
+  /** The page's own fields (title, description, urlSlug, metadata) as JSON Schema. */
+  pageSettings: Record<string, unknown>;
+  limits: { maxDepth: number; maxFilledSlots: number };
   tones: string[];
   defaultWrapper: string | null;
   unwrapped: string[];

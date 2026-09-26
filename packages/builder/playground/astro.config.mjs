@@ -1,0 +1,15 @@
+import { defineConfig } from 'astro/config';
+import tailwindcss from '@tailwindcss/vite';
+import icon from 'astro-icon';
+import parche from '@parche/astro';
+import createElements from '@parche/elements';
+import createUI from '@parche/ui';
+
+// The builder's fixture: a small site with every shape the editor handles
+// (slots, node wrappers, a named outlet, a navigation reference, a preset, a
+// JSON widget, a Markdown page). Its content is seeded from ./seed.
+export default defineConfig({
+  integrations: [parche({ parches: [createElements(), createUI()], config: './src/parche.config.json', routes: { pages: true } }), icon()],
+  i18n: { defaultLocale: 'en', locales: ['en'], routing: 'manual' },
+  vite: { plugins: [tailwindcss()] },
+});

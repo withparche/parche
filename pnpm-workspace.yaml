@@ -9,6 +9,8 @@ packages:
   - "parches/*"
   # Each element library may carry a playground: a fixture site for its tests.
   - "parches/*/playground"
+  # The builder's fixture site, seeded fresh for its browser tests.
+  - "packages/*/playground"
   - "examples/*"
   # Full-site demos: bigger than an example, not a CLI-served starter.
   - "demos/*"

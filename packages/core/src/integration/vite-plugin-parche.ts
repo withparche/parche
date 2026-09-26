@@ -264,6 +264,8 @@ function humanLabel(name: string): string {
  * Generate a JS module that exports:
  *  - `widgetSchemas`  — JSON Schema per widget (from Zod v4 toJSONSchema)
  *  - `widgetMeta`     — label / category / description / defaultProps / ui per widget
+ *  - `widgetPropSchemas` — the zod schema itself, for tools that validate props
+ *    the way the widget will (refinements a JSON Schema cannot carry)
  *
  * Widgets with a sibling `.props.ts` get a full schema + metadata.
  * Widgets without one get only basic metadata (no schema / no form in builder).
@@ -295,6 +297,7 @@ function generateWidgetSchemasModule(registry: ResolvedRegistry): string {
       // skipped with a warning instead of killing the entire builder palette.
       const m = `p${index}`;
       imports.push(`import * as ${m} from ${JSON.stringify(propsPath)};`);
+      statements.push(`if (${m}.schema) widgetPropSchemas[${keyJson}] = ${m}.schema;`);
       statements.push(
         `if (${m}.schema) { try { widgetSchemas[${keyJson}] = z.toJSONSchema(${m}.schema); } ` +
         `catch (e) { console.warn(${JSON.stringify(`[parche] Skipped JSON Schema for widget "${key}": `)} + ((e && e.message) || e)); } }`,
@@ -350,6 +353,7 @@ function generateWidgetSchemasModule(registry: ResolvedRegistry): string {
 
 export const widgetSchemas = {};
 export const widgetMeta = {};
+export const widgetPropSchemas = {};
 
 ${statements.join('\n')}
 

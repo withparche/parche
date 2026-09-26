@@ -67,8 +67,9 @@ test.describe('Toc', () => {
 
   test('links jump to their headings without script', async ({ page }) => {
     await page.goto('/toc');
-    await example(page, 'basic').getByRole('link', { name: 'Swapping them' }).click();
-    expect(page.url()).toContain('#ex-toc-swap');
+    // A section's link: always shown (a subsection's folds away while another section is read).
+    await example(page, 'basic').getByRole('link', { name: 'Themes' }).click();
+    expect(page.url()).toContain('#ex-toc-themes');
   });
 });
 

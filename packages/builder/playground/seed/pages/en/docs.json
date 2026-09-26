@@ -1,0 +1,10 @@
+{
+  "title": "Docs",
+  "layout": "docs",
+  "sections": [
+    { "widget": "Features", "props": { "title": "Getting started", "items": [{ "title": "Install", "description": "One command." }] } }
+  ],
+  "slots": {
+    "aside": [{ "widget": "Features", "props": { "title": "On this page", "layout": "list", "items": [{ "title": "Install" }] } }]
+  }
+}

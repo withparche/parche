@@ -98,37 +98,26 @@ const unwrappedAll = [...unwrapped, ...Object.values(definitions).filter((d) => 
 // the build, which is the CI check. The catalog imports every widget's
 // schema, so it is loaded only here and never on a server-rendered request.
 if (import.meta.env.DEV || Astro.isPrerendered) {
-  const [{ widgetMeta }, { tones }, { validateTree }] = await Promise.all([
+  const [{ widgetMeta }, { tones }, { checkTrees }] = await Promise.all([
     import('parche:registry/widgetSchemas'),
     import('parche:config/layout'),
-    import('../content/validate.js'),
+    import('../content/check.js'),
   ]);
-  // A JSON widget is a widget with no slots to the validator; its own tree is
-  // checked from its root, once, and each use's props against its schema.
-  const jsonShapes = Object.fromEntries(Object.values(rawDefinitions).map((d) => [d.name, { wrapper: d.wrapper }]));
-  const ctx = { widgets: { ...(widgetMeta as any), ...jsonShapes }, tones: tones.map((t) => t.name), wrapper: wrapperName };
-  const jsonIssues = [
-    ...json.issues,
-    ...Object.values(rawDefinitions).flatMap((d) => [
-      ...(d.name in (widgetMeta as any) ? [{ path: `widgets/${d.name}`, message: `"${d.name}" is also a registered widget; rename the JSON one` }] : []),
-      ...checkDefinition(d),
-      ...validateTree(d.tree, ctx, `widgets/${d.name}.tree`),
-    ]),
-    ...definitionRefs.flatMap(([, , issues]) => issues),
-    ...checkUses(rawNodes, rawDefinitions, base),
-    ...Object.entries(rawOutlets?.nodes ?? {}).flatMap(([name, tree]) => checkUses(tree, rawDefinitions, name === 'default' ? 'sections' : `slots.${name}`)),
-  ];
-  // A list's wrapper is checked like a node of that widget: it must exist and
-  // its tone must be registered.
-  const wrapperIssues = declared.flatMap(({ path, wrapper: w }) =>
-    w ? validateTree([{ widget: w.name, props: w.props }], { ...ctx, wrapper: w.name }, path).map((i) => ({ ...i, path })) : [],
-  );
   const issues = [
     ...refIssues,
-    ...jsonIssues,
-    ...wrapperIssues,
-    ...validateTree(rawNodes, ctx, base),
-    ...Object.entries(rawOutlets?.nodes ?? {}).flatMap(([name, tree]) => validateTree(tree, ctx, name === 'default' ? 'sections' : `slots.${name}`)),
+    ...json.issues,
+    ...checkTrees({
+      roots: [
+        { nodes: rawNodes, base },
+        ...Object.entries(rawOutlets?.nodes ?? {}).map(([name, tree]) => ({ nodes: tree, base: name === 'default' ? 'sections' : `slots.${name}` })),
+      ],
+      definitions: rawDefinitions,
+      definitionIssues: definitionRefs.flatMap(([, , issues]) => issues),
+      widgetMeta: widgetMeta as any,
+      tones: tones.map((t: { name: string }) => t.name),
+      wrapper: wrapperName,
+      declared,
+    }),
   ];
   if (issues.length && !import.meta.env.DEV) {
     throw new Error(
