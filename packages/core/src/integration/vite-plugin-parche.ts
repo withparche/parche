@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { Plugin } from 'vite';
+import { setTokenOverridesReloader } from '../dev/info.js';
 import type { ResolvedRegistry } from './types.js';
 import { tokensToCss, validateOverrides } from '../config/token-overrides.js';
 
@@ -535,10 +536,12 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
     enforce: 'pre',
 
     // The token overrides file may appear, change or go while the server
-    // runs (the builder writes it): its CSS module reloads each time.
+    // runs (the builder writes it): its CSS module reloads each time. A tool
+    // that just wrote it asks at once (reloadTokenOverrides in dev/), so a
+    // render right after the save never gets the old CSS while the watcher
+    // catches up.
     configureServer(server) {
-      const reload = (file: string) => {
-        if (path.resolve(file) !== registry.tokenOverridesPath) return;
+      const reloadNow = () => {
         for (const env of Object.values(server.environments ?? {})) {
           const mod = env.moduleGraph.getModuleById(TOKEN_OVERRIDES_VIRTUAL);
           if (mod) {
@@ -548,6 +551,10 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
             void (env as { reloadModule?: (m: typeof mod) => Promise<void> }).reloadModule?.(mod)?.catch(() => undefined);
           }
         }
+      };
+      setTokenOverridesReloader(reloadNow);
+      const reload = (file: string) => {
+        if (path.resolve(file) === registry.tokenOverridesPath) reloadNow();
       };
       server.watcher.on('add', reload);
       server.watcher.on('change', reload);

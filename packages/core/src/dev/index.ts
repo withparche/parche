@@ -6,7 +6,7 @@
  * core and is not for sites. Import it from code Vite runs (a route), not
  * from an integration: the helpers read the content store.
  */
-export { getDevInfo, setDevInfo } from './info.js';
+export { getDevInfo, setDevInfo, reloadTokenOverrides } from './info.js';
 export type { DevInfo } from './info.js';
 export { previewContext } from './preview.js';
 export type { PreviewContext } from './preview.js';

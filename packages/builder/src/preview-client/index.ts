@@ -96,7 +96,7 @@ const host = document.createElement('parche-builder-overlay');
 host.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:2147483647;';
 const shadow = host.attachShadow({ mode: 'open' });
 shadow.innerHTML = `<style>
-  .box{position:fixed;border-radius:3px;pointer-events:none;transition:all .08s ease-out}
+  .box{position:fixed;border-radius:3px;pointer-events:none}
   .hover{outline:1px dashed #6366f1;outline-offset:-1px}
   .selected{outline:2px solid #4f46e5;outline-offset:-2px}
   .label{position:absolute;left:-2px;top:-20px;font:600 11px/1 ui-sans-serif,system-ui,sans-serif;color:#fff;background:#4f46e5;padding:4px 6px;border-radius:3px 3px 3px 0;white-space:nowrap}
@@ -118,6 +118,10 @@ function place(box: HTMLElement, id: string | null) {
     return;
   }
   box.hidden = false;
+  // Written only when it moved: the box follows every frame while shown.
+  const at = `${rect.left},${rect.top},${rect.width},${rect.height}`;
+  if (box.dataset.at === at) return;
+  box.dataset.at = at;
   box.style.left = `${rect.left}px`;
   box.style.top = `${rect.top}px`;
   box.style.width = `${rect.width}px`;
@@ -130,9 +134,17 @@ function draw() {
   if (selected) label.textContent = api.describe?.(selected.split('.')[0]) ?? '';
 }
 
+// The boxes stick to their nodes: while one is shown it is placed again on
+// every frame, so it keeps up with scrolling and with a page that moves by
+// itself (an image that loads, a font, an accordion, a carousel). With
+// nothing to show, nothing runs.
 let frame = 0;
+const tick = () => {
+  draw();
+  frame = selected || (mode === 'edit' && hovered) ? requestAnimationFrame(tick) : 0;
+};
 const schedule = () => {
-  if (!frame) frame = requestAnimationFrame(() => ((frame = 0), draw()));
+  if (!frame) frame = requestAnimationFrame(tick);
 };
 addEventListener('scroll', schedule, { passive: true, capture: true });
 addEventListener('resize', schedule, { passive: true });

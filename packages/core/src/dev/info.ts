@@ -25,3 +25,14 @@ export function getDevInfo(): DevInfo | null {
   return (globalThis as { [KEY]?: DevInfo })[KEY] ?? null;
 }
 
+const RELOAD = Symbol.for('parche.dev.tokens');
+
+/** Recorded by the Vite plugin under `astro dev`: reloads the token overrides CSS module. */
+export function setTokenOverridesReloader(fn: () => void): void {
+  (globalThis as { [RELOAD]?: () => void })[RELOAD] = fn;
+}
+
+/** A tool that wrote src/parche.tokens.json reloads its CSS now, not when the watcher gets to it. */
+export function reloadTokenOverrides(): void {
+  (globalThis as { [RELOAD]?: () => void })[RELOAD]?.();
+}

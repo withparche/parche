@@ -4,6 +4,7 @@ import { session } from '../../server/session.js';
 import { json } from '../../server/guard.js';
 import { body, handle } from '../../server/http.js';
 import { readTokens, writeTokens } from '../../server/tokens.js';
+import { reloadTokenOverrides } from '@parche/astro/dev';
 
 const known = new Set([...Object.keys(catalog.light), ...Object.keys(catalog.dark)]);
 
@@ -15,5 +16,8 @@ export const GET = handle(async () => json({ catalog, meta, ...(await readTokens
 
 export const PUT = handle(async (req) => {
   const input = await body<{ etag: string; overrides: unknown }>(req);
-  return json(await writeTokens(session().root, input.etag ?? '', input.overrides, known));
+  const saved = await writeTokens(session().root, input.etag ?? '', input.overrides, known);
+  // The next render (the preview reloads) must see the new CSS.
+  reloadTokenOverrides();
+  return json(saved);
 });
