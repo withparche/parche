@@ -15,7 +15,13 @@ export const schema = z.object({
   width: z.number().default(800),
   height: z.number().optional(),
   ratio: z.enum(ratios).optional().meta({ help: 'Crops to a fixed aspect ratio (object-fit: cover).' }),
-  loading: z.enum(['lazy', 'eager']).default('lazy').meta({ help: 'eager for the hero image above the fold.' }),
+  loading: z.enum(['lazy', 'eager']).default('lazy').meta({ help: 'eager for an image above the fold; prefer `priority` for the main one.' }),
+  priority: z.boolean().default(false).meta({ help: 'The page\'s main image (a hero, a post\'s cover): loaded at once, fetched first. One per page.' }),
+  layout: z
+    .enum(['constrained', 'full-width', 'fixed'])
+    .optional()
+    .meta({ help: 'How the srcset is chosen: constrained (up to `width`), full-width (the viewport), fixed. Default: parche({ images: { layout } }), else constrained.' }),
+  sizes: z.string().optional().meta({ help: 'The sizes attribute, when the layout\'s default does not describe where the image sits.' }),
   fit: z.enum(['cover', 'contain']).default('cover'),
 });
 
@@ -24,7 +30,7 @@ export type Props = z.infer<typeof schema> & { class?: string };
 export const meta = defineElement({
   element: {
     label: 'Image',
-    description: 'An optimised image: local files through astro:assets, remote URLs as-is.',
+    description: 'An optimised, responsive image: local files through Astro, remote ones through their image CDN or Astro when allowed, as is otherwise.',
     tokens: ['color-surface'],
     parts: [
       { name: 'root', element: 'div', description: 'The frame; carries the aspect ratio.' },

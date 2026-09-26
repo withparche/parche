@@ -15,7 +15,8 @@
     "tailwind-merge": "catalog:",
     "zod": "catalog:",
     "invokers-polyfill": "catalog:",
-    "@oddbird/popover-polyfill": "catalog:"
+    "@oddbird/popover-polyfill": "catalog:",
+    "unpic": "catalog:"
   },
   "peerDependencies": {
     "@parche/astro": "workspace:*",

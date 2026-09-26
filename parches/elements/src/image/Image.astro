@@ -1,15 +1,24 @@
 ---
 /**
- * Image — one component for both kinds of picture a page has. Local images
- * (astro:assets metadata, which `resolveAssets` produces from `@/assets/…`)
- * go through Astro's optimiser: hashed, resized, modern formats. Remote URLs
- * render a plain `<img>` with explicit dimensions, so the layout never shifts.
+ * Image — one component for every picture a page has, each on the best path
+ * it can take (see image-strategy.ts):
+ * 1. local (`@/assets/…`, which resolveAssets registers with its metadata):
+ *    Astro's image service, responsive;
+ * 2. remote on an image CDN that transforms by URL (unpic detects it, or
+ *    `parche({ images: { cdn } })` names it): a srcset of CDN URLs, nothing
+ *    downloaded at build time;
+ * 3. remote and allowed by Astro's image.domains / remotePatterns: Astro;
+ * 4. anything else, and SVG: a plain <img> with its dimensions, and a build
+ *    warning for a remote one.
+ * `priority` marks the page's main image: loaded at once, fetched first.
  */
-import { Image as AstroImage } from 'astro:assets';
+import { Image as AstroImage, imageConfig, inferRemoteSize } from 'astro:assets';
+import { isRemoteAllowed } from 'astro/assets/utils';
 import { cn, splitProps } from '@parche/elements/utils';
 import { schema, type Props } from './image.props';
+import { REMOTE_BREAKPOINTS, cdnSources, readImagesOptions, remotePath, type ImageLayout } from './image-strategy';
 
-const { props: { src, alt, width, height, ratio, loading, fit }, rest, className, part } = splitProps(schema, Astro.props);
+const { props: { src, alt, width, height, ratio, loading, priority, layout: layoutProp, sizes, fit }, rest, className, part } = splitProps(schema, Astro.props);
 
 const ratios: Record<NonNullable<typeof ratio>, string> = {
   '1/1': 'aspect-square',
@@ -23,9 +32,71 @@ const ratios: Record<NonNullable<typeof ratio>, string> = {
   '9/16': 'aspect-[9/16]',
 };
 
-const isRemote = typeof src === 'string';
-const computedHeight = height ?? (ratio ? undefined : Math.round((width * 9) / 16));
+const options = readImagesOptions(import.meta.env.PARCHE_IMAGES);
+const layout: ImageLayout = layoutProp ?? options.layout ?? 'constrained';
+
+// A URL resolveAssets produced carries its metadata in the registry core
+// keeps; a copied element without Parche finds none and treats it as remote.
+type Local = { src: string; width: number; height: number; format?: string };
+const registry = (globalThis as { [k: symbol]: Map<string, Local> | undefined })[Symbol.for('parche.assets')];
+const local: Local | undefined = typeof src === 'string' ? registry?.get(src) : (src as Local);
+const url = typeof src === 'string' ? src : src.src;
+
+// The crop: an explicit height, else the ratio's, else the picture's own
+// (a local one), else 16:9 so a remote picture of unknown shape reserves space.
+const [rw, rh] = (ratio ?? '').split('/').map(Number);
+const shape = height ? height / width : ratio ? rh / rw : local ? local.height / local.width : 9 / 16;
+let h = Math.round(width * shape);
+const crop = !!(height || ratio);
+
+const isRemote = !local && /^https?:\/\//.test(url);
+let route = local
+  ? local.format === 'svg'
+    ? { path: 'plain' as const }
+    : { path: 'local' as const }
+  : isRemote
+    ? remotePath(url, options, (u) => isRemoteAllowed(u, imageConfig))
+    : { path: 'plain' as const };
+
+// Astro needs the size of a remote picture it will resize. Without a crop,
+// measure it (once per URL per build); a host that does not answer must not
+// fail the build, so that picture goes out as it is, with a warning.
+let natural: { width: number; height: number } | undefined;
+if (route.path === 'astro' && !crop) {
+  const sizes = ((globalThis as { [k: symbol]: Map<string, Promise<{ width: number; height: number } | undefined>> | undefined })[Symbol.for('parche.images.sizes')] ??= new Map());
+  if (!sizes.has(url)) sizes.set(url, inferRemoteSize(url).then((m) => ({ width: m.width, height: m.height }), () => undefined));
+  natural = await sizes.get(url);
+  if (!natural) route = { path: 'plain' as const };
+}
+
+const cdn =
+  route.path === 'cdn'
+    ? cdnSources(url, route.provider, { width, height: crop ? h : undefined, layout, breakpoints: options.breakpoints ?? imageConfig.breakpoints ?? REMOTE_BREAKPOINTS, sizes })
+    : undefined;
+
+// Say which remote pictures go out as they are, once each, at build time.
+if (isRemote && (route.path === 'plain' || (route.path === 'cdn' && !cdn)) && options.warnUnoptimized !== false && options.remote !== 'none') {
+  const warned = ((globalThis as { [k: symbol]: Set<string> | undefined })[Symbol.for('parche.images.warned')] ??= new Set());
+  if (!warned.has(url)) {
+    warned.add(url);
+    console.warn(`[parche] image not optimised: ${url} — allow its host in image.domains / remotePatterns, or name its CDN in parche({ images: { cdn: { providers } } })`);
+  }
+}
+
+if (natural) h = Math.round((width * natural.height) / natural.width);
+
+const eager = priority || loading === 'eager';
 const imgClass = cn('parche-image-img bg-surface', ratio && 'size-full', ratio && (fit === 'contain' ? 'object-contain' : 'object-cover'));
+const common = {
+  alt,
+  width,
+  height: h,
+  loading: eager ? ('eager' as const) : ('lazy' as const),
+  decoding: 'async' as const,
+  ...(priority ? { fetchpriority: 'high' as const } : {}),
+  class: imgClass,
+  'data-path': route.path === 'cdn' && !cdn ? 'plain' : route.path,
+};
 ---
 
 <div
@@ -34,26 +105,13 @@ const imgClass = cn('parche-image-img bg-surface', ratio && 'size-full', ratio &
   data-part={part}
   data-ratio={ratio}
 >
-  {isRemote ? (
-    <img
-      src={src}
-      alt={alt}
-      width={width}
-      height={computedHeight}
-      loading={loading}
-      decoding="async"
-      class={imgClass}
-      data-part="img"
-    />
+  {route.path === 'local' ? (
+    <AstroImage src={local as any} {...common} data-part="img" layout={layout} sizes={sizes} fit={fit} priority={priority} />
+  ) : route.path === 'astro' ? (
+    <AstroImage src={url} {...common} data-part="img" layout={layout} sizes={sizes} fit={fit} priority={priority} />
+  ) : cdn ? (
+    <img {...common} data-part="img" src={cdn.src} srcset={cdn.srcset} sizes={cdn.sizes} />
   ) : (
-    <AstroImage
-      src={src}
-      alt={alt}
-      width={width}
-      height={computedHeight ?? Math.round((width * src.height) / src.width)}
-      loading={loading}
-      class={imgClass}
-      data-part="img"
-    />
+    <img {...common} data-part="img" src={local?.src ?? url} />
   )}
 </div>

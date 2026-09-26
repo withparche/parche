@@ -50,7 +50,7 @@ const title = post ? (post.issue ? `#${post.issue} · ${post.title}` : post.titl
     </div>
     {p.image && post.image && (
       <figure class="mx-auto mt-10 max-w-[1040px]">
-        <Image src={post.image.src} alt={post.image.alt ?? ''} width={1600} loading="eager" class="w-full rounded-xl" />
+        <Image src={post.image.src} alt={post.image.alt ?? ''} width={1600} sizes="(min-width: 1100px) 1040px, 100vw" priority class="w-full rounded-xl" />
         {post.image.caption && <figcaption class="mt-2 text-center text-xs text-muted">{post.image.caption}</figcaption>}
       </figure>
     )}

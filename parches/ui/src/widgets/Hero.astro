@@ -33,7 +33,7 @@ const Badge = badge?.href ? 'a' : 'span';
     <div class="relative">
       <div class="parche-hero-media overflow-hidden rounded-lg">
         <slot name="media">
-          {image && <Image src={image.src} alt={image.alt} width={1600} ratio="16/9" loading="eager" class="block w-full" />}
+          {image && <Image src={image.src} alt={image.alt} width={1600} ratio="16/9" layout="full-width" priority class="block w-full" />}
         </slot>
       </div>
       <div class="mt-4 md:absolute md:bottom-[clamp(20px,4vw,48px)] md:left-[clamp(20px,4vw,48px)] md:mt-0 md:max-w-[460px]">
@@ -111,7 +111,7 @@ const Badge = badge?.href ? 'a' : 'span';
               alt={image.alt}
               width={split ? 600 : 1024}
               ratio={split ? undefined : '16/9'}
-              loading="eager"
+              priority
               class:list={['rounded-md', split && 'mx-auto max-w-[600px]']}
             />
           )}

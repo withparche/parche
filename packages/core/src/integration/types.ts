@@ -326,6 +326,46 @@ export interface ParcheThemesConfig {
   default?: string;
 }
 
+/**
+ * How images are optimised, read by the Image element. Every image takes the
+ * first path that applies:
+ * 1. local (`src/assets`): Astro's image service, responsive;
+ * 2. remote on an image CDN that transforms by URL (detected by unpic, or
+ *    named in `cdn.providers`): a srcset of CDN URLs, nothing at build time;
+ * 3. remote and allowed by Astro's `image.domains` / `image.remotePatterns`:
+ *    downloaded and optimised by Astro at build time;
+ * 4. anything else: a plain <img> with its dimensions, and a warning.
+ */
+export interface ParcheImagesConfig {
+  /**
+   * Which paths remote images may take. 'auto': CDN, then Astro, then as is.
+   * 'cdn': CDN or as is. 'astro': Astro or as is. 'none': always as is.
+   * Default: 'auto'.
+   */
+  remote?: 'auto' | 'cdn' | 'astro' | 'none';
+  cdn?: {
+    /**
+     * Only these hosts take the CDN path (exact, or '*.' / '**.' for
+     * subdomains). Default: any host unpic recognises or `providers` names.
+     */
+    hosts?: string[];
+    /** A host that is a known CDN under your own domain: host → provider ('imgix', 'cloudinary'…). */
+    providers?: Record<string, string>;
+    /** A provider for remote images unpic does not recognise, e.g. 'wsrv' (a free image proxy). Default: none. */
+    fallback?: string;
+  };
+  /**
+   * The default responsive layout: 'constrained' (up to its width), 'full-width'
+   * or 'fixed'. Also Astro's `image.layout` when astro.config sets none, so
+   * Markdown images get a srcset too. Default: 'constrained'.
+   */
+  layout?: 'constrained' | 'full-width' | 'fixed';
+  /** Widths a srcset may use. Default: Astro's (image.breakpoints). */
+  breakpoints?: number[];
+  /** Warn at build about each remote image that goes out unoptimised. Default: true. */
+  warnUnoptimized?: boolean;
+}
+
 export interface ParcheSeoConfig {
   /** Allow AI crawlers (GPTBot, CCBot, anthropic-ai, ClaudeBot) in robots.txt. Default: true */
   allowAICrawlers?: boolean;
@@ -355,6 +395,8 @@ export interface ParcheUserConfig {
   styles?: ParcheStylesConfig;
   /** SEO build-time config (robots.txt generation, etc.) */
   seo?: ParcheSeoConfig;
+  /** Image optimisation: local, image CDNs, Astro for remote, or as is. */
+  images?: ParcheImagesConfig;
 }
 
 /**

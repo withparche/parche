@@ -11,6 +11,8 @@ duplicate it here.
 
 - [conventions.md](./conventions.md) — the per-element contract, the styling API,
   the `ParcheElement` base, eject and copy-readiness.
+- [images.md](./images.md) — how pictures are optimised: local, image CDNs
+  (unpic), Astro for remote ones, or as they are; the `parche({ images })` options.
 
 ## Status
 

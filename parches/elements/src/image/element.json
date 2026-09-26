@@ -2,12 +2,30 @@
   "name": "image",
   "type": "element",
   "files": [
-    { "path": "Image.astro", "type": "part" },
-    { "path": "image.props.ts", "type": "props" },
-    { "path": "README.md", "type": "doc" },
-    { "path": "examples/basic.astro", "type": "example" }
+    {
+      "path": "Image.astro",
+      "type": "part"
+    },
+    {
+      "path": "image.props.ts",
+      "type": "props"
+    },
+    {
+      "path": "image-strategy.ts",
+      "type": "lib"
+    },
+    {
+      "path": "README.md",
+      "type": "doc"
+    },
+    {
+      "path": "examples/basic.astro",
+      "type": "example"
+    }
   ],
-  "dependencies": {},
+  "dependencies": {
+    "unpic": "^4.2.2"
+  },
   "registryDependencies": [],
   "source": null
 }

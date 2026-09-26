@@ -20,6 +20,19 @@ const imageLoaders = import.meta.glob<{ default: { src: string } }>(
   '/src/assets/images/**/*.{png,jpg,jpeg,gif,svg,webp,avif}',
 );
 
+/**
+ * Props stay plain data, so a resolved image is its URL; but the Image element
+ * needs Astro's metadata (width, height, format) to optimise it. Every image
+ * resolved here is registered under its URL, on a global the element reads
+ * by the same well-known symbol — a copied element without Parche finds no
+ * registry and treats the URL as any other.
+ */
+const ASSETS = Symbol.for('parche.assets');
+function assetRegistry(): Map<string, unknown> {
+  const g = globalThis as { [ASSETS]?: Map<string, unknown> };
+  return (g[ASSETS] ??= new Map());
+}
+
 /** Plain objects and arrays are the only things worth recursing into — Dates and
  *  class instances never hold asset paths and must not be flattened. */
 function isPlainObject(value: unknown): value is Record<string, unknown> {
@@ -58,6 +71,7 @@ export async function resolveAssets<T>(value: T): Promise<T> {
       if (loader) {
         const mod = await loader();
         resolved.set(src, mod.default.src);
+        assetRegistry().set(mod.default.src, mod.default);
       }
     }),
   );

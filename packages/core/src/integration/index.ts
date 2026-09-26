@@ -96,6 +96,23 @@ const userConfigSchema = z
       .optional(),
     styles: z.object({ entry: z.string().optional() }).strict().optional(),
     seo: z.object({ allowAICrawlers: z.boolean().optional() }).strict().optional(),
+    images: z
+      .object({
+        remote: z.enum(['auto', 'cdn', 'astro', 'none']).optional(),
+        cdn: z
+          .object({
+            hosts: z.array(z.string()).optional(),
+            providers: z.record(z.string(), z.string()).optional(),
+            fallback: z.string().optional(),
+          })
+          .strict()
+          .optional(),
+        layout: z.enum(['constrained', 'full-width', 'fixed']).optional(),
+        breakpoints: z.array(z.number().int().positive()).optional(),
+        warnUnoptimized: z.boolean().optional(),
+      })
+      .strict()
+      .optional(),
   })
   .strict();
 
@@ -221,6 +238,21 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
         if (!config.fonts?.length && resolvedRegistry.fonts.length > 0) {
           updateConfig({ fonts: toAstroFonts(resolvedRegistry.fonts) });
         }
+
+        // Images: the Image element reads the options from a build constant
+        // (elements import nothing from parche:*, so a copied one still works
+        // and falls back to the defaults). Astro gets the layout and the
+        // breakpoints when its own config sets none, so Markdown images are
+        // responsive too.
+        const images = resolved.images ?? {};
+        const imageLayout = images.layout ?? 'constrained';
+        updateConfig({
+          image: {
+            ...(config.image?.layout ? {} : { layout: imageLayout }),
+            ...(images.breakpoints && !config.image?.breakpoints ? { breakpoints: images.breakpoints } : {}),
+          },
+          vite: { define: { 'import.meta.env.PARCHE_IMAGES': JSON.stringify(JSON.stringify(images)) } },
+        });
 
 
         // Resolve @core/* alias for backward compatibility with widget internal imports

@@ -6,6 +6,7 @@
  * appear on a blog with one writer.
  */
 import Avatar from 'parche:elements/Avatar';
+import Image from 'parche:elements/Image';
 import Placeholder from 'parche:elements/Placeholder';
 import { blogContext, type BlogCard } from '../../lib/blog-context';
 import { schema, type Props } from './PostList.props';
@@ -35,6 +36,10 @@ const inFeed = Astro.slots.has('inFeed') && posts.length > p.inFeedAfter ? await
 const feedAt = (i: number) => inFeed && i === p.inFeedAfter - 1;
 const title = (c: BlogCard) => (c.issue ? `#${c.issue} · ${c.title}` : c.title);
 const seriesLabel = ctx?.labels?.seriesChip ?? 'Series';
+// The first picture is the page's main one only when nothing is featured
+// above the list on the first page; the rest wait until they are near.
+const lead = (i: number) => i === 0 && !ctx?.shown?.length && (ctx?.page?.current ?? 1) === 1 && !p.posts;
+const cardSizes = columns === '2' ? '(min-width: 640px) 50vw, 100vw' : '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw';
 ---
 
 <div class="parche-post-list" data-layout={layout} data-density={density} style={vars}>
@@ -47,7 +52,7 @@ const seriesLabel = ctx?.labels?.seriesChip ?? 'Series';
         <li class="flex min-w-0 flex-col overflow-hidden rounded-lg border border-border bg-surface">
           {show.image && (
             <a href={c.href} tabindex="-1" aria-hidden="true" class="block">
-              {c.image ? <img src={c.image.src} alt="" loading="lazy" class="aspect-[16/10] w-full object-cover" /> : <Placeholder ratio="16/10" class="rounded-none" />}
+              {c.image ? <Image src={c.image.src} alt="" width={640} ratio="16/10" sizes={cardSizes} priority={lead(i)} /> : <Placeholder ratio="16/10" class="rounded-none" />}
             </a>
           )}
           <div class="flex flex-1 flex-col p-(--card-pad)">
@@ -99,7 +104,7 @@ const seriesLabel = ctx?.labels?.seriesChip ?? 'Series';
           </div>
           {layout === 'rows' && show.image && (
             <a href={c.href} tabindex="-1" aria-hidden="true" class="col-start-2 row-span-full row-start-1 block self-start">
-              {c.image ? <img src={c.image.src} alt="" loading="lazy" class="aspect-square w-full rounded-md object-cover" /> : <Placeholder ratio="1/1" />}
+              {c.image ? <Image src={c.image.src} alt="" width={120} ratio="1/1" layout="fixed" class="rounded-md" /> : <Placeholder ratio="1/1" />}
             </a>
           )}
           {layout === 'compact' && show.date && <time datetime={c.date} class="font-mono text-xs whitespace-nowrap text-muted">{c.dateText}</time>}
