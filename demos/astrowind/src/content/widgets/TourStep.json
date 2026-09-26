@@ -1,0 +1,75 @@
+{
+  "label": "Tour step",
+  "description": "One screen of a product tour beside what it does and one action.",
+  "category": "content",
+  "icon": "tabler:device-desktop",
+  "props": {
+    "type": "object",
+    "properties": {
+      "url": { "type": "string", "description": "The bar over the screen: \"src/config.yaml · 1200×760\"." },
+      "badge": { "type": "string", "description": "\"Step 1 of 4\"." },
+      "caption": { "type": "string", "default": "real screenshot goes here" },
+      "ratio": { "type": "string", "enum": ["16/10", "16/9", "4/3"], "default": "16/10" },
+      "title": { "type": "string", "minLength": 1 },
+      "subtitle": { "type": "string" },
+      "actions": {
+        "type": "array",
+        "maxItems": 2,
+        "items": {
+          "type": "object",
+          "properties": {
+            "text": { "type": "string" },
+            "href": { "type": "string" },
+            "variant": { "type": "string", "enum": ["primary", "secondary", "contrast", "tertiary", "link"], "default": "primary" }
+          },
+          "required": ["text", "href"],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": ["url", "title"]
+  },
+  "tree": [
+    {
+      "widget": "Columns",
+      "props": { "ratio": "equal", "gap": "lg", "align": "center" },
+      "slots": {
+        "default": [
+          {
+            "widget": "Column",
+            "slots": {
+              "default": [
+                {
+                  "widget": "Screenshot",
+                  "props": {
+                    "url": { "$prop": "url" },
+                    "badge": { "$prop": "badge" },
+                    "badgeTone": "primary",
+                    "caption": { "$prop": "caption" },
+                    "ratio": { "$prop": "ratio" }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Column",
+            "slots": {
+              "default": [
+                {
+                  "widget": "CallToAction",
+                  "props": {
+                    "layout": "stacked",
+                    "title": { "$prop": "title" },
+                    "subtitle": { "$prop": "subtitle" },
+                    "actions": { "$prop": "actions" }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

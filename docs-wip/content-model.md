@@ -5,7 +5,8 @@ Provisional, like everything in `docs-wip/`. This is the model the
 
 ## One shape for everything
 
-A page, a layout and a preset are all trees of **nodes**:
+A page, a layout, a preset and a JSON widget's definition are all trees of
+**nodes**:
 
 ```json
 { "widget": "Hero", "props": { "title": "Pages are data" } }
@@ -27,7 +28,8 @@ A node is a widget with its props. A widget that declares **slots** in its
 The slot names are the widget's Astro slots: `slots.media` in the JSON lands
 in `<slot name="media">` in the `.astro`, and `slots.default` in the unnamed
 `<slot />`. A slot left empty keeps the widget's own fallback content. Trees
-stop at three levels.
+stop at three levels; past that, the repeated part becomes a widget of its
+own (see *Widgets in JSON*).
 
 The schema is `nodeSchema` in `@parche/astro/content`; `notes` is a free-text
 field for whoever edits the page next and is never rendered; `id` is an
@@ -188,6 +190,10 @@ each issue with its path:
 [parche] sections[2]: tone "neon" is not registered (known: default, muted, dark, primary, glow, gradient, dots)
 ```
 
+The uses of JSON widgets are checked on the same pass: their props against
+the definition's schema, and the definition's own tree (see *Widgets in
+JSON*).
+
 In a build, a prerendered page with issues fails the build with the same
 lines, which is the check CI runs; a page rendered on a server at request
 time is not checked, so the catalog, which imports every widget's schema,
@@ -228,6 +234,124 @@ it is used:
 An editor may instead copy the tree into the page, which is the same result
 without the link. A preset may contain another; expansion stops three deep.
 The locale's preset wins over the plain name.
+
+## Widgets in JSON
+
+A project can define a widget of its own in JSON: a composition of
+registered widgets with props of its own. It is content, like a page, so an
+editor, the builder or an assistant can write one without code or a build
+step. One file per widget in the `widgets` collection; the file name is the
+widget name, case kept:
+
+```
+src/content/widgets/TourStep.json   →   "widget": "TourStep"
+```
+
+```json
+{
+  "label": "Tour step",
+  "description": "One screen of a product tour beside what it does and one action.",
+  "category": "content",
+  "icon": "tabler:device-desktop",
+  "props": {
+    "type": "object",
+    "properties": {
+      "url": { "type": "string", "description": "The bar over the screen." },
+      "ratio": { "type": "string", "enum": ["16/10", "16/9", "4/3"], "default": "16/10" },
+      "title": { "type": "string", "minLength": 1 },
+      "actions": { "type": "array", "items": { "type": "object", "properties": { "text": { "type": "string" }, "href": { "type": "string" } }, "required": ["text", "href"] } }
+    },
+    "required": ["url", "title"]
+  },
+  "tree": [
+    { "widget": "Columns", "props": { "ratio": "equal", "align": "center" }, "slots": { "default": [
+      { "widget": "Column", "slots": { "default": [
+        { "widget": "Screenshot", "props": { "url": { "$prop": "url" }, "ratio": { "$prop": "ratio" } } }
+      ] } },
+      { "widget": "Column", "slots": { "default": [
+        { "widget": "CallToAction", "props": { "layout": "stacked", "title": { "$prop": "title" }, "actions": { "$prop": "actions" } } }
+      ] } }
+    ] } }
+  ]
+}
+```
+
+A page uses it by name, like any widget:
+
+```json
+{ "widget": "TourStep", "props": { "url": "src/config.yaml · 1200×760", "title": "One file for the whole site" } }
+```
+
+The collection has to be exported by the site, like the others:
+
+```ts
+const { pages, layouts, presets, widgets, navigation } = createCollections();
+export const collections = { pages, layouts, presets, widgets, navigation };
+```
+
+**The definition**
+
+- `label` (required), `description`, `category`, `icon`: what a palette shows,
+  as in a widget's `meta.widget`.
+- `props`: the widget's props, always declared, as **JSON Schema** (an
+  object schema: `properties`, `required`, and per prop `type`, `enum`,
+  `default`, `minLength`, `items`… and `description` for the help text).
+  Core turns it into a zod schema with `z.fromJSONSchema`, the same zod the
+  code widgets are written in, so a JSON widget and a `.props.ts` widget are
+  validated the same way. Unknown props are refused unless the schema sets
+  `additionalProperties`.
+- `wrapper`: `false` when a use is never wrapped, as a widget's
+  `wrapper: false`. Default `true`.
+- `tree`: the nodes it renders, one or more.
+
+**Placeholders.** In the tree, a value `{ "$prop": "title" }` takes the
+value of the prop. A dotted path reaches into an object prop:
+`{ "$prop": "link.href" }`. A placeholder whose prop has no value drops its
+key (or its array item), so the inner widget's own default applies. A
+placeholder is a whole value; it is not interpolated inside a string.
+
+**Validation.** Every use, and the definition itself, is checked with the
+rest of the page (a warning in dev, a failed build when prerendered):
+
+- each use's props against the definition's schema, with the defaults
+  applied, reported at the use's path in the page
+  (`sections[1].slots.config[0].props.title`);
+- the definition against itself: every placeholder names a declared prop,
+  and every declared prop is used;
+- the tree like any tree (widgets exist, slots are declared and allowed,
+  tones), counted **from its own root**;
+- the uses inside it, with the values the use gives them;
+- then each inner widget parses its own props when it renders, as always.
+
+A JSON widget takes no slots of its own, and its name may not be the name
+of a registered widget. It may use another JSON widget; a chain stops three
+deep. Presets and references (`$ref`, `$collection`) inside a definition are
+resolved like a page's.
+
+**Depth.** A use counts as one node where it sits, and its tree starts again
+at the root. This is what lets a composition that would pass the depth limit
+inline become one widget: the trial landing's tour is a `Switch` whose four
+options each hold a `TourStep`, instead of `Columns › Column › Screenshot`
+four times over.
+
+**JSON, preset or Astro?**
+
+| | A preset | A JSON widget | An Astro widget |
+|---|---|---|---|
+| What it is | A saved subtree with real values | A composition with props of its own | New markup, style or behaviour |
+| Parameters | None: every use is the same | Declared props, JSON Schema | Declared props, zod in `.props.ts` |
+| Used as | `{ "widget": "Preset", "props": { "name": … } }` | `{ "widget": "TourStep", … }` | `{ "widget": "TourStep", … }` |
+| Depth | Expanded in place: counts where it lands | One node; its tree counts from its root | One node |
+| Lives in | `src/content/presets/` | `src/content/widgets/` | `src/widgets/` + `overrides`, or a parche |
+| Needs | Nothing | Nothing | Code, and `zod` as a dependency |
+
+Reach for a JSON widget when the thing is only an arrangement of widgets
+that exist; write an Astro widget when it needs markup, CSS or script that
+no widget has.
+
+Not yet: filling a JSON widget's slots from the page (`{ "$slot": … }`),
+per-locale definitions (the text comes in through props), and listing JSON
+widgets in the builder's catalog next to the registered ones.
 
 ## Widgets on the model
 

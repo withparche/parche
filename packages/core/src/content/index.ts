@@ -13,6 +13,17 @@ export {
 } from './schemas.js';
 
 export type { MetadataEntry, PageEntry, NavigationEntry, LayoutEntry, PresetEntry } from './schemas.js';
+export {
+  widgetDefinitionSchema,
+  compileProps,
+  defineJsonWidget,
+  instantiate,
+  placeholders,
+  checkDefinition,
+  checkUses,
+  isPlaceholder,
+} from './json-widgets.js';
+export type { WidgetDefinition, JsonWidget, Placeholder } from './json-widgets.js';
 export { listWrapper, outletWrappers } from './wrapper.js';
 export type { WrapperSpec, ListWrapper } from './wrapper.js';
 export { substituteRefs, createResolver, parseEntryRef, hasRefs } from './refs.js';

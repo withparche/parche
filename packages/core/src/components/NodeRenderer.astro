@@ -6,11 +6,13 @@
  * so: an Outlet's `wrapper`, a page's, or the `wrapper` given here for these
  * roots (see content/wrapper.ts).
  */
-import { loadWidgets } from 'parche:registry/widgets';
+import { loadWidgets, widgetLoaders } from 'parche:registry/widgets';
 import { wrapper as wrapperName, unwrapped } from 'parche:config/layout';
 import { resolveAssets } from '../utils/assets.js';
 import { expandPresets } from '../utils/presets.js';
 import { resolveRefs } from '../utils/refs.js';
+import { loadJsonWidgets } from '../utils/json-widgets.js';
+import { usedJsonWidgets, checkDefinition, checkUses, type JsonWidget } from '../content/json-widgets';
 import type { Node as NodeData } from '../content/node';
 import { widgetNames } from '../content/node';
 import { listWrapper, outletWrappers, type WrapperSpec } from '../content/wrapper';
@@ -54,10 +56,26 @@ const declared = [
 ];
 const rootWrapper = wrap ? listWrapper(rootSpec, wrapperName) : null;
 
-// Everything the render will touch, loaded once: the tree, the outlet trees
-// and the wrappers. Widgets not referenced are never imported.
+// JSON widgets the trees use (and the ones inside those), each tree made
+// ready like a page's: presets, references, then asset paths.
 const outletTrees = Object.values(rawOutlets?.nodes ?? {}).flat();
-const names = widgetNames([...rawNodes, ...outletTrees]);
+// The collection is read only when a tree names a widget no parche registers,
+// so a site without JSON widgets never touches it.
+const unregistered = widgetNames([...rawNodes, ...outletTrees]).some((n) => n !== 'Outlet' && !(n in widgetLoaders));
+const json = unregistered ? await loadJsonWidgets() : { widgets: {}, issues: [] };
+const usedJson = [...usedJsonWidgets([...rawNodes, ...outletTrees], json.widgets)];
+const definitionRefs = await Promise.all(
+  usedJson.map(async (name) => {
+    const r = await expand(json.widgets[name].tree, `widgets/${name}.tree`);
+    return [name, { ...json.widgets[name], tree: r.nodes }, r.issues] as const;
+  }),
+);
+const rawDefinitions: Record<string, JsonWidget> = Object.fromEntries(definitionRefs.map(([n, d]) => [n, d]));
+const definitionTrees = Object.values(rawDefinitions).flatMap((d) => d.tree);
+
+// Everything the render will touch, loaded once: the tree, the outlet trees,
+// the JSON widgets' trees and the wrappers. Widgets not referenced are never imported.
+const names = widgetNames([...rawNodes, ...outletTrees, ...definitionTrees]).filter((n) => !(n in rawDefinitions));
 for (const d of declared) if (d.wrapper) names.push(d.wrapper.name);
 const widgets = await loadWidgets([...new Set(names)]);
 
@@ -65,6 +83,10 @@ const nodes = await resolveAssets(rawNodes);
 const outlets = rawOutlets
   ? { nodes: await resolveAssets(rawOutlets.nodes), html: rawOutlets.html }
   : undefined;
+const definitions: Record<string, JsonWidget> = Object.fromEntries(
+  await Promise.all(Object.entries(rawDefinitions).map(async ([n, d]) => [n, { ...d, tree: await resolveAssets(d.tree) }] as const)),
+);
+const unwrappedAll = [...unwrapped, ...Object.values(definitions).filter((d) => !d.wrapper).map((d) => d.name)];
 
 
 // Check the trees against the catalog: slots a widget does not declare,
@@ -78,7 +100,21 @@ if (import.meta.env.DEV || Astro.isPrerendered) {
     import('parche:config/layout'),
     import('../content/validate.js'),
   ]);
-  const ctx = { widgets: widgetMeta as any, tones: tones.map((t) => t.name), wrapper: wrapperName };
+  // A JSON widget is a widget with no slots to the validator; its own tree is
+  // checked from its root, once, and each use's props against its schema.
+  const jsonShapes = Object.fromEntries(Object.values(rawDefinitions).map((d) => [d.name, { wrapper: d.wrapper }]));
+  const ctx = { widgets: { ...(widgetMeta as any), ...jsonShapes }, tones: tones.map((t) => t.name), wrapper: wrapperName };
+  const jsonIssues = [
+    ...json.issues,
+    ...Object.values(rawDefinitions).flatMap((d) => [
+      ...(d.name in (widgetMeta as any) ? [{ path: `widgets/${d.name}`, message: `"${d.name}" is also a registered widget; rename the JSON one` }] : []),
+      ...checkDefinition(d),
+      ...validateTree(d.tree, ctx, `widgets/${d.name}.tree`),
+    ]),
+    ...definitionRefs.flatMap(([, , issues]) => issues),
+    ...checkUses(rawNodes, rawDefinitions, base),
+    ...Object.entries(rawOutlets?.nodes ?? {}).flatMap(([name, tree]) => checkUses(tree, rawDefinitions, name === 'default' ? 'sections' : `slots.${name}`)),
+  ];
   // A list's wrapper is checked like a node of that widget: it must exist and
   // its tone must be registered.
   const wrapperIssues = declared.flatMap(({ path, wrapper: w }) =>
@@ -86,6 +122,7 @@ if (import.meta.env.DEV || Astro.isPrerendered) {
   );
   const issues = [
     ...refIssues,
+    ...jsonIssues,
     ...wrapperIssues,
     ...validateTree(rawNodes, ctx, base),
     ...Object.entries(rawOutlets?.nodes ?? {}).flatMap(([name, tree]) => validateTree(tree, ctx, name === 'default' ? 'sections' : `slots.${name}`)),
@@ -99,4 +136,4 @@ if (import.meta.env.DEV || Astro.isPrerendered) {
 }
 ---
 
-{nodes.map((node) => <Node node={node} widgets={widgets} wrapper={rootWrapper} defaultWrapper={wrapperName} unwrapped={unwrapped} outlets={outlets} />)}
+{nodes.map((node) => <Node node={node} widgets={widgets} wrapper={rootWrapper} defaultWrapper={wrapperName} unwrapped={unwrappedAll} outlets={outlets} definitions={definitions} />)}

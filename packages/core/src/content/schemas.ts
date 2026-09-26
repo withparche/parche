@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { nodeSchema } from './node.js';
+import { widgetDefinitionSchema } from './json-widgets.js';
 
 /**
  * Schema for page-level SEO/metadata overrides.
@@ -134,6 +135,7 @@ export function createCollections(options?: {
   navigationBase?: string;
   layoutsBase?: string;
   presetsBase?: string;
+  widgetsBase?: string;
 }) {
   return {
     pages: defineCollection({
@@ -163,6 +165,16 @@ export function createCollections(options?: {
         base: options?.presetsBase ?? './src/content/presets',
       }),
       schema: options?.presetSchema ?? presetSchema,
+    }),
+    // JSON widgets: the file name is the widget name, case kept (TourStep.json
+    // is "TourStep"), so the id is not slugified like other entries.
+    widgets: defineCollection({
+      loader: glob({
+        pattern: '*.{yaml,yml,json}',
+        base: options?.widgetsBase ?? './src/content/widgets',
+        generateId: ({ entry }) => entry.replace(/\.(json|ya?ml)$/, ''),
+      }),
+      schema: widgetDefinitionSchema,
     }),
   };
 }

@@ -132,18 +132,18 @@
                 {
                   "widget": "TourStep",
                   "props": {
-                    "screen": {
-                      "url": "src/config.yaml · 1200×760",
-                      "badge": "Step 1 of 4",
-                      "caption": "real screenshot goes here",
-                      "ratio": "16/10"
-                    },
+                    "url": "src/config.yaml · 1200×760",
                     "title": "One file for the whole site",
+                    "badge": "Step 1 of 4",
+                    "caption": "real screenshot goes here",
+                    "ratio": "16/10",
                     "subtitle": "Name, URL, metadata, blog on or off, language. Change it once and every page follows — this is the file a client can safely be shown.",
-                    "action": {
-                      "text": "Run it yourself",
-                      "href": "#top"
-                    }
+                    "actions": [
+                      {
+                        "text": "Run it yourself",
+                        "href": "#top"
+                      }
+                    ]
                   }
                 }
               ],
@@ -151,18 +151,18 @@
                 {
                   "widget": "TourStep",
                   "props": {
-                    "screen": {
-                      "url": "CustomStyles.astro · 1200×760",
-                      "badge": "Step 2 of 4",
-                      "caption": "real screenshot goes here",
-                      "ratio": "16/10"
-                    },
+                    "url": "CustomStyles.astro · 1200×760",
                     "title": "Two colour scales, light and dark",
+                    "badge": "Step 2 of 4",
+                    "caption": "real screenshot goes here",
+                    "ratio": "16/10",
                     "subtitle": "Paste your brand hexes here and the entire site rebrands, including third-party shadcn-style components that read the same tokens.",
-                    "action": {
-                      "text": "Run it yourself",
-                      "href": "#top"
-                    }
+                    "actions": [
+                      {
+                        "text": "Run it yourself",
+                        "href": "#top"
+                      }
+                    ]
                   }
                 }
               ],
@@ -170,18 +170,18 @@
                 {
                   "widget": "TourStep",
                   "props": {
-                    "screen": {
-                      "url": "widget props · 1200×760",
-                      "badge": "Step 3 of 4",
-                      "caption": "real screenshot goes here",
-                      "ratio": "16/10"
-                    },
+                    "url": "widget props · 1200×760",
                     "title": "Sections are props, not markup",
+                    "badge": "Step 3 of 4",
+                    "caption": "real screenshot goes here",
+                    "ratio": "16/10",
                     "subtitle": "A hero is a component call with a headline, a subtitle and an image. No class soup to unpick when the client asks for a different order.",
-                    "action": {
-                      "text": "Run it yourself",
-                      "href": "#top"
-                    }
+                    "actions": [
+                      {
+                        "text": "Run it yourself",
+                        "href": "#top"
+                      }
+                    ]
                   }
                 }
               ],
@@ -189,18 +189,18 @@
                 {
                   "widget": "TourStep",
                   "props": {
-                    "screen": {
-                      "url": "terminal · npm run build · 1200×760",
-                      "badge": "Step 4 of 4",
-                      "caption": "real screenshot goes here",
-                      "ratio": "16/10"
-                    },
+                    "url": "terminal · npm run build · 1200×760",
                     "title": "A static folder at the end",
+                    "badge": "Step 4 of 4",
+                    "caption": "real screenshot goes here",
+                    "ratio": "16/10",
                     "subtitle": "38 KB median page, zero JS on static routes, and nothing to patch on a Friday. Deploy it anywhere that serves files.",
-                    "action": {
-                      "text": "Run it yourself",
-                      "href": "#top"
-                    }
+                    "actions": [
+                      {
+                        "text": "Run it yourself",
+                        "href": "#top"
+                      }
+                    ]
                   }
                 }
               ]

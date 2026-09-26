@@ -1,5 +1,5 @@
 import { createCollections } from '@parche/astro/content';
 
-const { pages, layouts } = createCollections();
+const { pages, layouts, widgets } = createCollections();
 
-export const collections = { pages, layouts };
+export const collections = { pages, layouts, widgets };

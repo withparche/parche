@@ -19,7 +19,6 @@
     "astro": "catalog:",
     "astro-icon": "catalog:",
     "sharp": "catalog:",
-    "tailwindcss": "catalog:",
-    "zod": "catalog:"
+    "tailwindcss": "catalog:"
   }
 }

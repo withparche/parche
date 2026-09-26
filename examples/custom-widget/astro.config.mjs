@@ -12,6 +12,8 @@ export default defineConfig({
       config: './src/parche.config.json',
       routes: { pages: true },
       // Register a project-local widget. Content can now use "widget": "Callout".
+      // A JSON widget (src/content/widgets/ProductShot.json) needs no entry
+      // here: the widgets collection is enough.
       overrides: {
         'widgets:Callout': './src/widgets/Callout.astro',
       },
