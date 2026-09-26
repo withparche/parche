@@ -69,7 +69,8 @@ test.describe('Toc', () => {
     await page.goto('/toc');
     // A section's link: always shown (a subsection's folds away while another section is read).
     await example(page, 'basic').getByRole('link', { name: 'Themes' }).click();
-    expect(page.url()).toContain('#ex-toc-themes');
+    // The hash can land a moment after the click (Firefox): wait for it.
+    await expect(page).toHaveURL(/#ex-toc-themes$/);
   });
 });
 

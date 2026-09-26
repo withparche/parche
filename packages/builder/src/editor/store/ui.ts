@@ -15,6 +15,12 @@ interface UiState {
   inspected: string | null;
   /** Bumped to reload the preview by hand (a saved page reloads by itself: it is a dev page). */
   previewRev: number;
+  /** Edit: a click selects. Browse: the page behaves as a visitor's. */
+  previewMode: 'edit' | 'browse';
+  /** Why the preview could not render the drafts, when it could not. */
+  previewError: string | null;
+  setPreviewMode: (m: 'edit' | 'browse') => void;
+  setPreviewError: (e: string | null) => void;
   bumpPreview: () => void;
   setPanel: (p: PanelId | null) => void;
   setCatalog: (c: Catalog) => void;
@@ -41,6 +47,10 @@ export const useUi = create<UiState>((set) => ({
   dark: storedDark,
   inspected: null,
   previewRev: 0,
+  previewMode: 'edit',
+  previewError: null,
+  setPreviewMode: (previewMode) => set({ previewMode }),
+  setPreviewError: (previewError) => set({ previewError }),
   bumpPreview: () => set((s) => ({ previewRev: s.previewRev + 1 })),
   setPanel: (panel) => set({ panel }),
   setCatalog: (catalog) => set({ catalog, catalogError: null }),

@@ -16,6 +16,8 @@ export interface Session {
   previewToken: string;
   host: string | boolean;
   root: string;
+  /** The editor's unsaved documents, by the file each stands in for, for the preview. */
+  drafts: Map<string, Record<string, unknown>>;
   /** Who listens for changes on disk: one per open editor (SSE). */
   listeners: Set<(e: BuilderEvent) => void>;
 }
@@ -24,5 +26,5 @@ const KEY = Symbol.for('parche.builder');
 
 export function session(): Session {
   const g = globalThis as { [KEY]?: Session };
-  return (g[KEY] ??= { token: '', previewToken: '', host: false, root: '', listeners: new Set() });
+  return (g[KEY] ??= { token: '', previewToken: '', host: false, root: '', drafts: new Map(), listeners: new Set() });
 }

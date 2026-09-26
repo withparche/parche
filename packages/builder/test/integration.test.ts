@@ -5,6 +5,7 @@ import builder from '../src/integration.ts';
 const setup = (command: string) => {
   const routes: { pattern: string; entrypoint: string; prerender?: boolean }[] = [];
   const updates: unknown[] = [];
+  const middleware: unknown[] = [];
   const hook = builder({ token: 't', previewToken: 'p' }).hooks['astro:config:setup'] as (o: unknown) => void;
   hook({ command, injectRoute: (r: (typeof routes)[number]) => routes.push(r), updateConfig: (c: unknown) => updates.push(c), config: { root: new URL('file:///tmp/site/') } });
   return { routes, updates };
@@ -25,5 +26,8 @@ test('under dev it adds only /_parche routes, never prerendered, and turns the d
     assert.equal(r.prerender, false);
     assert.match(r.entrypoint, /packages\/builder\/src\/routes\//);
   }
-  assert.deepEqual(updates, [{ devToolbar: { enabled: false } }]);
+  assert.equal(updates.length, 1);
+  const u = updates[0] as { devToolbar: unknown; vite: { plugins: { name: string }[] } };
+  assert.deepEqual(u.devToolbar, { enabled: false });
+  assert.deepEqual(u.vite.plugins.map((p) => p.name), ['parche-builder:draft-content']);
 });

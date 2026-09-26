@@ -8,6 +8,8 @@
  */
 export { getDevInfo, setDevInfo } from './info.js';
 export type { DevInfo } from './info.js';
+export { previewContext } from './preview.js';
+export type { PreviewContext } from './preview.js';
 export { resolveSiteConfigPath } from '../integration/load-site-config.js';
 export { resolveRefs } from '../utils/refs.js';
 export { expandPresets } from '../utils/presets.js';

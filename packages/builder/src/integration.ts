@@ -2,6 +2,9 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { AstroIntegration } from 'astro';
 import { session } from './server/session.js';
+import { previewAls } from './server/preview.js';
+import { previewMiddleware } from './server/preview-server.js';
+import { draftContent } from './vite/draft-content.js';
 
 export interface BuilderOptions {
   /** The session secret every editor request must carry; the CLI generates it. */
@@ -41,14 +44,18 @@ export default function builder(options: BuilderOptions): AstroIntegration {
 
         injectRoute({ pattern: '/_parche/builder', entrypoint: route('editor.ts'), prerender: false });
         injectRoute({ pattern: '/_parche/builder/assets/[...file]', entrypoint: route('editor-assets.ts'), prerender: false });
-        for (const api of ['catalog', 'docs', 'doc', 'validate', 'events', 'icons', 'assets', 'links']) {
+        for (const api of ['catalog', 'docs', 'doc', 'validate', 'events', 'icons', 'assets', 'links', 'drafts']) {
           injectRoute({ pattern: `/_parche/api/${api}`, entrypoint: route(`api/${api}.ts`), prerender: false });
         }
 
+        // The preview: pages asked for under /_parche/preview/<token>/ render
+        // with the editor's drafts (a stand-in for astro:content) and mark their nodes.
+        previewAls();
         // The editor has its own chrome; the dev toolbar would sit on top of the preview.
-        updateConfig({ devToolbar: { enabled: false } });
+        updateConfig({ devToolbar: { enabled: false }, vite: { plugins: [draftContent()] } });
       },
       'astro:server:setup': ({ server, logger }) => {
+        server.middlewares.use(previewMiddleware);
         // Changes on disk reach the open editors as events: a document by its
         // collection and id, a widget's props file as a catalog change.
         const s = session();

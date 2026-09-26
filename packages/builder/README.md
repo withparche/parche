@@ -23,6 +23,21 @@ check the page, and written only if the file did not change underneath
 (etag), keeping its indentation, its key order and, for Markdown, its body
 and frontmatter comments. Ids the editor gives nodes never reach the file.
 
+## The preview
+
+The page you edit shows beside the editor as the site renders it, with your
+unsaved changes: after each edit the editor sends its open documents as
+drafts, and the page refreshes in place (Idiomorph), keeping scroll and
+state. Pages are asked for under `/_parche/preview/<token>/…`; a middleware
+of the dev server turns that into the page's own URL and handles it inside
+a preview context (an AsyncLocalStorage core reads), where a stand-in for
+`astro:content` returns the draft of a file instead of the file, and each
+node leaves comments with its id around its output. Any other request — a
+normal tab on the same server — sees the files. The editor injects its
+preview client into the frame (same origin): it outlines the node under the
+pointer, selects on click (Select mode) or lets the page behave (Browse),
+and can show the page under another theme or colour scheme.
+
 ## How it is built
 
 - `src/integration.ts` — the integration (dev only), built with tsup for the CLI.

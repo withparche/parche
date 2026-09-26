@@ -13,6 +13,7 @@ import type { Node } from '../content/node';
 import { MAX_NODE_DEPTH } from '../content/node';
 import { listWrapper, nodeWrapper, type ListWrapper, type WrapperSpec } from '../content/wrapper';
 import { instantiate, parseUse, type JsonWidget } from '../content/json-widgets';
+import { previewContext } from '../dev/preview';
 
 interface Outlets {
   /** Page trees by outlet name. */
@@ -82,14 +83,23 @@ const slotNodes = (i: number) => filled[i]?.[1] ?? [];
 const own = isOutlet ? null : node.wrapper === undefined ? undefined : nodeWrapper(node.wrapper, wrapper, defaultWrapper);
 const effective = own !== undefined ? own : wrapper !== null && !isOutlet && !isWrapperItem && !unwrapped.includes(node.widget) ? wrapper : null;
 const Wrapper = effective ? widgets[effective.name] : null;
-// Inside its wrapper the node renders bare: nothing wraps it twice.
-const inner = effective ? { ...node, wrapper: false as const } : node;
+// Inside its wrapper the node renders bare: nothing wraps it twice (and is
+// marked once, around the band, for a preview's overlay).
+const inner = effective ? { ...node, wrapper: false as const, id: undefined } : node;
+
+// In a development tool's preview, a node with an id marks where its output
+// starts and ends, so the tool's overlay can outline it. Comments: they touch
+// neither the layout nor selectors. Never outside such a request, never in a build.
+const mark = import.meta.env.DEV && !isOutlet && typeof node.id === 'string' && /^[\w.-]{1,64}$/.test(node.id) && previewContext()?.markers === true;
+const open = mark ? `<!--parche-node:${node.id}-->` : '';
+const close = mark ? `<!--/parche-node:${node.id}-->` : '';
 
 if (import.meta.env.DEV && depth > MAX_NODE_DEPTH) {
   console.warn(`[parche] "${node.widget}" sits ${depth} levels deep; trees are meant to stop at ${MAX_NODE_DEPTH}.`);
 }
 ---
 
+{mark && <Fragment set:html={open} />}
 {isOutlet ? (
   outletName === 'default' ? (
     <main id="main-content" class="flex-1 [.parche-column>&]:flex [.parche-column>&]:flex-col [.parche-column>&]:gap-[inherit]">
@@ -129,3 +139,4 @@ if (import.meta.env.DEV && depth > MAX_NODE_DEPTH) {
     <Fragment slot={slotName(5)}>{slotNodes(5).map((child) => <Self node={child} widgets={widgets} defaultWrapper={defaultWrapper} unwrapped={unwrapped} outlets={outlets} definitions={definitions} depth={depth + 1} />)}</Fragment>
   </Widget>
 )}
+{mark && <Fragment set:html={close} />}

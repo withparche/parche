@@ -149,6 +149,11 @@ let pageMetadata: any = null;
 let PageMarkdownContent: any = null;
 let pageLayoutName: string = 'default';
 
+// In dev the page is read afresh: Astro caches getStaticPaths' props, and a
+// development tool may be showing a draft of this very page.
+const freshEntry = import.meta.env.DEV && mode === 'page' && entryId ? await getEntry('pages', entryId) : undefined;
+if (freshEntry) pageData = freshEntry.data;
+
 if (mode === 'page' && pageData) {
   const slugMap = await buildSlugMap();
   alternates = getAlternateUrls(pageKey, slugMap, defaultLocale, Astro.site);
@@ -161,7 +166,7 @@ if (mode === 'page' && pageData) {
 
   // Only a Markdown page has a body to render. A JSON entry renders to an
   // empty component, which left an empty prose block at the end of the page.
-  const pageEntry = await getEntry('pages', entryId);
+  const pageEntry = freshEntry ?? (await getEntry('pages', entryId));
   if (pageEntry && (pageEntry as any).body?.trim()) {
     try {
       const { Content } = await render(pageEntry);

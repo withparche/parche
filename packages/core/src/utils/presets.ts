@@ -1,6 +1,7 @@
 import { getCollection } from 'astro:content';
 import type { Node } from '../content/node.js';
 import { walkNodes } from '../content/node.js';
+import { previewContext } from '../dev/preview.js';
 
 /**
  * Presets: saved subtrees in the `presets` collection. A page inserts one by
@@ -56,7 +57,10 @@ export async function expandPresets(nodes: Node[], locale?: string, depth = 0): 
         if (import.meta.env.DEV) console.warn(`[parche] Preset "${name}" nests presets more than ${MAX_EXPANSIONS} deep; stopped.`);
         continue;
       }
-      out.push(...(await expandPresets(entry.data.tree, locale, depth + 1)));
+      const expanded = await expandPresets(entry.data.tree, locale, depth + 1);
+      // In a development tool's preview the preset's nodes carry its id, so
+      // its overlay can point at the Preset node they came from.
+      out.push(...(import.meta.env.DEV && node.id && previewContext() ? expanded.map((n, i) => ({ ...n, id: n.id ?? `${node.id}.${i}` })) : expanded));
       continue;
     }
     if (node.slots) {
