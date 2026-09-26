@@ -94,10 +94,63 @@
               "href": "/changelog"
             }
           ]
+        },
+        {
+          "title": "Landing pages",
+          "links": [
+            {
+              "label": "All landing pages",
+              "href": "/landing"
+            },
+            {
+              "label": "Lead generation",
+              "href": "/landing/lead-generation"
+            },
+            {
+              "label": "Click-through",
+              "href": "/landing/click-through"
+            },
+            {
+              "label": "Long-form sales",
+              "href": "/landing/sales"
+            },
+            {
+              "label": "Product details",
+              "href": "/landing/product"
+            },
+            {
+              "label": "Comparison",
+              "href": "/landing/comparison"
+            },
+            {
+              "label": "Pre-launch",
+              "href": "/landing/pre-launch"
+            },
+            {
+              "label": "Subscription",
+              "href": "/landing/subscription"
+            },
+            {
+              "label": "Free trial",
+              "href": "/landing/trial"
+            },
+            {
+              "label": "Book a demo",
+              "href": "/landing/demo"
+            },
+            {
+              "label": "Webinar",
+              "href": "/landing/webinar"
+            },
+            {
+              "label": "Thank-you",
+              "href": "/landing/thank-you"
+            }
+          ]
         }
       ],
       "mega": {
-        "columns": 2
+        "columns": 3
       }
     },
     {
