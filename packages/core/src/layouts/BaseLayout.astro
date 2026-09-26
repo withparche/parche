@@ -3,6 +3,7 @@ import '../styles/base.css';
 import { ClientRouter } from 'astro:transitions';
 import Font from 'astro/components/Font.astro';
 import { fonts as parcheFontDefs } from 'parche:config/fonts';
+import { headLinks } from 'parche:config/head';
 import type { ResolvedMetadata } from '../utils/metadata';
 import { buildRobotsContent, buildBreadcrumbs, buildJsonLdGraph } from '../utils/metadata';
 import type { SiteConfig } from '../types/config';
@@ -113,6 +114,8 @@ const article = metadata.ogType === 'article' ? metadata.article : undefined;
     {ogImageURL && <meta name="twitter:image" content={ogImageURL} />}
     {twitterHandle && <meta name="twitter:site" content={twitterHandle} />}
 
+    {/* Links the parches declare for every page (a blog's feed) */}
+    {headLinks.map((l) => <link rel={l.rel} href={l.href} type={l.type} title={l.title} hreflang={l.hreflang} />)}
     {/* Resource hints */}
     {preconnect.map((url) => <link rel="preconnect" href={url} />)}
 

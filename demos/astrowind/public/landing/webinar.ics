@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//AstroWind//Webinar//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:rebuild-client-site-2026-10-08@astrowind.example.com
+DTSTAMP:20260925T000000Z
+DTSTART:20261008T140000Z
+DTEND:20261008T150000Z
+SUMMARY:Rebuild a client site in 45 minutes\, live
+DESCRIPTION:A live workshop: a real 40-page agency site rebuilt from widgets\, on camera. 45 min + Q&A. The replay goes to everyone registered.
+URL:https://astrowind.example.com/landing/webinar
+END:VEVENT
+END:VCALENDAR

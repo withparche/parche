@@ -17,7 +17,8 @@ import SeriesNav from 'parche:widgets/blog/SeriesNav';
 import config from 'parche:config';
 import blogConfig from 'parche:app/blog';
 import { getCollection, getEntry, render } from 'astro:content';
-import { getPublishedPosts, getPostsBySeries, extractPostLocale } from '../../utils/post-helpers.js';
+import { getPublishedPosts, getPostsBySeries, extractPostLocale, getPostAlternates } from '../../utils/post-helpers.js';
+import { toAbsolute } from '../../utils/alternates.js';
 import { querySinglePost } from '../../utils/blog-query.js';
 import { calculateReadingTime } from '../../utils/reading-time.js';
 import { findRelatedPosts } from '../../utils/related-posts.js';
@@ -73,6 +74,18 @@ if (!post) {
 }
 
 const siteUrl = config.site || Astro.site?.href || '';
+
+// Translations of this post: the same file name under another locale folder,
+// as the resolver path does for root-level permalinks.
+const { postKey: currentKey } = extractPostLocale(post.id, defaultLocale);
+const alternates = toAbsolute(
+  getPostAlternates(await getCollection('posts'), currentKey, defaultLocale, showDrafts).map(({ locale: l, post: p }) => ({
+    locale: l,
+    path: resolvePostPermalink(permalinks.post, p, l, defaultLocale),
+  })),
+  Astro.site,
+);
+Astro.locals.parche = { ...(Astro.locals.parche ?? {}), locale, alternates };
 
 // Render markdown
 const { Content } = await render(post);
@@ -169,6 +182,14 @@ const postData = { ...post.data, readingTime };
 ---
 
 <BaseLayout metadata={metadata} config={site} lang={locale}>
+  {alternates.length > 1 && (
+    <Fragment slot="head">
+      {alternates.map((alt) => (
+        <link rel="alternate" hreflang={alt.locale} href={alt.href} />
+      ))}
+      <link rel="alternate" hreflang="x-default" href={alternates.find((a) => a.locale === defaultLocale)?.href} />
+    </Fragment>
+  )}
   <LayoutRenderer layoutSections={layoutSections}>
     {TemplateComponent ? (
       <TemplateComponent data={postData} authorData={authorData} tocItems={tocItems} permalinks={permalinks}>
@@ -198,6 +219,7 @@ const postData = { ...post.data, readingTime };
       <RelatedPosts
         title={labels.relatedPosts}
         linkText={labels.viewAllPosts}
+        linkUrl={localizePath(permalinks.listing, locale, defaultLocale)}
         posts={related.map((r) => ({
           title: r.data.title,
           description: r.data.description ?? r.data.excerpt,

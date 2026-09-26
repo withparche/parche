@@ -62,6 +62,11 @@ declare module 'parche:config/fonts' {
   export const fonts: Array<{ cssVariable: string; name: string; weights: number[]; fallbacks: string[]; preload?: boolean }>;
 }
 
+declare module 'parche:config/head' {
+  /** `<link>` tags the parches add to every page's head (a blog's feed). */
+  export const headLinks: Array<{ rel: string; href: string; type?: string; title?: string; hreflang?: string }>;
+}
+
 declare module 'parche:config/themes' {
   export const themes: Array<{ label: string; value: string }>;
   export const showPanel: boolean;

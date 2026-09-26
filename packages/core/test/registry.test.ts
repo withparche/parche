@@ -54,6 +54,21 @@ test('wrapper and tones are collected from the parche manifests; the last wrappe
   });
 });
 
+test('head links are collected from the parches in order, the same rel and href kept once', () => {
+  const feed = { rel: 'alternate', type: 'application/rss+xml', href: '/rss.xml' };
+  const reg = createRegistry(
+    {
+      parches: [
+        { name: 'blog', head: { links: [feed] } },
+        { name: 'pwa', head: { links: [{ rel: 'manifest', href: '/site.webmanifest' }, { ...feed, title: 'Again' }] } },
+      ],
+    },
+    ROOT,
+  );
+  assert.deepEqual(reg.headLinks, [feed, { rel: 'manifest', href: '/site.webmanifest' }]);
+  assert.deepEqual(createRegistry({ parches: [] }, ROOT).headLinks, []);
+});
+
 test('duplicate widget across parches warns (last wins), not silent', () => {
   const warnings = captureWarnings(() => {
     createRegistry(

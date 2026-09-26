@@ -227,6 +227,13 @@ export interface ParcheManifest {
    */
   fonts?: import('../config/font-variables.js').ParcheFontDef[];
   /**
+   * `<link>` tags this parche adds to every page's head: a blog's feed
+   * (`{ rel: 'alternate', type: 'application/rss+xml', href: '/rss.xml' }`),
+   * a web manifest. Rendered in declaration order; the same rel and href twice
+   * is kept once.
+   */
+  head?: { links?: HeadLink[] };
+  /**
    * Absolute globs of this parche's own component files, so Tailwind scans them
    * and generates the utility classes they use. A parche must contribute these
    * for its classes to survive being installed from npm (relative `@source`
@@ -373,6 +380,8 @@ export interface ResolvedRegistry {
   defaultTheme?: string;
   /** Resolved font set: core's base, plus each parche's, plus the site's. */
   fonts: import('../config/font-variables.js').ParcheFontDef[];
+  /** `<link>` tags the parches add to every page's head. */
+  headLinks: HeadLink[];
   /** Whether to show the floating theme panel */
   showPanel: boolean;
   /** Absolute CSS paths to import via parche:config/styles (parche-contributed + user entry) */
@@ -383,4 +392,14 @@ export interface ResolvedRegistry {
   apps: ParcheApp[];
   /** App resolvers — modules that export resolve() and getPaths() */
   resolvers: Array<{ appName: string; entrypoint: string }>;
+}
+
+/** A `<link>` a parche adds to every page's head. */
+export interface HeadLink {
+  rel: string;
+  href: string;
+  type?: string;
+  title?: string;
+  /** Adds `hreflang`, for a link that only applies to one language. */
+  hreflang?: string;
 }

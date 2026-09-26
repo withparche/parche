@@ -32,7 +32,10 @@ export async function GET(context: APIContext) {
       ...post.data.tags,
     ].filter(Boolean),
     ...(post.data.authorName ? { author: post.data.authorName } : {}),
-    ...(post.body ? { content: post.body } : {}),
+    // The rendered HTML, which the content layer keeps for Markdown posts; the
+    // raw body would show readers its asterisks and hashes. An MDX post has no
+    // stored HTML, so its item carries the description only.
+    ...((post as any).rendered?.html ? { content: (post as any).rendered.html } : {}),
   }));
 
   return rss({

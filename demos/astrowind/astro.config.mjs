@@ -8,7 +8,8 @@ import createBlog from '@parche/astro-blog';
 import { astrowind, product, editorial } from '@parche/themes';
 import { blogLabels } from './src/blog-labels.js';
 
-// AstroWind recreated on Parche — bilingual (en/es), static output.
+// AstroWind recreated on Parche — English while the site is rebuilt (Spanish
+// returns at the end), static output.
 //
 // This demo exists to test the framework against a real, complete site rather
 // than a curated slice: 20 pages, three layouts, a blog with taxonomies, and a

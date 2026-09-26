@@ -5,6 +5,7 @@ export const schema = z.object({
   posts: z.array(z.unknown()).default([]),
   title: z.string().optional(),
   linkText: z.string().optional(),
+  linkUrl: z.string().optional().meta({ help: 'Where "View all posts" leads: the blog listing.' }),
 });
 
 export type Props = z.infer<typeof schema>;

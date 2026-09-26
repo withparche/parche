@@ -89,6 +89,8 @@ export default function createBlog(config?: BlogConfig): ParcheManifest {
       'blog-post': templatePath('blog-post.astro'),
     },
     routes,
+    // Feed readers and browsers find the feed from any page's head.
+    ...(resolved.rss ? { head: { links: [{ rel: 'alternate', type: 'application/rss+xml', href: permalinks.rss }] } } : {}),
     config: resolved as unknown as Record<string, unknown>,
     requires: {
       elements: ['Container', 'Section'],

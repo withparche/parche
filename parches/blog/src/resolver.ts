@@ -200,7 +200,7 @@ export async function resolve(
     // declares `wrapper: false`, so the route leaves it bare.
     extraSections.push({
       widget: 'blog/RelatedPosts',
-      props: { posts: relatedPosts, title: labels.relatedPosts, linkText: labels.viewAllPosts },
+      props: { posts: relatedPosts, title: labels.relatedPosts, linkText: labels.viewAllPosts, linkUrl: localizePath(permalinks.listing, locale, defaultLocale) },
     });
   }
 

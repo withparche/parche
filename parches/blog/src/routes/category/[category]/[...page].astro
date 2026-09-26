@@ -36,13 +36,17 @@ export async function getStaticPaths() {
   const showDrafts = isDev && (blogConfig as any).showDraftsInDev;
   const pageSize = (blogConfig as any).postsPerPage ?? 12;
 
+  // The path parameter is the term's resolved slug, as for tags: links go
+  // through the same resolver, so a category with spaces, accents or a
+  // declared slug is generated where its links point.
+  const { resolveTerm: rt } = await import('../../../utils/taxonomy.js');
   const catMaxPages = new Map<string, number>();
   for (const locale of allLocales) {
     const cats = await qac(locale, showDrafts);
     for (const [cat, count] of cats) {
       const pages = Math.max(1, Math.ceil(count / pageSize));
-      const key = cat.toLowerCase();
-      catMaxPages.set(key, Math.max(catMaxPages.get(key) ?? 0, pages));
+      const { slug } = await rt('categories', cat, locale);
+      catMaxPages.set(slug, Math.max(catMaxPages.get(slug) ?? 0, pages));
     }
   }
 

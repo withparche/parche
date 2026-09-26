@@ -63,14 +63,12 @@ export function localizePath(path: string, locale: string, defaultLocale: string
 /** Resolve a post's href from the configured permalink pattern. */
 export function postHref(
   pattern: string,
-  post: { id: string; data: { urlSlug?: string; publishDate?: Date | string; category?: string } },
+  post: { id: string; data: { urlSlug?: string; publishDate?: Date | string; category?: string; authors?: string[] } },
   locale: string,
   defaultLocale: string,
 ): string {
   const d = post.data.publishDate ? new Date(post.data.publishDate) : new Date(0);
   const pad = (n: number) => String(n).padStart(2, '0');
-  const slugify = (v: string) =>
-    v.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 
   const path = pattern
     .replace(/%slug%/g, post.data.urlSlug ?? postKey(post.id))
@@ -80,7 +78,20 @@ export function postHref(
     .replace(/%hour%/g, pad(d.getHours()))
     .replace(/%minute%/g, pad(d.getMinutes()))
     .replace(/%second%/g, pad(d.getSeconds()))
-    .replace(/%category%/g, post.data.category ? slugify(post.data.category) : 'uncategorized');
+    .replace(/%category%/g, post.data.category ? slugify(post.data.category) : 'uncategorized')
+    .replace(/%author%/g, post.data.authors?.[0] ? slugify(post.data.authors[0]) : 'anonymous');
 
   return localizePath(path, locale, defaultLocale);
+}
+
+/** The blog's slugify, letter for letter: accents folded, not dropped ("Guías" → "guias"). */
+export function slugify(str: string): string {
+  return str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '');
 }

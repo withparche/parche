@@ -224,6 +224,7 @@ export function createRegistry(
   const apps: ParcheManifest[] = [];
   const contributedStyles: string[] = [];
   const contributedFonts: any[] = [];
+  const headLinks: import('./types.js').HeadLink[] = [];
   const contributedThemes: Array<{ label: string; value: string }> = [];
   const contentGlobs: string[] = [];
   let wrapper: string | null = null;
@@ -233,6 +234,9 @@ export function createRegistry(
   for (const parche of parches) {
     if (parche.styles) contributedStyles.push(...parche.styles);
     if (parche.fonts) contributedFonts.push(...parche.fonts);
+    for (const link of parche.head?.links ?? []) {
+      if (!headLinks.some((l) => l.rel === link.rel && l.href === link.href)) headLinks.push(link);
+    }
     if (parche.themes) contributedThemes.push(...parche.themes);
     if (parche.content) contentGlobs.push(...parche.content);
     if (parche.wrapper) wrapper = parche.wrapper;
@@ -469,6 +473,7 @@ export function createRegistry(
     showPanel,
     defaultTheme,
     fonts,
+    headLinks,
     styleEntries,
     contentGlobs,
     apps,
