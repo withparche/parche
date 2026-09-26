@@ -147,6 +147,7 @@ test('ArticleBody renders the body, and a sidebar only when one is filled', asyn
   const bare = await render(ArticleBody, {}, post());
   expect(bare).toContain('<p>First paragraph.</p>');
   expect(bare).not.toContain('<aside');
+  expect(await render(ArticleBody, {}, post(), { aside: '  <!-- nothing -->  ' })).not.toContain('<aside');
   const withAside = await render(ArticleBody, {}, post(), { aside: '<nav>toc</nav>' });
   expect(withAside).toContain('<aside');
   expect(withAside).toContain('<nav>toc</nav>');

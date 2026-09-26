@@ -29,6 +29,8 @@ export function extractTOC(html: string): TOCItem[] {
 
   let match: RegExpExecArray | null;
   while ((match = headingRegex.exec(html)) !== null) {
+    // A heading hidden from sight (Markdown's "Footnotes" label) is not a section.
+    if (/\bclass="[^"]*\bsr-only\b/.test(match[2] ?? '')) continue;
     const depth = parseInt(match[1], 10);
     const id = decodeEntities(/\bid="([^"]*)"/.exec(match[2] ?? '')?.[1] ?? '');
     const text = decodeEntities(match[3].replace(/<[^>]+>/g, '')).trim();

@@ -26,7 +26,7 @@ const toned = tone !== 'default';
 >
   <Container width={width}>
     <!-- Several widgets in one band stack with the rhythm between blocks. -->
-    <div class="parche-section-stack flex flex-col gap-[clamp(28px,3.5vw,48px)]">
+    <div class="parche-section-stack flex flex-col gap-[clamp(28px,3.5vw,48px)] *:min-w-0">
       <slot />
     </div>
   </Container>

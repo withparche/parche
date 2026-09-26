@@ -8,7 +8,7 @@
  * is the blog label of that name in the page's language, so a view carries no
  * text of its own unless it wants to.
  */
-import { getEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import { presetViews } from '../views/index.js';
 import { checkPlacements } from './placements.js';
 
@@ -31,12 +31,15 @@ export async function resolveView(
   name: string,
   opts: { locale: string; preset: string; labels: Record<string, string> },
 ): Promise<BlogView> {
-  let entry: any = null;
+  // Read from the list, not with getEntry: a view the site does not override
+  // is not missing, and must not be reported as such.
+  let entries: any[] = [];
   try {
-    entry = (await getEntry('views' as any, `${opts.locale}/blog-${name}`)) ?? (await getEntry('views' as any, `blog-${name}`));
+    entries = await getCollection('views' as any);
   } catch {
     // No views collection: the preset's view.
   }
+  const entry = entries.find((e) => e.id === `${opts.locale}/blog-${name}`) ?? entries.find((e) => e.id === `blog-${name}`);
   const view = (entry?.data as BlogView | undefined) ?? (presetViews[opts.preset]?.[name] as BlogView | undefined) ?? { sections: [] };
   const problems = checkPlacements(view);
   if (problems.length) throw new Error(`[parche] blog view "${name}":\n  ${problems.join('\n  ')}`);

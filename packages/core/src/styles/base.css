@@ -230,9 +230,16 @@
       margin-bottom: 0.5em;
     }
 
+    /* The space above a paragraph comes from the stack rule (* + *): after a
+       paragraph, a code block, a list. Resetting it here left a paragraph
+       flush against the code block before it. Under a heading the heading's
+       own bottom margin is the space. */
     & p {
-      margin-top: 0;
       margin-bottom: 0;
+    }
+
+    & :is(h2, h3, h4) + * {
+      margin-top: 0;
     }
 
     /* Underlined: a link in running text must be told apart without colour
@@ -293,6 +300,50 @@
     & pre code {
       background: none;
       padding: 0;
+    }
+
+    & img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 0.5rem;
+    }
+
+    /* Tables: full width, rows ruled, numbers readable; wide ones scroll in
+       their own box on a phone instead of widening the page. */
+    & table {
+      display: block;
+      max-width: 100%;
+      overflow-x: auto;
+      border-collapse: collapse;
+      font-size: 0.925em;
+      line-height: 1.5;
+    }
+    & th,
+    & td {
+      padding: 0.6em 0.9em 0.6em 0;
+      border-bottom: 1px solid var(--color-border);
+      text-align: left;
+      vertical-align: top;
+    }
+    & th {
+      color: var(--color-heading);
+      font-weight: 600;
+      border-bottom-width: 2px;
+    }
+
+    /* Footnotes: a quiet block after a rule; the label is for screen readers. */
+    & .footnotes {
+      font-size: 0.875em;
+      border-top: 1px solid var(--color-border);
+      padding-top: 1em;
+    }
+    & .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
     }
 
     & hr {

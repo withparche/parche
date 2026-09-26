@@ -1,0 +1,49 @@
+{
+  "sections": [
+    {
+      "widget": "Section",
+      "slots": {
+        "default": [
+          {
+            "widget": "blog/PageHeader",
+            "props": {
+              "title": "How AstroWind is built, and how to make it yours",
+              "subtitle": "Guides, the design system behind the template, and the parts of shipping a site nobody writes about. Written by the people who maintain it."
+            }
+          },
+          {
+            "widget": "blog/Featured",
+            "props": {
+              "layout": "one"
+            }
+          },
+          {
+            "widget": "blog/TaxonomyNav",
+            "props": {
+              "kind": "categories"
+            }
+          },
+          {
+            "widget": "blog/PostList",
+            "props": {
+              "layout": "cards"
+            }
+          },
+          {
+            "widget": "blog/Pagination"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "slots": {
+        "default": [
+          {
+            "widget": "blog/Subscribe"
+          }
+        ]
+      }
+    }
+  ]
+}

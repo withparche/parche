@@ -95,6 +95,10 @@ src/content/views/es/blog-index.json     Spanish only
 }
 ```
 
+The AstroWind demo does exactly this: it keeps the company preset and gives
+its index a title and a lead of its own in
+`demos/astrowind/src/content/views/blog-index.json`.
+
 The site exports the collection with the others:
 
 ```ts
@@ -316,4 +320,20 @@ is built; a `timeZone` in `dateFormat` wins.
 - Series: a post joins with `series: { name, order }`. An optional
   `src/content/series/<key>.json` describes the series once (`title`,
   `description`, `status`, `upcoming` parts with their date).
+
+## How it is checked
+
+- `test/blog-routes.mjs` walks the built blog sites: every internal link
+  resolves, the listing, its pages, the archive, search and feed exist, the
+  feed is in every head, each post has its lead, "Read next", its table of
+  contents when the preset has one, and one article and one trail in its
+  structured data.
+- `test/blog-presets.mjs` builds `examples/blog` once per preset
+  (`BLOG_PRESET=magazine`) and checks the pages each structure says exist and
+  the ones it says do not: author pages, series pages, the article type,
+  "Read next", the table of contents.
+- The widgets are rendered with a sample context in
+  `parches/ui/test/ssr/blog.test.ts`; the elements (LoadMore, Search,
+  Consent, AdSlot, Comments) run in the browser suite, the network ones
+  against stand-ins.
 

@@ -3,13 +3,16 @@
  * The post's text, rendered by the route, at a reading measure. `before`
  * holds what opens it (the series box), `after` what closes it (the next part,
  * the author), and `aside` a sticky sidebar (the table of contents), which
- * only appears on wide screens and only when filled.
+ * only appears on wide screens and only when something in it renders.
  */
 import { blogContext } from '../../lib/blog-context';
 
 const ctx = blogContext(Astro.locals);
 const html = ctx?.article?.html ?? '';
-const aside = Astro.slots.has('aside');
+// The sidebar takes a column only when something in it rendered: a table of
+// contents hides itself for a one-section post, and an ad slot without ads.
+const asideHtml = Astro.slots.has('aside') ? await Astro.slots.render('aside') : '';
+const aside = asideHtml.replace(/<!--[\s\S]*?-->/g, '').trim().length > 0;
 // `inArticle` goes after the first section: where the second h2 starts (or the
 // first, when text comes before any), never between the title and the first
 // paragraph. A post with a single section gets none.
@@ -20,7 +23,7 @@ const [first, rest] = inArticle ? [html.slice(0, cut), html.slice(cut)] : [html,
 const prose = 'prose max-w-none text-[clamp(16px,1.25vw,17.5px)] leading-[1.72] text-text [&_:is(h2,h3)]:scroll-mt-24';
 ---
 
-<div class:list={['parche-article-body mx-auto', aside ? 'grid max-w-[1040px] gap-x-[clamp(32px,5vw,72px)] lg:grid-cols-[minmax(0,680px)_220px] lg:justify-between' : 'max-w-[680px]']}>
+<div class:list={['parche-article-body mx-auto w-full min-w-0', aside ? 'grid max-w-[1040px] gap-x-[clamp(32px,5vw,72px)] lg:grid-cols-[minmax(0,680px)_220px] lg:justify-between' : 'max-w-[680px]']}>
   <div class="min-w-0">
     {Astro.slots.has('before') && <div class="mb-9 flex flex-col gap-4"><slot name="before" /></div>}
     <div data-pagefind-body class={prose} set:html={first} />
@@ -34,7 +37,7 @@ const prose = 'prose max-w-none text-[clamp(16px,1.25vw,17.5px)] leading-[1.72] 
   </div>
   {aside && (
     <aside class="hidden lg:block">
-      <div class="sticky top-24 flex flex-col gap-8"><slot name="aside" /></div>
+      <div class="sticky top-24 flex flex-col gap-8" set:html={asideHtml} />
     </aside>
   )}
 </div>

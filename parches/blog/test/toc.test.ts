@@ -17,3 +17,8 @@ test('h3 nest under their h2; a heading without an id gets a slug', () => {
   const toc = extractTOC('<h2 id="a">A</h2><h3 id="a1">A1</h3><h2>Second one</h2>');
   assert.deepEqual(toc.map((i) => [i.slug, i.children.map((c) => c.slug)]), [['a', ['a1']], ['second-one', []]]);
 });
+
+test('a visually hidden heading (the footnotes label) is not a section', () => {
+  const toc = extractTOC('<h2 id="a">A</h2><h2 id="footnote-label" class="sr-only">Footnotes</h2>');
+  assert.deepEqual(toc.map((i) => i.slug), ['a']);
+});

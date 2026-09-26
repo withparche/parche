@@ -24,3 +24,27 @@ never import an element by package path.
 
 It keeps the engine neutral, lets every widget share one consistent base, and
 makes the element contract a public, swappable surface.
+
+## What an element is
+
+An element is one piece of interface with one job: a button, a table, a
+dialog, a search field. It renders complete, accessible HTML on the server,
+and when it needs behaviour it upgrades that HTML in the browser as a small
+custom element: no framework runtime, and nothing breaks before the script
+arrives. Its parts carry `data-part` names, so a theme can restyle it without
+touching its markup.
+
+## What a widget is
+
+A widget is a section of a page, made of elements: a hero, a pricing table,
+a list of posts. It is what content names, as data:
+
+```json
+{ "widget": "blog/PostList", "props": { "layout": "cards" } }
+```
+
+Widgets take props with a schema, so the builder can draw a form for them
+and a build can refuse a typo. Because they reach elements through virtual
+modules, a site can swap an element for its own and every widget that uses
+it follows.
+
