@@ -3,11 +3,13 @@ import { api } from '../api';
 import { useUi, type PanelId, type Viewport } from '../store/ui';
 import { isDirty, useDocs, type Doc } from '../store/documents';
 import { useCurrentDoc } from '../store/current';
+import { useSelection } from '../store/selection';
 import type { Catalog } from '../store/types';
 import TopHeader from './TopHeader';
 import ActivityRail from './ActivityRail';
 import ResizeHandle from './ResizeHandle';
 import { usePanelResize } from './usePanelResize';
+import { PanelSide } from './panelSide';
 import { useEditorKeys } from './useEditorKeys';
 import { useDiskEvents } from './useDiskEvents';
 import PreviewFrame from '../preview/PreviewFrame';
@@ -53,6 +55,7 @@ export default function AppShell() {
   const { undo, redo, save } = useDocs.getState();
   const left = usePanelResize(280, 'left', 200, () => panel && togglePanel(panel));
   const right = usePanelResize(320, 'right', 240, () => inspect(null));
+  const pinned = useUi((s) => s.pinned);
   useCatalog();
   useEditorKeys();
   useDiskEvents();
@@ -65,6 +68,11 @@ export default function AppShell() {
   useEffect(() => {
     if (current) setPanel('outline');
   }, [current, setPanel]);
+  // A closed inspector opens again for whatever is selected or inspected next.
+  const selected = useSelection((s) => s.node);
+  useEffect(() => {
+    useUi.getState().setInspectorOpen(true);
+  }, [selected, inspected, current]);
   // Leaving with unsaved changes asks first.
   useEffect(() => {
     const warn = (e: BeforeUnloadEvent) => {
@@ -75,6 +83,8 @@ export default function AppShell() {
   }, []);
 
   const Left = panel ? panels[panel] : null;
+  const inspectorOpen = useUi((s) => s.inspectorOpen);
+  const showRight = !!(doc || inspected) && inspectorOpen;
   const dirty = isDirty(doc);
   const iconBtn = 'grid size-7 place-items-center rounded-md text-muted hover:bg-surface-hover hover:text-heading disabled:opacity-30';
   return (
@@ -121,10 +131,12 @@ export default function AppShell() {
       </TopHeader>
       <div className="flex min-h-0 flex-1">
         <ActivityRail />
-        {Left && (
+        {Left && pinned.left && (
           <>
             <div style={{ width: left.width }} className="flex shrink-0 flex-col overflow-hidden bg-surface">
-              <Left />
+              <PanelSide.Provider value="left">
+                <Left />
+              </PanelSide.Provider>
             </div>
             <ResizeHandle {...left.handle} label="Resize the panel" />
           </>
@@ -132,14 +144,38 @@ export default function AppShell() {
         <main className="flex min-w-0 flex-1 flex-col">
           {doc && <Notices doc={doc} />}
           <div className="min-h-0 flex-1">
-            <PreviewFrame src={previewSrc(doc, catalog, via)} rev={previewRev} onReload={bumpPreview} />
+            <PreviewFrame src={previewSrc(doc, catalog, via)} rev={previewRev} onReload={bumpPreview}>
+              {/* Unpinned panels float over the page, under the preview's toolbar. */}
+              {Left && !pinned.left && (
+                <div className="absolute inset-y-0 left-0 z-10 flex shadow-[4px_0_16px_rgb(0_0_0/0.35)]">
+                  <div style={{ width: left.width }} className="flex flex-col overflow-hidden border-r border-border bg-surface">
+                    <PanelSide.Provider value="left">
+                      <Left />
+                    </PanelSide.Provider>
+                  </div>
+                  <ResizeHandle {...left.handle} label="Resize the panel" floating />
+                </div>
+              )}
+              {showRight && !pinned.right && (
+                <div className="absolute inset-y-0 right-0 z-10 flex shadow-[-4px_0_16px_rgb(0_0_0/0.35)]">
+                  <ResizeHandle {...right.handle} label="Resize the inspector" floating />
+                  <aside style={{ width: right.width }} className="flex flex-col overflow-hidden border-l border-border bg-surface" aria-label="Inspector">
+                    <PanelSide.Provider value="right">
+                      <Inspector />
+                    </PanelSide.Provider>
+                  </aside>
+                </div>
+              )}
+            </PreviewFrame>
           </div>
         </main>
-        {(doc || inspected) && (
+        {showRight && pinned.right && (
           <>
             <ResizeHandle {...right.handle} label="Resize the inspector" />
             <aside style={{ width: right.width }} className="flex shrink-0 flex-col overflow-hidden bg-surface" aria-label="Inspector">
-              <Inspector />
+              <PanelSide.Provider value="right">
+                <Inspector />
+              </PanelSide.Provider>
             </aside>
           </>
         )}

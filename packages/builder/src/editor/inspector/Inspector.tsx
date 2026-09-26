@@ -18,6 +18,9 @@ import WidgetInfo from './WidgetInfo';
 import { pagesShowing } from '../preview/through';
 import { entryOf, localeOfDoc } from '../store/patterns';
 
+/** Close the inspector: the preview gets the room; selecting something opens it again. */
+const closeInspector = () => useUi.getState().setInspectorOpen(false);
+
 /**
  * The right panel: the selected node's props, its wrapper and its issues;
  * or, with nothing selected, the document's settings. A widget picked in
@@ -344,7 +347,7 @@ function DocSettings({ doc }: { doc: Doc }) {
   if (catalog && doc.collection === 'patterns') return <PatternSettings doc={doc} />;
   if (doc.kind !== 'page' || !catalog) {
     return (
-      <PanelShell title="Document">
+      <PanelShell title="Document" onClose={closeInspector}>
         <p className="m-3 text-xs text-muted">{doc.relPath}</p>
       </PanelShell>
     );
@@ -357,7 +360,7 @@ function DocSettings({ doc }: { doc: Doc }) {
       setIn(d, pointer, value);
     }, group);
   return (
-    <PanelShell title="Page" subtitle={doc.relPath}>
+    <PanelShell title="Page" subtitle={doc.relPath} onClose={closeInspector}>
       <div className="flex flex-col gap-1 p-3 pb-0">
         <label className="text-[11px] font-medium text-heading" htmlFor="page-layout">
           Layout
@@ -406,7 +409,7 @@ function LayoutSettings({ doc }: { doc: Doc }) {
   const usedBy = catalog.layouts.find((l) => l.id === doc.id)?.usedBy ?? [];
   const names = outletNames(doc);
   return (
-    <PanelShell title="Layout" subtitle={doc.relPath}>
+    <PanelShell title="Layout" subtitle={doc.relPath} onClose={closeInspector}>
       <div className="flex flex-col gap-3 p-3">
         <p className="m-0 text-xs text-heading">
           Used by {usedBy.length} page{usedBy.length === 1 ? '' : 's'}.
@@ -445,7 +448,7 @@ function MenuSettings({ doc }: { doc: Doc }) {
   const itemsSchema = entry?.itemsSchema as Record<string, unknown> | null | undefined;
   const onChange = (pointer: Pointer, value: unknown, group?: string) => editCurrent((d) => (pointer.length === 0 ? undefined : setIn(d, pointer, value)), group);
   return (
-    <PanelShell title="Menu" subtitle={doc.relPath}>
+    <PanelShell title="Menu" subtitle={doc.relPath} onClose={closeInspector}>
       <div className="flex flex-col gap-3 p-3 pb-0">
         {entry && entry.usedBy.length > 0 ? (
           <div className="text-[11px] text-muted">
@@ -504,7 +507,7 @@ function PatternSettings({ doc }: { doc: Doc }) {
   const onChange = (pointer: Pointer, value: unknown, group?: string) => editCurrent((d) => (pointer.length === 0 ? undefined : setIn(d, pointer, value)), group);
   const input = 'w-full rounded border border-border bg-background px-1.5 py-1 text-xs text-heading outline-none focus:border-primary';
   return (
-    <PanelShell title="Pattern" subtitle={doc.relPath}>
+    <PanelShell title="Pattern" subtitle={doc.relPath} onClose={closeInspector}>
       <p className="m-0 px-3 pt-3 text-[11px] text-muted">
         Used as <span className="font-mono text-heading">{`{ "widget": "${useName}" }`}</span>
         {props.length ? ', with its props.' : '. It takes no props: every use is the same.'}

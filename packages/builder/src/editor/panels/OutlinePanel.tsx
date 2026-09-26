@@ -51,7 +51,7 @@ export default function OutlinePanel() {
   return (
     <PanelShell title="Outline" subtitle={doc.relPath} onClose={() => close('outline')}>
       <div className="flex min-h-full flex-col">
-        <button type="button" onClick={() => select(null)} aria-current={selected === null} className="mx-2 mt-2 rounded-md px-2 py-1.5 text-left text-xs font-medium text-heading hover:bg-surface-hover aria-[current=true]:bg-primary-soft">
+        <button type="button" onClick={() => { select(null); useUi.getState().setInspectorOpen(true); }} aria-current={selected === null} className="mx-2 mt-2 rounded-md px-2 py-1.5 text-left text-xs font-medium text-heading hover:bg-surface-hover aria-[current=true]:bg-primary-soft">
           {(doc.data.title as string | undefined) ?? (doc.data.label as string | undefined) ?? doc.id}
           <span className="block text-[10px] font-normal text-muted">{doc.kind === 'page' ? 'Page settings' : doc.collection === 'navigation' ? 'Menu: its items are in the inspector' : doc.kind}</span>
         </button>

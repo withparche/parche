@@ -38,6 +38,12 @@ interface UiState {
   togglePanel: (p: PanelId) => void;
   setViewport: (v: Viewport) => void;
   toggleDark: () => void;
+  /** Pinned, a side panel takes its own space; unpinned, it floats over the preview. Remembered per browser. */
+  pinned: { left: boolean; right: boolean };
+  /** The inspector can be closed (to see the whole preview); selecting something opens it again. */
+  inspectorOpen: boolean;
+  setInspectorOpen: (open: boolean) => void;
+  togglePin: (side: 'left' | 'right') => void;
   inspect: (name: string | null) => void;
 }
 
@@ -47,6 +53,15 @@ const storedDark = (() => {
   } catch {
     return true;
   }
+})();
+
+const storedPins = (() => {
+  try {
+    const v = JSON.parse(localStorage.getItem('parche-builder:pinned') ?? 'null');
+    if (v && typeof v.left === 'boolean' && typeof v.right === 'boolean') return v as { left: boolean; right: boolean };
+  } catch {}
+  // As the old builder had it: the documents docked, the inspector floating.
+  return { left: true, right: false };
 })();
 
 export const useUi = create<UiState>((set) => ({
@@ -82,4 +97,15 @@ export const useUi = create<UiState>((set) => ({
       return { dark: !s.dark };
     }),
   inspect: (inspected) => set({ inspected }),
+  pinned: storedPins,
+  inspectorOpen: true,
+  setInspectorOpen: (inspectorOpen) => set({ inspectorOpen }),
+  togglePin: (side) =>
+    set((s) => {
+      const pinned = { ...s.pinned, [side]: !s.pinned[side] };
+      try {
+        localStorage.setItem('parche-builder:pinned', JSON.stringify(pinned));
+      } catch {}
+      return { pinned };
+    }),
 }));

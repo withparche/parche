@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import { useUi } from '../store/ui';
 import { previewToken, usePreview } from './usePreview';
 import { useDocs } from '../store/documents';
@@ -9,9 +9,9 @@ const widths = { desktop: '100%', tablet: '768px', mobile: '375px' } as const;
  * The page being edited, in its preview: the site's own render with the
  * editor's unsaved drafts, updated in place after each edit. Edit mode turns
  * a click into a selection; browse mode lets the page behave. `rev` reloads
- * it by hand.
+ * it by hand. `children` float over the page, under the toolbar (unpinned panels).
  */
-export default function PreviewFrame({ src, rev, onReload }: { src: string; rev: number; onReload: () => void }) {
+export default function PreviewFrame({ src, rev, onReload, children }: { src: string; rev: number; onReload: () => void; children?: ReactNode }) {
   const viewport = useUi((s) => s.viewport);
   const mode = useUi((s) => s.previewMode);
   const setMode = useUi((s) => s.setPreviewMode);
@@ -74,7 +74,7 @@ export default function PreviewFrame({ src, rev, onReload }: { src: string; rev:
           {error}
         </p>
       )}
-      <div className="flex min-h-0 flex-1 justify-center overflow-hidden bg-surface-2 data-[device=mobile]:py-4 data-[device=tablet]:py-4" data-device={viewport}>
+      <div className="relative flex min-h-0 flex-1 justify-center overflow-hidden bg-surface-2 data-[device=mobile]:py-4 data-[device=tablet]:py-4" data-device={viewport}>
         <iframe
           ref={frame}
           key={`${src}#${rev}`}
@@ -84,6 +84,7 @@ export default function PreviewFrame({ src, rev, onReload }: { src: string; rev:
           style={{ width: widths[viewport] }}
           className="h-full max-w-full border-0 bg-background shadow-[0_0_0_1px_var(--ds-sys-color-border)] transition-[width] duration-200"
         />
+        {children}
       </div>
     </div>
   );
