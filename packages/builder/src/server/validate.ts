@@ -1,5 +1,5 @@
 import type { ZodType } from 'zod';
-import { checkTrees, listWrapper, outletWrappers, usedJsonWidgets, type JsonWidget, type ListWrapper, type Node, type WidgetShape } from '@parche/astro/content/pure';
+import { checkTrees, listWrapper, outletWrappers, usedPatterns, PATTERN_PREFIX, type Pattern, type ListWrapper, type Node, type WidgetShape } from '@parche/astro/content/pure';
 
 /**
  * Everything the builder checks before a document is saved, with the paths
@@ -27,14 +27,14 @@ export interface ValidationContext {
   widgetPropSchemas: Record<string, ZodType>;
   tones: string[];
   wrapper: string | null;
-  /** The site's JSON widgets, by name. */
-  definitions: Record<string, JsonWidget>;
+  /** The patterns a document in its locale can use, by the name they are used with. */
+  definitions: Record<string, Pattern>;
   /** The collection's schema, when there is one to check against. */
   collectionSchema?: ZodType;
   /** Resolves `$ref` / `$collection` values as a page does; without one, nodes holding references skip the props check. */
   resolveRefs?: (nodes: Node[], base: string) => Promise<{ nodes: Node[]; issues: { path: string; message: string }[] }>;
-  /** Builds a JSON widget from a `widgets` document, to check the definition being edited. */
-  defineJsonWidget?: (name: string, data: unknown) => { widget?: JsonWidget; error?: string };
+  /** Builds a pattern from a `patterns` document, to check the one being edited. */
+  definePattern?: (entry: string, data: unknown) => { pattern?: Pattern; error?: string };
 }
 
 export { kindOf, rootsOf } from '../shared/roots.js';
@@ -54,7 +54,7 @@ export function* nodesWithPaths(roots: { nodes: Node[]; base: string }[]): Gener
 
 const zodPath = (segments: PropertyKey[]) => segments.map((s) => (typeof s === 'number' ? `[${s}]` : `.${String(s)}`)).join('');
 
-/** A value a props check cannot judge: a JSON widget's `$prop`, a view's `$label`. */
+/** A value a props check cannot judge: a pattern's `$prop`, a view's `$label`. */
 function hasPlaceholder(v: unknown): boolean {
   if (Array.isArray(v)) return v.some(hasPlaceholder);
   if (v && typeof v === 'object') {
@@ -82,11 +82,12 @@ export async function validateDoc(collection: string, data: Record<string, any>,
 
   let roots = rootsOf(kind, data);
   let definitions = ctx.definitions;
-  if (kind === 'widget') {
-    const made = ctx.defineJsonWidget?.(id, data);
-    if (made?.error) issues.push({ path: '(document)', message: made.error, severity: 'error', source: 'schema' });
-    // The definition checks its own tree; its $prop placeholders are not uses.
-    definitions = made?.widget ? { ...ctx.definitions, [id]: made.widget } : ctx.definitions;
+  const self = PATTERN_PREFIX + id;
+  if (kind === 'pattern') {
+    const made = ctx.definePattern?.(id, data);
+    if (made?.error && !issues.length) issues.push({ path: '(document)', message: made.error, severity: 'error', source: 'schema' });
+    // The pattern checks its own tree; its $prop placeholders are not uses.
+    definitions = made?.pattern ? { ...ctx.definitions, [self]: { ...made.pattern, name: self } } : ctx.definitions;
     roots = [];
   }
 
@@ -98,8 +99,8 @@ export async function validateDoc(collection: string, data: Record<string, any>,
     }
   }
 
-  // As the renderer does: only the JSON widgets this document uses are checked.
-  const used = kind === 'widget' ? { [id]: definitions[id] } : Object.fromEntries([...usedJsonWidgets(roots.flatMap((r) => r.nodes), definitions)].map((n) => [n, definitions[n]]));
+  // As the renderer does: only the patterns this document uses are checked.
+  const used = kind === 'pattern' ? { [self]: definitions[self] } : Object.fromEntries([...usedPatterns(roots.flatMap((r) => r.nodes), definitions)].map((n) => [n, definitions[n]]));
   for (const i of checkTrees({ roots, definitions: Object.fromEntries(Object.entries(used).filter(([, d]) => d)), widgetMeta: ctx.widgetMeta, tones: ctx.tones, wrapper: ctx.wrapper, declared })) {
     issues.push({ path: i.path, message: i.message, severity: 'error', source: 'tree' });
   }

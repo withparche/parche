@@ -2,17 +2,18 @@ import { z } from 'zod';
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { nodeSchema } from './node.js';
-import { widgetDefinitionSchema } from './json-widgets.js';
+import { patternSchema } from './patterns.js';
 
 export {
   metadataSchema,
   pageSchema,
   navigationSchema,
   layoutSchema,
-  presetSchema,
 } from './entries.js';
-export type { PresetEntry, MetadataEntry, PageEntry, NavigationEntry, LayoutEntry } from './entries.js';
-import { metadataSchema, pageSchema, navigationSchema, layoutSchema, presetSchema } from './entries.js';
+export { patternSchema } from './patterns.js';
+export type { MetadataEntry, PageEntry, NavigationEntry, LayoutEntry } from './entries.js';
+export type { PatternEntry } from './patterns.js';
+import { metadataSchema, pageSchema, navigationSchema, layoutSchema } from './entries.js';
 
 /**
  * Ready-to-use collections for a standard Parche project.
@@ -30,12 +31,10 @@ export function createCollections(options?: {
   pageSchema?: z.ZodType;
   navigationSchema?: z.ZodType;
   layoutSchema?: z.ZodType;
-  presetSchema?: z.ZodType;
   pagesBase?: string;
   navigationBase?: string;
   layoutsBase?: string;
-  presetsBase?: string;
-  widgetsBase?: string;
+  patternsBase?: string;
 }) {
   return {
     pages: defineCollection({
@@ -59,22 +58,14 @@ export function createCollections(options?: {
       }),
       schema: options?.layoutSchema ?? layoutSchema,
     }),
-    presets: defineCollection({
+    // Compositions used as `pattern/<id>`: `<id>.json`, or `<locale>/<id>.json`
+    // for one written per language (see content/patterns.ts).
+    patterns: defineCollection({
       loader: glob({
         pattern: '**/*.{yaml,yml,json}',
-        base: options?.presetsBase ?? './src/content/presets',
+        base: options?.patternsBase ?? './src/content/patterns',
       }),
-      schema: options?.presetSchema ?? presetSchema,
-    }),
-    // JSON widgets: the file name is the widget name, case kept (TourStep.json
-    // is "TourStep"), so the id is not slugified like other entries.
-    widgets: defineCollection({
-      loader: glob({
-        pattern: '*.{yaml,yml,json}',
-        base: options?.widgetsBase ?? './src/content/widgets',
-        generateId: ({ entry }) => entry.replace(/\.(json|ya?ml)$/, ''),
-      }),
-      schema: widgetDefinitionSchema,
+      schema: patternSchema,
     }),
   };
 }

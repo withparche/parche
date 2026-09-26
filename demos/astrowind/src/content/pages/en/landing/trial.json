@@ -128,7 +128,7 @@
       "slots": {
         "config": [
           {
-            "widget": "TourStep",
+            "widget": "pattern/tour-step",
             "props": {
               "url": "src/config.yaml · 1200×760",
               "title": "One file for the whole site",
@@ -147,7 +147,7 @@
         ],
         "styles": [
           {
-            "widget": "TourStep",
+            "widget": "pattern/tour-step",
             "props": {
               "url": "CustomStyles.astro · 1200×760",
               "title": "Two colour scales, light and dark",
@@ -166,7 +166,7 @@
         ],
         "props": [
           {
-            "widget": "TourStep",
+            "widget": "pattern/tour-step",
             "props": {
               "url": "widget props · 1200×760",
               "title": "Sections are props, not markup",
@@ -185,7 +185,7 @@
         ],
         "build": [
           {
-            "widget": "TourStep",
+            "widget": "pattern/tour-step",
             "props": {
               "url": "terminal · npm run build · 1200×760",
               "title": "A static folder at the end",

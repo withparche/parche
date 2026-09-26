@@ -6,13 +6,12 @@
  * so: an Outlet's `wrapper`, a page's, or the `wrapper` given here for these
  * roots (see content/wrapper.ts).
  */
-import { loadWidgets, widgetLoaders } from 'parche:registry/widgets';
+import { loadWidgets } from 'parche:registry/widgets';
 import { wrapper as wrapperName, unwrapped } from 'parche:config/layout';
 import { resolveAssets } from '../utils/assets.js';
-import { expandPresets } from '../utils/presets.js';
 import { resolveRefs } from '../utils/refs.js';
-import { loadJsonWidgets } from '../utils/json-widgets.js';
-import { usedJsonWidgets, checkDefinition, checkUses, type JsonWidget } from '../content/json-widgets';
+import { loadPatterns } from '../utils/patterns.js';
+import { isPatternUse, usedPatterns, type Pattern } from '../content/patterns';
 import type { Node as NodeData } from '../content/node';
 import { walkNodes, widgetNames } from '../content/node';
 import { listWrapper, outletWrappers, type WrapperSpec } from '../content/wrapper';
@@ -31,11 +30,9 @@ interface Props {
 const { nodes: givenNodes, wrapper: rootSpec, outlets: givenOutlets, base: givenBase } = Astro.props;
 const wrap = rootSpec !== undefined;
 
-// Presets first: a `Preset` node becomes the saved tree it names, so what
-// follows sees only real widgets.
-// Then references: a `$ref` or `$collection` value becomes the content it names.
+// References first: a `$ref` or `$collection` value becomes the content it names.
 const locale = (Astro.locals as any).parche?.locale as string | undefined;
-const expand = async (tree: NodeData[], base: string) => resolveRefs(await expandPresets(tree, locale), locale, base);
+const expand = (tree: NodeData[], base: string) => resolveRefs(tree, locale, base);
 const base = givenBase ?? (givenOutlets ? 'layout' : 'sections');
 const root = await expand(givenNodes, base);
 const rawNodes = root.nodes;
@@ -56,26 +53,26 @@ const declared = [
 ];
 const rootWrapper = wrap ? listWrapper(rootSpec, wrapperName) : null;
 
-// JSON widgets the trees use (and the ones inside those), each tree made
-// ready like a page's: presets, references, then asset paths.
+// The patterns the trees use (and the ones inside those), each tree made
+// ready like a page's: references, then asset paths. The collection is read
+// only when a tree uses a pattern, so a site without them never touches it.
 const outletTrees = Object.values(rawOutlets?.nodes ?? {}).flat();
-// The collection is read only when a tree names a widget no parche registers,
-// so a site without JSON widgets never touches it.
-const unregistered = widgetNames([...rawNodes, ...outletTrees]).some((n) => n !== 'Outlet' && !(n in widgetLoaders));
-const json = unregistered ? await loadJsonWidgets() : { widgets: {}, issues: [] };
-const usedJson = [...usedJsonWidgets([...rawNodes, ...outletTrees], json.widgets)];
+const usesPatterns = widgetNames([...rawNodes, ...outletTrees]).some(isPatternUse);
+const loaded = usesPatterns ? await loadPatterns(locale) : { patterns: {} as Record<string, Pattern>, issues: [] };
+const used = [...usedPatterns([...rawNodes, ...outletTrees], loaded.patterns)];
 const definitionRefs = await Promise.all(
-  usedJson.map(async (name) => {
-    const r = await expand(json.widgets[name].tree, `widgets/${name}.tree`);
-    return [name, { ...json.widgets[name], tree: r.nodes }, r.issues] as const;
+  used.map(async (name) => {
+    const p = loaded.patterns[name];
+    const r = await expand(p.tree, `patterns/${p.entry}.tree`);
+    return [name, { ...p, tree: r.nodes }, r.issues] as const;
   }),
 );
-const rawDefinitions: Record<string, JsonWidget> = Object.fromEntries(definitionRefs.map(([n, d]) => [n, d]));
+const rawDefinitions: Record<string, Pattern> = Object.fromEntries(definitionRefs.map(([n, d]) => [n, d]));
 const definitionTrees = Object.values(rawDefinitions).flatMap((d) => d.tree);
 
 // Everything the render will touch, loaded once: the tree, the outlet trees,
-// the JSON widgets' trees and the wrappers. Widgets not referenced are never imported.
-const names = widgetNames([...rawNodes, ...outletTrees, ...definitionTrees]).filter((n) => !(n in rawDefinitions));
+// the patterns' trees and the wrappers. Widgets not referenced are never imported.
+const names = widgetNames([...rawNodes, ...outletTrees, ...definitionTrees]).filter((n) => !isPatternUse(n));
 for (const d of declared) if (d.wrapper) names.push(d.wrapper.name);
 // A node that asks for the default wrapper by props alone needs it loaded too.
 const asksDefault = [...walkNodes([...rawNodes, ...outletTrees, ...definitionTrees])].some(({ node }) => node.wrapper && !node.wrapper.widget);
@@ -86,14 +83,13 @@ const nodes = await resolveAssets(rawNodes);
 const outlets = rawOutlets
   ? { nodes: await resolveAssets(rawOutlets.nodes), html: rawOutlets.html }
   : undefined;
-const definitions: Record<string, JsonWidget> = Object.fromEntries(
+const definitions: Record<string, Pattern> = Object.fromEntries(
   await Promise.all(Object.entries(rawDefinitions).map(async ([n, d]) => [n, { ...d, tree: await resolveAssets(d.tree) }] as const)),
 );
-const unwrappedAll = [...unwrapped, ...Object.values(definitions).filter((d) => !d.wrapper).map((d) => d.name)];
 
 
 // Check the trees against the catalog: slots a widget does not declare,
-// widgets a slot does not allow, counts, depth, tones. In dev every issue is
+// widgets a slot does not allow, counts, tones, patterns. In dev every issue is
 // a warning with its path; in a build, a prerendered page with issues fails
 // the build, which is the CI check. The catalog imports every widget's
 // schema, so it is loaded only here and never on a server-rendered request.
@@ -105,7 +101,7 @@ if (import.meta.env.DEV || Astro.isPrerendered) {
   ]);
   const issues = [
     ...refIssues,
-    ...json.issues,
+    ...loaded.issues,
     ...checkTrees({
       roots: [
         { nodes: rawNodes, base },
@@ -128,4 +124,4 @@ if (import.meta.env.DEV || Astro.isPrerendered) {
 }
 ---
 
-{nodes.map((node) => <Node node={node} widgets={widgets} wrapper={rootWrapper} defaultWrapper={wrapperName} unwrapped={unwrappedAll} outlets={outlets} definitions={definitions} />)}
+{nodes.map((node) => <Node node={node} widgets={widgets} wrapper={rootWrapper} defaultWrapper={wrapperName} unwrapped={unwrapped} outlets={outlets} definitions={definitions} />)}

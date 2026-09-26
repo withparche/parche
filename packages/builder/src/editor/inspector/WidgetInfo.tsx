@@ -1,14 +1,17 @@
 import PanelShell from '../shell/PanelShell';
 import { useUi } from '../store/ui';
+import { useCurrentDoc } from '../store/current';
+import { entryOf, localeOfDoc } from '../store/patterns';
 
 interface JsonSchema {
   properties?: Record<string, { description?: string; help?: string; type?: string | string[]; anyOf?: unknown[] }>;
 }
 
-/** What the catalog says about one widget: its slots and its props, as the forms will see them. */
+/** What the catalog says about one widget or pattern: its slots and its props, as the forms will see them. */
 export default function WidgetInfo() {
   const name = useUi((s) => s.inspected);
-  const widget = useUi((s) => (name ? s.catalog?.widgets[name] : undefined));
+  const docId = useCurrentDoc()?.id;
+  const widget = useUi((s) => (name && s.catalog ? entryOf(s.catalog, name, docId ? localeOfDoc(docId, s.catalog) : s.catalog.i18n.defaultLocale) : undefined));
   const inspect = useUi((s) => s.inspect);
   if (!name || !widget) return null;
   const props = Object.entries((widget.schema as JsonSchema | null)?.properties ?? {}).filter(([k]) => k !== 'widget');

@@ -78,7 +78,7 @@ function Label({ field, htmlFor, required, children }: { field: Field; htmlFor?:
 
 const Help = ({ text }: { text?: string }) => (text ? <p className="m-0 text-[11px] leading-snug text-muted">{text}</p> : null);
 
-/** A special value the form shows instead of editing: a reference, a view's label, a JSON widget's placeholder. */
+/** A special value the form shows instead of editing: a reference, a view's label, a pattern's placeholder. */
 function Special({ value }: { value: Record<string, unknown> }) {
   const [kind, text] =
     '$ref' in value ? ['Linked', String(value.$ref)] : '$collection' in value ? ['Query', String(value.$collection)] : '$label' in value ? ['Label', String(value.$label)] : ['Prop', String(value.$prop)];

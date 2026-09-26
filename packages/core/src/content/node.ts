@@ -24,8 +24,8 @@ export interface Node {
    * How this node is wrapped, over its list's wrapper: `{ props }` is the
    * list's wrapper widget (Section by default) with these props on top of the
    * list's; `{ widget, props }` is another widget, with only these props;
-   * `false` is no wrapper. It is decoration, not composition: the wrapper
-   * does not count toward the depth limit, and it holds only this node.
+   * `false` is no wrapper. It is decoration, not composition: it holds only
+   * this node.
    */
   wrapper?: WrapperSpec;
   /** A note for whoever edits the page next; never rendered. */
@@ -48,9 +48,6 @@ export const nodeSchema: z.ZodType<Node> = z.lazy(() =>
 );
 
 export const nodeListSchema = z.array(nodeSchema);
-
-/** How deep a tree may go: a page, a container, a container in it, and leaves. */
-export const MAX_NODE_DEPTH = 3;
 
 /** Walk every node of a tree, depth first, with its depth (roots are 0). */
 export function* walkNodes(nodes: Node[], depth = 0): Generator<{ node: Node; depth: number }> {

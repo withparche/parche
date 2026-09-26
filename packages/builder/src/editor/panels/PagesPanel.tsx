@@ -18,13 +18,12 @@ const COLLECTIONS: { id: string; label: string; one: string; create?: (title: st
   { id: 'pages', label: 'Pages', one: 'page', create: (title) => ({ title, sections: [] }) },
   { id: 'layouts', label: 'Layouts', one: 'layout', create: () => ({ sections: [{ widget: 'Outlet' }] }) },
   { id: 'navigation', label: 'Menus', one: 'menu', create: (title) => ({ label: title, items: [] }) },
-  { id: 'presets', label: 'Presets', one: 'preset' },
-  { id: 'widgets', label: 'Own widgets', one: 'widget' },
+  { id: 'patterns', label: 'Patterns', one: 'pattern' },
 ];
 
 /**
- * The site's documents by locale — pages, layouts, menus, presets and the
- * site's own JSON widgets: open one to edit it; create, rename and delete them.
+ * The site's documents by locale — pages, layouts, menus and patterns:
+ * open one to edit it; create, rename and delete them.
  */
 export default function PagesPanel() {
   const close = useUi((s) => s.togglePanel);

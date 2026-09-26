@@ -19,7 +19,7 @@ import YAML from 'yaml';
  * YAML is read-only for now.
  */
 
-export const COLLECTIONS = ['pages', 'layouts', 'navigation', 'presets', 'widgets', 'views', 'posts', 'authors', 'taxonomies', 'series'] as const;
+export const COLLECTIONS = ['pages', 'layouts', 'navigation', 'patterns', 'views', 'posts', 'authors', 'taxonomies', 'series'] as const;
 export type Collection = (typeof COLLECTIONS)[number];
 export type Format = 'json' | 'md' | 'yaml';
 

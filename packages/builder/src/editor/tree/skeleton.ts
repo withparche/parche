@@ -9,8 +9,8 @@ import type { SlotMeta } from './rules';
  * differs), and the slots it needs filled (`min`) with the first widget
  * each allows.
  */
-export function skeleton(catalog: { widgets: Record<string, { schema?: unknown; slots?: Record<string, SlotMeta> }>; jsonWidgets?: Record<string, { schema?: unknown }> }, widget: string, depth = 0): Node {
-  const entry = catalog.widgets[widget] ?? catalog.jsonWidgets?.[widget];
+export function skeleton(catalog: { widgets: Record<string, { schema?: unknown; slots?: Record<string, SlotMeta> }> }, widget: string, depth = 0, pattern?: { schema?: unknown }): Node {
+  const entry = pattern ?? catalog.widgets[widget];
   const node: Node = { widget, id: newId() };
   const schema = entry?.schema as JsonSchema | undefined;
   if (schema) {

@@ -10,7 +10,7 @@ async function openDoc(page: Page, collection: 'Layouts' | 'Menus', name: string
   await page.goto('/_parche/builder');
   await page.getByRole('combobox', { name: 'Documents' }).selectOption({ label: collection });
   await page.getByRole('region', { name: collection }).getByRole('button', { name: new RegExp(`^${name}(\\s|$)`) }).click();
-  await expect.poll(() => page.locator('iframe[title="Preview"]').evaluate((f: HTMLIFrameElement) => typeof (f.contentWindow as any).__parchePreview?.onSelect)).toBe('function');
+  await expect.poll(() => page.locator('iframe[title="Preview"]').evaluate((f: HTMLIFrameElement) => typeof (f.contentWindow as any)?.__parchePreview?.onSelect)).toBe('function');
 }
 
 test('a layout previews through a page that uses it, and its Outlet wraps what the page puts in it', async ({ page }) => {

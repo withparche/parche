@@ -23,7 +23,7 @@ const walk = (dir: string, acc: string[] = []) => {
 
 test('ids come and go without a trace: every demo document round-trips to the same JSON', () => {
   let files = 0;
-  for (const collection of ['pages', 'layouts', 'presets', 'widgets', 'views']) {
+  for (const collection of ['pages', 'layouts', 'patterns', 'views']) {
     let list: string[] = [];
     try {
       list = walk(join(DEMO, collection));
@@ -119,6 +119,10 @@ const catalog: RulesCatalog = {
     Image: {},
     Features: {},
   },
+  patterns: [
+    { entry: 'column-card', label: 'Column card', schema: null, roots: ['Column'] },
+    { entry: 'en/blurb', label: 'Blurb', schema: null, roots: ['Features'] },
+  ],
 };
 
 test('the rules offer only places that will render', () => {
@@ -131,14 +135,16 @@ test('the rules offer only places that will render', () => {
   assert.equal(canPlace(catalog, 'page', data, { parent: hero, slot: 'media', index: 0 }, { widget: 'Image' }, id(data, 'sections[0].slots.media[0]')).ok, true, 'moving within the slot does not count itself');
   assert.equal(canPlace(catalog, 'page', data, { parent: hero, slot: 'nope', index: 0 }, { widget: 'Image' }).ok, false);
   assert.equal(canPlace(catalog, 'page', data, { parent: columns, slot: 'default', index: 0 }, { widget: 'Column' }).ok, true);
-  // Column sits at depth 1, so its slot is depth 2: a Section there fits with one level below it, not two.
-  assert.equal(canPlace(catalog, 'page', data, { parent: column, slot: 'default', index: 0 }, { widget: 'Section', slots: { default: [{ widget: 'Features' }] } }).ok, true);
+  // Depth is not limited: a Section two levels deep inside a Column fits.
   const deep = { widget: 'Section', slots: { default: [{ widget: 'Section', slots: { default: [{ widget: 'Features' }] } }] } };
-  assert.match((canPlace(catalog, 'page', data, { parent: column, slot: 'default', index: 0 }, deep) as { reason: string }).reason, /too deep/);
+  assert.equal(canPlace(catalog, 'page', data, { parent: column, slot: 'default', index: 0 }, deep).ok, true);
   assert.match((canPlace(catalog, 'page', data, { parent: column, slot: 'default', index: 0 }, { widget: 'Columns' }, columns) as { reason: string }).reason, /into itself/);
   assert.equal(canPlace(catalog, 'page', data, { root: 'sections', index: 0 }, { widget: 'Outlet' }).ok, false);
   assert.equal(canPlace(catalog, 'layout', data, { root: 'sections', index: 0 }, { widget: 'Outlet' }).ok, true);
   // A wildcard slot takes any name.
   const sw: any = { sections: [{ widget: 'Switch', id: 's' }] };
   assert.equal(canPlace(catalog, 'page', sw, { parent: 's', slot: 'monthly', index: 0 }, { widget: 'Features' }).ok, true);
+  // A pattern goes where its roots may go.
+  assert.equal(canPlace(catalog, 'page', data, { parent: columns, slot: 'default', index: 0 }, { widget: 'pattern/column-card' }).ok, true);
+  assert.equal(canPlace(catalog, 'page', data, { parent: columns, slot: 'default', index: 0 }, { widget: 'pattern/blurb' }).ok, false);
 });

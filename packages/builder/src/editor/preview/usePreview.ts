@@ -5,6 +5,7 @@ import { useSelection } from '../store/selection';
 import { useUi } from '../store/ui';
 import type { PreviewApi } from '../../preview-client/index';
 import { draftCss, tokensDirty, useTokens } from '../store/tokens';
+import { entryOf, localeOfDoc } from '../store/patterns';
 
 /** Unsaved token values as CSS; once saved, the site's own CSS carries them. */
 const tokenCss = () => (tokensDirty(useTokens.getState()) ? draftCss() : '');
@@ -82,7 +83,7 @@ export function usePreview(frame: React.RefObject<HTMLIFrameElement | null>) {
         const d = current ? docs[current] : undefined;
         const widget = d ? findWidget(d.data, id) : undefined;
         const catalog = useUi.getState().catalog;
-        return widget ? catalog?.widgets[widget]?.label ?? catalog?.jsonWidgets?.[widget]?.label ?? widget : '';
+        return widget && d && catalog ? entryOf(catalog, widget, localeOfDoc(d.id, catalog))?.label ?? widget : '';
       };
       c.setMode(useUi.getState().previewMode);
       c.select(useSelection.getState().node);

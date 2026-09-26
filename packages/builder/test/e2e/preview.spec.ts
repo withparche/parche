@@ -5,7 +5,7 @@ async function openHome(page: Page) {
   await page.getByRole('region', { name: 'Pages' }).getByRole('button', { name: /^home(\s|$)/ }).click();
   await expect(page.frameLocator('iframe[title="Preview"]').getByRole('heading', { level: 1 })).toBeVisible();
   // The editor has wired its preview client (it injects it once the page loads).
-  await expect.poll(() => page.locator('iframe[title="Preview"]').evaluate((f: HTMLIFrameElement) => typeof (f.contentWindow as any).__parchePreview?.onSelect)).toBe('function');
+  await expect.poll(() => page.locator('iframe[title="Preview"]').evaluate((f: HTMLIFrameElement) => typeof (f.contentWindow as any)?.__parchePreview?.onSelect)).toBe('function');
   // The dev server reloads a page on its own now and then (dependency
   // optimisation, the content sync after another test's save): wait for quiet.
   await settle(page);
@@ -17,7 +17,7 @@ async function settle(page: Page) {
   page.on('framenavigated', onNav);
   await expect.poll(() => Date.now() - last > 1200, { timeout: 15_000 }).toBe(true);
   page.off('framenavigated', onNav);
-  await expect.poll(() => page.locator('iframe[title="Preview"]').evaluate((f: HTMLIFrameElement) => typeof (f.contentWindow as any).__parchePreview?.onSelect)).toBe('function');
+  await expect.poll(() => page.locator('iframe[title="Preview"]').evaluate((f: HTMLIFrameElement) => typeof (f.contentWindow as any)?.__parchePreview?.onSelect)).toBe('function');
 }
 const frame = (page: Page) => page.frameLocator('iframe[title="Preview"]');
 const outline = (page: Page) => page.getByRole('region', { name: 'Outline' });

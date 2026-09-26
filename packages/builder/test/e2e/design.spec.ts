@@ -8,7 +8,7 @@ test('a token change shows in the preview at once, and Save writes it to parche.
   await page.goto('/_parche/builder');
   await page.getByRole('region', { name: 'Pages' }).getByRole('button', { name: /^home(\s|$)/ }).click();
   const frame = page.locator('iframe[title="Preview"]');
-  await expect.poll(() => frame.evaluate((f: HTMLIFrameElement) => typeof (f.contentWindow as any).__parchePreview?.setTokens)).toBe('function');
+  await expect.poll(() => frame.evaluate((f: HTMLIFrameElement) => typeof (f.contentWindow as any)?.__parchePreview?.setTokens)).toBe('function');
   await frame.evaluate((f: HTMLIFrameElement) => ((f.contentWindow as any).__probe = 'alive'));
 
   await page.getByRole('button', { name: 'Design', exact: true }).click();

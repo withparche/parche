@@ -13,8 +13,8 @@ import { themes, defaultTheme } from 'parche:config/themes';
 // @ts-expect-error virtual module provided by @parche/astro
 import { locales, defaultLocale } from 'parche:config/i18n';
 import { z } from 'zod';
-import { loadJsonWidgets } from '@parche/astro/dev';
-import { MAX_NODE_DEPTH, outletWrappers, pageSchema } from '@parche/astro/content/pure';
+import { loadPatterns } from '@parche/astro/dev';
+import { outletWrappers, pageSchema, rootWidgets } from '@parche/astro/content/pure';
 import { listDocs, readDoc } from './files.js';
 import { session } from './session.js';
 import { navRefs, schemaAt } from './usage.js';
@@ -57,10 +57,19 @@ export async function buildCatalog() {
     wrapper: false,
     schema: { type: 'object', properties: { name: { type: 'string', title: 'Name', description: 'Leave empty for the page\'s sections; a name makes a slot pages fill by that name.' } } },
   };
-  const json = await loadJsonWidgets();
-  const jsonWidgets = Object.fromEntries(
-    Object.values(json.widgets).map((d) => [d.name, { label: d.label, description: d.description, category: d.category ?? 'custom', icon: d.icon, wrapper: d.wrapper, schema: d.props }]),
-  );
+  // Every pattern once, by its entry (`tour-step`, `en/faq-agencies`): the
+  // editor resolves `pattern/<id>` in the document's locale, as a page does.
+  // `roots` is what it stands for in a slot that allows only some widgets.
+  const loaded = await loadPatterns();
+  const patterns = Object.values(loaded.patterns).map((p) => ({
+    entry: p.entry,
+    label: p.label,
+    description: p.description,
+    category: p.category ?? 'patterns',
+    icon: p.icon,
+    schema: p.props,
+    roots: rootWidgets(p.name, loaded.patterns),
+  }));
   // The layouts a page can pick, each with the outlets it declares (a page
   // fills the named ones through its `slots`) and the pages that use it.
   const root = session().root;
@@ -106,12 +115,12 @@ export async function buildCatalog() {
   };
   return {
     widgets,
-    jsonWidgets,
+    patterns,
     layouts,
     navigation,
     pageUrls,
     pageSettings,
-    limits: { maxDepth: MAX_NODE_DEPTH, maxFilledSlots: 6 },
+    limits: { maxFilledSlots: 6 },
     tones: (tones as { name: string }[]).map((t) => t.name),
     defaultWrapper: wrapper ?? null,
     unwrapped: unwrapped ?? [],

@@ -21,7 +21,7 @@ test('a well-formed tree has no issues', () => {
       { widget: 'Hero', slots: { media: [{ widget: 'Form' }] } },
       { widget: 'Section', props: { tone: 'muted' }, slots: { default: [{ widget: 'Columns', slots: { default: [{ widget: 'Column' }, { widget: 'Column', slots: { default: [{ widget: 'Prose' }] } }] } }] } },
       { widget: 'Outlet' },
-      { widget: 'Preset', props: { name: 'pricing-with-faq' } },
+      { widget: 'pattern/pricing-with-faq' },
     ],
     ctx,
   );
@@ -55,14 +55,14 @@ test('a `*` slot accepts any name, with its own allow list', () => {
   assert.match(bad[0].message, /"Form" is not allowed in "Switch".agency/);
 });
 
-test('min, max, depth and tones are checked', () => {
+test('min, max and tones are checked; depth is not limited', () => {
   const deep = (n: number): any => (n === 0 ? { widget: 'Prose' } : { widget: 'Column', slots: { default: [deep(n - 1)] } });
   const issues = validateTree(
     [
       { widget: 'Columns', slots: { default: [{ widget: 'Column' }] } },
       { widget: 'Hero', slots: { media: [{ widget: 'Image' }, { widget: 'Image' }] } },
       { widget: 'Section', props: { tone: 'neon' } },
-      deep(4),
+      deep(8),
     ],
     ctx,
   );
@@ -70,7 +70,7 @@ test('min, max, depth and tones are checked', () => {
   assert.ok(m.some((x) => /at least 2/.test(x)));
   assert.ok(m.some((x) => /at most 1/.test(x)));
   assert.ok(m.some((x) => /tone "neon" is not registered/.test(x)));
-  assert.ok(m.some((x) => /4 levels deep; the limit is 3/.test(x)));
+  assert.equal(m.length, 3, 'nesting eight deep is the site\'s call');
 });
 
 test("a node's own wrapper must be a known widget with a default slot, and its tone registered", () => {
@@ -90,9 +90,4 @@ test("a node's own wrapper must be a known widget with a default slot, and its t
   assert.match(bad[2].message, /tone "neon" is not registered/);
   // No default wrapper to fall back on.
   assert.match(validateTree([{ widget: 'Prose', wrapper: { props: {} } }], { ...ctx, wrapper: null })[0].message, /names no widget/);
-});
-
-test('a wrapper does not count toward the depth limit', () => {
-  const deep = [{ widget: 'Section', slots: { default: [{ widget: 'Columns', slots: { default: [{ widget: 'Column', slots: { default: [{ widget: 'Prose', wrapper: { widget: 'Section' } }] } }, { widget: 'Column' }] } }] } }];
-  assert.deepEqual(validateTree(deep, ctx), []);
 });

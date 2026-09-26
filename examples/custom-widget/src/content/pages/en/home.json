@@ -7,7 +7,7 @@
       "props": {
         "tagline": "Extend",
         "title": "Bring your <span class='text-primary'>own widgets</span>",
-        "subtitle": "The Callout below is defined in this project (src/widgets/Callout.astro) and registered via config. The product shot after it is a JSON widget (src/content/widgets/ProductShot.json): no code, just widgets that exist, arranged once, with props of its own. Content references both by name, exactly like a built-in widget."
+        "subtitle": "The Callout below is defined in this project (src/widgets/Callout.astro) and registered via config. The product shot after it is a pattern (src/content/patterns/product-shot.json): no code, just widgets that exist, arranged once, with props of its own. Content uses the Callout by name, like a built-in widget, and the pattern as \"pattern/product-shot\"."
       }
     },
     {
@@ -19,7 +19,7 @@
       }
     },
     {
-      "widget": "ProductShot",
+      "widget": "pattern/product-shot",
       "props": {
         "screen": "app.example.com · 1200×760",
         "title": "A widget written as content",

@@ -5,8 +5,7 @@ Provisional, like everything in `docs-wip/`. This is the model the
 
 ## One shape for everything
 
-A page, a layout, a preset and a JSON widget's definition are all trees of
-**nodes**:
+A page, a layout and a pattern are all trees of **nodes**:
 
 ```json
 { "widget": "Hero", "props": { "title": "Pages are data" } }
@@ -27,9 +26,9 @@ A node is a widget with its props. A widget that declares **slots** in its
 
 The slot names are the widget's Astro slots: `slots.media` in the JSON lands
 in `<slot name="media">` in the `.astro`, and `slots.default` in the unnamed
-`<slot />`. A slot left empty keeps the widget's own fallback content. Trees
-stop at three levels; past that, the repeated part becomes a widget of its
-own (see *Widgets in JSON*).
+`<slot />`. A slot left empty keeps the widget's own fallback content. A tree
+nests as deep as the site wants; a part that repeats is usually better kept
+once, as a pattern (see *Patterns*).
 
 The schema is `nodeSchema` in `@parche/astro/content`; `notes` is a free-text
 field for whoever edits the page next and is never rendered; `id` is an
@@ -48,9 +47,9 @@ optional stable identifier an editor may write.
 
 `sections` fills the layout's unnamed outlet; `slots[name]` fills a named one.
 There is no `template` any more: what a template did is a layout, a widget or
-a preset.
+a pattern.
 
-JSON is the format of pages, layouts, presets and menus: it is what the
+JSON is the format of pages, layouts, patterns and menus: it is what the
 builder reads and writes, what an AI is asked to produce and what the
 schemas are checked against, so everything Parche ships and scaffolds is
 JSON. The collections also accept YAML (and pages Markdown with front
@@ -89,12 +88,11 @@ the same object a list declares:
 { "widget": "Gallery", "wrapper": false, "props": { … } }
 ```
 
-The wrapper is decoration, not composition: it holds only that node and
-does not count toward the depth limit. It works in any list, a slot's too,
-and an explicit wrapper applies even to a widget that is bare by default.
-The wrapper widget must be registered and declare a `default` slot; a JSON
-widget has no slots, so it cannot be one. A `$prop` inside a JSON widget's
-tree works in `wrapper.props` as in `props`.
+The wrapper is decoration, not composition: it holds only that node. It
+works in any list, a slot's too, and an explicit wrapper applies even to a
+widget that is bare by default. The wrapper widget must be registered and
+declare a `default` slot; a pattern has no slots, so it cannot be one. A
+`$prop` inside a pattern's tree works in `wrapper.props` as in `props`.
 
 Writing the wrapper as a node is still valid, and it is the form for a band
 that holds several widgets:
@@ -220,8 +218,8 @@ zod: the schema does not know the registry.
 
 `validateTree(nodes, ctx)` from `@parche/astro/content` checks a tree against
 the catalog: unknown widgets, slots a widget does not declare, widgets a slot
-does not allow, `min` and `max`, the depth limit, and a wrapper tone nobody
-registered. In dev, the renderer runs it on every page and layout and prints
+does not allow, `min` and `max`, and a wrapper tone nobody registered. How
+deep a tree nests is not checked: that is the site's call. In dev, the renderer runs it on every page and layout and prints
 each issue with its path:
 
 ```
@@ -229,9 +227,8 @@ each issue with its path:
 [parche] sections[2]: tone "neon" is not registered (known: default, muted, dark, primary, glow, gradient, dots)
 ```
 
-The uses of JSON widgets are checked on the same pass: their props against
-the definition's schema, and the definition's own tree (see *Widgets in
-JSON*).
+The uses of patterns are checked on the same pass: their props against the
+pattern's schema, and the pattern's own tree (see *Patterns*).
 
 In a build, a prerendered page with issues fails the build with the same
 lines, which is the check CI runs; a page rendered on a server at request
@@ -253,38 +250,34 @@ Pricing `hasRibbon`/`ribbonTitle` → `recommended`/`badge` and a plan's
 where the author put them, and running the script twice changes nothing.
 Front matter in Markdown pages is reported for hand editing.
 
-## Presets
+## Patterns
 
-A preset is a saved subtree with real values, in the `presets` collection
-(`src/content/presets/<locale>/<name>.json`):
+A pattern is a composition of widgets kept once and used by name wherever
+a widget goes. It serves two purposes with one shape:
 
-```json
-{ "label": "Questions agencies ask", "tree": [ { "widget": "FAQs", "props": { … } } ] }
-```
+- **Content shared as it is.** The same FAQ on several pages: the pattern
+  holds the widgets with their values, and a change to it shows everywhere
+  it is used.
+- **An abstraction with props.** A product page, a tour step: the tree is
+  fixed and each use gives only the values, which placeholders put where
+  they belong (the title in the first widget, the description in the
+  second…).
 
-A page inserts it by name, and the renderer replaces the node by the tree
-before validating and rendering, so a change to the preset shows everywhere
-it is used:
+The two meet: a shared FAQ can declare a `title` prop with a default, and a
+page that wants another title gives it while sharing the rest.
 
-```json
-{ "widget": "Preset", "props": { "name": "faq-agencies" } }
-```
-
-An editor may instead copy the tree into the page, which is the same result
-without the link. A preset may contain another; expansion stops three deep.
-The locale's preset wins over the plain name.
-
-## Widgets in JSON
-
-A project can define a widget of its own in JSON: a composition of
-registered widgets with props of its own. It is content, like a page, so an
-editor, the builder or an assistant can write one without code or a build
-step. One file per widget in the `widgets` collection; the file name is the
-widget name, case kept:
+One file per pattern in the `patterns` collection; the id is the file's
+path, and a page uses it as `pattern/<id>`:
 
 ```
-src/content/widgets/TourStep.json   →   "widget": "TourStep"
+src/content/patterns/tour-step.json        →   "widget": "pattern/tour-step"
+src/content/patterns/en/faq-agencies.json  →   "widget": "pattern/faq-agencies"   (in an English page)
 ```
+
+A pattern written per language lives in the locale's folder; the id is
+looked up in the page's locale first (`en/faq-agencies`), then as written
+(`faq-agencies`). A pattern whose text comes in through props usually lives
+outside any locale folder and serves every language.
 
 ```json
 {
@@ -315,32 +308,28 @@ src/content/widgets/TourStep.json   →   "widget": "TourStep"
 }
 ```
 
-A page uses it by name, like any widget:
-
 ```json
-{ "widget": "TourStep", "props": { "url": "src/config.yaml · 1200×760", "title": "One file for the whole site" } }
+{ "widget": "pattern/tour-step", "props": { "url": "src/config.yaml · 1200×760", "title": "One file for the whole site" } }
+{ "widget": "pattern/faq-agencies" }
 ```
 
 The collection has to be exported by the site, like the others:
 
 ```ts
-const { pages, layouts, presets, widgets, navigation } = createCollections();
-export const collections = { pages, layouts, presets, widgets, navigation };
+const { pages, layouts, patterns, navigation } = createCollections();
+export const collections = { pages, layouts, patterns, navigation };
 ```
 
-**The definition**
+**The pattern**
 
 - `label` (required), `description`, `category`, `icon`: what a palette shows,
   as in a widget's `meta.widget`.
-- `props`: the widget's props, always declared, as **JSON Schema** (an
-  object schema: `properties`, `required`, and per prop `type`, `enum`,
-  `default`, `minLength`, `items`… and `description` for the help text).
-  Core turns it into a zod schema with `z.fromJSONSchema`, the same zod the
-  code widgets are written in, so a JSON widget and a `.props.ts` widget are
-  validated the same way. Unknown props are refused unless the schema sets
-  `additionalProperties`.
-- `wrapper`: `false` when a use is never wrapped, as a widget's
-  `wrapper: false`. Default `true`.
+- `props` (optional): the props a use takes, as **JSON Schema** (an object
+  schema: `properties`, `required`, and per prop `type`, `enum`, `default`,
+  `minLength`, `items`… and `description` for the help text). Core turns it
+  into a zod schema with `z.fromJSONSchema`, the same zod the code widgets
+  are written in. Unknown props are refused unless the schema sets
+  `additionalProperties`; a pattern without `props` takes none.
 - `tree`: the nodes it renders, one or more.
 
 **Placeholders.** In the tree, a value `{ "$prop": "title" }` takes the
@@ -349,48 +338,44 @@ value of the prop. A dotted path reaches into an object prop:
 key (or its array item), so the inner widget's own default applies. A
 placeholder is a whole value; it is not interpolated inside a string.
 
-**Validation.** Every use, and the definition itself, is checked with the
-rest of the page (a warning in dev, a failed build when prerendered):
+**Where it is used.** A use stands for the pattern's roots. In a list they
+are items of that list, each wrapped (or not) as if written there; the
+use's own `wrapper`, when it has one, is theirs. In a slot that allows only
+some widgets, a pattern goes when every root is one of those, and a slot's
+`min` and `max` count its roots.
 
-- each use's props against the definition's schema, with the defaults
-  applied, reported at the use's path in the page
-  (`sections[1].slots.config[0].props.title`);
-- the definition against itself: every placeholder names a declared prop,
-  and every declared prop is used;
+**Validation.** Every use, and the pattern itself, is checked with the rest
+of the page (a warning in dev, a failed build when prerendered):
+
+- each use's props against the pattern's schema, with the defaults applied,
+  reported at the use's path in the page (`sections[1].slots.config[0].props.title`);
+- the pattern against itself: every placeholder names a declared prop, and
+  every declared prop is used;
 - the tree like any tree (widgets exist, slots are declared and allowed,
-  tones), counted **from its own root**;
+  tones);
 - the uses inside it, with the values the use gives them;
+- a use that names no pattern, and a pattern that reaches itself (`a` uses
+  `b` uses `a`), which is reported where the loop closes and not rendered;
 - then each inner widget parses its own props when it renders, as always.
 
-A JSON widget takes no slots of its own, and its name may not be the name
-of a registered widget. It may use another JSON widget; a chain stops three
-deep. Presets and references (`$ref`, `$collection`) inside a definition are
-resolved like a page's.
+A pattern takes no slots of its own. References (`$ref`, `$collection`)
+inside it are resolved like a page's.
 
-**Depth.** A use counts as one node where it sits, and its tree starts again
-at the root. This is what lets a composition that would pass the depth limit
-inline become one widget: the trial landing's tour is a `Switch` whose four
-options each hold a `TourStep`, instead of `Columns › Column › Screenshot`
-four times over.
+**Pattern or Astro widget?**
 
-**JSON, preset or Astro?**
+| | A pattern | An Astro widget |
+|---|---|---|
+| What it is | Widgets that exist, arranged once, with or without props | New markup, style or behaviour |
+| Parameters | Optional props, JSON Schema | Declared props, zod in `.props.ts` |
+| Used as | `{ "widget": "pattern/tour-step", … }` | `{ "widget": "TourStep", … }` |
+| Lives in | `src/content/patterns/` | `src/widgets/` + `overrides`, or a parche |
+| Needs | Nothing | Code, and `zod` as a dependency |
 
-| | A preset | A JSON widget | An Astro widget |
-|---|---|---|---|
-| What it is | A saved subtree with real values | A composition with props of its own | New markup, style or behaviour |
-| Parameters | None: every use is the same | Declared props, JSON Schema | Declared props, zod in `.props.ts` |
-| Used as | `{ "widget": "Preset", "props": { "name": … } }` | `{ "widget": "TourStep", … }` | `{ "widget": "TourStep", … }` |
-| Depth | Expanded in place: counts where it lands | One node; its tree counts from its root | One node |
-| Lives in | `src/content/presets/` | `src/content/widgets/` | `src/widgets/` + `overrides`, or a parche |
-| Needs | Nothing | Nothing | Code, and `zod` as a dependency |
+Reach for a pattern when the thing is only an arrangement of widgets that
+exist; write an Astro widget when it needs markup, CSS or script that no
+widget has.
 
-Reach for a JSON widget when the thing is only an arrangement of widgets
-that exist; write an Astro widget when it needs markup, CSS or script that
-no widget has.
-
-Not yet: filling a JSON widget's slots from the page (`{ "$slot": … }`),
-per-locale definitions (the text comes in through props), and listing JSON
-widgets in the builder's catalog next to the registered ones.
+Not yet: filling a pattern's slots from the page (`{ "$slot": … }`).
 
 ## Widgets on the model
 

@@ -14,7 +14,7 @@ test('a menu is found wherever a node takes it: at the top of its props, deeper,
     { widget: 'Section', slots: { default: [{ widget: 'Footer', props: { columns: [{ title: 'More', links: { $ref: 'navigation/legal#items' } }] } }] } },
     // A pointer somewhere else in the entry is not the menu's items.
     { widget: 'Hero', props: { title: { $ref: 'navigation/main#label' } } },
-    { widget: 'Features', props: { items: { $ref: 'presets/faq' } } },
+    { widget: 'Features', props: { items: { $ref: 'patterns/faq' } } },
   ]);
   assert.deepEqual(refs, [
     { widget: 'Header', prop: ['links'], ref: 'navigation/main' },

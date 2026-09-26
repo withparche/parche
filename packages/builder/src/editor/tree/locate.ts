@@ -43,13 +43,6 @@ export function nodeAtPath(kind: Kind, data: Record<string, any>, path: string):
   return best?.id ?? null;
 }
 
-/** How many levels a subtree adds below its root (a leaf adds 0). */
-export function height(node: Node): number {
-  let h = 0;
-  for (const kids of Object.values(node.slots ?? {})) if (Array.isArray(kids)) for (const k of kids) h = Math.max(h, 1 + height(k));
-  return h;
-}
-
 export function contains(node: Node, id: string): boolean {
   if (node.id === id) return true;
   return Object.values(node.slots ?? {}).some((kids) => Array.isArray(kids) && kids.some((k) => contains(k, id)));

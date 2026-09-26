@@ -38,7 +38,7 @@ That is the whole page format. It means a page can be edited by someone who does
 
 A widget is one section of a page with one purpose: a hero, features, pricing, testimonials, a contact form. Differences of shape are props (`layout: "split"`, `layout: "cards"`), and where a widget holds other content it has named slots. The home page, the pricing page, the eight example homes and the twelve landing pages are all made from the same set, arranged differently.
 
-Some widgets only arrange others: `Section` stacks what is inside it, `Columns` puts it side by side, `Switch` shows one option at a time. Trees stop at three levels deep on purpose; a page that needs more is usually a sign that a piece deserves to be its own widget, and a site can define one in JSON without writing code.
+Some widgets only arrange others: `Section` stacks what is inside it, `Columns` puts it side by side, `Switch` shows one option at a time. A piece that repeats deserves to be a pattern: a site defines one in JSON, without writing code, and uses it wherever a widget goes.
 
 ## Elements are the building blocks
 

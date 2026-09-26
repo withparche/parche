@@ -4,8 +4,7 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { ZodType } from 'zod';
-import { createResolver, substituteRefs, pageSchema, layoutSchema, presetSchema, type JsonWidget, type Node } from '@parche/astro/content/pure';
-import { defineJsonWidget } from '../../core/src/content/json-widgets.ts';
+import { createResolver, substituteRefs, pageSchema, layoutSchema, patternSchema, definePattern, patternsFor, type Pattern, type Node } from '@parche/astro/content/pure';
 import createUI from '../../../parches/ui/src/index.ts';
 import { validateDoc, type ValidationContext } from '../src/server/validate.ts';
 
@@ -37,12 +36,12 @@ async function catalog(): Promise<Omit<ValidationContext, 'collectionSchema'>> {
   }
   const manifest = createUI() as { tones?: { name: string }[] };
   const tones = ['default', 'muted', 'dark', 'primary', ...(manifest.tones ?? []).map((t) => t.name)];
-  const definitions: Record<string, JsonWidget> = {};
-  for (const file of walk(join(DEMO, 'widgets'), /\.json$/)) {
-    const name = relative(join(DEMO, 'widgets'), file).replace(/\.json$/, '');
-    const { widget } = defineJsonWidget(name, json(file));
-    if (widget) definitions[name] = widget;
+  const patterns: Pattern[] = [];
+  for (const file of walk(join(DEMO, 'patterns'), /\.json$/)) {
+    const { pattern } = definePattern(relative(join(DEMO, 'patterns'), file).replace(/\.json$/, ''), json(file));
+    if (pattern) patterns.push(pattern);
   }
+  const definitions = Object.fromEntries(Object.entries(patternsFor(patterns, 'en')).map(([name, p]) => [name, { ...p, name }]));
   // References resolve against the demo's navigation, as a page's do.
   const navigation = walk(join(DEMO, 'navigation'), /\.json$/).map((f) => ({ id: relative(join(DEMO, 'navigation'), f).replace(/\.json$/, ''), data: json(f) }));
   const resolve = createResolver((c) => (c === 'navigation' ? navigation : undefined), 'en');
@@ -53,7 +52,7 @@ async function catalog(): Promise<Omit<ValidationContext, 'collectionSchema'>> {
     wrapper: 'Section',
     definitions,
     resolveRefs: async (nodes: Node[], base: string) => substituteRefs(nodes, resolve, base),
-    defineJsonWidget,
+    definePattern,
   };
 }
 
@@ -69,8 +68,7 @@ test('the whole demo validates clean: no false positives before a single edit', 
   };
   await check('pages', pageSchema);
   await check('layouts', layoutSchema);
-  await check('presets', presetSchema);
-  await check('widgets', undefined);
+  await check('patterns', patternSchema);
   assert.deepEqual(found, []);
 });
 

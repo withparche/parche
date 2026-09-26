@@ -6,8 +6,9 @@ import { useCurrentDoc } from '../store/current';
 import { useSelection } from '../store/selection';
 import { locate } from '../tree/locate';
 import { insertWidget, WIDGET_TYPE } from './OutlinePanel';
+import { insertable, patternsIn } from '../store/patterns';
 
-/** The site's widgets by category, searchable; hidden ones (Header, Footer, Column) are left out. */
+/** The site's widgets and patterns by category, searchable; hidden ones (Header, Footer, Column) are left out. */
 export default function WidgetsPanel() {
   const catalog = useUi((s) => s.catalog);
   const error = useUi((s) => s.catalogError);
@@ -23,14 +24,15 @@ export default function WidgetsPanel() {
   const add = (name: string) => {
     if (!doc || !catalog) return;
     const at = selected ? locate(doc.kind, doc.data, selected) : null;
-    const target = at ? (at.parent ? { parent: at.parent.node.id!, slot: at.parent.slot, index: at.index + 1 } : { root: at.root, index: at.index + 1 }) : { root: doc.kind === 'preset' || doc.kind === 'widget' ? 'tree' : 'sections', index: Number.MAX_SAFE_INTEGER };
+    const target = at ? (at.parent ? { parent: at.parent.node.id!, slot: at.parent.slot, index: at.index + 1 } : { root: at.root, index: at.index + 1 }) : { root: doc.kind === 'pattern' ? 'tree' : 'sections', index: Number.MAX_SAFE_INTEGER };
     setNote(insertWidget(doc, target, name, catalog));
   };
 
   const groups = useMemo(() => {
     const q = query.trim().toLowerCase();
     const byCategory = new Map<string, { name: string; label: string; description?: string }[]>();
-    for (const [name, w] of [...Object.entries(catalog?.widgets ?? {}), ...Object.entries(catalog?.jsonWidgets ?? {})] as [string, { label: string; description?: string; category?: string; hidden?: boolean }][]) {
+    const list: ReturnType<typeof insertable> = catalog ? (doc ? insertable(catalog, doc) : [...Object.entries(catalog.widgets), ...Object.entries(patternsIn(catalog, catalog.i18n.defaultLocale))]) : [];
+    for (const [name, w] of list) {
       if (w.hidden) continue;
       // An Outlet belongs in a layout.
       if (name === 'Outlet' && doc?.kind !== 'layout') continue;
@@ -39,7 +41,7 @@ export default function WidgetsPanel() {
       byCategory.set(cat, [...(byCategory.get(cat) ?? []), { name, label: w.label, description: w.description }]);
     }
     return [...byCategory.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([cat, list]) => [cat, list.sort((a, b) => a.label.localeCompare(b.label))] as const);
-  }, [catalog, query, doc?.kind]);
+  }, [catalog, query, doc?.kind, doc?.id, doc?.collection]);
   const count = groups.reduce((n, [, l]) => n + l.length, 0);
 
   return (

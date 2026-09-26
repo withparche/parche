@@ -2,10 +2,10 @@ import { session } from '../../server/session.js';
 import { json } from '../../server/guard.js';
 import { body, handle } from '../../server/http.js';
 import { readDoc } from '../../server/files.js';
-import { layoutSchema, navigationSchema, pageSchema, presetSchema } from '@parche/astro/content/pure';
+import { layoutSchema, navigationSchema, pageSchema, patternSchema } from '@parche/astro/content/pure';
 import type { ZodType } from 'zod';
 
-const schemas: Record<string, ZodType> = { pages: pageSchema, layouts: layoutSchema, presets: presetSchema, navigation: navigationSchema };
+const schemas: Record<string, ZodType> = { pages: pageSchema, layouts: layoutSchema, patterns: patternSchema, navigation: navigationSchema };
 
 /**
  * The editor's unsaved documents, for the preview: `PUT { docs: [{ collection, id, data }] }`

@@ -12,11 +12,15 @@ import { duplicateNode, insertNode, moveNode, removeNode } from '../tree/ops';
 import { skeleton } from '../tree/skeleton';
 import { summaryOf } from '../forms/Form';
 import type { Catalog } from '../store/types';
+import { entryOf, insertable, localeOfDoc } from '../store/patterns';
+
+/** A new node for a widget or a pattern, in the document's locale. */
+const skeletonFor = (catalog: Catalog, name: string, doc: Doc) => skeleton(catalog, name, 0, name.startsWith('pattern/') ? entryOf(catalog, name, localeOfDoc(doc.id, catalog)) : undefined);
 
 const NODE_TYPE = 'application/x-parche-node';
 export const WIDGET_TYPE = 'application/x-parche-widget';
 
-const labelOf = (catalog: Catalog | null, widget: string) => catalog?.widgets[widget]?.label ?? catalog?.jsonWidgets?.[widget]?.label ?? widget;
+const labelOf = (catalog: Catalog | null, widget: string, doc: Doc) => (catalog ? entryOf(catalog, widget, localeOfDoc(doc.id, catalog))?.label : undefined) ?? widget;
 
 /** The document as a tree: its lists, each node with its slots, and where things can go. */
 export default function OutlinePanel() {
@@ -147,7 +151,7 @@ function Row({ doc, node, index, at, depth }: { doc: Doc; node: Node; index: num
           <span className={`inline-block transition-transform ${open ? 'rotate-90' : ''}`}>›</span>
         </button>
         <button type="button" onClick={() => select(id)} className="flex min-w-0 flex-1 items-baseline gap-1.5 py-1 pr-1 text-left">
-          <span className="shrink-0 text-xs font-medium text-heading">{labelOf(catalog, node.widget)}</span>
+          <span className="shrink-0 text-xs font-medium text-heading">{labelOf(catalog, node.widget, doc)}</span>
           {summary && <span className="truncate text-[11px] text-muted">{summary}</span>}
           {node.wrapper && typeof node.wrapper === 'object' && <span className="shrink-0 rounded bg-surface-2 px-1 text-[9px] text-muted" title="Has its own wrapper">{(node.wrapper.props?.tone as string) ?? node.wrapper.widget ?? 'band'}</span>}
           {node.wrapper === false && <span className="shrink-0 rounded bg-surface-2 px-1 text-[9px] text-muted">bare</span>}
@@ -219,7 +223,7 @@ function placeFromDrop(doc: Doc, e: DragEvent, target: Target, catalog: Catalog 
 }
 
 export function insertWidget(doc: Doc, target: Target, widget: string, catalog: Catalog): string | null {
-  const node = skeleton(catalog, widget);
+  const node = skeletonFor(catalog, widget, doc);
   const ok = canPlace(catalog, doc.kind, doc.data, target, node);
   if (!ok.ok) return ok.reason;
   editCurrent((d) => insertNode(doc.kind, d, target, node));
@@ -237,10 +241,10 @@ function InsertPoint({ doc, target, depth }: { doc: Doc; target: Target; depth: 
   const options = useMemo(() => {
     if (!open || !catalog) return [];
     const q = query.trim().toLowerCase();
-    const all = [...Object.entries(catalog.widgets).filter(([, w]) => !w.hidden || 'parent' in target), ...Object.entries(catalog.jsonWidgets ?? {})];
+    const all = insertable(catalog, doc).filter(([, w]) => !w.hidden || 'parent' in target);
     return all
       .filter(([name, w]) => !q || `${name} ${w.label}`.toLowerCase().includes(q))
-      .filter(([name]) => canPlace(catalog, doc.kind, doc.data, target, skeleton(catalog, name)).ok)
+      .filter(([name]) => canPlace(catalog, doc.kind, doc.data, target, skeletonFor(catalog, name, doc)).ok)
       .map(([name, w]) => ({ name, label: w.label, category: w.category }))
       .sort((a, b) => a.label.localeCompare(b.label));
   }, [open, catalog, query, doc, target]);

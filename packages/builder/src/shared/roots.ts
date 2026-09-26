@@ -2,14 +2,14 @@ import type { Node } from '@parche/astro/content/pure';
 
 /**
  * What kind of document a collection holds, and where its trees are: a page
- * has `sections` and named `slots`, a layout and a view `sections`, a preset
- * and a JSON widget a `tree`, a post a flat `sections` list. Shared by the
+ * has `sections` and named `slots`, a layout and a view `sections`, a
+ * pattern a `tree`, a post a flat `sections` list. Shared by the
  * server's validation and the editor's tree, so both walk the same lists.
  */
-export type Kind = 'page' | 'layout' | 'view' | 'preset' | 'widget' | 'post' | 'data';
+export type Kind = 'page' | 'layout' | 'view' | 'pattern' | 'post' | 'data';
 
 export function kindOf(collection: string): Kind {
-  return ({ pages: 'page', layouts: 'layout', views: 'view', presets: 'preset', widgets: 'widget', posts: 'post' } as Record<string, Kind>)[collection] ?? 'data';
+  return ({ pages: 'page', layouts: 'layout', views: 'view', patterns: 'pattern', posts: 'post' } as Record<string, Kind>)[collection] ?? 'data';
 }
 
 /** A root list: where it lives in the document (`sections`, `slots.aside`, `tree`) and its nodes. */
@@ -28,8 +28,7 @@ export function rootsOf(kind: Kind, data: Record<string, any>): Root[] {
     case 'view':
     case 'post':
       return [{ nodes: asList(data.sections), base: 'sections' }];
-    case 'preset':
-    case 'widget':
+    case 'pattern':
       return [{ nodes: asList(data.tree), base: 'tree' }];
     default:
       return [];

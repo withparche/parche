@@ -10,10 +10,21 @@ export interface CatalogWidget {
   schema: unknown;
 }
 
+/** A pattern (content/patterns): no slots; its props are a JSON Schema; `roots` is what it stands for in a slot. */
+export interface CatalogPattern {
+  entry: string;
+  label: string;
+  description?: string;
+  category?: string;
+  icon?: string;
+  schema: unknown;
+  roots: string[];
+}
+
 export interface Catalog {
   widgets: Record<string, CatalogWidget>;
-  /** The site's widgets written in JSON (content/widgets): no slots; their props are a JSON Schema. */
-  jsonWidgets: Record<string, Omit<CatalogWidget, 'slots' | 'ui' | 'hidden'>>;
+  /** The site's patterns, each once by its entry; `patternsIn` resolves `pattern/<id>` for a locale. */
+  patterns: CatalogPattern[];
   layouts: { id: string; locale: string; name: string; outlets: string[]; usedBy: string[] }[];
   /** Each menu with where it is used; its items take the shape of the first prop that uses it. */
   navigation: { id: string; locale: string; name: string; usedBy: { doc: string; widget: string; prop: string }[]; itemsSchema: unknown }[];
@@ -21,7 +32,7 @@ export interface Catalog {
   pageUrls: Record<string, string>;
   /** The page's own fields (title, description, urlSlug, metadata) as JSON Schema. */
   pageSettings: Record<string, unknown>;
-  limits: { maxDepth: number; maxFilledSlots: number };
+  limits: { maxFilledSlots: number };
   tones: string[];
   defaultWrapper: string | null;
   unwrapped: string[];

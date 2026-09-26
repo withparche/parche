@@ -8,7 +8,7 @@ test('the API answers only the editor: no token, no entry', async ({ request }) 
 
 test('the fixture is valid before any edit', async ({ page, request }) => {
   const a = api(request, await token(page));
-  for (const [collection, id] of [['pages', 'en/home'], ['pages', 'en/docs'], ['pages', 'en/about'], ['layouts', 'en/default'], ['layouts', 'en/docs'], ['presets', 'en/faq'], ['widgets', 'Memo']]) {
+  for (const [collection, id] of [['pages', 'en/home'], ['pages', 'en/docs'], ['pages', 'en/about'], ['layouts', 'en/default'], ['layouts', 'en/docs'], ['patterns', 'en/faq'], ['patterns', 'memo']]) {
     const doc = await (await a.get(`doc?collection=${collection}&id=${id}`)).json();
     const res = await (await a.post(`validate?collection=${collection}&id=${id}`, { data: doc.data })).json();
     expect(res.issues, `${collection}/${id}`).toEqual([]);

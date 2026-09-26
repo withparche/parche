@@ -543,7 +543,9 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
           const mod = env.moduleGraph.getModuleById(TOKEN_OVERRIDES_VIRTUAL);
           if (mod) {
             env.moduleGraph.invalidateModule(mod);
-            void server.reloadModule(mod);
+            // Each environment reloads its own module (the server-level
+            // reloadModule takes the old mixed graph's nodes, not these).
+            void (env as { reloadModule?: (m: typeof mod) => Promise<void> }).reloadModule?.(mod)?.catch(() => undefined);
           }
         }
       };

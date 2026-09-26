@@ -10,6 +10,7 @@ import { locate } from '../tree/locate';
 import { setIn, setProp, setWrapper } from '../tree/ops';
 import WidgetInfo from './WidgetInfo';
 import { pagesShowing } from '../preview/through';
+import { entryOf, localeOfDoc } from '../store/patterns';
 
 /**
  * The right panel: the selected node's props, its wrapper and its issues;
@@ -31,7 +32,7 @@ function NodeInspector({ doc, id }: { doc: Doc; id: string }) {
   const catalog = useUi((s) => s.catalog);
   const select = useSelection((s) => s.select);
   const at = locate(doc.kind, doc.data, id)!;
-  const widget = catalog?.widgets[at.node.widget] ?? catalog?.jsonWidgets?.[at.node.widget];
+  const widget = catalog ? entryOf(catalog, at.node.widget, localeOfDoc(doc.id, catalog)) : undefined;
   const schema = widget?.schema as Record<string, unknown> | undefined;
   const issues = doc.issues.filter((i) => i.path === at.path || i.path.startsWith(`${at.path}.props`) || i.path.startsWith(`${at.path}.wrapper`));
   const onChange = (pointer: Pointer, value: unknown, group?: string) => editCurrent((d) => setProp(doc.kind, d, id, pointer, value), group);
@@ -51,7 +52,7 @@ function NodeInspector({ doc, id }: { doc: Doc; id: string }) {
           ))}
         </ul>
       )}
-      {!widget && <p className="m-3 text-xs text-warning">"{at.node.widget}" is not a widget this site registers.</p>}
+      {!widget && <p className="m-3 text-xs text-warning">"{at.node.widget}" is {at.node.widget.startsWith('pattern/') ? 'not a pattern in src/content/patterns' : 'not a widget this site registers'}.</p>}
       {widget && !schema && <p className="m-3 text-xs text-muted">This widget declares no props.</p>}
       {schema && <Form key={id} schema={schema} value={at.node.props} onChange={onChange} groups={(widget as { ui?: { groups?: never } })?.ui?.groups} scope={id} />}
       {twin && (
