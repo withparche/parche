@@ -21,3 +21,4 @@ export const PaletteIcon = (p: P) => (<svg {...base(p)}><circle cx="13.5" cy="6.
 export const CloseIcon = (p: P) => (<svg {...base({ strokeWidth: 2.5, ...p })}><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>);
 export const SearchIcon = (p: P) => (<svg {...base(p)}><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>);
 export const ChevronIcon = (p: P) => (<svg {...base(p)}><path d="m9 18 6-6-6-6" /></svg>);
+export const SiteIcon = (p: P) => (<svg {...base(p)}><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" /></svg>);

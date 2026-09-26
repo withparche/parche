@@ -1,6 +1,7 @@
 import { useEffect, useId, useMemo, useState, type ReactNode } from 'react';
 import { api } from '../api';
 import { useUi } from '../store/ui';
+import { useDocs } from '../store/documents';
 import { emptyOf, fieldOf, humanize, variantOf, type Field, type JsonSchema } from './schema';
 
 /**
@@ -84,10 +85,33 @@ function Special({ value }: { value: Record<string, unknown> }) {
   return (
     <p className="m-0 flex items-center gap-2 rounded-md border border-dashed border-border px-2 py-1.5 text-xs">
       <span className="rounded bg-primary-soft px-1.5 py-0.5 text-[10px] font-semibold text-primary uppercase">{kind}</span>
-      <span className="truncate font-mono text-heading">{text}</span>
+      <span className="min-w-0 flex-1 truncate font-mono text-heading">{text}</span>
+      {'$ref' in value && (
+        <button type="button" onClick={() => void openRef(String(value.$ref))} className="shrink-0 rounded px-1 text-[11px] text-primary hover:underline" aria-label={`Open ${text}`}>
+          Open
+        </button>
+      )}
     </p>
   );
 }
+/** Open the entry a `$ref` names: the page's locale first, as the renderer resolves it. */
+async function openRef(ref: string) {
+  const [path] = ref.split('#');
+  const slash = path.indexOf('/');
+  if (slash <= 0) return;
+  const collection = path.slice(0, slash);
+  const id = path.slice(slash + 1);
+  const { docs, current, open } = useDocs.getState();
+  const from = current ? docs[current] : undefined;
+  const locale = from?.id.includes('/') ? from.id.split('/')[0] : undefined;
+  if (locale) {
+    try {
+      return await open(collection, `${locale}/${id}`);
+    } catch {}
+  }
+  await open(collection, id).catch(() => undefined);
+}
+
 const isSpecial = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v) && ['$ref', '$collection', '$label', '$prop'].some((k) => k in v);
 
 export function FieldView({ field, value, pointer, onChange, scope, required }: { field: Field; value: unknown; pointer: Pointer; onChange: OnChange; scope: string; required?: boolean }) {

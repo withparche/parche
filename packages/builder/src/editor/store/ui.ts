@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { Catalog } from './types';
 
-export type PanelId = 'pages' | 'outline' | 'widgets' | 'design';
+export type PanelId = 'pages' | 'outline' | 'widgets' | 'design' | 'site';
 export type Viewport = 'desktop' | 'tablet' | 'mobile';
 
 interface UiState {
@@ -21,6 +21,12 @@ interface UiState {
   previewTheme: string;
   previewScheme: '' | 'light' | 'dark';
   setPreviewLook: (look: { theme?: string; scheme?: '' | 'light' | 'dark' }) => void;
+  /** The collection the documents panel lists. */
+  docsCollection: string;
+  setDocsCollection: (c: string) => void;
+  /** The page a layout or a menu is shown through, by document key. */
+  previewVia: Record<string, string>;
+  setPreviewVia: (key: string, page: string) => void;
   /** Why the preview could not render the drafts, when it could not. */
   previewError: string | null;
   setPreviewMode: (m: 'edit' | 'browse') => void;
@@ -55,6 +61,10 @@ export const useUi = create<UiState>((set) => ({
   previewError: null,
   previewTheme: '',
   previewScheme: '',
+  previewVia: {},
+  docsCollection: 'pages',
+  setDocsCollection: (docsCollection) => set({ docsCollection }),
+  setPreviewVia: (key, page) => set((s) => ({ previewVia: { ...s.previewVia, [key]: page } })),
   setPreviewLook: (look) => set((s) => ({ previewTheme: look.theme ?? s.previewTheme, previewScheme: look.scheme ?? s.previewScheme })),
   setPreviewMode: (previewMode) => set({ previewMode }),
   setPreviewError: (previewError) => set({ previewError }),

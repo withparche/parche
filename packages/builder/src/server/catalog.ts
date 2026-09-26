@@ -17,6 +17,8 @@ import { loadJsonWidgets } from '@parche/astro/dev';
 import { MAX_NODE_DEPTH, outletWrappers, pageSchema } from '@parche/astro/content/pure';
 import { listDocs, readDoc } from './files.js';
 import { session } from './session.js';
+import { navRefs, schemaAt } from './usage.js';
+import { pageUrl } from '../shared/page-url.js';
 
 export interface CatalogWidget {
   label: string;
@@ -45,19 +47,57 @@ export async function buildCatalog() {
       schema: (widgetSchemas as Record<string, unknown>)[name] ?? null,
     };
   }
+  // Where a layout puts the page: the renderer's, not a registered widget.
+  // Its props are its name (the unnamed one is `default`) and the wrapper
+  // every item of the page's list goes in, which the inspector edits apart.
+  widgets.Outlet = {
+    label: 'Outlet',
+    category: 'layout',
+    description: "Where the page goes in a layout. A named outlet takes what a page puts in its slot of that name; the unnamed one takes the page's sections.",
+    wrapper: false,
+    schema: { type: 'object', properties: { name: { type: 'string', title: 'Name', description: 'Leave empty for the page\'s sections; a name makes a slot pages fill by that name.' } } },
+  };
   const json = await loadJsonWidgets();
   const jsonWidgets = Object.fromEntries(
     Object.values(json.widgets).map((d) => [d.name, { label: d.label, description: d.description, category: d.category ?? 'custom', icon: d.icon, wrapper: d.wrapper, schema: d.props }]),
   );
   // The layouts a page can pick, each with the outlets it declares (a page
-  // fills the named ones through its `slots`).
+  // fills the named ones through its `slots`) and the pages that use it.
   const root = session().root;
+  const pages = [];
+  for (const d of await listDocs(root, 'pages')) {
+    const doc = await readDoc(root, 'pages', d.id).catch(() => null);
+    if (doc) pages.push({ id: d.id, data: doc.data });
+  }
+  // Each page's URL, as the page route builds it: a layout or a menu shows
+  // in the preview through a page that uses it.
+  const pageUrls = Object.fromEntries(pages.map((p) => [p.id, pageUrl(p.id, p.data.urlSlug as string | undefined, defaultLocale)]));
   const layouts = [];
+  const refs: { doc: string; widget: string; prop: (string | number)[]; ref: string; locale: string }[] = [];
   for (const d of await listDocs(root, 'layouts')) {
     const doc = await readDoc(root, 'layouts', d.id).catch(() => null);
     const [locale, ...rest] = d.id.includes('/') ? d.id.split('/') : [defaultLocale, d.id];
-    const outlets = doc ? outletWrappers(Array.isArray(doc.data.sections) ? (doc.data.sections as never) : []).map((o) => o.name) : [];
-    layouts.push({ id: d.id, locale, name: rest.join('/'), outlets });
+    const name = rest.join('/');
+    const sections = doc && Array.isArray(doc.data.sections) ? (doc.data.sections as never[]) : [];
+    const outlets = outletWrappers(sections).map((o) => o.name);
+    const usedBy = pages.filter((p) => (p.id.includes('/') ? p.id.split('/')[0] : defaultLocale) === locale && ((p.data.layout as string | undefined) ?? 'default') === name).map((p) => p.id);
+    layouts.push({ id: d.id, locale, name, outlets, usedBy });
+    for (const r of navRefs(sections)) refs.push({ doc: `layouts/${d.id}`, locale, ...r });
+  }
+  for (const p of pages) {
+    const locale = p.id.includes('/') ? p.id.split('/')[0] : defaultLocale;
+    for (const r of navRefs([...((p.data.sections as never[]) ?? []), ...Object.values((p.data.slots as Record<string, never[]>) ?? {}).flat()])) refs.push({ doc: `pages/${p.id}`, locale, ...r });
+  }
+  // A menu's items take the shape of the prop that uses it (Header.links,
+  // Footer.columns): its schema is that prop's.
+  const navigation = [];
+  for (const d of await listDocs(root, 'navigation')) {
+    const [locale, ...rest] = d.id.includes('/') ? d.id.split('/') : [defaultLocale, d.id];
+    const name = rest.join('/');
+    const usedBy = refs.filter((r) => r.ref === `navigation/${name}` && (r.locale === locale || !d.id.includes('/')));
+    const first = usedBy[0];
+    const itemsSchema = first ? schemaAt((widgetSchemas as Record<string, unknown>)[first.widget], first.prop) : null;
+    navigation.push({ id: d.id, locale, name, usedBy: usedBy.map(({ doc, widget, prop }) => ({ doc, widget, prop: prop.join('.') })), itemsSchema });
   }
   const page = z.toJSONSchema(pageSchema, { unrepresentable: 'any' }) as { properties: Record<string, unknown> };
   const pageSettings = {
@@ -68,6 +108,8 @@ export async function buildCatalog() {
     widgets,
     jsonWidgets,
     layouts,
+    navigation,
+    pageUrls,
     pageSettings,
     limits: { maxDepth: MAX_NODE_DEPTH, maxFilledSlots: 6 },
     tones: (tones as { name: string }[]).map((t) => t.name),

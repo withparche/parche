@@ -85,7 +85,7 @@ done, because it turns one change into two coordinated ones.
 
 Not scheduled; they change what Parche *is*, not how well it works.
 
-- The visual builder (`@parche/builder`) in the repo + `parche astro builder`: in progress on `experimental` (phase 0 of 5: the dev-only shell, the catalog, the CLI).
+- The visual builder (`@parche/builder`) in the repo + `parche astro builder`: in progress on `experimental` (phases 0–4 of 5: the dev-only shell and CLI; pages with the full node model; a preview that morphs drafts in place; tokens and themes; layouts, menus and the site config. Next: the blog).
 - Narrans / narrative-first AI generation → `parche astro generate <prompt>`.
 
 ## Not doing (and why)

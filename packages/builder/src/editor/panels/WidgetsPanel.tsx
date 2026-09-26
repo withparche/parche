@@ -32,12 +32,14 @@ export default function WidgetsPanel() {
     const byCategory = new Map<string, { name: string; label: string; description?: string }[]>();
     for (const [name, w] of [...Object.entries(catalog?.widgets ?? {}), ...Object.entries(catalog?.jsonWidgets ?? {})] as [string, { label: string; description?: string; category?: string; hidden?: boolean }][]) {
       if (w.hidden) continue;
+      // An Outlet belongs in a layout.
+      if (name === 'Outlet' && doc?.kind !== 'layout') continue;
       if (q && !`${name} ${w.label} ${w.description ?? ''} ${w.category ?? ''}`.toLowerCase().includes(q)) continue;
       const cat = w.category ?? 'other';
       byCategory.set(cat, [...(byCategory.get(cat) ?? []), { name, label: w.label, description: w.description }]);
     }
     return [...byCategory.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([cat, list]) => [cat, list.sort((a, b) => a.label.localeCompare(b.label))] as const);
-  }, [catalog, query]);
+  }, [catalog, query, doc?.kind]);
   const count = groups.reduce((n, [, l]) => n + l.length, 0);
 
   return (

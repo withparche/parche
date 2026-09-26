@@ -13,7 +13,19 @@ interface Summary {
   etag: string;
 }
 
-/** The site's pages by locale: open one to edit it; create, rename and delete them. */
+/** The collections the builder edits as documents, with what a new one starts as (none: made elsewhere). */
+const COLLECTIONS: { id: string; label: string; one: string; create?: (title: string) => Record<string, unknown> }[] = [
+  { id: 'pages', label: 'Pages', one: 'page', create: (title) => ({ title, sections: [] }) },
+  { id: 'layouts', label: 'Layouts', one: 'layout', create: () => ({ sections: [{ widget: 'Outlet' }] }) },
+  { id: 'navigation', label: 'Menus', one: 'menu', create: (title) => ({ label: title, items: [] }) },
+  { id: 'presets', label: 'Presets', one: 'preset' },
+  { id: 'widgets', label: 'Own widgets', one: 'widget' },
+];
+
+/**
+ * The site's documents by locale — pages, layouts, menus, presets and the
+ * site's own JSON widgets: open one to edit it; create, rename and delete them.
+ */
 export default function PagesPanel() {
   const close = useUi((s) => s.togglePanel);
   const locales = useUi((s) => s.catalog?.i18n.locales) ?? NONE;
@@ -21,14 +33,18 @@ export default function PagesPanel() {
   const current = useDocs((s) => s.current);
   const docs = useDocs((s) => s.docs);
   const open = useDocs((s) => s.open);
+  const collection = useUi((s) => s.docsCollection);
+  const setCollection = useUi((s) => s.setDocsCollection);
+  const coll = COLLECTIONS.find((c) => c.id === collection) ?? COLLECTIONS[0];
   const [pages, setPages] = useState<Summary[]>([]);
   const [query, setQuery] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
 
   const refresh = useCallback(() => {
-    api<{ docs: Summary[] }>('docs?collection=pages').then((r) => setPages(r.docs), (e: Error) => setError(e.message));
-  }, []);
+    setError(null);
+    api<{ docs: Summary[] }>(`docs?collection=${collection}`).then((r) => setPages(r.docs), (e: Error) => setError(e.message));
+  }, [collection]);
   useEffect(refresh, [refresh]);
 
   const groups = useMemo(() => {
@@ -43,14 +59,14 @@ export default function PagesPanel() {
     return [...by.entries()].sort(([a], [b]) => (order.indexOf(a) + 1 || 99) - (order.indexOf(b) + 1 || 99));
   }, [pages, query, locales, defaultLocale]);
 
-  const openPage = (id: string) => void open('pages', id).catch((e: Error) => setError(e.message));
+  const openPage = (id: string) => void open(collection, id).catch((e: Error) => setError(e.message));
 
   const rename = async (p: Summary) => {
     const to = prompt('New id (locale/name):', p.id);
     if (!to || to === p.id) return;
     try {
-      await api(`doc?collection=pages&id=${encodeURIComponent(p.id)}`, { method: 'PATCH', body: { to, etag: p.etag } });
-      useDocs.getState().close(docKey('pages', p.id));
+      await api(`doc?collection=${collection}&id=${encodeURIComponent(p.id)}`, { method: 'PATCH', body: { to, etag: p.etag } });
+      useDocs.getState().close(docKey(collection, p.id));
       refresh();
       openPage(to);
     } catch (e) {
@@ -60,8 +76,8 @@ export default function PagesPanel() {
   const remove = async (p: Summary) => {
     if (!confirm(`Delete ${p.id}? The file goes; git can bring it back.`)) return;
     try {
-      await api(`doc?collection=pages&id=${encodeURIComponent(p.id)}`, { method: 'DELETE', body: { etag: p.etag } });
-      useDocs.getState().close(docKey('pages', p.id));
+      await api(`doc?collection=${collection}&id=${encodeURIComponent(p.id)}`, { method: 'DELETE', body: { etag: p.etag } });
+      useDocs.getState().close(docKey(collection, p.id));
       refresh();
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
@@ -70,18 +86,29 @@ export default function PagesPanel() {
 
   return (
     <PanelShell
-      title="Pages"
+      title={coll.label}
       subtitle={String(pages.length)}
       onClose={() => close('pages')}
       subHeader={
+        <div className="flex flex-col gap-1.5">
+        <select aria-label="Documents" value={collection} onChange={(e) => { setCollection(e.target.value); setCreating(false); setQuery(''); }} className="rounded-md border border-border bg-background px-1.5 py-1 text-xs text-heading">
+          {COLLECTIONS.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.label}
+            </option>
+          ))}
+        </select>
         <div className="flex gap-1.5">
           <label className="flex min-w-0 flex-1 items-center gap-2 rounded-md bg-surface-hover px-2 py-1.5 text-muted focus-within:outline-2 focus-within:outline-ring">
             <SearchIcon size={13} />
-            <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search pages" aria-label="Search pages" className="min-w-0 flex-1 bg-transparent text-xs text-heading outline-none placeholder:text-muted" />
+            <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={`Search ${coll.label.toLowerCase()}`} aria-label={`Search ${coll.label.toLowerCase()}`} className="min-w-0 flex-1 bg-transparent text-xs text-heading outline-none placeholder:text-muted" />
           </label>
-          <button type="button" onClick={() => setCreating(true)} className="shrink-0 rounded-md bg-primary px-2 text-xs font-medium text-on-primary hover:bg-primary-hover">
-            New
-          </button>
+          {coll.create && (
+            <button type="button" onClick={() => setCreating(true)} className="shrink-0 rounded-md bg-primary px-2 text-xs font-medium text-on-primary hover:bg-primary-hover">
+              New
+            </button>
+          )}
+        </div>
         </div>
       }
     >
@@ -90,13 +117,13 @@ export default function PagesPanel() {
           {error}
         </p>
       )}
-      {creating && <NewPage locales={locales} defaultLocale={defaultLocale} onDone={(id) => { setCreating(false); if (id) { refresh(); openPage(id); } }} />}
+      {creating && coll.create && <NewPage collection={collection} one={coll.one} make={coll.create} locales={locales} defaultLocale={defaultLocale} onDone={(id) => { setCreating(false); if (id) { refresh(); openPage(id); } }} />}
       {groups.map(([locale, list]) => (
         <div key={locale} className="px-2 pt-3">
           <h3 className="m-0 px-1 pb-1 text-[10px] font-semibold tracking-[0.08em] text-muted uppercase">{locale}</h3>
           <ul className="m-0 list-none p-0">
             {list.map((p) => {
-              const key = docKey('pages', p.id);
+              const key = docKey(collection, p.id);
               const name = p.id.includes('/') ? p.id.split('/').slice(1).join('/') : p.id;
               return (
                 <li key={p.id} className="group flex items-center rounded-md hover:bg-surface-hover aria-[current=true]:bg-primary-soft" aria-current={current === key}>
@@ -123,7 +150,7 @@ export default function PagesPanel() {
   );
 }
 
-function NewPage({ locales, defaultLocale, onDone }: { locales: string[]; defaultLocale: string; onDone: (id: string | null) => void }) {
+function NewPage({ collection, one, make, locales, defaultLocale, onDone }: { collection: string; one: string; make: (title: string) => Record<string, unknown>; locales: string[]; defaultLocale: string; onDone: (id: string | null) => void }) {
   const [locale, setLocale] = useState(defaultLocale);
   const [name, setName] = useState('');
   const [title, setTitle] = useState('');
@@ -131,7 +158,7 @@ function NewPage({ locales, defaultLocale, onDone }: { locales: string[]; defaul
   const create = async () => {
     const id = `${locale}/${name.trim().replace(/^\/+|\/+$/g, '')}`;
     try {
-      await api(`doc?collection=pages&id=${encodeURIComponent(id)}`, { method: 'POST', body: { data: { title: title || name, sections: [] } } });
+      await api(`doc?collection=${collection}&id=${encodeURIComponent(id)}`, { method: 'POST', body: { data: make(title || name) } });
       onDone(id);
     } catch (e) {
       setError(e instanceof ApiError ? e.message : String(e));
@@ -146,9 +173,9 @@ function NewPage({ locales, defaultLocale, onDone }: { locales: string[]; defaul
             <option key={l}>{l}</option>
           ))}
         </select>
-        <input autoFocus className={input} placeholder="name (about, landing/sale)" aria-label="Page name" value={name} onChange={(e) => setName(e.target.value)} />
+        <input autoFocus className={input} placeholder={collection === 'pages' ? 'name (about, landing/sale)' : 'name'} aria-label={`New ${one} name`} value={name} onChange={(e) => setName(e.target.value)} />
       </div>
-      <input className={input} placeholder="Title" aria-label="Page title" value={title} onChange={(e) => setTitle(e.target.value)} />
+      {collection !== 'layouts' && <input className={input} placeholder={collection === 'pages' ? 'Title' : 'Label'} aria-label={`New ${one} ${collection === 'pages' ? 'title' : 'label'}`} value={title} onChange={(e) => setTitle(e.target.value)} />}
       {error && <p className="m-0 text-[11px] text-danger">{error}</p>}
       <div className="flex justify-end gap-1.5">
         <button type="button" onClick={() => onDone(null)} className="rounded-md px-2 py-1 text-xs text-muted hover:text-heading">

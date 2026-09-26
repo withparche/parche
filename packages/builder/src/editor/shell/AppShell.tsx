@@ -15,10 +15,12 @@ import WidgetsPanel from '../panels/WidgetsPanel';
 import PagesPanel from '../panels/PagesPanel';
 import OutlinePanel from '../panels/OutlinePanel';
 import DesignPanel from '../panels/DesignPanel';
+import SitePanel from '../panels/SitePanel';
+import { previewSrc } from '../preview/through';
 import Inspector from '../inspector/Inspector';
 import { DesktopIcon, MobileIcon, RedoIcon, TabletIcon, UndoIcon } from './icons';
 
-const panels: Record<PanelId, FC> = { pages: PagesPanel, outline: OutlinePanel, widgets: WidgetsPanel, design: DesignPanel };
+const panels: Record<PanelId, FC> = { pages: PagesPanel, outline: OutlinePanel, widgets: WidgetsPanel, design: DesignPanel, site: SitePanel };
 const viewports: { id: Viewport; label: string; Icon: FC<{ size?: number }> }[] = [
   { id: 'desktop', label: 'Desktop', Icon: DesktopIcon },
   { id: 'tablet', label: 'Tablet, 768px', Icon: TabletIcon },
@@ -33,16 +35,6 @@ function useCatalog() {
   }, [setCatalog, setError]);
 }
 
-/** The page's URL on the site, as the page route builds it. */
-function pageUrl(doc: Doc | undefined, defaultLocale: string): string {
-  if (!doc || doc.collection !== 'pages') return '/';
-  const [locale, ...rest] = doc.id.includes('/') ? doc.id.split('/') : [defaultLocale, doc.id];
-  const key = rest.join('/');
-  const prefix = locale === defaultLocale ? '' : `/${locale}`;
-  if (key === 'home') return prefix || '/';
-  return `${prefix}/${(doc.data.urlSlug as string | undefined) ?? key}`;
-}
-
 /** The editor: the header, the rail, a left panel, the preview, and the inspector on the right. */
 export default function AppShell() {
   const panel = useUi((s) => s.panel);
@@ -55,7 +47,8 @@ export default function AppShell() {
   const dark = useUi((s) => s.dark);
   const previewRev = useUi((s) => s.previewRev);
   const bumpPreview = useUi((s) => s.bumpPreview);
-  const defaultLocale = useUi((s) => s.catalog?.i18n.defaultLocale ?? 'en');
+  const catalog = useUi((s) => s.catalog);
+  const via = useUi((s) => s.previewVia);
   const doc = useCurrentDoc();
   const { undo, redo, save } = useDocs.getState();
   const left = usePanelResize(280, 'left', 200, () => panel && togglePanel(panel));
@@ -139,7 +132,7 @@ export default function AppShell() {
         <main className="flex min-w-0 flex-1 flex-col">
           {doc && <Notices doc={doc} />}
           <div className="min-h-0 flex-1">
-            <PreviewFrame src={pageUrl(doc, defaultLocale)} rev={previewRev} onReload={bumpPreview} />
+            <PreviewFrame src={previewSrc(doc, catalog, via)} rev={previewRev} onReload={bumpPreview} />
           </div>
         </main>
         {(doc || inspected) && (
