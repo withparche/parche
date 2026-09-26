@@ -34,14 +34,28 @@
       }
     },
     {
+      "widget": "Callout",
+      "props": {
+        "layout": "inline",
+        "tone": "primary",
+        "label": "Why it works",
+        "description": "A click-through page has no form. Its only job is to make the next click feel obvious, so the primary button already points at the destination, right from the hero."
+      }
+    },
+    {
       "widget": "Section",
-      "props": { "id": "dest", "tone": "surface" },
+      "props": {
+        "id": "dest",
+        "tone": "surface"
+      },
       "slots": {
         "default": [
           {
             "widget": "Features",
             "props": {
+              "tagline": "The other side",
               "title": "What happens after you click",
+              "subtitle": "Remove the surprise: say exactly what the destination will ask for and how long it takes. A click with no unknowns is the click people actually make.",
               "align": "start",
               "layout": "cards",
               "columns": "4",
@@ -49,7 +63,7 @@
               "items": [
                 {
                   "eyebrow": "Where you land",
-                  "description": "The repository: README, live demo link and the “Use this template” button."
+                  "description": "The AstroWind repository on GitHub: README, live demo link and the “Use this template” button."
                 },
                 {
                   "eyebrow": "What it asks for",
@@ -57,11 +71,36 @@
                 },
                 {
                   "eyebrow": "How long it takes",
-                  "description": "About four minutes: clone, install, run. Node.js is the only requirement."
+                  "description": "A few minutes: clone, install, run. Node.js is the only requirement."
                 },
                 {
                   "eyebrow": "What it costs",
                   "description": "Nothing, ever. MIT licence, personal and commercial use."
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Testimonials",
+            "props": {
+              "tagline": "Proof",
+              "title": "Two sentences from real users are enough here",
+              "subtitle": "Placeholders on purpose. A bridge page needs less proof than a sales page: one or two real, specific quotes. Save the case studies for the destination.",
+              "items": [
+                {
+                  "text": "A quote that confirms the promise of the ad and mentions what the destination was like.",
+                  "name": "Customer name",
+                  "role": "Role, company (sample testimonial)"
+                },
+                {
+                  "text": "A short one about how long the whole thing took, from click to done.",
+                  "name": "Customer name",
+                  "role": "Role, company (sample testimonial)"
+                },
+                {
+                  "text": "A quote that addresses the reason someone would hesitate to click: price, commitment or time.",
+                  "name": "Customer name",
+                  "role": "Role, company (sample testimonial)"
                 }
               ]
             }
@@ -85,30 +124,198 @@
       }
     },
     {
+      "widget": "Steps",
+      "props": {
+        "layout": "numbered",
+        "tagline": "The bridge",
+        "title": "From the ad to the conversion in four steps",
+        "subtitle": "One direction, no detours. No menu to wander into, no form to fill, no second offer: the visitor either understands and clicks, or scrolls to understand more and then clicks.",
+        "items": [
+          {
+            "title": "The campaign makes a promise",
+            "description": "An ad, a post or an email says one thing. Visitors arrive with that sentence in their head, so the first screen says the same thing, louder."
+          },
+          {
+            "title": "The bridge explains and reassures",
+            "description": "A checkout shows a price; a store listing shows screenshots. Neither explains why. The bridge does: benefit, preview, proof, in two or three screens at most."
+          },
+          {
+            "title": "The visitor clicks through",
+            "description": "To the checkout, the signup or the store, already knowing what they will find there."
+          },
+          {
+            "title": "The destination converts",
+            "description": "It only has to confirm what the bridge made clear. Fewer abandoned carts and signups, because the objections were handled one page earlier."
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Features",
+      "props": {
+        "tagline": "Anatomy",
+        "title": "What a click-through page needs to carry",
+        "subtitle": "Six things, in roughly this order. Skip the ones your destination already does well.",
+        "align": "start",
+        "layout": "grid",
+        "columns": "3",
+        "items": [
+          {
+            "icon": "tabler:message-2",
+            "title": "Message match",
+            "description": "The headline uses the words of the ad or email that brought the visitor. Different words feel like a wrong turn."
+          },
+          {
+            "icon": "tabler:sparkles",
+            "title": "The benefit before the mechanics",
+            "description": "What changes for the visitor, then how it works. The destination will handle the details."
+          },
+          {
+            "icon": "tabler:eye",
+            "title": "A preview of the other side",
+            "description": "Show what happens after the click: a screenshot, the steps, the time it takes. Surprises kill conversions."
+          },
+          {
+            "icon": "tabler:quote",
+            "title": "Proof, briefly",
+            "description": "One or two real quotes or figures. The bridge is short; save the case studies for the destination."
+          },
+          {
+            "icon": "tabler:repeat",
+            "title": "One destination, repeated",
+            "description": "Every button goes to the same URL with the same label. Three placements: hero, after proof, end."
+          },
+          {
+            "icon": "tabler:circle-off",
+            "title": "Nothing else",
+            "description": "No newsletter box, no footer maze, no chat popup. Anything that is not the click is friction."
+          }
+        ]
+      }
+    },
+    {
       "widget": "Table",
       "props": {
-        "tagline": "What stays on the bridge",
-        "title": "And what waits on the other side",
-        "subtitle": "The single most reusable table in the whole set: it tells you what to delete from a bridge page.",
+        "tagline": "Rules of thumb",
+        "title": "What stays on the bridge, and what waits on the other side",
+        "subtitle": "The most reusable table on the page: whatever sits in the right-hand column belongs on the destination, so delete it from the bridge.",
         "align": "start",
         "columns": [
-          { "label": "Element" },
-          { "label": "This page", "highlight": true },
-          { "label": "The destination" }
+          {
+            "label": "Element"
+          },
+          {
+            "label": "Click-through page",
+            "highlight": true
+          },
+          {
+            "label": "The destination"
+          }
         ],
         "rows": [
-          { "cells": ["Destinations", "1", { "text": "As many as needed", "tone": "muted" }] },
-          { "cells": ["Form fields", "0", { "text": "The signup or checkout", "tone": "muted" }] },
-          { "cells": ["Buttons", "3, same label and URL", { "text": "Whatever the page needs", "tone": "muted" }] },
-          { "cells": ["Proof", "One or two quotes", { "text": "Case studies, reviews, numbers", "tone": "muted" }] },
-          { "cells": ["Pricing and feature list", "No", { "text": "Yes, in full", "tone": "muted" }] },
-          { "cells": ["Screens before the first button", "0", { "text": "Not a concern", "tone": "muted" }] }
+          {
+            "cells": [
+              "Destinations",
+              "1",
+              {
+                "text": "As many as needed",
+                "tone": "muted"
+              }
+            ]
+          },
+          {
+            "cells": [
+              "Form fields",
+              "0",
+              {
+                "text": "The signup or checkout",
+                "tone": "muted"
+              }
+            ]
+          },
+          {
+            "cells": [
+              "Buttons",
+              "3, same label and URL",
+              {
+                "text": "Whatever the page needs",
+                "tone": "muted"
+              }
+            ]
+          },
+          {
+            "cells": [
+              "Proof",
+              "One or two quotes",
+              {
+                "text": "Case studies, reviews, numbers",
+                "tone": "muted"
+              }
+            ]
+          },
+          {
+            "cells": [
+              "Pricing and feature list",
+              "No",
+              {
+                "text": "Yes, in full",
+                "tone": "muted"
+              }
+            ]
+          },
+          {
+            "cells": [
+              "Screens before the first button",
+              "0",
+              {
+                "text": "Not a concern",
+                "tone": "muted"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "widget": "FAQs",
+      "props": {
+        "tagline": "FAQ",
+        "title": "Questions people ask before they click",
+        "subtitle": "Short answers: a bridge page should not become a sales page. The same answers feed a FAQ rich result in search.",
+        "layout": "list",
+        "items": [
+          {
+            "title": "What is a click-through landing page?",
+            "description": "A page between a campaign and the place where the conversion happens (a checkout, a signup, an app store listing). It has no form of its own; its job is to explain the offer and make the next click an easy decision."
+          },
+          {
+            "title": "When is a click-through page better than sending traffic straight to the offer?",
+            "description": "When the destination is cold: a checkout that shows a price before explaining value, a signup that asks for a card, a store listing with no room for context. The bridge page supplies the missing context first."
+          },
+          {
+            "title": "How many buttons should it have, and where should they go?",
+            "description": "As many as you like, as long as they all go to the same place with the same wording. One in the hero, one after the proof and one at the end cover visitors who decide early, in the middle and late."
+          },
+          {
+            "title": "Should the button open the destination in a new tab?",
+            "description": "Usually not. A click-through page hands the visitor over; opening a new tab leaves the bridge behind them and splits attention."
+          },
+          {
+            "title": "How do I measure whether it works?",
+            "description": "Track the click-through rate to the destination, and the conversion rate on the destination for visitors who came through the bridge versus those who did not. If the second number does not improve, the bridge is not adding context, only a step."
+          },
+          {
+            "title": "How do I adapt this page with AstroWind?",
+            "description": "Point every button at your destination, replace the copy in each widget and keep the order. Every block is a reusable widget; no custom code is involved."
+          }
         ]
       }
     },
     {
       "widget": "Section",
-      "props": { "tone": "surface" },
+      "props": {
+        "tone": "surface"
+      },
       "slots": {
         "default": [
           {
@@ -117,14 +324,15 @@
               "layout": "closing",
               "size": "md",
               "title": "Nothing left to explain",
-              "subtitle": "Third placement, same button, same words. This is the click the page exists for.",
+              "subtitle": "This page is part of the free AstroWind template: Astro + Tailwind CSS, every block a reusable widget. Third placement, same button, same words: this is the click the page exists for.",
               "actions": [
                 {
                   "variant": "primary",
                   "text": "Continue to the template",
                   "href": "https://github.com/arthelokyo/astrowind"
                 }
-              ]
+              ],
+              "note": "One destination, three placements"
             }
           }
         ]

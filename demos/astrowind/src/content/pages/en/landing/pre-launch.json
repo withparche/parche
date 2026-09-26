@@ -8,7 +8,7 @@
       "props": {
         "layout": "split",
         "align": "start",
-        "tagline": "Waitlist open · 1,240 signed up",
+        "tagline": "Waitlist open · 1,240 signed up (sample)",
         "title": "Widgets v2 lands on 1 December",
         "subtitle": "Twelve agency widgets: case studies with results, process with deliverables, booking-backed contact. One field below gets you the date before anyone else, and the early-access price."
       },
@@ -25,7 +25,7 @@
               "success": {
                 "mode": "append",
                 "label": "You are on the list",
-                "title": "You are number 1,241 in the queue.",
+                "title": "You are number 1,241 in the queue (sample).",
                 "text": "The first email comes in week 2. Share your link: whoever joins through it gets the same early-access price.",
                 "copy": {
                   "label": "Copy your referral link",
@@ -68,6 +68,15 @@
       }
     },
     {
+      "widget": "Callout",
+      "props": {
+        "layout": "inline",
+        "tone": "primary",
+        "label": "Why it works",
+        "description": "On a pre-launch page the form is the product. It comes right after the hero, asks for one thing and says exactly what the signup gets. Everything below exists for the visitors who need more before they type."
+      }
+    },
+    {
       "widget": "Section",
       "props": {
         "tone": "surface"
@@ -79,7 +88,9 @@
             "props": {
               "layout": "panels",
               "align": "start",
+              "tagline": "What is coming",
               "title": "What, when, and why sign up today",
+              "subtitle": "The three facts a coming-soon page owes you, each stated once.",
               "columns": "3",
               "items": [
                 {
@@ -128,17 +139,20 @@
                           "columns": "1",
                           "tagline": "One real thing",
                           "title": "An unfinished screenshot beats three adjectives",
-                          "subtitle": "No customers yet, so this section carries the trust: something real from the product, a named person behind it, and what the signup does not mean.",
+                          "subtitle": "No customers yet, so this section carries the trust: something real from the product, the people behind it, and what the signup does not mean.",
                           "defaultIcon": "tabler:minus",
                           "items": [
                             {
-                              "description": "Work in progress, labelled as such"
+                              "title": "A screenshot, not a mockup",
+                              "description": "Even an unfinished screen is proof the product exists. This one is labelled work in progress, because it is."
                             },
                             {
-                              "description": "Built by the same three maintainers since 2022"
+                              "title": "The people behind it",
+                              "description": "Built by the same three maintainers since 2022. A name and a face turn a promise into a commitment."
                             },
                             {
-                              "description": "No spam, no selling the list, no launch that slips silently"
+                              "title": "What we will not do",
+                              "description": "No spam, no selling the list, no launch that slips silently. Saying it here is what makes the single field above enough."
                             }
                           ]
                         }
@@ -184,7 +198,7 @@
                 {
                   "label": "Week 0",
                   "title": "The waitlist opens",
-                  "description": "This page goes live with the form, the three facts and one real teaser."
+                  "description": "This page goes live with the form, the three facts and one real teaser. Signups start counting."
                 },
                 {
                   "label": "Weeks 2–6",
@@ -194,7 +208,7 @@
                 {
                   "label": "Week 8",
                   "title": "Early access for the list",
-                  "description": "Subscribers get in first, at the price promised on this page."
+                  "description": "Subscribers get in first, at the price promised on this page. Their feedback shapes the public release."
                 },
                 {
                   "label": "Launch day",
@@ -202,8 +216,104 @@
                   "description": "Same URL, new content, so no inbound link goes stale.",
                   "highlight": true
                 }
+              ],
+              "tagline": "Roadmap",
+              "subtitle": "A dated timeline sets expectations. Each step is a promise the emails will keep."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Stats",
+      "props": {
+        "tagline": "Launch facts",
+        "title": "Numbers a pre-launch page can state honestly",
+        "subtitle": "Before launch there are no customers and no results. There are still facts: state these instead of inventing traction.",
+        "items": [
+          {
+            "value": "1",
+            "label": "Field in the form"
+          },
+          {
+            "value": "1",
+            "label": "Date or window, stated once"
+          },
+          {
+            "value": "3",
+            "label": "Updates before launch"
+          },
+          {
+            "value": "0",
+            "label": "Features promised you cannot show"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "FAQs",
+            "props": {
+              "layout": "list",
+              "columns": "1",
+              "open": "first",
+              "tagline": "FAQ",
+              "title": "Questions people ask before joining a waitlist",
+              "subtitle": "Short answers. The same answers feed a FAQ rich result in search, which is how a coming-soon page gets found before launch.",
+              "items": [
+                {
+                  "title": "What is a pre-launch or coming soon landing page?",
+                  "description": "A page published before the product is available. It explains what is coming and collects email addresses from people who want to know when it does. Its success metric is signups, not sales."
+                },
+                {
+                  "title": "What should I offer in exchange for the email?",
+                  "description": "Something only an early signup gets: early access, a launch price, a say in the roadmap. The reason to sign up today rather than after launch is the whole conversion argument of the page, so state it next to the form."
+                },
+                {
+                  "title": "Do I need a countdown?",
+                  "description": "Only if the date will not move. A visible date beats a vague “coming soon”: it tells visitors how long they are being asked to wait and gives the emails a natural rhythm. Without one, state an honest window and let the roadmap make it concrete."
+                },
+                {
+                  "title": "How much of the product should I show?",
+                  "description": "One real thing: a screen, a clip, a draft, labelled work in progress if it is. And nothing you cannot ship: promise zero features you cannot show."
+                },
+                {
+                  "title": "What do I send to the people who signed up?",
+                  "description": "What the page promised, when it promised it: short progress emails (what shipped, what changed, one behind-the-scenes image), then the early-access link and the launch price. Showing the subject lines before the signup is what keeps unsubscribes low."
+                },
+                {
+                  "title": "How do I adapt this page with AstroWind?",
+                  "description": "Keep the order: form first, then the three facts, one real teaser, the roadmap. Replace the product, the date and the teaser, set the countdown to your launch time, and give the form an endpoint in your email tool; without one the signup is only simulated."
+                }
               ]
             }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "props": {
+        "layout": "closing",
+        "size": "md",
+        "title": "Build your pre-launch page",
+        "subtitle": "This page is part of the free AstroWind template: Astro + Tailwind CSS, every block a reusable widget. Put the form first, replace the facts, connect your email tool.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Get the template",
+            "href": "https://github.com/arthelokyo/astrowind"
+          },
+          {
+            "variant": "secondary",
+            "text": "Read the guide",
+            "href": "/landing"
           }
         ]
       }

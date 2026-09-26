@@ -49,14 +49,33 @@
               "layout": "tiles",
               "items": [
                 {
-                  "title": "Proof slot",
-                  "description": "Subscriber count, once it is real and checkable."
+                  "title": "4.9 / 5 · sample",
+                  "description": "Average rating, with a link to the reviews. Replace it with yours once it is real and checkable."
                 },
                 {
-                  "title": "Proof slot",
-                  "description": "Average rating, with a link to the reviews."
+                  "title": "12,000+ · sample",
+                  "description": "Active subscribers. Show the count only when it is real and checkable."
                 }
               ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "spacing": "sm"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Callout",
+            "props": {
+              "layout": "inline",
+              "tone": "primary",
+              "label": "Why it works",
+              "description": "A subscription is a promise repeated every month. The hero states the promise; the next block shows what actually arrives, so the price that follows has something to be compared with."
             }
           }
         ]
@@ -80,7 +99,7 @@
               "card": "canvas",
               "tagline": "What actually arrives",
               "title": "Last month, this month, next month",
-              "subtitle": "Anyone can sell the first month. Showing three in a row is how you sell the sixth — and it is the block almost every subscription page is missing.",
+              "subtitle": "Showing three months in a row is how you sell the sixth — and it is the block almost every subscription page is missing.",
               "items": [
                 {
                   "eyebrow": "November · delivered",
@@ -100,6 +119,31 @@
                   "title": "Docs and changelog kit",
                   "description": "Sidebar docs, search, versioning and a public changelog feed.",
                   "placeholder": "January pack preview · 1200×750"
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Features",
+            "props": {
+              "layout": "rows",
+              "header": "side",
+              "align": "start",
+              "tagline": "Recurring value",
+              "title": "Sell the second month",
+              "subtitle": "Anyone can sell the first month. Describe the value in a way that still makes sense in month six and the page attracts subscribers who stay instead of ones who try.",
+              "items": [
+                {
+                  "title": "A delivery with a rhythm",
+                  "description": "“A new pack on the first Monday” — predictability is what people pay monthly for."
+                },
+                {
+                  "title": "Access that accumulates",
+                  "description": "The library grows while the subscription runs, so leaving costs something real."
+                },
+                {
+                  "title": "A first win in the first week",
+                  "description": "One page shipped before the second charge. If you cannot name that win, churn starts there."
                 }
               ]
             }
@@ -134,7 +178,8 @@
                   "value": "yearly",
                   "label": "Yearly · 2 months free"
                 }
-              ]
+              ],
+              "subtitle": "Sample plans to show the block: monthly anchors the value, yearly is highlighted with the saving in plain units. Replace them with your real prices."
             },
             "slots": {
               "monthly": [
@@ -199,7 +244,8 @@
                         "features": [
                           "Every monthly pack, from the month you join",
                           "The full back catalogue, 14 packs",
-                          "Commercial use on client work"
+                          "Commercial use on client work",
+                          "One charge, and a renewal reminder before it"
                         ],
                         "actions": [
                           {
@@ -233,6 +279,15 @@
             }
           },
           {
+            "widget": "Callout",
+            "props": {
+              "layout": "inline",
+              "tone": "primary",
+              "label": "Cancel anytime",
+              "description": "One click, from the account page, effective at the end of the paid period: no email to write, no call to make, no retention offer to decline three times. State your policy this plainly, right under the plans."
+            }
+          },
+          {
             "widget": "Columns",
             "props": {
               "ratio": "equal",
@@ -260,10 +315,11 @@
                           ],
                           "results": [
                             {
-                              "formula": "people * 9",
+                              "label": "Cheapest mix for your team",
+                              "formula": "floor(people / 5) * 39 + min((people - floor(people / 5) * 5) * 12, 39)",
                               "prefix": "$",
                               "suffix": " /month",
-                              "note": "The Individual plan covers up to 5. Subscription pages lose the people who cannot tell which tier they are — a switch between two plans does not answer that."
+                              "note": "Individual is $12 a person, Studio $39 for five seats, so from four people Studio is cheaper. Subscription pages lose the people who cannot tell which tier they are — a switch between two plans does not answer that."
                             }
                           ],
                           "card": "surface"
@@ -283,33 +339,16 @@
                           "items": [
                             {
                               "value": "14 / 14",
-                              "label": "Packs delivered on the first Monday",
+                              "label": "Packs delivered on the first Monday (sample)",
                               "description": "None late, since March 2025."
                             },
                             {
                               "value": "11 months",
-                              "label": "Median subscription length",
+                              "label": "Median subscription length (sample)",
                               "description": "On a recurring offer, tenure beats satisfaction as proof."
                             }
-                          ]
-                        }
-                      }
-                    ]
-                  }
-                },
-                {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
-                      {
-                        "widget": "Callout",
-                        "props": {
-                          "tone": "neutral",
-                          "layout": "card",
-                          "label": "Cancel anytime",
-                          "title": "One click, from the account page",
-                          "description": "Effective at the end of the paid period. No email to write, no call to make, no retention offer you have to decline three times. Pausing is there too, before the cancel button.",
-                          "footer": "A renewal reminder before every charge, and no price change without notice."
+                          ],
+                          "note": "Sample figures: replace them with your own delivery record and tenure."
                         }
                       }
                     ]
@@ -336,7 +375,7 @@
               "columns": "4",
               "tagline": "Retention",
               "title": "What makes subscribers stay",
-              "subtitle": "Promise only the ones you deliver. A subscription page that over-promises here is buying churn at full price.",
+              "subtitle": "Promise the things that reduce churn, and only the ones you deliver. A subscription page that over-promises here is buying churn at full price.",
               "items": [
                 {
                   "title": "A fast first win",
@@ -378,41 +417,6 @@
           {
             "widget": "Features",
             "props": {
-              "layout": "rows",
-              "header": "side",
-              "align": "start",
-              "tagline": "Recurring value",
-              "title": "Sell the second month",
-              "subtitle": "Anyone can sell the first. Describe the value in a way that still makes sense in month six and the page attracts subscribers who stay instead of ones who try.",
-              "items": [
-                {
-                  "title": "A delivery with a rhythm",
-                  "description": "“A new pack on the first Monday” — predictability is what people pay monthly for."
-                },
-                {
-                  "title": "Access that accumulates",
-                  "description": "The library grows while the subscription runs, so leaving costs something real."
-                },
-                {
-                  "title": "A first win in the first week",
-                  "description": "One page shipped before the second charge. If you cannot name that win, churn starts there."
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "props": {
-        "tone": "surface"
-      },
-      "slots": {
-        "default": [
-          {
-            "widget": "Features",
-            "props": {
               "layout": "cards",
               "align": "start",
               "columns": "3",
@@ -437,6 +441,49 @@
                   "title": "Manage",
                   "description": "Switch plans, pause or cancel from the account page. Every change takes effect at the end of the paid period."
                 }
+              ],
+              "actions": [
+                {
+                  "variant": "secondary",
+                  "text": "See the plans",
+                  "href": "#plans"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Testimonials",
+            "props": {
+              "align": "start",
+              "tagline": "Proof",
+              "title": "Quotes from people who renewed",
+              "subtitle": "Placeholders on purpose. On a subscription page the best proof is tenure: quotes that mention how long someone has stayed and why.",
+              "items": [
+                {
+                  "text": "A quote that mentions how many months the subscriber has stayed and what keeps them.",
+                  "name": "Subscriber name",
+                  "role": "Role, subscriber since month/year (sample testimonial)"
+                },
+                {
+                  "text": "A quote about the first win: what they got done in the first week.",
+                  "name": "Subscriber name",
+                  "role": "Role, subscriber since month/year (sample testimonial)"
+                },
+                {
+                  "text": "A quote from someone who paused and came back. Nothing says “easy to leave” like someone who left and returned.",
+                  "name": "Subscriber name",
+                  "role": "Role, subscriber since month/year (sample testimonial)"
+                }
               ]
             }
           }
@@ -456,9 +503,9 @@
             "props": {
               "layout": "list",
               "columns": "1",
-              "open": "all",
+              "open": "first",
               "tagline": "FAQ",
-              "title": "Billing, cancellation and value",
+              "title": "Questions people ask before they subscribe",
               "items": [
                 {
                   "title": "How is this different from a pricing page?",
@@ -469,14 +516,23 @@
                   "description": "Show both, highlight yearly, and state the saving in plain units — “two months free”, not “17% off”. Let the monthly price anchor the value before the discount lands."
                 },
                 {
+                  "title": "How prominent should the cancellation policy be?",
+                  "description": "Right under the plans, in one plain sentence: how to cancel, when it takes effect, what you keep. A policy you have to look for reads as a policy you will have to fight."
+                },
+                {
                   "title": "What happens if I cancel mid-month?",
                   "description": "Access runs to the end of the period you paid for, and the packs you already downloaded stay yours under the same licence. No clawback, no partial refund to chase."
                 },
                 {
                   "title": "Trial or money-back window?",
                   "description": "One of the two, never both. A trial suits products people need to use to understand; a refund window suits content. Say it once, near the price, and honour it without friction."
+                },
+                {
+                  "title": "How do I adapt this page with AstroWind?",
+                  "description": "Replace the plans, the pack previews and the sample numbers and quotes with your own. Keep the order: what arrives before the price, the cancellation policy right under the plans."
                 }
-              ]
+              ],
+              "subtitle": "Billing, cancellation and value questions, answered before checkout."
             }
           }
         ]
@@ -495,8 +551,8 @@
               "layout": "closing",
               "size": "md",
               "tagline": "Not ready yet?",
-              "title": "Get the retention checklist instead",
-              "subtitle": "One email with the six practices above. No sequence, no follow-ups — the plans will still be here."
+              "title": "Get the retention checklist by email",
+              "subtitle": "One email with the six practices above as a checklist. No sequence, no follow-ups — the plans will still be here."
             },
             "slots": {
               "below": [
@@ -506,8 +562,42 @@
                     "layout": "inline",
                     "align": "center",
                     "placeholder": "you@company.com",
-                    "submit": "Send it"
+                    "submit": "Send it",
+                    "note": "One email, then nothing unless you subscribe. This form is a template: give it an endpoint to connect it to your email tool.",
+                    "success": {
+                      "mode": "append",
+                      "title": "The checklist is on its way.",
+                      "text": "One email, the six practices. Nothing else follows unless you subscribe."
+                    }
                   }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {},
+      "slots": {
+        "default": [
+          {
+            "widget": "CallToAction",
+            "props": {
+              "layout": "card",
+              "title": "Build your subscription page",
+              "subtitle": "This page is part of the free AstroWind template: Astro + Tailwind CSS, every block a reusable widget. Replace the plans, keep value before price.",
+              "actions": [
+                {
+                  "variant": "primary",
+                  "text": "Get the template",
+                  "href": "https://github.com/arthelokyo/astrowind"
+                },
+                {
+                  "variant": "secondary",
+                  "text": "Read the guide",
+                  "href": "/landing"
                 }
               ]
             }

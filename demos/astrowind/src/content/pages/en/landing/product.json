@@ -45,8 +45,8 @@
             "props": {
               "layout": "inline",
               "tone": "neutral",
-              "title": "4.8 / 5",
-              "description": "from 214 reviews on GitHub Discussions and Astro Themes — [read them](#reviews)"
+              "title": "4.8 / 5 · sample rating",
+              "description": "a placeholder for your real score and review count — [see the sample reviews](#reviews)"
             }
           }
         ],
@@ -57,6 +57,27 @@
               "frame": false,
               "caption": "product in use · 1200×900",
               "ratio": "4/3"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "why",
+        "label": "Why it works",
+        "spacing": "sm"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Callout",
+            "props": {
+              "layout": "inline",
+              "tone": "primary",
+              "label": "Why it works",
+              "description": "A product page starts with the product in one sentence and one image. The product on this page is real: the AstroWind template. Everything below is what a buyer would want to know about it."
             }
           }
         ]
@@ -76,19 +97,21 @@
               "layout": "panels",
               "align": "start",
               "columns": "3",
+              "tagline": "Three questions, answered first",
               "title": "What it is, who it is for, what you need",
+              "subtitle": "A visitor comparing products wants the summary before the detail. Answer what, who and what-do-I-need in the first screen after the hero; the specifications can wait.",
               "items": [
                 {
                   "eyebrow": "What it is",
-                  "description": "A free, open-source website template for Astro and Tailwind: pages, widgets, a blog, SEO and image optimisation, ready to customise."
+                  "description": "A free, open-source website template for Astro and Tailwind CSS: pages, widgets, a blog, SEO and image optimisation, ready to customise."
                 },
                 {
                   "eyebrow": "Who it is for",
-                  "description": "Developers, studios and small teams who want a fast, well-structured site without designing every section from scratch."
+                  "description": "Developers, studios and small teams who want a fast, well-structured site without designing every section from scratch: startups, SaaS, portfolios, marketing sites, blogs."
                 },
                 {
                   "eyebrow": "What you need",
-                  "description": "Node.js 22.22 or newer, an editor and about ten minutes. No account, no licence key."
+                  "description": "Node.js 22.22 or newer, a code editor and about ten minutes. No account, no licence key."
                 }
               ]
             }
@@ -120,7 +143,7 @@
                 {
                   "eyebrow": "01",
                   "title": "34 widgets, all production-used",
-                  "description": "Heroes, features, pricing, case studies, process, team, FAQ, contact. Every page on this site is built from them, including this one."
+                  "description": "Hero, features, steps, pricing, testimonials, FAQ, stats, contact and more. Every page on this site is built from them, including this one."
                 },
                 {
                   "eyebrow": "02",
@@ -130,12 +153,12 @@
                 {
                   "eyebrow": "03",
                   "title": "Rebrand from one token file",
-                  "description": "Light and dark colours, type and radii as CSS variables — shadcn-compatible, so external components follow the theme."
+                  "description": "Light and dark colours, type and radii as CSS variables, shadcn/ui-compatible so external components follow the theme. RTL, metadata, Open Graph images, sitemap and responsive images need no extra setup."
                 },
                 {
                   "eyebrow": "04",
                   "title": "Ready for coding assistants",
-                  "description": "An `AGENTS.md` and task skills, so an assistant edits the right file the first time instead of rewriting your site."
+                  "description": "An `AGENTS.md` and step-by-step skills, so Claude Code, Codex or Cursor edits the right file the first time instead of rewriting your site."
                 }
               ]
             }
@@ -156,7 +179,11 @@
             "props": {
               "tagline": "Specifications",
               "title": "Specs are where trust is won",
-              "subtitle": "The buyer who reads this far is deciding. Exact versions, requirements and contents, in a list they can compare against the alternative.",
+              "subtitle": "The buyer who reads this far is deciding. Give them the exact versions, requirements and contents, in a list they can scan and compare against the alternative.",
+              "link": {
+                "text": "Browse the source on GitHub",
+                "href": "https://github.com/arthelokyo/astrowind"
+              },
               "header": "none",
               "columns": [
                 {
@@ -168,13 +195,48 @@
                 }
               ],
               "rows": [
-                { "cells": ["Framework", "Astro 7.x, static output; adapters for on-demand pages"] },
-                { "cells": ["Styling", "Tailwind CSS 4, CSS-first config, shadcn/ui-compatible tokens"] },
-                { "cells": ["Tooling", "TypeScript, ESLint, Prettier — `npm run check` runs all three"] },
-                { "cells": ["Content", "Markdown and MDX with a typed schema; six demo posts"] },
-                { "cells": ["Pages included", "5 home demos, 6 landing pages, about, services, pricing, contact, 404, terms, privacy"] },
-                { "cells": ["Median page weight", "38 KB, zero JS on static routes"] },
-                { "cells": ["Requirements", "Node.js 22.22+; deploys to any static host, Dockerfile with nginx included"] }
+                {
+                  "cells": [
+                    "Framework",
+                    "Astro 7.x, static output; adapters for on-demand pages"
+                  ]
+                },
+                {
+                  "cells": [
+                    "Styling",
+                    "Tailwind CSS 4, CSS-first config, shadcn/ui-compatible tokens"
+                  ]
+                },
+                {
+                  "cells": [
+                    "Tooling",
+                    "TypeScript, ESLint, Prettier — `npm run check` runs all three"
+                  ]
+                },
+                {
+                  "cells": [
+                    "Content",
+                    "Markdown and MDX with a typed schema; six demo posts"
+                  ]
+                },
+                {
+                  "cells": [
+                    "Pages included",
+                    "8 home demos, 11 landing pages and their hub, about, services, pricing, contact, 404, terms, privacy"
+                  ]
+                },
+                {
+                  "cells": [
+                    "Median page weight",
+                    "38 KB, zero JS on static routes"
+                  ]
+                },
+                {
+                  "cells": [
+                    "Requirements",
+                    "Node.js 22.22+; deploys to any static host, Dockerfile with nginx included"
+                  ]
+                }
               ]
             }
           }
@@ -193,19 +255,39 @@
           {
             "widget": "Gallery",
             "props": {
-              "title": "Gallery of the product itself",
-              "hint": "Captions say what you are looking at. Screenshots for software, context shots for physical goods — never office photography.",
+              "tagline": "Gallery",
+              "title": "Show it from every angle",
+              "subtitle": "Buyers zoom in. Six to eight real images, each with a caption that says what they are looking at, answer more questions than a paragraph. Screenshots for software, context shots for physical goods — never office photography.",
               "layout": "grid",
               "ratio": "4/3",
               "lightbox": true,
               "items": [
-                { "caption": "home page, light theme" },
-                { "caption": "same page, dark theme" },
-                { "caption": "widget gallery, 34 sections" },
-                { "caption": "blog post layout with TOC" },
-                { "caption": "Lighthouse report, all four at 100" },
-                { "caption": "token file, before and after rebrand" }
-              ]
+                {
+                  "caption": "home page, light theme",
+                  "placeholder": "home page, light theme · 1600×1200"
+                },
+                {
+                  "caption": "same page, dark theme",
+                  "placeholder": "same page, dark theme · 1600×1200"
+                },
+                {
+                  "caption": "widget gallery, 34 sections",
+                  "placeholder": "widget gallery, 34 sections · 1600×1200"
+                },
+                {
+                  "caption": "blog post layout with TOC",
+                  "placeholder": "blog post layout with TOC · 1600×1200"
+                },
+                {
+                  "caption": "Lighthouse report, all four at 100",
+                  "placeholder": "Lighthouse report, all four at 100 · 1600×1200"
+                },
+                {
+                  "caption": "token file, before and after rebrand",
+                  "placeholder": "token file, before and after rebrand · 1600×1200"
+                }
+              ],
+              "hint": "Click any image to open it"
             }
           },
           {
@@ -214,11 +296,7 @@
               "layout": "inline",
               "tone": "success",
               "title": "14 sites deployed with the template this week",
-              "footer": "from the public deploy log · updated hourly",
-              "link": {
-                "text": "See the log",
-                "href": "#log"
-              }
+              "footer": "sample activity signal · connect it to your real deploy log before launch"
             }
           }
         ]
@@ -239,17 +317,79 @@
               "title": "The three things a buyer is choosing between",
               "subtitle": "A comparing buyer is already comparing — doing it for them, honestly, keeps them on the page instead of in a search tab.",
               "columns": [
-                { "label": "" },
-                { "label": "This template", "highlight": true },
-                { "label": "Paid theme" },
-                { "label": "Site builder" }
+                {
+                  "label": ""
+                },
+                {
+                  "label": "This template",
+                  "highlight": true
+                },
+                {
+                  "label": "Paid theme"
+                },
+                {
+                  "label": "Site builder"
+                }
               ],
               "rows": [
-                { "cells": ["Price", { "text": "Free, MIT", "tone": "success" }, "$49–$99 once", "$16–$49 / month"] },
-                { "cells": ["You own the code", { "text": "Yes", "tone": "success" }, "Licence-bound", "No, export only"] },
-                { "cells": ["Median page weight", { "text": "38 KB", "tone": "success" }, "180–400 KB", "600 KB+"] },
-                { "cells": ["Editing without a developer", { "text": "Markdown or a CMS adapter", "tone": "muted" }, "Depends on the theme", { "text": "Its strongest point", "tone": "default" }] },
-                { "cells": ["Support", { "text": "Community, public issues", "tone": "muted" }, "Author, usually email", "Paid, with an SLA"] }
+                {
+                  "cells": [
+                    "Price",
+                    {
+                      "text": "Free, MIT",
+                      "tone": "success"
+                    },
+                    "$49–$99 once",
+                    "$16–$49 / month"
+                  ]
+                },
+                {
+                  "cells": [
+                    "You own the code",
+                    {
+                      "text": "Yes",
+                      "tone": "success"
+                    },
+                    "Licence-bound",
+                    "No, export only"
+                  ]
+                },
+                {
+                  "cells": [
+                    "Median page weight",
+                    {
+                      "text": "38 KB",
+                      "tone": "success"
+                    },
+                    "180–400 KB",
+                    "600 KB+"
+                  ]
+                },
+                {
+                  "cells": [
+                    "Editing without a developer",
+                    {
+                      "text": "Markdown or a CMS adapter",
+                      "tone": "muted"
+                    },
+                    "Depends on the theme",
+                    {
+                      "text": "Its strongest point",
+                      "tone": "default"
+                    }
+                  ]
+                },
+                {
+                  "cells": [
+                    "Support",
+                    {
+                      "text": "Community, public issues",
+                      "tone": "muted"
+                    },
+                    "Author, usually email",
+                    "Paid, with an SLA"
+                  ]
+                }
               ],
               "note": "If you need someone to edit the site with no developer nearby, a builder is genuinely the better answer. Saying so is what makes the other four rows believable."
             }
@@ -260,9 +400,140 @@
     {
       "widget": "Section",
       "props": {
+        "id": "get",
+        "label": "Getting started",
+        "tone": "surface"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Steps",
+            "props": {
+              "layout": "numbered",
+              "title": "From download to a running site in three steps",
+              "subtitle": "A product page should show the first minutes of ownership. Fewer surprises after the purchase, fewer returns.",
+              "actions": [
+                {
+                  "variant": "primary",
+                  "text": "Get the template",
+                  "href": "https://github.com/arthelokyo/astrowind"
+                }
+              ],
+              "items": [
+                {
+                  "title": "Create the project",
+                  "description": "Run `npm create astro@latest -- --template arthelokyo/astrowind`, then `npm install` and `npm run dev`."
+                },
+                {
+                  "title": "Make it yours",
+                  "description": "Name, URL and metadata in one config file; colours and fonts in one styles file; replace the logo."
+                },
+                {
+                  "title": "Build and deploy",
+                  "description": "`npm run build` produces a static folder for Vercel, Netlify, Cloudflare, GitHub Pages or your own server."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "rules",
+        "label": "Rules of thumb"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Features",
+            "props": {
+              "layout": "grid",
+              "align": "start",
+              "columns": "4",
+              "tagline": "Rules of thumb",
+              "title": "Constraints that keep a product page honest",
+              "subtitle": "Limits, not results. The numbers about the product itself are in the specifications above.",
+              "items": [
+                {
+                  "icon": "tabler:box",
+                  "title": "One product per page",
+                  "description": "A page that sells two things sells neither. Variants are fine; alternatives are not."
+                },
+                {
+                  "icon": "tabler:stack-2",
+                  "title": "Three depths",
+                  "description": "Overview, features, specifications. Each answers the questions of a more decided buyer."
+                },
+                {
+                  "icon": "tabler:photo",
+                  "title": "The product in use",
+                  "description": "At least one real image of it being used, not only rendered. Buyers trust context."
+                },
+                {
+                  "icon": "tabler:tag",
+                  "title": "The price, on the page",
+                  "description": "A product page without a price sends the buyer to search for it elsewhere. State it."
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Callout",
+            "props": {
+              "layout": "inline",
+              "tone": "success",
+              "label": "Price and availability",
+              "description": "Free. MIT licence, for personal and commercial projects. Available now from the repository; no sign-up. State yours as plainly as this."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "reviews",
+        "label": "Proof",
+        "tone": "surface"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Testimonials",
+            "props": {
+              "tagline": "Proof",
+              "title": "What owners say goes here",
+              "subtitle": "Placeholders on purpose. On a product page, quotes should mention concrete use: what was built, how long it took, what surprised them.",
+              "items": [
+                {
+                  "text": "A quote naming what the customer built with the product and how long it took them.",
+                  "name": "Customer name",
+                  "role": "Role, company (sample testimonial)"
+                },
+                {
+                  "text": "A quote about a specification that mattered: a requirement met, a limit that was not a problem.",
+                  "name": "Customer name",
+                  "role": "Role, company (sample testimonial)"
+                },
+                {
+                  "text": "A short one comparing it with the alternative the customer considered.",
+                  "name": "Customer name",
+                  "role": "Role, company (sample testimonial)"
+                }
+              ],
+              "note": "Replace each with a real quote you can link to: name, role, date and where it was said."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
         "id": "faq",
         "label": "FAQ",
-        "tone": "surface",
         "width": "md"
       },
       "slots": {
@@ -272,10 +543,19 @@
             "props": {
               "layout": "list",
               "columns": "1",
-              "open": "all",
+              "open": "first",
               "tagline": "FAQ",
-              "title": "What buyers ask before downloading",
+              "title": "Questions buyers ask about a product page",
+              "subtitle": "Answered here so nobody has to write in.",
               "items": [
+                {
+                  "title": "What is a product details landing page?",
+                  "description": "A page dedicated to one product or service, structured in layers: a one-line summary, the main benefits, the full specifications, and everything a buyer needs to decide (price, availability, proof, common questions). It replaces the back-and-forth of a sales conversation."
+                },
+                {
+                  "title": "How is it different from a sales page or a click-through page?",
+                  "description": "A sales page argues; a click-through page bridges; a product page informs. Its visitor already wants this kind of thing and is comparing. Completeness and clarity convert here, not persuasion."
+                },
                 {
                   "title": "How much detail is too much on a product page?",
                   "description": "None, if it is organised by depth. Keep the first two screens skimmable and let the specifications carry the detail. Nobody leaves because a spec table is long; they leave because the first screen was vague."
@@ -286,11 +566,15 @@
                 },
                 {
                   "title": "What images does a product page need?",
-                  "description": "At least one of the product in use, not only on white. Screenshots for software, context shots for physical goods, a short clip if it moves. Office photography is not product photography."
+                  "description": "At least one of the product in use, not only on white. Screenshots for software, context shots for physical goods, a short demo clip if it moves."
                 },
                 {
                   "title": "Can I use it for client work?",
                   "description": "Yes — MIT, no attribution required, unlimited sites. Studios shipping it under their own brand is the most common use."
+                },
+                {
+                  "title": "How do I adapt this page with AstroWind?",
+                  "description": "Every block is a widget: Hero, Features, Table, Gallery, Steps, Testimonials, FAQs and CallToAction. Replace the copy and images, keep the three depths, and point the buttons at your store or checkout."
                 }
               ]
             }
@@ -300,7 +584,7 @@
             "props": {
               "layout": "centered",
               "title": "What else do you need to know?",
-              "subtitle": "Ask here and the answer gets published on this page with its date. Every question above arrived this way — including the awkward ones, which is the only version of this widget worth shipping.",
+              "subtitle": "Ask here and the answer gets published on this page with its date, including the awkward ones — the only version of this widget worth shipping.",
               "fields": [
                 {
                   "name": "question",
@@ -311,7 +595,7 @@
                 }
               ],
               "submit": "Ask it",
-              "note": "Answered in public within two working days · 34 asked, 34 answered."
+              "note": "Answered in public within two working days · 34 asked, 34 answered (sample count)."
             }
           }
         ]
@@ -320,36 +604,30 @@
     {
       "widget": "Section",
       "props": {
-        "id": "get",
-        "label": "Get the template"
+        "id": "close",
+        "label": "Get the template",
+        "tone": "surface"
       },
       "slots": {
         "default": [
           {
-            "widget": "Steps",
+            "widget": "CallToAction",
             "props": {
-              "layout": "numbered",
-              "title": "From download to a running site in three steps",
-              "subtitle": "A product page should show the first minutes of ownership. Fewer surprises afterwards, fewer returns.",
+              "layout": "closing",
+              "size": "md",
+              "title": "Get the product this page describes",
+              "subtitle": "This page is part of the free AstroWind template: Astro + Tailwind CSS, every block a reusable widget. Download it, replace the product, keep the three depths.",
               "actions": [
                 {
                   "variant": "primary",
                   "text": "Get the template",
-                  "href": "#get"
-                }
-              ],
-              "items": [
-                {
-                  "title": "Create the project",
-                  "description": "`npm create astro@latest -- --template arthelokyo/astrowind`"
+                  "href": "https://github.com/arthelokyo/astrowind",
+                  "icon": "tabler:download"
                 },
                 {
-                  "title": "Make it yours",
-                  "description": "Name, URL and metadata in one config file; colours and fonts in one styles file; replace the logo."
-                },
-                {
-                  "title": "Build and deploy",
-                  "description": "A static folder for Vercel, Netlify, Cloudflare, Pages or your own server."
+                  "variant": "secondary",
+                  "text": "Read the guide",
+                  "href": "/landing"
                 }
               ]
             }

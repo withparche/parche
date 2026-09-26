@@ -1,6 +1,6 @@
 {
   "title": "Lead Generation Landing Page Example & Guide",
-  "description": "Six sections, the question to ask yourself for each one, and the copy formulas that survive contact with real users. One page. No sequence.",
+  "description": "The six sections of a page that turns curious visitors into leads, the question to ask for each one, and the copy formulas that survive contact with real users. One page. No sequence.",
   "layout": "landing",
   "sections": [
     {
@@ -9,7 +9,7 @@
         "layout": "split",
         "tagline": "Free checklist · one page",
         "title": "Get the landing page checklist",
-        "subtitle": "Six sections, the question to ask yourself for each one, and the copy formulas that survive contact with real users. One page. No sequence."
+        "subtitle": "The six sections of a page that turns curious visitors into leads, and the question to ask yourself before you publish each one. One page. No sequence."
       },
       "slots": {
         "proof": [
@@ -20,9 +20,18 @@
               "columns": "1",
               "defaultIcon": "tabler:check",
               "items": [
-                { "description": "One page, printable, no signup wall" },
-                { "description": "Copy formulas for headline, subtitle and button" },
-                { "description": "A measurement plan: which events, and when to stop testing" }
+                {
+                  "title": "A one-page checklist",
+                  "description": "The six sections, with the questions to ask yourself for each one. Printable."
+                },
+                {
+                  "title": "Copy formulas that survive contact with real users",
+                  "description": "Headline, subtitle and button patterns you can fill in for any offer."
+                },
+                {
+                  "title": "A measurement plan",
+                  "description": "Which events to track, what a meaningful test looks like, and when to stop testing."
+                }
               ]
             }
           },
@@ -42,13 +51,13 @@
               "layout": "centered",
               "align": "start",
               "title": "Two fields, then it sends",
-              "subtitle": "You get the checklist immediately. Nothing else unless you ask.",
+              "subtitle": "You get the checklist right away. Nothing else unless you say so.",
               "fields": [
                 {
                   "name": "firstName",
                   "label": "First name",
                   "type": "text",
-                  "placeholder": "Marta",
+                  "placeholder": "Your first name is enough",
                   "autocomplete": "given-name",
                   "required": true
                 },
@@ -62,13 +71,13 @@
                 },
                 {
                   "name": "consent",
-                  "label": "Send me the checklist. I have read the privacy policy and can unsubscribe in one click.",
+                  "label": "I agree to receive the checklist by email and I have read the privacy policy. I can unsubscribe with one click.",
                   "type": "checkbox",
                   "required": true
                 }
               ],
               "submit": "Send me the checklist",
-              "note": "4,100 people have it. No sequence, no sales call.",
+              "note": "One email with the checklist. No sequence, no sales call.",
               "success": {
                 "mode": "replace",
                 "title": "It is in your inbox",
@@ -92,8 +101,19 @@
       }
     },
     {
+      "widget": "Callout",
+      "props": {
+        "layout": "inline",
+        "tone": "primary",
+        "label": "Why it works",
+        "description": "A hero states the outcome, not the product, and offers a single next step. Everything else on the page exists to remove doubts before that step."
+      }
+    },
+    {
       "widget": "Section",
-      "props": { "tone": "surface" },
+      "props": {
+        "tone": "surface"
+      },
       "slots": {
         "default": [
           {
@@ -101,32 +121,43 @@
             "props": {
               "tagline": "Proof",
               "title": "Who else uses this, in one glance",
-              "subtitle": "Real customer logos, with permission. No customers yet? Show partners, press or certifications — never invent them.",
+              "subtitle": "Real customer logos, with permission, go here. No customers yet? Show partners, press or certifications instead — never invent them.",
               "align": "start",
-              "names": ["Northwind", "Calderón & Co", "Höok Labs", "Ferrolab", "Quietmile"]
+              "names": [
+                "Northwind",
+                "Calderón & Co",
+                "Höok Labs",
+                "Ferrolab",
+                "Quietmile"
+              ],
+              "note": "Sample names"
             }
           },
           {
-            "widget": "Features",
+            "widget": "Testimonials",
             "props": {
-              "layout": "cards",
-              "columns": "3",
-              "card": "canvas",
+              "align": "start",
               "items": [
                 {
-                  "eyebrow": "Proof slot 1 · before / after",
-                  "description": "A sentence naming the problem before and the measured result after. Numbers make it credible."
+                  "title": "Before / after",
+                  "text": "One sentence that names the problem the customer had before and the result after. Specific numbers make it credible.",
+                  "name": "Customer name",
+                  "role": "Role, company (sample testimonial)"
                 },
                 {
-                  "eyebrow": "Proof slot 2 · objection",
-                  "description": "A quote that answers the same doubt your FAQ answers: time to value, price or trust."
+                  "title": "The objection",
+                  "text": "A quote that answers the biggest objection your FAQ also answers: time to value, price or trust.",
+                  "name": "Customer name",
+                  "role": "Role, company (sample testimonial)"
                 },
                 {
-                  "eyebrow": "How to fill these",
-                  "eyebrowTone": "primary",
-                  "description": "Ask three customers for one sentence each: what was hard before, what changed, and a number. Use their real name, role and photo with permission."
+                  "title": "A short one",
+                  "text": "Variety in length reads as authentic. Three quotes of identical shape read as written by the same person.",
+                  "name": "Customer name",
+                  "role": "Role, company (sample testimonial)"
                 }
-              ]
+              ],
+              "note": "Placeholders, on purpose: never publish invented testimonials. Ask three customers for one sentence each — what was hard before, what changed, and a number — and use their real name, role and photo with permission."
             }
           }
         ]
@@ -144,27 +175,27 @@
           {
             "eyebrow": "01",
             "title": "A promise in the headline",
-            "description": "Say what the visitor gets, in their words. “Get the checklist” beats “Download our PDF”."
+            "description": "Say what the visitor gets, in their words. “Get the checklist” beats “Download our PDF”. Keep the subtitle for the how and the who."
           },
           {
             "eyebrow": "02",
             "title": "The offer, made concrete",
-            "description": "Describe the magnet as a thing with a shape: pages, minutes, steps. Show it if you can."
+            "description": "Describe the magnet as a thing with a shape: pages, minutes, steps. Show it if you can. Vague value (“insights”) does not earn an email address."
           },
           {
             "eyebrow": "03",
             "title": "Proof someone else trusted you",
-            "description": "One real sentence from a customer outperforms three generic ones. Never invent them."
+            "description": "Logos, numbers or quotes. One real sentence from a customer outperforms three generic ones. Never invent them."
           },
           {
             "eyebrow": "04",
             "title": "The form, short and visible",
-            "description": "Ask only for what the follow-up needs. Make the button describe the outcome."
+            "description": "Ask only for what the follow-up needs. Say what happens after submit, and make the button describe the outcome, not the action."
           },
           {
             "eyebrow": "05",
             "title": "Objections answered",
-            "description": "An FAQ handles price, privacy, time and fit without a sales call — and feeds structured data."
+            "description": "An FAQ handles price, privacy, time and fit without a sales call — and doubles as structured data for search engines."
           },
           {
             "eyebrow": "06",
@@ -175,8 +206,38 @@
       }
     },
     {
+      "widget": "Steps",
+      "props": {
+        "layout": "numbered",
+        "tagline": "The flow",
+        "title": "From click to conversation in four steps",
+        "subtitle": "The page is one step of four. It only works when the ad before it and the email after it say the same thing.",
+        "items": [
+          {
+            "title": "Attract with one message",
+            "description": "Every ad, post or email that points here says the same thing as the headline. Message match is the cheapest conversion lift available."
+          },
+          {
+            "title": "Remove friction",
+            "description": "No menu, no footer full of links, a page that loads in under two seconds on mobile. This page keeps only a logo and one button in the header."
+          },
+          {
+            "title": "Capture the minimum",
+            "description": "Two fields and a consent box. Progressive profiling can ask for more later, once the lead has a reason to answer."
+          },
+          {
+            "title": "Deliver instantly, follow up deliberately",
+            "description": "Send the asset in the confirmation email, then a short sequence that earns the reply. The page’s job ends at submit; the sequence’s job starts there."
+          }
+        ]
+      }
+    },
+    {
       "widget": "Section",
-      "props": { "tone": "surface", "width": "md" },
+      "props": {
+        "tone": "surface",
+        "width": "md"
+      },
       "slots": {
         "default": [
           {
@@ -184,13 +245,14 @@
             "props": {
               "tagline": "FAQ",
               "title": "Asked before filling in a form",
+              "subtitle": "Answering them here saves a sales call and gives search engines a rich result.",
               "layout": "list",
               "columns": "1",
               "open": "first",
               "items": [
                 {
                   "title": "What is a lead generation landing page?",
-                  "description": "A single page with one goal: exchange something valuable — a guide, a demo, a quote, a trial — for a visitor’s contact details. Unlike a homepage it has no competing navigation and repeats one call to action."
+                  "description": "A single page with one goal: exchange something valuable — a guide, a demo, a quote, a trial — for a visitor’s contact details. Unlike a homepage it has no competing navigation and one call to action repeated throughout."
                 },
                 {
                   "title": "How many fields should the form have?",
@@ -198,14 +260,18 @@
                 },
                 {
                   "title": "Above the fold or at the end?",
-                  "description": "Both, and the same form. In the first screen for visitors who arrive convinced, repeated after the proof for those who need the full story. Two placements, one offer."
+                  "description": "Both, and the same offer. In the first screen for visitors who arrive convinced, repeated after the proof for those who need the full story. Two placements, one offer."
                 },
                 {
                   "title": "What is a good conversion rate?",
                   "description": "It depends on the source. Cold paid traffic often converts in the low single digits; warm email or retargeting can reach 10–20%. Compare against your own baseline and change one thing at a time."
                 },
                 {
-                  "title": "Does this satisfy privacy consent?",
+                  "title": "How do I make the form actually send submissions?",
+                  "description": "The form is a template. Point it at Netlify Forms, Formspree or your own endpoint; the fields, the consent box and the success message stay as they are."
+                },
+                {
+                  "title": "Does this page work for GDPR / privacy consent?",
                   "description": "The form ships with a consent checkbox linked to the privacy policy. Keep the label explicit about what you send and how often, and store the consent alongside the lead."
                 }
               ]
@@ -216,7 +282,9 @@
     },
     {
       "widget": "Section",
-      "props": { "id": "get" },
+      "props": {
+        "id": "get"
+      },
       "slots": {
         "default": [
           {
@@ -225,7 +293,7 @@
               "layout": "closing",
               "size": "md",
               "title": "Get the landing page checklist",
-              "subtitle": "Same offer as the top of the page, same two fields. Nothing new down here — that is the point."
+              "subtitle": "Same offer as the top of the page, one email, no sequence you did not ask for. Nothing new down here — that is the point."
             },
             "slots": {
               "below": [
@@ -244,6 +312,26 @@
                 }
               ]
             }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "props": {
+        "layout": "card",
+        "title": "Build your own lead generation page",
+        "subtitle": "This page is part of the free AstroWind template: Astro + Tailwind CSS, every section a reusable widget. Copy it, replace the copy, connect the form.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Get the template",
+            "href": "https://github.com/arthelokyo/astrowind"
+          },
+          {
+            "variant": "secondary",
+            "text": "Read the guide",
+            "href": "/landing"
           }
         ]
       }

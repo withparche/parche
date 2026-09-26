@@ -37,12 +37,31 @@
                 "`02` The problem, named precisely",
                 "`03` The mechanism — why it works",
                 "`04` Benefits as outcomes",
-                "`05` Proof with measured numbers",
-                "`06` The offer, three tiers",
-                "`07` Guarantee, right after the price",
+                "`05` What happens after you buy",
+                "`06` Proof with measured numbers",
+                "`07` The offer, then the guarantee",
                 "`08` Objections, answered",
                 "`09` The same ask, one last time"
               ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "spacing": "sm"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Callout",
+            "props": {
+              "layout": "inline",
+              "tone": "primary",
+              "label": "Why it works",
+              "description": "A sales headline promises a transformation, not a feature. The subtitle tells the reader what the page will do for them if they keep scrolling."
             }
           }
         ]
@@ -99,7 +118,7 @@
                       {
                         "eyebrow": "Your objection first",
                         "description": "“I do not want another abstraction layer.” There is none: it is Astro components and CSS variables. Delete the widgets you do not use and nothing breaks.",
-                        "footer": "Ferrolab moved 140 posts with zero redirect gaps."
+                        "footer": "Ferrolab moved 140 posts with zero redirect gaps (sample figure)."
                       }
                     ]
                   }
@@ -125,7 +144,7 @@
                       {
                         "eyebrow": "Your objection first",
                         "description": "“Will I need a developer to change anything?” For copy, images and new pages: no. For a new section type: yes, once — then it is yours forever.",
-                        "footer": "Northwind grew organic traffic 38% in one quarter."
+                        "footer": "Northwind grew organic traffic 38% in one quarter (sample figure)."
                       }
                     ]
                   }
@@ -151,7 +170,7 @@
                       {
                         "eyebrow": "Your objection first",
                         "description": "“Can I use it commercially, under my own brand?” Yes. MIT, no attribution, unlimited client sites. That is the most common use of it.",
-                        "footer": "Calderón & Co shipped eleven client sites, 60% fewer build hours."
+                        "footer": "Calderón & Co shipped eleven client sites, 60% fewer build hours (sample figure)."
                       }
                     ]
                   }
@@ -174,7 +193,7 @@
             "props": {
               "layout": "rows",
               "header": "side",
-              "tagline": "The problem",
+              "tagline": "02 · The problem",
               "title": "Traffic that reads the headline and leaves",
               "subtitle": "A reader who recognises their own situation in the first screen keeps reading. Describe the problem precisely and without exaggeration — the credibility earned here pays for every claim below.",
               "items": [
@@ -202,7 +221,7 @@
         "layout": "panels",
         "columns": "3",
         "align": "start",
-        "tagline": "The mechanism",
+        "tagline": "03 · The mechanism",
         "title": "Sell why it works, not that it works",
         "subtitle": "A reader who understands the mechanism trusts the result and stops looking for the catch. This is the block most pages skip, and the reason their proof reads as luck.",
         "items": [
@@ -264,8 +283,8 @@
                   "description": "The same nine blocks fit a course, a service or a product. Only the copy changes."
                 },
                 {
-                  "title": "Widgets you already have",
-                  "description": "Nine components from the template. No custom code, no new dependency, no build step."
+                  "title": "Built with widgets you already have",
+                  "description": "Nine components from the template’s widgets folder. No custom code, no new dependency."
                 }
               ]
             }
@@ -313,6 +332,33 @@
       }
     },
     {
+      "widget": "Stats",
+      "props": {
+        "tagline": "Rules of thumb",
+        "title": "Constraints that keep a sales page honest",
+        "subtitle": "Limits, not results. Real results belong in your testimonials and case studies.",
+        "layout": "figures",
+        "items": [
+          {
+            "value": "1",
+            "label": "Offer per page"
+          },
+          {
+            "value": "3",
+            "label": "Times the same call to action"
+          },
+          {
+            "value": "9",
+            "label": "Headlines that read as a summary"
+          },
+          {
+            "value": "0",
+            "label": "Invented testimonials"
+          }
+        ]
+      }
+    },
+    {
       "widget": "Section",
       "props": {
         "tone": "surface",
@@ -326,10 +372,11 @@
               "layout": "rows",
               "tagline": "06 · Proof",
               "title": "One case study beats nine quotes",
+              "subtitle": "Lead with one measured case; one quote in the customer’s own words backs it up. Both below are samples — replace them with your own, with permission.",
               "items": [
                 {
                   "client": "Höok Labs",
-                  "sector": "design studio",
+                  "sector": "design studio · sample case",
                   "title": "Replaced a 40-minute discovery call with this page structure.",
                   "description": "Prospects now arrive having read the argument; the call confirms scope and price.",
                   "caption": "before / after screens · 900×560",
@@ -347,7 +394,20 @@
                       "value": "90 d",
                       "label": "Measurement window"
                     }
-                  ]
+                  ],
+                  "footer": "Illustrative sample. Use only results you measured."
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Testimonials",
+            "props": {
+              "items": [
+                {
+                  "text": "One sentence that names the problem the customer had before and the measurable result after. This is a sample: replace it with a real customer’s words, with permission.",
+                  "name": "Customer name",
+                  "role": "Role, company (sample testimonial)"
                 }
               ]
             }
@@ -367,9 +427,9 @@
             "widget": "Heading",
             "props": {
               "align": "start",
-              "tagline": "The offer",
-              "title": "The price arrives now, not sooner",
-              "subtitle": "Three options, the middle one recommended with the reason visible. Sample figures — replace them with your real offer."
+              "tagline": "07 · The offer",
+              "title": "Price arrives only now, after the value is clear",
+              "subtitle": "Sample plans to show the block: three options, the middle one recommended with the reason visible, the same button on each. Replace them with your real offer."
             }
           },
           {
@@ -486,13 +546,14 @@
               "items": [
                 {
                   "title": "Starter",
+                  "subtitle": "Sample plan",
                   "currency": "$",
                   "price": "29",
                   "suffix": "/mo",
                   "features": [
                     "The core outcome, stated plainly",
                     "What is included, no jargon",
-                    "A limit that makes the next tier make sense"
+                    "A limit that makes the next plan make sense"
                   ],
                   "actions": [
                     {
@@ -503,15 +564,16 @@
                 },
                 {
                   "title": "Professional",
+                  "subtitle": "Sample plan, recommended",
                   "currency": "$",
                   "price": "79",
                   "suffix": "/mo",
                   "recommended": true,
-                  "badge": "4 of 5 pick this",
+                  "badge": "Recommended",
                   "features": [
                     "Everything in Starter",
                     "The benefit most buyers actually want",
-                    "The reason this is recommended, stated",
+                    "The reason this is the recommended choice",
                     "Support with a named response time"
                   ],
                   "actions": [
@@ -523,13 +585,14 @@
                 },
                 {
                   "title": "Team",
+                  "subtitle": "Sample plan",
                   "currency": "$",
                   "price": "199",
                   "suffix": "/mo",
                   "features": [
                     "Everything in Professional",
                     "Seats, roles or volume",
-                    "The anchor that makes Professional reasonable"
+                    "An anchor that makes Professional feel reasonable"
                   ],
                   "actions": [
                     {
@@ -548,7 +611,16 @@
               "layout": "card",
               "label": "Guarantee",
               "title": "30 days, full refund, one email",
-              "description": "No form to fill and no reason to give. If the page structure does not reduce your calls in the first month, write to us and we return the money. State yours this plainly or do not state one at all."
+              "description": "No form to fill and no reason to give. If the page structure does not reduce your calls in the first month, write to us and we return the money."
+            }
+          },
+          {
+            "widget": "Callout",
+            "props": {
+              "layout": "inline",
+              "tone": "primary",
+              "label": "Guarantee",
+              "description": "Right after the price, remove the last risk: a refund window, a free trial or a clear cancellation policy. Say it in one sentence and mean it."
             }
           }
         ]
@@ -607,6 +679,10 @@
               "title": "The questions that stop people from buying",
               "items": [
                 {
+                  "title": "When should a landing page be long instead of short?",
+                  "description": "When the decision is expensive, unfamiliar or emotional: a course, a service, a considered purchase. Short pages work for offers people already understand. Length is not the goal; answering every question before it is asked is."
+                },
+                {
                   "title": "Does anyone read a page this long?",
                   "description": "Buyers do, and skimmers read the headings. That is why every heading here carries the argument on its own — read only the H2s and you still get the pitch."
                 },
@@ -627,10 +703,15 @@
                   "description": "Scroll depth per block, and the offer click rate of visitors who reached it. Name those events before launch, so the first week already answers it."
                 },
                 {
-                  "title": "Are the numbers on this page real?",
-                  "description": "The case study is illustrative and labelled as a sample; the plan prices are samples too. Use only measured results on your own page — invented proof is the fastest way to lose the sale."
+                  "title": "How do I adapt this page to my product with AstroWind?",
+                  "description": "Copy the page, keep the order of the nine blocks and replace the copy block by block: your promise, your problem, your proof, your price. Every block is a widget from the template, so nothing needs new code."
+                },
+                {
+                  "title": "Are the numbers and testimonials on this page real?",
+                  "description": "No. The case study, the customer figures, the quote and the plan prices are samples, labelled as such. Use only measured results and real customers’ words, with permission, on your own page — invented proof is the fastest way to lose the sale."
                 }
-              ]
+              ],
+              "subtitle": "Answered here so the page, not a salesperson, handles them. The same answers feed a FAQ rich result in search."
             }
           }
         ]
@@ -659,6 +740,26 @@
                 }
               ]
             }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "CallToAction",
+      "props": {
+        "layout": "card",
+        "title": "Build your long-form sales page",
+        "subtitle": "This page is part of the free AstroWind template: Astro + Tailwind CSS, every block a reusable widget. Copy it, keep the order, replace the copy.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "Get the template",
+            "href": "https://github.com/arthelokyo/astrowind"
+          },
+          {
+            "variant": "secondary",
+            "text": "Read the guide",
+            "href": "/landing"
           }
         ]
       }
