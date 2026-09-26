@@ -14,8 +14,9 @@ const labels = ctx?.labels ?? {};
 const kind = ctx?.term?.kind === 'tags' ? labels.tagLabel ?? 'Tag' : ctx?.term?.kind === 'categories' ? labels.categoryLabel ?? 'Category' : ctx?.author ? labels.authorLabel ?? 'Author' : undefined;
 const series = ctx?.series;
 const fill = (t: string | undefined, v: Record<string, string | number>) => Object.entries(v).reduce((a, [k, x]) => a.replaceAll(`{${k}}`, String(x)), t ?? '');
-const title = p.title ?? series?.title ?? (ctx?.term ? (ctx.term.kind === 'tags' ? `#${ctx.term.name}` : ctx.term.name) : ctx?.author?.name ?? ctx?.listing.title);
-const subtitle = p.subtitle ?? series?.description ?? ctx?.term?.description ?? ctx?.author?.bio;
+const archive = ctx?.archive;
+const title = p.title ?? (archive ? labels.archiveTitle ?? 'Archive' : undefined) ?? series?.title ?? (ctx?.term ? (ctx.term.kind === 'tags' ? `#${ctx.term.name}` : ctx.term.name) : ctx?.author?.name ?? ctx?.listing.title);
+const subtitle = p.subtitle ?? (archive ? fill(labels.archiveSubtitle ?? 'Everything, by month. {total} posts in total.', { total: archive.total }) : undefined) ?? series?.description ?? ctx?.term?.description ?? ctx?.author?.bio;
 const tagline = p.tagline ?? (series ? fill(labels.seriesPublished ?? 'Series · {published} of {total} published', { published: series.published, total: series.total }) : undefined);
 const due = series?.parts.find((x) => x.upcoming);
 const note = series

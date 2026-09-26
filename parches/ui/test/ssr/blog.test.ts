@@ -18,6 +18,7 @@ import TOC from '../../src/widgets/blog/TOC.astro';
 import SeriesParts from '../../src/widgets/blog/SeriesParts.astro';
 import AuthorProfile from '../../src/widgets/blog/AuthorProfile.astro';
 import Writers from '../../src/widgets/blog/Writers.astro';
+import Archive from '../../src/widgets/blog/Archive.astro';
 import type { BlogArticle, BlogCard, BlogContext } from '../../src/lib/blog-context';
 
 let container: AstroContainer | null = null;
@@ -207,4 +208,21 @@ test("AuthorProfile shows the page's author; Writers lists the others", async ()
   ] }));
   expect(writers).toContain('Mark Rivera');
   expect(writers).not.toContain('href="/blog/author/jane"');
+});
+
+test('Archive: the year by month with counts, and the other years as links', async () => {
+  const archive = { year: 2026, total: 12, years: [
+    { year: 2026, count: 9, href: '/blog/archive', current: true },
+    { year: 2025, count: 3, href: '/blog/archive/2025', current: false },
+  ], months: [{ label: 'September 2026', count: 2, posts: [
+    { title: 'Post 1', href: '/post-1', date: '2026-09-01T00:00:00.000Z', dateText: '1 Sept 2026' },
+    { title: 'Post 2', href: '/post-2', date: '2026-09-02T00:00:00.000Z', dateText: '2 Sept 2026' },
+  ] }] };
+  const labels = { postsCount: '{count} posts', archiveEarlier: 'Earlier', archiveTitle: 'Archive', archiveSubtitle: 'Everything, by month. {total} posts in total.' };
+  const html = await render(Archive, {}, ctx({ archive, labels }));
+  expect(html).toContain('September 2026');
+  expect(html).toContain('2 posts');
+  expect(html).toContain('href="/blog/archive/2025"');
+  expect(html).not.toContain('href="/blog/archive"');
+  expect(await render(PageHeader, {}, ctx({ archive, labels }))).toContain('Everything, by month. 12 posts in total.');
 });

@@ -82,6 +82,13 @@ export interface BlogContext {
   article?: BlogArticle;
   /** On an author page: every writer, for "Other writers". */
   writers?: { key: string; name: string; role?: string; avatar?: { src: string; alt?: string }; href: string; count: number }[];
+  /** On an archive page. */
+  archive?: {
+    year: number;
+    total: number;
+    years: { year: number; count: number; href: string; current: boolean }[];
+    months: { label: string; count: number; posts: { title: string; href: string; date: string; dateText: string }[] }[];
+  };
   /** On a series page. */
   series?: {
     title: string;

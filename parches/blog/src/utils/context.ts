@@ -289,3 +289,39 @@ export async function writersContext(o: ContextOptions) {
   }
   return resolveAssets(writers);
 }
+
+/**
+ * An archive page's context: one year's posts grouped by month, newest first,
+ * and every year with its count, so a reader can get back to the thing they
+ * half remember. The newest year is the archive's own page.
+ */
+export async function archiveContext(year: number | undefined, o: ContextOptions) {
+  const { cfg, locale, defaultLocale, showDrafts } = o;
+  const all = getPublishedPosts(await getCollection('posts'), showDrafts, locale);
+  const yearOf = (p: Post) => p.data.publishDate.getUTCFullYear();
+  const counts = new Map<number, number>();
+  for (const p of all) counts.set(yearOf(p), (counts.get(yearOf(p)) ?? 0) + 1);
+  const years = [...counts.keys()].sort((a, b) => b - a);
+  const shown = year ?? years[0];
+  const base = localizePath(cfg.permalinks.archive, locale, defaultLocale);
+  const months = new Map<string, Post[]>();
+  for (const p of all.filter((x: Post) => yearOf(x) === shown)) {
+    const label = formatDate(p.data.publishDate, locale, { year: 'numeric', month: 'long' });
+    months.set(label, [...(months.get(label) ?? []), p]);
+  }
+  return {
+    year: shown,
+    total: all.length,
+    years: years.map((y) => ({ year: y, count: counts.get(y)!, href: y === years[0] ? base : `${base}/${y}`, current: y === shown })),
+    months: [...months].map(([label, posts]) => ({
+      label,
+      count: posts.length,
+      posts: posts.map((p: Post) => ({
+        title: p.data.title,
+        href: resolvePostPermalink(cfg.permalinks.post, p, locale, defaultLocale),
+        date: p.data.publishDate.toISOString(),
+        dateText: formatDate(p.data.publishDate, locale, cfg.dateFormat),
+      })),
+    })),
+  };
+}

@@ -48,7 +48,8 @@ the keys given. Components read the resolved values, never `preset`.
 | `series` | from the preset | Series pages and part-of-a-series boxes. |
 | `relatedPostsCount` | from the preset | Related posts after an article; `0` turns them off. |
 | `postsPerPage` | `12` | Posts per listing page. |
-| `tagIndexThreshold` | `3` | Tag pages with fewer posts are `noindex, follow`. |
+| `tagIndexThreshold` | `3` | Tag pages (and archive years) with fewer posts are `noindex, follow`. |
+| `archive` | `true` | The archive: the newest year by month at `/blog/archive`, earlier years at `/blog/archive/2025`. |
 | `readingTime`, `wordsPerMinute` | `true`, `200` | Reading time, computed from the body. |
 | `rss` | `true` | The feed, advertised in every page's head. |
 | `permalinks` | `/blog/…` | URL patterns for posts, listing, tags, categories, authors, series, feed. |
@@ -178,6 +179,11 @@ marked. Describe a series once in `src/content/series/<key>.json`:
 
 and join a post to it with `series: { name: getting-started, order: 2 }`.
 
+The `archive` view is `blog/PageHeader` ("Archive", "Everything, by month.
+12 posts in total.") over `blog/Archive`: the year's posts by month under a
+heavy rule with the count, and the earlier years as links. Every year is a
+real page, so nobody depends on scrolling to get back to March.
+
 Dates without a time (every frontmatter date) are UTC midnight and are
 formatted in UTC, so a post dated 2026-08-01 reads 1 August wherever the site
 is built; a `timeZone` in `dateFormat` wins.
@@ -192,6 +198,6 @@ is built; a `timeZone` in `dateFormat` wins.
 
 ## Not built yet
 
-The archive, subscribe and search pages,
+The subscribe and search pages,
 placements for ads and other elements, consent, comments, and structured
 data per page. See the plan in the session notes; each lands in this file.

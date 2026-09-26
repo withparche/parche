@@ -18,6 +18,7 @@ export const blogConfigSchema = z
         author: permalink,
         series: permalink,
         rss: permalink,
+        archive: permalink,
       })
       .partial()
       .strict()
@@ -35,6 +36,7 @@ export const blogConfigSchema = z
     authors: z.enum(['one', 'many']).optional(),
     aboutPath: permalink.optional(),
     tagIndexThreshold: z.number().int().min(0).optional(),
+    archive: z.boolean().optional(),
   })
   .strict();
 

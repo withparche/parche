@@ -95,6 +95,10 @@ export interface BlogLabels {
   seriesFollow: string;
   writingTitle: string;
   otherWriters: string;
+  /** The archive. Placeholders: {total}, {count}. */
+  archiveTitle: string;
+  archiveSubtitle: string;
+  archiveEarlier: string;
 }
 
 /** English defaults — the strings that were hardcoded across routes and widgets. */
@@ -158,6 +162,9 @@ export const DEFAULT_LABELS: BlogLabels = {
   seriesFollow: 'Upcoming parts are listed with their date, so readers know the series is alive.',
   writingTitle: 'Writing',
   otherWriters: 'Other writers',
+  archiveTitle: 'Archive',
+  archiveSubtitle: 'Everything, by month. {total} posts in total.',
+  archiveEarlier: 'Earlier',
 };
 
 /** Per-locale overrides, e.g. `{ es: { listingTitle: 'Blog' } }`. */

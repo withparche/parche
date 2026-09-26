@@ -78,6 +78,11 @@ export default function createBlog(config?: BlogConfig): ParcheManifest {
     });
   }
 
+  // Archive: the latest year by month, and a page per earlier year
+  if (resolved.archive) {
+    routes.push({ pattern: `${permalinkToRoutePattern(permalinks.archive)}/[...year]`, entrypoint: routePath('archive', '[...year].astro') });
+  }
+
   // RSS feed
   if (resolved.rss) {
     routes.push({
@@ -116,6 +121,7 @@ export default function createBlog(config?: BlogConfig): ParcheManifest {
         'blog/SeriesParts',
         'blog/AuthorProfile',
         'blog/Writers',
+        'blog/Archive',
         'Columns',
         'Column',
       ],

@@ -1,0 +1,40 @@
+---
+/**
+ * The archive: a year's posts grouped by month, each month under a heavy rule
+ * with its count, and the other years as links with theirs. Every page is a
+ * real, crawlable link: getting back to March must not depend on scrolling.
+ */
+import { blogContext } from '../../lib/blog-context';
+
+const ctx = blogContext(Astro.locals);
+const a = ctx?.archive;
+const labels = ctx?.labels ?? {};
+const count = (n: number) => (labels.postsCount ?? '{count} posts').replace('{count}', String(n));
+const others = (a?.years ?? []).filter((y) => !y.current);
+---
+
+{a && (
+  <div class="parche-archive">
+    {a.months.map((m) => (
+      <section class="mb-10">
+        <h2 class="flex items-baseline justify-between border-b-2 border-heading pb-2 font-heading text-lg font-semibold text-heading">
+          {m.label}<span class="font-mono text-xs font-normal text-muted">{count(m.count)}</span>
+        </h2>
+        <ul class="list-none p-0">
+          {m.posts.map((p) => (
+            <li class="flex items-baseline justify-between gap-6 border-b border-border py-3">
+              <a href={p.href} class="text-[16px] text-heading no-underline hover:text-primary">{p.title}</a>
+              <time datetime={p.date} class="font-mono text-xs whitespace-nowrap text-muted">{p.dateText}</time>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+    {others.length > 0 && (
+      <nav aria-label={labels.archiveEarlier ?? 'Earlier'} class="flex flex-wrap items-center gap-2">
+        <span class="mr-2 font-mono text-[10px] tracking-[0.16em] text-muted uppercase">{labels.archiveEarlier ?? 'Earlier'}</span>
+        {others.map((y) => <a href={y.href} class="rounded-sm border border-border bg-surface px-3 py-1.5 font-mono text-[13px] text-heading no-underline hover:border-primary">{y.year} · {y.count}</a>)}
+      </nav>
+    )}
+  </div>
+)}

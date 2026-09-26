@@ -77,6 +77,9 @@ for (const [site, want] of Object.entries(SITES)) {
   for (let n = 2; n <= lastPage; n++) check(existsSync(join(dist, want.listing, String(n), 'index.html')), `${site}: listing page ${n} missing`);
   check(!existsSync(join(dist, want.listing, String(lastPage + 1), 'index.html')), `${site}: listing page ${lastPage + 1} built past the last post`);
 
+  // The archive, newest year at its own address.
+  check(existsSync(join(dist, want.listing, 'archive', 'index.html')), `${site}: no archive at ${want.listing}/archive`);
+
   // Author pages exist only for a blog with several writers.
   const authorDir = join(dist, want.listing, 'author');
   check(existsSync(authorDir) === want.authorPages, `${site}: author pages ${want.authorPages ? 'missing' : 'built for a single-writer blog'}`);

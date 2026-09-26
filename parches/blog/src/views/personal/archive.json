@@ -1,0 +1,23 @@
+{
+  "sections": [
+    {
+      "widget": "Section",
+      "props": {
+        "width": "md"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "blog/PageHeader",
+            "props": {
+              "size": "md"
+            }
+          },
+          {
+            "widget": "blog/Archive"
+          }
+        ]
+      }
+    }
+  ]
+}

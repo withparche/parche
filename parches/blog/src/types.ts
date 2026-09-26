@@ -65,6 +65,8 @@ export interface BlogPermalinks {
   series?: string;
   /** RSS feed path. Default: '/rss.xml' */
   rss?: string;
+  /** Archive, by month; a year's page is `{archive}/{year}`. Default: '/blog/archive' */
+  archive?: string;
 }
 
 export interface BlogConfig {
@@ -117,6 +119,8 @@ export interface BlogConfig {
   aboutPath?: string;
   /** Tag pages with fewer posts than this are `noindex`: a thin page dilutes the site. Default: 3. */
   tagIndexThreshold?: number;
+  /** The archive by month and year, for the reader who half remembers a post. Default: true. */
+  archive?: boolean;
 }
 
 /** A kind of publication: a starting point for the blog's structure, never a lock. */
@@ -146,6 +150,7 @@ export interface ResolvedPermalinks {
   author: string;
   series: string;
   rss: string;
+  archive: string;
 }
 
 export interface ResolvedBlogConfig {
@@ -163,6 +168,7 @@ export interface ResolvedBlogConfig {
   authors: 'one' | 'many';
   aboutPath: string;
   tagIndexThreshold: number;
+  archive: boolean;
 }
 
 /**
@@ -184,6 +190,7 @@ export function resolveBlogConfig(config?: BlogConfig): ResolvedBlogConfig {
       author: p.author ?? '/blog/author/%author%',
       series: p.series ?? '/blog/series/%series%',
       rss: p.rss ?? '/rss.xml',
+      archive: p.archive ?? '/blog/archive',
     },
     postsPerPage: config?.postsPerPage ?? 12,
     readingTime: config?.readingTime ?? true,
@@ -200,6 +207,7 @@ export function resolveBlogConfig(config?: BlogConfig): ResolvedBlogConfig {
     authors: config?.authors ?? fromPreset.authors,
     aboutPath: config?.aboutPath ?? '/about',
     tagIndexThreshold: config?.tagIndexThreshold ?? 3,
+    archive: config?.archive ?? true,
   };
 }
 
