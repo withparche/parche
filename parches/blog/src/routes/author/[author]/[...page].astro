@@ -6,6 +6,7 @@
 import BlogPage from '../../../components/BlogPage.astro';
 import { baseContext, toCards, toPage, writersContext } from '../../../utils/context.js';
 import config from 'parche:config';
+import { generateItemListJsonLd, generatePersonJsonLd } from '../../../utils/blog-metadata.js';
 import blogConfig from 'parche:app/blog';
 import { getCollection, getEntry } from 'astro:content';
 import { queryPostsByAuthor } from '../../../utils/blog-query.js';
@@ -131,7 +132,10 @@ const context = {
   writers: await writersContext(opts),
 };
 
+const siteUrl = config.site || Astro.site?.href || '';
 const metadata = {
+  pageType: 'ProfilePage',
+  jsonLd: [generatePersonJsonLd({ name: authorData.name, role: authorData.role, bio: authorData.bio, image: resolvedAuthor.avatar?.src, url: authorBaseUrl, sameAs: links.map((l) => l.href) }, siteUrl), generateItemListJsonLd(context.posts.map((c) => ({ name: c.title, url: c.href })), siteUrl)],
   title: `${authorData.name}${pageNum > 1 ? ` · ${pageNum}` : ''} — ${site.brand.name}`,
   description: authorData.bio ?? format(labels.authorTitle, { value: authorData.name }),
   noindex: false,

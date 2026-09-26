@@ -234,6 +234,12 @@ export interface ParcheManifest {
    */
   head?: { links?: HeadLink[] };
   /**
+   * The site's search address, with `{search_term_string}` where the query
+   * goes ('/search?q={search_term_string}'): the WebSite structured data
+   * advertises it as a SearchAction. The last parche that declares one wins.
+   */
+  siteSearch?: string;
+  /**
    * Work a parche does at a point of the build, with what Astro gives that
    * hook. `astro:build:done` runs after core's own (robots.txt), in parche
    * order: a blog builds its search index over the built pages there.
@@ -390,6 +396,8 @@ export interface ResolvedRegistry {
   fonts: import('../config/font-variables.js').ParcheFontDef[];
   /** `<link>` tags the parches add to every page's head. */
   headLinks: HeadLink[];
+  /** The site's search address for the WebSite SearchAction, if a parche has one. */
+  siteSearch?: string;
   /** The parches' build-done hooks, in parche order, with the parche's name. */
   buildDone: { name: string; run: NonNullable<NonNullable<ParcheManifest['hooks']>['astro:build:done']> }[];
   /** Whether to show the floating theme panel */

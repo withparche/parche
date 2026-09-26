@@ -288,6 +288,23 @@ createBlog({ comments: { repo: 'owner/repo', repoId: 'R_…', category: 'Comment
 
 Without `comments` the widget renders nothing.
 
+### Structured data
+
+Every blog page says what it is:
+
+| Page | schema.org |
+|---|---|
+| Index, tag, category, archive, series | `CollectionPage` with an `ItemList` of the page's posts (or the series' parts) in order |
+| Author | `ProfilePage` with a `Person` (role, bio, portrait, profiles as `sameAs`) and the posts |
+| Article | `BlogPosting`, or `NewsArticle` for the magazine preset, with the author and their page, and one `BreadcrumbList` |
+| Search | `SearchResultsPage`, noindex |
+
+The site's `WebSite` node advertises the search as a `SearchAction`
+(`/search?q={search_term_string}`). Two generic pieces of core make this
+work for any parche: a route's metadata may set `pageType` for the WebPage
+node, and a page's own structured data of a kind (an article, a trail)
+replaces the one core would generate, so nothing is described twice.
+
 Dates without a time (every frontmatter date) are UTC midnight and are
 formatted in UTC, so a post dated 2026-08-01 reads 1 August wherever the site
 is built; a `timeZone` in `dateFormat` wins.
@@ -300,6 +317,3 @@ is built; a `timeZone` in `dateFormat` wins.
   `src/content/series/<key>.json` describes the series once (`title`,
   `description`, `status`, `upcoming` parts with their date).
 
-## Not built yet
-
-Structured data per page. It lands in this file.

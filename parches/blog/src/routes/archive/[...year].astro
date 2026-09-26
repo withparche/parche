@@ -7,6 +7,7 @@
 import BlogPage from '../../components/BlogPage.astro';
 import { archiveContext, baseContext } from '../../utils/context.js';
 import config from 'parche:config';
+import { generateItemListJsonLd } from '../../utils/blog-metadata.js';
 import blogConfig from 'parche:app/blog';
 import { defaultLocale, locales } from 'parche:config/i18n';
 import { localizeSiteConfig } from 'parche:utils/site';
@@ -45,7 +46,10 @@ const alternates = toAbsolute(
 const context = { ...(await baseContext('archive', opts)), posts: [], archive };
 const count = archive.months.reduce((n, m) => n + m.count, 0);
 
+const siteUrl = config.site || Astro.site?.href || '';
 const metadata = {
+  pageType: 'CollectionPage',
+  jsonLd: [generateItemListJsonLd(archive.months.flatMap((m) => m.posts.map((x) => ({ name: x.title, url: x.href }))), siteUrl)],
   title: `${labels.archiveTitle}${asked ? ` · ${asked}` : ''} — ${site.brand.name}`,
   description: format(labels.archiveSubtitle, { total: archive.total }),
   // A year with only a post or two is a thin page: kept for readers, out of the index.

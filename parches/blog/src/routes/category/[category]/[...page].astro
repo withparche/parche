@@ -6,6 +6,7 @@
 import BlogPage from '../../../components/BlogPage.astro';
 import { baseContext, toCards, toPage } from '../../../utils/context.js';
 import config from 'parche:config';
+import { generateItemListJsonLd } from '../../../utils/blog-metadata.js';
 import blogConfig from 'parche:app/blog';
 import { queryPostsByCategory, queryAllCategories } from '../../../utils/blog-query.js';
 import { resolveTaxonomyPermalink } from '../../../types.js';
@@ -104,7 +105,10 @@ const context = {
   term: { kind: 'categories' as const, name: term.title, href: categoryBaseUrl, count: page.total, ...(term.description ? { description: term.description } : {}) },
 };
 
+const siteUrl = config.site || Astro.site?.href || '';
 const metadata = {
+  pageType: 'CollectionPage',
+  jsonLd: [generateItemListJsonLd(context.posts.map((c) => ({ name: c.title, url: c.href })), siteUrl)],
   title: `${format(labels.categoryTitle, { value: term.title })}${pageNum > 1 ? ` · ${pageNum}` : ''} — ${site.brand.name}`,
   description: term.description ?? format(labels.categoryDescription, { value: term.title }),
   noindex: false,

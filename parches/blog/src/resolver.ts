@@ -15,7 +15,7 @@ import { querySinglePost } from './utils/blog-query.js';
 import { calculateReadingTime } from './utils/reading-time.js';
 import { extractTOC } from './utils/toc.js';
 import { generateBlogPostingJsonLd, generateBreadcrumbJsonLd } from './utils/blog-metadata.js';
-import { resolvePostPermalink, resolveTaxonomyPermalink, localizePath } from './types.js';
+import { resolvePostPermalink, resolveTaxonomyPermalink, resolveAuthorHref, localizePath } from './types.js';
 import { createTaxonomyResolver } from './utils/taxonomy.js';
 
 interface ResolveOptions {
@@ -119,10 +119,12 @@ export async function resolve(
   const postData = await resolveAssets({ ...post.data, readingTime });
 
   const blogPostingJsonLd = generateBlogPostingJsonLd({
+    type: cfg.preset === 'magazine' ? 'NewsArticle' : 'BlogPosting',
     post: postData,
     url: pageUrl,
     siteUrl,
     authorName: authorData[0]?.name,
+    ...(authorData[0]?.slug ? { authorUrl: `${siteUrl.replace(/\/$/, '')}${resolveAuthorHref(cfg, authorData[0].slug, locale, defaultLocale)}` } : {}),
   });
   const breadcrumbJsonLd = generateBreadcrumbJsonLd([
     { name: labels.home, url: `${base}${localizePath('/', locale, defaultLocale)}` || '/' },

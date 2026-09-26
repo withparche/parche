@@ -65,6 +65,8 @@ declare module 'parche:config/fonts' {
 declare module 'parche:config/head' {
   /** `<link>` tags the parches add to every page's head (a blog's feed). */
   export const headLinks: Array<{ rel: string; href: string; type?: string; title?: string; hreflang?: string }>;
+  /** The site's search address for the WebSite SearchAction, or null. */
+  export const siteSearch: string | null;
 }
 
 declare module 'parche:config/themes' {

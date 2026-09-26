@@ -140,7 +140,7 @@ export default function createBlog(config?: BlogConfig): ParcheManifest {
     // Feed readers and browsers find the feed from any page's head.
     ...(resolved.rss ? { head: { links: [{ rel: 'alternate', type: 'application/rss+xml', href: permalinks.rss }] } } : {}),
     config: resolved as unknown as Record<string, unknown>,
-    ...(resolved.search ? { hooks: { 'astro:build:done': buildSearchIndex } } : {}),
+    ...(resolved.search ? { hooks: { 'astro:build:done': buildSearchIndex }, siteSearch: `${resolved.search.path}?q={search_term_string}` } : {}),
     requires: {
       elements: ['Container', 'Section'],
       widgets: [

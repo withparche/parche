@@ -3,7 +3,7 @@ import '../styles/base.css';
 import { ClientRouter } from 'astro:transitions';
 import Font from 'astro/components/Font.astro';
 import { fonts as parcheFontDefs } from 'parche:config/fonts';
-import { headLinks } from 'parche:config/head';
+import { headLinks, siteSearch } from 'parche:config/head';
 import type { ResolvedMetadata } from '../utils/metadata';
 import { buildRobotsContent, buildBreadcrumbs, buildJsonLdGraph } from '../utils/metadata';
 import type { SiteConfig } from '../types/config';
@@ -65,7 +65,7 @@ const absoluteConfig = Astro.site && (resolvedConfig as any).metadata?.organizat
       },
     }
   : resolvedConfig;
-const jsonLdGraph = buildJsonLdGraph(metadata, canonicalURL, siteUrl, absoluteConfig, breadcrumbs);
+const jsonLdGraph = buildJsonLdGraph(metadata, canonicalURL, siteUrl, absoluteConfig, breadcrumbs, siteSearch ?? undefined);
 
 const verification = config.metadata?.verification;
 const preconnect = config.metadata?.preconnect ?? [];

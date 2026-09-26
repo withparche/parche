@@ -6,6 +6,7 @@
 import BlogPage from '../../components/BlogPage.astro';
 import { baseContext, seriesContext } from '../../utils/context.js';
 import config from 'parche:config';
+import { generateItemListJsonLd } from '../../utils/blog-metadata.js';
 import blogConfig from 'parche:app/blog';
 import { queryPostsBySeries, queryAllSeries } from '../../utils/blog-query.js';
 import { defaultLocale, locales } from 'parche:config/i18n';
@@ -67,7 +68,10 @@ const opts = { cfg, locale, defaultLocale, showDrafts };
 const series = await seriesContext(seriesName, posts, opts);
 const context = { ...(await baseContext('series', opts)), posts: [], series };
 
+const siteUrl = config.site || Astro.site?.href || '';
 const metadata = {
+  pageType: 'CollectionPage',
+  jsonLd: [generateItemListJsonLd(series.parts.map((p) => ({ name: p.title, url: p.href })), siteUrl)],
   title: `${series.title} — ${site.brand.name}`,
   description: series.description ?? format(labels.seriesDescription, { value: series.title }),
   noindex: false,

@@ -8,6 +8,7 @@
  * In both cases, the actual locale-filtered query happens at render time.
  */
 import config from 'parche:config';
+import { generateItemListJsonLd } from '../../utils/blog-metadata.js';
 import blogConfig from 'parche:app/blog';
 import BlogPage from '../../components/BlogPage.astro';
 import { queryBlogListing } from '../../utils/blog-query.js';
@@ -82,7 +83,10 @@ const context = {
   page: toPage(page, baseUrl),
 };
 
+const siteUrl = config.site || Astro.site?.href || '';
 const metadata = {
+  pageType: 'CollectionPage',
+  jsonLd: [generateItemListJsonLd(context.posts.map((c) => ({ name: c.title, url: c.href })), siteUrl)],
   title: `${context.listing.title}${pageNum > 1 ? ` · ${pageNum}` : ''} — ${site.brand.name}`,
   description: site.brand.description,
   noindex: false,

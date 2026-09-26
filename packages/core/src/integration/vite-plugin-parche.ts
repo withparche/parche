@@ -538,7 +538,7 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
       if (id === TEMPLATE_MAP_VIRTUAL) return generateTemplateMapModule(registry);
       if (id === I18N_CONFIG_VIRTUAL) return generateI18nConfigModule(registry);
       if (id === FONTS_CONFIG_VIRTUAL) return `export const fonts = ${JSON.stringify(registry.fonts)};\n`;
-      if (id === HEAD_CONFIG_VIRTUAL) return `export const headLinks = ${JSON.stringify(registry.headLinks ?? [])};\n`;
+      if (id === HEAD_CONFIG_VIRTUAL) return `export const headLinks = ${JSON.stringify(registry.headLinks ?? [])};\nexport const siteSearch = ${JSON.stringify(registry.siteSearch ?? null)};\n`;
       if (id === THEMES_CONFIG_VIRTUAL) return generateThemesConfigModule(registry);
       if (id === STYLES_CONFIG_VIRTUAL) return generateStylesModule(registry);
       if (id === LAYOUT_CONFIG_VIRTUAL) return generateLayoutConfigModule(registry);

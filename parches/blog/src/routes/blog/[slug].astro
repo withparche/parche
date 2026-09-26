@@ -20,7 +20,7 @@ import { toAbsolute } from '../../utils/alternates.js';
 import { querySinglePost } from '../../utils/blog-query.js';
 import { calculateReadingTime } from '../../utils/reading-time.js';
 import { generateBlogPostingJsonLd, generateBreadcrumbJsonLd } from '../../utils/blog-metadata.js';
-import { resolvePostPermalink, resolveTaxonomyPermalink, localizePath } from '../../types.js';
+import { resolvePostPermalink, resolveTaxonomyPermalink, resolveAuthorHref, localizePath } from '../../types.js';
 import { resolveLayout } from 'parche:utils/layout';
 import { defaultLocale } from 'parche:config/i18n';
 import { localizeSiteConfig } from 'parche:utils/site';
@@ -118,10 +118,12 @@ const TemplateComponent = templateMap[post.data.template || 'blog-post'];
 const base = siteUrl.replace(/\/$/, '');
 const pageUrl = `${base}${resolvePostPermalink(permalinks.post, post, locale, defaultLocale)}`;
 const blogPostingJsonLd = generateBlogPostingJsonLd({
+  type: cfg.preset === 'magazine' ? 'NewsArticle' : 'BlogPosting',
   post: { ...post.data, readingTime },
   url: pageUrl,
   siteUrl,
   authorName: authorData[0]?.name,
+  ...(authorData[0]?.slug ? { authorUrl: `${base}${resolveAuthorHref(cfg, authorData[0].slug, locale, defaultLocale)}` } : {}),
 });
 const breadcrumbJsonLd = generateBreadcrumbJsonLd([
   { name: labels.home, url: `${base}${localizePath('/', locale, defaultLocale)}` || '/' },

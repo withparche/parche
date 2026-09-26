@@ -28,6 +28,12 @@ export interface ResolvedMetadata {
   jsonLd?: unknown;
   siteName: string;
   locale: string;
+  /**
+   * The schema.org type of the page's WebPage node: 'CollectionPage' for a
+   * list of posts, 'ProfilePage' for a person, 'SearchResultsPage'. Default
+   * 'WebPage'.
+   */
+  pageType?: string;
 }
 
 /**
@@ -118,6 +124,8 @@ export interface JsonLdWebSite {
   name: string;
   url: string;
   description?: string;
+  /** The site's search address, with `{search_term_string}` where the query goes. */
+  search?: string;
 }
 
 export interface JsonLdWebPage {
@@ -125,6 +133,7 @@ export interface JsonLdWebPage {
   url: string;
   description?: string;
   isPartOf?: { name: string; url: string };
+  type?: string;
 }
 
 export function generateJsonLdWebSite(site: JsonLdWebSite): Record<string, unknown> {
@@ -133,12 +142,19 @@ export function generateJsonLdWebSite(site: JsonLdWebSite): Record<string, unkno
     name: site.name,
     url: site.url,
     ...(site.description && { description: site.description }),
+    ...(site.search && {
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: { '@type': 'EntryPoint', urlTemplate: site.search },
+        'query-input': 'required name=search_term_string',
+      },
+    }),
   };
 }
 
 export function generateJsonLdWebPage(page: JsonLdWebPage): Record<string, unknown> {
   return {
-    '@type': 'WebPage',
+    '@type': page.type ?? 'WebPage',
     name: page.name,
     url: page.url,
     ...(page.description && { description: page.description }),
@@ -233,6 +249,7 @@ export function buildJsonLdGraph(
   siteUrl: string,
   config: SiteConfig,
   breadcrumbs?: BreadcrumbItem[],
+  siteSearch?: string,
 ): string {
   const graph: Record<string, unknown>[] = [];
 
@@ -241,6 +258,8 @@ export function buildJsonLdGraph(
     name: resolved.siteName,
     url: siteUrl,
     description: config.brand.description || undefined,
+    // Absolute: the search a parche declares, on this site's origin.
+    search: siteSearch ? new URL(siteSearch.replace('{search_term_string}', '__q__'), siteUrl).href.replace('__q__', '{search_term_string}') : undefined,
   }));
 
   // WebPage
@@ -249,19 +268,27 @@ export function buildJsonLdGraph(
     url: pageUrl,
     description: resolved.description || undefined,
     isPartOf: { name: resolved.siteName, url: siteUrl },
+    type: resolved.pageType,
   }));
 
   // Organization
   const org = generateJsonLdOrganization(config);
   if (org) graph.push(org);
 
+  // A page's own structured data of a kind replaces what would be generated:
+  // a blog's BlogPosting (or NewsArticle) and its own trail win over the
+  // generic Article and the path's breadcrumbs, so nothing is described twice.
+  const own = (Array.isArray(resolved.jsonLd) ? resolved.jsonLd : resolved.jsonLd ? [resolved.jsonLd] : []) as Record<string, unknown>[];
+  const ownTypes = new Set(own.map((n) => n?.['@type']));
+  const ARTICLES = ['Article', 'BlogPosting', 'NewsArticle', 'TechArticle', 'ScholarlyArticle', 'Report'];
+
   // BreadcrumbList
-  if (breadcrumbs && breadcrumbs.length > 1) {
+  if (breadcrumbs && breadcrumbs.length > 1 && !ownTypes.has('BreadcrumbList')) {
     graph.push(generateJsonLdBreadcrumbList(breadcrumbs));
   }
 
   // Article
-  const article = generateJsonLdArticle(resolved, pageUrl);
+  const article = ARTICLES.some((t) => ownTypes.has(t)) ? null : generateJsonLdArticle(resolved, pageUrl);
   if (article) graph.push(article);
 
   // Custom JSON-LD escape hatch

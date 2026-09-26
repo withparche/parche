@@ -71,6 +71,12 @@ for (const [site, want] of Object.entries(SITES)) {
   }
   for (const [href, from] of broken) failures.push(`${site}: ${from} links to ${href}, which was not built`);
 
+  // The listing is a CollectionPage with its posts as an ItemList, and the
+  // site advertises its search.
+  const listingHtml = readFileSync(join(dist, want.listing, 'index.html'), 'utf8');
+  check(/"@type":"CollectionPage"/.test(listingHtml) && /"@type":"ItemList"/.test(listingHtml), `${site}: the listing is not a CollectionPage with an ItemList`);
+  check(/"@type":"SearchAction"/.test(listingHtml), `${site}: the WebSite does not advertise the search`);
+
   // The listing and its pages.
   const lastPage = Math.max(1, Math.ceil(want.posts / want.perPage));
   check(existsSync(join(dist, want.listing, 'index.html')), `${site}: no listing at ${want.listing}`);
@@ -108,6 +114,10 @@ for (const [site, want] of Object.entries(SITES)) {
     const html = readFileSync(file, 'utf8');
     const lead = html.match(/<h1[^>]*>[\s\S]*?<\/h1>\s*(?:<[^>]+>\s*)*<p[^>]*>([^<]{20,})/);
     check(!!lead, `${site}: ${file.slice(dist.length)} shows no lead paragraph under its title`);
+    // Described once: one article node, one trail.
+    const graph = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)?.[1] ?? '{"@graph":[]}')['@graph'];
+    const kinds = graph.map((n) => n['@type']);
+    check(kinds.filter((t) => ['Article', 'BlogPosting', 'NewsArticle'].includes(t)).length === 1 && kinds.filter((t) => t === 'BreadcrumbList').length === 1, `${site}: ${file.slice(dist.length)} describes its article or trail more than once (${kinds.join(', ')})`);
     check(html.includes('parche-read-next'), `${site}: ${file.slice(dist.length)} has no "Read next"`);
     // The company preset's article carries a table of contents; the personal one does not.
     check(html.includes('<parche-toc') === want.toc, `${site}: ${file.slice(dist.length)} ${want.toc ? 'has no' : 'has a'} table of contents`);
