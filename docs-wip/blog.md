@@ -50,6 +50,7 @@ the keys given. Components read the resolved values, never `preset`.
 | `postsPerPage` | `12` | Posts per listing page. |
 | `tagIndexThreshold` | `3` | Tag pages (and archive years) with fewer posts are `noindex, follow`. |
 | `archive` | `true` | The archive: the newest year by month at `/blog/archive`, earlier years at `/blog/archive/2025`. |
+| `search` | on | `true`, `false` or `{ path? }`: a Pagefind index built after the site and a search page at `path` (default `/search`, noindex). Needs the posts prerendered. |
 | `subscribe` | off | `{ endpoint?, path? }`: a subscribe page at `path` (default `/subscribe`) and the forms the views place. `endpoint` is where the form posts; without one the send is simulated, for a demo. |
 | `readingTime`, `wordsPerMinute` | `true`, `200` | Reading time, computed from the body. |
 | `rss` | `true` | The feed, advertised in every page's head. |
@@ -195,6 +196,19 @@ The author box of a one-writer blog offers "Get the next one by email", and
 an announced series part links to the page. Without `subscribe` none of this
 renders and no page is built: a form that goes nowhere is not a subscription.
 
+### Search
+
+After the build the blog runs Pagefind over the built site (a parche
+`astro:build:done` hook) and writes `pagefind/` next to it. Only articles are
+indexed: the article body carries `data-pagefind-body`, and the title,
+category and date are its metadata. The `search` view is the page header over
+`blog/Search`, the Search element on that index: it loads the index on the
+first search, searches as the reader types, keeps the query in the address
+(`/search?q=postgres`, so a link to a search works), lists category · date,
+title and an excerpt with the match marked, and, when nothing matches, offers
+the most used topics, the archive and the subscription. Without script the
+page says where to go instead.
+
 Dates without a time (every frontmatter date) are UTC midnight and are
 formatted in UTC, so a post dated 2026-08-01 reads 1 August wherever the site
 is built; a `timeZone` in `dateFormat` wins.
@@ -209,6 +223,5 @@ is built; a `timeZone` in `dateFormat` wins.
 
 ## Not built yet
 
-The search page,
-placements for ads and other elements, consent, comments, and structured
-data per page. See the plan in the session notes; each lands in this file.
+Placements for ads and other elements, consent, comments, and structured
+data per page. Each lands in this file.

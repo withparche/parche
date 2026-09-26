@@ -15,7 +15,7 @@
         "search": {
           "label": "Search",
           "shortcut": "⌘K",
-          "href": "/blog"
+          "href": "/search"
         },
         "controls": {
           "theme": "text",

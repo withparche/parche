@@ -1,0 +1,14 @@
+{
+  "name": "search",
+  "type": "element",
+  "files": [
+    { "path": "Search.astro", "type": "part" },
+    { "path": "search.element.ts", "type": "element" },
+    { "path": "search.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": [],
+  "source": null
+}

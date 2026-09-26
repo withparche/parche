@@ -234,6 +234,14 @@ export interface ParcheManifest {
    */
   head?: { links?: HeadLink[] };
   /**
+   * Work a parche does at a point of the build, with what Astro gives that
+   * hook. `astro:build:done` runs after core's own (robots.txt), in parche
+   * order: a blog builds its search index over the built pages there.
+   */
+  hooks?: {
+    'astro:build:done'?: (ctx: { dir: URL; logger: { info(msg: string): void; warn(msg: string): void } }) => void | Promise<void>;
+  };
+  /**
    * Absolute globs of this parche's own component files, so Tailwind scans them
    * and generates the utility classes they use. A parche must contribute these
    * for its classes to survive being installed from npm (relative `@source`
@@ -382,6 +390,8 @@ export interface ResolvedRegistry {
   fonts: import('../config/font-variables.js').ParcheFontDef[];
   /** `<link>` tags the parches add to every page's head. */
   headLinks: HeadLink[];
+  /** The parches' build-done hooks, in parche order, with the parche's name. */
+  buildDone: { name: string; run: NonNullable<NonNullable<ParcheManifest['hooks']>['astro:build:done']> }[];
   /** Whether to show the floating theme panel */
   showPanel: boolean;
   /** Absolute CSS paths to import via parche:config/styles (parche-contributed + user entry) */

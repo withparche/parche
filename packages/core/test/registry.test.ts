@@ -69,6 +69,13 @@ test('head links are collected from the parches in order, the same rel and href 
   assert.deepEqual(createRegistry({ parches: [] }, ROOT).headLinks, []);
 });
 
+test('build-done hooks are collected in parche order, with their name', () => {
+  const run = async () => {};
+  const reg = createRegistry({ parches: [{ name: 'blog', hooks: { 'astro:build:done': run } }, { name: 'ui' }] }, ROOT);
+  assert.deepEqual(reg.buildDone.map((h) => h.name), ['blog']);
+  assert.equal(reg.buildDone[0].run, run);
+});
+
 test('duplicate widget across parches warns (last wins), not silent', () => {
   const warnings = captureWarnings(() => {
     createRegistry(

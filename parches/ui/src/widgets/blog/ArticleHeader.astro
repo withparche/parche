@@ -26,10 +26,10 @@ const title = post ? (post.issue ? `#${post.issue} · ${post.title}` : post.titl
       {p.breadcrumb && ctx && (
         <nav aria-label="Breadcrumb" class="mb-5 text-sm text-muted">
           <a href={ctx.listing.href} class="text-inherit no-underline hover:text-primary">{ctx.listing.title}</a>
-          {post.category && (<><span aria-hidden="true" class="mx-2">/</span><a href={post.category.href} class="text-primary no-underline hover:underline">{post.category.name}</a></>)}
+          {post.category && (<><span aria-hidden="true" class="mx-2">/</span><a href={post.category.href} data-pagefind-meta="category" class="text-primary no-underline hover:underline">{post.category.name}</a></>)}
         </nav>
       )}
-      <h1 class="font-heading text-[clamp(34px,5vw,58px)] leading-[1.04] font-semibold tracking-[-0.03em] text-balance text-heading">{title}</h1>
+      <h1 data-pagefind-meta="title" class="font-heading text-[clamp(34px,5vw,58px)] leading-[1.04] font-semibold tracking-[-0.03em] text-balance text-heading">{title}</h1>
       {post.excerpt && <p class="mt-5 text-[clamp(18px,1.9vw,21px)] leading-[1.55] text-pretty text-muted">{post.excerpt}</p>}
       <div class="mt-7 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-4">
         <p class="flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] text-muted">
@@ -42,7 +42,7 @@ const title = post ? (post.issue ? `#${post.issue} · ${post.title}` : post.titl
               </span>
             </span>
           )}
-          <time datetime={post.date}>{post.dateText}</time>
+          <time datetime={post.date} data-pagefind-meta="date">{post.dateText}</time>
           {post.readingTime && <span>· {post.readingTime}</span>}
         </p>
         {p.share && a && <Share url={a.url} title={post.title} networks={['copy']} label={labels.shareAction ?? 'Share'} copiedText={labels.copied ?? 'Link copied'} class="text-xs" />}

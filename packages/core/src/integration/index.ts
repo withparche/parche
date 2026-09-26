@@ -8,6 +8,7 @@ import fs from 'node:fs';
 import { z } from 'zod';
 import { vitePluginParche } from './vite-plugin-parche.js';
 import { createRegistry } from './registry.js';
+import type { ResolvedRegistry } from './types.js';
 import { siteConfigSchema, type SiteConfig } from '../types/config.js';
 import type { ParcheUserConfig, ParchePreset, ParcheSeoConfig, UIRegistry, ParcheApp, ParcheManifest, ParcheRequires } from './types.js';
 
@@ -161,6 +162,8 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
   // Whether anything will actually produce /sitemap-index.xml. robots.txt
   // must not advertise a file the build never writes.
   let hasSitemap = false;
+  // The parches' build-done hooks, collected at setup.
+  let buildDone: ResolvedRegistry['buildDone'] = [];
   return {
     name: 'parche',
     hooks: {
@@ -209,6 +212,7 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
         }
         const rootDir = fileURLToPath(config.root);
         const resolvedRegistry = createRegistry(resolved, rootDir, parcheI18n ?? config.i18n, servedSiteConfig);
+        buildDone = resolvedRegistry.buildDone;
 
         // Fonts are data in the config and manifests; Astro needs provider
         // objects, which is code — so Parche builds them here. Same rule as the
@@ -273,8 +277,12 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
         });
       },
 
-      'astro:build:done': ({ dir }) => {
+      'astro:build:done': async ({ dir, logger }) => {
         processRobotsTxt(dir, resolvedSiteUrl, allowAICrawlers, hasSitemap);
+        // Then each parche's own, in order, with its name on what it logs.
+        for (const hook of buildDone) {
+          await hook.run({ dir, logger: logger.fork(`parche:${hook.name}`) });
+        }
       },
     },
   };

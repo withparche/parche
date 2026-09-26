@@ -1,4 +1,8 @@
 import { fileURLToPath } from 'node:url';
+// Imported with the config: a dynamic import in the build-done hook would go
+// through Vite's module runner, which is closed by then. Importing it starts
+// nothing; the Pagefind binary runs only while the index is built.
+import * as pagefind from 'pagefind';
 import path from 'node:path';
 import type { ParcheManifest } from '@parche/astro';
 import type { BlogConfig } from './types.js';
@@ -19,6 +23,25 @@ function isRootLevelPermalink(permalink: string): boolean {
   const routePattern = permalinkToRoutePattern(permalink);
   // If every segment is dynamic (wrapped in []), it conflicts with [...slug]
   return routePattern.split('/').every((seg) => seg.startsWith('['));
+}
+
+/**
+ * Builds the search index over the built site with Pagefind, into
+ * `<out>/pagefind/`. Only what an article marks with `data-pagefind-body` is
+ * indexed, so the search finds posts, not every page that mentions a word.
+ */
+async function buildSearchIndex({ dir, logger }: { dir: URL; logger: { info(m: string): void; warn(m: string): void } }) {
+  try {
+    const { index, errors } = await pagefind.createIndex({});
+    if (!index) throw new Error(errors.join('; '));
+    const { page_count } = await index.addDirectory({ path: fileURLToPath(dir) });
+    const written = await index.writeFiles({ outputPath: fileURLToPath(new URL('pagefind/', dir)) });
+    if (written.errors.length) throw new Error(written.errors.join('; '));
+    if (page_count === 0) logger.warn('search: no prerendered posts to index; the search page will find nothing.');
+    else logger.info(`search: index written from ${page_count} built page(s); only articles are searchable`);
+  } finally {
+    await pagefind.close();
+  }
 }
 
 /**
@@ -88,6 +111,11 @@ export default function createBlog(config?: BlogConfig): ParcheManifest {
     routes.push({ pattern: resolved.subscribe.path.replace(/^\//, ''), entrypoint: routePath('subscribe.astro') });
   }
 
+  // The search page (the index is built after the site, below)
+  if (resolved.search) {
+    routes.push({ pattern: resolved.search.path.replace(/^\//, ''), entrypoint: routePath('search.astro') });
+  }
+
   // RSS feed
   if (resolved.rss) {
     routes.push({
@@ -107,6 +135,7 @@ export default function createBlog(config?: BlogConfig): ParcheManifest {
     // Feed readers and browsers find the feed from any page's head.
     ...(resolved.rss ? { head: { links: [{ rel: 'alternate', type: 'application/rss+xml', href: permalinks.rss }] } } : {}),
     config: resolved as unknown as Record<string, unknown>,
+    ...(resolved.search ? { hooks: { 'astro:build:done': buildSearchIndex } } : {}),
     requires: {
       elements: ['Container', 'Section'],
       widgets: [
@@ -129,6 +158,7 @@ export default function createBlog(config?: BlogConfig): ParcheManifest {
         'blog/Archive',
         'blog/Subscribe',
         'blog/IssuePreview',
+        'blog/Search',
         'Columns',
         'Column',
       ],

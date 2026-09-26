@@ -84,3 +84,50 @@ test.describe('LoadMore', () => {
     await expectAccessible(page);
   });
 });
+
+test.describe('Search', () => {
+  // A stand-in for the Pagefind bundle the site build writes.
+  const fake = `
+    const pages = [
+      { url: '/postgres', excerpt: 'How we run <mark>Postgres</mark> on one box &amp; why', meta: { title: 'Postgres on one box', category: 'Engineering', date: '3 Sept 2026' } },
+      { url: '/self-hosting', excerpt: 'One container, any <mark>Postgres</mark>', meta: { title: 'Self-hosting ships', category: 'Product' } },
+    ];
+    export async function search(q) {
+      const hits = pages.filter((p) => p.meta.title.toLowerCase().includes(q.toLowerCase()) || p.excerpt.toLowerCase().includes(q.toLowerCase()));
+      return { results: hits.map((p) => ({ data: async () => p })) };
+    }`;
+
+  test('searches as the reader types, keeps the query in the address, and offers a way on when nothing matches', async ({ page }) => {
+    await page.route('**/pagefind-example/pagefind.js', (route) => route.fulfill({ contentType: 'text/javascript', body: fake }));
+    await page.goto('/search');
+    const root = example(page, 'basic').locator('parche-search');
+    test.skip(jsDisabled(), 'without script it is a form and a note');
+    await expect(root.locator('[data-part="nojs"]')).toBeHidden();
+    const field = root.getByRole('searchbox');
+    await field.fill('postgres');
+    await expect(root.locator('[data-part="status"]')).toHaveText('2 results for “postgres”');
+    await expect(root.locator('[data-part="results"] a')).toHaveText(['Postgres on one box', 'Self-hosting ships']);
+    await expect(root.locator('[data-part="results"] li').first()).toContainText('Engineering · 3 Sept 2026');
+    await expect(root.locator('[data-part="results"] mark').first()).toHaveText('Postgres');
+    await expect(page).toHaveURL(/\?q=postgres$/);
+    await field.fill('zzqx');
+    await expect(root.locator('[data-part="status"]')).toHaveText('Nothing matches “zzqx”.');
+    await expect(root.locator('[data-part="empty"]')).toBeVisible();
+    await field.press('Escape');
+    await expect(root.locator('[data-part="results"] li')).toHaveCount(0);
+    await expectAccessible(page);
+  });
+
+  test('a shared link with the query searches on arrival', async ({ page }) => {
+    test.skip(jsDisabled(), 'needs script');
+    await page.route('**/pagefind-example/pagefind.js', (route) => route.fulfill({ contentType: 'text/javascript', body: fake }));
+    await page.goto('/search?q=self');
+    await expect(example(page, 'basic').locator('[data-part="status"]')).toHaveText('1 result for “self”');
+  });
+
+  test('without script the note says where to go', async ({ page }) => {
+    test.skip(!jsDisabled(), 'no-JS only');
+    await page.goto('/search');
+    await expect(example(page, 'basic').locator('[data-part="nojs"]')).toBeVisible();
+  });
+});

@@ -33,6 +33,7 @@ export default function createElements(): ParcheManifest {
       Compare: el('compare/Compare.astro'),
       Calculator: el('calculator/Calculator.astro'),
       LoadMore: el('load-more/LoadMore.astro'),
+      Search: el('search/Search.astro'),
       Tag: el('tag/Tag.astro'),
       Link: el('link/Link.astro'),
       Image: el('image/Image.astro'),

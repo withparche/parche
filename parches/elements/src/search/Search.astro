@@ -1,0 +1,54 @@
+---
+/**
+ * Search — a field over a Pagefind index the site build wrote. The element
+ * loads the index only on this page, searches as the reader types (and on
+ * Enter), keeps the query in the address, lists the results (meta line,
+ * title, excerpt with the match marked) and, when nothing matches, shows the
+ * default slot: where to go instead. Without script the form reloads with the
+ * query and `noScript` says where to go.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema } from './search.props';
+
+const { props, rest, className, part } = splitProps(schema, Astro.props);
+const { bundle, param, label, placeholder, button, clear, loading, results, result, none, noScript, limit } = props;
+const q = Astro.url.searchParams.get(param) ?? '';
+---
+
+<parche-search
+  class={cn('parche-search block', className)}
+  {...rest}
+  data-part={part}
+  data-state="idle"
+  bundle={bundle}
+  param={param}
+  limit={limit}
+  loading-label={loading}
+  results-label={results}
+  result-label={result}
+  none-label={none}
+>
+  <form data-part="form" role="search" method="get" class="flex items-center gap-2 rounded-lg border border-border bg-surface p-1.5 focus-within:border-primary">
+    <label class="sr-only" for="parche-search-input">{label}</label>
+    <input
+      id="parche-search-input"
+      data-part="input"
+      type="search"
+      name={param}
+      value={q}
+      placeholder={placeholder}
+      autocomplete="off"
+      class="min-w-0 flex-1 bg-transparent px-3 py-2.5 text-lg text-heading placeholder:text-muted focus:outline-none [&::-webkit-search-cancel-button]:hidden"
+    />
+    <button type="button" data-part="clear" hidden class="cursor-pointer rounded-sm border border-border bg-background px-3 py-1.5 text-xs text-muted hover:text-heading">{clear}</button>
+    <button type="submit" class="cursor-pointer rounded-sm bg-primary px-4 py-2 text-sm font-semibold text-on-primary in-data-upgraded:sr-only">{button}</button>
+  </form>
+  <p data-part="status" aria-live="polite" class="mt-4 font-mono text-xs text-muted empty:hidden"></p>
+  <ol data-part="results" class="mt-2 list-none p-0"></ol>
+  <div data-part="empty" hidden class="mt-8"><slot /></div>
+  <p data-part="nojs" class="mt-4 text-sm text-muted">{noScript}</p>
+</parche-search>
+
+<script>
+  import './search.element.ts';
+</script>

@@ -225,6 +225,7 @@ export function createRegistry(
   const contributedStyles: string[] = [];
   const contributedFonts: any[] = [];
   const headLinks: import('./types.js').HeadLink[] = [];
+  const buildDone: import('./types.js').ResolvedRegistry['buildDone'] = [];
   const contributedThemes: Array<{ label: string; value: string }> = [];
   const contentGlobs: string[] = [];
   let wrapper: string | null = null;
@@ -234,6 +235,7 @@ export function createRegistry(
   for (const parche of parches) {
     if (parche.styles) contributedStyles.push(...parche.styles);
     if (parche.fonts) contributedFonts.push(...parche.fonts);
+    if (parche.hooks?.['astro:build:done']) buildDone.push({ name: parche.name, run: parche.hooks['astro:build:done'] });
     for (const link of parche.head?.links ?? []) {
       if (!headLinks.some((l) => l.rel === link.rel && l.href === link.href)) headLinks.push(link);
     }
@@ -474,6 +476,7 @@ export function createRegistry(
     defaultTheme,
     fonts,
     headLinks,
+    buildDone,
     styleEntries,
     contentGlobs,
     apps,

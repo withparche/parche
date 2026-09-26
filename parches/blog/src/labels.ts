@@ -113,6 +113,18 @@ export interface BlogLabels {
   readInBrowser: string;
   /** The chip on a list item that is part of a series. */
   seriesChip: string;
+  /** Search. Placeholders: {n}, {q}. */
+  searchTitle: string;
+  searchPlaceholder: string;
+  searchButton: string;
+  searchClear: string;
+  searchResults: string;
+  searchResult: string;
+  searchNone: string;
+  searchLoading: string;
+  searchNoScript: string;
+  searchSuggest: string;
+  searchArchive: string;
 }
 
 /** English defaults — the strings that were hardcoded across routes and widgets. */
@@ -191,6 +203,17 @@ export const DEFAULT_LABELS: BlogLabels = {
   issuePreview: 'Inbox · a recent issue',
   readInBrowser: 'Read the whole issue in the browser',
   seriesChip: 'Series',
+  searchTitle: 'Search',
+  searchPlaceholder: 'Search the posts',
+  searchButton: 'Search',
+  searchClear: 'Clear',
+  searchResults: '{n} results for “{q}”',
+  searchResult: '1 result for “{q}”',
+  searchNone: 'Nothing matches “{q}”.',
+  searchLoading: 'Searching…',
+  searchNoScript: 'Search runs in the browser. Without it, the archive lists every post by month.',
+  searchSuggest: 'Try a topic',
+  searchArchive: 'Browse the archive',
 };
 
 /** Per-locale overrides, e.g. `{ es: { listingTitle: 'Blog' } }`. */

@@ -129,6 +129,12 @@ export interface BlogConfig {
    * a demo. Off by default: a form that goes nowhere is not a subscription.
    */
   subscribe?: false | { endpoint?: string; path?: string };
+  /**
+   * Search over the posts: a Pagefind index built with the site, and a search
+   * page at `path` (default '/search', noindex). Static: it needs the posts
+   * prerendered. Default: on.
+   */
+  search?: boolean | { path?: string };
 }
 
 /** A kind of publication: a starting point for the blog's structure, never a lock. */
@@ -178,6 +184,7 @@ export interface ResolvedBlogConfig {
   tagIndexThreshold: number;
   archive: boolean;
   subscribe: false | { endpoint?: string; path: string };
+  search: false | { path: string };
 }
 
 /**
@@ -218,6 +225,7 @@ export function resolveBlogConfig(config?: BlogConfig): ResolvedBlogConfig {
     tagIndexThreshold: config?.tagIndexThreshold ?? 3,
     archive: config?.archive ?? true,
     subscribe: config?.subscribe ? { ...config.subscribe, path: config.subscribe.path ?? '/subscribe' } : false,
+    search: config?.search === false ? false : { path: (typeof config?.search === 'object' ? config.search.path : undefined) ?? '/search' },
   };
 }
 

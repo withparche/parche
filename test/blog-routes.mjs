@@ -80,6 +80,11 @@ for (const [site, want] of Object.entries(SITES)) {
   // The archive, newest year at its own address.
   check(existsSync(join(dist, want.listing, 'archive', 'index.html')), `${site}: no archive at ${want.listing}/archive`);
 
+  // Search: a noindex page, and the index the blog builds after the site.
+  const search = join(dist, 'search', 'index.html');
+  check(existsSync(search) && /<meta name="robots" content="noindex/.test(readFileSync(search, 'utf8')), `${site}: no noindex search page at /search`);
+  check(existsSync(join(dist, 'pagefind', 'pagefind.js')), `${site}: no search index (dist/pagefind)`);
+
   // Author pages exist only for a blog with several writers.
   const authorDir = join(dist, want.listing, 'author');
   check(existsSync(authorDir) === want.authorPages, `${site}: author pages ${want.authorPages ? 'missing' : 'built for a single-writer blog'}`);
