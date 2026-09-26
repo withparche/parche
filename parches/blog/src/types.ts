@@ -144,6 +144,12 @@ export interface BlogConfig {
    * the Consent widget; 'cmp' leaves it to a certified CMP. Off by default,
    * and a view's slots render nothing until this is set.
    */
+  /**
+   * Comments under a post, from GitHub Discussions through giscus: the
+   * repository and category ids from giscus.app. Loaded late and after
+   * "comments" consent (`consent: false` to skip the wait). Off by default.
+   */
+  comments?: false | { provider?: 'giscus'; repo: string; repoId: string; category: string; categoryId: string; mapping?: 'pathname' | 'url' | 'title' | 'og:title'; consent?: boolean };
   ads?: false | { provider?: 'adsense' | 'script'; client?: string; src?: string; html?: string; slots?: Record<string, string>; consent?: 'builtin' | 'cmp' };
 }
 
@@ -195,6 +201,7 @@ export interface ResolvedBlogConfig {
   archive: boolean;
   subscribe: false | { endpoint?: string; path: string };
   search: false | { path: string };
+  comments: false | { provider: 'giscus'; repo: string; repoId: string; category: string; categoryId: string; mapping: 'pathname' | 'url' | 'title' | 'og:title'; consent: boolean };
   ads: false | { provider: 'adsense' | 'script'; client?: string; src?: string; html?: string; slots: Record<string, string>; consent: 'builtin' | 'cmp' };
 }
 
@@ -236,6 +243,7 @@ export function resolveBlogConfig(config?: BlogConfig): ResolvedBlogConfig {
     tagIndexThreshold: config?.tagIndexThreshold ?? 3,
     archive: config?.archive ?? true,
     subscribe: config?.subscribe ? { ...config.subscribe, path: config.subscribe.path ?? '/subscribe' } : false,
+    comments: config?.comments ? { provider: 'giscus', mapping: 'pathname', consent: true, ...config.comments } : false,
     ads: config?.ads ? { ...config.ads, provider: config.ads.provider ?? 'adsense', slots: config.ads.slots ?? {}, consent: config.ads.consent ?? 'builtin' } : false,
     search: config?.search === false ? false : { path: (typeof config?.search === 'object' ? config.search.path : undefined) ?? '/search' },
   };

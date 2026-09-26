@@ -36,6 +36,7 @@ export default function createElements(): ParcheManifest {
       Search: el('search/Search.astro'),
       Consent: el('consent/Consent.astro'),
       AdSlot: el('ad-slot/AdSlot.astro'),
+      Comments: el('comments/Comments.astro'),
       Tag: el('tag/Tag.astro'),
       Link: el('link/Link.astro'),
       Image: el('image/Image.astro'),

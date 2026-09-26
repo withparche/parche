@@ -37,6 +37,22 @@ export const blogConfigSchema = z
     aboutPath: permalink.optional(),
     tagIndexThreshold: z.number().int().min(0).optional(),
     archive: z.boolean().optional(),
+    comments: z
+      .union([
+        z.literal(false),
+        z
+          .object({
+            provider: z.literal('giscus').optional(),
+            repo: z.string().regex(/^[\w.-]+\/[\w.-]+$/, { message: 'the repository as "owner/repo"' }),
+            repoId: z.string(),
+            category: z.string(),
+            categoryId: z.string(),
+            mapping: z.enum(['pathname', 'url', 'title', 'og:title']).optional(),
+            consent: z.boolean().optional(),
+          })
+          .strict(),
+      ])
+      .optional(),
     ads: z
       .union([
         z.literal(false),

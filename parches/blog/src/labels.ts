@@ -129,6 +129,12 @@ export interface BlogLabels {
   advertisement: string;
   editorsPicks: string;
   mostRead: string;
+  /** Comments. */
+  commentsTitle: string;
+  commentsLoad: string;
+  commentsNote: string;
+  commentsWaiting: string;
+  cookieChoices: string;
 }
 
 /** English defaults — the strings that were hardcoded across routes and widgets. */
@@ -221,6 +227,11 @@ export const DEFAULT_LABELS: BlogLabels = {
   advertisement: 'Advertisement',
   editorsPicks: "Editor's picks",
   mostRead: 'Most read this week',
+  commentsTitle: 'Comments',
+  commentsLoad: 'Load the comments',
+  commentsNote: 'Moderated before publishing · from GitHub Discussions · your email is never shown',
+  commentsWaiting: 'The comments load from GitHub once you allow them.',
+  cookieChoices: 'Cookie choices',
 };
 
 /** Per-locale overrides, e.g. `{ es: { listingTitle: 'Blog' } }`. */

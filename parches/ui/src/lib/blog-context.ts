@@ -61,6 +61,8 @@ export interface BlogContext {
   /** The site's name: who a newsletter issue is from. */
   brand?: string;
   rss?: string;
+  /** Comments, when the blog has them: giscus settings. */
+  comments?: { provider: 'giscus'; repo: string; repoId: string; category: string; categoryId: string; mapping: 'pathname' | 'url' | 'title' | 'og:title'; consent: boolean };
   /** Ads, when the blog has them: the network and a unit per placement. */
   ads?: { provider: 'adsense' | 'script'; client?: string; src?: string; html?: string; slots: Record<string, string>; consent: 'builtin' | 'cmp' };
   /** The subscription page and where its form posts, when the blog has one. */

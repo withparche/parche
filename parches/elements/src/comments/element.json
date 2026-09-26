@@ -1,0 +1,14 @@
+{
+  "name": "comments",
+  "type": "element",
+  "files": [
+    { "path": "Comments.astro", "type": "part" },
+    { "path": "comments.element.ts", "type": "element" },
+    { "path": "comments.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": [],
+  "source": null
+}

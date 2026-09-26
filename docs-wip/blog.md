@@ -50,6 +50,7 @@ the keys given. Components read the resolved values, never `preset`.
 | `postsPerPage` | `12` | Posts per listing page. |
 | `tagIndexThreshold` | `3` | Tag pages (and archive years) with fewer posts are `noindex, follow`. |
 | `archive` | `true` | The archive: the newest year by month at `/blog/archive`, earlier years at `/blog/archive/2025`. |
+| `comments` | off | `{ repo, repoId, category, categoryId, mapping?, consent? }`: giscus comments under posts (see *Comments*). |
 | `ads` | off | `{ provider?, client?, slots?, src?, html?, consent? }`: see *Ads and other placements*. |
 | `search` | on | `true`, `false` or `{ path? }`: a Pagefind index built after the site and a search page at `path` (default `/search`, noindex). Needs the posts prerendered. |
 | `subscribe` | off | `{ endpoint?, path? }`: a subscribe page at `path` (default `/subscribe`) and the forms the views place. `endpoint` is where the form posts; without one the send is simulated, for a demo. |
@@ -270,6 +271,23 @@ or `from: 'counts'`, the most read, sorted by numbers the site provides from
 its analytics (a `$ref` to a data file works). Nothing is counted by the
 blog, and without numbers the list does not show.
 
+### Comments
+
+`blog/Comments` is the discussion under a post, from GitHub Discussions
+through giscus (the magazine and newsletter presets place it after the
+author box). Nothing loads with the page: once "comments" is allowed in the
+Consent widget (giscus comes from GitHub), it loads when the reader scrolls
+near it, or at once on "Load the comments"; until then it says why and links
+to the cookie choices. It follows the light or dark mode, also when it
+changes, and a note beside it says it is moderated and the email never
+shown. Set it up with the ids from giscus.app:
+
+```js
+createBlog({ comments: { repo: 'owner/repo', repoId: 'R_…', category: 'Comments', categoryId: 'DIC_…' } })
+```
+
+Without `comments` the widget renders nothing.
+
 Dates without a time (every frontmatter date) are UTC midnight and are
 formatted in UTC, so a post dated 2026-08-01 reads 1 August wherever the site
 is built; a `timeZone` in `dateFormat` wins.
@@ -284,4 +302,4 @@ is built; a `timeZone` in `dateFormat` wins.
 
 ## Not built yet
 
-Comments, and structured data per page. Each lands in this file.
+Structured data per page. It lands in this file.

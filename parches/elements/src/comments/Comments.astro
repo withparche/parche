@@ -1,0 +1,39 @@
+---
+/**
+ * Comments — the discussion under a post, from GitHub Discussions through
+ * giscus. Nothing loads with the page: the element loads giscus when the
+ * reader scrolls near it or presses the button, and only once "comments" is
+ * allowed in the Consent element (giscus comes from GitHub). It follows the
+ * site's light or dark mode as it changes.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema } from './comments.props';
+
+const { props: { repo, repoId, category, categoryId, mapping, lang, consent, load, note, waiting, preferences }, rest, className, part } = splitProps(schema, Astro.props);
+---
+
+<parche-comments
+  class={cn('parche-comments block', className)}
+  {...rest}
+  data-part={part}
+  data-state="waiting"
+  repo={repo}
+  repo-id={repoId}
+  category={category}
+  category-id={categoryId}
+  mapping={mapping}
+  lang={lang}
+  consent={consent ? 'required' : 'none'}
+>
+  <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+    <button type="button" data-part="load" hidden class="cursor-pointer rounded-sm border border-border bg-surface px-4 py-2 text-sm font-semibold text-heading hover:border-primary">{load}</button>
+    {note && <p data-part="note" class="text-xs text-muted" set:html={note} />}
+  </div>
+  <p data-part="consent" hidden class="text-sm text-muted">{waiting} <a href="#cookie-preferences" class="text-heading underline underline-offset-2">{preferences}</a></p>
+  <div data-part="frame" class="mt-4"></div>
+  <noscript><p class="text-sm text-muted">The comments need JavaScript.</p></noscript>
+</parche-comments>
+
+<script>
+  import './comments.element.ts';
+</script>

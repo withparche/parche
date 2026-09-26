@@ -23,6 +23,7 @@ import Subscribe from '../../src/widgets/blog/Subscribe.astro';
 import IssuePreview from '../../src/widgets/blog/IssuePreview.astro';
 import BlogSearch from '../../src/widgets/blog/Search.astro';
 import AdSlot from '../../src/widgets/AdSlot.astro';
+import BlogComments from '../../src/widgets/blog/Comments.astro';
 import type { BlogArticle, BlogCard, BlogContext } from '../../src/lib/blog-context';
 
 let container: AstroContainer | null = null;
@@ -294,4 +295,14 @@ test('inFeed goes after inFeedAfter posts, never first, and only when there is s
   expect(list.indexOf('FEED')).toBeLessThan(list.indexOf('Post 3'));
   expect(list).toContain('data-placement="inFeed"');
   expect(await render(PostList, { inFeedAfter: 3 }, ctx(), { inFeed: '<div>FEED</div>' })).not.toContain('FEED');
+});
+
+test('Comments renders nothing until configured, then the giscus loader with the blog settings', async () => {
+  expect(await render(BlogComments, {}, post())).not.toContain('parche-comments');
+  const comments = { provider: 'giscus' as const, repo: 'owner/repo', repoId: 'R_1', category: 'Comments', categoryId: 'DIC_1', mapping: 'pathname' as const, consent: true };
+  const html = await render(BlogComments, {}, post({}, { comments, labels: { ...post().labels, commentsTitle: 'Comments', commentsNote: 'Moderated' } }));
+  expect(html).toContain('<parche-comments');
+  expect(html).toContain('repo="owner/repo"');
+  expect(html).toContain('consent="required"');
+  expect(html).toContain('Moderated');
 });

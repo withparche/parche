@@ -150,6 +150,7 @@ export async function baseContext(view: string, o: ContextOptions) {
     listing: { href: localizePath(cfg.permalinks.listing, locale, defaultLocale), title: labels.listingTitle },
     ...(cfg.rss ? { rss: localizePath(cfg.permalinks.rss, locale, defaultLocale) } : {}),
     ...(cfg.ads ? { ads: cfg.ads } : {}),
+    ...(cfg.comments ? { comments: cfg.comments } : {}),
     ...(cfg.subscribe ? { subscribe: { href: localizePath(cfg.subscribe.path, locale, defaultLocale), ...(cfg.subscribe.endpoint ? { endpoint: cfg.subscribe.endpoint } : {}) } } : {}),
     // Featured: the posts marked so first, then the newest, four at most (a
     // lead story and three beside it).

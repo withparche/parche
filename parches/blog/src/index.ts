@@ -166,6 +166,7 @@ export default function createBlog(config?: BlogConfig): ParcheManifest {
         'blog/Search',
         'AdSlot',
         'blog/Picks',
+        'blog/Comments',
         'Columns',
         'Column',
       ],

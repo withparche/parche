@@ -24,6 +24,9 @@
                 },
                 {
                   "widget": "blog/AuthorBox"
+                },
+                {
+                  "widget": "blog/Comments"
                 }
               ]
             }

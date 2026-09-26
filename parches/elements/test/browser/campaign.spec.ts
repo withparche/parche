@@ -185,3 +185,29 @@ test.describe('AdSlot', () => {
     expect(Math.round((await root.locator('[data-part="box"]').boundingBox())!.height)).toBe(250);
   });
 });
+
+test.describe('Comments', () => {
+  test('load nothing before consent, then giscus with the thread settings once allowed and in view', async ({ page }) => {
+    const requested: string[] = [];
+    await page.route('https://giscus.app/**', (route) => { requested.push(route.request().url()); return route.fulfill({ contentType: 'text/javascript', body: '' }); });
+    await page.goto('/comments');
+    const root = example(page, 'basic').locator('parche-comments');
+    test.skip(jsDisabled(), 'without script nothing loads');
+    await expect(root.locator('[data-part="consent"]')).toBeVisible();
+    await expect(root.getByRole('button', { name: 'Load the comments' })).toBeHidden();
+    expect(requested).toEqual([]);
+    await page.evaluate(() => {
+      localStorage.setItem('parche-consent', JSON.stringify({ v: 1, choices: { comments: true } }));
+      document.dispatchEvent(new CustomEvent('parche:consent', { detail: { comments: true } }));
+    });
+    // Allowed, and already in view: it loads without waiting for the button.
+    await expect(root.locator('[data-part="consent"]')).toBeHidden();
+    await expect(root).toHaveAttribute('data-state', 'loaded');
+    await expect(root.getByRole('button', { name: 'Load the comments' })).toBeHidden();
+    const script = root.locator('script[src="https://giscus.app/client.js"]');
+    await expect(script).toHaveAttribute('data-repo', 'withparche/parche');
+    await expect(script).toHaveAttribute('data-mapping', 'pathname');
+    await expect(script).toHaveAttribute('data-theme', /light|dark/);
+    await expectAccessible(page);
+  });
+});

@@ -1,0 +1,34 @@
+---
+/**
+ * The post's comments: the Comments element with the blog's giscus settings
+ * and words. Renders nothing until `comments` is configured.
+ */
+import CommentsElement from 'parche:elements/Comments';
+import { blogContext } from '../../lib/blog-context';
+import { schema, type Props } from './Comments.props';
+
+const p = schema.parse(Astro.props) as Props;
+const ctx = blogContext(Astro.locals);
+const c = ctx?.comments;
+const labels = ctx?.labels ?? {};
+const lang = (Astro.currentLocale ?? 'en').split('-')[0];
+---
+
+{c && (
+  <section class="parche-blog-comments border-t border-border pt-7" aria-label={p.title ?? labels.commentsTitle ?? 'Comments'}>
+    <h2 class="mb-4 font-heading text-xl font-semibold text-heading">{p.title ?? labels.commentsTitle ?? 'Comments'}</h2>
+    <CommentsElement
+      repo={c.repo}
+      repoId={c.repoId}
+      category={c.category}
+      categoryId={c.categoryId}
+      mapping={c.mapping}
+      consent={c.consent}
+      lang={lang}
+      load={labels.commentsLoad ?? 'Load the comments'}
+      note={p.note ?? labels.commentsNote}
+      waiting={labels.commentsWaiting ?? 'The comments load once you allow them.'}
+      preferences={labels.cookieChoices ?? 'Cookie choices'}
+    />
+  </section>
+)}
