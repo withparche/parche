@@ -116,6 +116,11 @@ export default function createBlog(config?: BlogConfig): ParcheManifest {
     routes.push({ pattern: resolved.search.path.replace(/^\//, ''), entrypoint: routePath('search.astro') });
   }
 
+  // ads.txt, which AdSense needs, from the publisher id
+  if (resolved.ads && resolved.ads.provider === 'adsense' && resolved.ads.client) {
+    routes.push({ pattern: 'ads.txt', entrypoint: routePath('ads.txt.ts') });
+  }
+
   // RSS feed
   if (resolved.rss) {
     routes.push({
@@ -159,6 +164,8 @@ export default function createBlog(config?: BlogConfig): ParcheManifest {
         'blog/Subscribe',
         'blog/IssuePreview',
         'blog/Search',
+        'AdSlot',
+        'blog/Picks',
         'Columns',
         'Column',
       ],

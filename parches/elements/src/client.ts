@@ -12,3 +12,5 @@ export {
   supportsAnchorPositioning,
   positionFallback,
 } from './_shared/overlay.js';
+export { readConsent, writeConsent, whenConsented, CONSENT_KEY, CONSENT_EVENT } from './_shared/consent.js';
+export type { Choices } from './_shared/consent.js';

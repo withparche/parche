@@ -10,12 +10,26 @@ import { blogContext } from '../../lib/blog-context';
 const ctx = blogContext(Astro.locals);
 const html = ctx?.article?.html ?? '';
 const aside = Astro.slots.has('aside');
+// `inArticle` goes after the first section: where the second h2 starts (or the
+// first, when text comes before any), never between the title and the first
+// paragraph. A post with a single section gets none.
+const heads = [...html.matchAll(/<h2[\s>]/g)].map((m) => m.index!);
+const cut = heads[0] === 0 || /^\s*<h2[\s>]/.test(html) ? heads[1] : heads[0];
+const inArticle = cut !== undefined && Astro.slots.has('inArticle') ? await Astro.slots.render('inArticle') : '';
+const [first, rest] = inArticle ? [html.slice(0, cut), html.slice(cut)] : [html, ''];
+const prose = 'prose max-w-none text-[clamp(16px,1.25vw,17.5px)] leading-[1.72] text-text [&_:is(h2,h3)]:scroll-mt-24';
 ---
 
 <div class:list={['parche-article-body mx-auto', aside ? 'grid max-w-[1040px] gap-x-[clamp(32px,5vw,72px)] lg:grid-cols-[minmax(0,680px)_220px] lg:justify-between' : 'max-w-[680px]']}>
   <div class="min-w-0">
     {Astro.slots.has('before') && <div class="mb-9 flex flex-col gap-4"><slot name="before" /></div>}
-    <div data-pagefind-body class="prose max-w-none text-[clamp(16px,1.25vw,17.5px)] leading-[1.72] text-text [&_:is(h2,h3)]:scroll-mt-24" set:html={html} />
+    <div data-pagefind-body class={prose} set:html={first} />
+    {inArticle && (
+      <>
+        <div class="my-10 border-y border-border py-6" data-placement="inArticle" set:html={inArticle} />
+        <div data-pagefind-body class={prose} set:html={rest} />
+      </>
+    )}
     {Astro.slots.has('after') && <div class="mt-12 flex flex-col gap-5"><slot name="after" /></div>}
   </div>
   {aside && (

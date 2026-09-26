@@ -41,7 +41,8 @@ export class ParcheLoadMore extends ParcheElement {
       const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
       const there = doc.querySelector(selector);
       if (!there) throw new Error('load-more: no list on the next page');
-      const added = Array.from(there.children).map((item) => here.appendChild(document.importNode(item, true)));
+      // Placements (an in-feed ad) belong to their page: not repeated.
+      const added = Array.from(there.children).filter((item) => !item.hasAttribute('data-placement')).map((item) => here.appendChild(document.importNode(item, true)));
       history.replaceState(history.state, '', href);
       const next = doc.querySelector<HTMLAnchorElement>('parche-load-more [data-part="link"]');
       const status = this.part('status');

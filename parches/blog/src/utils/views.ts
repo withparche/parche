@@ -10,6 +10,7 @@
  */
 import { getEntry } from 'astro:content';
 import { presetViews } from '../views/index.js';
+import { checkPlacements } from './placements.js';
 
 export interface BlogView {
   sections: any[];
@@ -37,5 +38,7 @@ export async function resolveView(
     // No views collection: the preset's view.
   }
   const view = (entry?.data as BlogView | undefined) ?? (presetViews[opts.preset]?.[name] as BlogView | undefined) ?? { sections: [] };
+  const problems = checkPlacements(view);
+  if (problems.length) throw new Error(`[parche] blog view "${name}":\n  ${problems.join('\n  ')}`);
   return substituteLabels(view, opts.labels) as BlogView;
 }

@@ -131,3 +131,57 @@ test.describe('Search', () => {
     await expect(example(page, 'basic').locator('[data-part="nojs"]')).toBeVisible();
   });
 });
+
+test.describe('Consent', () => {
+  test('asks once, remembers the choice, reopens from a link, and lets what waits load only once agreed', async ({ page }) => {
+    test.skip(jsDisabled(), 'without script nothing is asked and nothing loads');
+    await page.goto('/consent');
+    const panel = page.getByRole('region', { name: 'Cookie choices' });
+    await expect(panel).toBeVisible();
+    await expectAccessible(page);
+    // Something that waits on ads listens for the choice.
+    await page.evaluate(() => {
+      (window as any).loaded = [];
+      document.addEventListener('parche:consent', (e: any) => { if (e.detail.ads) (window as any).loaded.push('ads'); });
+    });
+    await panel.getByRole('button', { name: 'Only necessary' }).click();
+    await expect(panel).toBeHidden();
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('parche-consent')!).choices)).toEqual({ ads: false, comments: false });
+    expect(await page.evaluate(() => (window as any).loaded)).toEqual([]);
+    await page.reload();
+    await expect(panel).toBeHidden();
+    await page.getByRole('link', { name: 'Cookie preferences' }).click();
+    await expect(panel).toBeVisible();
+    await expect(panel.getByRole('checkbox', { name: /Advertising/ })).not.toBeChecked();
+    await expect(panel.getByRole('button', { name: 'Save choices' })).toBeFocused();
+    await page.evaluate(() => { (window as any).loaded = []; document.addEventListener('parche:consent', (e: any) => { if (e.detail.ads) (window as any).loaded.push('ads'); }); });
+    await panel.getByRole('checkbox', { name: /Advertising/ }).check();
+    await panel.getByRole('button', { name: 'Save choices' }).click();
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('parche-consent')!).choices)).toEqual({ ads: true, comments: false });
+    expect(await page.evaluate(() => (window as any).loaded)).toEqual(['ads']);
+  });
+});
+
+test.describe('AdSlot', () => {
+  test('keeps its space and label, loads nothing before consent, and the network once agreed', async ({ page }) => {
+    const requested: string[] = [];
+    await page.route('**/ad-example.js', (route) => { requested.push(route.request().url()); return route.fulfill({ contentType: 'text/javascript', body: 'window.adScriptRan = true;' }); });
+    await page.goto('/adslot');
+    const root = example(page, 'basic').locator('parche-ad');
+    await expect(root.getByText('Advertisement')).toBeVisible();
+    expect(Math.round((await root.locator('[data-part="box"]').boundingBox())!.height)).toBe(250);
+    test.skip(jsDisabled(), 'without script the space stays empty');
+    await page.waitForTimeout(300);
+    expect(requested).toEqual([]);
+    await expect(root).toHaveAttribute('data-state', 'waiting');
+    await page.evaluate(() => {
+      localStorage.setItem('parche-consent', JSON.stringify({ v: 1, choices: { ads: true } }));
+      document.dispatchEvent(new CustomEvent('parche:consent', { detail: { ads: true } }));
+    });
+    await expect(root).toHaveAttribute('data-state', 'loaded');
+    await expect(root.locator('[data-example-ad]')).toHaveText('An ad');
+    expect(requested).toHaveLength(1);
+    expect(await page.evaluate(() => (window as any).adScriptRan)).toBe(true);
+    expect(Math.round((await root.locator('[data-part="box"]').boundingBox())!.height)).toBe(250);
+  });
+});

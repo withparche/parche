@@ -1,0 +1,14 @@
+{
+  "name": "ad-slot",
+  "type": "element",
+  "files": [
+    { "path": "AdSlot.astro", "type": "part" },
+    { "path": "ad-slot.element.ts", "type": "element" },
+    { "path": "ad-slot.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": [],
+  "source": null
+}

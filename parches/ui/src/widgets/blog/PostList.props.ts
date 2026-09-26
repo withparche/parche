@@ -19,6 +19,7 @@ export const schema = z.object({
   category: toggle(),
   tags: toggle(),
   title: z.string().optional().meta({ help: 'A heading over the list: "Writing" on an author page.' }),
+  inFeedAfter: z.number().int().min(1).max(12).default(3).meta({ help: 'The in-feed slot (an ad, a subscribe box) goes after this many posts; never first.' }),
   empty: z.string().optional().meta({ help: 'What an empty list says. Default: the blog label.' }),
   /** Posts to show instead of the page's (a fixed list on a home page). */
   posts: z.array(z.any()).optional(),
@@ -26,7 +27,12 @@ export const schema = z.object({
 
 export type Props = z.infer<typeof schema>;
 
+export const slots = {
+  inFeed: { label: 'In the list', help: 'After `inFeedAfter` posts, never first: an ad, a subscribe box. Not repeated by load more.', max: 1 },
+};
+
 export const meta: WidgetMeta = {
+  slots,
   widget: {
     label: 'Post list',
     description: "The posts of a blog page, as a list, cards or rows. Reads the page's posts; takes a fixed list too.",

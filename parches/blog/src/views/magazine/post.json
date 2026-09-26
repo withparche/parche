@@ -29,6 +29,22 @@
               "aside": [
                 {
                   "widget": "blog/TOC"
+                },
+                {
+                  "widget": "AdSlot",
+                  "props": {
+                    "slot": "articleSidebar",
+                    "size": "half-page"
+                  }
+                }
+              ],
+              "inArticle": [
+                {
+                  "widget": "AdSlot",
+                  "props": {
+                    "slot": "inArticle",
+                    "size": "large-rectangle"
+                  }
                 }
               ]
             }
@@ -42,6 +58,20 @@
         "default": [
           {
             "widget": "blog/ReadNext"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "slots": {
+        "default": [
+          {
+            "widget": "AdSlot",
+            "props": {
+              "slot": "articleEnd",
+              "size": "leaderboard"
+            }
           }
         ]
       }

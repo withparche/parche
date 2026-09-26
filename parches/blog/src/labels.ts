@@ -125,6 +125,10 @@ export interface BlogLabels {
   searchNoScript: string;
   searchSuggest: string;
   searchArchive: string;
+  /** Over every ad slot. */
+  advertisement: string;
+  editorsPicks: string;
+  mostRead: string;
 }
 
 /** English defaults — the strings that were hardcoded across routes and widgets. */
@@ -214,6 +218,9 @@ export const DEFAULT_LABELS: BlogLabels = {
   searchNoScript: 'Search runs in the browser. Without it, the archive lists every post by month.',
   searchSuggest: 'Try a topic',
   searchArchive: 'Browse the archive',
+  advertisement: 'Advertisement',
+  editorsPicks: "Editor's picks",
+  mostRead: 'Most read this week',
 };
 
 /** Per-locale overrides, e.g. `{ es: { listingTitle: 'Blog' } }`. */

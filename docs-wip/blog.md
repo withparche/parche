@@ -50,6 +50,7 @@ the keys given. Components read the resolved values, never `preset`.
 | `postsPerPage` | `12` | Posts per listing page. |
 | `tagIndexThreshold` | `3` | Tag pages (and archive years) with fewer posts are `noindex, follow`. |
 | `archive` | `true` | The archive: the newest year by month at `/blog/archive`, earlier years at `/blog/archive/2025`. |
+| `ads` | off | `{ provider?, client?, slots?, src?, html?, consent? }`: see *Ads and other placements*. |
 | `search` | on | `true`, `false` or `{ path? }`: a Pagefind index built after the site and a search page at `path` (default `/search`, noindex). Needs the posts prerendered. |
 | `subscribe` | off | `{ endpoint?, path? }`: a subscribe page at `path` (default `/subscribe`) and the forms the views place. `endpoint` is where the form posts; without one the send is simulated, for a demo. |
 | `readingTime`, `wordsPerMinute` | `true`, `200` | Reading time, computed from the body. |
@@ -209,6 +210,66 @@ title and an excerpt with the match marked, and, when nothing matches, offers
 the most used topics, the archive and the subscription. Without script the
 page says where to go instead.
 
+### Ads and other placements
+
+A placement is a place in a view where something that is not the blog's own
+content goes: an ad, a subscribe box, a sponsor, a promotion of your own.
+Most placements are simply nodes in a view: at the top of the index, in a
+sidebar column, after the article, after "Read next". Put any widget there.
+Two places cannot be expressed as a node in a list, so they are slots:
+
+- `inArticle`, on `blog/ArticleBody`: after the first section of the text,
+  never before it.
+- `inFeed`, on `blog/PostList`: after `inFeedAfter` posts (default 3), never
+  first, only when there is something after it, and not repeated by "load
+  more".
+
+**Ads** are `AdSlot` nodes naming a placement:
+
+```json
+{ "widget": "AdSlot", "props": { "slot": "inArticle", "size": "large-rectangle" } }
+```
+
+and the configuration gives each placement its unit:
+
+```js
+createBlog({
+  ads: {
+    provider: 'adsense',                 // or 'script' with `src` and `html`, for other networks
+    client: 'ca-pub-1234567890',
+    slots: { indexLeaderboard: '…', inFeed: '…', inArticle: '…', articleSidebar: '…', articleEnd: '…' },
+    consent: 'builtin',                  // or 'cmp'
+  },
+})
+```
+
+An AdSlot reserves its size's height from the first paint (a late ad never
+moves the text), is labelled "Advertisement", and loads the network only
+after consent and when it comes near the viewport. Sizes: `leaderboard`
+728×90 (320×100 on phones), `rectangle` 300×250, `large-rectangle` 336×280,
+`half-page` 300×600, sticky, from 1024px. Without `ads`, or without a unit for
+its placement, an AdSlot renders nothing: the magazine preset places slots
+where the design puts them, and a site without ads sees none. With an AdSense
+`client`, `/ads.txt` is built.
+
+**Rules, checked when a view renders**: an AdSlot before the page's title,
+or in ArticleBody's `before` (between the title and the first paragraph),
+stops the build with the view and the place.
+
+**Consent.** Place the `Consent` widget once in the layout, with the
+categories the site uses (`ads`, `comments`). It asks on the first visit,
+with "Accept all" and "Only necessary" side by side, remembers the choice,
+and any link to `#cookie-preferences` reopens it. AdSlots (and comments)
+wait for their category. AdSense in the EEA, UK and Switzerland requires a
+certified CMP (TCF v2.3): use one, set `consent: 'cmp'`, and the slots leave
+the gating to it.
+
+**Picks** (`blog/Picks`) is the magazine front's short list: `from:
+'featured'` (editor's picks), `from: 'posts'` (a hand-ordered list of keys),
+or `from: 'counts'`, the most read, sorted by numbers the site provides from
+its analytics (a `$ref` to a data file works). Nothing is counted by the
+blog, and without numbers the list does not show.
+
 Dates without a time (every frontmatter date) are UTC midnight and are
 formatted in UTC, so a post dated 2026-08-01 reads 1 August wherever the site
 is built; a `timeZone` in `dateFormat` wins.
@@ -223,5 +284,4 @@ is built; a `timeZone` in `dateFormat` wins.
 
 ## Not built yet
 
-Placements for ads and other elements, consent, comments, and structured
-data per page. Each lands in this file.
+Comments, and structured data per page. Each lands in this file.

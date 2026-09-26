@@ -9,7 +9,7 @@ export const groups: Array<{ label: string; names: string[] }> = [
   { label: 'Media', names: ['Image', 'Gallery', 'Compare', 'Avatar', 'Icon', 'Video', 'Skeleton'] },
   { label: 'Data display', names: ['Badge', 'Tag', 'Card', 'List', 'Table', 'Filter', 'Callout', 'Countdown', 'Stat', 'Breadcrumb', 'Pagination', 'LoadMore', 'Toc', 'Share'] },
   { label: 'Disclosure', names: ['Collapsible', 'Accordion', 'Tabs', 'Carousel'] },
-  { label: 'Overlays', names: ['Dialog', 'Sheet', 'Popover', 'Menu', 'Tooltip', 'Toast', 'Banner', 'StickyBar'] },
+  { label: 'Overlays', names: ['Dialog', 'Sheet', 'Popover', 'Menu', 'Tooltip', 'Toast', 'Banner', 'StickyBar', 'Consent', 'AdSlot'] },
   { label: 'Forms', names: ['Form', 'Calculator', 'Search', 'Label', 'Field', 'Input', 'Textarea', 'Select', 'Checkbox', 'RadioGroup', 'Switch', 'Slider', 'Combobox'] },
 ];
 

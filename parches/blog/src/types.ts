@@ -135,6 +135,16 @@ export interface BlogConfig {
    * prerendered. Default: on.
    */
   search?: boolean | { path?: string };
+  /**
+   * Ads, placed by the views with `AdSlot` nodes named after a placement
+   * (`indexLeaderboard`, `inFeed`, `inArticle`, `articleSidebar`,
+   * `articleEnd`, or any name a site's view uses). AdSense: `client` and a
+   * unit id per placement in `slots`; any other network: `provider: 'script'`
+   * with its `src` and container `html`. Consent: 'builtin' waits for "ads" in
+   * the Consent widget; 'cmp' leaves it to a certified CMP. Off by default,
+   * and a view's slots render nothing until this is set.
+   */
+  ads?: false | { provider?: 'adsense' | 'script'; client?: string; src?: string; html?: string; slots?: Record<string, string>; consent?: 'builtin' | 'cmp' };
 }
 
 /** A kind of publication: a starting point for the blog's structure, never a lock. */
@@ -185,6 +195,7 @@ export interface ResolvedBlogConfig {
   archive: boolean;
   subscribe: false | { endpoint?: string; path: string };
   search: false | { path: string };
+  ads: false | { provider: 'adsense' | 'script'; client?: string; src?: string; html?: string; slots: Record<string, string>; consent: 'builtin' | 'cmp' };
 }
 
 /**
@@ -225,6 +236,7 @@ export function resolveBlogConfig(config?: BlogConfig): ResolvedBlogConfig {
     tagIndexThreshold: config?.tagIndexThreshold ?? 3,
     archive: config?.archive ?? true,
     subscribe: config?.subscribe ? { ...config.subscribe, path: config.subscribe.path ?? '/subscribe' } : false,
+    ads: config?.ads ? { ...config.ads, provider: config.ads.provider ?? 'adsense', slots: config.ads.slots ?? {}, consent: config.ads.consent ?? 'builtin' } : false,
     search: config?.search === false ? false : { path: (typeof config?.search === 'object' ? config.search.path : undefined) ?? '/search' },
   };
 }

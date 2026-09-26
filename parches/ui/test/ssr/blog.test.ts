@@ -22,6 +22,7 @@ import Archive from '../../src/widgets/blog/Archive.astro';
 import Subscribe from '../../src/widgets/blog/Subscribe.astro';
 import IssuePreview from '../../src/widgets/blog/IssuePreview.astro';
 import BlogSearch from '../../src/widgets/blog/Search.astro';
+import AdSlot from '../../src/widgets/AdSlot.astro';
 import type { BlogArticle, BlogCard, BlogContext } from '../../src/lib/blog-context';
 
 let container: AstroContainer | null = null;
@@ -260,4 +261,37 @@ test('the blog search offers topics, the archive and the subscription for when n
   expect(html).toContain('#astro');
   expect(html).toContain('href="/blog/archive"');
   expect(html).toContain('href="/subscribe"');
+});
+
+const ads = { provider: 'adsense' as const, client: 'ca-pub-1', slots: { inArticle: '42' }, consent: 'builtin' as const };
+
+test('AdSlot renders nothing without ads or a unit for its placement; reserves and labels it otherwise', async () => {
+  expect(await render(AdSlot, { slot: 'inArticle' }, ctx())).not.toContain('parche-ad');
+  expect(await render(AdSlot, { slot: 'articleEnd' }, ctx({ ads }))).not.toContain('parche-ad');
+  const html = await render(AdSlot, { slot: 'inArticle', size: 'large-rectangle' }, ctx({ ads }));
+  expect(html).toContain('<parche-ad');
+  expect(html).toContain('unit="42"');
+  expect(html).toContain('h-[280px]');
+  expect(html).toContain('Advertisement');
+});
+
+test('inArticle goes after the first section, and not at all in a single-section post', async () => {
+  const two = post({ html: '<p>Intro.</p><h2 id="a">A</h2><p>A text.</p><h2 id="b">B</h2><p>B text.</p>' });
+  const html = await render(ArticleBody, {}, two, { inArticle: '<div>AD</div>' });
+  expect(html.indexOf('AD')).toBeGreaterThan(html.indexOf('Intro.'));
+  expect(html.indexOf('AD')).toBeLessThan(html.indexOf('id="a"'));
+  const fromHeading = post({ html: '<h2 id="a">A</h2><p>A text.</p><h2 id="b">B</h2>' });
+  const h = await render(ArticleBody, {}, fromHeading, { inArticle: '<div>AD</div>' });
+  expect(h.indexOf('AD')).toBeGreaterThan(h.indexOf('A text.'));
+  expect(h.indexOf('AD')).toBeLessThan(h.indexOf('id="b"'));
+  const one = post({ html: '<h2 id="a">A</h2><p>Only.</p>' });
+  expect(await render(ArticleBody, {}, one, { inArticle: '<div>AD</div>' })).not.toContain('AD');
+});
+
+test('inFeed goes after inFeedAfter posts, never first, and only when there is something after it', async () => {
+  const list = await render(PostList, { inFeedAfter: 2 }, ctx(), { inFeed: '<div>FEED</div>' });
+  expect(list.indexOf('FEED')).toBeGreaterThan(list.indexOf('Post 2'));
+  expect(list.indexOf('FEED')).toBeLessThan(list.indexOf('Post 3'));
+  expect(list).toContain('data-placement="inFeed"');
+  expect(await render(PostList, { inFeedAfter: 3 }, ctx(), { inFeed: '<div>FEED</div>' })).not.toContain('FEED');
 });

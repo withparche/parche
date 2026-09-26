@@ -101,10 +101,13 @@ export default function createUI(): ParcheManifest {
       'blog/Subscribe': w('blog/Subscribe.astro'),
       'blog/IssuePreview': w('blog/IssuePreview.astro'),
       'blog/Search': w('blog/Search.astro'),
+      'blog/Picks': w('blog/Picks.astro'),
+      Consent: w('Consent.astro'),
+      AdSlot: w('AdSlot.astro'),
       'blog/TOC': w('blog/TOC.astro'),
     },
     requires: {
-      elements: ['Accordion', 'Tabs', 'Command', 'Frame', 'Placeholder', 'List', 'Table', 'Callout', 'Gallery', 'Filter', 'StickyBar', 'Countdown', 'Compare', 'Calculator', 'LoadMore', 'Search', 'Form', 'Select', 'RadioGroup', 'Avatar', 'Badge', 'Banner', 'Breadcrumb', 'Button', 'Card', 'Carousel', 'Checkbox', 'Collapsible', 'Container', 'Divider', 'Heading', 'Icon', 'Image', 'Input', 'Link', 'Menu', 'Pagination', 'Popover', 'Section', 'Share', 'Sheet', 'Stat', 'Tag', 'Textarea', 'Toc'],
+      elements: ['Accordion', 'Tabs', 'Command', 'Frame', 'Placeholder', 'List', 'Table', 'Callout', 'Gallery', 'Filter', 'StickyBar', 'Countdown', 'Compare', 'Calculator', 'LoadMore', 'Search', 'Consent', 'AdSlot', 'Form', 'Select', 'RadioGroup', 'Avatar', 'Badge', 'Banner', 'Breadcrumb', 'Button', 'Card', 'Carousel', 'Checkbox', 'Collapsible', 'Container', 'Divider', 'Heading', 'Icon', 'Image', 'Input', 'Link', 'Menu', 'Pagination', 'Popover', 'Section', 'Share', 'Sheet', 'Stat', 'Tag', 'Textarea', 'Toc'],
     },
   };
 }

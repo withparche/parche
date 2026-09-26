@@ -1,0 +1,13 @@
+---
+/**
+ * The site's cookie consent, placed once in the layout: the Consent element
+ * with the site's words. Ads (AdSlot) and comments wait on the categories it
+ * records; any link to `#cookie-preferences` reopens it.
+ */
+import ConsentElement from 'parche:elements/Consent';
+import { schema, type Props } from './Consent.props';
+
+const p = schema.parse(Astro.props) as Props;
+---
+
+<ConsentElement {...p} />

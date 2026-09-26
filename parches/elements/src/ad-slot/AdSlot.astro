@@ -1,0 +1,41 @@
+---
+/**
+ * AdSlot — a labelled place for an ad. The box has the height of its size
+ * from the first paint, so the ad arriving later moves nothing (CLS). The
+ * network is loaded after consent ("ads" in the Consent element, or a
+ * certified CMP with `consent: 'cmp'`) and only when the slot is near the
+ * viewport. A half-page slot is sticky and shown on wide screens only.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema } from './ad-slot.props';
+
+const { props: { size, provider, client, unit, src, html, label, consent }, rest, className, part } = splitProps(schema, Astro.props);
+const box = {
+  leaderboard: 'mx-auto h-[100px] w-full max-w-[320px] min-[740px]:h-[90px] min-[740px]:max-w-[728px]',
+  rectangle: 'mx-auto h-[250px] w-[300px] max-w-full',
+  'large-rectangle': 'mx-auto h-[280px] w-[336px] max-w-full',
+  'half-page': 'h-[600px] w-[300px] max-w-full',
+}[size];
+---
+
+<parche-ad
+  class={cn('parche-ad block', size === 'half-page' && 'sticky top-24 hidden lg:block', className)}
+  {...rest}
+  data-part={part}
+  data-state="waiting"
+  data-size={size}
+  provider={provider}
+  client={client}
+  unit={unit}
+  src={src}
+  consent={consent}
+>
+  <p data-part="label" class="mb-1.5 text-center font-mono text-[10px] tracking-[0.16em] text-muted uppercase">{label}</p>
+  <div data-part="box" class={cn('overflow-hidden rounded-sm bg-surface', box)}>
+    {provider === 'script' && html && <template set:html={html} />}
+  </div>
+</parche-ad>
+
+<script>
+  import './ad-slot.element.ts';
+</script>

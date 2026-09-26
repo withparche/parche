@@ -1,0 +1,14 @@
+{
+  "name": "consent",
+  "type": "element",
+  "files": [
+    { "path": "Consent.astro", "type": "part" },
+    { "path": "consent.element.ts", "type": "element" },
+    { "path": "consent.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": [],
+  "source": null
+}

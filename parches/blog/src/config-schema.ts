@@ -37,6 +37,21 @@ export const blogConfigSchema = z
     aboutPath: permalink.optional(),
     tagIndexThreshold: z.number().int().min(0).optional(),
     archive: z.boolean().optional(),
+    ads: z
+      .union([
+        z.literal(false),
+        z
+          .object({
+            provider: z.enum(['adsense', 'script']).optional(),
+            client: z.string().regex(/^ca-pub-\d+$/, { message: 'an AdSense publisher id looks like "ca-pub-1234567890"' }).optional(),
+            src: z.string().optional(),
+            html: z.string().optional(),
+            slots: z.record(z.string(), z.string()).optional(),
+            consent: z.enum(['builtin', 'cmp']).optional(),
+          })
+          .strict(),
+      ])
+      .optional(),
     search: z.union([z.boolean(), z.object({ path: permalink.optional() }).strict()]).optional(),
     subscribe: z.union([z.literal(false), z.object({ endpoint: z.string().optional(), path: permalink.optional() }).strict()]).optional(),
   })

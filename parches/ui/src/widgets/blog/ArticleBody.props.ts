@@ -16,5 +16,6 @@ export const meta: WidgetMeta = {
     before: { label: 'Before', help: 'Opens the text: the series box.', max: 2 },
     after: { label: 'After', help: 'Closes it: the next part, the author.', max: 4 },
     aside: { label: 'Sidebar', help: 'Beside the text on wide screens: the table of contents.', max: 3 },
+    inArticle: { label: 'In the article', help: 'After the first section, never before it: an ad, a subscribe box.', max: 1 },
   },
 };

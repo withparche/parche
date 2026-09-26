@@ -149,6 +149,7 @@ export async function baseContext(view: string, o: ContextOptions) {
     labels: labels as unknown as Record<string, string>,
     listing: { href: localizePath(cfg.permalinks.listing, locale, defaultLocale), title: labels.listingTitle },
     ...(cfg.rss ? { rss: localizePath(cfg.permalinks.rss, locale, defaultLocale) } : {}),
+    ...(cfg.ads ? { ads: cfg.ads } : {}),
     ...(cfg.subscribe ? { subscribe: { href: localizePath(cfg.subscribe.path, locale, defaultLocale), ...(cfg.subscribe.endpoint ? { endpoint: cfg.subscribe.endpoint } : {}) } } : {}),
     // Featured: the posts marked so first, then the newest, four at most (a
     // lead story and three beside it).

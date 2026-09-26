@@ -1,0 +1,31 @@
+---
+/**
+ * An ad in a named placement. The unit comes from the blog's `ads`
+ * configuration: nothing renders until ads are set, or when the placement
+ * has no unit, so a preset's view can place slots at the right spots without
+ * showing empty boxes on a site without ads.
+ */
+import AdSlotElement from 'parche:elements/AdSlot';
+import { blogContext } from '../lib/blog-context';
+import { schema, type Props } from './AdSlot.props';
+
+const p = schema.parse(Astro.props) as Props;
+const ads = blogContext(Astro.locals)?.ads;
+const unit = ads?.slots[p.slot];
+const on = ads && (ads.provider === 'script' ? Boolean(ads.src || ads.html) : Boolean(ads.client && unit));
+const label = p.label ?? blogContext(Astro.locals)?.labels?.advertisement ?? 'Advertisement';
+---
+
+{on && ads && (
+  <AdSlotElement
+    size={p.size}
+    provider={ads.provider}
+    client={ads.client}
+    unit={unit}
+    src={ads.src}
+    html={ads.html}
+    consent={ads.consent}
+    label={label}
+    data-placement={p.slot}
+  />
+)}

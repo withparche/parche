@@ -1,0 +1,12 @@
+---
+import Consent from '../Consent.astro';
+---
+
+<p class="text-sm text-muted">The panel opens until a choice is made. <a href="#cookies" data-consent-open>Cookie preferences</a> reopens it.</p>
+<Consent
+  text='We use cookies for ads and comments only if you agree. <a href="#privacy">Privacy</a>.'
+  categories={[
+    { key: 'ads', label: 'Advertising', description: 'Ads from AdSense, which sets its own cookies.' },
+    { key: 'comments', label: 'Comments', description: 'The discussion under a post, loaded from GitHub.' },
+  ]}
+/>

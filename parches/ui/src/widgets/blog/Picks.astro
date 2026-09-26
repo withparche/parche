@@ -1,0 +1,56 @@
+---
+/**
+ * A short list of posts for a front page's sidebar. `featured`: the posts
+ * marked so (editor's picks). `posts`: a hand-ordered list of keys.
+ * `counts`: the most read, sorted by numbers the site provides from its own
+ * analytics; nothing is counted here, and without numbers nothing shows.
+ */
+import { getCollection } from 'astro:content';
+import { blogContext } from '../../lib/blog-context';
+import { getBlogLinkContext, postHref, postKey, postLocale } from '../../lib/blog-links';
+import { schema, type Props } from './Picks.props';
+
+const p = schema.parse(Astro.props) as Props;
+const ctx = blogContext(Astro.locals);
+const link = await getBlogLinkContext();
+const locale = Astro.currentLocale ?? link.defaultLocale;
+let entries: any[] = [];
+try {
+  entries = (await getCollection('posts' as any)).filter((e: any) => !e.data.draft && postLocale(e.id, link.defaultLocale) === locale);
+} catch {
+  entries = [];
+}
+const byKey = new Map(entries.map((e) => [postKey(e.id), e]));
+const keys =
+  p.from === 'posts'
+    ? p.posts
+    : p.from === 'counts'
+      ? Object.entries(p.counts).sort((a, b) => b[1] - a[1]).map(([k]) => k)
+      : entries.filter((e) => e.data.featured).sort((a, b) => +b.data.publishDate - +a.data.publishDate).map((e) => postKey(e.id));
+const items = keys.map((k) => byKey.get(k)).filter(Boolean).slice(0, p.limit).map((e: any) => ({
+  title: e.data.title,
+  href: postHref(link.postPattern, e, locale, link.defaultLocale),
+  category: e.data.category as string | undefined,
+}));
+const numbered = p.numbered ?? p.from === 'counts';
+const title = p.title ?? ctx?.labels?.editorsPicks ?? "Editor's picks";
+const Tag = numbered ? 'ol' : 'ul';
+---
+
+{items.length > 0 && (
+  <section class="parche-picks" aria-label={title}>
+    <h2 class="border-b-2 border-heading pb-2 font-mono text-[11px] font-medium tracking-[0.12em] text-heading uppercase">{title}</h2>
+    <Tag class="list-none p-0">
+      {items.map((it, i) => (
+        <li class="flex gap-3 border-b border-border py-3">
+          {numbered && <span class="font-heading text-lg leading-none font-semibold text-primary">{i + 1}</span>}
+          <span>
+            {!numbered && it.category && <span class="mb-1 block font-mono text-[10px] tracking-[0.16em] text-primary uppercase">{it.category}</span>}
+            <a href={it.href} class="font-heading text-[15px] leading-[1.35] font-semibold text-heading no-underline hover:underline">{it.title}</a>
+          </span>
+        </li>
+      ))}
+    </Tag>
+    {p.note && <p class="mt-2 font-mono text-[11px] text-muted">{p.note}</p>}
+  </section>
+)}

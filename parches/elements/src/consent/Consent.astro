@@ -1,0 +1,53 @@
+---
+/**
+ * Consent — a panel at the foot of the screen asking which categories the
+ * visitor accepts, beyond what the site needs to work. Accept all and Only
+ * necessary are equal buttons; "Choose" opens a checkbox per category. The
+ * choice is remembered and announced (see _shared/consent.ts): ads, comments
+ * and anything else that waits on it load then, and not before. Any element
+ * with `data-consent-open`, or a link to `#cookie-preferences` (a footer's
+ * "Cookie preferences"), reopens it.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema } from './consent.props';
+
+const { props: { text, categories, necessary, accept, reject, save, customize, label }, rest, className, part } = splitProps(schema, Astro.props);
+const button = 'cursor-pointer rounded-sm px-4 py-2 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
+---
+
+<parche-consent class={cn('parche-consent', className)} {...rest} data-part={part} data-state="closed" categories={categories.map((c) => c.key).join(' ')}>
+  <section
+    data-part="panel"
+    aria-label={label}
+    hidden
+    class="fixed inset-x-3 bottom-3 z-[80] mx-auto max-w-[640px] rounded-xl border border-border bg-surface p-5 shadow-lg sm:inset-x-6 sm:bottom-6"
+  >
+    <p class="text-sm leading-[1.6] text-text" set:html={text} />
+    <fieldset data-part="choices" hidden class="mt-4 flex flex-col gap-3 border-t border-border pt-4">
+      <legend class="sr-only">{label}</legend>
+      <label class="flex items-start gap-3 text-sm text-muted">
+        <input type="checkbox" checked disabled class="mt-1" />
+        <span><span class="font-semibold text-heading">{necessary}</span></span>
+      </label>
+      {categories.map((c) => (
+        <label class="flex items-start gap-3 text-sm">
+          <input type="checkbox" data-part="option" value={c.key} class="mt-1 accent-(--ds-sys-color-primary)" />
+          <span>
+            <span class="font-semibold text-heading">{c.label}</span>
+            {c.description && <span class="block text-muted">{c.description}</span>}
+          </span>
+        </label>
+      ))}
+    </fieldset>
+    <div class="mt-4 flex flex-wrap gap-2">
+      <button type="button" data-part="accept" class={cn(button, 'bg-primary text-on-primary hover:opacity-90')}>{accept}</button>
+      <button type="button" data-part="reject" class={cn(button, 'border border-border bg-surface text-heading hover:border-primary')}>{reject}</button>
+      <button type="button" data-part="customize" class={cn(button, 'text-muted underline hover:text-heading')}>{customize}</button>
+      <button type="button" data-part="save" hidden class={cn(button, 'border border-border bg-surface text-heading hover:border-primary')}>{save}</button>
+    </div>
+  </section>
+</parche-consent>
+
+<script>
+  import './consent.element.ts';
+</script>

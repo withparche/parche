@@ -29,6 +29,10 @@ if (!p.posts && ctx?.term?.kind === 'categories') show.category = false;
 const empty = p.empty ?? ctx?.labels?.emptyState ?? 'No posts yet.';
 // Density is variables only: the markup is the same.
 const vars = density === 'compact' ? '--row-y:13px;--card-pad:15px;--gap:14px;--list-title:17px' : '--row-y:22px;--card-pad:22px;--gap:22px;--list-title:21px';
+// The in-feed slot, rendered once, goes after `inFeedAfter` posts: never first,
+// and only in a list long enough to have something after it.
+const inFeed = Astro.slots.has('inFeed') && posts.length > p.inFeedAfter ? await Astro.slots.render('inFeed') : '';
+const feedAt = (i: number) => inFeed && i === p.inFeedAfter - 1;
 const title = (c: BlogCard) => (c.issue ? `#${c.issue} · ${c.title}` : c.title);
 const seriesLabel = ctx?.labels?.seriesChip ?? 'Series';
 ---
@@ -39,7 +43,7 @@ const seriesLabel = ctx?.labels?.seriesChip ?? 'Series';
     <p class="py-10 text-muted">{empty}</p>
   ) : layout === 'cards' ? (
     <ul data-load-more-list class:list={['grid list-none gap-(--gap) p-0', columns === '2' ? 'sm:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3']}>
-      {posts.map((c) => (
+      {posts.map((c, i) => (<>
         <li class="flex min-w-0 flex-col overflow-hidden rounded-lg border border-border bg-surface">
           {show.image && (
             <a href={c.href} tabindex="-1" aria-hidden="true" class="block">
@@ -62,11 +66,12 @@ const seriesLabel = ctx?.labels?.seriesChip ?? 'Series';
             </p>
           </div>
         </li>
-      ))}
+        {feedAt(i) && <li class="sm:col-span-full" data-placement="inFeed" set:html={inFeed} />}
+      </>))}
     </ul>
   ) : (
     <ul data-load-more-list class="list-none border-b border-border p-0">
-      {posts.map((c) => (
+      {posts.map((c, i) => (<>
         <li
           class:list={[
             'grid gap-x-8 gap-y-1 border-t border-border py-(--row-y)',
@@ -99,7 +104,8 @@ const seriesLabel = ctx?.labels?.seriesChip ?? 'Series';
           )}
           {layout === 'compact' && show.date && <time datetime={c.date} class="font-mono text-xs whitespace-nowrap text-muted">{c.dateText}</time>}
         </li>
-      ))}
+        {feedAt(i) && <li class="border-t border-border py-(--row-y)" data-placement="inFeed" set:html={inFeed} />}
+      </>))}
     </ul>
   )}
 </div>

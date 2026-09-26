@@ -61,6 +61,8 @@ export interface BlogContext {
   /** The site's name: who a newsletter issue is from. */
   brand?: string;
   rss?: string;
+  /** Ads, when the blog has them: the network and a unit per placement. */
+  ads?: { provider: 'adsense' | 'script'; client?: string; src?: string; html?: string; slots: Record<string, string>; consent: 'builtin' | 'cmp' };
   /** The subscription page and where its form posts, when the blog has one. */
   subscribe?: { href: string; endpoint?: string };
   /** This page's posts. */
