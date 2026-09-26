@@ -109,6 +109,35 @@ that wins and Parche stays out of the way. Preload only the family visible above
 the fold: every preloaded file competes with the hero image for the first
 connection.
 
+## Why one file is enough
+
+A button that says `bg-blue-600` has chosen a color, when what it meant was "the
+main action". On the day the brand moves to green, every component that picked
+a shade has to be found and changed. Here no component picks a color. It names
+a role, such as `bg-primary`, `text-muted` or `bg-surface`, and the active theme
+decides what that role is. `bg-primary` looks like a Tailwind color, but it is a
+bridge to the role, generated next to the tokens.
+
+The tokens come in four layers, and each one only reads the layer below:
+
+| Layer | Prefix | Holds |
+| --- | --- | --- |
+| Reference | `--ds-ref-*` | The raw material: OKLCH color ramps, radii, shadows, font stacks. |
+| System | `--ds-sys-*` | The roles (primary, surface, border, muted) and the type styles, each with a light and a dark value. |
+| Component | `--ds-comp-*` | One element's own knobs, each defaulting to a system token. |
+| Configuration | `--ds-conf-*` | The radius scale, motion durations, measures and section rhythm. |
+
+Components read the system layer only. A contract test fails the build if one
+names a reference color, and that rule is what makes a theme possible. Each role
+also carries its light and its dark value, and the roles come in pairs chosen
+together (`primary` and `on-primary`, `surface` and `on-surface`). A component
+written once is right in both modes, and whoever picks a color also picks the
+text that sits on it.
+
+The ramps are written in OKLCH, where lightness follows what the eye sees. The
+600 step of every hue has about the same visual weight, so swapping a blue ramp
+for a green one does not make the buttons harder to read.
+
 ## Write your colors as a theme
 
 When the colors must be your own, write a theme. It is one CSS file that

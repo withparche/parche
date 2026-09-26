@@ -22,7 +22,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 /** Sites with a blog, and what their content should produce. */
 const SITES = {
   // company preset: several writers, each with a page.
-  'demos/astrowind': { posts: 8, perPage: 6, listing: '/blog', rss: '/rss.xml', authorPages: true, toc: true },
+  'demos/astrowind': { posts: 6, perPage: 6, listing: '/blog', rss: '/rss.xml', authorPages: true, toc: true },
   // personal preset: one writer, no author pages; the byline links to /about.
   'examples/blog': { posts: 2, perPage: 6, listing: '/blog', rss: '/rss.xml', authorPages: false, toc: false },
 };

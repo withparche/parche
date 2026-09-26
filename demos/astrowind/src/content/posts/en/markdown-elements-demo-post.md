@@ -1,138 +1,206 @@
 ---
-title: "Markdown elements demo post"
-excerpt: "How a Markdown file becomes a post on this blog, written with every element the prose styles cover so you can check them in one place."
-publishDate: "2026-04-02T00:00:00Z"
-category: "Documentation"
+publishDate: 2026-01-20T00:00:00Z
+title: Markdown elements demo post
+excerpt: Every Markdown and MDX element the blog can render on one page, to see how headings, lists, tables, code, images and embeds look with the default styles.
+category: Documentation
+metadata:
+  noindex: true
 tags:
   - markdown
   - blog
-authors:
-  - jane
-authorName: Jane Doe
-featured: false
+  - astro
 ---
 
-A post on this blog is one Markdown file in `src/content/posts/en/`. You write
-it in a text editor, and the build turns it into a page with a table of
-contents, a reading time, related posts and a place in the search index. This
-post explains how that happens. It also uses *every element the prose styles
-cover*, once each, so it doubles as a test page: if something here looks
-wrong, the styles need work, **not the content**. For the Markdown syntax
-itself, the [Astro guide to Markdown](https://docs.astro.build/en/guides/markdown-content/)
-is the reference.
+<span id="top"></span>
 
-## Start with the frontmatter
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-The block between the two `---` lines at the top of the file is the
-frontmatter. It is data about the post, not part of the text, and the blog
-checks it against a schema when the site builds. A misspelled field or a date
-that is not a date stops the build with the field's name, which is better than
-a post that silently disappears.
+## Headings
 
-This is the frontmatter of the post you are reading:
+Sint sit cillum pariatur eiusmod nulla pariatur ipsum. Sit laborum anim qui mollit tempor pariatur nisi minim dolor. Aliquip et adipisicing sit sit fugiat commodo id sunt. Nostrud enim ad commodo incididunt cupidatat in ullamco ullamco Lorem cupidatat velit enim et Lorem. Ut laborum cillum laboris fugiat culpa sint irure do reprehenderit culpa occaecat. Exercitation esse mollit tempor magna aliqua in occaecat aliquip veniam reprehenderit nisi dolor in laboris dolore velit.
 
-```yaml
-title: "Markdown elements demo post"
-publishDate: "2026-04-02T00:00:00Z"
-category: "Documentation"
-tags:
-  - markdown
-  - blog
-authors:
-  - jane
-featured: false
+## Heading two
+
+Aute officia nulla deserunt do deserunt cillum velit magna. Officia veniam culpa anim minim dolore labore pariatur voluptate id ad est duis quis velit dolor pariatur enim. Incididunt enim excepteur do veniam consequat culpa do voluptate dolor fugiat ad adipisicing sit. Labore officia est adipisicing dolore proident eiusmod exercitation deserunt ullamco anim do occaecat velit. Elit dolor consectetur proident sunt aliquip est do tempor quis aliqua culpa aute. Duis in tempor exercitation pariatur et adipisicing mollit irure tempor ut enim esse commodo laboris proident. Do excepteur laborum anim esse aliquip eu sit id Lorem incididunt elit irure ea nulla dolor et. Nulla amet fugiat qui minim deserunt enim eu cupidatat aute officia do velit ea reprehenderit.
+
+### Heading three
+
+Voluptate cupidatat cillum elit quis ipsum eu voluptate fugiat consectetur enim. Quis ut voluptate culpa ex anim aute consectetur dolore proident voluptate exercitation eiusmod. Esse in do anim magna minim culpa sint. Adipisicing ipsum consectetur proident ullamco magna sit amet aliqua aute fugiat laborum exercitation duis et.
+
+#### Heading four
+
+Commodo fugiat aliqua minim quis pariatur mollit id tempor. Non occaecat minim esse enim aliqua adipisicing nostrud duis consequat eu adipisicing qui. Minim aliquip sit excepteur ipsum consequat laborum pariatur excepteur. Veniam fugiat et amet ad elit anim laborum duis mollit occaecat et et ipsum et reprehenderit. Occaecat aliquip dolore adipisicing sint labore occaecat officia fugiat. Quis adipisicing exercitation exercitation eu amet est laboris sunt nostrud ipsum reprehenderit ullamco. Enim sint ut consectetur id anim aute voluptate exercitation mollit dolore magna magna est Lorem. Ut adipisicing adipisicing aliqua ullamco voluptate labore nisi tempor esse magna incididunt.
+
+##### Heading five
+
+Veniam enim esse amet veniam deserunt laboris amet enim consequat. Minim nostrud deserunt cillum consectetur commodo eu enim nostrud ullamco occaecat excepteur. Aliquip et ut est commodo enim dolor amet sint excepteur. Amet ad laboris laborum deserunt sint sunt aliqua commodo ex duis deserunt enim est ex labore ut. Duis incididunt velit adipisicing non incididunt adipisicing adipisicing. Ad irure duis nisi tempor eu dolor fugiat magna et consequat tempor eu ex dolore. Mollit esse nisi qui culpa ut nisi ex proident culpa cupidatat cillum culpa occaecat anim. Ut officia sit ea nisi ea excepteur nostrud ipsum et nulla.
+
+###### Heading six
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+[[Top]](#top)
+
+## Paragraphs
+
+Incididunt ex adipisicing ea ullamco consectetur in voluptate proident fugiat tempor deserunt reprehenderit ullamco id dolore laborum. Do laboris laboris minim incididunt qui consectetur exercitation adipisicing dolore et magna consequat magna anim sunt. Officia fugiat Lorem sunt pariatur incididunt Lorem reprehenderit proident irure. Dolore ipsum aliqua mollit ad officia fugiat sit eu aliquip cupidatat ipsum duis laborum laborum fugiat esse. Voluptate anim ex dolore deserunt ea ex eiusmod irure. Occaecat excepteur aliqua exercitation aliquip dolor esse eu eu.
+
+Officia dolore laborum aute incididunt commodo nisi velit est est elit et dolore elit exercitation. Enim aliquip magna id ipsum aliquip consectetur ad nulla quis. Incididunt pariatur dolor consectetur cillum enim velit cupidatat laborum quis ex.
+
+Officia irure in non voluptate adipisicing sit amet tempor duis dolore deserunt enim ut. Reprehenderit incididunt in ad anim et deserunt deserunt Lorem laborum quis. Enim aute anim labore proident laboris voluptate elit excepteur in. Ex labore nulla velit officia ullamco Lorem Lorem id do. Dolore ullamco ipsum magna dolor pariatur voluptate ipsum id occaecat ipsum. Dolore tempor quis duis commodo quis quis enim.
+
+[[Top]](#top)
+
+## Blockquotes
+
+Ad nisi laborum aute cupidatat magna deserunt eu id laboris id. Aliquip nulla cupidatat sint ex Lorem mollit laborum dolor amet est ut esse aute. Nostrud ex consequat id incididunt proident ipsum minim duis aliqua ut ex et ad quis. Laborum sint esse cillum anim nulla cillum consectetur aliqua sit. Nisi excepteur cillum labore amet excepteur commodo enim occaecat consequat ipsum proident exercitation duis id in.
+
+> Ipsum et cupidatat mollit exercitation enim duis sunt irure aliqua reprehenderit mollit. Pariatur Lorem pariatur laboris do culpa do elit irure. Eiusmod amet nulla voluptate velit culpa et aliqua ad reprehenderit sit ut.
+
+Labore ea magna Lorem consequat aliquip consectetur cillum duis dolore. Et veniam dolor qui incididunt minim amet laboris sit. Dolore ad esse commodo et dolore amet est velit ut nisi ea. Excepteur ea nulla commodo dolore anim dolore adipisicing eiusmod labore id enim esse quis mollit deserunt est. Minim ea culpa voluptate nostrud commodo proident in duis aliquip minim.
+
+> Qui est sit et reprehenderit aute est esse enim aliqua id aliquip ea anim. Pariatur sint reprehenderit mollit velit voluptate enim consectetur sint enim. Quis exercitation proident elit non id qui culpa dolore esse aliquip consequat.
+
+Ipsum excepteur cupidatat sunt minim ad eiusmod tempor sit.
+
+> Deserunt excepteur adipisicing culpa pariatur cillum laboris ullamco nisi fugiat cillum officia. In cupidatat nulla aliquip tempor ad Lorem Lorem quis voluptate officia consectetur pariatur ex in est duis. Mollit id esse est elit exercitation voluptate nostrud nisi laborum magna dolore dolore tempor in est consectetur.
+
+Adipisicing voluptate ipsum culpa voluptate id aute laboris labore esse fugiat veniam ullamco occaecat do ut. Tempor et esse reprehenderit veniam proident ipsum irure sit ullamco et labore ea excepteur nulla labore ut. Ex aute minim quis tempor in eu id id irure ea nostrud dolor esse.
+
+[[Top]](#top)
+
+## Lists
+
+### Ordered List
+
+1. Longan
+2. Lychee
+3. Excepteur ad cupidatat do elit laborum amet cillum reprehenderit consequat quis.
+   Deserunt officia esse aliquip consectetur duis ut labore laborum commodo aliquip aliquip velit pariatur dolore.
+4. Marionberry
+5. Melon
+   - Cantaloupe
+   - Honeydew
+   - Watermelon
+6. Miracle fruit
+7. Mulberry
+
+### Unordered List
+
+- Olive
+- Orange
+  - Blood orange
+  - Clementine
+- Papaya
+- Ut aute ipsum occaecat nisi culpa Lorem id occaecat cupidatat id id magna laboris ad duis. Fugiat cillum dolore veniam nostrud proident sint consectetur eiusmod irure adipisicing.
+- Passionfruit
+
+[[Top]](#top)
+
+## Horizontal rule
+
+In dolore velit aliquip labore mollit minim tempor veniam eu veniam ad in sint aliquip mollit mollit. Ex occaecat non deserunt elit laborum sunt tempor sint consequat culpa culpa qui sit. Irure ad commodo eu voluptate mollit cillum cupidatat veniam proident amet minim reprehenderit.
+
+---
+
+In laboris eiusmod reprehenderit aliquip sit proident occaecat. Non sit labore anim elit veniam Lorem minim commodo eiusmod irure do minim nisi. Dolor amet cillum excepteur consequat sint non sint.
+
+[[Top]](#top)
+
+## Table
+
+Duis sunt ut pariatur reprehenderit mollit mollit magna dolore in pariatur nulla commodo sit dolor ad fugiat. Laboris amet ea occaecat duis eu enim exercitation deserunt ea laborum occaecat reprehenderit. Et incididunt dolor commodo consequat mollit nisi proident non pariatur in et incididunt id. Eu ut et Lorem ea ex magna minim ipsum ipsum do.
+
+| Table Heading 1 | Table Heading 2 | Center align | Right align | Table Heading 5 |
+| :-------------- | :-------------- | :----------: | ----------: | :-------------- |
+| Item 1          | Item 2          |    Item 3    |      Item 4 | Item 5          |
+| Item 1          | Item 2          |    Item 3    |      Item 4 | Item 5          |
+| Item 1          | Item 2          |    Item 3    |      Item 4 | Item 5          |
+| Item 1          | Item 2          |    Item 3    |      Item 4 | Item 5          |
+| Item 1          | Item 2          |    Item 3    |      Item 4 | Item 5          |
+
+Minim id consequat adipisicing cupidatat laborum culpa veniam non consectetur et duis pariatur reprehenderit eu ex consectetur. Sunt nisi qui eiusmod ut cillum laborum Lorem officia aliquip laboris ullamco nostrud laboris non irure laboris. Cillum dolore labore Lorem deserunt mollit voluptate esse incididunt ex dolor.
+
+[[Top]](#top)
+
+## Code
+
+### Inline code
+
+Ad amet irure est magna id mollit Lorem in do duis enim. Excepteur velit nisi magna ea pariatur pariatur ullamco fugiat deserunt sint non sint. Duis duis est `code in text` velit velit aute culpa ex quis pariatur pariatur laborum aute pariatur duis tempor sunt ad. Irure magna voluptate dolore consectetur consectetur irure esse. Anim magna `<strong>in culpa qui officia</strong>` dolor eiusmod esse amet aute cupidatat aliqua do id voluptate cupidatat reprehenderit amet labore deserunt.
+
+### Highlighted
+
+Et fugiat ad nisi amet magna labore do cillum fugiat occaecat cillum Lorem proident. In sint dolor ullamco ad do adipisicing amet id excepteur Lorem aliquip sit irure veniam laborum duis cillum. Aliqua occaecat minim cillum deserunt magna sunt laboris do do irure ea nostrud consequat ut voluptate ex.
+
+```go
+package main
+
+import (
+    "fmt"
+    "net/http"
+)
+
+func handler(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprintf(w, "Hi there, I love %s!", r.URL.Path[1:])
+}
+
+func main() {
+    http.HandleFunc("/", handler)
+    http.ListenAndServe(":8080", nil)
+}
 ```
 
-The fields each have one job:
+Ex amet id ex aliquip id do laborum excepteur exercitation elit sint commodo occaecat nostrud est. Nostrud pariatur esse veniam laborum non sint magna sit laboris minim in id. Aliqua pariatur pariatur excepteur adipisicing irure culpa consequat commodo et ex id ad.
 
-| Field | What it decides |
-| --- | --- |
-| `title` | The heading of the page and the text of every link to it |
-| `excerpt` | The summary under the title and on the post's card |
-| `publishDate` | The order of the lists and the archive month |
-| `category` | The one category page the post belongs to |
-| `tags` | The tag pages it appears on, and part of what "Read next" compares |
-| `featured` | Whether the post can take the featured spot on the index |
-| `image` | The picture under the title, on the card and when the post is shared |
+[[Top]](#top)
 
-Only `title` and `publishDate` are required. Everything else has a sensible
-default, and a post without an image, like this one, still gets a card.
+## Inline elements
 
-## Headings become the outline
+Sint ea anim ipsum ad commodo cupidatat do **exercitation** incididunt et minim ad labore sunt. Minim deserunt labore laboris velit nulla incididunt ipsum nulla. Ullamco ad laborum ea qui et anim in laboris exercitation tempor sit officia laborum reprehenderit culpa velit quis. **Consequat commodo** reprehenderit duis [irure](#!) esse esse exercitation minim enim Lorem dolore duis irure. Nisi Lorem reprehenderit ea amet excepteur dolor excepteur magna labore proident voluptate ipsum. Reprehenderit ex esse deserunt aliqua ea officia mollit Lorem nulla magna enim. Et ad ipsum labore enim ipsum **cupidatat consequat**. Commodo non ea cupidatat magna deserunt dolore ipsum velit nulla elit veniam nulla eiusmod proident officia.
 
-The page already has a title, rendered as the only `h1`. So the text of a post
-starts at `##`, and each `##` is a section. The build reads the rendered
-headings and builds the table of contents beside the text from them.
+![Super wide](https://placehold.co/2832x1000/e5e7eb/6b7280/png?text=Super+wide)
 
-### How deep the outline goes
+_Proident sit veniam in est proident officia adipisicing_ ea tempor cillum non cillum velit deserunt. Voluptate laborum incididunt sit consectetur Lorem irure incididunt voluptate nostrud. Commodo ut eiusmod tempor cupidatat esse enim minim ex anim consequat. Mollit sint culpa qui laboris quis consectetur ad sint esse. Amet anim anim minim ullamco et duis non irure. Sit tempor adipisicing ea laboris `culpa ex duis sint` anim aute reprehenderit id eu ea. Aute [excepteur proident](#!) Lorem minim adipisicing nostrud mollit ad ut voluptate do nulla esse occaecat aliqua sint anim.
 
-The table of contents takes levels two to four and nests them the way you
-wrote them:
+![Not so big](https://placehold.co/600x400/000000/FFFFFF/png)
 
-- A `##` heading is an entry at the top level.
-- A `###` heading is nested under the `##` before it.
-  - A `####` heading goes one level deeper still.
-  - Anything below that stays in the text but out of the outline.
-- The table of contents only appears when a post has at least two top-level
-  sections. One section needs no map.
+Incididunt in culpa cupidatat mollit cillum qui proident sit. In cillum aliquip incididunt voluptate magna amet cupidatat cillum pariatur sint aliqua est _enim **anim** voluptate_. Magna aliquip proident incididunt id duis pariatur eiusmod incididunt commodo culpa dolore sit. Culpa do nostrud elit ad exercitation anim pariatur non minim nisi **adipisicing sunt _officia_**. Do deserunt magna mollit Lorem commodo ipsum do cupidatat mollit enim ut elit veniam ea voluptate.
 
-#### Links to a section
+Reprehenderit non eu quis in ad elit esse qui aute id [incididunt](#!) dolore cillum. Esse laboris consequat dolor anim exercitation tempor aliqua deserunt velit magna laboris. Culpa culpa minim duis amet mollit do quis amet commodo nulla irure.
 
-Astro's Markdown renderer gives each heading an `id` made from its text, and
-the table of contents links to that id. Rename a heading and its link changes
-with it, so an old link to that section stops landing on it. Choose section
-names you will not need to change, and keep them short: they sit in a narrow
-sidebar.
+[[Top]](#top)
 
-## Reading time is counted, not guessed
+## MDX
 
-The reading time next to the date is computed from the body at build time. The
-blog strips the Markdown, counts the words and divides by 200 words per minute,
-then rounds.[^1] Some parts of a post do not count as reading:
-
-1. Code blocks and inline code are removed before counting, since nobody reads
-   code at the pace of prose.
-2. Images are removed, alt text included.
-3. Links keep their text and lose their address, so a URL does not add words.
-
-If a post is mostly code or diagrams and the estimate feels wrong, set
-`readingTime` in the frontmatter to the number of minutes you want shown, and
-the blog uses yours instead.
-
-## Images and quotes carry their own weight
-
-An image in the body is written like a link with an exclamation mark in front.
-Point it at a file in `src/assets/` with a relative path, and Astro optimizes it
-at build time: it converts it to a lighter format and writes the width and
-height into the markup,
-so the text does not jump when the image arrives.
-
-![An astronaut drawn in blue and orange ink, floating among drops of paint](../../../assets/images/hero-image.png)
-
-The alt text is the image for anyone who cannot see it. Describe what is in the
-picture and why it is there, not the file name. If an image is only
-decoration, it probably belongs in the design rather than in the post.
-
-Quotes work the same way: use them for words that are not yours, and say whose
-they are. A blockquote is not a callout box for your own sentence.
-
-> Write the post for the reader who arrives from a search, halfway through,
-> with one question. Headings are how they find the answer.
-
-## What happens after you publish
-
-Once the file is saved and the site is built, the post shows up in several
-places without any extra work. It is listed on the blog index and on its
-category and tag pages, newest first. It goes into the RSS feed. Its body is
-added to the search index, so a phrase from the middle of the text finds it.
-And it appears under other posts in "Read next", where the blog scores every
-pair of posts by what they share: the same category counts most, then a shared
-series, then each shared tag and a shared author.
-
+```js
 ---
+publishDate: 2026-01-20T00:00:00Z
+title: 'Markdown elements demo post'
+---
+import Logo from "~/components/Logo.astro";
 
-That is the whole path from file to page. The fastest way to learn it is to
-copy this post, change the frontmatter, delete half the sections and build.
-Then look at what moved.
+## MDX
 
-[^1]: A very short post never shows zero: the minimum is one minute.
+<Logo />
+```
+
+<div style="border:1px dashed;padding: 10px 5px">
+  <img src="https://placehold.co/160x40/e5e7eb/6b7280/png?text=Logo" alt="Logo" width="160" height="40" />
+</div>
+
+## Astro Embed
+
+### Youtube
+
+![YouTube video y9n6HkftavM](https://placehold.co/1280x720/e5e7eb/6b7280/png?text=YouTube+%C2%B7+y9n6HkftavM)
+
+### Tweet
+
+![Tweet by @Steve8708](https://placehold.co/550x300/e5e7eb/6b7280/png?text=Tweet+%C2%B7+%40Steve8708)
+
+### Vimeo
+
+![Vimeo video 178430038](https://placehold.co/1280x720/e5e7eb/6b7280/png?text=Vimeo+%C2%B7+178430038)
+
+[[Top]](#top)
