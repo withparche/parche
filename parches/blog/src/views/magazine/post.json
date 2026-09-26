@@ -1,0 +1,50 @@
+{
+  "sections": [
+    {
+      "widget": "Section",
+      "slots": {
+        "default": [
+          {
+            "widget": "blog/ArticleHeader"
+          },
+          {
+            "widget": "blog/ArticleBody",
+            "slots": {
+              "before": [
+                {
+                  "widget": "blog/SeriesBox"
+                }
+              ],
+              "after": [
+                {
+                  "widget": "blog/SeriesBox",
+                  "props": {
+                    "variant": "next"
+                  }
+                },
+                {
+                  "widget": "blog/AuthorBox"
+                }
+              ],
+              "aside": [
+                {
+                  "widget": "blog/TOC"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "slots": {
+        "default": [
+          {
+            "widget": "blog/ReadNext"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -13,7 +13,6 @@ import { getCollection, getEntry } from 'astro:content';
 import { getPublishedPosts, extractPostLocale, getPostAlternates } from './utils/post-helpers.js';
 import { querySinglePost } from './utils/blog-query.js';
 import { calculateReadingTime } from './utils/reading-time.js';
-import { findRelatedPosts } from './utils/related-posts.js';
 import { extractTOC } from './utils/toc.js';
 import { generateBlogPostingJsonLd, generateBreadcrumbJsonLd } from './utils/blog-metadata.js';
 import { resolvePostPermalink, resolveTaxonomyPermalink, localizePath } from './types.js';
@@ -72,7 +71,7 @@ export async function resolve(
   const labels = resolveLabels(cfg.labels, locale, defaultLocale);
   const tax = await createTaxonomyResolver(locale);
 
-  const { post, allPosts } = await querySinglePost({
+  const { post } = await querySinglePost({
     slug,
     locale,
     showDrafts: opts.showDrafts,
@@ -107,22 +106,6 @@ export async function resolve(
     authorData.push({ name: post.data.authorName });
   }
 
-  // `allPosts` from querySinglePost is already published + locale-filtered +
-  // sorted, so related/series reuse it directly — no extra passes over posts.
-  const related = findRelatedPosts(post, allPosts, cfg.relatedPostsCount ?? 3);
-
-  // Series navigation — filter the already-prepared set by series and reorder.
-  const seriesPosts = post.data.series
-    ? allPosts
-        .filter((p) => p.data.series?.name === post.data.series!.name)
-        .sort((a, b) => a.data.series!.order - b.data.series!.order)
-        .map((p) => ({
-          title: p.data.title,
-          href: resolvePostPermalink(permalinks.post, p, locale, defaultLocale),
-          order: p.data.series!.order,
-        }))
-    : [];
-
   // JSON-LD
   const siteUrl = opts.siteUrl ?? '';
   const siteName = opts.siteName ?? '';
@@ -153,56 +136,9 @@ export async function resolve(
 
   // Trailing sections as generic { widget, props, wrapper } — the blog parche
   // decides the widgets and their layout; the core route just renders them.
-  const seriesNav =
-    post.data.series && seriesPosts.length > 1
-      ? { seriesName: post.data.series.name, posts: seriesPosts, currentOrder: post.data.series.order }
-      : null;
-  const relatedPosts =
-    related.length > 0
-      ? related.map((r) => ({
-          title: r.data.title,
-          description: r.data.description ?? r.data.excerpt,
-          href: resolvePostPermalink(permalinks.post, r, locale, defaultLocale),
-          image: r.data.image,
-          publishDate: r.data.publishDate,
-          category: r.data.category,
-          tags: r.data.tags,
-        }))
-      : null;
-
+  // Series and related posts are part of the post's view now (see the
+  // template), so the resolver adds no sections of its own.
   const extraSections: ResolvedPost['extras']['sections'] = [];
-  if (seriesNav) {
-    // A narrow column with no vertical rhythm of its own: an explicit Section
-    // node, so the route wraps nothing else around it.
-    extraSections.push({
-      widget: 'Section',
-      props: { width: 'md', spacing: 'none' },
-      slots: {
-        default: [
-          {
-            widget: 'blog/SeriesNav',
-            // Labels must travel with the node: the catch-all renders these by
-            // name and has no idea they contain user-facing strings.
-            props: {
-              ...seriesNav,
-              seriesLabel: labels.seriesLabel,
-              partText: labels.seriesPart,
-              prevText: labels.previous,
-              nextText: labels.next,
-            },
-          },
-        ],
-      },
-    });
-  }
-  if (relatedPosts) {
-    // RelatedPosts renders its own full-width Section/Container; its meta
-    // declares `wrapper: false`, so the route leaves it bare.
-    extraSections.push({
-      widget: 'blog/RelatedPosts',
-      props: { posts: relatedPosts, title: labels.relatedPosts, linkText: labels.viewAllPosts, linkUrl: localizePath(permalinks.listing, locale, defaultLocale) },
-    });
-  }
 
   // Translations of this post: same file name under a different locale directory.
   const { postKey: currentKey } = extractPostLocale(post.id, defaultLocale);
@@ -218,12 +154,12 @@ export async function resolve(
     layout: post.data.layout || 'default',
     collection: 'posts',
     entryId: post.id,
-    templateProps: await resolveAssets({
-      data: postData,
-      authorData,
-      tocItems: [], // TOC gets resolved by catch-all after rendering
-      permalinks,
-    }),
+    templateProps: {
+      ...(await resolveAssets({ data: postData, authorData, permalinks })),
+      // The entry itself: the template builds the article from it (series,
+      // related posts, authors), the same way on both post paths.
+      entry: post,
+    },
     metadata: await resolveAssets({
       title: `${post.data.metadata?.title ?? post.data.title} — ${siteName}`,
       description: post.data.metadata?.description ?? post.data.description ?? post.data.excerpt,

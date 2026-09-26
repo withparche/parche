@@ -77,6 +77,17 @@ export interface BlogLabels {
   loadMore: string;
   loading: string;
   loadedMore: string;
+  /** Article page. Placeholders: {part}, {total}, {series}, {date}, {name}. */
+  readNext: string;
+  onThisPage: string;
+  copyLink: string;
+  shareAction: string;
+  seriesEyebrow: string;
+  previously: string;
+  nextInSeries: string;
+  publishes: string;
+  writtenBy: string;
+  moreFrom: string;
 }
 
 /** English defaults — the strings that were hardcoded across routes and widgets. */
@@ -124,6 +135,16 @@ export const DEFAULT_LABELS: BlogLabels = {
   loadMore: 'Load more',
   loading: 'Loading…',
   loadedMore: '{n} more loaded',
+  readNext: 'Read next',
+  onThisPage: 'On this page',
+  copyLink: 'Copy link',
+  shareAction: 'Share',
+  seriesEyebrow: 'Series · Part {part} of {total}',
+  previously: 'Previously',
+  nextInSeries: 'Next in {series}',
+  publishes: 'Publishes {date}',
+  writtenBy: 'Written by {name}',
+  moreFrom: 'More from {name}',
 };
 
 /** Per-locale overrides, e.g. `{ es: { listingTitle: 'Blog' } }`. */

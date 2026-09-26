@@ -10,8 +10,8 @@
  * - the listing, its pagination, the taxonomy and author pages and the feed
  *   are generated, for the posts the site has;
  * - every page advertises the feed in its head;
- * - a post shows its lead, links back to the listing from Read next, and
- *   carries BlogPosting structured data.
+ * - a post shows its lead, "Read next" and, when its preset has one, a
+ *   table of contents, and carries BlogPosting structured data.
  */
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -22,9 +22,9 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 /** Sites with a blog, and what their content should produce. */
 const SITES = {
   // company preset: several writers, each with a page.
-  'demos/astrowind': { posts: 8, perPage: 6, listing: '/blog', rss: '/rss.xml', authorPages: true },
+  'demos/astrowind': { posts: 8, perPage: 6, listing: '/blog', rss: '/rss.xml', authorPages: true, toc: true },
   // personal preset: one writer, no author pages; the byline links to /about.
-  'examples/blog': { posts: 2, perPage: 6, listing: '/blog', rss: '/rss.xml', authorPages: false },
+  'examples/blog': { posts: 2, perPage: 6, listing: '/blog', rss: '/rss.xml', authorPages: false, toc: false },
 };
 
 const failures = [];
@@ -100,9 +100,9 @@ for (const [site, want] of Object.entries(SITES)) {
     const html = readFileSync(file, 'utf8');
     const lead = html.match(/<h1[^>]*>[\s\S]*?<\/h1>\s*(?:<[^>]+>\s*)*<p[^>]*>([^<]{20,})/);
     check(!!lead, `${site}: ${file.slice(dist.length)} shows no lead paragraph under its title`);
-    if (/Related Posts|relatedPosts/i.test(html)) {
-      check(new RegExp(`href="${want.listing}"`).test(html), `${site}: ${file.slice(dist.length)} has related posts but no link to the listing`);
-    }
+    check(html.includes('parche-read-next'), `${site}: ${file.slice(dist.length)} has no "Read next"`);
+    // The company preset's article carries a table of contents; the personal one does not.
+    check(html.includes('<parche-toc') === want.toc, `${site}: ${file.slice(dist.length)} ${want.toc ? 'has no' : 'has a'} table of contents`);
   }
 }
 

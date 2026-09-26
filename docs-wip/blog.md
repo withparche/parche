@@ -61,8 +61,8 @@ value or a permalink without a leading slash stops the build with its name.
 ## Views
 
 Each blog page type renders a view: `index`, `taxonomy` (tag and category
-pages), `author`. More come with the article, series, archive, subscribe and
-search pages.
+pages), `author`, `post` (the article). More come with the series, archive,
+subscribe and search pages.
 
 A view is `{ "sections": [ …nodes ], "wrapper"?: … }`. The preset's ships
 with the blog; a site replaces one by adding it to the `views` collection:
@@ -129,6 +129,34 @@ a reload lands where the reader is. On the last page it goes away.
 Bylines never show on a blog with one writer, and a category's own page does
 not repeat the category on every card.
 
+### The article
+
+The post template renders the body once, reads its outline (h2 and h3, by
+the ids the Markdown renderer gave them) and builds the article context: the
+post, its authors with bio and post count, its place in its series, the
+related posts. Then it renders the `post` view, the same on a prefixed
+permalink and on a root-level one.
+
+```json
+{ "widget": "blog/ArticleBody", "slots": {
+  "before": [{ "widget": "blog/SeriesBox" }],
+  "after": [{ "widget": "blog/SeriesBox", "props": { "variant": "next" } }, { "widget": "blog/AuthorBox" }],
+  "aside": [{ "widget": "blog/TOC" }]
+} }
+```
+
+| Widget | What it shows | Main props |
+|---|---|---|
+| `blog/ArticleHeader` | Trail, h1, lead, byline (several writers only), date, reading time, copy link and share, then the image wider than the text. Nothing else before the first paragraph. | `image`, `share`, `breadcrumb` |
+| `blog/ArticleBody` | The text at a reading measure; slots `before`, `after`, and `aside`, a sticky sidebar on wide screens, only when filled | — |
+| `blog/SeriesBox` | "Series · Part 2 of 5" and the part before; or the next part, or its date when only announced | `variant: top \| next` |
+| `blog/AuthorBox` | One writer: "Written by", bio, one next step. Several: role, post count, bio, "More from" | `action` |
+| `blog/TOC` | "On this page", marking the section in view; nothing for fewer than two sections | `title` |
+| `blog/ReadNext` | Three related posts under a rule; nothing when there are none | `title` |
+
+Personal and newsletter articles are one column; company and magazine carry
+the table of contents beside the text.
+
 ## Content
 
 - Posts: `featured: true` puts a post in `blog/Featured`; `issue: 142` numbers
@@ -139,7 +167,6 @@ not repeat the category on every card.
 
 ## Not built yet
 
-The article view (table of contents, series box, author box, read next),
-author and series pages, archive, subscribe and search pages,
+The author and series pages, archive, subscribe and search pages,
 placements for ads and other elements, consent, comments, and structured
 data per page. See the plan in the session notes; each lands in this file.

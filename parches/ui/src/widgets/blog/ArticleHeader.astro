@@ -1,0 +1,58 @@
+---
+/**
+ * The top of an article: a trail to the blog and the category, the h1, the
+ * lead, a byline row (the author on a blog with several writers; date and
+ * reading time always; copy link and share), then the image, wider than the
+ * text. Nothing else goes between the title and the first paragraph.
+ */
+import Avatar from 'parche:elements/Avatar';
+import Image from 'parche:elements/Image';
+import Share from 'parche:elements/Share';
+import { blogContext } from '../../lib/blog-context';
+import { schema, type Props } from './ArticleHeader.props';
+
+const p = schema.parse(Astro.props) as Props;
+const ctx = blogContext(Astro.locals);
+const a = ctx?.article;
+const labels = ctx?.labels ?? {};
+const post = a?.post;
+const byline = ctx?.authors !== 'one' ? a?.authors[0] : undefined;
+const title = post ? (post.issue ? `#${post.issue} · ${post.title}` : post.title) : '';
+---
+
+{post && (
+  <header class="parche-article-header">
+    <div class="mx-auto max-w-[760px]">
+      {p.breadcrumb && ctx && (
+        <nav aria-label="Breadcrumb" class="mb-5 text-sm text-muted">
+          <a href={ctx.listing.href} class="text-inherit no-underline hover:text-primary">{ctx.listing.title}</a>
+          {post.category && (<><span aria-hidden="true" class="mx-2">/</span><a href={post.category.href} class="text-primary no-underline hover:underline">{post.category.name}</a></>)}
+        </nav>
+      )}
+      <h1 class="font-heading text-[clamp(34px,5vw,58px)] leading-[1.04] font-semibold tracking-[-0.03em] text-balance text-heading">{title}</h1>
+      {post.excerpt && <p class="mt-5 text-[clamp(18px,1.9vw,21px)] leading-[1.55] text-pretty text-muted">{post.excerpt}</p>}
+      <div class="mt-7 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-4">
+        <p class="flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] text-muted">
+          {byline && (
+            <span class="flex items-center gap-2.5">
+              <Avatar size="sm" name={byline.name} src={byline.avatar?.src} />
+              <span class="leading-tight">
+                {byline.href ? <a href={byline.href} class="block font-semibold text-heading no-underline hover:underline">{byline.name}</a> : <span class="block font-semibold text-heading">{byline.name}</span>}
+                {byline.role && <span class="text-xs">{byline.role}</span>}
+              </span>
+            </span>
+          )}
+          <time datetime={post.date}>{post.dateText}</time>
+          {post.readingTime && <span>· {post.readingTime}</span>}
+        </p>
+        {p.share && a && <Share url={a.url} title={post.title} networks={['copy']} label={labels.shareAction ?? 'Share'} copiedText={labels.copied ?? 'Link copied'} class="text-xs" />}
+      </div>
+    </div>
+    {p.image && post.image && (
+      <figure class="mx-auto mt-10 max-w-[1040px]">
+        <Image src={post.image.src} alt={post.image.alt ?? ''} width={1600} loading="eager" class="w-full rounded-xl" />
+        {post.image.caption && <figcaption class="mt-2 text-center text-xs text-muted">{post.image.caption}</figcaption>}
+      </figure>
+    )}
+  </header>
+)}

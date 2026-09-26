@@ -1,21 +1,26 @@
 ---
-/** Table of contents sidebar: the Toc element, which tracks the visible heading. */
+/**
+ * The table of contents: the Toc element, which marks the heading in view.
+ * In an article view it reads the post's outline; a route or page may still
+ * pass `items`. Nothing when the post has fewer than two sections.
+ */
 import Toc from 'parche:elements/Toc';
+import { blogContext } from '../../lib/blog-context';
 
 interface TOCItem {
-  depth: number;
   text: string;
   slug: string;
-  children: TOCItem[];
+  children?: TOCItem[];
 }
 
 interface Props {
-  items: TOCItem[];
+  items?: TOCItem[];
   title?: string;
   class?: string;
 }
 
-const { items, title = 'Table of Contents', class: className } = Astro.props;
+const ctx = blogContext(Astro.locals);
+const { items = ctx?.article?.toc ?? [], title = ctx?.labels?.onThisPage ?? 'On this page', class: className } = Astro.props;
 ---
 
-{items.length > 0 && <Toc items={items} title={title} class={className} />}
+{items.length > 1 && <Toc items={items} title={title} class={className} />}

@@ -22,20 +22,30 @@ function slugify(text: string): string {
  * Parses h2–h4 headings into a nested structure.
  */
 export function extractTOC(html: string): TOCItem[] {
-  const headingRegex = /<h([2-4])[^>]*(?:id="([^"]*)")?[^>]*>([\s\S]*?)<\/h[2-4]>/gi;
+  // The id is read from the attributes wherever it sits: the anchor must be
+  // the one the Markdown renderer gave the heading, not a slug of our own.
+  const headingRegex = /<h([2-4])(\s[^>]*)?>([\s\S]*?)<\/h\1>/gi;
   const flat: { depth: number; text: string; slug: string }[] = [];
 
   let match: RegExpExecArray | null;
   while ((match = headingRegex.exec(html)) !== null) {
     const depth = parseInt(match[1], 10);
-    const id = match[2] || '';
-    // Strip HTML tags from heading content
-    const text = match[3].replace(/<[^>]+>/g, '').trim();
+    const id = decodeEntities(/\bid="([^"]*)"/.exec(match[2] ?? '')?.[1] ?? '');
+    const text = decodeEntities(match[3].replace(/<[^>]+>/g, '')).trim();
     const slug = id || slugify(text);
     flat.push({ depth, text, slug });
   }
 
   return buildTree(flat);
+}
+
+/** The few entities a heading's text carries (&amp;, &#x27;, &quot;…). */
+function decodeEntities(text: string): string {
+  const named: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: '\u00a0' };
+  return text.replace(/&(#x[0-9a-f]+|#\d+|\w+);/gi, (m, code: string) => {
+    if (code[0] === '#') return String.fromCodePoint(code[1].toLowerCase() === 'x' ? parseInt(code.slice(2), 16) : parseInt(code.slice(1), 10));
+    return named[code.toLowerCase()] ?? m;
+  });
 }
 
 /**

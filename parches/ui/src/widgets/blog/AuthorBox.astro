@@ -1,0 +1,42 @@
+---
+/**
+ * Who wrote the post, after it. On a blog with one writer, the reader already
+ * knows the name: "Written by", a short bio and one next step (`action`,
+ * usually the subscription). On a blog with several, a card with the role,
+ * how many posts, the bio and "More from" the author's page.
+ */
+import Avatar from 'parche:elements/Avatar';
+import { blogContext } from '../../lib/blog-context';
+import { schema, type Props } from './AuthorBox.props';
+
+const p = schema.parse(Astro.props) as Props;
+const ctx = blogContext(Astro.locals);
+const authors = ctx?.article?.authors ?? [];
+const labels = ctx?.labels ?? {};
+const one = ctx?.authors === 'one';
+const fill = (t: string | undefined, name: string) => (t ?? '').replaceAll('{name}', name);
+const count = (n: number) => (labels.postsCount ?? '{count} posts').replace('{count}', String(n));
+---
+
+{authors.length > 0 && (one ? (
+  <aside class="parche-author-box flex gap-4 border-t border-border pt-7">
+    <Avatar size="lg" name={authors[0].name} src={authors[0].avatar?.src} />
+    <div>
+      <p class="font-semibold text-heading">{fill(labels.writtenBy ?? 'Written by {name}', authors[0].name)}</p>
+      {authors[0].bio && <p class="mt-1.5 text-sm leading-[1.6] text-muted">{authors[0].bio}</p>}
+      {p.action && <a href={p.action.href} class="mt-4 inline-flex rounded-sm bg-primary px-4 py-2 text-sm font-semibold text-on-primary no-underline hover:opacity-90">{p.action.text}</a>}
+    </div>
+  </aside>
+) : (
+  authors.map((a) => (
+    <aside class="parche-author-box flex gap-4 rounded-lg border border-border bg-surface p-5">
+      <Avatar size="lg" name={a.name} src={a.avatar?.src} />
+      <div>
+        <p class="font-semibold text-heading">{a.name}</p>
+        <p class="text-xs text-muted">{[a.role, a.count ? count(a.count) : undefined].filter(Boolean).join(' · ')}</p>
+        {a.bio && <p class="mt-2 text-sm leading-[1.6] text-muted">{a.bio}</p>}
+        {a.href && <a href={a.href} class="mt-3 inline-block text-sm font-semibold text-primary no-underline hover:underline">{fill(labels.moreFrom ?? 'More from {name}', a.name)} →</a>}
+      </div>
+    </aside>
+  ))
+))}

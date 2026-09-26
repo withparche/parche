@@ -1,0 +1,29 @@
+---
+/**
+ * The posts related to this one (same category and tags, same series, same
+ * author, recent), three across under a rule: the one next thing a reader
+ * who finished should do. Nothing when there are none.
+ */
+import { blogContext } from '../../lib/blog-context';
+import { schema, type Props } from './ReadNext.props';
+
+const p = schema.parse(Astro.props) as Props;
+const ctx = blogContext(Astro.locals);
+const posts = (ctx?.article?.related ?? []).slice(0, 3);
+const title = p.title ?? ctx?.labels?.readNext ?? 'Read next';
+---
+
+{posts.length > 0 && (
+  <section class="parche-read-next" aria-label={title}>
+    <h2 class="mb-6 font-heading text-[clamp(22px,2.4vw,28px)] font-semibold tracking-[-0.02em] text-heading">{title}</h2>
+    <ul class="grid list-none gap-[clamp(18px,2.4vw,28px)] p-0 md:grid-cols-3">
+      {posts.map((c) => (
+        <li class="border-t-2 border-heading pt-4">
+          {c.category && <a href={c.category.href} class="font-mono text-[10px] leading-none font-medium tracking-[0.16em] text-primary uppercase no-underline hover:underline">{c.category.name}</a>}
+          <h3 class="mt-2 font-heading text-[17px] leading-[1.3] font-semibold text-balance text-heading"><a href={c.href} class="text-inherit no-underline hover:underline">{c.title}</a></h3>
+          {c.excerpt && <p class="mt-1.5 text-sm leading-[1.55] text-muted">{c.excerpt}</p>}
+        </li>
+      ))}
+    </ul>
+  </section>
+)}

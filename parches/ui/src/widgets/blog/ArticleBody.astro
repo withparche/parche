@@ -1,0 +1,26 @@
+---
+/**
+ * The post's text, rendered by the route, at a reading measure. `before`
+ * holds what opens it (the series box), `after` what closes it (the next part,
+ * the author), and `aside` a sticky sidebar (the table of contents), which
+ * only appears on wide screens and only when filled.
+ */
+import { blogContext } from '../../lib/blog-context';
+
+const ctx = blogContext(Astro.locals);
+const html = ctx?.article?.html ?? '';
+const aside = Astro.slots.has('aside');
+---
+
+<div class:list={['parche-article-body mx-auto', aside ? 'grid max-w-[1040px] gap-x-[clamp(32px,5vw,72px)] lg:grid-cols-[minmax(0,680px)_220px] lg:justify-between' : 'max-w-[680px]']}>
+  <div class="min-w-0">
+    {Astro.slots.has('before') && <div class="mb-9 flex flex-col gap-4"><slot name="before" /></div>}
+    <div class="prose max-w-none text-[clamp(16px,1.25vw,17.5px)] leading-[1.72] text-text [&_:is(h2,h3)]:scroll-mt-24" set:html={html} />
+    {Astro.slots.has('after') && <div class="mt-12 flex flex-col gap-5"><slot name="after" /></div>}
+  </div>
+  {aside && (
+    <aside class="hidden lg:block">
+      <div class="sticky top-24 flex flex-col gap-8"><slot name="aside" /></div>
+    </aside>
+  )}
+</div>

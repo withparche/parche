@@ -8,6 +8,8 @@ import { getCollection, getEntry } from 'astro:content';
 import { resolveAssets } from 'parche:utils/assets';
 import { calculateReadingTime } from './reading-time.js';
 import { getPublishedPosts } from './post-helpers.js';
+import { findRelatedPosts } from './related-posts.js';
+import { extractTOC } from './toc.js';
 import { createTaxonomyResolver } from './taxonomy.js';
 import { resolvePostPermalink, resolveTaxonomyPermalink, resolveAuthorHref, localizePath, type ResolvedBlogConfig } from '../types.js';
 import { resolveLabels, format } from '../labels.js';
@@ -134,5 +136,85 @@ export async function baseContext(view: string, o: ContextOptions) {
     // lead story and three beside it).
     featured: await toCards([...marked, ...all.filter((p: Post) => !p.data.featured)].slice(0, 4), o),
     terms: await toTerms(o),
+  };
+}
+
+/**
+ * The context of an article page: the post as a card with its full image, the
+ * rendered body and its outline, the authors with their bio and post count,
+ * where the post sits in its series, and the related posts.
+ */
+export async function articleContext(entry: Post, html: string, url: string, o: ContextOptions) {
+  const { cfg, locale, defaultLocale, showDrafts } = o;
+  const all = getPublishedPosts(await getCollection('posts'), showDrafts, locale);
+  const [card] = await toCards([entry], o);
+  const d = entry.data;
+  const author = await authorLookup(locale);
+
+  const authors = [];
+  for (const key of d.authors ?? []) {
+    const a = await author(key);
+    const count = all.filter((p: Post) => (p.data.authors ?? []).includes(key)).length;
+    authors.push({
+      name: a?.name ?? key,
+      ...(a?.role ? { role: a.role } : {}),
+      ...(a?.bio ? { bio: a.bio } : {}),
+      ...(a?.avatar ? { avatar: a.avatar } : {}),
+      href: resolveAuthorHref(cfg, a?.key ?? key, locale, defaultLocale),
+      count,
+    });
+  }
+  if (authors.length === 0 && d.authorName) authors.push({ name: d.authorName, count: 0 });
+
+  let series;
+  if (d.series) {
+    const name = d.series.name;
+    let described: any = null;
+    try {
+      described = (await getEntry('series' as any, `${locale}/${name}`)) ?? (await getEntry('series' as any, name));
+    } catch {
+      described = null;
+    }
+    const parts = all.filter((p: Post) => p.data.series?.name === name).sort((a: Post, b: Post) => a.data.series.order - b.data.series.order);
+    const upcoming = (described?.data?.status ?? 'ongoing') === 'ongoing' ? (described?.data?.upcoming ?? []) : [];
+    const at = parts.findIndex((p: Post) => p.id === entry.id);
+    const prev = at > 0 ? parts[at - 1] : undefined;
+    const next = at >= 0 && at < parts.length - 1 ? parts[at + 1] : undefined;
+    const soon = !next && upcoming[0] ? upcoming[0] : undefined;
+    series = {
+      title: described?.data?.title ?? name,
+      ...(described?.data?.description ? { description: described.data.description } : {}),
+      ...(cfg.series ? { href: resolveTaxonomyPermalink(cfg.permalinks.series, name, locale, defaultLocale) } : {}),
+      part: d.series.order,
+      total: parts.length + upcoming.length,
+      ...(prev ? { prev: { title: prev.data.title, href: resolvePostPermalink(cfg.permalinks.post, prev, locale, defaultLocale) } } : {}),
+      ...(next
+        ? { next: { title: next.data.title, href: resolvePostPermalink(cfg.permalinks.post, next, locale, defaultLocale) } }
+        : soon
+          ? { next: { title: soon.title, ...(soon.date ? { dateText: soon.date.toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric' }) } : {}) } }
+          : {}),
+    };
+  }
+
+  const related = cfg.relatedPostsCount > 0 ? await toCards(findRelatedPosts(entry, all, cfg.relatedPostsCount), o) : [];
+
+  return {
+    ...(await baseContext('post', o)),
+    posts: [],
+    article: {
+      post: {
+        ...card,
+        ...(d.image ? { image: (await resolveAssets(d.image)) as any } : {}),
+        ...(d.modifiedDate ? { modifiedText: d.modifiedDate.toLocaleDateString(locale, cfg.dateFormat) } : {}),
+      },
+      html,
+      toc: extractTOC(html)
+        .filter((i) => i.depth === 2)
+        .map((i) => ({ text: i.text, slug: i.slug, ...(i.children.length ? { children: i.children.map((c) => ({ text: c.text, slug: c.slug })) } : {}) })),
+      url,
+      authors: await resolveAssets(authors),
+      ...(series ? { series } : {}),
+      related,
+    },
   };
 }

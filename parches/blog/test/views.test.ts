@@ -35,7 +35,7 @@ const labelsIn = (v: unknown, out: string[] = []): string[] => {
 test('every preset ships the same views', () => {
   const presets = readdirSync(VIEWS).filter((f) => !f.includes('.')).sort();
   assert.deepEqual(presets, Object.keys(BLOG_PRESETS).sort());
-  for (const p of presets) assert.deepEqual(readdirSync(join(VIEWS, p)).sort(), ['author.json', 'index.json', 'taxonomy.json'], p);
+  for (const p of presets) assert.deepEqual(readdirSync(join(VIEWS, p)).sort(), ['author.json', 'index.json', 'post.json', 'taxonomy.json'], p);
 });
 
 for (const preset of Object.keys(BLOG_PRESETS)) {

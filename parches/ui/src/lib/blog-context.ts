@@ -78,6 +78,33 @@ export interface BlogContext {
     links: { label: string; href: string }[];
     count: number;
   };
+  /** On an article page. */
+  article?: BlogArticle;
+}
+
+/** What an article page knows about its post. */
+export interface BlogArticle {
+  post: BlogCard & { image?: { src: string; alt?: string; caption?: string }; modifiedText?: string };
+  /** The rendered body. */
+  html: string;
+  /** The body's h2 and h3, for a table of contents. */
+  toc: { text: string; slug: string; children?: { text: string; slug: string }[] }[];
+  /** The page's absolute URL, for sharing. */
+  url: string;
+  authors: { name: string; role?: string; bio?: string; avatar?: { src: string; alt?: string }; href?: string; count: number }[];
+  series?: {
+    title: string;
+    description?: string;
+    /** The series page, when the blog builds series pages. */
+    href?: string;
+    part: number;
+    /** Published parts plus the announced ones. */
+    total: number;
+    prev?: { title: string; href: string };
+    /** The next part: a link when published, a date when announced. */
+    next?: { title: string; href?: string; dateText?: string };
+  };
+  related: BlogCard[];
 }
 
 /** The blog context of this request, or undefined outside a blog page. */
