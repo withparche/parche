@@ -70,6 +70,28 @@ test('Pricing: the recommended tier is marked and the comparison has one column 
   expect(html).toContain('<th scope="row"');
 });
 
+test('Pricing with periods: one control, one grid per period, fields keyed by period, the rest written once', async () => {
+  const html = await render(Pricing, {
+    title: 'Plans',
+    level: 1,
+    periods: { label: 'Billing period', value: 'yearly', syncKey: 'billing', options: [{ value: 'monthly', label: 'Monthly' }, { value: 'yearly', label: 'Yearly' }] },
+    note: 'Prices in USD.',
+    items: [
+      { title: 'Free', price: '0' },
+      { title: 'Team', price: { monthly: '29', yearly: '290' }, suffix: { monthly: '/month', yearly: '/year' }, recommended: true },
+    ],
+  });
+  expect(html).toMatch(/<h1[^>]*>Plans<\/h1>/);
+  expect(html).toMatch(/role="tablist"[^>]*aria-label="Billing period"/);
+  expect(html).toContain('$29');
+  expect(html).toContain('$290');
+  // The plan written once is in both grids; the note once, under them.
+  expect(html.match(/>Free</g)?.length).toBe(2);
+  expect(html.match(/Prices in USD\./g)?.length).toBe(1);
+  // A field keyed by period needs the periods, and only those.
+  await expect(render(Pricing, { items: [{ title: 'Team', price: { monthly: '29' } }] })).rejects.toThrow(/declares no periods/);
+});
+
 test('Gallery: the heading, the hint beside it, thumbnails that link to their full image', async () => {
   const { default: Gallery } = await import('../../src/widgets/Gallery.astro');
   const html = await render(Gallery, {

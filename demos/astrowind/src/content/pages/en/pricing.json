@@ -4,7 +4,7 @@
   "layout": "cadence",
   "sections": [
     {
-      "widget": "Switch",
+      "widget": "Pricing",
       "wrapper": {
         "props": {
           "id": "plans",
@@ -13,164 +13,104 @@
         }
       },
       "props": {
-        "label": "Billing period",
-        "syncKey": "billing",
-        "value": "yearly",
-        "align": "start",
-        "options": [
-          {
-            "value": "monthly",
-            "label": "Monthly"
-          },
-          {
-            "value": "yearly",
-            "label": "Yearly · 2 months free"
-          }
-        ],
         "title": "Per project, not per seat",
         "subtitle": "Seat pricing punishes you for inviting the people who should read the changelog. Every price here is the price you pay — no hidden tier, no per-seat surprise at renewal.",
-        "level": 1
-      },
-      "slots": {
-        "monthly": [
-          {
-            "widget": "Pricing",
-            "props": {
-              "items": [
-                {
-                  "title": "Free",
-                  "price": "0",
-                  "currency": "$",
-                  "note": "One project, forever. Not a trial — there is no clock.",
-                  "features": [
-                    "1 project · unlimited releases",
-                    "Changelog page on cadence.dev/yourname",
-                    "RSS and email digest up to 500 subscribers",
-                    "Cadence badge in the footer"
-                  ],
-                  "actions": [
-                    {
-                      "text": "Start free",
-                      "href": "#signup"
-                    }
-                  ]
-                },
-                {
-                  "title": "Team",
-                  "price": "29",
-                  "currency": "$",
-                  "suffix": "/month",
-                  "note": "Switch to yearly and two months are free",
-                  "recommended": true,
-                  "badge": "4 of 5 teams pick this",
-                  "features": [
-                    "Unlimited projects and editors",
-                    "Your own domain, no badge",
-                    "In-app widget and per-account read receipts",
-                    "Digest to 50,000 subscribers from your domain",
-                    "GitHub, Linear, Slack and Intercom"
-                  ],
-                  "actions": [
-                    {
-                      "text": "Start free, upgrade later",
-                      "href": "#signup"
-                    }
-                  ]
-                },
-                {
-                  "title": "Self-hosted",
-                  "price": "99",
-                  "currency": "$",
-                  "suffix": "/month",
-                  "note": "Your infrastructure, your database",
-                  "features": [
-                    "Everything in Team",
-                    "One container, any Postgres 14+",
-                    "SAML and OIDC single sign-on",
-                    "Audit log and data residency wherever you host",
-                    "Named support contact, 1 business day"
-                  ],
-                  "actions": [
-                    {
-                      "text": "Talk to us",
-                      "href": "/contact"
-                    }
-                  ]
-                }
-              ],
-              "note": "Prices in USD, excluding VAT. Non-profits and student projects pay nothing on Team — [just ask](/contact)."
+        "align": "start",
+        "level": 1,
+        "periods": {
+          "label": "Billing period",
+          "options": [
+            {
+              "value": "monthly",
+              "label": "Monthly"
+            },
+            {
+              "value": "yearly",
+              "label": "Yearly · 2 months free"
             }
-          }
-        ],
-        "yearly": [
+          ],
+          "value": "yearly",
+          "syncKey": "billing"
+        },
+        "note": "Prices in USD, excluding VAT. Non-profits and student projects pay nothing on Team — [just ask](/contact).",
+        "items": [
           {
-            "widget": "Pricing",
-            "props": {
-              "items": [
-                {
-                  "title": "Free",
-                  "price": "0",
-                  "currency": "$",
-                  "note": "One project, forever. Not a trial — there is no clock.",
-                  "features": [
-                    "1 project · unlimited releases",
-                    "Changelog page on cadence.dev/yourname",
-                    "RSS and email digest up to 500 subscribers",
-                    "Cadence badge in the footer"
-                  ],
-                  "actions": [
-                    {
-                      "text": "Start free",
-                      "href": "#signup"
-                    }
-                  ]
-                },
-                {
-                  "title": "Team",
-                  "price": "290",
-                  "currency": "$",
-                  "suffix": "/year",
-                  "note": "Two months free against monthly",
-                  "recommended": true,
-                  "badge": "4 of 5 teams pick this",
-                  "features": [
-                    "Unlimited projects and editors",
-                    "Your own domain, no badge",
-                    "In-app widget and per-account read receipts",
-                    "Digest to 50,000 subscribers from your domain",
-                    "GitHub, Linear, Slack and Intercom"
-                  ],
-                  "actions": [
-                    {
-                      "text": "Start free, upgrade later",
-                      "href": "#signup"
-                    }
-                  ],
-                  "noteTone": "success"
-                },
-                {
-                  "title": "Self-hosted",
-                  "price": "990",
-                  "currency": "$",
-                  "suffix": "/year",
-                  "note": "Your infrastructure, your database",
-                  "features": [
-                    "Everything in Team",
-                    "One container, any Postgres 14+",
-                    "SAML and OIDC single sign-on",
-                    "Audit log and data residency wherever you host",
-                    "Named support contact, 1 business day"
-                  ],
-                  "actions": [
-                    {
-                      "text": "Talk to us",
-                      "href": "/contact"
-                    }
-                  ]
-                }
-              ],
-              "note": "Prices in USD, excluding VAT. Non-profits and student projects pay nothing on Team — [just ask](/contact)."
+            "title": "Free",
+            "price": "0",
+            "currency": "$",
+            "note": "One project, forever. Not a trial — there is no clock.",
+            "features": [
+              "1 project · unlimited releases",
+              "Changelog page on cadence.dev/yourname",
+              "RSS and email digest up to 500 subscribers",
+              "Cadence badge in the footer"
+            ],
+            "actions": [
+              {
+                "text": "Start free",
+                "href": "#signup"
+              }
+            ]
+          },
+          {
+            "title": "Team",
+            "price": {
+              "monthly": "29",
+              "yearly": "290"
+            },
+            "currency": "$",
+            "suffix": {
+              "monthly": "/month",
+              "yearly": "/year"
+            },
+            "note": {
+              "monthly": "Switch to yearly and two months are free",
+              "yearly": "Two months free against monthly"
+            },
+            "recommended": true,
+            "badge": "4 of 5 teams pick this",
+            "features": [
+              "Unlimited projects and editors",
+              "Your own domain, no badge",
+              "In-app widget and per-account read receipts",
+              "Digest to 50,000 subscribers from your domain",
+              "GitHub, Linear, Slack and Intercom"
+            ],
+            "actions": [
+              {
+                "text": "Start free, upgrade later",
+                "href": "#signup"
+              }
+            ],
+            "noteTone": {
+              "yearly": "success"
             }
+          },
+          {
+            "title": "Self-hosted",
+            "price": {
+              "monthly": "99",
+              "yearly": "990"
+            },
+            "currency": "$",
+            "suffix": {
+              "monthly": "/month",
+              "yearly": "/year"
+            },
+            "note": "Your infrastructure, your database",
+            "features": [
+              "Everything in Team",
+              "One container, any Postgres 14+",
+              "SAML and OIDC single sign-on",
+              "Audit log and data residency wherever you host",
+              "Named support contact, 1 business day"
+            ],
+            "actions": [
+              {
+                "text": "Talk to us",
+                "href": "/contact"
+              }
+            ]
           }
         ]
       }

@@ -156,119 +156,98 @@
       "slots": {
         "default": [
           {
-            "widget": "Switch",
+            "widget": "Pricing",
             "props": {
-              "label": "Billing period",
-              "syncKey": "billing",
-              "value": "yearly",
-              "align": "start",
               "tagline": "Plans",
               "title": "Two ways to pay for the same thing",
-              "options": [
+              "subtitle": "Sample plans to show the block: monthly anchors the value, yearly is highlighted with the saving in plain units. Replace them with your real prices.",
+              "align": "start",
+              "periods": {
+                "label": "Billing period",
+                "options": [
+                  {
+                    "value": "monthly",
+                    "label": "Monthly"
+                  },
+                  {
+                    "value": "yearly",
+                    "label": "Yearly · 2 months free"
+                  }
+                ],
+                "value": "yearly",
+                "syncKey": "billing"
+              },
+              "items": [
                 {
-                  "value": "monthly",
-                  "label": "Monthly"
+                  "title": "Individual",
+                  "price": {
+                    "monthly": "12",
+                    "yearly": "120"
+                  },
+                  "currency": "$",
+                  "suffix": {
+                    "monthly": "/month",
+                    "yearly": "/year"
+                  },
+                  "note": {
+                    "monthly": "Cancel any time",
+                    "yearly": "Two months free against paying monthly"
+                  },
+                  "recommended": true,
+                  "features": {
+                    "monthly": [
+                      "Every monthly pack, from the month you join",
+                      "The full back catalogue, 14 packs",
+                      "Commercial use on client work"
+                    ],
+                    "yearly": [
+                      "Every monthly pack, from the month you join",
+                      "The full back catalogue, 14 packs",
+                      "Commercial use on client work",
+                      "One charge, and a renewal reminder before it"
+                    ]
+                  },
+                  "actions": {
+                    "monthly": [
+                      {
+                        "text": "Start monthly",
+                        "href": "#plans"
+                      }
+                    ],
+                    "yearly": [
+                      {
+                        "text": "Start yearly",
+                        "href": "#plans"
+                      }
+                    ]
+                  },
+                  "noteTone": {
+                    "yearly": "success"
+                  }
                 },
                 {
-                  "value": "yearly",
-                  "label": "Yearly · 2 months free"
-                }
-              ],
-              "subtitle": "Sample plans to show the block: monthly anchors the value, yearly is highlighted with the saving in plain units. Replace them with your real prices."
-            },
-            "slots": {
-              "monthly": [
-                {
-                  "widget": "Pricing",
-                  "props": {
-                    "items": [
-                      {
-                        "title": "Individual",
-                        "price": "12",
-                        "currency": "$",
-                        "suffix": "/month",
-                        "note": "Cancel any time",
-                        "recommended": true,
-                        "features": [
-                          "Every monthly pack, from the month you join",
-                          "The full back catalogue, 14 packs",
-                          "Commercial use on client work"
-                        ],
-                        "actions": [
-                          {
-                            "text": "Start monthly",
-                            "href": "#plans"
-                          }
-                        ]
-                      },
-                      {
-                        "title": "Studio · 5 seats",
-                        "price": "39",
-                        "currency": "$",
-                        "suffix": "/month",
-                        "note": "The anchor that makes Individual feel small",
-                        "features": [
-                          "Everything in Individual, five seats",
-                          "Shared library and one invoice",
-                          "Brand presets per client"
-                        ],
-                        "actions": [
-                          {
-                            "text": "Start Studio",
-                            "href": "#plans"
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                }
-              ],
-              "yearly": [
-                {
-                  "widget": "Pricing",
-                  "props": {
-                    "items": [
-                      {
-                        "title": "Individual",
-                        "price": "120",
-                        "currency": "$",
-                        "suffix": "/year",
-                        "note": "Two months free against paying monthly",
-                        "noteTone": "success",
-                        "recommended": true,
-                        "features": [
-                          "Every monthly pack, from the month you join",
-                          "The full back catalogue, 14 packs",
-                          "Commercial use on client work",
-                          "One charge, and a renewal reminder before it"
-                        ],
-                        "actions": [
-                          {
-                            "text": "Start yearly",
-                            "href": "#plans"
-                          }
-                        ]
-                      },
-                      {
-                        "title": "Studio · 5 seats",
-                        "price": "390",
-                        "currency": "$",
-                        "suffix": "/year",
-                        "note": "The anchor that makes Individual feel small",
-                        "features": [
-                          "Everything in Individual, five seats",
-                          "Shared library and one invoice",
-                          "Brand presets per client"
-                        ],
-                        "actions": [
-                          {
-                            "text": "Start Studio",
-                            "href": "#plans"
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                  "title": "Studio · 5 seats",
+                  "price": {
+                    "monthly": "39",
+                    "yearly": "390"
+                  },
+                  "currency": "$",
+                  "suffix": {
+                    "monthly": "/month",
+                    "yearly": "/year"
+                  },
+                  "note": "The anchor that makes Individual feel small",
+                  "features": [
+                    "Everything in Individual, five seats",
+                    "Shared library and one invoice",
+                    "Brand presets per client"
+                  ],
+                  "actions": [
+                    {
+                      "text": "Start Studio",
+                      "href": "#plans"
+                    }
+                  ]
                 }
               ]
             }

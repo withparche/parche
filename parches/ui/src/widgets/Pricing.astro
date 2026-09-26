@@ -2,65 +2,60 @@
 /**
  * Pricing: the tiers as cards, the recommended one marked, and a comparison
  * table under them with one column per plan. Cards sell, the table closes.
+ *
+ * With `periods` (monthly, yearly…) a control sits over the plans, with one
+ * grid per period; a plan's field that changes is keyed by period
+ * (`"price": { "monthly": "29", "yearly": "290" }`), one that does not is
+ * written once. The control is the Tabs element, as Switch uses it, so the
+ * chosen period can live in the URL and, without script, every period shows.
  */
-import Card from 'parche:elements/Card';
+import Tabs from 'parche:elements/Tabs';
 import { inline } from '../_shared/inline';
-import Button from 'parche:elements/Button';
 import TableElement from 'parche:elements/Table';
 import SectionHeader from '../components/SectionHeader.astro';
-import { schema, type Props } from './Pricing.props';
+import PricingPlans, { type Plan } from '../components/PricingPlans.astro';
+import { schema, periodFields, type Props } from './Pricing.props';
 
-const { title, subtitle, tagline, link, align, items, note, comparison } = schema.parse(Astro.props) as Props;
-const plans = items.filter((p) => p.price || p.title);
+const { title, subtitle, tagline, link, align, level, periods, items, note, comparison } = schema.parse(Astro.props) as Props;
+
+/** A plan with every field at one period's value. */
+const at = (period?: string) => (plan: (typeof items)[number]): Plan => {
+  const out: Record<string, unknown> = { ...plan };
+  for (const field of periodFields) {
+    const v = (plan as Record<string, unknown>)[field];
+    if (v && typeof v === 'object' && !Array.isArray(v)) out[field] = period ? (v as Record<string, unknown>)[period] : undefined;
+  }
+  out.features ??= [];
+  out.actions ??= [];
+  out.noteTone ??= 'muted';
+  return out as unknown as Plan;
+};
+const visible = (p: Plan) => Boolean(p.price || p.title);
+const plans = items.map(at(periods?.options[0]?.value)).filter(visible);
+const forPeriod = (i: number) => (periods?.options[i] ? items.map(at(periods.options[i].value)).filter(visible) : []);
 const featured = plans.findIndex((p) => p.recommended);
+const spaced = Boolean(comparison && !note);
+const hasHeading = Boolean(title || tagline || subtitle);
+const name = (i: number) => periods?.options[i]?.value ?? `__none-${i}`;
 ---
 
 <!-- One root, so a Section stacks this widget as one block. -->
-<div class="parche-pricing">
-<SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="md" />
-
-{plans.length > 0 && (
-  <div class:list={['grid grid-cols-[repeat(auto-fit,minmax(min(260px,100%),1fr))] gap-[clamp(16px,2vw,24px)]', comparison && !note && 'mb-[clamp(20px,3vw,32px)]']}>
-    {plans.map((p) => {
-      const numeric = /^[\d.,]/.test(String(p.price ?? ''));
-      const shown = p.type === 'custom' ? (p.price || "Let's talk") : `${numeric ? (p.currency ?? '$') : ''}${p.price ?? ''}`;
-      return (
-        <Card
-          as="article"
-          variant="canvas"
-          radius="lg"
-          padding="lg"
-          gap="md"
-          shadow="none"
-          class:list={['relative overflow-visible', p.recommended && 'border-primary shadow-lg']}
-        >
-          {p.badge && (
-            <span class="absolute -top-[11px] left-[var(--ds-comp-card-padding-lg,clamp(1.5rem,2.8vw,2rem))] rounded-full bg-primary px-2.5 py-1.5 type-label text-on-primary">{p.badge}</span>
-          )}
-          <div>
-            {p.title && <h3 class="mb-3 text-base leading-none font-semibold text-heading">{p.title}</h3>}
-            <p class="type-figure text-heading">
-              {shown}{(p.suffix || p.period) && <span class="font-body text-[15px] font-normal tracking-normal text-muted"> {p.suffix ?? p.period}</span>}
-            </p>
-            {(p.note || p.subtitle) && <p class:list={['mt-2 type-small', p.noteTone === 'success' ? 'text-success' : 'text-muted']} set:html={inline(p.note ?? p.subtitle)} />}
-            {p.description && <p class="mt-2 type-small text-muted" set:html={inline(p.description)} />}
-          </div>
-          {p.features.length > 0 && (
-            <ul class="flex flex-col gap-[9px] border-t border-border-soft pt-[18px] text-sm leading-[1.5] text-heading">
-              {p.features.map((f) => <li set:html={inline(f)} />)}
-            </ul>
-          )}
-          {p.actions.length > 0 && (
-            <div class="mt-auto flex flex-col gap-2">
-              {p.actions.map((a) => a.text && (
-                <Button href={a.href} target={a.target} variant={a.variant === 'tertiary' ? 'secondary' : (a.variant ?? (p.recommended ? 'primary' : 'secondary'))} block class="p-3 text-[15px] leading-none">{a.text}</Button>
-              ))}
-            </div>
-          )}
-        </Card>
-      );
-    })}
-  </div>
+<div class:list={['parche-pricing', periods && !hasHeading && align === 'center' && 'text-center [&_.parche-tabs-list]:justify-center']}>
+{periods ? (
+  <Tabs items={periods.options} value={periods.value} syncKey={periods.syncKey} variant="pill" label={periods.label}>
+    {hasHeading && <SectionHeader slot="header" {tagline} {title} {subtitle} {link} {level} width="sm" spacing="none" />}
+    <Fragment slot={name(0)}>{periods.options[0] && <PricingPlans plans={forPeriod(0)} {spaced} />}</Fragment>
+    <Fragment slot={name(1)}>{periods.options[1] && <PricingPlans plans={forPeriod(1)} {spaced} />}</Fragment>
+    <Fragment slot={name(2)}>{periods.options[2] && <PricingPlans plans={forPeriod(2)} {spaced} />}</Fragment>
+    <Fragment slot={name(3)}>{periods.options[3] && <PricingPlans plans={forPeriod(3)} {spaced} />}</Fragment>
+    <Fragment slot={name(4)}>{periods.options[4] && <PricingPlans plans={forPeriod(4)} {spaced} />}</Fragment>
+    <Fragment slot={name(5)}>{periods.options[5] && <PricingPlans plans={forPeriod(5)} {spaced} />}</Fragment>
+  </Tabs>
+) : (
+  <>
+    <SectionHeader {tagline} {title} {subtitle} {link} {align} {level} spacing="md" />
+    {plans.length > 0 && <PricingPlans {plans} {spaced} />}
+  </>
 )}
 
 {note && <p class:list={['mt-4 type-small text-muted [&_a]:text-primary', comparison && 'mb-[clamp(20px,3vw,32px)]']} set:html={inline(note)} />}

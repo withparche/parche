@@ -1,0 +1,79 @@
+---
+/**
+ * The plans of a Pricing widget as cards, for one billing period: every
+ * field already resolved to that period's value. Pricing renders it once,
+ * or once per period inside its control.
+ */
+import Card from 'parche:elements/Card';
+import Button from 'parche:elements/Button';
+import { inline } from '../_shared/inline';
+
+export interface Plan {
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  type: 'standard' | 'custom';
+  price?: string;
+  currency?: string;
+  period?: string;
+  suffix?: string;
+  note?: string;
+  noteTone: 'muted' | 'success';
+  features: string[];
+  actions: { text?: string; href?: string; target?: string; variant?: string }[];
+  recommended: boolean;
+  badge?: string;
+}
+
+interface Props {
+  plans: Plan[];
+  /** Space under the grid, when a comparison table follows it directly. */
+  spaced?: boolean;
+}
+
+const { plans, spaced = false } = Astro.props;
+---
+
+{plans.length > 0 && (
+  <div class:list={['grid grid-cols-[repeat(auto-fit,minmax(min(260px,100%),1fr))] gap-[clamp(16px,2vw,24px)]', spaced && 'mb-[clamp(20px,3vw,32px)]']}>
+    {plans.map((p) => {
+      const numeric = /^[\d.,]/.test(String(p.price ?? ''));
+      const shown = p.type === 'custom' ? (p.price || "Let's talk") : `${numeric ? (p.currency ?? '$') : ''}${p.price ?? ''}`;
+      return (
+        <Card
+          as="article"
+          variant="canvas"
+          radius="lg"
+          padding="lg"
+          gap="md"
+          shadow="none"
+          class:list={['relative overflow-visible', p.recommended && 'border-primary shadow-lg']}
+        >
+          {p.badge && (
+            <span class="absolute -top-[11px] left-[var(--ds-comp-card-padding-lg,clamp(1.5rem,2.8vw,2rem))] rounded-full bg-primary px-2.5 py-1.5 type-label text-on-primary">{p.badge}</span>
+          )}
+          <div>
+            {p.title && <h3 class="mb-3 text-base leading-none font-semibold text-heading">{p.title}</h3>}
+            <p class="type-figure text-heading">
+              {shown}{(p.suffix || p.period) && <span class="font-body text-[15px] font-normal tracking-normal text-muted"> {p.suffix ?? p.period}</span>}
+            </p>
+            {(p.note || p.subtitle) && <p class:list={['mt-2 type-small', p.noteTone === 'success' ? 'text-success' : 'text-muted']} set:html={inline(p.note ?? p.subtitle)} />}
+            {p.description && <p class="mt-2 type-small text-muted" set:html={inline(p.description)} />}
+          </div>
+          {p.features.length > 0 && (
+            <ul class="flex flex-col gap-[9px] border-t border-border-soft pt-[18px] text-sm leading-[1.5] text-heading">
+              {p.features.map((f) => <li set:html={inline(f)} />)}
+            </ul>
+          )}
+          {p.actions.length > 0 && (
+            <div class="mt-auto flex flex-col gap-2">
+              {p.actions.map((a) => a.text && (
+                <Button href={a.href} target={a.target} variant={(a.variant === 'tertiary' ? 'secondary' : (a.variant ?? (p.recommended ? 'primary' : 'secondary'))) as any} block class="p-3 text-[15px] leading-none">{a.text}</Button>
+              ))}
+            </div>
+          )}
+        </Card>
+      );
+    })}
+  </div>
+)}
