@@ -140,7 +140,8 @@ const displayTag = term.title;
 const metadata = {
   title: `${format(labels.tagTitle, { value: displayTag })} — ${site.brand.name}`,
   description: term.description ?? format(labels.tagDescription, { value: displayTag }),
-  noindex: false,
+  // A tag with only a post or two is a thin page: kept for readers, out of the index.
+  noindex: page.total < (cfg.tagIndexThreshold ?? 3),
   nofollow: false,
   ogType: 'website' as const,
   twitterCard: 'summary_large_image' as const,

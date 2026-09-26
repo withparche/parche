@@ -8,7 +8,7 @@ import BlogPostHeader from 'parche:widgets/blog/BlogPostHeader';
 import ShareButtons from 'parche:widgets/blog/ShareButtons';
 import ToBlogLink from 'parche:widgets/blog/ToBlogLink';
 import blogConfig from 'parche:app/blog';
-import { resolveTaxonomyPermalink, localizePath } from '../types.js';
+import { resolveTaxonomyPermalink, resolveAuthorHref, localizePath } from '../types.js';
 import { defaultLocale } from 'parche:config/i18n';
 import { resolveLabels } from '../labels.js';
 import { createTaxonomyResolver } from '../utils/taxonomy.js';
@@ -59,7 +59,7 @@ const pageUrl = Astro.url.href;
       authors={authorData.map((a) => ({
         name: a.name,
         avatar: a.avatar,
-        href: resolveTaxonomyPermalink(permalinks.author, a.slug ?? a.name, locale, defaultLocale),
+        href: resolveAuthorHref({ ...(blogConfig as any), permalinks }, a.slug ?? a.name, locale, defaultLocale),
       }))}
       categoryHref={data.category ? resolveTaxonomyPermalink(permalinks.category, tax.slugFor('categories', data.category), locale, defaultLocale) : undefined}
     />

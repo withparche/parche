@@ -1,0 +1,20 @@
+{
+  "title": "About Jane Doe",
+  "description": "Jane Doe writes this blog: Astro, design systems and shipping fast.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "layout": "text",
+        "align": "start",
+        "tagline": "About",
+        "title": "Jane Doe",
+        "subtitle": "Maintainer. Writes about Astro, design systems and shipping fast. This blog has one writer, so her name links here instead of to an author page.",
+        "actions": [
+          { "variant": "primary", "text": "Read the blog", "href": "/blog" },
+          { "variant": "secondary", "text": "GitHub", "href": "https://github.com/withparche", "target": "_blank" }
+        ]
+      }
+    }
+  ]
+}

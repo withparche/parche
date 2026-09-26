@@ -47,6 +47,8 @@ export const postSchema = z.object({
 
   // Content hints
   excerpt: z.string().optional(),
+  /** A newsletter's issue number: shown as "#142" before the title. */
+  issue: z.number().int().positive().optional(),
   readingTime: z.number().optional(),
 
   // Layout
@@ -127,7 +129,24 @@ export const authorSchema = z.object({
     .optional(),
 });
 
+/**
+ * A series, described once: `src/content/series/<key>.json`. A post joins it
+ * with `series: { name: '<key>', order: 2 }` (the key, or the series title as
+ * written before the collection existed). The file is optional: a series
+ * without one is titled by its name and has no description.
+ */
+export const seriesSchema = z.object({
+  title: z.string(),
+  description: z.string().optional(),
+  /** 'ongoing' lists `upcoming` parts with their date, so readers know it is alive. */
+  status: z.enum(['ongoing', 'complete']).default('ongoing'),
+  upcoming: z
+    .array(z.object({ title: z.string(), date: z.coerce.date().optional(), note: z.string().optional() }))
+    .default([]),
+});
+
 export type PostEntry = z.infer<typeof postSchema>;
+export type SeriesEntry = z.infer<typeof seriesSchema>;
 export type AuthorEntry = z.infer<typeof authorSchema>;
 export type TaxonomyTerm = z.infer<typeof taxonomyTermSchema>;
 export type TaxonomyEntry = z.infer<typeof taxonomySchema>;

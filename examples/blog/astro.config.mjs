@@ -9,7 +9,7 @@ import createBlog from '@parche/astro-blog';
 export default defineConfig({
   integrations: [
     parche({
-      parches: [createElements(), createUI(), createBlog({ postsPerPage: 6, permalinks: { post: '/%slug%' } })],
+      parches: [createElements(), createUI(), createBlog({ preset: 'personal', postsPerPage: 6, permalinks: { post: '/%slug%' } })],
       config: './src/parche.config.json',
       routes: { pages: true },
     }),

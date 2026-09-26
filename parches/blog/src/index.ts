@@ -3,9 +3,10 @@ import path from 'node:path';
 import type { ParcheManifest } from '@parche/astro';
 import type { BlogConfig } from './types.js';
 import { resolveBlogConfig, permalinkToRoutePattern } from './types.js';
+import { validateBlogConfig } from './config-schema.js';
 
-export type { BlogConfig } from './types.js';
-export { resolvePostPermalink, resolveTaxonomyPermalink, localizePath } from './types.js';
+export type { BlogConfig, BlogPreset, ResolvedBlogConfig } from './types.js';
+export { resolvePostPermalink, resolveTaxonomyPermalink, resolveAuthorHref, localizePath, BLOG_PRESETS } from './types.js';
 export { DEFAULT_LABELS, resolveLabels, format } from './labels.js';
 export type { BlogLabels, BlogLabelsConfig } from './labels.js';
 
@@ -37,6 +38,7 @@ function isRootLevelPermalink(permalink: string): boolean {
  *   })] })
  */
 export default function createBlog(config?: BlogConfig): ParcheManifest {
+  validateBlogConfig(config);
   const resolved = resolveBlogConfig(config);
   const srcDir = path.dirname(fileURLToPath(import.meta.url));
   const routePath = (...segments: string[]) => path.resolve(srcDir, 'routes', ...segments);
@@ -53,9 +55,12 @@ export default function createBlog(config?: BlogConfig): ParcheManifest {
     { pattern: `${permalinkToRoutePattern(permalinks.tag)}/[...page]`, entrypoint: routePath('tag', '[tag]', '[...page].astro') },
     // Category listing (paginated)
     { pattern: `${permalinkToRoutePattern(permalinks.category)}/[...page]`, entrypoint: routePath('category', '[category]', '[...page].astro') },
-    // Author listing (paginated)
-    { pattern: `${permalinkToRoutePattern(permalinks.author)}/[...page]`, entrypoint: routePath('author', '[author]', '[...page].astro') },
   ];
+
+  // Author pages only when there are several writers; one writer is the About page.
+  if (resolved.authors === 'many') {
+    routes.push({ pattern: `${permalinkToRoutePattern(permalinks.author)}/[...page]`, entrypoint: routePath('author', '[author]', '[...page].astro') });
+  }
 
   // Single post: use own route if prefixed, otherwise use resolver via catch-all
   if (!useResolver) {

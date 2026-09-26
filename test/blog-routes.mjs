@@ -21,8 +21,10 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 /** Sites with a blog, and what their content should produce. */
 const SITES = {
-  'demos/astrowind': { posts: 8, perPage: 6, listing: '/blog', rss: '/rss.xml' },
-  'examples/blog': { posts: 2, perPage: 6, listing: '/blog', rss: '/rss.xml' },
+  // company preset: several writers, each with a page.
+  'demos/astrowind': { posts: 8, perPage: 6, listing: '/blog', rss: '/rss.xml', authorPages: true },
+  // personal preset: one writer, no author pages; the byline links to /about.
+  'examples/blog': { posts: 2, perPage: 6, listing: '/blog', rss: '/rss.xml', authorPages: false },
 };
 
 const failures = [];
@@ -74,6 +76,10 @@ for (const [site, want] of Object.entries(SITES)) {
   check(existsSync(join(dist, want.listing, 'index.html')), `${site}: no listing at ${want.listing}`);
   for (let n = 2; n <= lastPage; n++) check(existsSync(join(dist, want.listing, String(n), 'index.html')), `${site}: listing page ${n} missing`);
   check(!existsSync(join(dist, want.listing, String(lastPage + 1), 'index.html')), `${site}: listing page ${lastPage + 1} built past the last post`);
+
+  // Author pages exist only for a blog with several writers.
+  const authorDir = join(dist, want.listing, 'author');
+  check(existsSync(authorDir) === want.authorPages, `${site}: author pages ${want.authorPages ? 'missing' : 'built for a single-writer blog'}`);
 
   // The feed exists, has one item per post, and every page points to it.
   const feed = join(dist, want.rss);

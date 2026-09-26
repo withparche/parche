@@ -1,9 +1,9 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
-import { postSchema, authorSchema, taxonomySchema } from './schemas.js';
+import { postSchema, authorSchema, taxonomySchema, seriesSchema } from './schemas.js';
 
-export { postSchema, authorSchema, taxonomySchema, taxonomyTermSchema } from './schemas.js';
-export type { PostEntry, AuthorEntry, TaxonomyEntry, TaxonomyTerm } from './schemas.js';
+export { postSchema, authorSchema, taxonomySchema, taxonomyTermSchema, seriesSchema } from './schemas.js';
+export type { PostEntry, AuthorEntry, TaxonomyEntry, TaxonomyTerm, SeriesEntry } from './schemas.js';
 
 /**
  * Create blog content collections.
@@ -18,9 +18,11 @@ export function createBlogCollections(options?: {
   postSchema?: import('zod').ZodType;
   authorSchema?: import('zod').ZodType;
   taxonomySchema?: import('zod').ZodType;
+  seriesSchema?: import('zod').ZodType;
   postsBase?: string;
   authorsBase?: string;
   taxonomiesBase?: string;
+  seriesBase?: string;
 }) {
   return {
     posts: defineCollection({
@@ -45,6 +47,14 @@ export function createBlogCollections(options?: {
         base: options?.taxonomiesBase ?? './src/content/taxonomies',
       }),
       schema: options?.taxonomySchema ?? taxonomySchema,
+    }),
+    // One file per series (its key is the file name). Optional.
+    series: defineCollection({
+      loader: glob({
+        pattern: '**/*.{json,yaml,yml}',
+        base: options?.seriesBase ?? './src/content/series',
+      }),
+      schema: options?.seriesSchema ?? seriesSchema,
     }),
   };
 }

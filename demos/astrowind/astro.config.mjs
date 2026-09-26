@@ -24,6 +24,8 @@ export default defineConfig({
         // With no static prefix the blog registers a resolver and core's
         // catch-all serves posts, per locale.
         createBlog({
+          // Several writers with their own pages, categories, one featured post.
+          preset: 'company',
           postsPerPage: 6,
           relatedPostsCount: 4,
           permalinks: { post: '/%slug%' },

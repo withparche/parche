@@ -76,13 +76,13 @@ export interface BlogConfig {
   readingTime?: boolean;
   /** Words per minute for reading time. Default: 200 */
   wordsPerMinute?: number;
-  /** Number of related posts to show. Default: 3 */
+  /** Number of related posts to show; 0 turns them off. Default: from the preset (3, or 0 for a newsletter). */
   relatedPostsCount?: number;
   /** Show draft posts in dev mode. Default: true */
   showDraftsInDev?: boolean;
   /** Enable RSS feed generation. Default: true */
   rss?: boolean;
-  /** Enable series/collections. Default: false */
+  /** Build series pages and the part-of-a-series boxes. Default: from the preset. */
   series?: boolean;
   /**
    * How post dates are rendered, as options for `Intl.DateTimeFormat`.
@@ -102,7 +102,41 @@ export interface BlogConfig {
    * Anything omitted falls back to the English defaults. See ./labels.ts.
    */
   labels?: BlogLabelsConfig;
+  /**
+   * The kind of publication, which sets the defaults of the keys below (see
+   * BLOG_PRESETS). Any key given explicitly wins over the preset. Default:
+   * 'company'.
+   */
+  preset?: BlogPreset;
+  /**
+   * 'one' for a single writer: no author pages are built, and a byline links
+   * to `aboutPath`. 'many' builds a page per author.
+   */
+  authors?: 'one' | 'many';
+  /** With `authors: 'one'`, where the writer's name links. Default: '/about'. */
+  aboutPath?: string;
+  /** Tag pages with fewer posts than this are `noindex`: a thin page dilutes the site. Default: 3. */
+  tagIndexThreshold?: number;
 }
+
+/** A kind of publication: a starting point for the blog's structure, never a lock. */
+export type BlogPreset = 'personal' | 'company' | 'magazine' | 'newsletter';
+
+/**
+ * What each preset decides. Only structure lives here (which pages exist, how
+ * many related posts are looked up); how the pages look is decided by the
+ * blog's views, which each preset also ships.
+ */
+export const BLOG_PRESETS: Record<BlogPreset, { authors: 'one' | 'many'; series: boolean; relatedPostsCount: number }> = {
+  // One writer, tags, and series for long arguments told in parts.
+  personal: { authors: 'one', series: true, relatedPostsCount: 3 },
+  // Several writers with their own pages; categories map to the teams.
+  company: { authors: 'many', series: false, relatedPostsCount: 3 },
+  // Sections, many writers, series for investigations.
+  magazine: { authors: 'many', series: true, relatedPostsCount: 3 },
+  // One writer; every post is a numbered issue and the next one is the point.
+  newsletter: { authors: 'one', series: false, relatedPostsCount: 0 },
+};
 
 export interface ResolvedPermalinks {
   listing: string;
@@ -125,10 +159,21 @@ export interface ResolvedBlogConfig {
   series: boolean;
   dateFormat: Intl.DateTimeFormatOptions;
   labels: BlogLabelsConfig;
+  preset: BlogPreset;
+  authors: 'one' | 'many';
+  aboutPath: string;
+  tagIndexThreshold: number;
 }
 
+/**
+ * The blog's configuration, resolved: built-in defaults, then the preset, then
+ * the keys the site gives. Components read only this, never `preset` to decide
+ * anything themselves.
+ */
 export function resolveBlogConfig(config?: BlogConfig): ResolvedBlogConfig {
   const p = config?.permalinks ?? {};
+  const preset = config?.preset ?? 'company';
+  const fromPreset = BLOG_PRESETS[preset];
 
   return {
     permalinks: {
@@ -143,15 +188,34 @@ export function resolveBlogConfig(config?: BlogConfig): ResolvedBlogConfig {
     postsPerPage: config?.postsPerPage ?? 12,
     readingTime: config?.readingTime ?? true,
     wordsPerMinute: config?.wordsPerMinute ?? 200,
-    relatedPostsCount: config?.relatedPostsCount ?? 3,
+    relatedPostsCount: config?.relatedPostsCount ?? fromPreset.relatedPostsCount,
     showDraftsInDev: config?.showDraftsInDev ?? true,
     rss: config?.rss ?? true,
-    series: config?.series ?? false,
+    series: config?.series ?? fromPreset.series,
     // The default is what the widgets already rendered, so nothing shifts until
     // a site asks it to.
     dateFormat: config?.dateFormat ?? { year: 'numeric', month: 'short', day: 'numeric' },
     labels: config?.labels ?? {},
+    preset,
+    authors: config?.authors ?? fromPreset.authors,
+    aboutPath: config?.aboutPath ?? '/about',
+    tagIndexThreshold: config?.tagIndexThreshold ?? 3,
   };
+}
+
+/**
+ * Where an author's name links: their page when the blog has several writers,
+ * the About page when it has one (there are no author pages then).
+ */
+export function resolveAuthorHref(
+  config: Pick<ResolvedBlogConfig, 'authors' | 'aboutPath' | 'permalinks'>,
+  author: string,
+  locale?: string,
+  defaultLocale?: string,
+): string {
+  return config.authors === 'one'
+    ? localizePath(config.aboutPath, locale, defaultLocale)
+    : resolveTaxonomyPermalink(config.permalinks.author, author, locale, defaultLocale);
 }
 
 /** Slugify a string for URL usage. */
