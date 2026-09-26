@@ -185,6 +185,23 @@ consuming prop takes. A layout then holds structure only:
 
 and an editor changes a link once for every layout that shows it.
 
+## Props first, slots for the variation
+
+A widget's props should be rich enough for most pages to need nothing else:
+the default is a widget filled in with props. Slots exist for the variation
+a widget cannot foresee, so it bends instead of multiplying: a form where a
+hero's image goes, a row of reviews under its subtitle, a code block above a
+features grid. They are not the way to build a section out of small pieces.
+
+When a combination keeps coming back in slots, it is a prop the widget is
+missing. The demo showed three: a Section around every block (now a node's
+`wrapper`), a Switch over two copies of Pricing (now Pricing's `periods`),
+and a Screenshot alone in a Hero's or Features' media slot, used as a
+captioned placeholder (now their `image`, which takes Screenshot's options).
+What stays in slots is what varies: numbers or a status line under a hero,
+two different widgets side by side in Columns, a note after a widget in the
+same band.
+
 ## Declaring slots in a widget
 
 ```ts

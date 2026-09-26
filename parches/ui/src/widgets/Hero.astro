@@ -8,6 +8,8 @@
  */
 import { inline } from '../_shared/inline';
 import Image from 'parche:elements/Image';
+import Screenshot from './Screenshot.astro';
+import { pictureBox, plainPicture, screenshotOf } from '../_shared/content';
 import Action from '../components/Action.astro';
 import { schema, type Props } from './Hero.props';
 
@@ -33,7 +35,9 @@ const Badge = badge?.href ? 'a' : 'span';
     <div class="relative">
       <div class="parche-hero-media overflow-hidden rounded-lg">
         <slot name="media">
-          {image && <Image src={image.src} alt={image.alt} width={1600} ratio="16/9" layout="full-width" priority class="block w-full" />}
+          {image && (plainPicture(image)
+            ? <Image src={image.src} alt={image.alt} {...pictureBox(1600, image.ratio ?? '16/9')} layout="full-width" priority class="block w-full" />
+            : <Screenshot {...screenshotOf(image, '16/9')} />)}
         </slot>
       </div>
       <div class="mt-4 md:absolute md:bottom-[clamp(20px,4vw,48px)] md:left-[clamp(20px,4vw,48px)] md:mt-0 md:max-w-[460px]">
@@ -105,16 +109,17 @@ const Badge = badge?.href ? 'a' : 'span';
     {showMedia && (
       <div class:list={['parche-hero-media flex min-w-0 flex-col gap-3', !split && (centered ? 'relative mx-auto w-full max-w-5xl' : 'relative w-full')]}>
         <slot name="media">
-          {image && (
+          {image && (plainPicture(image) ? (
             <Image
               src={image.src}
               alt={image.alt}
-              width={split ? 600 : 1024}
-              ratio={split ? undefined : '16/9'}
+              {...pictureBox(split ? 600 : 1024, image.ratio ?? (split ? undefined : '16/9'))}
               priority
               class:list={['rounded-md', split && 'mx-auto max-w-[600px]']}
             />
-          )}
+          ) : (
+            <Screenshot {...screenshotOf(image, split ? '4/3' : '16/9')} />
+          ))}
         </slot>
       </div>
     )}

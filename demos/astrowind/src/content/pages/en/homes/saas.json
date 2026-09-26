@@ -25,19 +25,13 @@
             "href": "#product"
           }
         ],
-        "note": "Free for one project forever · 2 minutes to your first published note"
-      },
-      "slots": {
-        "media": [
-          {
-            "widget": "Screenshot",
-            "props": {
-              "url": "app.cadence.dev/releases",
-              "caption": "product UI · release editor · 2000×830",
-              "ratio": "2000/830"
-            }
-          }
-        ]
+        "note": "Free for one project forever · 2 minutes to your first published note",
+        "image": {
+          "caption": "product UI · release editor · 2000×830",
+          "ratio": "2000/830",
+          "frame": true,
+          "url": "app.cadence.dev/releases"
+        }
       }
     },
     {
@@ -106,20 +100,14 @@
               "link": {
                 "text": "Try this step yourself",
                 "href": "#signup"
+              },
+              "image": {
+                "caption": "inbox · merged PRs · 1200×750",
+                "ratio": "8/5",
+                "frame": true,
+                "badge": "Step 1",
+                "badgeTone": "primary"
               }
-            },
-            "slots": {
-              "media": [
-                {
-                  "widget": "Screenshot",
-                  "props": {
-                    "caption": "inbox · merged PRs · 1200×750",
-                    "badge": "Step 1",
-                    "badgeTone": "primary",
-                    "ratio": "8/5"
-                  }
-                }
-              ]
             }
           }
         ],
@@ -133,20 +121,14 @@
               "link": {
                 "text": "Try this step yourself",
                 "href": "#signup"
+              },
+              "image": {
+                "caption": "editor · release note · 1200×750",
+                "ratio": "8/5",
+                "frame": true,
+                "badge": "Step 2",
+                "badgeTone": "primary"
               }
-            },
-            "slots": {
-              "media": [
-                {
-                  "widget": "Screenshot",
-                  "props": {
-                    "caption": "editor · release note · 1200×750",
-                    "badge": "Step 2",
-                    "badgeTone": "primary",
-                    "ratio": "8/5"
-                  }
-                }
-              ]
             }
           }
         ],
@@ -160,20 +142,14 @@
               "link": {
                 "text": "Try this step yourself",
                 "href": "#signup"
+              },
+              "image": {
+                "caption": "surfaces · publish · 1200×750",
+                "ratio": "8/5",
+                "frame": true,
+                "badge": "Step 3",
+                "badgeTone": "primary"
               }
-            },
-            "slots": {
-              "media": [
-                {
-                  "widget": "Screenshot",
-                  "props": {
-                    "caption": "surfaces · publish · 1200×750",
-                    "badge": "Step 3",
-                    "badgeTone": "primary",
-                    "ratio": "8/5"
-                  }
-                }
-              ]
             }
           }
         ],
@@ -187,20 +163,14 @@
               "link": {
                 "text": "Try this step yourself",
                 "href": "#signup"
+              },
+              "image": {
+                "caption": "analytics · read receipts · 1200×750",
+                "ratio": "8/5",
+                "frame": true,
+                "badge": "Step 4",
+                "badgeTone": "primary"
               }
-            },
-            "slots": {
-              "media": [
-                {
-                  "widget": "Screenshot",
-                  "props": {
-                    "caption": "analytics · read receipts · 1200×750",
-                    "badge": "Step 4",
-                    "badgeTone": "primary",
-                    "ratio": "8/5"
-                  }
-                }
-              ]
             }
           }
         ]
@@ -501,157 +471,101 @@
       "slots": {
         "default": [
           {
-            "widget": "Switch",
+            "widget": "Pricing",
             "props": {
-              "options": [
-                {
-                  "value": "monthly",
-                  "label": "Monthly"
-                },
-                {
-                  "value": "yearly",
-                  "label": "Yearly · 2 months free"
-                }
-              ],
-              "value": "yearly",
-              "label": "Billing period",
-              "syncKey": "billing",
               "tagline": "Pricing",
               "title": "Per project, not per seat",
-              "subtitle": "Seat-based pricing punishes you for inviting the people who should read the changelog."
-            },
-            "slots": {
-              "monthly": [
-                {
-                  "widget": "Pricing",
-                  "props": {
-                    "items": [
-                      {
-                        "title": "Free",
-                        "price": "0",
-                        "currency": "$",
-                        "note": "One project, forever. Not a trial.",
-                        "features": [
-                          "Public changelog page",
-                          "RSS feed and email digest",
-                          "Cadence badge in the footer"
-                        ],
-                        "actions": [
-                          {
-                            "text": "Start free",
-                            "href": "#signup"
-                          }
-                        ]
-                      },
-                      {
-                        "title": "Team",
-                        "price": "29",
-                        "currency": "$",
-                        "suffix": "/month",
-                        "note": "Switch to yearly and two months are free",
-                        "recommended": true,
-                        "badge": "4 of 5 teams pick this",
-                        "features": [
-                          "Unlimited projects and editors",
-                          "In-app widget and read receipts",
-                          "Your domain, no badge",
-                          "Slack and Linear integrations"
-                        ],
-                        "actions": [
-                          {
-                            "text": "Start free, upgrade later",
-                            "href": "#signup"
-                          }
-                        ]
-                      },
-                      {
-                        "title": "Self-hosted",
-                        "price": "99",
-                        "currency": "$",
-                        "suffix": "/month",
-                        "note": "Your infrastructure, your data",
-                        "features": [
-                          "Everything in Team",
-                          "One container, any Postgres",
-                          "SSO and audit log",
-                          "Named support contact"
-                        ],
-                        "actions": [
-                          {
-                            "text": "Talk to us",
-                            "href": "/contact"
-                          }
-                        ]
-                      }
-                    ]
+              "subtitle": "Seat-based pricing punishes you for inviting the people who should read the changelog.",
+              "periods": {
+                "label": "Billing period",
+                "options": [
+                  {
+                    "value": "monthly",
+                    "label": "Monthly"
+                  },
+                  {
+                    "value": "yearly",
+                    "label": "Yearly · 2 months free"
                   }
-                }
-              ],
-              "yearly": [
+                ],
+                "value": "yearly",
+                "syncKey": "billing"
+              },
+              "items": [
                 {
-                  "widget": "Pricing",
-                  "props": {
-                    "items": [
-                      {
-                        "title": "Free",
-                        "price": "0",
-                        "currency": "$",
-                        "note": "One project, forever. Not a trial.",
-                        "features": [
-                          "Public changelog page",
-                          "RSS feed and email digest",
-                          "Cadence badge in the footer"
-                        ],
-                        "actions": [
-                          {
-                            "text": "Start free",
-                            "href": "#signup"
-                          }
-                        ]
-                      },
-                      {
-                        "title": "Team",
-                        "price": "290",
-                        "currency": "$",
-                        "suffix": "/year",
-                        "note": "Two months free against monthly",
-                        "noteTone": "success",
-                        "recommended": true,
-                        "badge": "4 of 5 teams pick this",
-                        "features": [
-                          "Unlimited projects and editors",
-                          "In-app widget and read receipts",
-                          "Your domain, no badge",
-                          "Slack and Linear integrations"
-                        ],
-                        "actions": [
-                          {
-                            "text": "Start free, upgrade later",
-                            "href": "#signup"
-                          }
-                        ]
-                      },
-                      {
-                        "title": "Self-hosted",
-                        "price": "990",
-                        "currency": "$",
-                        "suffix": "/year",
-                        "note": "Your infrastructure, your data",
-                        "features": [
-                          "Everything in Team",
-                          "One container, any Postgres",
-                          "SSO and audit log",
-                          "Named support contact"
-                        ],
-                        "actions": [
-                          {
-                            "text": "Talk to us",
-                            "href": "/contact"
-                          }
-                        ]
-                      }
-                    ]
+                  "title": "Free",
+                  "price": "0",
+                  "currency": "$",
+                  "note": "One project, forever. Not a trial.",
+                  "features": [
+                    "Public changelog page",
+                    "RSS feed and email digest",
+                    "Cadence badge in the footer"
+                  ],
+                  "actions": [
+                    {
+                      "text": "Start free",
+                      "href": "#signup"
+                    }
+                  ]
+                },
+                {
+                  "title": "Team",
+                  "price": {
+                    "monthly": "29",
+                    "yearly": "290"
+                  },
+                  "currency": "$",
+                  "suffix": {
+                    "monthly": "/month",
+                    "yearly": "/year"
+                  },
+                  "note": {
+                    "monthly": "Switch to yearly and two months are free",
+                    "yearly": "Two months free against monthly"
+                  },
+                  "recommended": true,
+                  "badge": "4 of 5 teams pick this",
+                  "features": [
+                    "Unlimited projects and editors",
+                    "In-app widget and read receipts",
+                    "Your domain, no badge",
+                    "Slack and Linear integrations"
+                  ],
+                  "actions": [
+                    {
+                      "text": "Start free, upgrade later",
+                      "href": "#signup"
+                    }
+                  ],
+                  "noteTone": {
+                    "yearly": "success"
                   }
+                },
+                {
+                  "title": "Self-hosted",
+                  "price": {
+                    "monthly": "99",
+                    "yearly": "990"
+                  },
+                  "currency": "$",
+                  "suffix": {
+                    "monthly": "/month",
+                    "yearly": "/year"
+                  },
+                  "note": "Your infrastructure, your data",
+                  "features": [
+                    "Everything in Team",
+                    "One container, any Postgres",
+                    "SSO and audit log",
+                    "Named support contact"
+                  ],
+                  "actions": [
+                    {
+                      "text": "Talk to us",
+                      "href": "/contact"
+                    }
+                  ]
                 }
               ]
             }

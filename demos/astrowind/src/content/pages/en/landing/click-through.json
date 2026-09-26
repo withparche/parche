@@ -16,21 +16,15 @@
             "text": "Continue to the template",
             "href": "https://github.com/arthelokyo/astrowind"
           }
-        ]
-      },
-      "slots": {
-        "media": [
-          {
-            "widget": "Screenshot",
-            "props": {
-              "url": "github.com/arthelokyo/astrowind",
-              "badge": "the destination",
-              "badgeTone": "primary",
-              "ratio": "16/10",
-              "caption": "screenshot of the destination · 1000×625"
-            }
-          }
-        ]
+        ],
+        "image": {
+          "caption": "screenshot of the destination · 1000×625",
+          "ratio": "16/10",
+          "frame": true,
+          "url": "github.com/arthelokyo/astrowind",
+          "badge": "the destination",
+          "badgeTone": "primary"
+        }
       }
     },
     {

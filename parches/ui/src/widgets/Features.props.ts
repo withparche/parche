@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
-import { action, image, link, heading, headingGroup, text } from '../_shared/content';
+import { action, image, link, heading, headingGroup, text, picture } from '../_shared/content';
 
 export const layouts = ['grid', 'cards', 'list', 'panels', 'tiles', 'strip', 'rows', 'gallery'] as const;
 export const tones = ['neutral', 'primary', 'success', 'warning', 'danger', 'muted'] as const;
@@ -34,7 +34,7 @@ export const schema = z.object({
   card: z.enum(['surface', 'canvas']).default('surface').meta({ help: 'The card colour: the surface on the page colour, or the page colour on a surface section.' }),
   actions: z.array(action).default([]).meta({ help: 'Under the items: download the CV, see every integration.' }),
   defaultIcon: z.string().optional().meta({ input: 'icon', help: 'Fallback icon when an item has none' }),
-  image: image.optional().meta({ help: 'Shown above the items when the media slot is empty.' }),
+  image: picture.optional().meta({ help: 'Above the items when the media slot is empty: an image, a captioned placeholder until there is one, or either in a browser window or a phone.' }),
 });
 
 export type Props = z.infer<typeof schema>;

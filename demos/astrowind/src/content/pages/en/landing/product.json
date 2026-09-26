@@ -23,7 +23,11 @@
             "text": "Jump to specifications",
             "href": "#specs"
           }
-        ]
+        ],
+        "image": {
+          "caption": "product in use · 1200×900",
+          "ratio": "4/3"
+        }
       },
       "slots": {
         "proof": [
@@ -47,16 +51,6 @@
               "tone": "neutral",
               "title": "4.8 / 5 · sample rating",
               "description": "a placeholder for your real score and review count — [see the sample reviews](#reviews)"
-            }
-          }
-        ],
-        "media": [
-          {
-            "widget": "Screenshot",
-            "props": {
-              "frame": false,
-              "caption": "product in use · 1200×900",
-              "ratio": "4/3"
             }
           }
         ]

@@ -23,19 +23,13 @@
             "href": "https://wa.me/34600000000"
           }
         ],
-        "proofFirst": true
+        "proofFirst": true,
+        "image": {
+          "caption": "the van and the two of us · 1200×900",
+          "ratio": "4/3"
+        }
       },
       "slots": {
-        "media": [
-          {
-            "widget": "Screenshot",
-            "props": {
-              "caption": "the van and the two of us · 1200×900",
-              "ratio": "4/3",
-              "frame": false
-            }
-          }
-        ],
         "proof": [
           {
             "widget": "Callout",

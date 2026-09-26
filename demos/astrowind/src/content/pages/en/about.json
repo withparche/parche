@@ -10,19 +10,11 @@
         "title": "We built this because our own changelog was three weeks late, every time",
         "subtitle": "Cadence started in 2024 as an internal script at a company where two of us worked. It turned merged pull requests into a draft so nobody had to write release notes at 6pm on a Friday. Other teams asked for it. Now nine of us work on it full time from Bilbao and Lisbon.",
         "align": "start",
-        "size": "md"
-      },
-      "slots": {
-        "media": [
-          {
-            "widget": "Screenshot",
-            "props": {
-              "caption": "the team, one real photo · 2000×860",
-              "ratio": "2000/860",
-              "frame": false
-            }
-          }
-        ]
+        "size": "md",
+        "image": {
+          "caption": "the team, one real photo · 2000×860",
+          "ratio": "2000/860"
+        }
       }
     },
     {

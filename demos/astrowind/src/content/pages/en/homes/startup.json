@@ -22,19 +22,11 @@
             "text": "Read the numbers",
             "href": "#traction"
           }
-        ]
-      },
-      "slots": {
-        "media": [
-          {
-            "widget": "Screenshot",
-            "props": {
-              "caption": "the robot on a customer floor · 2400×1400",
-              "ratio": "12/7",
-              "frame": false
-            }
-          }
-        ]
+        ],
+        "image": {
+          "caption": "the robot on a customer floor · 2400×1400",
+          "ratio": "12/7"
+        }
       }
     },
     {

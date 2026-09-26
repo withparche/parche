@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
-import { action, image } from '../_shared/content';
+import { action, image, picture } from '../_shared/content';
 
 export const layouts = ['center', 'split', 'text', 'side', 'overlay'] as const;
 
@@ -25,7 +25,7 @@ export const schema = z.object({
   actions: z.array(action).default([]),
   note: z.string().optional().meta({ help: 'One quiet line under the actions: "Free for one project forever", the returns policy.' }),
   proofFirst: z.boolean().default(false).meta({ help: 'Put the proof slot (numbers, a call button) before the actions.' }),
-  image: image.optional().meta({ help: 'Shown in the media area when the media slot is empty.' }),
+  image: picture.optional().meta({ help: 'The media area when the media slot is empty: an image, a captioned placeholder until there is one, or either in a browser window or a phone.' }),
 });
 
 export type Props = z.infer<typeof schema>;

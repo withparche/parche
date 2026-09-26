@@ -24,19 +24,13 @@
           }
         ],
         "note": "60-day returns, postage paid. Lifetime repairs, including the ones you caused.",
-        "proofFirst": true
+        "proofFirst": true,
+        "image": {
+          "caption": "product shot · 2000×1200",
+          "ratio": "5/3"
+        }
       },
       "slots": {
-        "media": [
-          {
-            "widget": "Screenshot",
-            "props": {
-              "frame": false,
-              "caption": "product shot · 2000×1200",
-              "ratio": "5/3"
-            }
-          }
-        ],
         "proof": [
           {
             "widget": "Stats",

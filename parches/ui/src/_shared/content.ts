@@ -63,6 +63,52 @@ export const image = z.object({
 });
 export type Image = z.infer<typeof image>;
 
+/**
+ * A widget's main picture, as the design draws it: a plain image by default,
+ * a placeholder captioned with what goes there until there is one, and the
+ * browser window or phone around it when asked. The frame options are the
+ * Screenshot widget's, which draws every case but the plain image.
+ */
+export const picture = z.object({
+  src: z.string().optional().meta({ input: 'image', help: 'Without one, a striped placeholder captioned with what goes there.' }),
+  alt: z.string().default('').meta({ help: 'Empty when the image is decorative.' }),
+  caption: z.string().optional().meta({ help: 'Until there is an image: what goes there and its size ("hero screenshot · 1200×900").' }),
+  ratio: z.string().optional().meta({ help: 'Width/height, "16/9"; the layout\'s own when omitted.' }),
+  frame: z.boolean().default(false).meta({ help: 'Draw a browser window around it.' }),
+  device: z.enum(['none', 'phone']).default('none').meta({ help: 'phone: a phone bezel, for an app screen.' }),
+  url: z.string().optional().meta({ help: 'The address in the window bar (with `frame`).' }),
+  badge: z.string().optional().meta({ help: 'A chip in the window bar: "LCP 0.4s".' }),
+  badgeTone: z.enum(['success', 'warning', 'primary', 'muted']).default('success'),
+});
+export type Picture = z.infer<typeof picture>;
+
+/** True when a picture is just an image: the widget draws it itself. */
+export const plainPicture = (p: Picture): p is Picture & { src: string } => Boolean(p.src) && !p.frame && p.device === 'none';
+
+const IMAGE_RATIOS = ['1/1', '4/3', '16/9', '3/2', '21/9', '16/10', '4/5', '3/4', '9/16'];
+/**
+ * The Image element's size for a picture at `width`: its ratio when the
+ * element knows it (a crop), else the height the ratio gives, else nothing.
+ */
+export const pictureBox = (width: number, ratio?: string): { width: number; ratio?: any; height?: number } => {
+  if (!ratio) return { width };
+  if (IMAGE_RATIOS.includes(ratio)) return { width, ratio };
+  const [w, h] = ratio.split('/').map(Number);
+  return w > 0 && h > 0 ? { width, height: Math.round((width * h) / w) } : { width };
+};
+
+/** The Screenshot props that draw a picture that is not plain. */
+export const screenshotOf = (p: Picture, ratio: string) => ({
+  ...(p.src ? { image: { src: p.src, alt: p.alt } } : {}),
+  caption: p.caption ?? 'image',
+  ratio: p.ratio ?? ratio,
+  frame: p.frame,
+  device: p.device,
+  url: p.url,
+  badge: p.badge,
+  badgeTone: p.badgeTone,
+});
+
 /** A number a sceptic can check: value, unit, and where and when it was measured. */
 export const sourcedNumber = z.object({
   value: z.string().meta({ help: 'As displayed: "−64%", "1.2", "38".' }),

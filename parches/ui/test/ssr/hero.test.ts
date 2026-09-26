@@ -69,3 +69,14 @@ test('align start keeps a centre layout on the left', async () => {
   const html = await render({ ...copy, align: 'start' });
   expect(html).not.toContain('text-center');
 });
+
+test('the image prop draws a captioned placeholder until there is an image, or a browser window around it', async () => {
+  const placeholder = await render({ layout: 'split', title: 'T', image: { caption: 'product in use · 1200×900', ratio: '4/3' } });
+  expect(placeholder).toContain('product in use · 1200×900');
+  expect(placeholder).not.toContain('<img');
+  const framed = await render({ title: 'T', image: { caption: 'product UI', ratio: '2000/830', frame: true, url: 'app.example.com' } });
+  expect(framed).toContain('app.example.com');
+  const plain = await render({ title: 'T', image: { src: 'https://example.com/a.png', alt: 'A', ratio: '2000/860' } });
+  expect(plain).toMatch(/<img[^>]+alt="A"/);
+  expect(plain).toMatch(/width="1024"[^>]*height="440"/);
+});
