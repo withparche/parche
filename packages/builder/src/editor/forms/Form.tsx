@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useId, useMemo, useState, type ReactNode } from 'react';
 import { api } from '../api';
 import { useUi } from '../store/ui';
 import { useDocs } from '../store/documents';
@@ -78,8 +78,20 @@ function Label({ field, htmlFor, required, children }: { field: Field; htmlFor?:
 
 const Help = ({ text }: { text?: string }) => (text ? <p className="m-0 text-[11px] leading-snug text-muted">{text}</p> : null);
 
+/**
+ * Inside a pattern, any field of a node can be linked to one of the
+ * pattern's props (and a linked one unlinked): the editor that shows the
+ * form says how, through this context. Elsewhere there is none.
+ */
+export interface LinkActions {
+  link: (pointer: Pointer, value: unknown) => void;
+  unlink: (pointer: Pointer) => void;
+}
+export const LinkContext = createContext<LinkActions | null>(null);
+
 /** A special value the form shows instead of editing: a reference, a view's label, a pattern's placeholder. */
-function Special({ value }: { value: Record<string, unknown> }) {
+function Special({ value, pointer }: { value: Record<string, unknown>; pointer: Pointer }) {
+  const linking = useContext(LinkContext);
   const [kind, text] =
     '$ref' in value ? ['Linked', String(value.$ref)] : '$collection' in value ? ['Query', String(value.$collection)] : '$label' in value ? ['Label', String(value.$label)] : ['Prop', String(value.$prop)];
   return (
@@ -89,6 +101,11 @@ function Special({ value }: { value: Record<string, unknown> }) {
       {'$ref' in value && (
         <button type="button" onClick={() => void openRef(String(value.$ref))} className="shrink-0 rounded px-1 text-[11px] text-primary hover:underline" aria-label={`Open ${text}`}>
           Open
+        </button>
+      )}
+      {'$prop' in value && linking && (
+        <button type="button" onClick={() => linking.unlink(pointer)} className="shrink-0 rounded px-1 text-[11px] text-primary hover:underline" aria-label={`Unlink ${text}`}>
+          Unlink
         </button>
       )}
     </p>
@@ -114,14 +131,36 @@ async function openRef(ref: string) {
 
 const isSpecial = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v) && ['$ref', '$collection', '$label', '$prop'].some((k) => k in v);
 
-export function FieldView({ field, value, pointer, onChange, scope, required }: { field: Field; value: unknown; pointer: Pointer; onChange: OnChange; scope: string; required?: boolean }) {
+type FieldProps = { field: Field; value: unknown; pointer: Pointer; onChange: OnChange; scope: string; required?: boolean };
+
+/** One field; inside a pattern, with "Link to a prop" on the innermost field under the pointer or the focus. */
+export function FieldView(props: FieldProps) {
+  const linking = useContext(LinkContext);
+  if (!linking || props.pointer.length === 0 || props.field.kind === 'const' || isSpecial(props.value) || !props.field.label) return <FieldBody {...props} />;
+  return (
+    <div className="linkable relative [&:not(:has(.linkable:focus-within)):focus-within>.link-prop]:flex [&:not(:has(.linkable:hover)):hover>.link-prop]:flex">
+      <FieldBody {...props} />
+      <button
+        type="button"
+        onClick={() => linking.link(props.pointer, props.value)}
+        className="link-prop absolute -top-0.5 right-0 hidden items-center rounded bg-primary-soft px-1.5 py-0.5 text-[10px] font-medium text-primary hover:bg-primary hover:text-on-primary"
+        aria-label={`Link ${props.field.label} to a prop`}
+        title="Link this field to a prop of the pattern: each use gives its own value"
+      >
+        Link to a prop
+      </button>
+    </div>
+  );
+}
+
+function FieldBody({ field, value, pointer, onChange, scope, required }: FieldProps) {
   const id = useId();
   const group = `${scope}:${pointer.join('.')}`;
   if (isSpecial(value)) {
     return (
       <div className="flex flex-col gap-1">
         <Label field={field} />
-        <Special value={value} />
+        <Special value={value} pointer={pointer} />
         <Help text={field.help} />
       </div>
     );

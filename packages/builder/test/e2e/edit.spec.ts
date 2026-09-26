@@ -15,7 +15,7 @@ test('select a widget in the outline, edit a prop, save: the file changes by tha
   await expect(title).toHaveValue('Fixture home');
   await title.fill('Edited by the test');
   await expect(page.getByTitle('Unsaved changes')).toBeVisible();
-  await page.getByRole('button', { name: 'Save' }).click();
+  await page.getByRole('button', { name: 'Save', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Saved' })).toBeVisible();
   const text = file('pages/en/home.json');
   expect(text).toContain('"title": "Edited by the test"');
@@ -42,7 +42,7 @@ test('add a widget where it fits, from the outline, and save it', async ({ page 
   await outline.getByRole('button', { name: '+ Add' }).last().click();
   await page.getByRole('textbox', { name: 'Widget to add' }).fill('FAQs');
   await page.getByRole('button', { name: /^FAQs/ }).click();
-  await page.getByRole('button', { name: 'Save' }).click();
+  await page.getByRole('button', { name: 'Save', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Saved' })).toBeVisible();
   expect(JSON.parse(file('pages/en/docs.json')).sections.map((s: { widget: string }) => s.widget)).toEqual(['Features', 'FAQs']);
 });
@@ -52,7 +52,7 @@ test('a Markdown page keeps its body and its frontmatter comment', async ({ page
   await page.getByRole('button', { name: /^About\s*Page settings/ }).click();
   // The page's title, before the metadata's.
   await page.getByLabel('Title', { exact: true }).first().fill('About us');
-  await page.getByRole('button', { name: 'Save' }).click();
+  await page.getByRole('button', { name: 'Save', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Saved' })).toBeVisible();
   const text = file('pages/en/about.md');
   expect(text).toContain('title: About us');

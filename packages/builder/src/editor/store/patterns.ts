@@ -26,7 +26,7 @@ export function entryOf(catalog: Catalog | null, name: string, locale: string): 
 }
 
 /** What a pattern stands for where it is used: its root widgets (the name itself for anything else). */
-export function standsFor(catalog: { patterns?: CatalogPattern[] }, name: string): string[] {
+export function standsFor(catalog: { patterns?: Pick<CatalogPattern, 'entry' | 'roots'>[] }, name: string): string[] {
   if (!name.startsWith(PATTERN_PREFIX)) return [name];
   const id = name.slice(PATTERN_PREFIX.length);
   const list = catalog.patterns ?? [];

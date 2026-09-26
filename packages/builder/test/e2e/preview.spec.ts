@@ -30,7 +30,7 @@ test('an edit shows in the preview in place, without a reload, and only there', 
   await expect(frame(page).getByRole('heading', { level: 1 })).toHaveText('Only a draft');
   expect(await page.locator('iframe[title="Preview"]').evaluate((f: HTMLIFrameElement) => (f.contentWindow as any).__probe)).toBe('alive');
   // Nothing saved, and the site itself still serves the file.
-  await expect(page.getByRole('button', { name: 'Save' })).toBeEnabled();
+  await expect(page.getByRole('button', { name: 'Save', exact: true })).toBeEnabled();
   expect(await (await request.get('/')).text()).not.toContain('Only a draft');
 });
 

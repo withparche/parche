@@ -4,13 +4,14 @@ import { pageUrl } from '../../shared/page-url';
 
 /**
  * The pages a document shows through in the preview: a page is itself; a
- * layout, the pages that use it; a menu, the pages that use it directly or
- * through their layout. Page ids, in the order the catalog found them.
+ * layout, the pages that use it; a menu or a pattern, the pages that use it
+ * directly or through their layout. Page ids, in the order the catalog found them.
  */
 export function pagesShowing(doc: Doc | undefined, catalog: Catalog | null): string[] {
   if (!doc || !catalog) return [];
   if (doc.collection === 'pages') return [doc.id];
   if (doc.collection === 'layouts') return catalog.layouts.find((l) => l.id === doc.id)?.usedBy ?? [];
+  if (doc.collection === 'patterns') return catalog.patterns.find((p) => p.entry === doc.id)?.usedBy ?? [];
   if (doc.collection === 'navigation') {
     const out: string[] = [];
     for (const u of catalog.navigation.find((n) => n.id === doc.id)?.usedBy ?? []) {

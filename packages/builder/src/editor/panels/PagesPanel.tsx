@@ -4,6 +4,9 @@ import { SearchIcon } from '../shell/icons';
 import { api, ApiError } from '../api';
 import { useUi } from '../store/ui';
 import { docKey, isDirty, useDocs } from '../store/documents';
+import { skeleton } from '../tree/skeleton';
+import { patternFrom } from '../tree/pattern-ops';
+import type { Catalog } from '../store/types';
 
 const NONE: string[] = [];
 
@@ -18,7 +21,8 @@ const COLLECTIONS: { id: string; label: string; one: string; create?: (title: st
   { id: 'pages', label: 'Pages', one: 'page', create: (title) => ({ title, sections: [] }) },
   { id: 'layouts', label: 'Layouts', one: 'layout', create: () => ({ sections: [{ widget: 'Outlet' }] }) },
   { id: 'navigation', label: 'Menus', one: 'menu', create: (title) => ({ label: title, items: [] }) },
-  { id: 'patterns', label: 'Patterns', one: 'pattern' },
+  // A pattern starts from a widget the person picks (NewPattern), never empty.
+  { id: 'patterns', label: 'Patterns', one: 'pattern', create: () => ({}) },
 ];
 
 /**
@@ -51,12 +55,13 @@ export default function PagesPanel() {
     const by = new Map<string, Summary[]>();
     for (const p of pages) {
       if (q && !p.id.toLowerCase().includes(q)) continue;
-      const locale = p.id.includes('/') ? p.id.split('/')[0] : defaultLocale;
+      // A page without a locale folder is the default locale's; a pattern or a menu serves every language.
+      const locale = p.id.includes('/') && locales.includes(p.id.split('/')[0]) ? p.id.split('/')[0] : collection === 'pages' ? defaultLocale : 'every language';
       by.set(locale, [...(by.get(locale) ?? []), p]);
     }
     const order = [defaultLocale, ...locales.filter((l) => l !== defaultLocale)];
     return [...by.entries()].sort(([a], [b]) => (order.indexOf(a) + 1 || 99) - (order.indexOf(b) + 1 || 99));
-  }, [pages, query, locales, defaultLocale]);
+  }, [pages, query, locales, defaultLocale, collection]);
 
   const openPage = (id: string) => void open(collection, id).catch((e: Error) => setError(e.message));
 
@@ -116,14 +121,15 @@ export default function PagesPanel() {
           {error}
         </p>
       )}
-      {creating && coll.create && <NewPage collection={collection} one={coll.one} make={coll.create} locales={locales} defaultLocale={defaultLocale} onDone={(id) => { setCreating(false); if (id) { refresh(); openPage(id); } }} />}
+      {creating && collection === 'patterns' && <NewPattern locales={locales} onDone={(id) => { setCreating(false); if (id) { refresh(); openPage(id); } }} />}
+      {creating && coll.create && collection !== 'patterns' && <NewPage collection={collection} one={coll.one} make={coll.create} locales={locales} defaultLocale={defaultLocale} onDone={(id) => { setCreating(false); if (id) { refresh(); openPage(id); } }} />}
       {groups.map(([locale, list]) => (
         <div key={locale} className="px-2 pt-3">
           <h3 className="m-0 px-1 pb-1 text-[10px] font-semibold tracking-[0.08em] text-muted uppercase">{locale}</h3>
           <ul className="m-0 list-none p-0">
             {list.map((p) => {
               const key = docKey(collection, p.id);
-              const name = p.id.includes('/') ? p.id.split('/').slice(1).join('/') : p.id;
+              const name = p.id.includes('/') && locales.includes(p.id.split('/')[0]) ? p.id.split('/').slice(1).join('/') : p.id;
               return (
                 <li key={p.id} className="group flex items-center rounded-md hover:bg-surface-hover aria-[current=true]:bg-primary-soft" aria-current={current === key}>
                   <button type="button" onClick={() => openPage(p.id)} className="flex min-w-0 flex-1 items-center gap-1.5 px-2 py-1.5 text-left text-xs text-heading">
@@ -181,6 +187,64 @@ function NewPage({ collection, one, make, locales, defaultLocale, onDone }: { co
           Cancel
         </button>
         <button type="submit" disabled={!name.trim()} className="rounded-md bg-primary px-2.5 py-1 text-xs font-medium text-on-primary disabled:opacity-40">
+          Create
+        </button>
+      </div>
+    </form>
+  );
+}
+
+/** A new pattern: its label, its name, the languages it serves, and the widget it starts from. */
+function NewPattern({ locales, onDone }: { locales: string[]; onDone: (id: string | null) => void }) {
+  const catalog = useUi((s) => s.catalog);
+  const [label, setLabel] = useState('');
+  const [name, setName] = useState('');
+  const [scope, setScope] = useState('');
+  const [widget, setWidget] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const widgets = Object.entries(catalog?.widgets ?? {}).filter(([n, w]) => !w.hidden && n !== 'Outlet').sort(([, a], [, b]) => a.label.localeCompare(b.label));
+  const slug = (name || label).trim().toLowerCase().replace(/[^a-z0-9/-]+/g, '-').replace(/^-+|-+$/g, '');
+  const create = async () => {
+    if (!catalog || !slug || !widget) return;
+    const id = scope ? `${scope}/${slug}` : slug;
+    try {
+      await api(`doc?collection=patterns&id=${encodeURIComponent(id)}`, { method: 'POST', body: { data: patternFrom([skeleton(catalog, widget)], label || slug) } });
+      await api<Catalog>('catalog').then(useUi.getState().setCatalog, () => undefined);
+      onDone(id);
+    } catch (e) {
+      setError(e instanceof ApiError ? e.message : String(e));
+    }
+  };
+  const input = 'w-full rounded-md border border-border bg-background px-2 py-1.5 text-xs text-heading outline-none focus:border-primary';
+  return (
+    <form className="m-2 flex flex-col gap-2 rounded-md border border-border bg-background p-2.5" onSubmit={(e) => { e.preventDefault(); void create(); }}>
+      <input autoFocus className={input} placeholder="Label (Product page, Common questions)" aria-label="New pattern label" value={label} onChange={(e) => setLabel(e.target.value)} />
+      <div className="flex gap-1.5">
+        <input className={input} placeholder={slug || 'name'} aria-label="New pattern name" value={name} onChange={(e) => setName(e.target.value)} />
+        <select className={`${input} w-auto`} aria-label="Languages" value={scope} onChange={(e) => setScope(e.target.value)}>
+          <option value="">Every language</option>
+          {locales.map((l) => (
+            <option key={l} value={l}>
+              Only {l}
+            </option>
+          ))}
+        </select>
+      </div>
+      <select className={input} aria-label="Starts from" value={widget} onChange={(e) => setWidget(e.target.value)}>
+        <option value="">Starts from…</option>
+        {widgets.map(([n, w]) => (
+          <option key={n} value={n}>
+            {w.label}
+          </option>
+        ))}
+      </select>
+      <p className="m-0 text-[10px] text-muted">Add more widgets in the outline; give it props by linking fields to them.</p>
+      {error && <p className="m-0 text-[11px] text-danger">{error}</p>}
+      <div className="flex justify-end gap-1.5">
+        <button type="button" onClick={() => onDone(null)} className="rounded-md px-2 py-1 text-xs text-muted hover:text-heading">
+          Cancel
+        </button>
+        <button type="submit" disabled={!slug || !widget} className="rounded-md bg-primary px-2.5 py-1 text-xs font-medium text-on-primary disabled:opacity-40">
           Create
         </button>
       </div>

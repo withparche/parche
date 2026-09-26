@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
-import { navRefs, schemaAt } from '../src/server/usage.ts';
+import { navRefs, schemaAt } from '../src/shared/usage.ts';
 import { pageUrl } from '../src/shared/page-url.ts';
 import { pagesShowing, previewSrc } from '../src/editor/preview/through.ts';
 
@@ -49,7 +49,7 @@ test("a page's URL: the locale prefix unless default, home at the root, urlSlug 
   assert.equal(pageUrl('about', undefined, 'en'), '/about');
 });
 
-test('a layout or a menu previews through a page that uses it, the chosen one when it still does', () => {
+test('a layout, a menu or a pattern previews through a page that uses it, the chosen one when it still does', () => {
   const catalog = {
     i18n: { locales: ['en'], defaultLocale: 'en' },
     layouts: [
@@ -60,6 +60,7 @@ test('a layout or a menu previews through a page that uses it, the chosen one wh
       { id: 'en/main', locale: 'en', name: 'main', usedBy: [{ doc: 'layouts/en/default', widget: 'Header', prop: 'links' }, { doc: 'pages/en/docs', widget: 'Header', prop: 'links' }], itemsSchema: null },
       { id: 'en/unused', locale: 'en', name: 'unused', usedBy: [], itemsSchema: null },
     ],
+    patterns: [{ entry: 'faq', usedBy: ['en/about'] }],
     pageUrls: { 'en/home': '/', 'en/about': '/about-us', 'en/docs': '/docs' },
   } as never;
   const doc = (collection: string, id: string, data = {}) => ({ collection, id, key: `${collection}/${id}`, data }) as never;
@@ -69,6 +70,7 @@ test('a layout or a menu previews through a page that uses it, the chosen one wh
   // A choice the document no longer has falls back to the first page.
   assert.equal(previewSrc(doc('layouts', 'en/docs'), catalog, { 'layouts/en/docs': 'en/about' }), '/docs');
   assert.equal(previewSrc(doc('navigation', 'en/unused'), catalog, {}), '/');
+  assert.equal(previewSrc(doc('patterns', 'faq'), catalog, {}), '/about-us');
   // A page is its own URL, with the urlSlug being edited.
   assert.equal(previewSrc(doc('pages', 'en/about', { urlSlug: 'team' }), catalog, {}), '/team');
 });

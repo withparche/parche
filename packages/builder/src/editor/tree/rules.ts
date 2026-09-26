@@ -24,7 +24,7 @@ export interface SlotMeta {
 
 export interface RulesCatalog {
   widgets: Record<string, { slots?: Record<string, SlotMeta>; hidden?: boolean }>;
-  patterns?: CatalogPattern[];
+  patterns?: Pick<CatalogPattern, 'entry' | 'roots'>[];
 }
 
 /** A node fills at most this many slots (Node.astro forwards six). */

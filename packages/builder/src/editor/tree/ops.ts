@@ -38,6 +38,12 @@ export function removeNode(kind: Kind, data: Record<string, any>, id: string): N
   return node;
 }
 
+/** Put these nodes where a node is (a pattern's use for its widgets, a node for its pattern's use). */
+export function replaceNode(kind: Kind, data: Record<string, any>, id: string, nodes: Node[]): void {
+  const at = locate(kind, data, id);
+  if (at) at.list.splice(at.index, 1, ...nodes);
+}
+
 export function moveNode(kind: Kind, data: Record<string, any>, id: string, target: Target): void {
   const from = locate(kind, data, id);
   if (!from) return;
@@ -75,6 +81,16 @@ export function setProp(kind: Kind, data: Record<string, any>, id: string, point
   at.node.props ??= {};
   setIn(at.node.props, pointer, value);
   if (Object.keys(at.node.props).length === 0) delete at.node.props;
+}
+
+/** The value at a pointer, or undefined. */
+export function getIn(target: unknown, pointer: (string | number)[]): unknown {
+  let cur: any = target;
+  for (const key of pointer) {
+    if (cur == null || typeof cur !== 'object') return undefined;
+    cur = cur[key];
+  }
+  return cur;
 }
 
 export function setIn(target: Record<string, any> | unknown[], pointer: (string | number)[], value: unknown): void {

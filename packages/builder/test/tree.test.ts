@@ -120,8 +120,8 @@ const catalog: RulesCatalog = {
     Features: {},
   },
   patterns: [
-    { entry: 'column-card', label: 'Column card', schema: null, roots: ['Column'] },
-    { entry: 'en/blurb', label: 'Blurb', schema: null, roots: ['Features'] },
+    { entry: 'column-card', roots: ['Column'] },
+    { entry: 'en/blurb', roots: ['Features'] },
   ],
 };
 

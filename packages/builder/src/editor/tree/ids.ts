@@ -12,11 +12,15 @@ export const EPHEMERAL = 'n_';
 
 let counter = 0;
 const alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
+/** Every id this editor made, on opening a document or for a node it inserted: none of them is saved. */
+const made = new Set<string>();
 export function newId(): string {
   let s = '';
   const bytes = crypto.getRandomValues(new Uint8Array(8));
   for (const b of bytes) s += alphabet[b % alphabet.length];
-  return `${EPHEMERAL}${s}${(counter++).toString(36)}`;
+  const id = `${EPHEMERAL}${s}${(counter++).toString(36)}`;
+  made.add(id);
+  return id;
 }
 
 function* allNodes(nodes: Node[]): Generator<Node> {
@@ -24,6 +28,15 @@ function* allNodes(nodes: Node[]): Generator<Node> {
     yield n;
     for (const kids of Object.values(n.slots ?? {})) if (Array.isArray(kids)) yield* allNodes(kids);
   }
+}
+
+/** A node and everything in its slots with new ids, for nodes placed in a document (a copy, a detached pattern). */
+export function withNewIds(node: Node): Node {
+  return {
+    ...node,
+    id: newId(),
+    ...(node.slots ? { slots: Object.fromEntries(Object.entries(node.slots).map(([k, kids]) => [k, kids.map(withNewIds)])) } : {}),
+  };
 }
 
 /** Give every node an id, in place. Returns the ids that are ephemeral, and the ones found repeated. */
@@ -46,11 +59,11 @@ export function assignIds(kind: Kind, data: Record<string, any>): { ephemeral: S
   return { ephemeral, repeated };
 }
 
-/** A deep copy of the document without the ephemeral ids: what is saved. */
+/** A deep copy of the document without the ephemeral ids (and those of nodes inserted since): what is saved. */
 export function stripIds<T extends Record<string, any>>(kind: Kind, data: T, ephemeral: ReadonlySet<string>): T {
   const copy = structuredClone(data);
   for (const root of rootsOf(kind, copy)) {
-    for (const node of allNodes(root.nodes)) if (node.id && ephemeral.has(node.id)) delete node.id;
+    for (const node of allNodes(root.nodes)) if (node.id && (ephemeral.has(node.id) || made.has(node.id))) delete node.id;
   }
   return copy;
 }

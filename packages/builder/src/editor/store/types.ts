@@ -18,7 +18,10 @@ export interface CatalogPattern {
   category?: string;
   icon?: string;
   schema: unknown;
+  tree: import('@parche/astro/content/pure').Node[];
   roots: string[];
+  /** The pages that use it, directly or through their layout. */
+  usedBy: string[];
 }
 
 export interface Catalog {

@@ -1,13 +1,19 @@
 import { useState } from 'react';
 import type { WrapperSpec } from '@parche/astro/content/pure';
 import PanelShell from '../shell/PanelShell';
-import Form, { type Pointer } from '../forms/Form';
+import Form, { LinkContext, type LinkActions, type Pointer } from '../forms/Form';
 import { useUi } from '../store/ui';
 import { useSelection } from '../store/selection';
 import { editCurrent, useCurrentDoc } from '../store/current';
 import type { Doc } from '../store/documents';
 import { locate } from '../tree/locate';
-import { setIn, setProp, setWrapper } from '../tree/ops';
+import { replaceNode, setIn, setProp, setWrapper } from '../tree/ops';
+import { withNewIds } from '../tree/ids';
+import { detach, linkProp, patternFrom, propNameFor, removeProp, renameProp, setRequired, unlinkProp } from '../tree/pattern-ops';
+import { schemaAt } from '../../shared/usage';
+import { api, ApiError } from '../api';
+import { useDocs } from '../store/documents';
+import type { Catalog, CatalogPattern } from '../store/types';
 import WidgetInfo from './WidgetInfo';
 import { pagesShowing } from '../preview/through';
 import { entryOf, localeOfDoc } from '../store/patterns';
@@ -41,8 +47,29 @@ function NodeInspector({ doc, id }: { doc: Doc; id: string }) {
   // Two outlets of one name would take the same slot of the page.
   const name = (at.node.props?.name as string | undefined) || 'default';
   const twin = outlet && outletNames(doc).filter((n) => n === name).length > 1;
+  // In a pattern, any field of its widgets can be linked to one of its props.
+  const linking: LinkActions | null =
+    doc.kind === 'pattern' && schema
+      ? {
+          link: (pointer, _value) => {
+            const asked = prompt('Link this field to a prop of the pattern. Prop name:', propNameFor(pointer));
+            const prop = asked?.trim().replace(/[^A-Za-z0-9_]/g, '_');
+            if (!prop) return;
+            editCurrent((d) => {
+              const n = locate(doc.kind, d, id)?.node;
+              if (n) linkProp(d as never, n, pointer, prop, schemaAt(schema, pointer) as Record<string, unknown> | null);
+            });
+          },
+          unlink: (pointer) =>
+            editCurrent((d) => {
+              const n = locate(doc.kind, d, id)?.node;
+              if (n) unlinkProp(d as never, n, pointer);
+            }),
+        }
+      : null;
   return (
     <PanelShell title={widget?.label ?? at.node.widget} subtitle={at.path} onClose={() => select(null)}>
+      {!outlet && !doc.readOnly && <PatternActions doc={doc} id={id} />}
       {issues.length > 0 && (
         <ul role="alert" className="m-2 flex list-none flex-col gap-1 rounded-md bg-danger-soft p-2">
           {issues.map((i, n) => (
@@ -54,7 +81,11 @@ function NodeInspector({ doc, id }: { doc: Doc; id: string }) {
       )}
       {!widget && <p className="m-3 text-xs text-warning">"{at.node.widget}" is {at.node.widget.startsWith('pattern/') ? 'not a pattern in src/content/patterns' : 'not a widget this site registers'}.</p>}
       {widget && !schema && <p className="m-3 text-xs text-muted">This widget declares no props.</p>}
-      {schema && <Form key={id} schema={schema} value={at.node.props} onChange={onChange} groups={(widget as { ui?: { groups?: never } })?.ui?.groups} scope={id} />}
+      {schema && (
+        <LinkContext.Provider value={linking}>
+          <Form key={id} schema={schema} value={at.node.props} onChange={onChange} groups={(widget as { ui?: { groups?: never } })?.ui?.groups} scope={id} />
+        </LinkContext.Provider>
+      )}
       {twin && (
         <p role="alert" className="m-2 rounded-md bg-danger-soft p-2 text-[11px] text-danger">
           Another Outlet of this layout is also "{name}": each name takes one slot of the page.
@@ -67,6 +98,104 @@ function NodeInspector({ doc, id }: { doc: Doc; id: string }) {
       )}
       {outlet ? <OutletWrapperEditor doc={doc} id={id} /> : <WrapperEditor doc={doc} id={id} />}
     </PanelShell>
+  );
+}
+
+const kebab = (s: string) => s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase().replace(/[^a-z0-9/-]+/g, '-').replace(/^-+|-+$/g, '');
+
+/**
+ * A node and patterns: a use opens its pattern or turns back into its
+ * widgets (detach: a copy the page owns); any other node can be saved as a
+ * pattern, and replaced here by its use.
+ */
+function PatternActions({ doc, id }: { doc: Doc; id: string }) {
+  const catalog = useUi((s) => s.catalog);
+  const setCatalog = useUi((s) => s.setCatalog);
+  const [saving, setSaving] = useState(false);
+  const at = locate(doc.kind, doc.data, id)!;
+  const btn = 'rounded-md border border-border px-2 py-1 text-[11px] text-muted hover:text-heading';
+  if (at.node.widget.startsWith('pattern/')) {
+    const p = catalog ? (entryOf(catalog, at.node.widget, localeOfDoc(doc.id, catalog)) as CatalogPattern | undefined) : undefined;
+    if (!p) return null;
+    return (
+      <div className="flex items-center gap-1.5 border-b border-border px-3 py-2">
+        <span className="flex-1 text-[11px] text-muted">A pattern: its widgets live in one place.</span>
+        <button type="button" className={btn} onClick={() => void useDocs.getState().open('patterns', p.entry)}>
+          Open pattern
+        </button>
+        <button
+          type="button"
+          className={btn}
+          title="Replace this use with a copy of the pattern's widgets, which this page then owns"
+          onClick={() => editCurrent((d) => replaceNode(doc.kind, d, id, detach(p, at.node.props).map(withNewIds)))}
+        >
+          Detach
+        </button>
+      </div>
+    );
+  }
+  return (
+    <div className="border-b border-border px-3 py-2">
+      {!saving ? (
+        <button type="button" className={btn} onClick={() => setSaving(true)}>
+          Save as pattern
+        </button>
+      ) : (
+        <SaveAsPattern doc={doc} id={id} catalog={catalog} onDone={(c) => { setSaving(false); if (c) setCatalog(c); }} />
+      )}
+    </div>
+  );
+}
+
+function SaveAsPattern({ doc, id, catalog, onDone }: { doc: Doc; id: string; catalog: Catalog | null; onDone: (catalog?: Catalog) => void }) {
+  const at = locate(doc.kind, doc.data, id)!;
+  const locale = catalog ? localeOfDoc(doc.id, catalog) : '';
+  const label0 = entryOf(catalog, at.node.widget, locale)?.label ?? at.node.widget;
+  const [label, setLabel] = useState(label0);
+  const [name, setName] = useState(kebab(label0));
+  const [scope, setScope] = useState('');
+  const [replace, setReplace] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const input = 'w-full rounded-md border border-border bg-background px-2 py-1.5 text-xs text-heading outline-none focus:border-primary';
+  const save = async () => {
+    const id0 = kebab(name);
+    if (!id0) return;
+    // The node's own wrapper is how this page places it, not part of the pattern: it stays on the use.
+    const { wrapper, ...node } = at.node;
+    try {
+      await api(`doc?collection=patterns&id=${encodeURIComponent(scope ? `${scope}/${id0}` : id0)}`, { method: 'POST', body: { data: patternFrom([node], label || label0) } });
+    } catch (e) {
+      setError(e instanceof ApiError ? e.message : String(e));
+      return;
+    }
+    const next = await api<Catalog>('catalog').catch(() => undefined);
+    if (replace) editCurrent((d) => replaceNode(doc.kind, d, id, [{ widget: `pattern/${id0}`, id, ...(wrapper !== undefined ? { wrapper } : {}) }]));
+    onDone(next);
+  };
+  return (
+    <form className="flex flex-col gap-2" onSubmit={(e) => { e.preventDefault(); void save(); }} aria-label="Save as pattern">
+      <input className={input} aria-label="Pattern label" placeholder="Label" value={label} onChange={(e) => setLabel(e.target.value)} />
+      <div className="flex gap-1.5">
+        <input className={input} aria-label="Pattern name" placeholder="name" value={name} onChange={(e) => setName(e.target.value)} />
+        <select className={`${input} w-auto`} aria-label="Languages" value={scope} onChange={(e) => setScope(e.target.value)}>
+          <option value="">Every language</option>
+          {locale && <option value={locale}>Only {locale}</option>}
+        </select>
+      </div>
+      <label className="flex items-center gap-2 text-[11px] text-heading">
+        <input type="checkbox" className="accent-primary" checked={replace} onChange={(e) => setReplace(e.target.checked)} />
+        Use the pattern here, in place of this node
+      </label>
+      {error && <p className="m-0 text-[11px] text-danger">{error}</p>}
+      <div className="flex justify-end gap-1.5">
+        <button type="button" onClick={() => onDone()} className="rounded-md px-2 py-1 text-xs text-muted hover:text-heading">
+          Cancel
+        </button>
+        <button type="submit" disabled={!kebab(name)} className="rounded-md bg-primary px-2.5 py-1 text-xs font-medium text-on-primary disabled:opacity-40">
+          Save pattern
+        </button>
+      </div>
+    </form>
   );
 }
 
@@ -212,6 +341,7 @@ function DocSettings({ doc }: { doc: Doc }) {
   const catalog = useUi((s) => s.catalog);
   if (catalog && doc.collection === 'layouts') return <LayoutSettings doc={doc} />;
   if (catalog && doc.collection === 'navigation') return <MenuSettings doc={doc} />;
+  if (catalog && doc.collection === 'patterns') return <PatternSettings doc={doc} />;
   if (doc.kind !== 'page' || !catalog) {
     return (
       <PanelShell title="Document">
@@ -344,6 +474,86 @@ function MenuSettings({ doc }: { doc: Doc }) {
       ) : (
         <JsonField label="Items" value={doc.data.items ?? []} onChange={(v) => editCurrent((d) => void (d.items = v))} />
       )}
+    </PanelShell>
+  );
+}
+
+const PATTERN_FIELDS = {
+  type: 'object',
+  properties: {
+    label: { type: 'string', title: 'Label', description: 'What the palette shows.' },
+    description: { type: 'string', title: 'Description', input: 'textarea' },
+    category: { type: 'string', title: 'Category', description: 'The palette group; "patterns" when empty.' },
+    icon: { type: 'string', title: 'Icon', input: 'icon' },
+  },
+  required: ['label'],
+};
+
+/**
+ * A pattern: what the palette shows, and its props. A prop comes from
+ * linking a field of one of its widgets (in the outline, select the widget,
+ * then "Link to a prop" on the field); here each can be renamed, made
+ * required, given help, or removed (its fields get their value back).
+ */
+function PatternSettings({ doc }: { doc: Doc }) {
+  const catalog = useUi((s) => s.catalog)!;
+  const locale = localeOfDoc(doc.id, catalog);
+  const useName = `pattern/${doc.id.startsWith(`${locale}/`) ? doc.id.slice(locale.length + 1) : doc.id}`;
+  const props = Object.entries((doc.data.props?.properties ?? {}) as Record<string, Record<string, unknown>>);
+  const required = new Set<string>(doc.data.props?.required ?? []);
+  const onChange = (pointer: Pointer, value: unknown, group?: string) => editCurrent((d) => (pointer.length === 0 ? undefined : setIn(d, pointer, value)), group);
+  const input = 'w-full rounded border border-border bg-background px-1.5 py-1 text-xs text-heading outline-none focus:border-primary';
+  return (
+    <PanelShell title="Pattern" subtitle={doc.relPath}>
+      <p className="m-0 px-3 pt-3 text-[11px] text-muted">
+        Used as <span className="font-mono text-heading">{`{ "widget": "${useName}" }`}</span>
+        {props.length ? ', with its props.' : '. It takes no props: every use is the same.'}
+      </p>
+      <div className="px-3 pt-3">
+        <ShownThrough doc={doc} />
+      </div>
+      <Form schema={PATTERN_FIELDS} value={doc.data} onChange={onChange} scope={`${doc.key}:pattern`} />
+      <section aria-label="Props" className="border-t border-border p-3">
+        <h3 className="m-0 pb-1 text-[10px] font-semibold tracking-[0.08em] text-muted uppercase">Props</h3>
+        {!props.length && <p className="m-0 text-[11px] text-muted">None yet. Select a widget in the outline and use “Link to a prop” on a field: each use of the pattern then gives its own value.</p>}
+        <ul className="m-0 flex list-none flex-col gap-2 p-0">
+          {props.map(([name, schema]) => (
+            <li key={name} className="flex flex-col gap-1 rounded-md border border-border p-2">
+              <div className="flex items-center gap-1.5">
+                <input
+                  className={`${input} font-mono`}
+                  aria-label={`Prop ${name} name`}
+                  defaultValue={name}
+                  onBlur={(e) => {
+                    const to = e.target.value.trim().replace(/[^A-Za-z0-9_]/g, '_');
+                    if (to && to !== name) editCurrent((d) => renameProp(d as never, name, to));
+                    else e.target.value = name;
+                  }}
+                />
+                <button type="button" onClick={() => editCurrent((d) => removeProp(d as never, name))} className="shrink-0 rounded px-1 text-[11px] text-muted hover:text-danger" aria-label={`Remove prop ${name}`}>
+                  Remove
+                </button>
+              </div>
+              <label className="flex items-center gap-2 text-[11px] text-heading">
+                <input type="checkbox" className="accent-primary" checked={required.has(name)} onChange={(e) => editCurrent((d) => setRequired(d as never, name, e.target.checked))} />
+                Every use must give it
+              </label>
+              <input
+                className={input}
+                aria-label={`Prop ${name} help`}
+                placeholder="Help for whoever fills it"
+                value={(schema.description as string | undefined) ?? ''}
+                onChange={(e) => editCurrent((d) => setIn(d, ['props', 'properties', name, 'description'], e.target.value || undefined), `${doc.key}:help:${name}`)}
+              />
+              {schema.default !== undefined && (
+                <p className="m-0 truncate text-[10px] text-muted" title={JSON.stringify(schema.default)}>
+                  Default: <span className="font-mono">{JSON.stringify(schema.default)}</span>
+                </p>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
     </PanelShell>
   );
 }

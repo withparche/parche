@@ -31,7 +31,7 @@ test('a layout previews through a page that uses it, and its Outlet wraps what t
   await inspector.getByRole('radio', { name: 'A wrapper' }).click();
   await expect.poll(bands).toBe(bare + 1);
 
-  await page.getByRole('button', { name: 'Save' }).click();
+  await page.getByRole('button', { name: 'Save', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Saved' })).toBeVisible();
   expect(JSON.parse(file('layouts/en/docs.json')).sections[2]).toEqual({ widget: 'Outlet', props: { name: 'aside', wrapper: {} } });
 });
@@ -50,7 +50,7 @@ test("a menu is edited with the form of the prop that uses it, and the header sh
   // The menu's own label first, then each item's.
   await menu.getByRole('textbox', { name: 'Label', exact: true }).nth(1).fill('Start');
   await expect(frame(page).locator('header a', { hasText: 'Start' }).first()).toBeAttached();
-  await page.getByRole('button', { name: 'Save' }).click();
+  await page.getByRole('button', { name: 'Save', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Saved' })).toBeVisible();
   expect(JSON.parse(file('navigation/en/main.json')).items[0]).toEqual({ label: 'Start', href: '/' });
 });

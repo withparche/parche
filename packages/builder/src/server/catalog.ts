@@ -13,11 +13,11 @@ import { themes, defaultTheme } from 'parche:config/themes';
 // @ts-expect-error virtual module provided by @parche/astro
 import { locales, defaultLocale } from 'parche:config/i18n';
 import { z } from 'zod';
-import { loadPatterns } from '@parche/astro/dev';
-import { outletWrappers, pageSchema, rootWidgets } from '@parche/astro/content/pure';
+import { outletWrappers, pageSchema, patternsFor, rootWidgets, widgetNames } from '@parche/astro/content/pure';
+import { readPatterns } from './patterns.js';
 import { listDocs, readDoc } from './files.js';
 import { session } from './session.js';
-import { navRefs, schemaAt } from './usage.js';
+import { navRefs, schemaAt } from '../shared/usage.js';
 import { pageUrl } from '../shared/page-url.js';
 
 export interface CatalogWidget {
@@ -60,16 +60,28 @@ export async function buildCatalog() {
   // Every pattern once, by its entry (`tour-step`, `en/faq-agencies`): the
   // editor resolves `pattern/<id>` in the document's locale, as a page does.
   // `roots` is what it stands for in a slot that allows only some widgets.
-  const loaded = await loadPatterns();
-  const patterns = Object.values(loaded.patterns).map((p) => ({
+  const { patterns: all } = await readPatterns(session().root);
+  const byName = patternsFor(all);
+  const patterns = all.map((p) => ({
     entry: p.entry,
     label: p.label,
     description: p.description,
     category: p.category ?? 'patterns',
     icon: p.icon,
     schema: p.props,
-    roots: rootWidgets(p.name, loaded.patterns),
+    tree: p.tree,
+    roots: rootWidgets(p.name, byName),
+    // The pages that use it, directly or through their layout: the preview shows it through one.
+    usedBy: [] as string[],
   }));
+  const useIn = (nodes: unknown[], locale: string, pageIds: string[]) => {
+    const names = patternsFor(all, locale);
+    for (const name of widgetNames(nodes as never)) {
+      const entry = names[name]?.entry;
+      const p = entry && patterns.find((x) => x.entry === entry);
+      if (p) p.usedBy.push(...pageIds.filter((id) => !p.usedBy.includes(id)));
+    }
+  };
   // The layouts a page can pick, each with the outlets it declares (a page
   // fills the named ones through its `slots`) and the pages that use it.
   const root = session().root;
@@ -91,10 +103,12 @@ export async function buildCatalog() {
     const outlets = outletWrappers(sections).map((o) => o.name);
     const usedBy = pages.filter((p) => (p.id.includes('/') ? p.id.split('/')[0] : defaultLocale) === locale && ((p.data.layout as string | undefined) ?? 'default') === name).map((p) => p.id);
     layouts.push({ id: d.id, locale, name, outlets, usedBy });
+    useIn(sections, locale, usedBy);
     for (const r of navRefs(sections)) refs.push({ doc: `layouts/${d.id}`, locale, ...r });
   }
   for (const p of pages) {
     const locale = p.id.includes('/') ? p.id.split('/')[0] : defaultLocale;
+    useIn([...((p.data.sections as never[]) ?? []), ...Object.values((p.data.slots as Record<string, never[]>) ?? {}).flat()], locale, [p.id]);
     for (const r of navRefs([...((p.data.sections as never[]) ?? []), ...Object.values((p.data.slots as Record<string, never[]>) ?? {}).flat()])) refs.push({ doc: `pages/${p.id}`, locale, ...r });
   }
   // A menu's items take the shape of the prop that uses it (Header.links,

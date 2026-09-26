@@ -11,7 +11,9 @@ import { widgetMeta, widgetPropSchemas } from 'parche:registry/widgetSchemas';
 import { tones, wrapper } from 'parche:config/layout';
 // @ts-expect-error virtual module provided by @parche/astro
 import { defaultLocale } from 'parche:config/i18n';
-import { definePattern, loadPatterns, resolveRefs } from '@parche/astro/dev';
+import { definePattern, resolveRefs } from '@parche/astro/dev';
+import { patternsByName } from './patterns.js';
+import { session } from './session.js';
 import { layoutSchema, navigationSchema, pageSchema, patternSchema } from '@parche/astro/content/pure';
 import type { ZodType } from 'zod';
 import type { ValidationContext } from './validate.js';
@@ -22,13 +24,13 @@ const schemas: Record<string, ZodType> = { pages: pageSchema, layouts: layoutSch
 export const localeOf = (id: string) => (id.includes('/') ? id.split('/')[0] : defaultLocale);
 
 export async function validationContext(collection: string, id: string): Promise<ValidationContext> {
-  const loaded = await loadPatterns(localeOf(id));
+  const patterns = await patternsByName(session().root, localeOf(id));
   return {
     widgetMeta,
     widgetPropSchemas,
     tones: (tones as { name: string }[]).map((t) => t.name),
     wrapper: wrapper ?? null,
-    definitions: loaded.patterns,
+    definitions: patterns,
     collectionSchema: schemas[collection],
     resolveRefs: (nodes, base) => resolveRefs(nodes, localeOf(id), base),
     definePattern,
