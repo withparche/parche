@@ -99,6 +99,20 @@ export interface BlogLabels {
   archiveTitle: string;
   archiveSubtitle: string;
   archiveEarlier: string;
+  /** Subscription. */
+  subscribeTitle: string;
+  subscribeText: string;
+  subscribeButton: string;
+  subscribeNote: string;
+  subscribeSending: string;
+  subscribeDone: string;
+  subscribeDoneText: string;
+  subscribeNext: string;
+  subscribePageTitle: string;
+  issuePreview: string;
+  readInBrowser: string;
+  /** The chip on a list item that is part of a series. */
+  seriesChip: string;
 }
 
 /** English defaults — the strings that were hardcoded across routes and widgets. */
@@ -165,6 +179,18 @@ export const DEFAULT_LABELS: BlogLabels = {
   archiveTitle: 'Archive',
   archiveSubtitle: 'Everything, by month. {total} posts in total.',
   archiveEarlier: 'Earlier',
+  subscribeTitle: 'Get new posts by email',
+  subscribeText: 'The whole post in the email, not a teaser that makes you click through.',
+  subscribeButton: 'Subscribe',
+  subscribeNote: 'One-click unsubscribe · no tracking pixels',
+  subscribeSending: 'Subscribing…',
+  subscribeDone: 'Check your inbox',
+  subscribeDoneText: 'One email to confirm, then the next post when it is out.',
+  subscribeNext: 'Get the next one by email',
+  subscribePageTitle: 'Subscribe',
+  issuePreview: 'Inbox · a recent issue',
+  readInBrowser: 'Read the whole issue in the browser',
+  seriesChip: 'Series',
 };
 
 /** Per-locale overrides, e.g. `{ es: { listingTitle: 'Blog' } }`. */

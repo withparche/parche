@@ -121,6 +121,14 @@ export interface BlogConfig {
   tagIndexThreshold?: number;
   /** The archive by month and year, for the reader who half remembers a post. Default: true. */
   archive?: boolean;
+  /**
+   * The subscription: a page at `path` (default '/subscribe') and the forms
+   * the views place (a band after the list, a field in a newsletter's hero,
+   * the step after "Written by"). `endpoint` is where the form posts
+   * (Buttondown, Formspree, your API); without one the send is simulated, for
+   * a demo. Off by default: a form that goes nowhere is not a subscription.
+   */
+  subscribe?: false | { endpoint?: string; path?: string };
 }
 
 /** A kind of publication: a starting point for the blog's structure, never a lock. */
@@ -169,6 +177,7 @@ export interface ResolvedBlogConfig {
   aboutPath: string;
   tagIndexThreshold: number;
   archive: boolean;
+  subscribe: false | { endpoint?: string; path: string };
 }
 
 /**
@@ -208,6 +217,7 @@ export function resolveBlogConfig(config?: BlogConfig): ResolvedBlogConfig {
     aboutPath: config?.aboutPath ?? '/about',
     tagIndexThreshold: config?.tagIndexThreshold ?? 3,
     archive: config?.archive ?? true,
+    subscribe: config?.subscribe ? { ...config.subscribe, path: config.subscribe.path ?? '/subscribe' } : false,
   };
 }
 

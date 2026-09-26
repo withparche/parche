@@ -30,7 +30,7 @@ const empty = p.empty ?? ctx?.labels?.emptyState ?? 'No posts yet.';
 // Density is variables only: the markup is the same.
 const vars = density === 'compact' ? '--row-y:13px;--card-pad:15px;--gap:14px;--list-title:17px' : '--row-y:22px;--card-pad:22px;--gap:22px;--list-title:21px';
 const title = (c: BlogCard) => (c.issue ? `#${c.issue} · ${c.title}` : c.title);
-const seriesLabel = ctx?.labels?.seriesLabel ?? 'Series';
+const seriesLabel = ctx?.labels?.seriesChip ?? 'Series';
 ---
 
 <div class="parche-post-list" data-layout={layout} data-density={density} style={vars}>

@@ -1,0 +1,55 @@
+---
+/**
+ * The blog's subscription, placed by a view: a band after a list (title and
+ * text beside the form), the opening of the subscribe page, or the field alone
+ * in a newsletter's hero. It posts to the blog's `subscribe.endpoint` and
+ * shows the sent state; with no subscription configured it renders nothing,
+ * so a preset's view can place it without promising a form that goes nowhere.
+ */
+import Newsletter from '../Newsletter.astro';
+import { inline } from '../../_shared/inline';
+import { blogContext } from '../../lib/blog-context';
+import { schema, type Props } from './Subscribe.props';
+
+const p = schema.parse(Astro.props) as Props;
+const ctx = blogContext(Astro.locals);
+const sub = ctx?.subscribe;
+const labels = ctx?.labels ?? {};
+const title = p.title ?? labels.subscribeTitle ?? 'Get new posts by email';
+const text = p.text ?? labels.subscribeText;
+const form = {
+  layout: 'inline' as const,
+  align: 'start' as const,
+  submit: p.button ?? labels.subscribeButton ?? 'Subscribe',
+  note: p.note ?? labels.subscribeNote,
+  ...(sub?.endpoint ? { endpoint: sub.endpoint } : {}),
+  loading: labels.subscribeSending ?? 'Subscribing…',
+  success: { mode: 'replace' as const, title: labels.subscribeDone ?? 'Check your inbox', text: labels.subscribeDoneText },
+};
+const eyebrow = 'mb-3 font-mono text-[10px] leading-none font-medium tracking-[0.16em] text-primary uppercase';
+---
+
+{sub && (p.layout === 'field' ? (
+  <div class="parche-subscribe mx-auto w-full max-w-[460px]" data-layout="field"><Newsletter {...form} align="center" /></div>
+) : p.layout === 'hero' ? (
+  <div class="parche-subscribe max-w-[640px]" data-layout="hero">
+    {p.eyebrow && <p class={eyebrow} set:html={inline(p.eyebrow)} />}
+    <h1 class="font-heading text-[clamp(40px,6vw,68px)] leading-[1.02] font-semibold tracking-[-0.035em] text-balance text-heading" set:html={inline(title)} />
+    {text && <p class="mt-5 text-[clamp(17px,1.7vw,20px)] leading-[1.6] text-pretty text-muted" set:html={inline(text)} />}
+    <div class="mt-7"><Newsletter {...form} /></div>
+    {p.points.length > 0 && (
+      <ul class="mt-8 list-none border-b border-border p-0">
+        {p.points.map((pt) => <li class="flex gap-3 border-t border-border py-3 text-[15px] text-heading"><span aria-hidden="true" class="text-success">✓</span><span set:html={inline(pt)} /></li>)}
+      </ul>
+    )}
+  </div>
+) : (
+  <div class="parche-subscribe grid items-center gap-[clamp(20px,3vw,48px)] border-t border-border pt-[clamp(32px,4vw,56px)] md:grid-cols-2" data-layout="band">
+    <div>
+      {p.eyebrow && <p class={eyebrow} set:html={inline(p.eyebrow)} />}
+      <h2 class="font-heading text-[clamp(26px,3vw,36px)] leading-[1.1] font-semibold tracking-[-0.025em] text-heading" set:html={inline(title)} />
+      {text && <p class="mt-3 text-base leading-[1.6] text-muted" set:html={inline(text)} />}
+    </div>
+    <Newsletter {...form} />
+  </div>
+))}

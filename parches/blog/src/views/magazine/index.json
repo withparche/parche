@@ -21,7 +21,9 @@
             "widget": "blog/TaxonomyNav",
             "props": {
               "kind": "categories",
-              "label": { "$label": "sectionsLabel" }
+              "label": {
+                "$label": "sectionsLabel"
+              }
             }
           },
           {
@@ -33,7 +35,19 @@
           },
           {
             "widget": "blog/Pagination",
-            "props": { "more": true }
+            "props": {
+              "more": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "slots": {
+        "default": [
+          {
+            "widget": "blog/Subscribe"
           }
         ]
       }

@@ -1,0 +1,38 @@
+---
+/**
+ * The subscription page: the preset's (or the site's) `subscribe` view, with
+ * the latest post for a real past issue. Indexed: it ranks for "{name}
+ * newsletter". Only built when `subscribe` is configured.
+ */
+import BlogPage from '../components/BlogPage.astro';
+import { baseContext, toCards } from '../utils/context.js';
+import config from 'parche:config';
+import blogConfig from 'parche:app/blog';
+import { getCollection } from 'astro:content';
+import { defaultLocale, locales } from 'parche:config/i18n';
+import { localizeSiteConfig } from 'parche:utils/site';
+import { getPublishedPosts } from '../utils/post-helpers.js';
+import { getRouteAlternates, toAbsolute } from '../utils/alternates.js';
+import { resolveLabels } from '../labels.js';
+
+const cfg = blogConfig as any;
+const locale = Astro.currentLocale ?? defaultLocale;
+const showDrafts = import.meta.env.DEV && cfg.showDraftsInDev;
+const opts = { cfg, locale, defaultLocale, showDrafts };
+const site = localizeSiteConfig(config, locale);
+const labels = resolveLabels(cfg.labels, locale, defaultLocale);
+const latest = getPublishedPosts(await getCollection('posts'), showDrafts, locale).slice(0, 1);
+const alternates = toAbsolute(await getRouteAlternates({ path: cfg.subscribe.path, locales: locales as string[], defaultLocale }), Astro.site);
+const context = { ...(await baseContext('subscribe', opts)), posts: await toCards(latest, opts) };
+
+const metadata = {
+  title: `${labels.subscribePageTitle} — ${site.brand.name}`,
+  description: labels.subscribeText,
+  noindex: false,
+  nofollow: false,
+  ogType: 'website' as const,
+  twitterCard: 'summary_large_image' as const,
+};
+---
+
+<BlogPage view="subscribe" {context} {metadata} {site} {locale} {defaultLocale} {alternates} />

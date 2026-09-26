@@ -26,6 +26,8 @@ export default defineConfig({
         createBlog({
           // Several writers with their own pages, categories, one featured post.
           preset: 'company',
+          // No endpoint: the form simulates the send, for the demo.
+          subscribe: {},
           postsPerPage: 6,
           relatedPostsCount: 4,
           permalinks: { post: '/%slug%' },

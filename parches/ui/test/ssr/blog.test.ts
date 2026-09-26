@@ -19,6 +19,8 @@ import SeriesParts from '../../src/widgets/blog/SeriesParts.astro';
 import AuthorProfile from '../../src/widgets/blog/AuthorProfile.astro';
 import Writers from '../../src/widgets/blog/Writers.astro';
 import Archive from '../../src/widgets/blog/Archive.astro';
+import Subscribe from '../../src/widgets/blog/Subscribe.astro';
+import IssuePreview from '../../src/widgets/blog/IssuePreview.astro';
 import type { BlogArticle, BlogCard, BlogContext } from '../../src/lib/blog-context';
 
 let container: AstroContainer | null = null;
@@ -225,4 +227,26 @@ test('Archive: the year by month with counts, and the other years as links', asy
   expect(html).toContain('href="/blog/archive/2025"');
   expect(html).not.toContain('href="/blog/archive"');
   expect(await render(PageHeader, {}, ctx({ archive, labels }))).toContain('Everything, by month. 12 posts in total.');
+});
+
+test('Subscribe renders nothing without a subscription, and posts to its endpoint with one', async () => {
+  expect(await render(Subscribe, {}, ctx())).not.toContain('parche-subscribe');
+  const sub = ctx({ subscribe: { href: '/subscribe', endpoint: 'https://example.com/api/subscribe' }, labels: { subscribeTitle: 'Get new posts by email', subscribeButton: 'Subscribe' } });
+  const band = await render(Subscribe, {}, sub);
+  expect(band).toContain('data-layout="band"');
+  expect(band).toContain('Get new posts by email');
+  expect(band).toContain('https://example.com/api/subscribe');
+  const hero = await render(Subscribe, { layout: 'hero', eyebrow: 'Every Tuesday', points: ['One idea per issue'] }, sub);
+  expect(hero).toMatch(/<h1[^>]*>Get new posts by email<\/h1>/);
+  expect(hero).toContain('One idea per issue');
+  expect(await render(Subscribe, { layout: 'field' }, sub)).not.toContain('Get new posts by email');
+});
+
+test("IssuePreview shows the latest post as an email from the site; AuthorBox's one step is the subscription", async () => {
+  const preview = await render(IssuePreview, {}, ctx({ brand: 'Field Notes', posts: [card(2, { issue: 142 })] }));
+  expect(preview).toContain('Field Notes');
+  expect(preview).toContain('#142 · Post 2');
+  expect(preview).toContain('href="/post-2"');
+  const box = await render(AuthorBox, {}, post({}, { authors: 'one', subscribe: { href: '/subscribe' }, labels: { ...post().labels, subscribeNext: 'Get the next one by email' } }));
+  expect(box).toMatch(/href="\/subscribe"[^>]*>Get the next one by email/);
 });

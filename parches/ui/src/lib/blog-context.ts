@@ -58,7 +58,11 @@ export interface BlogContext {
   /** The UI strings in the page's language (see the blog's labels). */
   labels: Record<string, string>;
   listing: { href: string; title: string };
+  /** The site's name: who a newsletter issue is from. */
+  brand?: string;
   rss?: string;
+  /** The subscription page and where its form posts, when the blog has one. */
+  subscribe?: { href: string; endpoint?: string };
   /** This page's posts. */
   posts: BlogCard[];
   /** Posts marked featured (or the newest, when none is), newest first. */

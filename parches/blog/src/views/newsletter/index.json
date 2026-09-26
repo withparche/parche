@@ -11,10 +11,18 @@
             }
           },
           {
+            "widget": "blog/Subscribe",
+            "props": {
+              "layout": "field"
+            }
+          },
+          {
             "widget": "blog/Featured",
             "props": {
               "layout": "one",
-              "label": { "$label": "latestIssueLabel" }
+              "label": {
+                "$label": "latestIssueLabel"
+              }
             }
           },
           {

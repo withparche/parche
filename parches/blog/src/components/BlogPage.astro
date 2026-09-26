@@ -42,7 +42,7 @@ const featuring = (nodes: any[]): number => {
 };
 const page = (context as any).page;
 const shown = (!page || page.current === 1) ? ((context as any).featured ?? []).slice(0, featuring(tree.sections)).map((c: any) => c.href) : [];
-Astro.locals.parche = { ...(Astro.locals.parche ?? {}), locale, alternates, blog: { ...context, shown } };
+Astro.locals.parche = { ...(Astro.locals.parche ?? {}), locale, alternates, blog: { ...context, shown, brand: site?.brand?.name } };
 ---
 
 <BaseLayout metadata={metadata} config={site} lang={locale}>

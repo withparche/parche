@@ -30,6 +30,16 @@
           }
         ]
       }
+    },
+    {
+      "widget": "Section",
+      "slots": {
+        "default": [
+          {
+            "widget": "blog/Subscribe"
+          }
+        ]
+      }
     }
   ]
 }

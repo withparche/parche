@@ -98,6 +98,8 @@ export default function createUI(): ParcheManifest {
       'blog/AuthorProfile': w('blog/AuthorProfile.astro'),
       'blog/Writers': w('blog/Writers.astro'),
       'blog/Archive': w('blog/Archive.astro'),
+      'blog/Subscribe': w('blog/Subscribe.astro'),
+      'blog/IssuePreview': w('blog/IssuePreview.astro'),
       'blog/TOC': w('blog/TOC.astro'),
     },
     requires: {

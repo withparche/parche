@@ -83,6 +83,11 @@ export default function createBlog(config?: BlogConfig): ParcheManifest {
     routes.push({ pattern: `${permalinkToRoutePattern(permalinks.archive)}/[...year]`, entrypoint: routePath('archive', '[...year].astro') });
   }
 
+  // The subscription page
+  if (resolved.subscribe) {
+    routes.push({ pattern: resolved.subscribe.path.replace(/^\//, ''), entrypoint: routePath('subscribe.astro') });
+  }
+
   // RSS feed
   if (resolved.rss) {
     routes.push({
@@ -122,6 +127,8 @@ export default function createBlog(config?: BlogConfig): ParcheManifest {
         'blog/AuthorProfile',
         'blog/Writers',
         'blog/Archive',
+        'blog/Subscribe',
+        'blog/IssuePreview',
         'Columns',
         'Column',
       ],

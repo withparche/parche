@@ -29,6 +29,11 @@ const eyebrow = 'font-mono text-[10px] leading-none font-medium tracking-[0.16em
       <p class="font-mono text-[10px] leading-none font-medium tracking-[0.16em] text-muted uppercase">{fill(labels.nextInSeries ?? 'Next in {series}', { series: s.title })}</p>
       <p class="mt-2 font-heading text-[17px] font-semibold text-heading">{s.next.href ? <a href={s.next.href} class="text-inherit no-underline hover:underline">{s.next.title}</a> : s.next.title}</p>
     </div>
-    {!s.next.href && s.next.dateText && <p class="font-mono text-xs text-muted">{fill(labels.publishes ?? 'Publishes {date}', { date: s.next.dateText })}</p>}
+    {!s.next.href && s.next.dateText && (
+      <p class="font-mono text-xs text-muted">
+        {fill(labels.publishes ?? 'Publishes {date}', { date: s.next.dateText })}
+        {ctx?.subscribe && <> · <a href={ctx.subscribe.href} class="text-primary no-underline hover:underline">{labels.subscribeNext ?? 'Get the next one by email'}</a></>}
+      </p>
+    )}
   </aside>
 )}
