@@ -85,7 +85,11 @@ done, because it turns one change into two coordinated ones.
 
 Not scheduled; they change what Parche *is*, not how well it works.
 
-- The visual builder (`@parche/builder`) in the repo + `parche astro builder`: in progress on `experimental` (phases 0–4 of 5: the dev-only shell and CLI; pages with the full node model; a preview that morphs drafts in place; tokens and themes; layouts, menus and the site config. Next: the blog).
+- The visual builder (`@parche/builder`) in the repo + `parche astro builder`: in progress on `experimental`, see [docs-wip/builder.md](./docs-wip/builder.md).
+  - Done (phases 0–4 of 5): the dev-only shell and CLI; pages with the full node model; a preview that morphs drafts in place; tokens and themes; layouts, menus and the site config; patterns (create, save a node as one, detach a use, link fields to props); side panels pinned or floating.
+  - Next: the blog (posts, views, authors, taxonomies), phase 5.
+  - Then: renaming or deleting a pattern, menu or layout updates or warns about its uses; collection paths and page URLs from core instead of the builder's own assumptions; a colour picker and contrast checks in the token editor; choosing `$ref` / `$collection` / `$label` values from a form.
+- Patterns that take widgets from the page (`{ "$slot": … }`), not only values.
 - Narrans / narrative-first AI generation → `parche astro generate <prompt>`.
 
 ## Not doing (and why)

@@ -13,6 +13,10 @@ duplicate it here.
   the `ParcheElement` base, eject and copy-readiness.
 - [images.md](./images.md) — how pictures are optimised: local, image CDNs
   (unpic), Astro for remote ones, or as they are; the `parche({ images })` options.
+- [content-model.md](./content-model.md) — nodes, slots, outlets, the wrapper,
+  references, patterns and validation.
+- [builder.md](./builder.md) — the visual builder: running it, what it edits,
+  how the preview works, and its known gaps.
 
 ## Status
 

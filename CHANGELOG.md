@@ -13,6 +13,31 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
 
 ### Added
 
+- **The visual builder, `@parche/builder`, and `parche astro builder`.** An
+  editor for a site's content over the site's own render, in development
+  only: the CLI adds it through Astro's programmatic `dev()`, it refuses any
+  other command, and no build carries it. Pages with their slots and
+  wrappers, layouts and their outlets, menus (with the form of the prop that
+  uses them), patterns, the design tokens (the base look or a theme, light
+  or dark, into `src/parche.tokens.json`) and the site config (the dev server
+  restarts to read it). The preview is the real page with the unsaved edits
+  in place, updated without a reload, with hover and selection outlines; a
+  layout, menu or pattern previews through a page that uses it. Every edit
+  is checked as the renderer checks it, and a save writes the file keeping
+  its indentation and order, or stops if the file changed on disk. Side
+  panels can be pinned beside the preview or float over it. Private while
+  on `experimental`; see `docs-wip/builder.md`.
+
+- **Patterns** (`src/content/patterns/`). A composition of widgets kept once
+  and used wherever a widget goes, as `{ "widget": "pattern/<id>" }`. Without
+  props it is content shared as it is (the same FAQ on several pages); with
+  props, declared as JSON Schema, each use gives only the values, which
+  `{ "$prop": "title" }` placeholders put where they belong. The id is looked
+  up in the page's locale first; a use stands for its root widgets in the
+  list it sits in and in a slot's `allow` and counts; a pattern that reaches
+  itself is reported and not rendered. Export the `patterns` collection from
+  `createCollections()`.
+
 - **Design-system pages in the playground** (`/design`). The three token layers
   read from the real stylesheets: every colour role with its light and dark
   value and which elements consume it, the contrast of the pairs the elements
