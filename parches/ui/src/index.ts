@@ -41,6 +41,11 @@ export default function createUI(): ParcheManifest {
       PrevNext: w('PrevNext.astro'),
       Releases: w('Releases.astro'),
       Products: w('Products.astro'),
+      Heading: w('Heading.astro'),
+      StickyBar: w('StickyBar.astro'),
+      Countdown: w('Countdown.astro'),
+      Compare: w('Compare.astro'),
+      Calculator: w('Calculator.astro'),
       Columns: w('Columns.astro'),
       Column: w('Column.astro'),
       Switch: w('Switch.astro'),
@@ -93,7 +98,7 @@ export default function createUI(): ParcheManifest {
       'blog/ToBlogLink': w('blog/ToBlogLink.astro'),
     },
     requires: {
-      elements: ['Accordion', 'Tabs', 'Command', 'Frame', 'Placeholder', 'List', 'Table', 'Callout', 'Gallery', 'Filter', 'Form', 'Select', 'RadioGroup', 'Avatar', 'Badge', 'Banner', 'Breadcrumb', 'Button', 'Card', 'Carousel', 'Checkbox', 'Collapsible', 'Container', 'Divider', 'Heading', 'Icon', 'Image', 'Input', 'Link', 'Menu', 'Pagination', 'Popover', 'Section', 'Share', 'Sheet', 'Stat', 'Tag', 'Textarea', 'Toc'],
+      elements: ['Accordion', 'Tabs', 'Command', 'Frame', 'Placeholder', 'List', 'Table', 'Callout', 'Gallery', 'Filter', 'StickyBar', 'Countdown', 'Compare', 'Calculator', 'Form', 'Select', 'RadioGroup', 'Avatar', 'Badge', 'Banner', 'Breadcrumb', 'Button', 'Card', 'Carousel', 'Checkbox', 'Collapsible', 'Container', 'Divider', 'Heading', 'Icon', 'Image', 'Input', 'Link', 'Menu', 'Pagination', 'Popover', 'Section', 'Share', 'Sheet', 'Stat', 'Tag', 'Textarea', 'Toc'],
     },
   };
 }

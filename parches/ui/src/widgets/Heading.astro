@@ -1,0 +1,9 @@
+---
+/** A section heading on its own, over widgets that carry none (a Columns, a Table pair). */
+import SectionHeader from '../components/SectionHeader.astro';
+import { schema, type Props } from './Heading.props';
+
+const { tagline, title, subtitle, link, align, width } = schema.parse(Astro.props) as Props;
+---
+
+<SectionHeader {tagline} {title} {subtitle} {link} {align} {width} spacing="none" />

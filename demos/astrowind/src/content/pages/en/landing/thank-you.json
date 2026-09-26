@@ -1,0 +1,160 @@
+{
+  "title": "Thank you",
+  "description": "The checklist is in your inbox. What happens next, and one thing while you are here.",
+  "layout": "landing",
+  "metadata": {
+    "noindex": true,
+    "nofollow": true
+  },
+  "sections": [
+    {
+      "widget": "Section",
+      "props": {
+        "width": "sm"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "PageHeader",
+            "props": {
+              "tagline": "✓ Checklist sent",
+              "title": "The checklist is in your inbox",
+              "subtitle": "Sent to you from `hello@astrowind.dev`, subject “Your landing page checklist”. Not there in two minutes? Check spam, then reply and a human will send it again."
+            }
+          },
+          {
+            "widget": "Callout",
+            "props": {
+              "tone": "neutral",
+              "label": "What happens next",
+              "items": [
+                "`now` The checklist, as a one-page PDF and a fillable version",
+                "`3 wks` One email: the mistake we see most often in submitted pages",
+                "`then` Nothing, unless you ask. Three emails a year, maximum"
+              ]
+            }
+          },
+          {
+            "widget": "Callout",
+            "props": {
+              "tone": "primary",
+              "title": "One thing, while you are here",
+              "description": "The template that built the page you just used is free and MIT licensed. The six sections in the checklist are already wired in it.",
+              "actions": [
+                {
+                  "variant": "primary",
+                  "text": "Get the template",
+                  "href": "https://github.com/arthelokyo/astrowind"
+                },
+                {
+                  "variant": "secondary",
+                  "text": "Or join the live rebuild",
+                  "href": "/landing/webinar"
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Contact",
+            "props": {
+              "title": "Two questions, now that it costs you nothing",
+              "subtitle": "This is where the fields you did not ask for at the form belong — progressive profiling, after the conversion is safe.",
+              "layout": "centered",
+              "fields": [
+                {
+                  "name": "building",
+                  "label": "What are you building?",
+                  "type": "text",
+                  "placeholder": "A SaaS marketing site"
+                },
+                {
+                  "name": "for",
+                  "label": "Who are you doing it for?",
+                  "type": "text",
+                  "placeholder": "A client · my own company"
+                }
+              ],
+              "submit": "Save, or skip — genuinely optional",
+              "success": {
+                "mode": "button",
+                "label": "Saved"
+              }
+            }
+          },
+          {
+            "widget": "Callout",
+            "props": {
+              "tone": "neutral",
+              "layout": "inline",
+              "description": "Know someone building a landing page this week?"
+            }
+          },
+          {
+            "widget": "Command",
+            "props": {
+              "command": "astrowind.dev/landing/lead-generation",
+              "prompt": "→",
+              "copyLabel": "Copy the link",
+              "copiedLabel": "Copied the link"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Features",
+            "props": {
+              "title": "Nearest types to this one",
+              "link": {
+                "text": "All eleven types",
+                "href": "/landing"
+              },
+              "align": "start",
+              "layout": "cards",
+              "columns": "3",
+              "card": "canvas",
+              "items": [
+                {
+                  "eyebrow": "/landing/lead-generation",
+                  "title": "Lead generation",
+                  "description": "When you need the email before the sale.",
+                  "href": "/landing/lead-generation"
+                },
+                {
+                  "eyebrow": "/landing/webinar",
+                  "title": "Webinar",
+                  "description": "When the offer has a date and a replay.",
+                  "href": "/landing/webinar"
+                },
+                {
+                  "eyebrow": "/landing/trial",
+                  "title": "Free trial",
+                  "description": "When the conversion is an account.",
+                  "href": "/landing/trial"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "StickyBar",
+      "props": {
+        "text": "Checklist sent — check your inbox",
+        "note": "Next email in three weeks",
+        "action": {
+          "text": "Get the template",
+          "href": "https://github.com/arthelokyo/astrowind"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+---
+/**
+ * StickyBar — the page's one action, following the reader. Hidden until they
+ * have scrolled past the hero, hidden again when the footer comes into view,
+ * so it never covers the close or the legal links. Without script it stays
+ * hidden: the same action is already in the hero and the close.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema } from './sticky-bar.props';
+
+const { props: { position, after, label }, rest, className, part } = splitProps(schema, Astro.props);
+---
+
+<parche-sticky-bar class={cn('parche-sticky-bar', className)} {...rest} data-part={part} data-state="hidden" data-position={position} after={after}>
+  <div
+    class={cn(
+      'fixed inset-x-0 z-40 border-border bg-background/90 backdrop-blur-lg transition-transform duration-200 motion-reduce:transition-none',
+      position === 'bottom' ? 'bottom-0 border-t translate-y-full in-data-[state=shown]:translate-y-0' : 'top-[var(--parche-header-height,4.25rem)] border-b -translate-y-[200%] in-data-[state=shown]:translate-y-0',
+    )}
+    role="region"
+    aria-label={label}
+    data-part="bar"
+    inert
+  >
+    <div class="mx-auto flex max-w-(--ds-conf-width-xl) flex-wrap items-center gap-x-4 gap-y-2 px-(--ds-conf-gutter) py-3">
+      <slot />
+    </div>
+  </div>
+</parche-sticky-bar>
+
+<script>
+  import './sticky-bar.element.ts';
+</script>

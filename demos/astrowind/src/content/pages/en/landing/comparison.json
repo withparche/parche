@@ -1,0 +1,337 @@
+{
+  "title": "An Astro template compared with a paid theme and a site builder",
+  "layout": "landing",
+  "description": "Written by the people who make one of the three, which is why every claim below has a date and one row where we lose.",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "layout": "text",
+        "align": "start",
+        "badge": {
+          "tag": "Comparison",
+          "text": "last verified 1 September 2026"
+        },
+        "title": "An Astro template compared with a paid theme and a site builder",
+        "subtitle": "Written by the people who make one of the three, which is why every claim below has a date and one row where we lose. If you need a site your marketing team edits with no developer nearby, stop reading and use a builder.",
+        "actions": [
+          {
+            "variant": "primary",
+            "text": "See the table",
+            "href": "#table"
+          },
+          {
+            "variant": "secondary",
+            "text": "Try the template instead",
+            "href": "/landing/product"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "table",
+        "label": "The table",
+        "tone": "surface"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Table",
+            "props": {
+              "columns": [
+                {
+                  "label": ""
+                },
+                {
+                  "label": "This template",
+                  "highlight": true
+                },
+                {
+                  "label": "Paid Astro theme"
+                },
+                {
+                  "label": "Hosted site builder"
+                }
+              ],
+              "minWidth": 720,
+              "rows": [
+                {
+                  "cells": [
+                    "Cost, year one",
+                    {
+                      "text": "$0",
+                      "tone": "success"
+                    },
+                    "$49–$99 once",
+                    "$192–$588"
+                  ]
+                },
+                {
+                  "cells": [
+                    "Editing without a developer",
+                    {
+                      "text": "Markdown or a CMS adapter",
+                      "tone": "muted"
+                    },
+                    "Same, theme-dependent",
+                    {
+                      "text": "They win this outright",
+                      "tone": "warning"
+                    }
+                  ]
+                },
+                {
+                  "cells": [
+                    "Median page weight",
+                    {
+                      "text": "38 KB",
+                      "tone": "success"
+                    },
+                    "180–400 KB",
+                    "600 KB+"
+                  ]
+                },
+                {
+                  "cells": [
+                    "You own the code",
+                    {
+                      "text": "Yes, MIT",
+                      "tone": "success"
+                    },
+                    "Licence-bound",
+                    "No, export only"
+                  ]
+                },
+                {
+                  "cells": [
+                    "Time to a live site",
+                    {
+                      "text": "Four minutes, with Node installed",
+                      "tone": "muted"
+                    },
+                    "Similar",
+                    {
+                      "text": "Minutes, no tooling at all",
+                      "tone": "warning"
+                    }
+                  ]
+                },
+                {
+                  "cells": [
+                    "Support when it breaks",
+                    {
+                      "text": "Public issues, community",
+                      "tone": "muted"
+                    },
+                    "The author, by email",
+                    "Paid, with an SLA"
+                  ]
+                },
+                {
+                  "cells": [
+                    "Lock-in risk",
+                    {
+                      "text": "None, static output",
+                      "tone": "success"
+                    },
+                    "Low",
+                    "High, platform-bound"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Columns",
+            "props": {
+              "gap": "md",
+              "align": "stretch"
+            },
+            "slots": {
+              "default": [
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Callout",
+                        "props": {
+                          "tone": "warning",
+                          "label": "Choose a site builder if…",
+                          "description": "Nobody on the team will ever open a terminal, you need a page published by someone in marketing this afternoon, and a monthly fee is cheaper than the developer hour it replaces. That is a real answer, and it is not ours."
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Callout",
+                        "props": {
+                          "tone": "neutral",
+                          "label": "Choose a paid theme if…",
+                          "description": "You want one specific visual direction you have already fallen in love with, and a single author to email when it breaks. Paying $79 for that is entirely rational."
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Callout",
+                        "props": {
+                          "tone": "primary",
+                          "label": "Choose this if…",
+                          "description": "A developer touches the site at least monthly, page speed is judged by someone, and you want the repository to outlive whichever tool is fashionable in 2029."
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "compare",
+        "label": "Same site, both ways"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Compare",
+            "props": {
+              "tagline": "Same site, both ways",
+              "title": "Drag to compare the same page",
+              "subtitle": "Same viewport, same content, same day. The load time and page weight are labelled on each side — without those numbers this is a style opinion.",
+              "before": {
+                "label": "before · 4.1 s · 820 KB",
+                "tone": "warning",
+                "placeholder": "The site-builder version"
+              },
+              "after": {
+                "label": "after · 0.4 s · 38 KB",
+                "tone": "success",
+                "placeholder": "The same page on this template"
+              },
+              "ratio": "16/9"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "migrating",
+        "label": "Migrating",
+        "tone": "surface"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Columns",
+            "props": {
+              "gap": "lg",
+              "align": "start"
+            },
+            "slots": {
+              "default": [
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "CallToAction",
+                        "props": {
+                          "layout": "stacked",
+                          "title": "Migrating, with the effort named",
+                          "subtitle": "A comparison page that does not say how hard switching is has only done half the job. These are real hours, from real migrations.",
+                          "actions": [
+                            {
+                              "variant": "secondary",
+                              "text": "Have us do it on a call",
+                              "href": "/contact"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Table",
+                        "props": {
+                          "frame": "open",
+                          "header": "none",
+                          "columns": [
+                            {
+                              "label": "Task"
+                            },
+                            {
+                              "label": "Effort",
+                              "align": "end",
+                              "mono": true
+                            }
+                          ],
+                          "rows": [
+                            {
+                              "cells": [
+                                "Content and page structure",
+                                "6–10 h"
+                              ]
+                            },
+                            {
+                              "cells": [
+                                "Brand tokens and type",
+                                "2–3 h"
+                              ]
+                            },
+                            {
+                              "cells": [
+                                "Blog import and taxonomy",
+                                "4–8 h"
+                              ]
+                            },
+                            {
+                              "cells": [
+                                "Redirects and search console",
+                                "2–4 h"
+                              ]
+                            },
+                            {
+                              "cells": [
+                                "Forms, analytics, consent",
+                                "3–5 h"
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

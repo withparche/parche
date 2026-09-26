@@ -1,0 +1,17 @@
+---
+/** The Countdown element with an optional label and note, bare or in a card, for a hero or an aside. */
+import CountdownElement from 'parche:elements/Countdown';
+import Card from 'parche:elements/Card';
+import { inline } from '../_shared/inline';
+import { schema, type Props } from './Countdown.props';
+
+const { label, to, date, done, seconds, note, card, elevated } = schema.parse(Astro.props) as Props;
+const Frame = card === 'none' ? 'div' : Card;
+const frame = card === 'none' ? {} : { variant: card, radius: 'lg', padding: 'lg', shadow: elevated ? 'md' : 'none' };
+---
+
+<Frame {...frame} class="parche-countdown-widget">
+  {label && <p class="mb-3 type-label text-primary" set:html={inline(label)} />}
+  <CountdownElement {to} {date} {done} {seconds} />
+  {note && <p class="mt-4 text-xs leading-[1.5] text-muted" set:html={inline(note)} />}
+</Frame>

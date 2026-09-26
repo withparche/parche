@@ -12,7 +12,7 @@ import { inline } from '../_shared/inline';
 import FormSuccess from '../components/FormSuccess.astro';
 import { schema, type Props } from './Newsletter.props';
 
-const { title, subtitle, layout, align, placeholder, submit, note, endpoint, loading, error, success } = schema.parse(Astro.props) as Props;
+const { title, subtitle, layout, align, field, placeholder, submit, note, endpoint, loading, error, success } = schema.parse(Astro.props) as Props;
 // A stable id from the content, so two newsletters on one page do not clash.
 const seed = `${title ?? ''}${placeholder}${submit}`;
 let h = 5381;
@@ -28,13 +28,13 @@ const frame = card ? { variant: 'canvas', radius: 'lg', padding: 'lg', shadow: '
   {card && subtitle && <p class="mb-4 text-sm leading-[1.55] text-muted" set:html={inline(subtitle)} />}
   <Form {endpoint} label={title ?? 'Subscribe'} success={success?.mode ?? 'button'} loadingLabel={loading} successLabel={success?.label} errorMessage={error}>
     <div class="parche-field flex flex-wrap gap-2">
-      <label class="sr-only" for={id}>Email</label>
+      <label class="sr-only" for={id}>{field.label}</label>
       <input
         id={id}
-        type="email"
-        name="email"
+        type={field.type}
+        name={field.name}
         required
-        autocomplete="email"
+        autocomplete={field.type === 'email' ? 'email' : field.type === 'tel' ? 'tel' : 'off'}
         placeholder={placeholder}
         class:list={[
           'min-w-[180px] flex-1 rounded-sm border border-border bg-surface text-[15px] leading-none text-heading placeholder:text-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-[invalid=true]:border-danger',

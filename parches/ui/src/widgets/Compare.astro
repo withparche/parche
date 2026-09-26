@@ -1,0 +1,14 @@
+---
+/** A section around the Compare element: the shared heading and the frame. */
+import CompareElement from 'parche:elements/Compare';
+import SectionHeader from '../components/SectionHeader.astro';
+import { schema, type Props } from './Compare.props';
+
+const { tagline, title, subtitle, link, align, before, after, ratio, label } = schema.parse(Astro.props) as Props;
+const side = (s: Props['before']) => ({ src: s.image?.src, alt: s.image?.alt ?? '', label: s.label, tone: s.tone, placeholder: s.placeholder });
+---
+
+<div class="parche-compare-section">
+  <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="md" width="lg" />
+  <CompareElement before={side(before)} after={side(after)} {ratio} {label} />
+</div>

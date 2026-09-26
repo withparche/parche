@@ -1,53 +1,128 @@
 {
-  "title": "See the offer",
+  "title": "Click-Through Landing Page Example & Guide",
+  "description": "What the destination asks for, how long it takes and what it costs — before you get there. One button, one place, three placements.",
   "layout": "landing",
-  "description": "No menus, no distractions. Read the offer and decide.",
   "sections": [
     {
       "widget": "Hero",
       "props": {
         "layout": "split",
-        "tagline": "See the offer",
-        "title": "One decision, ==one button==",
-        "subtitle": "No menus, no distractions. Read the offer and decide.",
+        "tagline": "No form on this page",
+        "title": "See what is on the other side of the click",
+        "subtitle": "What the destination asks for, how long it takes and what it costs — before you get there. One button, one place, three placements.",
         "actions": [
           {
             "variant": "primary",
-            "text": "Continue",
-            "href": "#cta",
-            "icon": "tabler:arrow-right"
+            "text": "Continue to the template",
+            "href": "https://github.com/arthelokyo/astrowind"
           }
-        ],
-        "image": {
-          "src": "https://images.unsplash.com/photo-1531973486364-5fa64260d75b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1658&q=80",
-          "alt": "See the offer"
-        }
+        ]
+      },
+      "slots": {
+        "media": [
+          {
+            "widget": "Screenshot",
+            "props": {
+              "url": "github.com/arthelokyo/astrowind",
+              "badge": "the destination",
+              "badgeTone": "primary",
+              "ratio": "16/10",
+              "caption": "screenshot of the destination · 1000×625"
+            }
+          }
+        ]
       }
     },
     {
       "widget": "Section",
+      "props": { "id": "dest", "tone": "surface" },
+      "slots": {
+        "default": [
+          {
+            "widget": "Features",
+            "props": {
+              "title": "What happens after you click",
+              "align": "start",
+              "layout": "cards",
+              "columns": "4",
+              "card": "canvas",
+              "items": [
+                {
+                  "eyebrow": "Where you land",
+                  "description": "The repository: README, live demo link and the “Use this template” button."
+                },
+                {
+                  "eyebrow": "What it asks for",
+                  "description": "Nothing. No account, no email, no card. A GitHub login only if you fork it."
+                },
+                {
+                  "eyebrow": "How long it takes",
+                  "description": "About four minutes: clone, install, run. Node.js is the only requirement."
+                },
+                {
+                  "eyebrow": "What it costs",
+                  "description": "Nothing, ever. MIT licence, personal and commercial use."
+                }
+              ]
+            }
+          },
+          {
+            "widget": "CallToAction",
+            "props": {
+              "layout": "closing",
+              "size": "md",
+              "actions": [
+                {
+                  "variant": "primary",
+                  "text": "Continue to the template",
+                  "href": "https://github.com/arthelokyo/astrowind"
+                }
+              ],
+              "note": "`?utm_source=email&utm_campaign=bridge&ref=aw` — carried through to the destination"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Table",
       "props": {
-        "id": "cta",
-        "tone": "glow"
-      },
+        "tagline": "What stays on the bridge",
+        "title": "And what waits on the other side",
+        "subtitle": "The single most reusable table in the whole set: it tells you what to delete from a bridge page.",
+        "align": "start",
+        "columns": [
+          { "label": "Element" },
+          { "label": "This page", "highlight": true },
+          { "label": "The destination" }
+        ],
+        "rows": [
+          { "cells": ["Destinations", "1", { "text": "As many as needed", "tone": "muted" }] },
+          { "cells": ["Form fields", "0", { "text": "The signup or checkout", "tone": "muted" }] },
+          { "cells": ["Buttons", "3, same label and URL", { "text": "Whatever the page needs", "tone": "muted" }] },
+          { "cells": ["Proof", "One or two quotes", { "text": "Case studies, reviews, numbers", "tone": "muted" }] },
+          { "cells": ["Pricing and feature list", "No", { "text": "Yes, in full", "tone": "muted" }] },
+          { "cells": ["Screens before the first button", "0", { "text": "Not a concern", "tone": "muted" }] }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": { "tone": "surface" },
       "slots": {
         "default": [
           {
             "widget": "CallToAction",
             "props": {
-              "title": "Continue",
-              "subtitle": "It takes less than a minute and costs nothing to try.",
+              "layout": "closing",
+              "size": "md",
+              "title": "Nothing left to explain",
+              "subtitle": "Third placement, same button, same words. This is the click the page exists for.",
               "actions": [
                 {
                   "variant": "primary",
-                  "text": "Continue",
-                  "href": "#",
-                  "icon": "tabler:arrow-right"
-                },
-                {
-                  "variant": "secondary",
-                  "text": "Ask a question",
-                  "href": "/contact"
+                  "text": "Continue to the template",
+                  "href": "https://github.com/arthelokyo/astrowind"
                 }
               ]
             }

@@ -1,0 +1,40 @@
+---
+/**
+ * Compare — before and after in one frame. The after image fills it; the
+ * before image sits on top, clipped at the divider; a native range input under
+ * the frame moves the divider (keyboard and touch come with it). Each side has
+ * a chip saying what it is, with a tone for the better one.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import Placeholder from '../placeholder/Placeholder.astro';
+import { schema } from './compare.props';
+
+const { props: { before, after, ratio, start, label }, rest, className, part } = splitProps(schema, Astro.props);
+const chipTone = { neutral: 'bg-surface text-heading', success: 'bg-success-soft text-success', warning: 'bg-warning-soft text-warning' } as const;
+const media = (s: typeof before) => s.src
+  ? { img: true, src: s.src, alt: s.alt }
+  : { img: false, caption: s.placeholder };
+---
+
+<parche-compare class={cn('parche-compare block', className)} {...rest} data-part={part} style={`--pos:${start}%`}>
+  <div class="relative overflow-hidden rounded-lg border border-border has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-ring" style={`aspect-ratio:${ratio}`} data-part="frame">
+    <div class="absolute inset-0" data-part="after">
+      {media(after).img ? <img src={after.src} alt={after.alt} class="block h-full w-full object-cover" /> : <Placeholder ratio={ratio} label={after.placeholder} class="h-full" />}
+      {!after.src && after.placeholder && <span class="absolute right-3 bottom-3 font-mono text-[11px] tracking-[0.06em] text-muted uppercase">{after.placeholder}</span>}
+      <span class={cn('absolute top-3 right-3 rounded-sm px-2 py-1 font-mono text-[11px] leading-none font-medium', chipTone[after.tone])} data-part="chip">{after.label}</span>
+    </div>
+    <div class="absolute inset-0 [clip-path:inset(0_calc(100%-var(--pos))_0_0)]" data-part="before">
+      {media(before).img ? <img src={before.src} alt={before.alt} class="block h-full w-full object-cover" /> : <Placeholder ratio={ratio} label={before.placeholder} class="h-full bg-surface" />}
+      {!before.src && before.placeholder && <span class="absolute bottom-3 left-3 font-mono text-[11px] tracking-[0.06em] text-muted uppercase">{before.placeholder}</span>}
+      <span class={cn('absolute top-3 left-3 rounded-sm px-2 py-1 font-mono text-[11px] leading-none font-medium', chipTone[before.tone])} data-part="chip">{before.label}</span>
+    </div>
+    <span class="pointer-events-none absolute inset-y-0 w-0.5 bg-primary" style="left:calc(var(--pos) - 1px)" aria-hidden="true">
+      <span class="absolute top-1/2 left-1/2 flex size-9 -translate-1/2 items-center justify-center rounded-full border-2 border-primary bg-background font-mono text-xs text-primary shadow-sm" data-part="handle">↔</span>
+    </span>
+    <input type="range" min="0" max="100" value={start} step="1" aria-label={label} class="absolute inset-0 m-0 h-full w-full cursor-ew-resize appearance-none opacity-0" data-part="range" />
+  </div>
+</parche-compare>
+
+<script>
+  import './compare.element.ts';
+</script>

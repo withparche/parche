@@ -1,53 +1,661 @@
 {
-  "title": "Read the full story",
+  "title": "Stop explaining the offer on calls",
+  "description": "A nine-block page that makes the whole argument in order — problem, mechanism, proof, price, guarantee — so the call confirms instead of convincing.",
   "layout": "landing",
-  "description": "Take your time. This page covers what the product does, who it is for and where it will not help you.",
   "sections": [
     {
       "widget": "Hero",
       "props": {
         "layout": "split",
-        "tagline": "Read the full story",
-        "title": "Everything you need, ==explained properly==",
-        "subtitle": "Take your time. This page covers what the product does, who it is for and where it will not help you.",
+        "align": "start",
+        "tagline": "For teams selling something that needs explaining",
+        "title": "Stop explaining the offer on calls",
+        "subtitle": "A nine-block page that makes the whole argument in order — problem, mechanism, proof, price, guarantee — so the call confirms instead of convincing.",
         "actions": [
           {
             "variant": "primary",
-            "text": "Buy now",
-            "href": "#cta",
-            "icon": "tabler:arrow-right"
+            "text": "See the offer",
+            "href": "#offer"
+          },
+          {
+            "variant": "secondary",
+            "text": "Read the argument",
+            "href": "#problem"
           }
-        ],
-        "image": {
-          "src": "https://images.unsplash.com/photo-1531973486364-5fa64260d75b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1658&q=80",
-          "alt": "Read the full story"
-        }
+        ]
+      },
+      "slots": {
+        "media": [
+          {
+            "widget": "Callout",
+            "props": {
+              "tone": "neutral",
+              "layout": "card",
+              "label": "The nine blocks, in order",
+              "items": [
+                "`01` ==Promise — you are here==",
+                "`02` The problem, named precisely",
+                "`03` The mechanism — why it works",
+                "`04` Benefits as outcomes",
+                "`05` Proof with measured numbers",
+                "`06` The offer, three tiers",
+                "`07` Guarantee, right after the price",
+                "`08` Objections, answered",
+                "`09` The same ask, one last time"
+              ]
+            }
+          }
+        ]
       }
     },
     {
       "widget": "Section",
       "props": {
-        "id": "cta",
-        "tone": "glow"
+        "tone": "surface",
+        "id": "reader"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Switch",
+            "props": {
+              "tagline": "Who is reading this",
+              "title": "The argument changes with the reader",
+              "label": "Who is reading this",
+              "syncKey": "reader",
+              "options": [
+                {
+                  "value": "dev",
+                  "label": "Developer"
+                },
+                {
+                  "value": "mkt",
+                  "label": "Marketer"
+                },
+                {
+                  "value": "agency",
+                  "label": "Agency"
+                }
+              ]
+            },
+            "slots": {
+              "dev": [
+                {
+                  "widget": "Features",
+                  "props": {
+                    "layout": "cards",
+                    "columns": "3",
+                    "card": "canvas",
+                    "items": [
+                      {
+                        "eyebrow": "What breaks today",
+                        "description": "You inherit the marketing site and every change is an afternoon."
+                      },
+                      {
+                        "eyebrow": "What changes",
+                        "eyebrowTone": "primary",
+                        "description": "Content lives in typed collections, so a wrong edit fails the build instead of the live page. No CMS webhook to debug at 18:00 on a Friday, and the whole site is a folder you can read in one sitting."
+                      },
+                      {
+                        "eyebrow": "Your objection first",
+                        "description": "“I do not want another abstraction layer.” There is none: it is Astro components and CSS variables. Delete the widgets you do not use and nothing breaks.",
+                        "footer": "Ferrolab moved 140 posts with zero redirect gaps."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "mkt": [
+                {
+                  "widget": "Features",
+                  "props": {
+                    "layout": "cards",
+                    "columns": "3",
+                    "card": "canvas",
+                    "items": [
+                      {
+                        "eyebrow": "What breaks today",
+                        "description": "You cannot publish a landing page without booking developer time."
+                      },
+                      {
+                        "eyebrow": "What changes",
+                        "eyebrowTone": "primary",
+                        "description": "Eleven landing types, each a page of Markdown and props. Copy, replace the words, publish. The pages ship with the events already wired, so you get numbers on day one rather than after a ticket."
+                      },
+                      {
+                        "eyebrow": "Your objection first",
+                        "description": "“Will I need a developer to change anything?” For copy, images and new pages: no. For a new section type: yes, once — then it is yours forever.",
+                        "footer": "Northwind grew organic traffic 38% in one quarter."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "agency": [
+                {
+                  "widget": "Features",
+                  "props": {
+                    "layout": "cards",
+                    "columns": "3",
+                    "card": "canvas",
+                    "items": [
+                      {
+                        "eyebrow": "What breaks today",
+                        "description": "Every client site starts from a different half-finished codebase."
+                      },
+                      {
+                        "eyebrow": "What changes",
+                        "eyebrowTone": "primary",
+                        "description": "One repository, one token file per brand, eleven page types. Clients edit Markdown and cannot break the build. Handover is the repo plus a vitals report, and the licence lets you charge whatever your work is worth."
+                      },
+                      {
+                        "eyebrow": "Your objection first",
+                        "description": "“Can I use it commercially, under my own brand?” Yes. MIT, no attribution, unlimited client sites. That is the most common use of it.",
+                        "footer": "Calderón & Co shipped eleven client sites, 60% fewer build hours."
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "problem"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Features",
+            "props": {
+              "layout": "rows",
+              "header": "side",
+              "tagline": "The problem",
+              "title": "Traffic that reads the headline and leaves",
+              "subtitle": "A reader who recognises their own situation in the first screen keeps reading. Describe the problem precisely and without exaggeration — the credibility earned here pays for every claim below.",
+              "items": [
+                {
+                  "title": "Short pages assume the visitor already wants it",
+                  "description": "They do not. For anything unfamiliar or expensive, two paragraphs leave every doubt intact."
+                },
+                {
+                  "title": "Feature lists do not change minds",
+                  "description": "A list says what the product has. It never says what the buyer’s week looks like afterwards."
+                },
+                {
+                  "title": "The call carries the whole weight",
+                  "description": "When the page does not persuade, a human has to — one conversation at a time. That does not scale."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Features",
+      "props": {
+        "layout": "panels",
+        "columns": "3",
+        "align": "start",
+        "tagline": "The mechanism",
+        "title": "Sell why it works, not that it works",
+        "subtitle": "A reader who understands the mechanism trusts the result and stops looking for the catch. This is the block most pages skip, and the reason their proof reads as luck.",
+        "items": [
+          {
+            "eyebrow": "A",
+            "title": "Problem, then mechanism, then proof",
+            "description": "Order matters more than length. Each block answers the question the previous one raised."
+          },
+          {
+            "eyebrow": "B",
+            "title": "Headlines that read as a summary",
+            "description": "Read only the headings on this page and you still get the pitch. Skimmers are buyers too."
+          },
+          {
+            "eyebrow": "C",
+            "title": "One offer, repeated at three moments",
+            "description": "After the promise, after the proof, and at the end. Same action, same wording, no alternatives."
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface",
+        "id": "benefits"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Features",
+            "props": {
+              "layout": "cards",
+              "columns": "4",
+              "card": "canvas",
+              "align": "start",
+              "tagline": "04 · Benefits",
+              "title": "What the buyer gets, stated as outcomes",
+              "subtitle": "Each one written the way a customer would describe it to a colleague, not the way a spec sheet would. If a line could appear on a competitor’s page unchanged, it is not a benefit.",
+              "items": [
+                {
+                  "title": "Fewer calls that start from zero",
+                  "description": "Prospects arrive having read the argument. The call confirms scope and price; it does not convince."
+                },
+                {
+                  "title": "Objections handled at 3 a.m.",
+                  "description": "Price, time, fit and risk are answered on the page, in the order they actually come up."
+                },
+                {
+                  "title": "A structure you can measure",
+                  "description": "Scroll depth per block tells you where the argument loses people. You fix that block, not the whole page."
+                },
+                {
+                  "title": "Copy that survives a redesign",
+                  "description": "The order and the headlines carry the sale. Visuals can change without rewriting the pitch."
+                },
+                {
+                  "title": "Reusable for every offer",
+                  "description": "The same nine blocks fit a course, a service or a product. Only the copy changes."
+                },
+                {
+                  "title": "Widgets you already have",
+                  "description": "Nine components from the template. No custom code, no new dependency, no build step."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Steps",
+      "props": {
+        "layout": "rows",
+        "header": "side",
+        "tagline": "05 · How it works",
+        "title": "What happens after you buy",
+        "subtitle": "The block that removes the “and then what?” doubt. Name the first week, not the first year — and name who does each part.",
+        "actions": [
+          {
+            "variant": "secondary",
+            "text": "Jump to the offer",
+            "href": "#offer"
+          }
+        ],
+        "items": [
+          {
+            "title": "You get the nine-block outline",
+            "description": "Filled in for your offer, with the headline patterns. You review it before anything is built.",
+            "duration": "day 1"
+          },
+          {
+            "title": "We write the argument, you supply the proof",
+            "description": "Your job is three customer sentences and one number. Ours is everything else.",
+            "duration": "week 1"
+          },
+          {
+            "title": "The page ships instrumented",
+            "description": "Scroll depth per block and offer clicks, wired on the first day so the baseline is real.",
+            "duration": "week 2"
+          },
+          {
+            "title": "One test at a time, for a month",
+            "description": "We change the block that loses people, not the whole page, and stop when the lift is flat.",
+            "duration": "weeks 3–6"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface",
+        "id": "proof"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Cases",
+            "props": {
+              "layout": "rows",
+              "tagline": "06 · Proof",
+              "title": "One case study beats nine quotes",
+              "items": [
+                {
+                  "client": "Höok Labs",
+                  "sector": "design studio",
+                  "title": "Replaced a 40-minute discovery call with this page structure.",
+                  "description": "Prospects now arrive having read the argument; the call confirms scope and price.",
+                  "caption": "before / after screens · 900×560",
+                  "results": [
+                    {
+                      "value": "−54%",
+                      "label": "Calls per closed deal",
+                      "tone": "success"
+                    },
+                    {
+                      "value": "+31%",
+                      "label": "Proposal acceptance"
+                    },
+                    {
+                      "value": "90 d",
+                      "label": "Measurement window"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "offer",
+        "label": "The offer"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Heading",
+            "props": {
+              "align": "start",
+              "tagline": "The offer",
+              "title": "The price arrives now, not sooner",
+              "subtitle": "Three options, the middle one recommended with the reason visible. Sample figures — replace them with your real offer."
+            }
+          },
+          {
+            "widget": "Columns",
+            "props": {
+              "ratio": "equal",
+              "align": "stretch"
+            },
+            "slots": {
+              "default": [
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Table",
+                        "props": {
+                          "tagline": "What you actually receive",
+                          "header": "none",
+                          "frame": "open",
+                          "columns": [
+                            {
+                              "label": "What you receive"
+                            },
+                            {
+                              "label": "Priced separately",
+                              "align": "end",
+                              "mono": true
+                            }
+                          ],
+                          "rows": [
+                            {
+                              "cells": [
+                                "The nine-block outline, written for your offer",
+                                "$1,200"
+                              ]
+                            },
+                            {
+                              "cells": [
+                                "Headline and CTA patterns, filled in",
+                                "$400"
+                              ]
+                            },
+                            {
+                              "cells": [
+                                "The page built and instrumented",
+                                "$2,400"
+                              ]
+                            },
+                            {
+                              "cells": [
+                                "Four weeks of one-test-at-a-time iteration",
+                                "$1,600"
+                              ]
+                            }
+                          ],
+                          "footer": [
+                            "Priced separately",
+                            "$5,600"
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Calculator",
+                        "props": {
+                          "label": "What it costs you to keep doing this",
+                          "inputs": [
+                            {
+                              "name": "calls",
+                              "label": "Discovery calls per month",
+                              "value": 40,
+                              "min": 0,
+                              "step": 5
+                            },
+                            {
+                              "name": "hours",
+                              "label": "Hours each, including prep",
+                              "value": 1,
+                              "min": 0.5,
+                              "max": 4,
+                              "step": 0.5
+                            }
+                          ],
+                          "results": [
+                            {
+                              "label": "Given back",
+                              "formula": "calls * hours * 0.5",
+                              "suffix": " hours / month",
+                              "note": "Assuming the page removes half of the first calls — your own number, not ours."
+                            }
+                          ],
+                          "share": {
+                            "label": "Copy result",
+                            "note": "Send it to whoever approves the budget — the link reproduces these numbers, not ours."
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Pricing",
+            "props": {
+              "items": [
+                {
+                  "title": "Starter",
+                  "currency": "$",
+                  "price": "29",
+                  "suffix": "/mo",
+                  "features": [
+                    "The core outcome, stated plainly",
+                    "What is included, no jargon",
+                    "A limit that makes the next tier make sense"
+                  ],
+                  "actions": [
+                    {
+                      "text": "Choose Starter",
+                      "href": "#offer"
+                    }
+                  ]
+                },
+                {
+                  "title": "Professional",
+                  "currency": "$",
+                  "price": "79",
+                  "suffix": "/mo",
+                  "recommended": true,
+                  "badge": "4 of 5 pick this",
+                  "features": [
+                    "Everything in Starter",
+                    "The benefit most buyers actually want",
+                    "The reason this is recommended, stated",
+                    "Support with a named response time"
+                  ],
+                  "actions": [
+                    {
+                      "text": "Choose Professional",
+                      "href": "#offer"
+                    }
+                  ]
+                },
+                {
+                  "title": "Team",
+                  "currency": "$",
+                  "price": "199",
+                  "suffix": "/mo",
+                  "features": [
+                    "Everything in Professional",
+                    "Seats, roles or volume",
+                    "The anchor that makes Professional reasonable"
+                  ],
+                  "actions": [
+                    {
+                      "text": "Talk to us",
+                      "href": "#offer"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Callout",
+            "props": {
+              "tone": "success",
+              "layout": "card",
+              "label": "Guarantee",
+              "title": "30 days, full refund, one email",
+              "description": "No form to fill and no reason to give. If the page structure does not reduce your calls in the first month, write to us and we return the money. State yours this plainly or do not state one at all."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Features",
+            "props": {
+              "layout": "cards",
+              "header": "side",
+              "columns": "1",
+              "card": "canvas",
+              "tagline": "Honesty block",
+              "title": "Who this is not for",
+              "subtitle": "Saying who should not buy is the cheapest credibility on a long page, and it filters the calls you did not want. Almost no template ships this block; almost every good sales page has one.",
+              "items": [
+                {
+                  "title": "You sell something people already understand",
+                  "description": "Then a short page converts better. Use the click-through or product type instead."
+                },
+                {
+                  "title": "You have no proof yet, of any kind",
+                  "description": "Nine blocks of argument with nothing to back them reads as pressure. Get one customer first."
+                },
+                {
+                  "title": "Your traffic is all cold and paid",
+                  "description": "A long page needs a visitor willing to read. Warm it up with the lead-generation type first."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "width": "md"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "FAQs",
+            "props": {
+              "layout": "list",
+              "columns": "1",
+              "open": "all",
+              "tagline": "08 · Objections",
+              "title": "The questions that stop people from buying",
+              "items": [
+                {
+                  "title": "Does anyone read a page this long?",
+                  "description": "Buyers do, and skimmers read the headings. That is why every heading here carries the argument on its own — read only the H2s and you still get the pitch."
+                },
+                {
+                  "title": "How many calls to action should it have?",
+                  "description": "One offer, repeated three times: after the promise, after the proof, and at the end. Two different offers on one page split attention and lower both."
+                },
+                {
+                  "title": "Where do price and guarantee go?",
+                  "description": "After the value is clear and the proof has landed. Price before benefits feels expensive; a guarantee right after the price removes the last excuse to wait."
+                },
+                {
+                  "title": "Is it not manipulative to write this way?",
+                  "description": "Order and clarity are not manipulation. Invented proof, fake scarcity and a countdown that resets are — and none of them appear in this structure."
+                },
+                {
+                  "title": "How do I know which block is failing?",
+                  "description": "Scroll depth per block, and the offer click rate of visitors who reached it. Name those events before launch, so the first week already answers it."
+                },
+                {
+                  "title": "Are the numbers on this page real?",
+                  "description": "The case study is illustrative and labelled as a sample; the plan prices are samples too. Use only measured results on your own page — invented proof is the fastest way to lose the sale."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface"
       },
       "slots": {
         "default": [
           {
             "widget": "CallToAction",
             "props": {
-              "title": "Buy now",
-              "subtitle": "It takes less than a minute and costs nothing to try.",
+              "layout": "closing",
+              "size": "md",
+              "tagline": "09 · Close",
+              "title": "Same ask, one last time",
+              "subtitle": "You reached the end, so you are the most convinced reader on the page. The action has not changed.",
               "actions": [
                 {
                   "variant": "primary",
-                  "text": "Buy now",
-                  "href": "#",
-                  "icon": "tabler:arrow-right"
-                },
-                {
-                  "variant": "secondary",
-                  "text": "Ask a question",
-                  "href": "/contact"
+                  "text": "See the offer",
+                  "href": "#offer"
                 }
               ]
             }

@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@iconify-json/tabler": "^1.2.38",
-    "@parche/astro-blog": "workspace:*",
     "@parche/astro": "workspace:*",
+    "@parche/astro-blog": "workspace:*",
     "@parche/elements": "workspace:*",
     "@parche/themes": "workspace:*",
     "@parche/ui": "workspace:*",
@@ -19,6 +19,7 @@
     "astro": "catalog:",
     "astro-icon": "catalog:",
     "sharp": "catalog:",
-    "tailwindcss": "catalog:"
+    "tailwindcss": "catalog:",
+    "zod": "catalog:"
   }
 }

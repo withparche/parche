@@ -1,0 +1,14 @@
+{
+  "name": "countdown",
+  "type": "element",
+  "files": [
+    { "path": "Countdown.astro", "type": "part" },
+    { "path": "countdown.element.ts", "type": "element" },
+    { "path": "countdown.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": [],
+  "source": null
+}

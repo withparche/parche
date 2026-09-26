@@ -1,0 +1,14 @@
+{
+  "name": "compare",
+  "type": "element",
+  "files": [
+    { "path": "Compare.astro", "type": "part" },
+    { "path": "compare.element.ts", "type": "element" },
+    { "path": "compare.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": ["placeholder"],
+  "source": null
+}

@@ -1,0 +1,15 @@
+---
+/** The StickyBar element with the page's one action, a line and a quiet fact. */
+import StickyBarElement from 'parche:elements/StickyBar';
+import Action from '../components/Action.astro';
+import { inline } from '../_shared/inline';
+import { schema, type Props } from './StickyBar.props';
+
+const { text, note, action, position } = schema.parse(Astro.props) as Props;
+---
+
+<StickyBarElement {position} label={text.replace(/[*_`=]/g, '')}>
+  <strong class="text-sm leading-[1.3] font-semibold text-heading" set:html={inline(text)} />
+  {note && <span class="hidden text-xs leading-[1.3] text-muted sm:inline" set:html={inline(note)} />}
+  <Action {action} size="sm" class="ml-auto" />
+</StickyBarElement>

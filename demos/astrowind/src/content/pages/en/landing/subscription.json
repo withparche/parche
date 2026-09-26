@@ -1,53 +1,513 @@
 {
-  "title": "Subscribe",
+  "title": "A new template pack, first Monday of every month",
   "layout": "landing",
-  "description": "One email, on Thursdays, with what we learned building software that week. Unsubscribe in one click.",
+  "description": "Landing pages, email templates and widget sets, built on the same tokens. Cancel in one click, from the account page, any time.",
   "sections": [
     {
       "widget": "Hero",
       "props": {
         "layout": "split",
-        "tagline": "Subscribe",
-        "title": "Good things, ==every week==",
-        "subtitle": "One email, on Thursdays, with what we learned building software that week. Unsubscribe in one click.",
+        "align": "start",
+        "tagline": "Monthly template pack",
+        "title": "A new template pack, first Monday of every month",
+        "subtitle": "Landing pages, email templates and widget sets, built on the same tokens. Cancel in one click, from the account page, any time.",
         "actions": [
           {
             "variant": "primary",
-            "text": "Subscribe",
-            "href": "#cta",
-            "icon": "tabler:arrow-right"
+            "text": "See the plans",
+            "href": "#plans"
+          },
+          {
+            "variant": "secondary",
+            "text": "What arrives each month",
+            "href": "#arrives"
           }
-        ],
-        "image": {
-          "src": "https://images.unsplash.com/photo-1531973486364-5fa64260d75b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1658&q=80",
-          "alt": "Subscribe"
-        }
+        ]
+      },
+      "slots": {
+        "media": [
+          {
+            "widget": "Stats",
+            "props": {
+              "layout": "cards",
+              "items": [
+                {
+                  "value": "$12",
+                  "label": "per month, cancel any time"
+                },
+                {
+                  "value": "2 months",
+                  "label": "free on the yearly plan",
+                  "tone": "success"
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Features",
+            "props": {
+              "layout": "tiles",
+              "items": [
+                {
+                  "title": "Proof slot",
+                  "description": "Subscriber count, once it is real and checkable."
+                },
+                {
+                  "title": "Proof slot",
+                  "description": "Average rating, with a link to the reviews."
+                }
+              ]
+            }
+          }
+        ]
       }
     },
     {
       "widget": "Section",
       "props": {
-        "id": "cta",
-        "tone": "glow"
+        "tone": "surface",
+        "id": "arrives",
+        "label": "What arrives"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Features",
+            "props": {
+              "layout": "cards",
+              "align": "start",
+              "columns": "3",
+              "card": "canvas",
+              "tagline": "What actually arrives",
+              "title": "Last month, this month, next month",
+              "subtitle": "Anyone can sell the first month. Showing three in a row is how you sell the sixth — and it is the block almost every subscription page is missing.",
+              "items": [
+                {
+                  "eyebrow": "November · delivered",
+                  "title": "Six email templates",
+                  "description": "Transactional and campaign, dark-mode safe, tested in nine clients.",
+                  "placeholder": "November pack preview · 1200×750"
+                },
+                {
+                  "eyebrow": "December · this month",
+                  "title": "Agency landing pack",
+                  "description": "Four landing pages with case-study and booking widgets included.",
+                  "placeholder": "December pack preview · 1200×750",
+                  "featured": true
+                },
+                {
+                  "eyebrow": "January · announced",
+                  "title": "Docs and changelog kit",
+                  "description": "Sidebar docs, search, versioning and a public changelog feed.",
+                  "placeholder": "January pack preview · 1200×750"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "ruled",
+        "id": "plans",
+        "label": "Plans"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Switch",
+            "props": {
+              "label": "Billing period",
+              "syncKey": "billing",
+              "value": "yearly",
+              "align": "start",
+              "tagline": "Plans",
+              "title": "Two ways to pay for the same thing",
+              "options": [
+                {
+                  "value": "monthly",
+                  "label": "Monthly"
+                },
+                {
+                  "value": "yearly",
+                  "label": "Yearly · 2 months free"
+                }
+              ]
+            },
+            "slots": {
+              "monthly": [
+                {
+                  "widget": "Pricing",
+                  "props": {
+                    "items": [
+                      {
+                        "title": "Individual",
+                        "price": "12",
+                        "currency": "$",
+                        "suffix": "/month",
+                        "note": "Cancel any time",
+                        "recommended": true,
+                        "features": [
+                          "Every monthly pack, from the month you join",
+                          "The full back catalogue, 14 packs",
+                          "Commercial use on client work"
+                        ],
+                        "actions": [
+                          {
+                            "text": "Start monthly",
+                            "href": "#plans"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "Studio · 5 seats",
+                        "price": "39",
+                        "currency": "$",
+                        "suffix": "/month",
+                        "note": "The anchor that makes Individual feel small",
+                        "features": [
+                          "Everything in Individual, five seats",
+                          "Shared library and one invoice",
+                          "Brand presets per client"
+                        ],
+                        "actions": [
+                          {
+                            "text": "Start Studio",
+                            "href": "#plans"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ],
+              "yearly": [
+                {
+                  "widget": "Pricing",
+                  "props": {
+                    "items": [
+                      {
+                        "title": "Individual",
+                        "price": "120",
+                        "currency": "$",
+                        "suffix": "/year",
+                        "note": "Two months free against paying monthly",
+                        "noteTone": "success",
+                        "recommended": true,
+                        "features": [
+                          "Every monthly pack, from the month you join",
+                          "The full back catalogue, 14 packs",
+                          "Commercial use on client work"
+                        ],
+                        "actions": [
+                          {
+                            "text": "Start yearly",
+                            "href": "#plans"
+                          }
+                        ]
+                      },
+                      {
+                        "title": "Studio · 5 seats",
+                        "price": "390",
+                        "currency": "$",
+                        "suffix": "/year",
+                        "note": "The anchor that makes Individual feel small",
+                        "features": [
+                          "Everything in Individual, five seats",
+                          "Shared library and one invoice",
+                          "Brand presets per client"
+                        ],
+                        "actions": [
+                          {
+                            "text": "Start Studio",
+                            "href": "#plans"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Columns",
+            "props": {
+              "ratio": "equal",
+              "align": "stretch"
+            },
+            "slots": {
+              "default": [
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Calculator",
+                        "props": {
+                          "label": "Price your own case",
+                          "inputs": [
+                            {
+                              "name": "people",
+                              "label": "People who need access",
+                              "value": 3,
+                              "min": 1,
+                              "max": 50,
+                              "step": 1
+                            }
+                          ],
+                          "results": [
+                            {
+                              "formula": "people * 9",
+                              "prefix": "$",
+                              "suffix": " /month",
+                              "note": "The Individual plan covers up to 5. Subscription pages lose the people who cannot tell which tier they are — a switch between two plans does not answer that."
+                            }
+                          ],
+                          "card": "surface"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Stats",
+                        "props": {
+                          "layout": "panels",
+                          "items": [
+                            {
+                              "value": "14 / 14",
+                              "label": "Packs delivered on the first Monday",
+                              "description": "None late, since March 2025."
+                            },
+                            {
+                              "value": "11 months",
+                              "label": "Median subscription length",
+                              "description": "On a recurring offer, tenure beats satisfaction as proof."
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Callout",
+                        "props": {
+                          "tone": "neutral",
+                          "layout": "card",
+                          "label": "Cancel anytime",
+                          "title": "One click, from the account page",
+                          "description": "Effective at the end of the paid period. No email to write, no call to make, no retention offer you have to decline three times. Pausing is there too, before the cancel button.",
+                          "footer": "A renewal reminder before every charge, and no price change without notice."
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Features",
+            "props": {
+              "layout": "tiles",
+              "align": "start",
+              "columns": "4",
+              "tagline": "Retention",
+              "title": "What makes subscribers stay",
+              "subtitle": "Promise only the ones you deliver. A subscription page that over-promises here is buying churn at full price.",
+              "items": [
+                {
+                  "title": "A fast first win",
+                  "description": "A page shipped in the first session, before the second charge is near."
+                },
+                {
+                  "title": "A predictable rhythm",
+                  "description": "First Monday, every month. Irregular delivery reads as neglect even when the total is the same."
+                },
+                {
+                  "title": "Visible new value",
+                  "description": "A changelog and a “new this month” email. Nobody should wonder what they paid for."
+                },
+                {
+                  "title": "A pause option",
+                  "description": "Pausing keeps a subscriber who would otherwise cancel. Offer it before the cancel button, not instead of it."
+                },
+                {
+                  "title": "Transparent billing",
+                  "description": "A reminder before every renewal, receipts that explain themselves, no silent price change."
+                },
+                {
+                  "title": "An exit without friction",
+                  "description": "One-click cancellation is the strongest reason to sign up. Make it true and say it."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "ruled"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Features",
+            "props": {
+              "layout": "rows",
+              "header": "side",
+              "align": "start",
+              "tagline": "Recurring value",
+              "title": "Sell the second month",
+              "subtitle": "Anyone can sell the first. Describe the value in a way that still makes sense in month six and the page attracts subscribers who stay instead of ones who try.",
+              "items": [
+                {
+                  "title": "A delivery with a rhythm",
+                  "description": "“A new pack on the first Monday” — predictability is what people pay monthly for."
+                },
+                {
+                  "title": "Access that accumulates",
+                  "description": "The library grows while the subscription runs, so leaving costs something real."
+                },
+                {
+                  "title": "A first win in the first week",
+                  "description": "One page shipped before the second charge. If you cannot name that win, churn starts there."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Features",
+            "props": {
+              "layout": "cards",
+              "align": "start",
+              "columns": "3",
+              "card": "canvas",
+              "accent": true,
+              "tagline": "How it works",
+              "title": "Subscribe, receive, manage",
+              "subtitle": "Three steps, so the visitor knows what happens after the button and how they stay in control of it.",
+              "items": [
+                {
+                  "eyebrow": "01",
+                  "title": "Subscribe",
+                  "description": "Pick monthly or yearly, pay once, get immediate access to the full back catalogue. The confirmation email states the next charge date."
+                },
+                {
+                  "eyebrow": "02",
+                  "title": "Receive",
+                  "description": "A new pack on the first Monday, a “new this month” email, and a changelog so you can always see what you paid for."
+                },
+                {
+                  "eyebrow": "03",
+                  "title": "Manage",
+                  "description": "Switch plans, pause or cancel from the account page. Every change takes effect at the end of the paid period."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "ruled",
+        "width": "md"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "FAQs",
+            "props": {
+              "layout": "list",
+              "columns": "1",
+              "open": "all",
+              "tagline": "FAQ",
+              "title": "Billing, cancellation and value",
+              "items": [
+                {
+                  "title": "How is this different from a pricing page?",
+                  "description": "A pricing page compares plans for someone who already decided to buy. This page has to sell the recurring relationship first: what arrives every month, why it stays valuable, and how easy it is to leave."
+                },
+                {
+                  "title": "Monthly or yearly first?",
+                  "description": "Show both, highlight yearly, and state the saving in plain units — “two months free”, not “17% off”. Let the monthly price anchor the value before the discount lands."
+                },
+                {
+                  "title": "What happens if I cancel mid-month?",
+                  "description": "Access runs to the end of the period you paid for, and the packs you already downloaded stay yours under the same licence. No clawback, no partial refund to chase."
+                },
+                {
+                  "title": "Trial or money-back window?",
+                  "description": "One of the two, never both. A trial suits products people need to use to understand; a refund window suits content. Say it once, near the price, and honour it without friction."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface"
       },
       "slots": {
         "default": [
           {
             "widget": "CallToAction",
             "props": {
-              "title": "Subscribe",
-              "subtitle": "It takes less than a minute and costs nothing to try.",
-              "actions": [
+              "layout": "closing",
+              "size": "md",
+              "tagline": "Not ready yet?",
+              "title": "Get the retention checklist instead",
+              "subtitle": "One email with the six practices above. No sequence, no follow-ups — the plans will still be here."
+            },
+            "slots": {
+              "below": [
                 {
-                  "variant": "primary",
-                  "text": "Subscribe",
-                  "href": "#",
-                  "icon": "tabler:arrow-right"
-                },
-                {
-                  "variant": "secondary",
-                  "text": "Ask a question",
-                  "href": "/contact"
+                  "widget": "Newsletter",
+                  "props": {
+                    "layout": "inline",
+                    "align": "center",
+                    "placeholder": "you@company.com",
+                    "submit": "Send it"
+                  }
                 }
               ]
             }

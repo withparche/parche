@@ -1,0 +1,29 @@
+---
+/**
+ * Countdown — days, hours and minutes left until a moment, over the moment
+ * itself in words. The date is the content; the count is an upgrade: without
+ * script, or once it has passed, the date line is what shows. The count is
+ * not a live region: it would announce every minute.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema } from './countdown.props';
+
+const { props: { to, date, done, units, seconds }, rest, className, part } = splitProps(schema, Astro.props);
+const shown = seconds ? (['days', 'hours', 'minutes', 'seconds'] as const) : (['days', 'hours', 'minutes'] as const);
+---
+
+<parche-countdown class={cn('parche-countdown block', className)} {...rest} data-part={part} data-state="counting" to={to} done={done}>
+  <dl class="flex gap-2" data-part="units" hidden>
+    {shown.map((u) => (
+      <div class="min-w-[68px] rounded-md border border-border bg-surface px-3 py-2.5 text-center" data-part="unit" data-unit={u}>
+        <dd class="font-heading text-[26px] leading-none font-semibold tracking-[-0.02em] text-heading tabular-nums" data-part="value">–</dd>
+        <dt class="mt-1.5 font-mono text-[10px] leading-none tracking-[0.1em] text-muted uppercase">{units[u]}</dt>
+      </div>
+    ))}
+  </dl>
+  <p class="mt-2.5 font-mono text-xs leading-[1.4] text-muted" data-part="date">{date}</p>
+</parche-countdown>
+
+<script>
+  import './countdown.element.ts';
+</script>

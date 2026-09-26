@@ -20,6 +20,8 @@ export const schema = z.object({
   title: z.string().optional().meta({ help: 'The page heading (h1). Inline HTML allowed.' }),
   subtitle: z.string().optional().meta({ input: 'textarea' }),
   content: z.string().optional().meta({ input: 'textarea', help: 'Extra HTML under the subtitle.' }),
+  points: z.array(z.string()).default([]).meta({ help: 'Short lines with a check mark under the subtitle: what you get, what it costs.' }),
+  valign: z.enum(['center', 'start']).default('center').meta({ help: 'split: align the two columns on their middle or their top.' }),
   actions: z.array(action).default([]),
   note: z.string().optional().meta({ help: 'One quiet line under the actions: "Free for one project forever", the returns policy.' }),
   proofFirst: z.boolean().default(false).meta({ help: 'Put the proof slot (numbers, a call button) before the actions.' }),

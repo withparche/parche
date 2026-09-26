@@ -6,11 +6,11 @@ export const groups: Array<{ label: string; names: string[] }> = [
   { label: 'Layout', names: ['Container', 'Section', 'AspectRatio', 'Divider'] },
   { label: 'Typography', names: ['Heading', 'Eyebrow', 'Prose', 'Code', 'Kbd'] },
   { label: 'Actions', names: ['Button', 'Link'] },
-  { label: 'Media', names: ['Image', 'Gallery', 'Avatar', 'Icon', 'Video', 'Skeleton'] },
-  { label: 'Data display', names: ['Badge', 'Tag', 'Card', 'List', 'Table', 'Filter', 'Callout', 'Stat', 'Breadcrumb', 'Pagination', 'Toc', 'Share'] },
+  { label: 'Media', names: ['Image', 'Gallery', 'Compare', 'Avatar', 'Icon', 'Video', 'Skeleton'] },
+  { label: 'Data display', names: ['Badge', 'Tag', 'Card', 'List', 'Table', 'Filter', 'Callout', 'Countdown', 'Stat', 'Breadcrumb', 'Pagination', 'Toc', 'Share'] },
   { label: 'Disclosure', names: ['Collapsible', 'Accordion', 'Tabs', 'Carousel'] },
-  { label: 'Overlays', names: ['Dialog', 'Sheet', 'Popover', 'Menu', 'Tooltip', 'Toast', 'Banner'] },
-  { label: 'Forms', names: ['Form', 'Label', 'Field', 'Input', 'Textarea', 'Select', 'Checkbox', 'RadioGroup', 'Switch', 'Slider', 'Combobox'] },
+  { label: 'Overlays', names: ['Dialog', 'Sheet', 'Popover', 'Menu', 'Tooltip', 'Toast', 'Banner', 'StickyBar'] },
+  { label: 'Forms', names: ['Form', 'Calculator', 'Label', 'Field', 'Input', 'Textarea', 'Select', 'Checkbox', 'RadioGroup', 'Switch', 'Slider', 'Combobox'] },
 ];
 
 export function grouped(names: string[]): Array<{ label: string; names: string[] }> {

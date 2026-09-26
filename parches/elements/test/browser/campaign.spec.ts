@@ -1,0 +1,68 @@
+/**
+ * The campaign elements: a countdown, a before-and-after frame, a sticky bar
+ * and a calculator. Each reads right from the server; script makes it move.
+ */
+import { expect, test } from '@playwright/test';
+import { example, expectAccessible, jsDisabled } from './_shared';
+
+test.describe('Countdown', () => {
+  test('counts the units down, and the date in words is always there', async ({ page }) => {
+    await page.goto('/countdown');
+    const root = example(page, 'basic').locator('parche-countdown');
+    await expect(root.locator('[data-part="date"]')).toHaveText('1 December 2030 · 18:00 CET');
+    if (jsDisabled()) return;
+    await expect(root).toHaveAttribute('data-state', 'counting');
+    await expect(root.locator('[data-part="value"]').first()).toHaveText(/^\d+$/);
+    await expectAccessible(page);
+  });
+});
+
+test.describe('Compare', () => {
+  test('the range moves the divider, from the keyboard and by pointing at the frame', async ({ page }) => {
+    await page.goto('/compare');
+    const root = example(page, 'basic').locator('parche-compare');
+    await expect(root.getByText('before · 4.1 s · 820 KB')).toBeVisible();
+    await expect(root.getByText('after · 0.4 s · 38 KB')).toBeVisible();
+    test.skip(jsDisabled(), 'without script the divider stays at the start');
+    const range = root.getByRole('slider', { name: 'Drag to compare' });
+    await range.focus();
+    await page.keyboard.press('Home');
+    await expect.poll(() => root.evaluate((el) => el.style.getPropertyValue('--pos'))).toBe('0%');
+    await root.scrollIntoViewIfNeeded();
+    const box = (await root.locator('[data-part="frame"]').boundingBox())!;
+    await page.mouse.click(box.x + box.width * 0.75, box.y + box.height / 2);
+    await expect.poll(() => root.evaluate((el) => parseInt(el.style.getPropertyValue('--pos')))).toBeGreaterThan(65);
+    await expectAccessible(page);
+  });
+});
+
+test.describe('StickyBar', () => {
+  test('stays out of the way until the first screen is behind, then comes up', async ({ page }) => {
+    await page.goto('/stickybar');
+    const root = page.locator('parche-sticky-bar').first();
+    await expect(root).toHaveAttribute('data-state', 'hidden');
+    await expect(root.locator('[data-part="bar"]')).toHaveAttribute('inert', '');
+    test.skip(jsDisabled(), 'without script the bar never shows');
+    await page.evaluate(() => scrollTo(0, innerHeight));
+    await expect(root).toHaveAttribute('data-state', 'shown');
+    await expect(root.locator('[data-part="bar"]')).not.toHaveAttribute('inert', '');
+    await expect(root.getByRole('link', { name: 'Send it to me' })).toBeInViewport();
+  });
+});
+
+test.describe('Calculator', () => {
+  test('the result is computed on the server, and follows the inputs', async ({ page }) => {
+    await page.goto('/calculator');
+    const root = example(page, 'basic').locator('parche-calculator');
+    const value = root.locator('[data-part="value"]');
+    await expect(value).toHaveText('20 hours / month');
+    test.skip(jsDisabled(), 'without script the starting result stays');
+    await root.getByRole('button', { name: 'More Discovery calls per month' }).click();
+    await expect(value).toHaveText('23 hours / month');
+    await root.getByRole('spinbutton', { name: 'Hours each, including prep' }).fill('2');
+    await expect(value).toHaveText('45 hours / month');
+    await expect(page).toHaveURL(/calls=45&hours=2/);
+    await expect(root.locator('[data-part="link"]')).toHaveText(/calls=45&hours=2/);
+    await expectAccessible(page);
+  });
+});

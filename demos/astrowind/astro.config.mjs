@@ -34,6 +34,10 @@ export default defineConfig({
       ],
       config: './src/parche.config.json',
       routes: { pages: true },
+      // Project widgets: a tree that would nest too deep becomes one widget here.
+      overrides: {
+        'widgets:TourStep': './src/widgets/TourStep.astro',
+      },
       // Render the theme server-side so the first paint is the Product look,
       // not the base one. A visitor's own pick still wins on the client.
       themes: { default: 'product', showPanel: false },

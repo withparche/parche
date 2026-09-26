@@ -11,7 +11,7 @@ const result = z.object({
 const item = z.object({
   client: z.string(),
   sector: z.string().optional(),
-  title: z.string(),
+  title: z.string().optional().meta({ help: 'Without one, the description carries the case.' }),
   description: z.string().optional().meta({ input: 'textarea', markdown: 'inline' }),
   href: z.string().optional(),
   image: image.optional(),

@@ -1,52 +1,355 @@
 {
-  "title": "See specifications",
+  "title": "The template, spec by spec",
   "layout": "landing",
-  "description": "Specifications, materials and the honest limitations. Everything you would ask in a shop.",
+  "description": "Astro 7, Tailwind CSS 4, 34 widgets, MIT licence. Everything a buyer checks before downloading, on one page.",
   "sections": [
     {
       "widget": "Hero",
       "props": {
-        "tagline": "See specifications",
-        "title": "The ==details== that make the difference",
-        "subtitle": "Specifications, materials and the honest limitations. Everything you would ask in a shop.",
+        "layout": "split",
+        "align": "start",
+        "tagline": "Website template · v1.0",
+        "title": "The template, spec by spec",
+        "subtitle": "Astro 7, Tailwind CSS 4, 34 widgets, MIT licence. Everything a buyer checks before downloading, on one page.",
+        "proofFirst": true,
         "actions": [
           {
             "variant": "primary",
-            "text": "Add to basket",
-            "href": "#cta",
-            "icon": "tabler:arrow-right"
+            "text": "Get the template",
+            "href": "#get"
+          },
+          {
+            "variant": "secondary",
+            "text": "Jump to specifications",
+            "href": "#specs"
+          }
+        ]
+      },
+      "slots": {
+        "proof": [
+          {
+            "widget": "Stats",
+            "props": {
+              "layout": "inline",
+              "align": "start",
+              "items": [
+                {
+                  "value": "Free",
+                  "label": "MIT · available now · no sign-up"
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Callout",
+            "props": {
+              "layout": "inline",
+              "tone": "neutral",
+              "title": "4.8 / 5",
+              "description": "from 214 reviews on GitHub Discussions and Astro Themes — [read them](#reviews)"
+            }
           }
         ],
-        "image": {
-          "src": "https://images.unsplash.com/photo-1531973486364-5fa64260d75b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1658&q=80",
-          "alt": "See specifications"
-        }
+        "media": [
+          {
+            "widget": "Screenshot",
+            "props": {
+              "frame": false,
+              "caption": "product in use · 1200×900",
+              "ratio": "4/3"
+            }
+          }
+        ]
       }
     },
     {
       "widget": "Section",
       "props": {
-        "id": "cta",
-        "tone": "glow"
+        "id": "overview",
+        "label": "Overview"
       },
       "slots": {
         "default": [
           {
-            "widget": "CallToAction",
+            "widget": "Features",
             "props": {
-              "title": "Add to basket",
-              "subtitle": "It takes less than a minute and costs nothing to try.",
+              "layout": "panels",
+              "align": "start",
+              "columns": "3",
+              "title": "What it is, who it is for, what you need",
+              "items": [
+                {
+                  "eyebrow": "What it is",
+                  "description": "A free, open-source website template for Astro and Tailwind: pages, widgets, a blog, SEO and image optimisation, ready to customise."
+                },
+                {
+                  "eyebrow": "Who it is for",
+                  "description": "Developers, studios and small teams who want a fast, well-structured site without designing every section from scratch."
+                },
+                {
+                  "eyebrow": "What you need",
+                  "description": "Node.js 22.22 or newer, an editor and about ten minutes. No account, no licence key."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "features",
+        "label": "Features",
+        "tone": "surface"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Features",
+            "props": {
+              "layout": "cards",
+              "align": "start",
+              "columns": "4",
+              "card": "canvas",
+              "accent": true,
+              "tagline": "Key features",
+              "title": "What it does, in the buyer’s terms",
+              "subtitle": "Described by the outcome each one produces. The exhaustive list lives in the specifications below — this is the layer for a buyer who is still comparing.",
+              "items": [
+                {
+                  "eyebrow": "01",
+                  "title": "34 widgets, all production-used",
+                  "description": "Heroes, features, pricing, case studies, process, team, FAQ, contact. Every page on this site is built from them, including this one."
+                },
+                {
+                  "eyebrow": "02",
+                  "title": "A blog that reads like documentation",
+                  "description": "Markdown and MDX with a typed schema, categories, tags, RSS and taxonomy pages generated at build time."
+                },
+                {
+                  "eyebrow": "03",
+                  "title": "Rebrand from one token file",
+                  "description": "Light and dark colours, type and radii as CSS variables — shadcn-compatible, so external components follow the theme."
+                },
+                {
+                  "eyebrow": "04",
+                  "title": "Ready for coding assistants",
+                  "description": "An `AGENTS.md` and task skills, so an assistant edits the right file the first time instead of rewriting your site."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "specs",
+        "label": "Specifications"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Table",
+            "props": {
+              "tagline": "Specifications",
+              "title": "Specs are where trust is won",
+              "subtitle": "The buyer who reads this far is deciding. Exact versions, requirements and contents, in a list they can compare against the alternative.",
+              "header": "none",
+              "columns": [
+                {
+                  "label": "Specification",
+                  "width": "34%"
+                },
+                {
+                  "label": "Value"
+                }
+              ],
+              "rows": [
+                { "cells": ["Framework", "Astro 7.x, static output; adapters for on-demand pages"] },
+                { "cells": ["Styling", "Tailwind CSS 4, CSS-first config, shadcn/ui-compatible tokens"] },
+                { "cells": ["Tooling", "TypeScript, ESLint, Prettier — `npm run check` runs all three"] },
+                { "cells": ["Content", "Markdown and MDX with a typed schema; six demo posts"] },
+                { "cells": ["Pages included", "5 home demos, 6 landing pages, about, services, pricing, contact, 404, terms, privacy"] },
+                { "cells": ["Median page weight", "38 KB, zero JS on static routes"] },
+                { "cells": ["Requirements", "Node.js 22.22+; deploys to any static host, Dockerfile with nginx included"] }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "gallery",
+        "label": "Gallery",
+        "tone": "surface"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Gallery",
+            "props": {
+              "title": "Gallery of the product itself",
+              "hint": "Captions say what you are looking at. Screenshots for software, context shots for physical goods — never office photography.",
+              "layout": "grid",
+              "ratio": "4/3",
+              "lightbox": true,
+              "items": [
+                { "caption": "home page, light theme" },
+                { "caption": "same page, dark theme" },
+                { "caption": "widget gallery, 34 sections" },
+                { "caption": "blog post layout with TOC" },
+                { "caption": "Lighthouse report, all four at 100" },
+                { "caption": "token file, before and after rebrand" }
+              ]
+            }
+          },
+          {
+            "widget": "Callout",
+            "props": {
+              "layout": "inline",
+              "tone": "success",
+              "title": "14 sites deployed with the template this week",
+              "footer": "from the public deploy log · updated hourly",
+              "link": {
+                "text": "See the log",
+                "href": "#log"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "compare",
+        "label": "Compared with"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Table",
+            "props": {
+              "tagline": "Compared with",
+              "title": "The three things a buyer is choosing between",
+              "subtitle": "A comparing buyer is already comparing — doing it for them, honestly, keeps them on the page instead of in a search tab.",
+              "columns": [
+                { "label": "" },
+                { "label": "This template", "highlight": true },
+                { "label": "Paid theme" },
+                { "label": "Site builder" }
+              ],
+              "rows": [
+                { "cells": ["Price", { "text": "Free, MIT", "tone": "success" }, "$49–$99 once", "$16–$49 / month"] },
+                { "cells": ["You own the code", { "text": "Yes", "tone": "success" }, "Licence-bound", "No, export only"] },
+                { "cells": ["Median page weight", { "text": "38 KB", "tone": "success" }, "180–400 KB", "600 KB+"] },
+                { "cells": ["Editing without a developer", { "text": "Markdown or a CMS adapter", "tone": "muted" }, "Depends on the theme", { "text": "Its strongest point", "tone": "default" }] },
+                { "cells": ["Support", { "text": "Community, public issues", "tone": "muted" }, "Author, usually email", "Paid, with an SLA"] }
+              ],
+              "note": "If you need someone to edit the site with no developer nearby, a builder is genuinely the better answer. Saying so is what makes the other four rows believable."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "faq",
+        "label": "FAQ",
+        "tone": "surface",
+        "width": "md"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "FAQs",
+            "props": {
+              "layout": "list",
+              "columns": "1",
+              "open": "all",
+              "tagline": "FAQ",
+              "title": "What buyers ask before downloading",
+              "items": [
+                {
+                  "title": "How much detail is too much on a product page?",
+                  "description": "None, if it is organised by depth. Keep the first two screens skimmable and let the specifications carry the detail. Nobody leaves because a spec table is long; they leave because the first screen was vague."
+                },
+                {
+                  "title": "Where do price and availability go?",
+                  "description": "Near the top for a known product, after the features for a new one. Either way on the page itself — “contact us for pricing” is a form in disguise and costs conversions."
+                },
+                {
+                  "title": "What images does a product page need?",
+                  "description": "At least one of the product in use, not only on white. Screenshots for software, context shots for physical goods, a short clip if it moves. Office photography is not product photography."
+                },
+                {
+                  "title": "Can I use it for client work?",
+                  "description": "Yes — MIT, no attribution required, unlimited sites. Studios shipping it under their own brand is the most common use."
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Contact",
+            "props": {
+              "layout": "centered",
+              "title": "What else do you need to know?",
+              "subtitle": "Ask here and the answer gets published on this page with its date. Every question above arrived this way — including the awkward ones, which is the only version of this widget worth shipping.",
+              "fields": [
+                {
+                  "name": "question",
+                  "label": "Your question",
+                  "type": "text",
+                  "placeholder": "Does it work with my CMS?",
+                  "required": true
+                }
+              ],
+              "submit": "Ask it",
+              "note": "Answered in public within two working days · 34 asked, 34 answered."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "get",
+        "label": "Get the template"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Steps",
+            "props": {
+              "layout": "numbered",
+              "title": "From download to a running site in three steps",
+              "subtitle": "A product page should show the first minutes of ownership. Fewer surprises afterwards, fewer returns.",
               "actions": [
                 {
                   "variant": "primary",
-                  "text": "Add to basket",
-                  "href": "#",
-                  "icon": "tabler:arrow-right"
+                  "text": "Get the template",
+                  "href": "#get"
+                }
+              ],
+              "items": [
+                {
+                  "title": "Create the project",
+                  "description": "`npm create astro@latest -- --template arthelokyo/astrowind`"
                 },
                 {
-                  "variant": "secondary",
-                  "text": "Ask a question",
-                  "href": "/contact"
+                  "title": "Make it yours",
+                  "description": "Name, URL and metadata in one config file; colours and fonts in one styles file; replace the logo."
+                },
+                {
+                  "title": "Build and deploy",
+                  "description": "A static folder for Vercel, Netlify, Cloudflare, Pages or your own server."
                 }
               ]
             }

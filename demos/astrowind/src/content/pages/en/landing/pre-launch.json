@@ -1,53 +1,206 @@
 {
-  "title": "Join the waiting list",
+  "title": "Widgets v2 lands on 1 December",
   "layout": "landing",
-  "description": "We are a few weeks away. Leave your address and you will be among the first to try it.",
+  "description": "Twelve agency widgets: case studies with results, process with deliverables, booking-backed contact. One field below gets you the date before anyone else, and the early-access price.",
   "sections": [
     {
       "widget": "Hero",
       "props": {
         "layout": "split",
-        "tagline": "Join the waiting list",
-        "title": "Something is ==coming==",
-        "subtitle": "We are a few weeks away. Leave your address and you will be among the first to try it.",
-        "actions": [
+        "align": "start",
+        "tagline": "Waitlist open · 1,240 signed up",
+        "title": "Widgets v2 lands on 1 December",
+        "subtitle": "Twelve agency widgets: case studies with results, process with deliverables, booking-backed contact. One field below gets you the date before anyone else, and the early-access price."
+      },
+      "slots": {
+        "proof": [
           {
-            "variant": "primary",
-            "text": "Notify me",
-            "href": "#cta",
-            "icon": "tabler:arrow-right"
+            "widget": "Newsletter",
+            "props": {
+              "layout": "inline",
+              "align": "start",
+              "placeholder": "you@company.com",
+              "submit": "Notify me at launch",
+              "note": "Email about this launch only. One click to unsubscribe. No selling the list.",
+              "success": {
+                "mode": "append",
+                "label": "You are on the list",
+                "title": "You are number 1,241 in the queue.",
+                "text": "The first email comes in week 2. Share your link: whoever joins through it gets the same early-access price.",
+                "copy": {
+                  "label": "Copy your referral link",
+                  "value": "https://astrowind.dev/v2?ref=a7k2",
+                  "copiedLabel": "Referral link copied"
+                }
+              }
+            }
+          },
+          {
+            "widget": "Callout",
+            "props": {
+              "tone": "neutral",
+              "layout": "card",
+              "label": "The three emails you will get",
+              "items": [
+                "`wk 2` “Three of the twelve widgets are done — here they are”",
+                "`wk 6` “What changed after the first agency tested it”",
+                "`wk 8` “Early access is open — your link, and the launch price”"
+              ],
+              "footer": "Showing the subject lines converts better than promising “updates”, and almost nobody unsubscribes surprised."
+            }
           }
         ],
-        "image": {
-          "src": "https://images.unsplash.com/photo-1531973486364-5fa64260d75b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1658&q=80",
-          "alt": "Join the waiting list"
-        }
+        "media": [
+          {
+            "widget": "Countdown",
+            "props": {
+              "label": "Launch day",
+              "to": "2026-12-01T09:00:00Z",
+              "date": "1 Dec 2026, 09:00 UTC",
+              "seconds": true,
+              "done": "Widgets v2 is out",
+              "card": "surface",
+              "elevated": true,
+              "note": "No date yet? Say “early next quarter” and show the roadmap instead. A countdown you might reset costs more trust than it buys."
+            }
+          }
+        ]
       }
     },
     {
       "widget": "Section",
       "props": {
-        "id": "cta",
-        "tone": "glow"
+        "tone": "surface"
       },
       "slots": {
         "default": [
           {
-            "widget": "CallToAction",
+            "widget": "Features",
             "props": {
-              "title": "Notify me",
-              "subtitle": "It takes less than a minute and costs nothing to try.",
-              "actions": [
+              "layout": "panels",
+              "align": "start",
+              "title": "What, when, and why sign up today",
+              "columns": "3",
+              "items": [
                 {
-                  "variant": "primary",
-                  "text": "Notify me",
-                  "href": "#",
-                  "icon": "tabler:arrow-right"
+                  "eyebrow": "What",
+                  "description": "Twelve widgets that turn the template into an agency toolkit: case studies with measured results, process with deliverables and owners, contact with booking slots."
                 },
                 {
-                  "variant": "secondary",
-                  "text": "Ask a question",
-                  "href": "/contact"
+                  "eyebrow": "When",
+                  "description": "1 December 2026. The date has been on this page since week 0 and will not move; if it did, you would hear it from us first."
+                },
+                {
+                  "eyebrow": "Why now",
+                  "description": "Early access two weeks before launch, the launch price for the first year, and a say in which three widgets ship first."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "ruled"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Columns",
+            "props": {
+              "ratio": "equal",
+              "gap": "lg",
+              "align": "center"
+            },
+            "slots": {
+              "default": [
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Features",
+                        "props": {
+                          "layout": "list",
+                          "align": "start",
+                          "columns": "1",
+                          "tagline": "One real thing",
+                          "title": "An unfinished screenshot beats three adjectives",
+                          "subtitle": "No customers yet, so this section carries the trust: something real from the product, a named person behind it, and what the signup does not mean.",
+                          "defaultIcon": "tabler:minus",
+                          "items": [
+                            {
+                              "description": "Work in progress, labelled as such"
+                            },
+                            {
+                              "description": "Built by the same three maintainers since 2022"
+                            },
+                            {
+                              "description": "No spam, no selling the list, no launch that slips silently"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Screenshot",
+                        "props": {
+                          "url": "case-study widget · draft",
+                          "badge": "work in progress",
+                          "badgeTone": "warning",
+                          "caption": "real in-progress screen · 1000×625",
+                          "ratio": "16/10"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Timeline",
+            "props": {
+              "title": "From this page to launch day",
+              "items": [
+                {
+                  "label": "Week 0",
+                  "title": "The waitlist opens",
+                  "description": "This page goes live with the form, the three facts and one real teaser."
+                },
+                {
+                  "label": "Weeks 2–6",
+                  "title": "Three progress emails",
+                  "description": "What shipped, what changed, one behind-the-scenes image. Nothing else."
+                },
+                {
+                  "label": "Week 8",
+                  "title": "Early access for the list",
+                  "description": "Subscribers get in first, at the price promised on this page."
+                },
+                {
+                  "label": "Launch day",
+                  "title": "This page becomes the product page",
+                  "description": "Same URL, new content, so no inbound link goes stale.",
+                  "highlight": true
                 }
               ]
             }

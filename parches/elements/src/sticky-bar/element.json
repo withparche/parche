@@ -1,0 +1,14 @@
+{
+  "name": "sticky-bar",
+  "type": "element",
+  "files": [
+    { "path": "StickyBar.astro", "type": "part" },
+    { "path": "sticky-bar.element.ts", "type": "element" },
+    { "path": "sticky-bar.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": [],
+  "source": null
+}

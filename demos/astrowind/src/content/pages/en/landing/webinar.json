@@ -1,0 +1,209 @@
+{
+  "title": "Rebuild a client site in 45 minutes, live",
+  "description": "We take a real 40-page agency site and rebuild the five pages that matter, on camera, with the mistakes left in. 8 October 2026 · 16:00 CET · 45 min + Q&A.",
+  "layout": "landing",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "layout": "split",
+        "align": "start",
+        "badge": {
+          "tag": "Live workshop",
+          "text": "8 October 2026 · 16:00 CET · 45 min + Q&A"
+        },
+        "title": "Rebuild a client site in 45 minutes, live",
+        "subtitle": "We take a real 40-page agency site and rebuild the five pages that matter, on camera, with the mistakes left in. Bring your own URL and it might be the one we use."
+      },
+      "slots": {
+        "proof": [
+          {
+            "widget": "Features",
+            "props": {
+              "layout": "list",
+              "columns": "1",
+              "defaultIcon": "tabler:check",
+              "items": [
+                {
+                  "description": "Replay to everyone registered, whether you attend or not"
+                },
+                {
+                  "description": "The repository we build, public after the session"
+                },
+                {
+                  "description": "No pitch. It is a workshop, and the product is already free"
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Features",
+            "props": {
+              "tagline": "Agenda, by the minute",
+              "align": "start",
+              "layout": "rows",
+              "items": [
+                {
+                  "eyebrow": "00–08",
+                  "title": "Audit: what is slow, what is unmaintainable, what to delete"
+                },
+                {
+                  "eyebrow": "08–25",
+                  "title": "Home and services rebuilt from widgets, with the client’s tokens"
+                },
+                {
+                  "eyebrow": "25–38",
+                  "title": "Blog migration, redirects, and the two things that always break"
+                },
+                {
+                  "eyebrow": "38–45",
+                  "title": "Deploy, Lighthouse, handover — then Q&A until questions run out"
+                }
+              ]
+            }
+          }
+        ],
+        "media": [
+          {
+            "widget": "Newsletter",
+            "props": {
+              "layout": "card",
+              "title": "Save my seat",
+              "subtitle": "One field. You get the calendar invite immediately and the replay afterwards.",
+              "placeholder": "you@company.com",
+              "submit": "Save my seat",
+              "loading": "Saving…",
+              "note": "Reminders: one the day before, one 15 minutes before.\nYour time zone: 16:00 CET shown as your local time on the invite.\n412 registered · room holds everyone, it is a stream.",
+              "success": {
+                "mode": "append",
+                "label": "Seat saved ✓",
+                "title": "Registered · invite sent",
+                "links": [
+                  {
+                    "text": "Add to Google",
+                    "href": "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Rebuild%20a%20client%20site%20in%2045%20minutes%2C%20live&dates=20261008T140000Z/20261008T150000Z"
+                  },
+                  {
+                    "text": "Add to Outlook",
+                    "href": "https://outlook.live.com/calendar/0/deeplink/compose?subject=Rebuild%20a%20client%20site%20in%2045%20minutes%2C%20live&startdt=2026-10-08T14:00:00Z&enddt=2026-10-08T15:00:00Z"
+                  },
+                  {
+                    "text": ".ics file",
+                    "href": "/landing/webinar.ics"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "widget": "Team",
+            "props": {
+              "tagline": "Who is running it",
+              "layout": "rows",
+              "items": [
+                {
+                  "name": "Arthelo Kyo",
+                  "role": "Created the template · 2,100 commits"
+                },
+                {
+                  "name": "Marta Ibáñez",
+                  "role": "Shipped 11 client sites on it"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "recording",
+        "label": "Recording"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Columns",
+            "props": {
+              "ratio": "equal",
+              "gap": "lg",
+              "align": "center"
+            },
+            "slots": {
+              "default": [
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "CallToAction",
+                        "props": {
+                          "layout": "stacked",
+                          "tagline": "After the event",
+                          "title": "This page becomes the recording",
+                          "subtitle": "Same URL, new content: the video, a transcript, the repository and the chapter list. Every inbound link keeps working, and the transcript is the richest keyword surface on the site."
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Screenshot",
+                        "props": {
+                          "frame": false,
+                          "caption": "recording player · 1280×720",
+                          "ratio": "16/9"
+                        }
+                      },
+                      {
+                        "widget": "Features",
+                        "props": {
+                          "layout": "strip",
+                          "columns": "4",
+                          "items": [
+                            {
+                              "title": "00:00",
+                              "description": "audit"
+                            },
+                            {
+                              "title": "08:12",
+                              "description": "rebuild"
+                            },
+                            {
+                              "title": "25:40",
+                              "description": "migration"
+                            },
+                            {
+                              "title": "38:05",
+                              "description": "deploy"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "StickyBar",
+      "props": {
+        "text": "Live on 8 October, 16:00 CET",
+        "note": "Replay to everyone registered",
+        "action": {
+          "text": "Save my seat",
+          "href": "#top"
+        }
+      }
+    }
+  ]
+}

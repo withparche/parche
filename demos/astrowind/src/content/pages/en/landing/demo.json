@@ -1,0 +1,203 @@
+{
+  "title": "See it on your own site structure",
+  "description": "Bring your sitemap and we rebuild two of your pages live, with your brand tokens. If it does not fit, we say so on the call.",
+  "layout": "landing",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "layout": "split",
+        "align": "start",
+        "tagline": "25 minutes · no sales deck",
+        "title": "See it on your own site structure",
+        "subtitle": "Bring your sitemap and we rebuild two of your pages live, with your brand tokens. If it does not fit, we say so on the call."
+      },
+      "slots": {
+        "proof": [
+          {
+            "widget": "Features",
+            "props": {
+              "tagline": "What the 25 minutes covers",
+              "align": "start",
+              "layout": "rows",
+              "items": [
+                {
+                  "eyebrow": "0–5",
+                  "title": "Your current site, what is slow and what is unmaintainable"
+                },
+                {
+                  "eyebrow": "5–18",
+                  "title": "Two of your pages rebuilt live with your tokens"
+                },
+                {
+                  "eyebrow": "18–25",
+                  "title": "Effort, cost range and whether you even need us"
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Team",
+            "props": {
+              "tagline": "You will speak to",
+              "layout": "rows",
+              "items": [
+                {
+                  "name": "Sofía Navarro",
+                  "role": "Maintainer since 2023 · not a sales rep"
+                }
+              ]
+            }
+          }
+        ],
+        "media": [
+          {
+            "widget": "Contact",
+            "props": {
+              "layout": "split",
+              "booking": {
+                "title": "Pick a slot",
+                "badge": "3 left this week",
+                "slots": [
+                  {
+                    "label": "09:30",
+                    "detail": "Tuesday 16 September",
+                    "href": "#book"
+                  },
+                  {
+                    "label": "14:00",
+                    "detail": "Tuesday 16 September",
+                    "href": "#book",
+                    "selected": true
+                  },
+                  {
+                    "label": "16:30",
+                    "detail": "Tuesday 16 September",
+                    "disabled": true
+                  },
+                  {
+                    "label": "11:00",
+                    "detail": "Thursday 18 September",
+                    "href": "#book"
+                  },
+                  {
+                    "label": "15:00",
+                    "detail": "Thursday 18 September",
+                    "href": "#book"
+                  }
+                ],
+                "note": "Times shown in your local zone · 25 minutes · video or phone"
+              },
+              "fields": [
+                {
+                  "name": "project",
+                  "label": "What are you working on?",
+                  "placeholder": "A 60-page marketing site for a hardware launch",
+                  "help": "One line is plenty — it decides which two pages we rebuild on the call.",
+                  "required": true
+                },
+                {
+                  "name": "editors",
+                  "label": "Who edits the site today?",
+                  "placeholder": "One developer, plus marketing for copy",
+                  "help": "It changes what we show you, not whether you qualify."
+                },
+                {
+                  "name": "email",
+                  "label": "Where should we send the invite?",
+                  "type": "email",
+                  "placeholder": "you@company.com",
+                  "autocomplete": "email",
+                  "help": "Asked last on purpose: by now you have already done the work.",
+                  "required": true
+                }
+              ],
+              "submit": "Book Tuesday 14:00",
+              "loading": "Booking…",
+              "success": {
+                "mode": "button",
+                "label": "Slot booked ✓"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "budget",
+        "label": "Budget"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Columns",
+            "props": {
+              "ratio": "equal",
+              "gap": "lg"
+            },
+            "slots": {
+              "default": [
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Stats",
+                        "props": {
+                          "title": "Budget, before you ask",
+                          "subtitle": "Hiding pricing until the call wastes both calendars. A range with what moves it is the honest middle ground between a price list and “contact us”.",
+                          "align": "start",
+                          "layout": "panels",
+                          "items": [
+                            {
+                              "value": "$6K – $18K",
+                              "label": "Fixed scope, four to six weeks.",
+                              "description": "Moves with the page count, the number of locales and whether content migration is ours or yours."
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "Brands",
+                        "props": {
+                          "layout": "strip",
+                          "label": "Teams who booked this call",
+                          "names": [
+                            "Northwind",
+                            "Ferrolab",
+                            "Quietmile"
+                          ],
+                          "note": "Filtered to buyers who look like you: 30–120 page marketing sites, one or two developers, an SEO team asking hard questions."
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "StickyBar",
+      "props": {
+        "text": "25 minutes, no sales deck",
+        "note": "Three slots left this week",
+        "action": {
+          "text": "Book a slot",
+          "href": "#top"
+        }
+      }
+    }
+  ]
+}

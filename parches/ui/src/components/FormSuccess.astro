@@ -14,8 +14,8 @@ interface Props {
 }
 
 const { success } = Astro.props;
-const { mode, title, text, actions, links, copy } = success;
-const extras = actions.length > 0 || links.length > 0 || copy;
+const { mode, title, text, note, actions, links, copy } = success;
+const extras = actions.length > 0 || links.length > 0 || copy || note;
 ---
 
 {mode === 'replace' ? (
@@ -25,6 +25,8 @@ const extras = actions.length > 0 || links.length > 0 || copy;
     {text && <p class="text-[15px] leading-[1.65] text-muted" set:html={inline(text)} />}
     {extras && (
       <div class="mt-2 flex w-full flex-col gap-3 border-t border-border-soft pt-4">
+        {note?.title && <p class="text-[15px] leading-[1.3] font-semibold text-heading" set:html={inline(note.title)} />}
+        {note?.text && <p class="text-sm leading-[1.6] text-muted" set:html={inline(note.text)} />}
         <Actions {actions} size="md" />
         {links.length > 0 && <ul class="flex flex-wrap gap-2">{links.map((l) => <li><a href={l.href} class="block rounded-sm border border-border bg-surface px-[11px] py-2 text-xs leading-none font-medium text-heading no-underline hover:border-primary">{l.text}</a></li>)}</ul>}
         {copy && <Command variant="button" command={copy.value} copyLabel={copy.label} copiedLabel={copy.copiedLabel ?? 'Copied'} class="self-start" />}

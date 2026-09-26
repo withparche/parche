@@ -5,19 +5,14 @@
       "props": {
         "logo": {
           "text": "AstroWind",
-          "href": "/"
+          "href": "/",
+          "mark": true
         },
-        "links": {
-          "$ref": "navigation/landing"
-        },
-        "actions": [
-          {
-            "label": "Download",
-            "href": "https://github.com/arthelokyo/astrowind",
-            "variant": "primary"
-          }
-        ],
-        "position": "right"
+        "position": "left",
+        "controls": {
+          "theme": "text",
+          "locale": "none"
+        }
       }
     },
     {
@@ -31,12 +26,11 @@
     {
       "widget": "Footer",
       "props": {
-        "siteName": "AstroWind",
-        "columns": [],
+        "layout": "minimal",
+        "copyright": "© 2026 AstroWind · MIT licensed",
         "secondaryLinks": {
           "$ref": "navigation/legal"
-        },
-        "footNote": "Made by <a class=\"text-primary hover:underline\" href=\"https://github.com/arthelokyo\">arthelokyo</a>."
+        }
       }
     }
   ]

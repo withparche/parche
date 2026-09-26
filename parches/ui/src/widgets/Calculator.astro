@@ -1,0 +1,20 @@
+---
+/** A section around the Calculator element: the shared heading, and the numbers in a card. */
+import CalculatorElement from 'parche:elements/Calculator';
+import Card from 'parche:elements/Card';
+import SectionHeader from '../components/SectionHeader.astro';
+import { inline } from '../_shared/inline';
+import { schema, type Props } from './Calculator.props';
+
+const { tagline, title, subtitle, link, align, label, inputs, results, share, locale, card } = schema.parse(Astro.props) as Props;
+const Frame = card === 'none' ? 'div' : Card;
+const frame = card === 'none' ? {} : { variant: card, radius: 'lg', padding: 'lg', shadow: 'none' };
+---
+
+<div class="parche-calculator-section">
+  <SectionHeader {tagline} {title} {subtitle} {link} {align} spacing="md" width="lg" />
+  <Frame {...frame}>
+    {label && <p class="mb-4 type-label text-muted" set:html={inline(label)} />}
+    <CalculatorElement {inputs} {results} {share} {locale} />
+  </Frame>
+</div>

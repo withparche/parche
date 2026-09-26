@@ -1,0 +1,14 @@
+---
+import Calculator from '../Calculator.astro';
+---
+
+<div class="max-w-md rounded-lg border border-border p-6">
+  <Calculator
+    inputs={[
+      { name: 'calls', label: 'Discovery calls per month', value: 40, min: 0, step: 5 },
+      { name: 'hours', label: 'Hours each, including prep', value: 1, min: 0.5, max: 4, step: 0.5 },
+    ]}
+    results={[{ label: 'Hours this page gives back', formula: 'calls * hours * 0.5', suffix: ' hours / month' }]}
+    share={{ label: 'Copy this result' }}
+  />
+</div>

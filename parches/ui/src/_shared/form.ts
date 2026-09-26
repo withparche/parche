@@ -28,6 +28,7 @@ export const success = z.object({
   mode: z.enum(['button', 'append', 'replace']).default('append').meta({ help: 'button: only the label changes · append: the message under the form · replace: the message in place of the form.' }),
   title: text().optional(),
   text: text({ input: 'textarea' }).optional(),
+  note: z.object({ title: text().optional(), text: text({ input: 'textarea' }).optional() }).optional().meta({ help: 'A second block above the actions: "While you wait" and a line.' }),
   actions: z.array(action).default([]).meta({ help: 'What to do next: download, read the guide.' }),
   links: z.array(link).default([]).meta({ help: 'Small chips: "Add to Google", ".ics file".' }),
   copy: z.object({ label: z.string(), value: z.string(), copiedLabel: z.string().optional() }).optional().meta({ help: 'A value to copy: a referral link.' }),

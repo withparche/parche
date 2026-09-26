@@ -9,6 +9,7 @@ import Select from 'parche:elements/Select';
 import Checkbox from 'parche:elements/Checkbox';
 import RadioGroup from 'parche:elements/RadioGroup';
 import type { Field } from '../_shared/form';
+import { inline } from '../_shared/inline';
 
 interface Props {
   fields: Field[];
@@ -20,7 +21,8 @@ const options = (f: Field) => (f.options ?? []).map((o) => (typeof o === 'string
 ---
 
 {fields.map((f) => {
-  const label = f.label ?? humanize(f.name);
+  // Labels read inline Markdown: a consent line links to the privacy policy.
+  const label = f.label ? (inline(f.label) ?? f.label) : humanize(f.name);
   if (f.type === 'textarea') return <Textarea name={f.name} {label} placeholder={f.placeholder} rows={f.rows ?? 4} grow={false} required={f.required} description={f.help} />;
   if (f.type === 'select') return <Select name={f.name} {label} options={options(f)} placeholder={f.placeholder} required={f.required} description={f.help} />;
   if (f.type === 'radio') return <RadioGroup name={f.name} {label} options={options(f)} required={f.required} description={f.help} />;

@@ -25,26 +25,29 @@ const LAZY_MAX = 40_000;
 // sent states), and 2 KB more for the Gallery lightbox (~1.6 KB). Like the
 // others, each script is emitted once and loaded only by pages that use it.
 // 2 KB more for the Filter (~1 KB) that a changelog or catalogue filters with.
+// 6 KB more for the campaign elements a landing page uses: StickyBar (~0.9 KB),
+// Countdown (~1 KB), Compare (~0.3 KB) and Calculator with its formula
+// reader (~3.4 KB).
 const PROJECTS = {
-  'demos/astrowind': { kind: 'static', clientJsMax: 44_000 },
-  'examples/blog': { kind: 'static', clientJsMax: 44_000 },
-  'examples/custom-widget': { kind: 'static', clientJsMax: 44_000 },
-  'examples/i18n': { kind: 'static', clientJsMax: 44_000 },
+  'demos/astrowind': { kind: 'static', clientJsMax: 50_000 },
+  'examples/blog': { kind: 'static', clientJsMax: 50_000 },
+  'examples/custom-widget': { kind: 'static', clientJsMax: 50_000 },
+  'examples/i18n': { kind: 'static', clientJsMax: 50_000 },
   'examples/import-widget': { kind: 'static', clientJsMax: 6_000 },
-  'examples/markdown-pages': { kind: 'static', clientJsMax: 44_000 },
+  'examples/markdown-pages': { kind: 'static', clientJsMax: 50_000 },
   'examples/react': { kind: 'static', skipClientBudget: true }, // ships React islands
   'examples/shadcn': { kind: 'static', skipClientBudget: true }, // ships React islands
   // The SSR examples serve /elements: every interactive element's script.
-  'examples/ssr-cloudflare': { kind: 'ssr', clientJsMax: 52_000 },
-  'examples/ssr-node': { kind: 'ssr', clientJsMax: 52_000 },
-  'examples/themes': { kind: 'static', clientJsMax: 44_000 },
+  'examples/ssr-cloudflare': { kind: 'ssr', clientJsMax: 58_000 },
+  'examples/ssr-node': { kind: 'ssr', clientJsMax: 58_000 },
+  'examples/themes': { kind: 'static', clientJsMax: 50_000 },
   // The elements playground: every element page must build; the eager budget
   // grows with each interactive element's declared cost (see the elements plan).
-  'parches/elements/playground': { kind: 'static', clientJsMax: 52_000 },
-  'templates/portfolio': { kind: 'static', clientJsMax: 44_000 },
+  'parches/elements/playground': { kind: 'static', clientJsMax: 58_000 },
+  'templates/portfolio': { kind: 'static', clientJsMax: 50_000 },
   'templates/saas-landing': {
     kind: 'ssr',
-    clientJsMax: 44_000,
+    clientJsMax: 50_000,
     iconSsrMax: 60_000, // scoped `include` keeps this small (baseline ~28 KB)
     layoutChunkMax: 200_000, // lazy catalog keeps this tiny (baseline ~31 KB); eager was ~2.3 MB
     minWidgetChunks: 2, // widgets must be code-split, not bundled into one chunk

@@ -8,6 +8,7 @@ export const schema = z.object({
   subtitle: text().optional().meta({ help: 'What arrives and how often: one promise, one frequency.' }),
   align: z.enum(['center', 'start']).default('center').meta({ help: 'Where an inline row sits: centred in a band, or at the start of a column.' }),
   layout: z.enum(['card', 'inline']).default('card').meta({ help: 'card: a titled card, for the end of a page or a post · inline: the field and the button in one centred row, for a hero or a closing band.' }),
+  field: z.object({ name: z.string().default('email'), type: z.enum(['email', 'text', 'tel', 'url']).default('email'), label: z.string().default('Email') }).prefault({}).meta({ help: 'The one field: an email by default, or a question ("text"), a phone number.' }),
   placeholder: z.string().default('you@company.com'),
   submit: z.string().default('Subscribe').meta({ help: 'The submit button label.' }),
   note: text().optional().meta({ help: 'Under the field: unsubscribe, how many readers, what you never do.' }),

@@ -11,7 +11,7 @@ import Image from 'parche:elements/Image';
 import Action from '../components/Action.astro';
 import { schema, type Props } from './Hero.props';
 
-const { layout, align, size, badge, title, subtitle, tagline, content, actions, note, proofFirst, image } = schema.parse(Astro.props) as Props;
+const { layout, align, size, badge, title, subtitle, tagline, content, points, valign, actions, note, proofFirst, image } = schema.parse(Astro.props) as Props;
 const hasMedia = Astro.slots.has('media') || Boolean(image);
 const side = layout === 'side';
 const overlay = layout === 'overlay';
@@ -51,7 +51,7 @@ const Badge = badge?.href ? 'a' : 'span';
   ) : (
   <div
     class:list={[
-      'grid items-center gap-[clamp(28px,4vw,56px)]',
+      'grid gap-[clamp(28px,4vw,56px)]', valign === 'start' ? 'items-start' : 'items-center',
       split || side ? 'grid-cols-[repeat(auto-fit,minmax(min(320px,100%),1fr))]' : 'grid-cols-1',
       side && 'items-end',
     ]}
@@ -70,6 +70,11 @@ const Badge = badge?.href ? 'a' : 'span';
       {tagline && !badge && <p class="type-label uppercase text-primary mb-2" set:html={inline(tagline)} />}
       {title && <h1 class:list={[titleClass, 'text-balance', side ? 'mb-0' : 'mb-5']} set:html={inline(title)} />}
       {!side && subtitle && <p class:list={['type-lead mb-[30px] max-w-[36em] text-pretty', centered && 'mx-auto']} set:html={inline(subtitle)} />}
+      {!side && points.length > 0 && (
+        <ul class:list={['mb-7 flex flex-col gap-[11px] text-[15px] leading-[1.5] text-heading', centered && 'mx-auto w-fit text-left']}>
+          {points.map((p) => <li class="flex gap-2.5"><span class="font-mono text-success" aria-hidden="true">✓</span><span set:html={inline(p)} /></li>)}
+        </ul>
+      )}
       {!side && content && <div class="text-muted mb-6 [&_pre]:max-w-full [&_pre]:overflow-x-auto [&_pre]:text-sm" set:html={content} />}
       {!side && proofFirst && Astro.slots.has('proof') && (
         <div class:list={['parche-hero-proof mb-[26px] flex flex-col gap-3', centered && 'items-center']}>

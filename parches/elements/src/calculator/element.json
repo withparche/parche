@@ -1,0 +1,15 @@
+{
+  "name": "calculator",
+  "type": "element",
+  "files": [
+    { "path": "Calculator.astro", "type": "part" },
+    { "path": "calculator.element.ts", "type": "element" },
+    { "path": "calculator.props.ts", "type": "props" },
+    { "path": "formula.ts", "type": "lib" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": [],
+  "source": null
+}

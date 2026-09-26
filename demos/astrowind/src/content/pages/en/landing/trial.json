@@ -1,0 +1,286 @@
+{
+  "title": "Have a site running in four minutes",
+  "description": "Clone the template and the demo site is yours to edit locally — no signup, nothing to cancel. The account is only for saving themes across machines.",
+  "layout": "landing",
+  "sections": [
+    {
+      "widget": "Hero",
+      "props": {
+        "layout": "split",
+        "align": "start",
+        "tagline": "No card · no account · no trial clock",
+        "title": "Have a site running in four minutes",
+        "subtitle": "Clone the template and the demo site is yours to edit locally — no signup, nothing to cancel. The account below is only for saving themes across machines."
+      },
+      "slots": {
+        "proof": [
+          {
+            "widget": "Features",
+            "props": {
+              "layout": "rows",
+              "accent": true,
+              "items": [
+                {
+                  "eyebrow": "0:00",
+                  "title": "Run one command"
+                },
+                {
+                  "eyebrow": "1:40",
+                  "title": "Dev server up, demo site on localhost"
+                },
+                {
+                  "eyebrow": "4:00",
+                  "title": "Your logo, your colours, first page edited"
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Command",
+            "props": {
+              "command": "npm create astro@latest -- --template arthelokyo/astrowind"
+            }
+          }
+        ],
+        "media": [
+          {
+            "widget": "Callout",
+            "props": {
+              "layout": "card",
+              "elevated": true,
+              "title": "Optional account",
+              "description": "For syncing brand presets between machines. The template works fully without it — said here rather than discovered later.",
+              "actions": [
+                {
+                  "variant": "secondary",
+                  "text": "Continue with GitHub",
+                  "href": "#",
+                  "icon": "tabler:brand-github"
+                },
+                {
+                  "variant": "secondary",
+                  "text": "Continue with Google",
+                  "href": "#",
+                  "icon": "tabler:brand-google"
+                }
+              ]
+            }
+          },
+          {
+            "widget": "Contact",
+            "props": {
+              "layout": "centered",
+              "fields": [
+                {
+                  "name": "email",
+                  "type": "email",
+                  "placeholder": "you@company.com",
+                  "autocomplete": "email",
+                  "required": true
+                }
+              ],
+              "submit": "Create the optional account",
+              "loading": "Creating…",
+              "note": "SOC 2 in progress · EU data residency · Delete in one click",
+              "success": {
+                "mode": "button",
+                "label": "Account created"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "tour",
+        "label": "Tour"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Switch",
+            "props": {
+              "tagline": "Tour · four screens",
+              "title": "See the four files that matter",
+              "subtitle": "Real screens, including the plain ones. Click a step — this is the closest a page can get to letting you use the thing, and it beats a hero video because it survives being screenshotted and linked.",
+              "label": "Tour step",
+              "syncKey": "step",
+              "variant": "pill",
+              "options": [
+                {
+                  "value": "config",
+                  "label": "1 · config.yaml"
+                },
+                {
+                  "value": "styles",
+                  "label": "2 · CustomStyles.astro"
+                },
+                {
+                  "value": "props",
+                  "label": "3 · widget props"
+                },
+                {
+                  "value": "build",
+                  "label": "4 · npm run build"
+                }
+              ]
+            },
+            "slots": {
+              "config": [
+                {
+                  "widget": "TourStep",
+                  "props": {
+                    "screen": {
+                      "url": "src/config.yaml · 1200×760",
+                      "badge": "Step 1 of 4",
+                      "caption": "real screenshot goes here",
+                      "ratio": "16/10"
+                    },
+                    "title": "One file for the whole site",
+                    "subtitle": "Name, URL, metadata, blog on or off, language. Change it once and every page follows — this is the file a client can safely be shown.",
+                    "action": {
+                      "text": "Run it yourself",
+                      "href": "#top"
+                    }
+                  }
+                }
+              ],
+              "styles": [
+                {
+                  "widget": "TourStep",
+                  "props": {
+                    "screen": {
+                      "url": "CustomStyles.astro · 1200×760",
+                      "badge": "Step 2 of 4",
+                      "caption": "real screenshot goes here",
+                      "ratio": "16/10"
+                    },
+                    "title": "Two colour scales, light and dark",
+                    "subtitle": "Paste your brand hexes here and the entire site rebrands, including third-party shadcn-style components that read the same tokens.",
+                    "action": {
+                      "text": "Run it yourself",
+                      "href": "#top"
+                    }
+                  }
+                }
+              ],
+              "props": [
+                {
+                  "widget": "TourStep",
+                  "props": {
+                    "screen": {
+                      "url": "widget props · 1200×760",
+                      "badge": "Step 3 of 4",
+                      "caption": "real screenshot goes here",
+                      "ratio": "16/10"
+                    },
+                    "title": "Sections are props, not markup",
+                    "subtitle": "A hero is a component call with a headline, a subtitle and an image. No class soup to unpick when the client asks for a different order.",
+                    "action": {
+                      "text": "Run it yourself",
+                      "href": "#top"
+                    }
+                  }
+                }
+              ],
+              "build": [
+                {
+                  "widget": "TourStep",
+                  "props": {
+                    "screen": {
+                      "url": "terminal · npm run build · 1200×760",
+                      "badge": "Step 4 of 4",
+                      "caption": "real screenshot goes here",
+                      "ratio": "16/10"
+                    },
+                    "title": "A static folder at the end",
+                    "subtitle": "38 KB median page, zero JS on static routes, and nothing to patch on a Friday. Deploy it anywhere that serves files.",
+                    "action": {
+                      "text": "Run it yourself",
+                      "href": "#top"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "tone": "surface"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "Features",
+            "props": {
+              "title": "What you can do before you decide anything",
+              "align": "start",
+              "layout": "cards",
+              "columns": "4",
+              "card": "canvas",
+              "items": [
+                {
+                  "title": "Ship a real page",
+                  "description": "Not a sandbox with fake data. The demo site is production code, and the page you edit is the page you deploy."
+                },
+                {
+                  "title": "Use every widget",
+                  "description": "All 34, no locked sections, no watermark. Nothing is held back for a paid tier that does not exist."
+                },
+                {
+                  "title": "Deploy it",
+                  "description": "To your own host, under your own domain, for a client, on day one. MIT means exactly that."
+                },
+                {
+                  "title": "Leave",
+                  "description": "Delete the account and the code keeps working. That is the difference between a template and a platform."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "id": "faq",
+        "width": "md"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "FAQs",
+            "props": {
+              "tagline": "FAQ",
+              "title": "Asked before signing up",
+              "layout": "list",
+              "columns": "1",
+              "open": "all",
+              "items": [
+                {
+                  "title": "What happens on day 14?",
+                  "description": "Nothing. There is no clock — this is the honest version of a trial page. If your product does expire, say the date, say what you keep, and say it here rather than in an email on day 13."
+                },
+                {
+                  "title": "Do I need the account at all?",
+                  "description": "No. It syncs brand presets between machines; everything else works from the repository. A trial page that admits its signup is optional converts worse and retains far better."
+                },
+                {
+                  "title": "Where does my data live?",
+                  "description": "EU region, deletable from the account page, and no analytics until you accept them. The compliance strip above is the short version your buyer’s IT reviewer will look for."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

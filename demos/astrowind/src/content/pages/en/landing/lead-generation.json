@@ -1,52 +1,246 @@
 {
-  "title": "Download the guide",
+  "title": "Lead Generation Landing Page Example & Guide",
+  "description": "Six sections, the question to ask yourself for each one, and the copy formulas that survive contact with real users. One page. No sequence.",
   "layout": "landing",
-  "description": "Forty pages on cutting build times, written from real projects rather than benchmarks. Free, no signup wall.",
   "sections": [
     {
       "widget": "Hero",
       "props": {
-        "tagline": "Download the guide",
-        "title": "Get the complete guide to ==shipping faster==",
-        "subtitle": "Forty pages on cutting build times, written from real projects rather than benchmarks. Free, no signup wall.",
-        "actions": [
+        "layout": "split",
+        "tagline": "Free checklist · one page",
+        "title": "Get the landing page checklist",
+        "subtitle": "Six sections, the question to ask yourself for each one, and the copy formulas that survive contact with real users. One page. No sequence."
+      },
+      "slots": {
+        "proof": [
           {
-            "variant": "primary",
-            "text": "Send me the guide",
-            "href": "#cta",
-            "icon": "tabler:arrow-right"
+            "widget": "Features",
+            "props": {
+              "layout": "list",
+              "columns": "1",
+              "defaultIcon": "tabler:check",
+              "items": [
+                { "description": "One page, printable, no signup wall" },
+                { "description": "Copy formulas for headline, subtitle and button" },
+                { "description": "A measurement plan: which events, and when to stop testing" }
+              ]
+            }
+          },
+          {
+            "widget": "Screenshot",
+            "props": {
+              "frame": false,
+              "ratio": "16/10",
+              "caption": "the checklist itself · 1000×625"
+            }
           }
         ],
-        "image": {
-          "src": "https://images.unsplash.com/photo-1531973486364-5fa64260d75b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1658&q=80",
-          "alt": "Download the guide"
-        }
+        "media": [
+          {
+            "widget": "Contact",
+            "props": {
+              "layout": "centered",
+              "align": "start",
+              "title": "Two fields, then it sends",
+              "subtitle": "You get the checklist immediately. Nothing else unless you ask.",
+              "fields": [
+                {
+                  "name": "firstName",
+                  "label": "First name",
+                  "type": "text",
+                  "placeholder": "Marta",
+                  "autocomplete": "given-name",
+                  "required": true
+                },
+                {
+                  "name": "email",
+                  "label": "Email",
+                  "type": "email",
+                  "placeholder": "you@company.com",
+                  "autocomplete": "email",
+                  "required": true
+                },
+                {
+                  "name": "consent",
+                  "label": "Send me the checklist. I have read the privacy policy and can unsubscribe in one click.",
+                  "type": "checkbox",
+                  "required": true
+                }
+              ],
+              "submit": "Send me the checklist",
+              "note": "4,100 people have it. No sequence, no sales call.",
+              "success": {
+                "mode": "replace",
+                "title": "It is in your inbox",
+                "text": "From `hello@astrowind.dev`, subject “Your landing page checklist”. If it is not there in two minutes, check spam — then reply and we will send it again.\n\n**While you wait**\nThe template that built this page is free. Clone it and the six sections are already there.",
+                "actions": [
+                  {
+                    "variant": "primary",
+                    "text": "Get the template",
+                    "href": "https://github.com/arthelokyo/astrowind"
+                  },
+                  {
+                    "variant": "secondary",
+                    "text": "See the full thank-you page",
+                    "href": "/landing/thank-you"
+                  }
+                ]
+              }
+            }
+          }
+        ]
       }
     },
     {
       "widget": "Section",
+      "props": { "tone": "surface" },
+      "slots": {
+        "default": [
+          {
+            "widget": "Brands",
+            "props": {
+              "tagline": "Proof",
+              "title": "Who else uses this, in one glance",
+              "subtitle": "Real customer logos, with permission. No customers yet? Show partners, press or certifications — never invent them.",
+              "align": "start",
+              "names": ["Northwind", "Calderón & Co", "Höok Labs", "Ferrolab", "Quietmile"]
+            }
+          },
+          {
+            "widget": "Features",
+            "props": {
+              "layout": "cards",
+              "columns": "3",
+              "card": "canvas",
+              "items": [
+                {
+                  "eyebrow": "Proof slot 1 · before / after",
+                  "description": "A sentence naming the problem before and the measured result after. Numbers make it credible."
+                },
+                {
+                  "eyebrow": "Proof slot 2 · objection",
+                  "description": "A quote that answers the same doubt your FAQ answers: time to value, price or trust."
+                },
+                {
+                  "eyebrow": "How to fill these",
+                  "eyebrowTone": "primary",
+                  "description": "Ask three customers for one sentence each: what was hard before, what changed, and a number. Use their real name, role and photo with permission."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Features",
       "props": {
-        "id": "cta",
-        "tone": "glow"
-      },
+        "tagline": "Anatomy",
+        "title": "The six sections of a lead generation page",
+        "subtitle": "Presence matters more than order: visitors scan, then read. Each block answers a question they have not asked yet.",
+        "align": "start",
+        "layout": "panels",
+        "items": [
+          {
+            "eyebrow": "01",
+            "title": "A promise in the headline",
+            "description": "Say what the visitor gets, in their words. “Get the checklist” beats “Download our PDF”."
+          },
+          {
+            "eyebrow": "02",
+            "title": "The offer, made concrete",
+            "description": "Describe the magnet as a thing with a shape: pages, minutes, steps. Show it if you can."
+          },
+          {
+            "eyebrow": "03",
+            "title": "Proof someone else trusted you",
+            "description": "One real sentence from a customer outperforms three generic ones. Never invent them."
+          },
+          {
+            "eyebrow": "04",
+            "title": "The form, short and visible",
+            "description": "Ask only for what the follow-up needs. Make the button describe the outcome."
+          },
+          {
+            "eyebrow": "05",
+            "title": "Objections answered",
+            "description": "An FAQ handles price, privacy, time and fit without a sales call — and feeds structured data."
+          },
+          {
+            "eyebrow": "06",
+            "title": "The same ask, repeated",
+            "description": "Visitors who reached the end are the most convinced. Give them the same action, not a new one."
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": { "tone": "surface", "width": "md" },
+      "slots": {
+        "default": [
+          {
+            "widget": "FAQs",
+            "props": {
+              "tagline": "FAQ",
+              "title": "Asked before filling in a form",
+              "layout": "list",
+              "columns": "1",
+              "open": "first",
+              "items": [
+                {
+                  "title": "What is a lead generation landing page?",
+                  "description": "A single page with one goal: exchange something valuable — a guide, a demo, a quote, a trial — for a visitor’s contact details. Unlike a homepage it has no competing navigation and repeats one call to action."
+                },
+                {
+                  "title": "How many fields should the form have?",
+                  "description": "As few as your follow-up needs. Name and email are enough for a download; add company or budget only when sales will actually use them. Every extra required field lowers completion."
+                },
+                {
+                  "title": "Above the fold or at the end?",
+                  "description": "Both, and the same form. In the first screen for visitors who arrive convinced, repeated after the proof for those who need the full story. Two placements, one offer."
+                },
+                {
+                  "title": "What is a good conversion rate?",
+                  "description": "It depends on the source. Cold paid traffic often converts in the low single digits; warm email or retargeting can reach 10–20%. Compare against your own baseline and change one thing at a time."
+                },
+                {
+                  "title": "Does this satisfy privacy consent?",
+                  "description": "The form ships with a consent checkbox linked to the privacy policy. Keep the label explicit about what you send and how often, and store the consent alongside the lead."
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": { "id": "get" },
       "slots": {
         "default": [
           {
             "widget": "CallToAction",
             "props": {
-              "title": "Send me the guide",
-              "subtitle": "It takes less than a minute and costs nothing to try.",
-              "actions": [
+              "layout": "closing",
+              "size": "md",
+              "title": "Get the landing page checklist",
+              "subtitle": "Same offer as the top of the page, same two fields. Nothing new down here — that is the point."
+            },
+            "slots": {
+              "below": [
                 {
-                  "variant": "primary",
-                  "text": "Send me the guide",
-                  "href": "#",
-                  "icon": "tabler:arrow-right"
-                },
-                {
-                  "variant": "secondary",
-                  "text": "Ask a question",
-                  "href": "/contact"
+                  "widget": "Newsletter",
+                  "props": {
+                    "layout": "inline",
+                    "placeholder": "you@company.com",
+                    "submit": "Send me the checklist",
+                    "success": {
+                      "mode": "append",
+                      "title": "It is in your inbox.",
+                      "text": "From `hello@astrowind.dev`, subject “Your landing page checklist”."
+                    }
+                  }
                 }
               ]
             }
