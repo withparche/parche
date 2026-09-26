@@ -20,5 +20,8 @@
     "astro-icon": "catalog:",
     "sharp": "catalog:",
     "tailwindcss": "catalog:"
+  },
+  "devDependencies": {
+    "@parche/builder": "workspace:*"
   }
 }

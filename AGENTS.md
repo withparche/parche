@@ -18,7 +18,8 @@ materialization.
   - `parches/ui` — widget library (`parche:widgets/*`).
   - `parches/blog` — app parche: routes, collections, RSS (`@parche/astro-blog`).
   - `parches/themes` — theme parches (`corporate`, `minimal`, …): each contributes its `[data-theme]` CSS + switcher entry, so a site bundles only the themes it imports.
-- `packages/cli` — `@parche/cli`, the `parche` command (`parche astro new`). Built with tsup.
+- `packages/cli` — `@parche/cli`, the `parche` command (`parche astro new`, `parche astro builder`). Built with tsup.
+- `packages/builder` — `@parche/builder`, the visual editor. Dev only: `parche astro builder` adds it through Astro's programmatic `dev()`, it throws under any other command, and no build may carry it (`test/assert-dist.mjs`). The editor is a prebuilt React bundle (`pnpm --filter @parche/builder build`); its routes live under `/_parche/`.
 - `packages/create-parche` — the `npm create parche` entry (reuses the CLI's scaffolder).
 - `templates/*` — project starters consumed by the CLI (each may have a `parche.template.json`).
 - `examples/*` — small per-feature demos.
@@ -31,6 +32,7 @@ pnpm install
 pnpm dev                       # examples/blog
 pnpm --filter <example> dev    # e.g. example-i18n
 pnpm --filter <pkg> build
+pnpm builder                   # the visual editor over demos/astrowind
 pnpm test                      # unit tests + a build over every project
 ```
 

@@ -1,0 +1,25 @@
+/* The editor's chrome: Parche's own tokens, in the base look (never a site
+   theme), dark by default. Tailwind only scans the editor's sources. */
+@import "tailwindcss" source("../");
+@import "@parche/astro/styles/generated/ref.css";
+@import "@parche/astro/styles/generated/sys.css";
+@import "@parche/astro/styles/generated/conf.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+html,
+body,
+#parche-builder {
+  height: 100%;
+}
+body {
+  margin: 0;
+  background: var(--ds-sys-color-background);
+  color: var(--ds-sys-color-text);
+  font: 13px/1.45 ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+:focus-visible {
+  outline: 2px solid var(--ds-sys-color-ring);
+  outline-offset: 1px;
+}

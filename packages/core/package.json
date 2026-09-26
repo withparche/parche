@@ -7,6 +7,7 @@
     "./types": "./src/integration/types.ts",
     "./config": "./src/types/config.ts",
     "./styles": "./src/styles/base.css",
+    "./styles/generated/*": "./src/styles/generated/*",
     "./content": "./src/content/index.ts",
     "./schemas": "./src/content/schemas.ts"
   },

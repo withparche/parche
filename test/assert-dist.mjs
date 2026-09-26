@@ -86,12 +86,30 @@ function checkPageBudget(proj, cfg, dist) {
   );
 }
 
+// The visual builder runs only under `astro dev` (parche astro builder): no
+// build may carry its routes, its preview markers or its session.
+const BUILDER_TRACES = ['/_parche/', '<!--parche-node:', 'parche.builder'];
+function builderTraces(dir, acc = []) {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) builderTraces(full, acc);
+    else if (/\.(html|m?js|css|json)$/.test(entry.name)) {
+      const text = readFileSync(full, 'utf8');
+      const hit = BUILDER_TRACES.find((t) => text.includes(t));
+      if (hit) acc.push(`${full.slice(ROOT.length + 1)} (${hit})`);
+    }
+  }
+  return acc;
+}
+
 for (const [proj, cfg] of Object.entries(PROJECTS)) {
   const dist = join(ROOT, proj, 'dist');
   if (!existsSync(dist)) {
     failures.push(`${proj}: no dist/ — did the build run?`);
     continue;
   }
+  const traces = builderTraces(dist);
+  check(traces.length === 0, `${proj}: the builder leaked into the build: ${traces.slice(0, 3).join(', ')}`);
 
   if (cfg.kind === 'ssr') {
     check(existsSync(join(dist, 'server', 'entry.mjs')), `${proj}: dist/server/entry.mjs missing`);
