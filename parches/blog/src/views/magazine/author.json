@@ -1,0 +1,27 @@
+{
+  "sections": [
+    {
+      "widget": "Section",
+      "slots": {
+        "default": [
+          {
+            "widget": "blog/PageHeader",
+            "props": {
+              "size": "md"
+            }
+          },
+          {
+            "widget": "blog/PostList",
+            "props": {
+              "layout": "rows",
+              "density": "compact"
+            }
+          },
+          {
+            "widget": "blog/Pagination"
+          }
+        ]
+      }
+    }
+  ]
+}

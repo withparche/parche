@@ -24,6 +24,14 @@ export { termFrom, termFromSlug, defaultTitle, defaultSlug } from './taxonomy-ru
 
 import type { TaxonomyKind, ResolvedTerm } from './taxonomy-rules.js';
 
+// Read once per build: a site without the collection would otherwise be warned
+// about it on every lookup, and a page does many.
+let _entries: Promise<any[]> | null = null;
+function taxonomyEntries(): Promise<any[]> {
+  if (!import.meta.env.PROD) return getCollection('taxonomies');
+  return (_entries ??= getCollection('taxonomies').catch(() => []));
+}
+
 /** Load a locale's declared terms, keyed by lowercased key. Empty when the
  *  project ships no taxonomies collection at all. */
 async function declaredTerms(
@@ -32,7 +40,7 @@ async function declaredTerms(
 ): Promise<Map<string, TaxonomyTerm>> {
   const out = new Map<string, TaxonomyTerm>();
   try {
-    const entries = await getCollection('taxonomies');
+    const entries = await taxonomyEntries();
     const entry = entries.find((e: any) => e.id === locale || e.id === `${locale}/index`);
     for (const term of ((entry?.data as any)?.[kind] ?? []) as TaxonomyTerm[]) {
       out.set(term.key.toLowerCase(), term);

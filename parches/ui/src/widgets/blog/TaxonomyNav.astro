@@ -1,0 +1,35 @@
+---
+/**
+ * The topics of a blog as a row of chips: links to the tag or category pages,
+ * so a filter is a real URL a reader can share and a crawler can follow. The
+ * current term is marked, "All" leads back to the listing.
+ */
+import { blogContext } from '../../lib/blog-context';
+import { schema, type Props } from './TaxonomyNav.props';
+
+const p = schema.parse(Astro.props) as Props;
+const ctx = blogContext(Astro.locals);
+const kind = p.kind ?? ctx?.term?.kind ?? 'tags';
+const terms = (ctx?.terms[kind] ?? []).slice(0, p.limit);
+const active = ctx?.term?.kind === kind ? ctx.term.href : undefined;
+const labels = ctx?.labels ?? {};
+const label = p.label ?? (kind === 'tags' ? labels.tagsLabel ?? 'Tags' : labels.categoriesLabel ?? 'Categories');
+const chip = 'inline-flex items-center rounded-full border px-3 py-1.5 text-[13px] leading-none no-underline transition-colors';
+const on = 'border-heading bg-heading font-semibold text-background';
+const off = 'border-border bg-surface text-text hover:border-primary hover:text-primary';
+---
+
+{terms.length > 0 && (
+  <nav aria-label={label} class="parche-blog-topics flex flex-wrap items-center gap-x-4 gap-y-3 border-y border-border py-3.5">
+    <span class="font-mono text-[10px] leading-none tracking-[0.16em] text-muted uppercase">{label}</span>
+    <ul class="flex flex-1 list-none flex-wrap gap-2 p-0">
+      {p.all && ctx?.listing && (
+        <li><a href={ctx.listing.href} class:list={[chip, active ? off : on]} aria-current={active ? undefined : 'page'}>{labels.allLabel ?? 'All'}</a></li>
+      )}
+      {terms.map((t) => (
+        <li><a href={t.href} class:list={[chip, t.href === active ? on : off]} aria-current={t.href === active ? 'page' : undefined}>{kind === 'tags' ? `#${t.name}` : t.name}</a></li>
+      ))}
+    </ul>
+    {p.rss && ctx?.rss && <a href={ctx.rss} class="font-mono text-xs text-muted no-underline hover:text-primary">RSS</a>}
+  </nav>
+)}

@@ -1,0 +1,86 @@
+/**
+ * What a blog route knows, handed to the widgets of its view.
+ *
+ * The blog's pages are JSON views (lists of widgets), so the view decides how
+ * a page looks and never wires data: the route queries the posts, the page,
+ * the terms and the author, and leaves them here, on `Astro.locals.parche.blog`.
+ * A blog widget reads what it needs and still takes props, which win: the
+ * same PostList renders the route's posts in a view and a fixed list on a home
+ * page.
+ *
+ * The ui parche cannot import the blog parche (the dependency runs the other
+ * way), so the shape is declared here and the blog builds objects of it.
+ */
+
+/** A post as a list shows it: everything resolved (links, date, reading time). */
+export interface BlogCard {
+  title: string;
+  excerpt?: string;
+  href: string;
+  image?: { src: string; alt?: string };
+  /** ISO date, for <time datetime>. */
+  date: string;
+  /** The date as the site formats it, in the page's locale. */
+  dateText: string;
+  authors: { name: string; href?: string; avatar?: { src: string; alt?: string } }[];
+  category?: { name: string; href: string };
+  tags: { name: string; href: string }[];
+  /** "9 min read", already formatted; absent when reading time is off. */
+  readingTime?: string;
+  featured: boolean;
+  /** A newsletter issue number. */
+  issue?: number;
+  series?: { name: string; part: number };
+}
+
+export interface BlogTerm {
+  name: string;
+  href: string;
+  count: number;
+  description?: string;
+}
+
+export interface BlogPageInfo {
+  current: number;
+  last: number;
+  /** Posts in the whole list, not only this page. */
+  total: number;
+  /** The href of page n. */
+  hrefs: string[];
+}
+
+export interface BlogContext {
+  /** Which view is rendering: index, taxonomy, author, series, post, archive, subscribe, search. */
+  view: string;
+  preset: 'personal' | 'company' | 'magazine' | 'newsletter';
+  /** One writer or several: bylines are left out for one. */
+  authors: 'one' | 'many';
+  /** The UI strings in the page's language (see the blog's labels). */
+  labels: Record<string, string>;
+  listing: { href: string; title: string };
+  rss?: string;
+  /** This page's posts. */
+  posts: BlogCard[];
+  /** Posts marked featured (or the newest, when none is), newest first. */
+  featured: BlogCard[];
+  /** Hrefs of the posts the view already features on this page; a list leaves them out. */
+  shown?: string[];
+  page?: BlogPageInfo;
+  /** Every tag and category with its count, for navigation. */
+  terms: { tags: BlogTerm[]; categories: BlogTerm[] };
+  /** The term this page filters by, on a tag or category page. */
+  term?: BlogTerm & { kind: 'tags' | 'categories' };
+  author?: {
+    name: string;
+    role?: string;
+    bio?: string;
+    avatar?: { src: string; alt?: string };
+    links: { label: string; href: string }[];
+    count: number;
+  };
+}
+
+/** The blog context of this request, or undefined outside a blog page. */
+export function blogContext(locals: unknown): BlogContext | undefined {
+  return (locals as { parche?: { blog?: BlogContext } } | undefined)?.parche?.blog;
+}

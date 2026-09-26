@@ -1,8 +1,8 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
-import { postSchema, authorSchema, taxonomySchema, seriesSchema } from './schemas.js';
+import { postSchema, authorSchema, taxonomySchema, seriesSchema, viewSchema } from './schemas.js';
 
-export { postSchema, authorSchema, taxonomySchema, taxonomyTermSchema, seriesSchema } from './schemas.js';
+export { postSchema, authorSchema, taxonomySchema, taxonomyTermSchema, seriesSchema, viewSchema } from './schemas.js';
 export type { PostEntry, AuthorEntry, TaxonomyEntry, TaxonomyTerm, SeriesEntry } from './schemas.js';
 
 /**
@@ -23,6 +23,7 @@ export function createBlogCollections(options?: {
   authorsBase?: string;
   taxonomiesBase?: string;
   seriesBase?: string;
+  viewsBase?: string;
 }) {
   return {
     posts: defineCollection({
@@ -55,6 +56,14 @@ export function createBlogCollections(options?: {
         base: options?.seriesBase ?? './src/content/series',
       }),
       schema: options?.seriesSchema ?? seriesSchema,
+    }),
+    // The site's own blog views (blog-index.json…), over the preset's. Optional.
+    views: defineCollection({
+      loader: glob({
+        pattern: '**/*.{json,yaml,yml}',
+        base: options?.viewsBase ?? './src/content/views',
+      }),
+      schema: viewSchema,
     }),
   };
 }

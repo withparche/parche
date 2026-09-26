@@ -1,0 +1,104 @@
+---
+/**
+ * The posts of a blog page. In a blog view it reads the page's posts from the
+ * route (see lib/blog-context.ts); given `posts`, it shows those. The layout
+ * decides what a post shows unless a toggle says otherwise, and bylines never
+ * appear on a blog with one writer.
+ */
+import Avatar from 'parche:elements/Avatar';
+import Placeholder from 'parche:elements/Placeholder';
+import { blogContext, type BlogCard } from '../../lib/blog-context';
+import { schema, type Props } from './PostList.props';
+
+const p = schema.parse(Astro.props) as Props;
+const ctx = blogContext(Astro.locals);
+const posts: BlogCard[] = (p.posts as BlogCard[] | undefined) ?? (ctx?.posts ?? []).filter((c) => !ctx?.shown?.includes(c.href));
+const { layout, density, columns } = p;
+
+const defaults = {
+  list: { date: true, excerpt: true, image: false, author: false, readingTime: true, category: false, tags: true },
+  cards: { date: true, excerpt: true, image: true, author: true, readingTime: true, category: true, tags: false },
+  rows: { date: true, excerpt: true, image: true, author: true, readingTime: true, category: true, tags: false },
+  compact: { date: true, excerpt: false, image: false, author: false, readingTime: false, category: false, tags: false },
+}[layout];
+const show = Object.fromEntries(Object.entries(defaults).map(([k, v]) => [k, (p as any)[k] ?? v])) as typeof defaults;
+if (ctx?.authors === 'one') show.author = false;
+// On a category's own page every post is in it: the eyebrow would only repeat the title.
+if (!p.posts && ctx?.term?.kind === 'categories') show.category = false;
+
+const empty = p.empty ?? ctx?.labels?.emptyState ?? 'No posts yet.';
+// Density is variables only: the markup is the same.
+const vars = density === 'compact' ? '--row-y:13px;--card-pad:15px;--gap:14px;--list-title:17px' : '--row-y:22px;--card-pad:22px;--gap:22px;--list-title:21px';
+const title = (c: BlogCard) => (c.issue ? `#${c.issue} · ${c.title}` : c.title);
+const seriesLabel = ctx?.labels?.seriesLabel ?? 'Series';
+---
+
+<div class="parche-post-list" data-layout={layout} data-density={density} style={vars}>
+  {posts.length === 0 ? (
+    <p class="py-10 text-muted">{empty}</p>
+  ) : layout === 'cards' ? (
+    <ul class:list={['grid list-none gap-(--gap) p-0', columns === '2' ? 'sm:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3']}>
+      {posts.map((c) => (
+        <li class="flex min-w-0 flex-col overflow-hidden rounded-lg border border-border bg-surface">
+          {show.image && (
+            <a href={c.href} tabindex="-1" aria-hidden="true" class="block">
+              {c.image ? <img src={c.image.src} alt="" loading="lazy" class="aspect-[16/10] w-full object-cover" /> : <Placeholder ratio="16/10" class="rounded-none" />}
+            </a>
+          )}
+          <div class="flex flex-1 flex-col p-(--card-pad)">
+            {show.category && c.category && <a href={c.category.href} class="mb-2.5 w-fit font-mono text-[10px] leading-none font-medium tracking-[0.16em] text-primary uppercase no-underline hover:underline">{c.category.name}</a>}
+            <h3 class="mb-2 font-heading text-[clamp(16px,1.4vw,18px)] leading-[1.3] font-semibold tracking-[-0.01em] text-balance text-heading"><a href={c.href} class="text-inherit no-underline hover:underline">{title(c)}</a></h3>
+            {show.excerpt && c.excerpt && <p class="mb-4 text-sm leading-[1.55] text-pretty text-muted">{c.excerpt}</p>}
+            <p class="mt-auto flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted">
+              {show.author && c.authors[0] && (
+                <span class="flex items-center gap-2 font-medium text-heading">
+                  <Avatar size="xs" name={c.authors[0].name} src={c.authors[0].avatar?.src} />
+                  {c.authors[0].href ? <a href={c.authors[0].href} class="text-inherit no-underline hover:underline">{c.authors[0].name}</a> : c.authors[0].name}
+                </span>
+              )}
+              {show.date && <time datetime={c.date}>{c.dateText}</time>}
+              {show.readingTime && c.readingTime && <span>· {c.readingTime}</span>}
+            </p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <ul class="list-none border-b border-border p-0">
+      {posts.map((c) => (
+        <li
+          class:list={[
+            'grid gap-x-8 gap-y-1 border-t border-border py-(--row-y)',
+            layout === 'list' && show.date && 'sm:grid-cols-[140px_minmax(0,1fr)]',
+            layout === 'rows' && show.image && 'grid-cols-[minmax(0,1fr)_96px] sm:grid-cols-[minmax(0,1fr)_120px]',
+            layout === 'compact' && 'grid-cols-[minmax(0,1fr)_auto] items-baseline',
+          ]}
+        >
+          {layout === 'list' && show.date && <time datetime={c.date} class="pt-1 font-mono text-xs text-muted">{c.dateText}</time>}
+          <div class="min-w-0 max-w-[68ch]">
+            {layout === 'rows' && show.category && c.category && <a href={c.category.href} class="mb-1.5 inline-block font-mono text-[10px] leading-none font-medium tracking-[0.16em] text-primary uppercase no-underline hover:underline">{c.category.name}</a>}
+            <h3 class:list={['font-heading leading-[1.3] font-semibold tracking-[-0.01em] text-balance text-heading', layout === 'compact' ? 'text-base' : 'text-(length:--list-title)']}>
+              <a href={c.href} class="text-inherit no-underline hover:underline">{title(c)}</a>
+            </h3>
+            {show.excerpt && c.excerpt && <p class="mt-1.5 text-[15px] leading-[1.6] text-pretty text-muted">{c.excerpt}</p>}
+            {layout !== 'compact' && (
+              <p class="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted">
+                {show.author && c.authors[0] && (c.authors[0].href ? <a href={c.authors[0].href} class="font-semibold text-heading no-underline hover:underline">{c.authors[0].name}</a> : <span class="font-semibold text-heading">{c.authors[0].name}</span>)}
+                {layout === 'rows' && show.date && <time datetime={c.date}>{c.dateText}</time>}
+                {show.readingTime && c.readingTime && <span>{layout === 'rows' ? '· ' : ''}{c.readingTime}</span>}
+                {c.series && <span class="rounded-full border border-primary/40 px-2 py-0.5 text-primary">{seriesLabel}</span>}
+                {show.tags && c.tags.map((t) => <a href={t.href} class="font-mono text-muted no-underline hover:text-primary">#{t.name}</a>)}
+              </p>
+            )}
+          </div>
+          {layout === 'rows' && show.image && (
+            <a href={c.href} tabindex="-1" aria-hidden="true" class="row-span-full block self-start">
+              {c.image ? <img src={c.image.src} alt="" loading="lazy" class="aspect-square w-full rounded-md object-cover" /> : <Placeholder ratio="1/1" />}
+            </a>
+          )}
+          {layout === 'compact' && show.date && <time datetime={c.date} class="font-mono text-xs whitespace-nowrap text-muted">{c.dateText}</time>}
+        </li>
+      ))}
+    </ul>
+  )}
+</div>

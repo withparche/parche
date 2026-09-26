@@ -1,30 +1,31 @@
 ---
 /**
- * Blog pagination — the adapter between the blog routes' props
- * (`currentPage`, `totalPages`, `baseUrl`, `prevText`, `nextText`) and the
- * Pagination element. Keeps the v1 look: previous/next only, no numbers.
+ * Pages of a blog list: newer, the numbers, older, and "Page 1 of 7 · 38
+ * posts". In a blog view it reads the page from the route; a route may still
+ * pass `currentPage`, `totalPages` and `baseUrl` itself. Every page is a real
+ * link, so a crawler and a reader without script get all of them.
  */
 import Pagination from 'parche:elements/Pagination';
+import { blogContext } from '../../lib/blog-context';
+import { schema, type Props } from './Pagination.props';
 
-interface Props {
-  currentPage: number;
-  totalPages: number;
-  baseUrl: string;
-  prevText?: string;
-  nextText?: string;
-  class?: string;
-}
-
-const {
-  currentPage,
-  totalPages,
-  baseUrl,
-  prevText = 'Newer posts',
-  nextText = 'Older posts',
-  class: className = '',
-} = Astro.props;
+const p = schema.parse(Astro.props) as Props;
+const ctx = blogContext(Astro.locals);
+const current = p.currentPage ?? ctx?.page?.current ?? 1;
+const total = p.totalPages ?? ctx?.page?.last ?? 1;
+const base = p.baseUrl ?? ctx?.page?.hrefs[0] ?? ctx?.listing.href ?? '/blog';
+const labels = ctx?.labels ?? {};
+const prev = p.prevText ?? labels.newerPosts ?? 'Newer posts';
+const next = p.nextText ?? labels.olderPosts ?? 'Older posts';
+const count = ctx?.page?.total;
+const summary = p.summary && ctx?.page
+  ? (labels.pageSummary ?? 'Page {current} of {last} · {total} posts').replace('{current}', String(current)).replace('{last}', String(total)).replace('{total}', String(count))
+  : undefined;
 ---
 
-{totalPages > 1 && (
-  <Pagination current={currentPage} total={totalPages} base={baseUrl} numbers={false} prevLabel={prevText} nextLabel={nextText} class={className} />
+{total > 1 && (
+  <div class:list={['parche-blog-pagination flex flex-wrap items-center justify-between gap-4', p.class]}>
+    <Pagination current={current} total={total} base={base} numbers={p.numbers} window={1} prevLabel={prev} nextLabel={next} />
+    {summary && <p class="font-mono text-xs text-muted">{summary}</p>}
+  </div>
 )}

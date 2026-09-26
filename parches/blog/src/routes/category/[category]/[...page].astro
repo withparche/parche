@@ -3,27 +3,17 @@
  * Posts filtered by category, with pagination.
  * Works in both static and SSR modes.
  */
-import 'parche:config/styles';
-import BaseLayout from 'parche:layouts/BaseLayout';
-import LayoutRenderer from 'parche:LayoutRenderer';
-import { showPanel } from 'parche:config/themes';
-import ThemePanel from 'parche:components/ThemePanel';
-import BlogList from 'parche:widgets/blog/BlogList';
-import Breadcrumbs from 'parche:widgets/blog/Breadcrumbs';
+import BlogPage from '../../../components/BlogPage.astro';
+import { baseContext, toCards, toPage } from '../../../utils/context.js';
 import config from 'parche:config';
 import blogConfig from 'parche:app/blog';
 import { queryPostsByCategory, queryAllCategories } from '../../../utils/blog-query.js';
-import { calculateReadingTime } from '../../../utils/reading-time.js';
-import { resolvePostPermalink, resolveTaxonomyPermalink, localizePath } from '../../../types.js';
-import { resolveLayout } from 'parche:utils/layout';
+import { resolveTaxonomyPermalink } from '../../../types.js';
 import { defaultLocale, locales } from 'parche:config/i18n';
 import { localizeSiteConfig } from 'parche:utils/site';
 import { getRouteAlternates, toAbsolute } from '../../../utils/alternates.js';
-import { resolveTerm, resolveSlug, createTaxonomyResolver } from '../../../utils/taxonomy.js';
-import { resolveAssets } from 'parche:utils/assets';
+import { resolveTerm, resolveSlug } from '../../../utils/taxonomy.js';
 import { resolveLabels, format } from '../../../labels.js';
-import Container from 'parche:elements/Container';
-import Section from 'parche:elements/Section';
 
 const cfg = blogConfig as any;
 const permalinks = cfg.permalinks;
@@ -65,7 +55,6 @@ const { category } = Astro.params;
 const isDev = import.meta.env.DEV;
 const showDrafts = isDev && cfg.showDraftsInDev;
 const pageNum = parseInt(Astro.params.page ?? '') || 1;
-const tax = await createTaxonomyResolver(locale);
 const knownCategories = [...(await queryAllCategories(locale, showDrafts)).keys()];
 const term = await resolveSlug('categories', category!, locale, knownCategories);
 if (!term) {
@@ -106,77 +95,23 @@ const alternates = toAbsolute(
   }),
   Astro.site,
 );
-Astro.locals.parche = { ...(Astro.locals.parche ?? {}), locale, alternates };
 
-const layoutSections = await resolveLayout('default', locale, defaultLocale);
-
-const posts = await resolveAssets(page.data.map((post: any) => {
-  const rt = cfg.readingTime
-    ? calculateReadingTime(post.body ?? '', cfg.wordsPerMinute)
-    : null;
-  return {
-    title: post.data.title,
-    description: post.data.description ?? post.data.excerpt,
-    href: resolvePostPermalink(permalinks.post, post, locale, defaultLocale),
-    image: post.data.image,
-    publishDate: post.data.publishDate,
-    category: post.data.category,
-    tags: post.data.tags,
-    readingTime: post.data.readingTime ?? rt?.minutes,
-    categoryHref: post.data.category
-      ? resolveTaxonomyPermalink(permalinks.category, tax.slugFor('categories', post.data.category), locale, defaultLocale)
-      : undefined,
-    tagHrefs: post.data.tags?.map((t: string) =>
-      resolveTaxonomyPermalink(permalinks.tag, tax.slugFor('tags', t), locale, defaultLocale)),
-  };
-}));
-
-const displayCategory = term.title;
+const opts = { cfg, locale, defaultLocale, showDrafts };
+const context = {
+  ...(await baseContext('taxonomy', opts)),
+  posts: await toCards(page.data, opts),
+  page: toPage(page, categoryBaseUrl),
+  term: { kind: 'categories' as const, name: term.title, href: categoryBaseUrl, count: page.total, ...(term.description ? { description: term.description } : {}) },
+};
 
 const metadata = {
-  title: `${format(labels.categoryTitle, { value: displayCategory })} — ${site.brand.name}`,
-  description: term.description ?? format(labels.categoryDescription, { value: displayCategory }),
+  title: `${format(labels.categoryTitle, { value: term.title })}${pageNum > 1 ? ` · ${pageNum}` : ''} — ${site.brand.name}`,
+  description: term.description ?? format(labels.categoryDescription, { value: term.title }),
   noindex: false,
   nofollow: false,
   ogType: 'website' as const,
   twitterCard: 'summary_large_image' as const,
 };
-
-const breadcrumbs = [
-  { label: labels.home, href: localizePath('/', locale, defaultLocale) },
-  { label: labels.blog, href: localizePath(permalinks.listing, locale, defaultLocale) },
-  { label: displayCategory },
-];
 ---
 
-<BaseLayout metadata={metadata} config={site} lang={locale}>
-  {alternates.length > 1 && (
-    <Fragment slot="head">
-      {alternates.map((alt) => (
-        <link rel="alternate" hreflang={alt.locale} href={alt.href} />
-      ))}
-      <link rel="alternate" hreflang="x-default" href={alternates.find((a) => a.locale === defaultLocale)?.href} />
-    </Fragment>
-  )}
-  <LayoutRenderer layoutSections={layoutSections}>
-    <Section class="!py-4">
-      <Container class="max-w-6xl">
-        <Breadcrumbs items={breadcrumbs} />
-      </Container>
-    </Section>
-
-    <BlogList
-      title={displayCategory}
-      posts={posts}
-      currentPage={page.currentPage}
-      totalPages={page.lastPage}
-      baseUrl={categoryBaseUrl}
-      emptyText={labels.emptyState}
-      readingTimeText={labels.readingTime}
-      dateFormat={cfg.dateFormat}
-      prevText={labels.newerPosts}
-      nextText={labels.olderPosts}
-    />
-  </LayoutRenderer>
-  {showPanel && <ThemePanel />}
-</BaseLayout>
+<BlogPage view="taxonomy" {context} {metadata} {site} {locale} {defaultLocale} {alternates} />

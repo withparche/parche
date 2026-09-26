@@ -1,0 +1,49 @@
+---
+/**
+ * The heading of a blog page, as its h1. Props win; left empty, it takes the
+ * page's own: the listing title on the index, the term and its description on
+ * a tag or category page, the author's name and bio on theirs.
+ */
+import { inline } from '../../_shared/inline';
+import { blogContext } from '../../lib/blog-context';
+import { schema, type Props } from './PageHeader.props';
+
+const p = schema.parse(Astro.props) as Props;
+const ctx = blogContext(Astro.locals);
+const labels = ctx?.labels ?? {};
+const kind = ctx?.term?.kind === 'tags' ? labels.tagLabel ?? 'Tag' : ctx?.term?.kind === 'categories' ? labels.categoryLabel ?? 'Category' : ctx?.author ? labels.authorLabel ?? 'Author' : undefined;
+const title = p.title ?? (ctx?.term ? (ctx.term.kind === 'tags' ? `#${ctx.term.name}` : ctx.term.name) : ctx?.author?.name ?? ctx?.listing.title);
+const subtitle = p.subtitle ?? ctx?.term?.description ?? ctx?.author?.bio;
+const tagline = p.tagline;
+const center = p.align === 'center';
+// On a term or author page: a trail back to the listing, and how many posts it holds.
+const trail = !p.tagline && kind && ctx ? { href: ctx.listing.href, title: ctx.listing.title, kind } : undefined;
+const count = trail && ctx?.page ? (labels.postsCount ?? '{count} posts').replace('{count}', String(ctx.page.total)) : undefined;
+---
+
+<header class:list={['parche-blog-header', center && 'mx-auto text-center']}>
+  {tagline && <p class="mb-3 font-mono text-[10px] leading-none font-medium tracking-[0.16em] text-primary uppercase" set:html={inline(tagline)} />}
+  {trail && (
+    <nav aria-label="Breadcrumb" class="mb-5 text-sm text-muted">
+      <a href={trail.href} class="text-inherit no-underline hover:text-primary">{trail.title}</a>
+      <span aria-hidden="true" class="mx-2">/</span>
+      <span aria-current="page">{trail.kind}</span>
+    </nav>
+  )}
+  {title && (
+    <h1
+      class:list={[
+        'font-heading font-semibold text-balance text-heading',
+        p.size === 'lg' ? 'text-[clamp(40px,6.2vw,74px)] leading-none tracking-[-0.035em]' : 'text-[clamp(32px,4.4vw,52px)] leading-[1.05] tracking-[-0.03em]',
+        center ? 'mx-auto max-w-[18ch]' : 'max-w-[20ch]',
+      ]}
+      set:html={inline(title)}
+    />
+  )}
+  {(subtitle || count) && (
+    <div class:list={['mt-5 flex flex-wrap items-end justify-between gap-x-8 gap-y-3', center && 'justify-center']}>
+      {subtitle && <p class:list={['text-[clamp(17px,1.7vw,20px)] leading-[1.6] text-pretty text-muted', center ? 'mx-auto max-w-[46ch]' : 'max-w-[56ch]']} set:html={inline(subtitle)} />}
+      {count && <p class="font-mono text-xs text-muted">{count}</p>}
+    </div>
+  )}
+</header>

@@ -55,6 +55,24 @@ export interface BlogLabels {
 
   /** RSS feed title suffix. */
   rssFeed: string;
+  /** Beside the pagination. Placeholders: {current}, {last}, {total}. */
+  pageSummary: string;
+  /** Eyebrows over a tag, category or author page's title. */
+  tagLabel: string;
+  categoryLabel: string;
+  authorLabel: string;
+  /** The word before a row of topics, and the chip back to everything. */
+  tagsLabel: string;
+  categoriesLabel: string;
+  allLabel: string;
+  /** Over the featured post. */
+  featuredLabel: string;
+  /** A magazine's word for its categories. */
+  sectionsLabel: string;
+  /** A newsletter's featured post. */
+  latestIssueLabel: string;
+  /** How many posts a tag, category or author has. Placeholder: {count}. */
+  postsCount: string;
 }
 
 /** English defaults — the strings that were hardcoded across routes and widgets. */
@@ -88,6 +106,17 @@ export const DEFAULT_LABELS: BlogLabels = {
   next: 'Next',
 
   rssFeed: 'RSS Feed',
+  pageSummary: 'Page {current} of {last} · {total} posts',
+  tagLabel: 'Tag',
+  categoryLabel: 'Category',
+  authorLabel: 'Author',
+  tagsLabel: 'Tags',
+  categoriesLabel: 'Categories',
+  allLabel: 'All',
+  featuredLabel: 'Featured',
+  sectionsLabel: 'Sections',
+  latestIssueLabel: 'Latest issue',
+  postsCount: '{count} posts',
 };
 
 /** Per-locale overrides, e.g. `{ es: { listingTitle: 'Blog' } }`. */

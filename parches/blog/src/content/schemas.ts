@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { metadataSchema } from '@parche/astro/content';
+import { metadataSchema, nodeSchema } from '@parche/astro/content';
 
 /**
  * Schema for blog post entries.
@@ -143,6 +143,16 @@ export const seriesSchema = z.object({
   upcoming: z
     .array(z.object({ title: z.string(), date: z.coerce.date().optional(), note: z.string().optional() }))
     .default([]),
+});
+
+/**
+ * A blog view: the widgets of one blog page type (`blog-index`,
+ * `blog-taxonomy`, `blog-author`…), overriding the preset's. The same shape
+ * as a page's body.
+ */
+export const viewSchema = z.object({
+  sections: z.array(nodeSchema),
+  wrapper: z.union([z.literal(false), z.object({ widget: z.string().optional(), props: z.record(z.string(), z.unknown()).optional() })]).optional(),
 });
 
 export type PostEntry = z.infer<typeof postSchema>;

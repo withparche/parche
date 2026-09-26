@@ -100,8 +100,14 @@ export default function createBlog(config?: BlogConfig): ParcheManifest {
     requires: {
       elements: ['Container', 'Section'],
       widgets: [
-        'blog/AuthorCard',
-        'blog/BlogList',
+        // The widgets of the preset views.
+        'Section',
+        'blog/PageHeader',
+        'blog/Featured',
+        'blog/TaxonomyNav',
+        'blog/PostList',
+        'blog/Pagination',
+        // The post template.
         'blog/BlogPostHeader',
         'blog/Breadcrumbs',
         'blog/RelatedPosts',

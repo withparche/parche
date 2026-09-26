@@ -1,0 +1,61 @@
+---
+/**
+ * A blog page: the site's layout around the view for this page type, with the
+ * route's data in the blog context for the view's widgets (see ui's
+ * lib/blog-context.ts). The view is rendered like a page's body: the layout's
+ * outlet wraps its items, and the tree is validated like any other.
+ */
+import 'parche:config/styles';
+import BaseLayout from 'parche:layouts/BaseLayout';
+import LayoutRenderer from 'parche:LayoutRenderer';
+import ThemePanel from 'parche:components/ThemePanel';
+import { showPanel } from 'parche:config/themes';
+import { resolveLayout } from 'parche:utils/layout';
+import { resolveView } from '../utils/views.js';
+
+interface Props {
+  view: string;
+  context: { preset: string; labels: Record<string, string> } & Record<string, unknown>;
+  metadata: any;
+  site: any;
+  locale: string;
+  defaultLocale: string;
+  alternates: { locale: string; href: string }[];
+  layout?: string;
+}
+
+const { view, context, metadata, site, locale, defaultLocale, alternates, layout = 'default' } = Astro.props;
+const layoutSections = await resolveLayout(layout, locale, defaultLocale);
+const tree = await resolveView(view, { locale, preset: context.preset, labels: context.labels });
+
+// A post the view already features on the first page is not listed again
+// under it: the view says how many it features (one, or a lead and three).
+const featuring = (nodes: any[]): number => {
+  for (const n of nodes ?? []) {
+    if (n?.widget === 'blog/Featured' && !n.props?.posts) return n.props?.layout === 'lead' ? 4 : 1;
+    for (const kids of Object.values(n?.slots ?? {})) {
+      const found = featuring(kids as any[]);
+      if (found) return found;
+    }
+  }
+  return 0;
+};
+const page = (context as any).page;
+const shown = (!page || page.current === 1) ? ((context as any).featured ?? []).slice(0, featuring(tree.sections)).map((c: any) => c.href) : [];
+Astro.locals.parche = { ...(Astro.locals.parche ?? {}), locale, alternates, blog: { ...context, shown } };
+---
+
+<BaseLayout metadata={metadata} config={site} lang={locale}>
+  {alternates.length > 1 && (
+    <Fragment slot="head">
+      {alternates.map((alt) => <link rel="alternate" hreflang={alt.locale} href={alt.href} />)}
+      <link rel="alternate" hreflang="x-default" href={alternates.find((a) => a.locale === defaultLocale)?.href} />
+    </Fragment>
+  )}
+  <LayoutRenderer
+    layoutSections={layoutSections}
+    pageSlots={{ default: tree.sections }}
+    pageWrappers={tree.wrapper !== undefined ? { default: tree.wrapper } : undefined}
+  />
+  {showPanel && <ThemePanel />}
+</BaseLayout>

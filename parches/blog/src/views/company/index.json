@@ -1,0 +1,35 @@
+{
+  "sections": [
+    {
+      "widget": "Section",
+      "slots": {
+        "default": [
+          {
+            "widget": "blog/PageHeader"
+          },
+          {
+            "widget": "blog/Featured",
+            "props": {
+              "layout": "one"
+            }
+          },
+          {
+            "widget": "blog/TaxonomyNav",
+            "props": {
+              "kind": "categories"
+            }
+          },
+          {
+            "widget": "blog/PostList",
+            "props": {
+              "layout": "cards"
+            }
+          },
+          {
+            "widget": "blog/Pagination"
+          }
+        ]
+      }
+    }
+  ]
+}

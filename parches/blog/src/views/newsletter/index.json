@@ -1,0 +1,39 @@
+{
+  "sections": [
+    {
+      "widget": "Section",
+      "slots": {
+        "default": [
+          {
+            "widget": "blog/PageHeader",
+            "props": {
+              "align": "center"
+            }
+          },
+          {
+            "widget": "blog/Featured",
+            "props": {
+              "layout": "one",
+              "label": { "$label": "latestIssueLabel" }
+            }
+          },
+          {
+            "widget": "blog/TaxonomyNav",
+            "props": {
+              "kind": "tags"
+            }
+          },
+          {
+            "widget": "blog/PostList",
+            "props": {
+              "layout": "list"
+            }
+          },
+          {
+            "widget": "blog/Pagination"
+          }
+        ]
+      }
+    }
+  ]
+}

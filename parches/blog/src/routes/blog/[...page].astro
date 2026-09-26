@@ -7,24 +7,15 @@
  * In SSR mode, getStaticPaths is ignored.
  * In both cases, the actual locale-filtered query happens at render time.
  */
-import 'parche:config/styles';
-import BaseLayout from 'parche:layouts/BaseLayout';
-import LayoutRenderer from 'parche:LayoutRenderer';
-import { showPanel } from 'parche:config/themes';
-import ThemePanel from 'parche:components/ThemePanel';
-import BlogList from 'parche:widgets/blog/BlogList';
 import config from 'parche:config';
 import blogConfig from 'parche:app/blog';
+import BlogPage from '../../components/BlogPage.astro';
 import { queryBlogListing } from '../../utils/blog-query.js';
-import { calculateReadingTime } from '../../utils/reading-time.js';
-import { resolvePostPermalink, resolveTaxonomyPermalink, localizePath } from '../../types.js';
-import { resolveLayout } from 'parche:utils/layout';
+import { localizePath } from '../../types.js';
 import { defaultLocale, locales } from 'parche:config/i18n';
 import { localizeSiteConfig } from 'parche:utils/site';
 import { getRouteAlternates, toAbsolute } from '../../utils/alternates.js';
-import { resolveAssets } from 'parche:utils/assets';
-import { createTaxonomyResolver } from '../../utils/taxonomy.js';
-import { resolveLabels, format } from '../../labels.js';
+import { baseContext, toCards, toPage } from '../../utils/context.js';
 
 const cfg = blogConfig as any;
 const permalinks = cfg.permalinks;
@@ -60,15 +51,9 @@ const locale = Astro.currentLocale ?? defaultLocale;
 const isDev = import.meta.env.DEV;
 const showDrafts = isDev && cfg.showDraftsInDev;
 const pageNum = parseInt(Astro.params.page ?? '') || 1;
+const baseUrl = localizePath(permalinks.listing, locale, defaultLocale);
 
-const page = await queryBlogListing({
-  locale,
-  page: pageNum,
-  pageSize: cfg.postsPerPage ?? 12,
-  showDrafts,
-  baseUrl: localizePath(permalinks.listing, locale, defaultLocale),
-});
-
+const page = await queryBlogListing({ locale, page: pageNum, pageSize: cfg.postsPerPage ?? 12, showDrafts, baseUrl });
 
 // The entrypoint is shared by /blog and /<locale>/blog, and Astro caches
 // getStaticPaths per component — so the generated path set is the union across
@@ -79,48 +64,26 @@ if (pageNum > page.lastPage) {
 }
 
 const site = localizeSiteConfig(config, locale);
-const labels = resolveLabels(cfg.labels, locale, defaultLocale);
 // Translations of this route: the listing exists under every locale that has posts.
 const alternates = toAbsolute(
   await getRouteAlternates({
     path: permalinks.listing,
     locales: locales as string[],
     defaultLocale,
-    hasContent: async (l) =>
-      (await queryBlogListing({ locale: l, page: 1, pageSize: 1, showDrafts })).total > 0,
+    hasContent: async (l) => (await queryBlogListing({ locale: l, page: 1, pageSize: 1, showDrafts })).total > 0,
   }),
   Astro.site,
 );
-Astro.locals.parche = { ...(Astro.locals.parche ?? {}), locale, alternates };
 
-const tax = await createTaxonomyResolver(locale);
-const layoutSections = await resolveLayout('default', locale, defaultLocale);
-
-const posts = await resolveAssets(page.data.map((post: any) => {
-  const rt = cfg.readingTime
-    ? calculateReadingTime(post.body ?? '', cfg.wordsPerMinute)
-    : null;
-  return {
-    title: post.data.title,
-    description: post.data.description ?? post.data.excerpt,
-    href: resolvePostPermalink(permalinks.post, post, locale, defaultLocale),
-    image: post.data.image,
-    publishDate: post.data.publishDate,
-    category: post.data.category,
-    tags: post.data.tags,
-    readingTime: post.data.readingTime ?? rt?.minutes,
-    featured: post.data.featured,
-    draft: post.data.draft,
-    categoryHref: post.data.category
-      ? resolveTaxonomyPermalink(permalinks.category, tax.slugFor('categories', post.data.category), locale, defaultLocale)
-      : undefined,
-    tagHrefs: post.data.tags?.map((t: string) =>
-      resolveTaxonomyPermalink(permalinks.tag, tax.slugFor('tags', t), locale, defaultLocale)),
-  };
-}));
+const opts = { cfg, locale, defaultLocale, showDrafts };
+const context = {
+  ...(await baseContext('index', opts)),
+  posts: await toCards(page.data, opts),
+  page: toPage(page, baseUrl),
+};
 
 const metadata = {
-  title: `${labels.listingTitle} — ${site.brand.name}`,
+  title: `${context.listing.title}${pageNum > 1 ? ` · ${pageNum}` : ''} — ${site.brand.name}`,
   description: site.brand.description,
   noindex: false,
   nofollow: false,
@@ -129,28 +92,4 @@ const metadata = {
 };
 ---
 
-<BaseLayout metadata={metadata} config={site} lang={locale}>
-  {alternates.length > 1 && (
-    <Fragment slot="head">
-      {alternates.map((alt) => (
-        <link rel="alternate" hreflang={alt.locale} href={alt.href} />
-      ))}
-      <link rel="alternate" hreflang="x-default" href={alternates.find((a) => a.locale === defaultLocale)?.href} />
-    </Fragment>
-  )}
-  <LayoutRenderer layoutSections={layoutSections}>
-    <BlogList
-      title={labels.listingTitle}
-      posts={posts}
-      currentPage={page.currentPage}
-      totalPages={page.lastPage}
-      baseUrl={localizePath(permalinks.listing, locale, defaultLocale)}
-      emptyText={labels.emptyState}
-      readingTimeText={labels.readingTime}
-      dateFormat={cfg.dateFormat}
-      prevText={labels.newerPosts}
-      nextText={labels.olderPosts}
-    />
-  </LayoutRenderer>
-  {showPanel && <ThemePanel />}
-</BaseLayout>
+<BlogPage view="index" {context} {metadata} {site} {locale} {defaultLocale} {alternates} />
