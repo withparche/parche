@@ -7,7 +7,7 @@ export const groups: Array<{ label: string; names: string[] }> = [
   { label: 'Typography', names: ['Heading', 'Eyebrow', 'Prose', 'Code', 'Kbd'] },
   { label: 'Actions', names: ['Button', 'Link'] },
   { label: 'Media', names: ['Image', 'Gallery', 'Compare', 'Avatar', 'Icon', 'Video', 'Skeleton'] },
-  { label: 'Data display', names: ['Badge', 'Tag', 'Card', 'List', 'Table', 'Filter', 'Callout', 'Countdown', 'Stat', 'Breadcrumb', 'Pagination', 'Toc', 'Share'] },
+  { label: 'Data display', names: ['Badge', 'Tag', 'Card', 'List', 'Table', 'Filter', 'Callout', 'Countdown', 'Stat', 'Breadcrumb', 'Pagination', 'LoadMore', 'Toc', 'Share'] },
   { label: 'Disclosure', names: ['Collapsible', 'Accordion', 'Tabs', 'Carousel'] },
   { label: 'Overlays', names: ['Dialog', 'Sheet', 'Popover', 'Menu', 'Tooltip', 'Toast', 'Banner', 'StickyBar'] },
   { label: 'Forms', names: ['Form', 'Calculator', 'Label', 'Field', 'Input', 'Textarea', 'Select', 'Checkbox', 'RadioGroup', 'Switch', 'Slider', 'Combobox'] },

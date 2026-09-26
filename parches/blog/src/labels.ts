@@ -73,6 +73,10 @@ export interface BlogLabels {
   latestIssueLabel: string;
   /** How many posts a tag, category or author has. Placeholder: {count}. */
   postsCount: string;
+  /** The load-more button, while it loads, and what it announces. Placeholder: {n}. */
+  loadMore: string;
+  loading: string;
+  loadedMore: string;
 }
 
 /** English defaults — the strings that were hardcoded across routes and widgets. */
@@ -117,6 +121,9 @@ export const DEFAULT_LABELS: BlogLabels = {
   sectionsLabel: 'Sections',
   latestIssueLabel: 'Latest issue',
   postsCount: '{count} posts',
+  loadMore: 'Load more',
+  loading: 'Loading…',
+  loadedMore: '{n} more loaded',
 };
 
 /** Per-locale overrides, e.g. `{ es: { listingTitle: 'Blog' } }`. */

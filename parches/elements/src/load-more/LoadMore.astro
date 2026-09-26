@@ -1,0 +1,27 @@
+---
+/**
+ * LoadMore — progressive enhancement on real pagination. The markup is a link
+ * to the next page, which works as is without script and for crawlers. The
+ * element fetches that page instead, appends its list's items to this page's
+ * list (both matched by `list`), points the link at the page after, and
+ * updates the address with replaceState, so a reload or a shared link lands
+ * where the reader is.
+ */
+import { cn, splitProps } from '@parche/elements/utils';
+import { schema } from './load-more.props';
+
+const { props: { href, list, label, loadingLabel, status }, rest, className, part } = splitProps(schema, Astro.props);
+---
+
+<parche-load-more class={cn('parche-load-more flex flex-col items-center gap-2', className)} {...rest} data-part={part} data-state="idle" list={list} loading-label={loadingLabel} status={status}>
+  <a
+    href={href}
+    data-part="link"
+    class="inline-flex items-center justify-center rounded-sm border border-border bg-surface px-6 py-3 text-sm font-semibold text-heading no-underline hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring in-data-[state=loading]:opacity-70"
+  >{label}</a>
+  <p data-part="status" class="sr-only" aria-live="polite"></p>
+</parche-load-more>
+
+<script>
+  import './load-more.element.ts';
+</script>

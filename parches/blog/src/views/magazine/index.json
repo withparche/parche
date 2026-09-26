@@ -32,7 +32,8 @@
             }
           },
           {
-            "widget": "blog/Pagination"
+            "widget": "blog/Pagination",
+            "props": { "more": true }
           }
         ]
       }

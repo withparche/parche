@@ -109,15 +109,22 @@ simply write its words.
 A post the view already features on the first page (`blog/Featured`) is not
 listed again under it.
 
+**Load more** (`blog/Pagination` with `more: true`, the magazine's default) is
+progressive enhancement on the real pages, never a replacement: the button is
+a link to `/blog/2`, a complete page a crawler follows and a reader without
+script gets. With script (the LoadMore element) it fetches that page, adds its
+posts to the list, points itself at the next one and updates the address, so
+a reload lands where the reader is. On the last page it goes away.
+
 ### The widgets
 
 | Widget | What it shows | Main props |
 |---|---|---|
 | `blog/PageHeader` | The page's h1: the blog's title, the term with a trail and its count, the author | `title`, `subtitle`, `tagline`, `align`, `size` |
-| `blog/Featured` | The post marked `featured: true`, or the newest | `layout: one \| lead`, `label` |
+| `blog/Featured` | The posts marked `featured: true`, then the newest | `layout: one \| lead`, `label` |
 | `blog/TaxonomyNav` | Tags or categories as chips, with All and the feed | `kind`, `label`, `limit`, `all`, `rss` |
 | `blog/PostList` | The page's posts | `layout: list \| cards \| rows \| compact`, `density: airy \| compact`, `columns`, and toggles `date`, `excerpt`, `image`, `author`, `readingTime`, `category`, `tags` |
-| `blog/Pagination` | Newer, numbers, older, "Page 1 of 7 · 38 posts" | `numbers`, `summary` |
+| `blog/Pagination` | Newer, numbers, older, "Page 1 of 7 · 38 posts"; or a "Load more" button | `numbers`, `summary`, `more` |
 
 Bylines never show on a blog with one writer, and a category's own page does
 not repeat the category on every card.
@@ -133,6 +140,6 @@ not repeat the category on every card.
 ## Not built yet
 
 The article view (table of contents, series box, author box, read next),
-author and series pages, archive, subscribe and search pages, "load more",
+author and series pages, archive, subscribe and search pages,
 placements for ads and other elements, consent, comments, and structured
 data per page. See the plan in the session notes; each lands in this file.

@@ -6,6 +6,7 @@
  * link, so a crawler and a reader without script get all of them.
  */
 import Pagination from 'parche:elements/Pagination';
+import LoadMore from 'parche:elements/LoadMore';
 import { blogContext } from '../../lib/blog-context';
 import { schema, type Props } from './Pagination.props';
 
@@ -23,7 +24,14 @@ const summary = p.summary && ctx?.page
   : undefined;
 ---
 
-{total > 1 && (
+{total > 1 && p.more ? (
+  current < total && (
+    <div class:list={['parche-blog-pagination flex flex-col items-center gap-3', p.class]}>
+      <LoadMore href={ctx?.page?.hrefs[current] ?? `${base}/${current + 1}`} label={labels.loadMore ?? 'Load more'} loadingLabel={labels.loading ?? 'Loading…'} status={labels.loadedMore ?? '{n} more loaded'} />
+      {summary && <p class="font-mono text-xs text-muted">{summary}</p>}
+    </div>
+  )
+) : total > 1 && (
   <div class:list={['parche-blog-pagination flex flex-wrap items-center justify-between gap-4', p.class]}>
     <Pagination current={current} total={total} base={base} numbers={p.numbers} window={1} prevLabel={prev} nextLabel={next} />
     {summary && <p class="font-mono text-xs text-muted">{summary}</p>}

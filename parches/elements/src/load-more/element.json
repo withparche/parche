@@ -1,0 +1,14 @@
+{
+  "name": "load-more",
+  "type": "element",
+  "files": [
+    { "path": "LoadMore.astro", "type": "part" },
+    { "path": "load-more.element.ts", "type": "element" },
+    { "path": "load-more.props.ts", "type": "props" },
+    { "path": "README.md", "type": "doc" },
+    { "path": "examples/basic.astro", "type": "example" }
+  ],
+  "dependencies": {},
+  "registryDependencies": [],
+  "source": null
+}

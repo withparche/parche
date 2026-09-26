@@ -130,8 +130,9 @@ export async function baseContext(view: string, o: ContextOptions) {
     labels: labels as unknown as Record<string, string>,
     listing: { href: localizePath(cfg.permalinks.listing, locale, defaultLocale), title: labels.listingTitle },
     ...(cfg.rss ? { rss: localizePath(cfg.permalinks.rss, locale, defaultLocale) } : {}),
-    // Featured: the posts marked so, or the newest when none is.
-    featured: await toCards((marked.length ? marked : all).slice(0, 4), o),
+    // Featured: the posts marked so first, then the newest, four at most (a
+    // lead story and three beside it).
+    featured: await toCards([...marked, ...all.filter((p: Post) => !p.data.featured)].slice(0, 4), o),
     terms: await toTerms(o),
   };
 }

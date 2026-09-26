@@ -66,3 +66,21 @@ test.describe('Calculator', () => {
     await expectAccessible(page);
   });
 });
+
+test.describe('LoadMore', () => {
+  test('adds the next page to the list, moves focus to it and updates the address', async ({ page }) => {
+    await page.goto('/loadmore');
+    const root = example(page, 'basic');
+    const items = root.locator('[data-load-more-list] > li');
+    await expect(items).toHaveCount(2);
+    const link = root.getByRole('link', { name: 'Load more' });
+    await expect(link).toHaveAttribute('href', '?page=2');
+    test.skip(jsDisabled(), 'without script it is a link to the next page');
+    await link.click();
+    await expect(items).toHaveCount(4);
+    await expect(page).toHaveURL(/\?page=2$/);
+    await expect(root.locator('[data-part="status"]')).toHaveText('2 more loaded');
+    await expect(items.nth(2).locator('a')).toBeFocused();
+    await expectAccessible(page);
+  });
+});

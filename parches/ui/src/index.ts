@@ -98,7 +98,7 @@ export default function createUI(): ParcheManifest {
       'blog/ToBlogLink': w('blog/ToBlogLink.astro'),
     },
     requires: {
-      elements: ['Accordion', 'Tabs', 'Command', 'Frame', 'Placeholder', 'List', 'Table', 'Callout', 'Gallery', 'Filter', 'StickyBar', 'Countdown', 'Compare', 'Calculator', 'Form', 'Select', 'RadioGroup', 'Avatar', 'Badge', 'Banner', 'Breadcrumb', 'Button', 'Card', 'Carousel', 'Checkbox', 'Collapsible', 'Container', 'Divider', 'Heading', 'Icon', 'Image', 'Input', 'Link', 'Menu', 'Pagination', 'Popover', 'Section', 'Share', 'Sheet', 'Stat', 'Tag', 'Textarea', 'Toc'],
+      elements: ['Accordion', 'Tabs', 'Command', 'Frame', 'Placeholder', 'List', 'Table', 'Callout', 'Gallery', 'Filter', 'StickyBar', 'Countdown', 'Compare', 'Calculator', 'LoadMore', 'Form', 'Select', 'RadioGroup', 'Avatar', 'Badge', 'Banner', 'Breadcrumb', 'Button', 'Card', 'Carousel', 'Checkbox', 'Collapsible', 'Container', 'Divider', 'Heading', 'Icon', 'Image', 'Input', 'Link', 'Menu', 'Pagination', 'Popover', 'Section', 'Share', 'Sheet', 'Stat', 'Tag', 'Textarea', 'Toc'],
     },
   };
 }

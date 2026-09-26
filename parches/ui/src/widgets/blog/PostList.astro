@@ -37,7 +37,7 @@ const seriesLabel = ctx?.labels?.seriesLabel ?? 'Series';
   {posts.length === 0 ? (
     <p class="py-10 text-muted">{empty}</p>
   ) : layout === 'cards' ? (
-    <ul class:list={['grid list-none gap-(--gap) p-0', columns === '2' ? 'sm:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3']}>
+    <ul data-load-more-list class:list={['grid list-none gap-(--gap) p-0', columns === '2' ? 'sm:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3']}>
       {posts.map((c) => (
         <li class="flex min-w-0 flex-col overflow-hidden rounded-lg border border-border bg-surface">
           {show.image && (
@@ -64,7 +64,7 @@ const seriesLabel = ctx?.labels?.seriesLabel ?? 'Series';
       ))}
     </ul>
   ) : (
-    <ul class="list-none border-b border-border p-0">
+    <ul data-load-more-list class="list-none border-b border-border p-0">
       {posts.map((c) => (
         <li
           class:list={[
@@ -92,7 +92,7 @@ const seriesLabel = ctx?.labels?.seriesLabel ?? 'Series';
             )}
           </div>
           {layout === 'rows' && show.image && (
-            <a href={c.href} tabindex="-1" aria-hidden="true" class="row-span-full block self-start">
+            <a href={c.href} tabindex="-1" aria-hidden="true" class="col-start-2 row-span-full row-start-1 block self-start">
               {c.image ? <img src={c.image.src} alt="" loading="lazy" class="aspect-square w-full rounded-md object-cover" /> : <Placeholder ratio="1/1" />}
             </a>
           )}
