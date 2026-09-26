@@ -1,0 +1,46 @@
+/* Toc: what utilities cannot express — the height cap and its faded edges,
+   the collapsing groups and the indicator's motion. Without the element the
+   list is capped and scrolls; everything open, no indicator. */
+.parche-toc-viewport {
+  max-height: var(--ds-comp-toc-max-height, min(22rem, 50vh));
+  scrollbar-width: thin;
+}
+.parche-toc-viewport[data-fade='top'] {
+  mask-image: linear-gradient(to bottom, transparent, #000 2.5rem);
+}
+.parche-toc-viewport[data-fade='bottom'] {
+  mask-image: linear-gradient(to top, transparent, #000 2.5rem);
+}
+.parche-toc-viewport[data-fade='both'] {
+  mask-image: linear-gradient(to bottom, transparent, #000 2.5rem, #000 calc(100% - 2.5rem), transparent);
+}
+
+/* A group folds its rows to zero; its links stay in the DOM (inert while
+   closed) so opening it is a transition, not a render. */
+.parche-toc-group {
+  display: grid;
+  grid-template-rows: 1fr;
+}
+.parche-toc-group > ul {
+  min-height: 0;
+  overflow: hidden;
+}
+.parche-toc-group[data-state='closed'] {
+  grid-template-rows: 0fr;
+}
+
+.parche-toc-indicator {
+  opacity: 0;
+}
+.parche-toc-indicator[data-shown] {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .parche-toc-group {
+    transition: grid-template-rows 0.2s ease;
+  }
+  .parche-toc-indicator[data-ready] {
+    transition: transform 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+  }
+}

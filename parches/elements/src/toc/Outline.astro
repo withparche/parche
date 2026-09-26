@@ -1,0 +1,18 @@
+---
+// The capped box the links scroll in, the track they sit on and the
+// indicator that runs along it. Shared by both layouts.
+import Items from './Items.astro';
+import type { TocItem } from './toc.props';
+
+interface Props {
+  items: TocItem[];
+}
+const { items } = Astro.props;
+---
+
+<div class="parche-toc-viewport overflow-y-auto overscroll-contain" data-part="viewport">
+  <div class="parche-toc-track relative" data-part="track">
+    <Items items={items} depth={0} />
+    <span class="parche-toc-indicator pointer-events-none absolute left-0 top-0 w-0.5 rounded-full bg-primary" data-part="indicator" aria-hidden="true"></span>
+  </div>
+</div>

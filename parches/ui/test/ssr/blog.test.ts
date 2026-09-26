@@ -14,7 +14,6 @@ import ArticleBody from '../../src/widgets/blog/ArticleBody.astro';
 import SeriesBox from '../../src/widgets/blog/SeriesBox.astro';
 import AuthorBox from '../../src/widgets/blog/AuthorBox.astro';
 import ReadNext from '../../src/widgets/blog/ReadNext.astro';
-import TOC from '../../src/widgets/blog/TOC.astro';
 import SeriesParts from '../../src/widgets/blog/SeriesParts.astro';
 import AuthorProfile from '../../src/widgets/blog/AuthorProfile.astro';
 import Writers from '../../src/widgets/blog/Writers.astro';
@@ -144,11 +143,12 @@ test('ArticleHeader: the title as h1, the lead, a byline only for a blog with se
 });
 
 test('ArticleBody renders the body, and a sidebar only when one is filled', async () => {
-  const bare = await render(ArticleBody, {}, post());
+  const noToc = { toc: [] };
+  const bare = await render(ArticleBody, {}, post(noToc));
   expect(bare).toContain('<p>First paragraph.</p>');
   expect(bare).not.toContain('<aside');
-  expect(await render(ArticleBody, {}, post(), { aside: '  <!-- nothing -->  ' })).not.toContain('<aside');
-  const withAside = await render(ArticleBody, {}, post(), { aside: '<nav>toc</nav>' });
+  expect(await render(ArticleBody, {}, post(noToc), { aside: '  <!-- nothing -->  ' })).not.toContain('<aside');
+  const withAside = await render(ArticleBody, {}, post(noToc), { aside: '<nav>toc</nav>' });
   expect(withAside).toContain('<aside');
   expect(withAside).toContain('<nav>toc</nav>');
 });
@@ -178,9 +178,18 @@ test('ReadNext lists the related posts, and nothing when there are none', async 
   expect(await render(ReadNext, {}, post({ related: [] }))).not.toContain('Read next');
 });
 
-test("TOC reads the post's outline; one section is not worth a table", async () => {
-  expect(await render(TOC, {}, post())).toContain('href="#two"');
-  expect(await render(TOC, {}, post({ toc: [{ text: 'One', slug: 'one' }] }))).not.toContain('href="#one"');
+test("ArticleBody draws the table of contents from the outline: in the aside, and as a disclosure for narrow screens", async () => {
+  const html = await render(ArticleBody, {}, post());
+  expect(html.match(/<parche-toc/g)?.length).toBe(2);
+  expect(html).toMatch(/<aside[\s\S]*<parche-toc[\s\S]*href="#two"/);
+  expect(html).toMatch(/<parche-toc[^>]*class="[^"]*lg:hidden[\s\S]*<details/);
+  // One section is not worth a table, and no outline (the blog's toc off) is none.
+  expect(await render(ArticleBody, {}, post({ toc: [{ text: 'One', slug: 'one' }] }))).not.toContain('<parche-toc');
+  const off = await render(ArticleBody, {}, post({ toc: [] }));
+  expect(off).not.toContain('<parche-toc');
+  expect(off).not.toContain('<aside');
+  // What the view puts in the aside goes under the table.
+  expect(await render(ArticleBody, {}, post(), { aside: '<div>AD</div>' })).toMatch(/<parche-toc[\s\S]*<\/parche-toc>[\s\S]*<div>AD<\/div>/);
 });
 
 const series = { title: 'Variable fonts', description: 'Five essays.', status: 'ongoing' as const, published: 2, total: 3, parts: [

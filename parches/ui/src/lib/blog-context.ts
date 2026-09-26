@@ -113,7 +113,7 @@ export interface BlogArticle {
   post: BlogCard & { image?: { src: string; alt?: string; caption?: string }; modifiedText?: string };
   /** The rendered body. */
   html: string;
-  /** The body's h2 and h3, for a table of contents. */
+  /** The post's sections (h2, with their h3), empty when the blog's `toc` is off. ArticleBody draws the table from it. */
   toc: { text: string; slug: string; children?: { text: string; slug: string }[] }[];
   /** The page's absolute URL, for sharing. */
   url: string;

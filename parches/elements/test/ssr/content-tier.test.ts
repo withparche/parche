@@ -16,6 +16,20 @@ describe('Toc', () => {
     expect(html).not.toMatch(/aria-current/);
     expect(scriptCount(html)).toBe(1);
   });
+
+  it('keeps it short: a capped viewport with a track, groups open on the server, a disclosure on demand', async () => {
+    const deep = [{ text: 'A', slug: 'a', children: [{ text: 'B', slug: 'b' }] }];
+    const html = await render(Toc, { items: deep });
+    expect(html).toMatch(/data-part="viewport"/);
+    expect(html).toMatch(/data-part="indicator"[^>]*aria-hidden="true"/);
+    // Without the element every level is open: groups render open.
+    expect(html).toMatch(/data-part="group" data-state="open"/);
+    expect(html).toContain('href="#b"');
+    const disclosure = await render(Toc, { items: deep, layout: 'disclosure', title: 'Contents' });
+    expect(disclosure).toMatch(/<details[^>]*data-part="disclosure"/);
+    expect(disclosure).toMatch(/<summary[^>]*data-part="title"[^>]*>\s*Contents/);
+    expect(disclosure).not.toMatch(/<details[^>]* open/);
+  });
 });
 
 describe('Share', () => {

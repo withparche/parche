@@ -2,12 +2,42 @@
   "name": "toc",
   "type": "element",
   "files": [
-    { "path": "Toc.astro", "type": "part" },
-    { "path": "Items.astro", "type": "part" },
-    { "path": "toc.props.ts", "type": "props" },
-    { "path": "toc.element.ts", "type": "element" },
-    { "path": "README.md", "type": "doc" },
-    { "path": "examples/basic.astro", "type": "example" }
+    {
+      "path": "Toc.astro",
+      "type": "part"
+    },
+    {
+      "path": "Outline.astro",
+      "type": "part"
+    },
+    {
+      "path": "Items.astro",
+      "type": "part"
+    },
+    {
+      "path": "toc.props.ts",
+      "type": "props"
+    },
+    {
+      "path": "toc.element.ts",
+      "type": "element"
+    },
+    {
+      "path": "toc.css",
+      "type": "style"
+    },
+    {
+      "path": "README.md",
+      "type": "doc"
+    },
+    {
+      "path": "examples/basic.astro",
+      "type": "example"
+    },
+    {
+      "path": "examples/long.astro",
+      "type": "example"
+    }
   ],
   "dependencies": {},
   "registryDependencies": [],

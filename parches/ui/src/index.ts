@@ -105,7 +105,6 @@ export default function createUI(): ParcheManifest {
       'blog/Comments': w('blog/Comments.astro'),
       Consent: w('Consent.astro'),
       AdSlot: w('AdSlot.astro'),
-      'blog/TOC': w('blog/TOC.astro'),
     },
     requires: {
       elements: ['Accordion', 'Tabs', 'Command', 'Frame', 'Placeholder', 'List', 'Table', 'Callout', 'Gallery', 'Filter', 'StickyBar', 'Countdown', 'Compare', 'Calculator', 'LoadMore', 'Search', 'Consent', 'AdSlot', 'Comments', 'Form', 'Select', 'RadioGroup', 'Avatar', 'Badge', 'Banner', 'Breadcrumb', 'Button', 'Card', 'Carousel', 'Checkbox', 'Collapsible', 'Container', 'Divider', 'Heading', 'Icon', 'Image', 'Input', 'Link', 'Menu', 'Pagination', 'Popover', 'Section', 'Share', 'Sheet', 'Stat', 'Tag', 'Textarea', 'Toc'],

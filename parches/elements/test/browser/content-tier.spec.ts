@@ -17,6 +17,54 @@ test.describe('Toc', () => {
     await expect(nav.getByRole('link', { name: 'Widgets' })).not.toHaveAttribute('aria-current', 'true');
   });
 
+  test('a long one stays capped: folds, marks what is in view, scrolls itself, fades its edges', async ({ page }) => {
+    test.skip(jsDisabled());
+    await page.setViewportSize({ width: 1000, height: 700 });
+    await page.goto('/toc');
+    const toc = example(page, 'long').locator('parche-toc');
+    const viewport = toc.locator('[data-part="viewport"]');
+    const groups = toc.locator('[data-part="group"]');
+    await expect(toc).toHaveAttribute('data-upgraded', '');
+    // Capped at the 16rem the example sets, with more below it.
+    const box = await viewport.evaluate((v) => ({ height: v.clientHeight, scroll: v.scrollHeight }));
+    expect(box.height).toBeLessThanOrEqual(256);
+    expect(box.scroll).toBeGreaterThan(box.height);
+    await expect(viewport).toHaveAttribute('data-fade', 'bottom');
+    // Only the section being read shows its subsections; the others are inert.
+    await expect(groups.nth(0)).toHaveAttribute('data-state', 'open');
+    await expect(groups.nth(1)).toHaveAttribute('data-state', 'closed');
+    expect(await groups.nth(1).evaluate((g) => (g as HTMLElement).inert)).toBe(true);
+
+    // Read "Deploy": its group opens, Install's closes, the box scrolls to it.
+    await page.evaluate(() => {
+      const h = document.getElementById('ex-long-deploy')!;
+      window.scrollTo(0, h.getBoundingClientRect().top + window.scrollY - 80);
+    });
+    await expect(toc.getByRole('link', { name: 'Deploy', exact: true })).toHaveAttribute('aria-current', 'true');
+    await expect(groups.nth(7)).toHaveAttribute('data-state', 'open');
+    await expect(groups.nth(0)).toHaveAttribute('data-state', 'closed');
+    await expect.poll(() => viewport.evaluate((v) => v.scrollTop)).toBeGreaterThan(0);
+    await expect(viewport).toHaveAttribute('data-fade', /top|both/);
+    // The indicator runs over what is on screen, starting at the current link.
+    const indicator = toc.locator('[data-part="indicator"]');
+    await expect(indicator).toHaveAttribute('data-shown', '');
+    await expect
+      .poll(async () => {
+        const [i, l] = await Promise.all([indicator.boundingBox(), toc.getByRole('link', { name: 'Deploy', exact: true }).boundingBox()]);
+        return Math.abs(i!.y - l!.y) < 2 && i!.height >= l!.height - 1;
+      })
+      .toBe(true);
+  });
+
+  test('without script every level is open and the list is still capped', async ({ page }) => {
+    test.skip(!jsDisabled());
+    await page.goto('/toc');
+    const toc = example(page, 'long').locator('parche-toc');
+    await expect(toc.locator('[data-part="group"][data-state="closed"]')).toHaveCount(0);
+    await expect(toc.getByRole('link', { name: 'Why: troubleshoot' })).toBeAttached();
+    expect(await toc.locator('[data-part="viewport"]').evaluate((v) => v.clientHeight)).toBeLessThanOrEqual(256);
+  });
+
   test('links jump to their headings without script', async ({ page }) => {
     await page.goto('/toc');
     await example(page, 'basic').getByRole('link', { name: 'Swapping them' }).click();

@@ -1,0 +1,32 @@
+---
+import Toc from '../Toc.astro';
+const sections = ['Install', 'Configure', 'Pages', 'Widgets', 'Themes', 'Blog', 'Search', 'Deploy', 'Upgrade', 'Troubleshoot'];
+const subs = ['Why', 'How', 'Limits'];
+const slug = (s: string) => `ex-long-${s.toLowerCase().replace(/\s+/g, '-')}`;
+const items = sections.map((s) => ({
+  text: s,
+  slug: slug(s),
+  children: subs.map((c) => ({ text: `${c}: ${s.toLowerCase()}`, slug: slug(`${s} ${c}`) })),
+}));
+---
+
+<div class="grid gap-8 md:grid-cols-[14rem_1fr]">
+  <div class="flex flex-col gap-6 md:sticky md:top-24 md:self-start">
+    <Toc items={items} style="--ds-comp-toc-max-height: 16rem" />
+    <div class="grid h-32 place-items-center rounded-lg border border-dashed border-border text-sm text-muted">What sits under the table stays in view</div>
+  </div>
+  <div class="space-y-6 text-muted">
+    {sections.map((s) => (
+      <>
+        <h3 id={slug(s)} class="type-h3 text-heading">{s}</h3>
+        <p>Ten sections of three subsections each: the list is capped, only the section being read shows its subsections, and the box scrolls itself to keep it in view.</p>
+        {subs.map((c) => (
+          <>
+            <h4 id={slug(`${s} ${c}`)} class="font-semibold text-heading">{c}: {s.toLowerCase()}</h4>
+            <p class="min-h-40">A paragraph long enough to scroll past.</p>
+          </>
+        ))}
+      </>
+    ))}
+  </div>
+</div>

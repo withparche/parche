@@ -25,11 +25,6 @@
                 {
                   "widget": "blog/AuthorBox"
                 }
-              ],
-              "aside": [
-                {
-                  "widget": "blog/TOC"
-                }
               ]
             }
           }

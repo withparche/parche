@@ -156,7 +156,6 @@ export default function createBlog(config?: BlogConfig): ParcheManifest {
         'blog/SeriesBox',
         'blog/AuthorBox',
         'blog/ReadNext',
-        'blog/TOC',
         'blog/SeriesParts',
         'blog/AuthorProfile',
         'blog/Writers',

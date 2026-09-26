@@ -1,5 +1,7 @@
 ---
-// One level of the table of contents; recurses for children.
+// One level of the table of contents; recurses for children. Every link
+// starts at the track on the left and is indented by padding, so the
+// indicator can run past all of them.
 import type { TocItem } from './toc.props';
 
 interface Props {
@@ -7,20 +9,28 @@ interface Props {
   depth: number;
 }
 const { items, depth } = Astro.props;
+const indent = ['pl-3', 'pl-6', 'pl-9', 'pl-12', 'pl-14', 'pl-16'][depth] ?? 'pl-16';
 ---
 
-<ul class:list={['parche-toc-list space-y-1', depth > 0 && 'ml-4 mt-1']} data-part="list" data-depth={depth}>
+<ul class:list={['parche-toc-list', depth === 0 && 'border-l border-border']} data-part="list" data-depth={depth}>
   {items.map((item) => (
     <li data-part="item">
       <a
         href={`#${item.slug}`}
-        class="parche-toc-link block py-0.5 text-muted transition-colors hover:text-heading focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-[current=true]:font-medium aria-[current=true]:text-primary"
+        class:list={[
+          'parche-toc-link block py-1 leading-snug text-muted transition-colors hover:text-heading focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring data-[state=current]:text-heading data-[state=visible]:text-heading',
+          indent,
+        ]}
         data-part="link"
         data-slug={item.slug}
       >
         {item.text}
       </a>
-      {item.children && item.children.length > 0 && <Astro.self items={item.children} depth={depth + 1} />}
+      {item.children && item.children.length > 0 && (
+        <div class="parche-toc-group" data-part="group" data-state="open">
+          <Astro.self items={item.children} depth={depth + 1} />
+        </div>
+      )}
     </li>
   ))}
 </ul>

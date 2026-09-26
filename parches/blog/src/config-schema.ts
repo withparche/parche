@@ -30,6 +30,7 @@ export const blogConfigSchema = z
     showDraftsInDev: z.boolean().optional(),
     rss: z.boolean().optional(),
     series: z.boolean().optional(),
+    toc: z.boolean().optional(),
     dateFormat: z.record(z.string(), z.unknown()).optional(),
     labels: z.record(z.string(), z.record(z.string(), z.string())).optional(),
     preset: z.enum(['personal', 'company', 'magazine', 'newsletter']).optional(),

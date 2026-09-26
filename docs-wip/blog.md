@@ -47,6 +47,7 @@ the keys given. Components read the resolved values, never `preset`.
 | `aboutPath` | `'/about'` | Where a single writer's name links. |
 | `series` | from the preset | Series pages and part-of-a-series boxes. |
 | `relatedPostsCount` | from the preset | Related posts after an article; `0` turns them off. |
+| `toc` | from the preset | A table of contents on posts with two sections or more (see *The table of contents*). On for company and magazine. |
 | `postsPerPage` | `12` | Posts per listing page. |
 | `tagIndexThreshold` | `3` | Tag pages (and archive years) with fewer posts are `noindex, follow`. |
 | `archive` | `true` | The archive: the newest year by month at `/blog/archive`, earlier years at `/blog/archive/2025`. |
@@ -150,21 +151,36 @@ permalink and on a root-level one.
 { "widget": "blog/ArticleBody", "slots": {
   "before": [{ "widget": "blog/SeriesBox" }],
   "after": [{ "widget": "blog/SeriesBox", "props": { "variant": "next" } }, { "widget": "blog/AuthorBox" }],
-  "aside": [{ "widget": "blog/TOC" }]
+  "aside": [{ "widget": "AdSlot", "props": { "slot": "articleSidebar" } }]
 } }
 ```
 
 | Widget | What it shows | Main props |
 |---|---|---|
 | `blog/ArticleHeader` | Trail, h1, lead, byline (several writers only), date, reading time, copy link and share, then the image wider than the text. Nothing else before the first paragraph. | `image`, `share`, `breadcrumb` |
-| `blog/ArticleBody` | The text at a reading measure; slots `before`, `after`, and `aside`, a sticky sidebar on wide screens, only when filled | — |
+| `blog/ArticleBody` | The text at a reading measure; slots `before`, `after`, and `aside`, a sticky sidebar on wide screens under the table of contents, only when something is in it | — |
 | `blog/SeriesBox` | "Series · Part 2 of 5" and the part before; or the next part, or its date when only announced | `variant: top \| next` |
 | `blog/AuthorBox` | One writer: "Written by", bio, one next step. Several: role, post count, bio, "More from" | `action` |
-| `blog/TOC` | "On this page", marking the section in view; nothing for fewer than two sections | `title` |
 | `blog/ReadNext` | Three related posts under a rule; nothing when there are none | `title` |
 
-Personal and newsletter articles are one column; company and magazine carry
+By default personal and newsletter articles are one column; company and magazine carry
 the table of contents beside the text.
+
+#### The table of contents
+
+It is not a widget: it is the `toc` setting, and ArticleBody draws it for a
+post with two sections or more, always the same way. A view cannot move it
+or change how it works, only put things under it. On wide screens it tops
+the sticky sidebar; on narrow ones, where there is no sidebar, it is a closed
+"On this page" above the text.
+
+It lists the post's h2 and their h3, and it never grows past
+`min(22rem, 50vh)`: the list scrolls inside, its edges fade where there is
+more, and it scrolls itself to keep the section being read in view, so an ad
+or a promotion under it stays on screen. A track on its left marks every
+section with text on screen; a section's h3 open while it is read and close
+after. A theme changes the cap with `--ds-comp-toc-max-height`. Without
+JavaScript every link is there and open, capped the same way.
 
 ### Author and series pages
 
@@ -326,7 +342,7 @@ is built; a `timeZone` in `dateFormat` wins.
 - `test/blog-routes.mjs` walks the built blog sites: every internal link
   resolves, the listing, its pages, the archive, search and feed exist, the
   feed is in every head, each post has its lead, "Read next", its table of
-  contents when the preset has one, and one article and one trail in its
+  contents when the blog's `toc` is on, and one article and one trail in its
   structured data.
 - `test/blog-presets.mjs` builds `examples/blog` once per preset
   (`BLOG_PRESET=magazine`) and checks the pages each structure says exist and

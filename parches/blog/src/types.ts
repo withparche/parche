@@ -87,6 +87,13 @@ export interface BlogConfig {
   /** Build series pages and the part-of-a-series boxes. Default: from the preset. */
   series?: boolean;
   /**
+   * A table of contents on posts with two or more sections: beside the text
+   * on wide screens, a closed "On this page" above it on narrow ones. It
+   * always works the same way and never grows past its cap. Default: from
+   * the preset (on for company and magazine).
+   */
+  toc?: boolean;
+  /**
    * How post dates are rendered, as options for `Intl.DateTimeFormat`.
    *
    * Not a token template like 'MMMM d, yyyy': that would bake English word order
@@ -161,15 +168,15 @@ export type BlogPreset = 'personal' | 'company' | 'magazine' | 'newsletter';
  * many related posts are looked up); how the pages look is decided by the
  * blog's views, which each preset also ships.
  */
-export const BLOG_PRESETS: Record<BlogPreset, { authors: 'one' | 'many'; series: boolean; relatedPostsCount: number }> = {
+export const BLOG_PRESETS: Record<BlogPreset, { authors: 'one' | 'many'; series: boolean; relatedPostsCount: number; toc: boolean }> = {
   // One writer, tags, and series for long arguments told in parts.
-  personal: { authors: 'one', series: true, relatedPostsCount: 3 },
+  personal: { authors: 'one', series: true, relatedPostsCount: 3, toc: false },
   // Several writers with their own pages; categories map to the teams.
-  company: { authors: 'many', series: false, relatedPostsCount: 3 },
+  company: { authors: 'many', series: false, relatedPostsCount: 3, toc: true },
   // Sections, many writers, series for investigations.
-  magazine: { authors: 'many', series: true, relatedPostsCount: 3 },
+  magazine: { authors: 'many', series: true, relatedPostsCount: 3, toc: true },
   // One writer; every post is a numbered issue and the next one is the point.
-  newsletter: { authors: 'one', series: false, relatedPostsCount: 0 },
+  newsletter: { authors: 'one', series: false, relatedPostsCount: 0, toc: false },
 };
 
 export interface ResolvedPermalinks {
@@ -192,6 +199,7 @@ export interface ResolvedBlogConfig {
   showDraftsInDev: boolean;
   rss: boolean;
   series: boolean;
+  toc: boolean;
   dateFormat: Intl.DateTimeFormatOptions;
   labels: BlogLabelsConfig;
   preset: BlogPreset;
@@ -233,6 +241,7 @@ export function resolveBlogConfig(config?: BlogConfig): ResolvedBlogConfig {
     showDraftsInDev: config?.showDraftsInDev ?? true,
     rss: config?.rss ?? true,
     series: config?.series ?? fromPreset.series,
+    toc: config?.toc ?? fromPreset.toc,
     // The default is what the widgets already rendered, so nothing shifts until
     // a site asks it to.
     dateFormat: config?.dateFormat ?? { year: 'numeric', month: 'short', day: 'numeric' },

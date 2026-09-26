@@ -223,7 +223,7 @@ export async function articleContext(entry: Post, html: string, url: string, o: 
         ...(d.modifiedDate ? { modifiedText: formatDate(d.modifiedDate, locale, cfg.dateFormat) } : {}),
       },
       html,
-      toc: extractTOC(html)
+      toc: !cfg.toc ? [] : extractTOC(html)
         .filter((i) => i.depth === 2)
         .map((i) => ({ text: i.text, slug: i.slug, ...(i.children.length ? { children: i.children.map((c) => ({ text: c.text, slug: c.slug })) } : {}) })),
       url,

@@ -31,9 +31,6 @@
               ],
               "aside": [
                 {
-                  "widget": "blog/TOC"
-                },
-                {
                   "widget": "AdSlot",
                   "props": {
                     "slot": "articleSidebar",
