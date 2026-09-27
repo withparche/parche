@@ -284,7 +284,7 @@ export interface ParcheManifest {
   /**
    * Where the entries of a collection this parche generates pages for are
    * served: collection name → absolute path of a module whose default export
-   * is `(entry: { id, data }) => string`. Core adds that address as `href` to
+   * is `(entry: { id, data }, collection) => string`. Core adds that address as `href` to
    * each entry a `{ "$collection": … }` or `{ "$ref": … }` yields (unless the
    * entry has its own), so a list links to the pages without knowing their rule.
    */

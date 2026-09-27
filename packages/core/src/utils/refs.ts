@@ -24,7 +24,7 @@ async function load(name: string): Promise<RefEntry[] | undefined> {
     list = undefined;
   }
   const url = list ? await urlFor(name) : undefined;
-  if (list && url) list = list.map((e) => (e.data.href === undefined ? { ...e, data: { ...e.data, href: url(e) } } : e));
+  if (list && url) list = list.map((e) => (e.data.href === undefined ? { ...e, data: { ...e.data, href: url(e, name) } } : e));
   if (CACHE) loaded.set(name, list);
   return list;
 }

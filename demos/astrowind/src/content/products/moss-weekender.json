@@ -1,0 +1,25 @@
+{
+  "name": "The Moss weekender",
+  "order": 1,
+  "price": "£248",
+  "badge": "Bestseller",
+  "stock": { "label": "In stock", "state": "in" },
+  "rating": { "value": 4.9, "count": 212 },
+  "placeholder": "product shot · 800×1000",
+  "summary": "A 38-litre weekend bag in waxed cotton, with brass hardware and a leather base. Cabin size on most airlines, and built to be repaired rather than replaced.",
+  "highlights": ["Waxed cotton that darkens as it is used", "Solid brass buckles, cast in Birmingham", "Lifetime repairs, including the ones you caused"],
+  "photo": { "caption": "the Moss weekender · 1600×1200", "ratio": "4/3" },
+  "specs": [
+    { "label": "Capacity", "value": "38 litres" },
+    { "label": "Size", "value": "55 × 30 × 25 cm" },
+    { "label": "Weight", "value": "1.6 kg" },
+    { "label": "Outer", "value": "Waxed cotton, 18 oz" },
+    { "label": "Made in", "value": "West Yorkshire" }
+  ],
+  "care": [
+    { "title": "How do I clean it?", "description": "Brush off dry mud and wipe it with a damp cloth. Never wash it: the wax comes out with the dirt." },
+    { "title": "When does it need waxing again?", "description": "About once a year, or when water stops beading on it. A tin of wax comes with the bag." },
+    { "title": "What if something breaks?", "description": "Send it back, postage paid. We fix it for free for as long as we are here." }
+  ],
+  "cart": { "text": "Add to basket", "href": "/homes/store#cart" }
+}

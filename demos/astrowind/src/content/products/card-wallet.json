@@ -1,0 +1,20 @@
+{
+  "name": "Card wallet, oxblood",
+  "order": 3,
+  "price": "£48",
+  "stock": { "label": "Sold out", "state": "out" },
+  "placeholder": "product shot · 800×1000",
+  "summary": "Four cards and a few folded notes, in vegetable-tanned leather that takes the shape of what you carry. Stitched by hand, one at a time.",
+  "highlights": ["Vegetable-tanned leather from Walsall", "Hand-stitched with waxed linen thread", "Lifetime repairs"],
+  "photo": { "caption": "the card wallet · 1600×1200", "ratio": "4/3" },
+  "specs": [
+    { "label": "Holds", "value": "4 cards and notes" },
+    { "label": "Size", "value": "10 × 7.5 cm" },
+    { "label": "Leather", "value": "Oxblood, vegetable-tanned" }
+  ],
+  "care": [
+    { "title": "When is it back?", "description": "The next batch is being cut now. Leave your email and we write once, when it is in stock." },
+    { "title": "How do I look after the leather?", "description": "Nothing, mostly. If it dries out after a few years, a little neutral balm brings it back." }
+  ],
+  "restock": { "text": "Email me when it is back", "href": "/homes/store#restock" }
+}

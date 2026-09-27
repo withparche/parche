@@ -1,0 +1,52 @@
+{
+  "label": "Product page",
+  "description": "A product's page in the store: the product with its price and stock, what it is made of, and how to look after it. Each product in the products collection is shown with it.",
+  "category": "commerce",
+  "props": {
+    "type": "object",
+    "properties": {
+      "name": { "type": "string", "minLength": 1 },
+      "badge": { "type": "string" },
+      "price": { "type": "string", "minLength": 1 },
+      "stock": { "type": "object", "properties": { "label": { "type": "string" }, "state": { "type": "string", "enum": ["in", "low", "out"] } }, "required": ["label"] },
+      "summary": { "type": "string" },
+      "highlights": { "type": "array", "items": { "type": "string" } },
+      "photo": { "type": "object", "properties": { "src": { "type": "string" }, "alt": { "type": "string" }, "caption": { "type": "string" }, "ratio": { "type": "string" } } },
+      "specs": { "type": "array", "items": { "type": "object", "properties": { "label": { "type": "string" }, "value": { "type": "string" } }, "required": ["label", "value"] } },
+      "care": { "type": "array", "items": { "type": "object", "properties": { "title": { "type": "string" }, "description": { "type": "string" } } } },
+      "cart": { "type": "object", "properties": { "text": { "type": "string" }, "href": { "type": "string" } }, "required": ["text", "href"] },
+      "restock": { "type": "object", "properties": { "text": { "type": "string" }, "href": { "type": "string" } }, "required": ["text", "href"] }
+    },
+    "required": ["name", "price", "stock"]
+  },
+  "tree": [
+    {
+      "widget": "Hero",
+      "props": {
+        "layout": "split",
+        "size": "md",
+        "tagline": { "$prop": "badge" },
+        "title": { "$prop": "name" },
+        "subtitle": { "$prop": "summary" },
+        "points": { "$prop": "highlights" },
+        "actions": [{ "$prop": "cart" }, { "$prop": "restock" }],
+        "note": "60-day returns, postage paid. Lifetime repairs, including the ones you caused.",
+        "proofFirst": true,
+        "image": { "$prop": "photo" }
+      },
+      "slots": {
+        "proof": [{ "widget": "Stats", "props": { "layout": "inline", "items": [{ "value": { "$prop": "price" }, "label": { "$prop": "stock.label" } }] } }]
+      }
+    },
+    {
+      "widget": "Callout",
+      "wrapper": { "props": { "width": "md" } },
+      "props": { "label": "Details", "title": "What it is made of", "rows": { "$prop": "specs" } }
+    },
+    {
+      "widget": "FAQs",
+      "wrapper": { "props": { "width": "md", "tone": "surface" } },
+      "props": { "title": "Care and repairs", "layout": "list", "open": "all", "items": { "$prop": "care" } }
+    }
+  ]
+}

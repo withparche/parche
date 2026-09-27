@@ -42,9 +42,16 @@ async function catalog(): Promise<Omit<ValidationContext, 'collectionSchema'>> {
     if (pattern) patterns.push(pattern);
   }
   const definitions = Object.fromEntries(Object.entries(patternsFor(patterns, 'en')).map(([name, p]) => [name, { ...p, name }]));
-  // References resolve against the demo's navigation, as a page's do.
-  const navigation = walk(join(DEMO, 'navigation'), /\.json$/).map((f) => ({ id: relative(join(DEMO, 'navigation'), f).replace(/\.json$/, ''), data: json(f) }));
-  const resolve = createResolver((c) => (c === 'navigation' ? navigation : undefined), 'en');
+  // References resolve against the demo's collections (its menus, its products), as a page's do.
+  const collection = (c: string) => {
+    const dir = join(DEMO, c);
+    try {
+      return walk(dir, /\.json$/).map((f) => ({ id: relative(dir, f).replace(/\.json$/, ''), data: json(f) }));
+    } catch {
+      return undefined;
+    }
+  };
+  const resolve = createResolver(collection, 'en');
   return {
     widgetMeta,
     widgetPropSchemas,

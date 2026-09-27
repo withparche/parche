@@ -90,6 +90,7 @@ const CORE_MODULES: Record<string, string> = {
   'parche:utils/i18n': corePath('utils/i18n.ts'),
   'parche:utils/layout': corePath('utils/layout.ts'),
   'parche:utils/assets': corePath('utils/assets.ts'),
+  'parche:utils/patterns': corePath('utils/patterns.ts'),
   'parche:utils/site': corePath('utils/site.ts'),
   // Note: Header and Footer are widgets of the ui parche (hidden from the
   // palette by their meta); core ships no chrome and no elements.
@@ -125,6 +126,7 @@ const BASE_NAMED_EXPORTS: readonly string[] = [
   'parche:utils/i18n',
   'parche:utils/layout',
   'parche:utils/assets',
+  'parche:utils/patterns',
   'parche:utils/site',
 ];
 

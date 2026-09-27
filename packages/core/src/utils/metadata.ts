@@ -71,6 +71,41 @@ export function resolveMetadata(
   };
 }
 
+/**
+ * The metadata of a page an app generates (a blog post, a product), resolved
+ * the way a page's is: the author's own `metadata` first, then what the app
+ * says about the page (its type, its picture, whether to keep it out of the
+ * index), then the site's defaults (its name, its default picture, robots,
+ * the Twitter card). The app adds only its own on top: the schema.org page
+ * type and structured data. The title carries the site's name, as every
+ * page's does. `site` is the site config in the page's language.
+ */
+export interface AppPageMetadata {
+  title: string;
+  description?: string;
+  /** The author's own metadata (an entry's `metadata`): wins over everything. */
+  metadata?: Record<string, unknown>;
+  ogType?: string;
+  ogImage?: string;
+  twitterCard?: string;
+  noindex?: boolean;
+  article?: Record<string, unknown>;
+  pageType?: string;
+  jsonLd?: unknown[];
+}
+
+export function pageMetadata(site: SiteConfig, locale: string, page: AppPageMetadata): ResolvedMetadata {
+  const defined = (o: Record<string, unknown>) => Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined));
+  const meta = { ...defined({ ogType: page.ogType, ogImage: page.ogImage, twitterCard: page.twitterCard, noindex: page.noindex, article: page.article }), ...defined(page.metadata ?? {}) };
+  const resolved = resolveMetadata({ title: page.title, description: page.description, metadata: meta } as unknown as PageEntry, site, { locale });
+  return {
+    ...resolved,
+    title: `${resolved.title} — ${site.brand.name}`,
+    ...(page.pageType ? { pageType: page.pageType } : {}),
+    ...(page.jsonLd ? { jsonLd: page.jsonLd } : {}),
+  };
+}
+
 // ---------------------------------------------------------------------------
 // Robots meta content builder
 // ---------------------------------------------------------------------------

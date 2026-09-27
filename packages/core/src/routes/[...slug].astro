@@ -204,11 +204,11 @@ const pageWrappers = mode === 'page' && pageData?.wrapper !== undefined ? { defa
       <AppTemplate {...resolvedApp.templateProps}>
         {AppContent && <AppContent />}
       </AppTemplate>
-    ) : (
+    ) : AppContent ? (
       <article class="prose max-w-4xl mx-auto py-16 px-4">
-        {AppContent && <AppContent />}
+        <AppContent />
       </article>
-    )}
+    ) : null}
 
     {appExtras.sections?.length > 0 && (
       <NodeRenderer nodes={appExtras.sections} wrapper={outletWrapper(layoutSections)} />

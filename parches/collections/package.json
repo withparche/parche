@@ -1,0 +1,46 @@
+{
+  "name": "@parche/astro-collections",
+  "version": "0.7.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@parche/astro": "workspace:*"
+  },
+  "peerDependencies": {
+    "astro": "catalog:"
+  },
+  "devDependencies": {
+    "astro": "catalog:"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "description": "Parche collection pages: a page for every entry of a collection of plain data, rendered by a widget or a pattern, as a parche.",
+  "license": "MIT",
+  "author": "Arthelokyo",
+  "homepage": "https://github.com/withparche/parche#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/withparche/parche.git",
+    "directory": "parches/collections"
+  },
+  "bugs": {
+    "url": "https://github.com/withparche/parche/issues"
+  },
+  "keywords": [
+    "astro",
+    "parche",
+    "collections",
+    "content"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ]
+}

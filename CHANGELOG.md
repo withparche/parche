@@ -30,6 +30,15 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   panels can be pinned beside the preview or float over it. Private while
   on `experimental`; see `docs-wip/builder.md`.
 
+- **Pages from a collection, `@parche/astro-collections`.** A collection of
+  plain data (products, courses, places) gets a page for every entry at a
+  `path`, rendered by a widget or a pattern that takes the entry's fields as
+  props: the ones it declares by name, the others through a `props` map, the
+  rest left out. The collection keeps only its data and its own schema; the
+  page's structure is the pattern's. Entries carry their address as `href` in
+  a `$collection`, so lists link to the pages. The demo store's three products
+  are the example (`docs-wip/collections.md`).
+
 - **Patterns** (`src/content/patterns/`). A composition of widgets kept once
   and used wherever a widget goes, as `{ "widget": "pattern/<id>" }`. Without
   props it is content shared as it is (the same FAQ on several pages); with

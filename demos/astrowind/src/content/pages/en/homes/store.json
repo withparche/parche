@@ -135,62 +135,7 @@
         },
         "columns": "4",
         "ratio": "4/5",
-        "items": [
-          {
-            "name": "The Moss weekender",
-            "href": "/homes/store#shop",
-            "placeholder": "product shot · 800×1000",
-            "badge": "Bestseller",
-            "price": "£248",
-            "stock": {
-              "label": "In stock",
-              "state": "in"
-            },
-            "rating": {
-              "value": 4.9,
-              "count": 212
-            }
-          },
-          {
-            "name": "Field tote, waxed",
-            "href": "/homes/store#shop",
-            "placeholder": "product shot · 800×1000",
-            "price": "£142",
-            "stock": {
-              "label": "Only 3 left",
-              "state": "low"
-            },
-            "rating": {
-              "value": 4.8,
-              "count": 156
-            }
-          },
-          {
-            "name": "Card wallet, oxblood",
-            "href": "/homes/store#shop",
-            "placeholder": "product shot · 800×1000",
-            "price": "£48",
-            "stock": {
-              "label": "Sold out",
-              "state": "out"
-            },
-            "restock": {
-              "text": "Email me when it is back",
-              "href": "/homes/store#restock"
-            }
-          },
-          {
-            "name": "Repair kit",
-            "href": "/homes/store#shop",
-            "placeholder": "product shot · 800×1000",
-            "price": "£18",
-            "stock": {
-              "label": "In stock",
-              "state": "in"
-            },
-            "note": "Wax, thread, spare buckle"
-          }
-        ]
+        "items": { "$collection": "products", "sort": "order" }
       }
     },
     {

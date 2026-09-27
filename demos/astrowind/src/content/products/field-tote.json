@@ -1,0 +1,22 @@
+{
+  "name": "Field tote, waxed",
+  "order": 2,
+  "price": "£142",
+  "stock": { "label": "Only 3 left", "state": "low" },
+  "rating": { "value": 4.8, "count": 156 },
+  "placeholder": "product shot · 800×1000",
+  "summary": "An open tote for the market, the library and everything in between. The same waxed cotton as the weekender, with an inside pocket that closes.",
+  "highlights": ["Carries a laptop up to 15 inches", "Handles long enough for the shoulder", "Lifetime repairs"],
+  "photo": { "caption": "the field tote · 1600×1200", "ratio": "4/3" },
+  "specs": [
+    { "label": "Capacity", "value": "18 litres" },
+    { "label": "Size", "value": "42 × 36 × 14 cm" },
+    { "label": "Weight", "value": "0.7 kg" },
+    { "label": "Made in", "value": "West Yorkshire" }
+  ],
+  "care": [
+    { "title": "How do I clean it?", "description": "A damp cloth for the outside; turn it out and shake it for the inside. No washing machine." },
+    { "title": "Why only three left?", "description": "We make about nine bags a week between four people. The next batch of totes is due in three weeks." }
+  ],
+  "cart": { "text": "Add to basket", "href": "/homes/store#cart" }
+}
