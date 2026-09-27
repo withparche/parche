@@ -40,7 +40,7 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   itself is reported and not rendered. Export the `patterns` collection from
   `createCollections()`.
 
-- **The node model** (`ba3e5b1`, `b831257`, `e4b5c11`, `7a0115d`). A page, a
+- **The node model** (`ba3e5b1`, `b831257`, `a83328d`, `7a0115d`). A page, a
   layout and a pattern are one shape, a tree of nodes `{ widget, props,
   slots, wrapper, notes, id }`. A widget that declares slots in its
   `.props.ts` takes nodes by slot name into its Astro slots; `*` accepts any
@@ -83,15 +83,15 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   styles, radii, shadows and the conf knobs.
 
 - **New elements** (`0f136c9`, `bc6c5c4`, `ec5d94d`, `f9657a1`, `b74593a`,
-  `3a37a6e`, `25831cb`, `d55bdc5`, `24a14a4`, `a54e553`, `1d7d56d`,
-  `0943e7e`): Command, Frame, Placeholder, List, Table, Callout, Form (in-place
+  `3a37a6e`, `48a621c`, `4857705`, `1f758b2`, `766d362`, `4eb610a`,
+  `a95d21b`): Command, Frame, Placeholder, List, Table, Callout, Form (in-place
   validation and sending states on a real form), Gallery (a lightbox over
   links), Filter, Calculator, Countdown, Compare, StickyBar, LoadMore, Search
   (Pagefind), Consent, AdSlot and Comments (giscus, after consent). Each works
   without script in a documented form.
 
 - **New and reworked ui widgets** (`1aec631`, `749beac`, `4187629`, `b16f0c6`,
-  `d85e0b3`, `a42a266`, `158d258`, `d55bdc5`, `b34e5e2`, `f9d4d8b`). One Hero
+  `d85e0b3`, `63c5077`, `d7deaa6`, `4857705`, `d4a130e`, `54d3936`). One Hero
   (center, split, text, side, overlay layouts; media and proof slots), one
   Features (grid, cards, list, panels, tiles, rows, gallery), one Steps
   (timeline, grid, numbered, rows, columns), CallToAction layouts, Pricing
@@ -104,7 +104,7 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   align) and one vocabulary (`items`, `actions`, `link`, `layout`), and
   short texts read inline Markdown (`501784e`).
 
-- **Images on their best path** (`12f3125`). The Image element sends each
+- **Images on their best path** (`e342e6e`). The Image element sends each
   picture through Astro's image service when local, as a srcset of an image
   CDN's URLs when remote on one (detected by unpic), through Astro when its
   domain is allowed, and as a plain `<img>` with a build warning otherwise.
@@ -112,9 +112,9 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   `cdn.fallback`, `layout`, `breakpoints`, `warnUnoptimized`. `priority`
   marks a page's main picture. See `docs-wip/images.md`.
 
-- **The blog, rebuilt on views** (`f8e7104`, `882a491`, `f700837`, `ab484fc`,
-  `9659e70`, `3b0e53b`, `a54e553`, `1d7d56d`, `0943e7e`, `bc5a876`,
-  `24a14a4`, `e6d1fa8`, `2bfef89`). `createBlog({ preset })` picks the
+- **The blog, rebuilt on views** (`1c4047e`, `54edc60`, `839069b`, `ac01bc0`,
+  `0149928`, `1e9d6c5`, `766d362`, `4eb610a`, `a95d21b`, `8da6bcb`,
+  `1f758b2`, `e004882`, `bddda59`). `createBlog({ preset })` picks the
   structure: `personal`, `company` (default), `magazine` or `newsletter`,
   with options validated when the config loads. Listings, terms, authors,
   series, the archive and the article each render a JSON view a site can
@@ -125,7 +125,7 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   load more, a table of contents as a setting (`toc`), and structured data
   for every blog page, with no page described twice. See `docs-wip/blog.md`.
 
-- **For parches** (`417abbc`, `a54e553`, `bc5a876`): head links
+- **For parches** (`6ca9e88`, `766d362`, `8da6bcb`): head links
   (`head.links`), `hooks['astro:build:done']`, `siteSearch` for the
   WebSite's SearchAction, a route's `pageType` for its WebPage node, and
   `dev`, a module development tools reach through `parche:registry/dev`.
@@ -161,7 +161,7 @@ rewrites pages, layouts and views in place (idempotent), and
   `--ds-sys-color-<role>`, type and font roles under `--ds-sys-type-*` and
   `--ds-sys-font-*`; `tokens.css` and `semantic.css` are replaced by the
   generated layers.
-- **Blog widgets** (`882a491`, `f700837`, `e6d1fa8`): BlogList, BlogPostCard,
+- **Blog widgets** (`54edc60`, `839069b`, `e004882`): BlogList, BlogPostCard,
   BlogPostHeader, CategoryNav, TagCloud, RelatedPosts, SeriesNav,
   ShareButtons, ToBlogLink, AuthorCard and blog/TOC give way to the views and
   the `blog/*` widgets.
@@ -172,14 +172,14 @@ rewrites pages, layouts and views in place (idempotent), and
   1.3:1 against the surrounding muted text, which the new contrast page and
   axe's link-in-text-block rule both flagged.
 
-- **Local images are optimised** (`12f3125`). A `@/assets/…` path became a
+- **Local images are optimised** (`e342e6e`). A `@/assets/…` path became a
   URL before the Image element saw it, so it was treated as remote and
   never went through Astro's image service.
 
 - **No empty prose block at the end of JSON pages** (`69a2412`): the route
   rendered an empty Markdown body for them, 64px of blank space.
 
-- **Blog** (`417abbc`, `ab484fc`, `2bfef89`): category pages are built at the
+- **Blog** (`6ca9e88`, `ac01bc0`, `bddda59`): category pages are built at the
   slug their links use; a post without a description shows its excerpt as
   the lead; related posts link to the listing on both post paths; prefixed
   permalinks emit their hreflang alternates; the feed carries rendered HTML;
