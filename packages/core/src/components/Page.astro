@@ -1,0 +1,59 @@
+---
+/**
+ * The frame every page of the site shares: the site's styles, BaseLayout with
+ * the page's metadata and the `hreflang` links of its translations, the
+ * page's layout with its content in the outlets, and the theme panel when it
+ * is on. Core's page route renders through it, and so does every route an
+ * app adds (the blog's), so a change to what a page carries in its head or
+ * around its body reaches all of them at once.
+ *
+ * Content goes in as the page's trees by outlet (`pageSlots`, the unnamed one
+ * being `default`) and/or as children, placed after the default outlet's
+ * nodes (a Markdown body, an app's template).
+ */
+import 'parche:config/styles';
+import BaseLayout from 'parche:layouts/BaseLayout';
+import LayoutRenderer from 'parche:LayoutRenderer';
+import ThemePanel from 'parche:components/ThemePanel';
+import { showPanel } from 'parche:config/themes';
+import { defaultLocale } from 'parche:config/i18n';
+import { resolveLayout } from '../utils/layout.js';
+import type { Node } from '../content/node.js';
+import type { WrapperSpec } from '../content/wrapper.js';
+
+interface Props {
+  /** The page's resolved metadata (see utils/metadata.ts). */
+  metadata: any;
+  /** The site config, in the page's language (localizeSiteConfig). */
+  site: any;
+  locale: string;
+  /** The page's translations, absolute; `hreflang` links are written when there are two or more. */
+  alternates?: { locale: string; href: string }[];
+  /** The layout by name, looked up in the page's locale; or its trees, already resolved. */
+  layout?: string;
+  layoutSections?: Node[];
+  pageSlots?: Record<string, Node[]>;
+  pageWrappers?: Record<string, WrapperSpec>;
+}
+
+const { metadata, site, locale, alternates = [], layout = 'default', layoutSections, pageSlots, pageWrappers } = Astro.props;
+const sections = layoutSections ?? (await resolveLayout(layout, locale, defaultLocale));
+const hasChildren = Astro.slots.has('default');
+---
+
+<BaseLayout metadata={metadata} config={site} lang={locale}>
+  {alternates.length > 1 && (
+    <Fragment slot="head">
+      {alternates.map((alt) => <link rel="alternate" hreflang={alt.locale} href={alt.href} />)}
+      <link rel="alternate" hreflang="x-default" href={alternates.find((a) => a.locale === defaultLocale)?.href} />
+    </Fragment>
+  )}
+  {hasChildren ? (
+    <LayoutRenderer layoutSections={sections} pageSlots={pageSlots} pageWrappers={pageWrappers}>
+      <slot />
+    </LayoutRenderer>
+  ) : (
+    <LayoutRenderer layoutSections={sections} pageSlots={pageSlots} pageWrappers={pageWrappers} />
+  )}
+  {showPanel && <ThemePanel />}
+</BaseLayout>

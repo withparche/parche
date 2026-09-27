@@ -82,6 +82,8 @@ const CORE_MODULES: Record<string, string> = {
   // DynamicRenderer & LayoutRenderer
   'parche:NodeRenderer': corePath('components/NodeRenderer.astro'),
   'parche:LayoutRenderer': corePath('components/LayoutRenderer.astro'),
+  // The frame every page shares (core's route and the apps' routes).
+  'parche:Page': corePath('components/Page.astro'),
 
   // Utils (named exports)
   'parche:utils/metadata': corePath('utils/metadata.ts'),
@@ -457,6 +459,9 @@ export function createRegistry(
   // The parches' modules for development tools.
   const devTools: Record<string, string> = {};
   for (const parche of parches) if (parche.dev) devTools[parche.name] = parche.dev;
+  // Where routed collections' entries are served; a later parche overrides an earlier one.
+  const entryUrls: Record<string, string> = {};
+  for (const parche of parches) Object.assign(entryUrls, parche.urls ?? {});
 
   // Collect app resolvers
   const resolvers: Array<{ appName: string; entrypoint: string }> = [];
@@ -490,5 +495,6 @@ export function createRegistry(
     apps,
     resolvers,
     devTools,
+    entryUrls,
   };
 }

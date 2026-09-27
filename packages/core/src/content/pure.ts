@@ -1,6 +1,6 @@
 /**
  * The content model's pure half: the node, the wrapper rules, the validator,
- * the pattern checks and the reference grammar, without the collections
+ * the pattern checks, the reference grammar and the rules of page addresses, without the collections
  * (which pull in astro:content). What a browser tool — the builder's editor —
  * can import to check a tree as the renderer will.
  */
@@ -30,4 +30,5 @@ export {
 } from './patterns.js';
 export type { Pattern, PatternEntry, Placeholder } from './patterns.js';
 export { isEntryRef, isQueryRef, isRef, hasRefs, parseEntryRef, substituteRefs, createResolver } from './refs.js';
+export { localizePath, splitLocale, pagePath, slugify, absoluteAlternates } from '../utils/paths.js';
 export type { Ref, EntryRef, QueryRef, RefIssue } from './refs.js';

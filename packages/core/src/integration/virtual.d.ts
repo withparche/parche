@@ -55,6 +55,11 @@ declare module 'parche:registry/dev' {
   export default tools;
 }
 
+declare module 'parche:registry/urls' {
+  /** The function that gives an entry of `collection` its address (declared by the parche that routes it), or undefined. */
+  export function urlFor(collection: string): Promise<((entry: { id: string; data: Record<string, unknown> }) => string) | undefined>;
+}
+
 declare module 'parche:registry/resolvers' {
   export function resolveContent(
     slug: string,
@@ -205,6 +210,11 @@ declare module 'parche:NodeRenderer' {
 }
 
 declare module 'parche:LayoutRenderer' {
+  const Component: import('astro').AstroComponentFactory;
+  export default Component;
+}
+
+declare module 'parche:Page' {
   const Component: import('astro').AstroComponentFactory;
   export default Component;
 }

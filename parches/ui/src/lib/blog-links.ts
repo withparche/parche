@@ -1,12 +1,14 @@
 /**
  * Link helpers for the homepage blog widgets (BlogLatestPosts, BlogHighlightedPosts).
  *
- * These widgets live in the ui parche, which cannot import `@parche/astro-blog` — the
- * dependency runs the other way (the blog parche requires ui's `blog/*` widgets).
- * So the blog's permalink pattern is read at runtime from the `parche:app/blog`
- * virtual module, and the substitution below mirrors `resolvePostPermalink` in
- * `parches/blog/src/types.ts`. Keep the two in sync.
+ * With the blog registered, a post's address comes from the blog itself,
+ * through core's `parche:registry/urls` (the widgets ask `urlFor('posts')`).
+ * `postHref` below is only the fallback for a site that has posts but not
+ * the blog parche: the default permalink pattern, read from `parche:app/blog`
+ * when present.
  */
+
+import { localizePath, slugify } from '@parche/astro/content/pure';
 
 export interface BlogLinkContext {
   /** Permalink pattern for a post, e.g. '/blog/%slug%'. */
@@ -54,11 +56,8 @@ export function postKey(id: string): string {
   return key.replace(/\.\w+$/, '');
 }
 
-/** Prefix a path with the locale segment, unless it is the default locale. */
-export function localizePath(path: string, locale: string, defaultLocale: string): string {
-  if (locale === defaultLocale) return path;
-  return `/${locale}${path.startsWith('/') ? path : `/${path}`}`;
-}
+/** Core's rule: the default locale is never prefixed. */
+export { localizePath };
 
 /** Resolve a post's href from the configured permalink pattern. */
 export function postHref(
@@ -82,16 +81,4 @@ export function postHref(
     .replace(/%author%/g, post.data.authors?.[0] ? slugify(post.data.authors[0]) : 'anonymous');
 
   return localizePath(path, locale, defaultLocale);
-}
-
-/** The blog's slugify, letter for letter: accents folded, not dropped ("Guías" → "guias"). */
-export function slugify(str: string): string {
-  return str
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-+|-+$/g, '');
 }

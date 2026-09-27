@@ -8,16 +8,11 @@
  * permalinks (resolver.ts): one assembly of the post's page — its authors,
  * metadata, structured data, assets and translations — for both paths.
  */
-import 'parche:config/styles';
-import BaseLayout from 'parche:layouts/BaseLayout';
-import LayoutRenderer from 'parche:LayoutRenderer';
+import Page from 'parche:Page';
 import { templateMap } from 'parche:registry/templates';
-import { showPanel } from 'parche:config/themes';
-import ThemePanel from 'parche:components/ThemePanel';
 import config from 'parche:config';
 import blogConfig from 'parche:app/blog';
 import { getEntry, render } from 'astro:content';
-import { resolveLayout } from 'parche:utils/layout';
 import { defaultLocale } from 'parche:config/i18n';
 import { localizeSiteConfig } from 'parche:utils/site';
 import { resolve } from '../../resolver.js';
@@ -64,29 +59,17 @@ Astro.locals.parche = { ...(Astro.locals.parche ?? {}), locale, alternates };
 
 const entry = await getEntry('posts', resolved.entryId);
 const { Content } = await render(entry!);
-const layoutSections = await resolveLayout(resolved.layout, locale, defaultLocale);
 const TemplateComponent = templateMap[resolved.template];
 ---
 
-<BaseLayout metadata={resolved.metadata} config={site} lang={locale}>
-  {alternates.length > 1 && (
-    <Fragment slot="head">
-      {alternates.map((alt) => (
-        <link rel="alternate" hreflang={alt.locale} href={alt.href} />
-      ))}
-      <link rel="alternate" hreflang="x-default" href={alternates.find((a) => a.locale === defaultLocale)?.href} />
-    </Fragment>
+<Page metadata={resolved.metadata} site={site} locale={locale} alternates={alternates} layout={resolved.layout}>
+  {TemplateComponent ? (
+    <TemplateComponent {...resolved.templateProps}>
+      <Content />
+    </TemplateComponent>
+  ) : (
+    <article class="prose max-w-4xl mx-auto py-16 px-4">
+      <Content />
+    </article>
   )}
-  <LayoutRenderer layoutSections={layoutSections}>
-    {TemplateComponent ? (
-      <TemplateComponent {...resolved.templateProps}>
-        <Content />
-      </TemplateComponent>
-    ) : (
-      <article class="prose max-w-4xl mx-auto py-16 px-4">
-        <Content />
-      </article>
-    )}
-  </LayoutRenderer>
-  {showPanel && <ThemePanel />}
-</BaseLayout>
+</Page>

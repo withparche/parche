@@ -62,23 +62,6 @@ export function generateBlogPostingJsonLd(options: BlogPostingOptions): Record<s
 }
 
 /**
- * Generate JSON-LD BreadcrumbList for blog post pages.
- */
-export function generateBreadcrumbJsonLd(
-  items: { name: string; url: string }[],
-): Record<string, unknown> {
-  return {
-    '@type': 'BreadcrumbList',
-    itemListElement: items.map((item, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      name: item.name,
-      item: item.url,
-    })),
-  };
-}
-
-/**
  * An ItemList of a page's entries, in order, with their position: the posts
  * of a listing or a term, the parts of a series. Entries without a URL (an
  * announced part) are listed by name.

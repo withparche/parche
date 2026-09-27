@@ -165,6 +165,10 @@ can take a reference:
   split by locale, drafts left out, then `filter` (equality, or membership
   for an array field), `sort` (a field, `-` for descending) and `limit`. It
   yields a list of the entries' data, each with its `id`.
+- An entry of a collection a parche serves pages for (the blog's `posts`)
+  also carries its address as `href`, unless it has one of its own: a list
+  of posts on any page links to them without knowing the blog's permalink.
+  A parche declares that address with `urls` in its manifest.
 - An object is a reference only when it has nothing else in it (`$ref`
   alone; `$collection` with only those three options). A reference that does
   not resolve renders empty and is a content issue with its path, which fails

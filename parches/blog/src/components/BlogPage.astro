@@ -5,12 +5,7 @@
  * lib/blog-context.ts). The view is rendered like a page's body: the layout's
  * outlet wraps its items, and the tree is validated like any other.
  */
-import 'parche:config/styles';
-import BaseLayout from 'parche:layouts/BaseLayout';
-import LayoutRenderer from 'parche:LayoutRenderer';
-import ThemePanel from 'parche:components/ThemePanel';
-import { showPanel } from 'parche:config/themes';
-import { resolveLayout } from 'parche:utils/layout';
+import Page from 'parche:Page';
 import { resolveView } from '../utils/views.js';
 
 interface Props {
@@ -25,7 +20,6 @@ interface Props {
 }
 
 const { view, context, metadata, site, locale, defaultLocale, alternates, layout = 'default' } = Astro.props;
-const layoutSections = await resolveLayout(layout, locale, defaultLocale);
 const tree = await resolveView(view, { locale, preset: context.preset, labels: context.labels });
 
 // A post the view already features on the first page is not listed again
@@ -45,17 +39,12 @@ const shown = (!page || page.current === 1) ? ((context as any).featured ?? []).
 Astro.locals.parche = { ...(Astro.locals.parche ?? {}), locale, alternates, blog: { ...context, shown, brand: site?.brand?.name } };
 ---
 
-<BaseLayout metadata={metadata} config={site} lang={locale}>
-  {alternates.length > 1 && (
-    <Fragment slot="head">
-      {alternates.map((alt) => <link rel="alternate" hreflang={alt.locale} href={alt.href} />)}
-      <link rel="alternate" hreflang="x-default" href={alternates.find((a) => a.locale === defaultLocale)?.href} />
-    </Fragment>
-  )}
-  <LayoutRenderer
-    layoutSections={layoutSections}
-    pageSlots={{ default: tree.sections }}
-    pageWrappers={tree.wrapper !== undefined ? { default: tree.wrapper } : undefined}
-  />
-  {showPanel && <ThemePanel />}
-</BaseLayout>
+<Page
+  metadata={metadata}
+  site={site}
+  locale={locale}
+  alternates={alternates}
+  layout={layout}
+  pageSlots={{ default: tree.sections }}
+  pageWrappers={tree.wrapper !== undefined ? { default: tree.wrapper } : undefined}
+/>

@@ -28,6 +28,7 @@
  *   category: '/blog/category/%category%'         → /blog/category/tutorials
  *   listing:  '/blog'                             → /blog
  */
+import { localizePath, slugify } from '@parche/astro/content/pure';
 import type { BlogLabelsConfig } from './labels.js';
 
 export interface BlogPermalinks {
@@ -273,35 +274,14 @@ export function resolveAuthorHref(
     : resolveTaxonomyPermalink(config.permalinks.author, author, locale, defaultLocale);
 }
 
-/** Slugify a string for URL usage. */
-function slugify(str: string): string {
-  return str
-    // Decompose accented letters, then drop the combining marks, so "Guías" becomes
-    // "guias" rather than "gus" — \w is ASCII-only and would otherwise delete them.
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
-
 /** Extract the post key (without locale prefix) from a content entry ID. */
 function postKeyFromId(id: string): string {
   const slashIdx = id.indexOf('/');
   return slashIdx !== -1 ? id.slice(slashIdx + 1) : id;
 }
 
-/**
- * Prefix a resolved path with the locale segment, unless it is the default locale.
- * Parche never prefixes the default locale (see core's expectedSlugFor), so this
- * mirrors that rule for every link the blog generates.
- */
-export function localizePath(path: string, locale?: string, defaultLocale?: string): string {
-  if (!locale || !defaultLocale || locale === defaultLocale) return path;
-  return `/${locale}${path.startsWith('/') ? path : `/${path}`}`;
-}
+/** The locale prefix rule, core's: the default locale is never prefixed. */
+export { localizePath };
 
 /** Resolve a post permalink from pattern + post data. */
 export function resolvePostPermalink(

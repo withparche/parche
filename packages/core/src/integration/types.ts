@@ -281,6 +281,14 @@ export interface ParcheManifest {
    * only, by the parche's name; an unstable, tooling-only contract.
    */
   dev?: string;
+  /**
+   * Where the entries of a collection this parche generates pages for are
+   * served: collection name → absolute path of a module whose default export
+   * is `(entry: { id, data }) => string`. Core adds that address as `href` to
+   * each entry a `{ "$collection": … }` or `{ "$ref": … }` yields (unless the
+   * entry has its own), so a list links to the pages without knowing their rule.
+   */
+  urls?: Record<string, string>;
 }
 
 /** @deprecated Use ParcheManifest. Kept as an alias for existing app factories. */
@@ -463,6 +471,8 @@ export interface ResolvedRegistry {
   resolvers: Array<{ appName: string; entrypoint: string }>;
   /** The parches' modules for development tools, by parche name (see ParcheManifest.dev). */
   devTools: Record<string, string>;
+  /** Where each routed collection's entries are served: collection → module (see ParcheManifest.urls). */
+  entryUrls: Record<string, string>;
 }
 
 /** A `<link>` a parche adds to every page's head. */

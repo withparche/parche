@@ -1,4 +1,7 @@
 import { getCollection } from 'astro:content';
+import { pagePath } from './paths.js';
+
+export { localizePath, splitLocale, pagePath, slugify, absoluteAlternates } from './paths.js';
 
 // These are injected at build time via the parche:config/i18n virtual module.
 // Importing here would create a circular dependency, so the functions accept
@@ -42,9 +45,7 @@ export async function buildSlugMap(): Promise<SlugMapEntry[]> {
 
 /** The URL slug an entry is served at (empty string = the root / home). */
 function expectedSlugFor(entry: SlugMapEntry, defaultLocale: string): string {
-  if (entry.pageKey === 'home') return entry.locale === defaultLocale ? '' : entry.locale;
-  if (entry.locale === defaultLocale) return entry.slug;
-  return `${entry.locale}/${entry.slug}`;
+  return pagePath(entry.pageKey, entry.locale, defaultLocale, entry.slug).slice(1);
 }
 
 function buildSlugIndex(slugMap: SlugMapEntry[], defaultLocale: string): Map<string, SlugMapEntry> {

@@ -7,6 +7,7 @@
 import { getCollection } from 'astro:content';
 import { resolveAssets } from 'parche:utils/assets';
 import { getBlogLinkContext, postHref, postLocale, localizePath } from '../lib/blog-links.js';
+import { urlFor } from 'parche:registry/urls';
 import SectionHeader from '../components/SectionHeader.astro';
 import BlogPostCardGrid from 'parche:widgets/blog/BlogPostCardGrid';
 import { schema, type Props } from './BlogHighlightedPosts.props';
@@ -27,6 +28,8 @@ try {
   const locale = Astro.currentLocale ?? defaultLocale;
   resolvedLinkUrl = (link && link.href) || localizePath(listing, locale, defaultLocale);
 
+  // The blog says where its posts are served; the pattern below is only for a site without it.
+  const postUrl = await urlFor('posts');
   const allPosts = await getCollection('posts');
   const nonDraft = allPosts.filter((p: any) => !p.data.draft);
   const localePosts = nonDraft.filter((p: any) => postLocale(p.id, defaultLocale) === locale);
@@ -55,8 +58,7 @@ try {
   posts = await resolveAssets(selected.map((post: any) => ({
     title: post.data.title,
     description: post.data.description ?? post.data.excerpt,
-    // Honour the configured permalink pattern instead of assuming a root-level slug.
-    href: postHref(postPattern, post, locale, defaultLocale),
+    href: postUrl ? postUrl(post) : postHref(postPattern, post, locale, defaultLocale),
     image: post.data.image,
   })));
 } catch {

@@ -100,6 +100,8 @@ const RESOLVERS_ID = 'parche:registry/resolvers';
 const RESOLVERS_VIRTUAL = '\0parche:registry/resolvers';
 const DEV_TOOLS_ID = 'parche:registry/dev';
 const DEV_TOOLS_VIRTUAL = '\0parche:registry/dev';
+const ENTRY_URLS_ID = 'parche:registry/urls';
+const ENTRY_URLS_VIRTUAL = '\0parche:registry/urls';
 const APP_CONFIG_PREFIX = 'parche:app/';
 const APP_CONFIG_VIRTUAL_PREFIX = '\0parche:app/';
 
@@ -473,6 +475,19 @@ ${statements.join('\n')}
  * Generate a JS module that aggregates all app resolvers.
  * Exports resolveContent(slug, locale, opts) and getResolverPaths(locales, defaultLocale, opts).
  */
+/** `urlFor(collection)`: the function that gives an entry of that collection its address, or undefined. */
+function generateEntryUrlsModule(registry: ResolvedRegistry): string {
+  const entries = Object.entries(registry.entryUrls ?? {}).map(([name, file]) => `  ${JSON.stringify(name)}: () => import(${JSON.stringify(file)}),`);
+  return `const modules = {\n${entries.join('\n')}\n};
+const loaded = {};
+export async function urlFor(collection) {
+  const load = modules[collection];
+  if (!load) return undefined;
+  return (loaded[collection] ??= (await load()).default);
+}
+`;
+}
+
 function generateResolversModule(registry: ResolvedRegistry): string {
   if (registry.resolvers.length === 0) {
     return `
@@ -578,6 +593,7 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
       if (id === ELEMENTS_ID) return ELEMENTS_VIRTUAL;
       if (id === RESOLVERS_ID) return RESOLVERS_VIRTUAL;
       if (id === DEV_TOOLS_ID) return DEV_TOOLS_VIRTUAL;
+      if (id === ENTRY_URLS_ID) return ENTRY_URLS_VIRTUAL;
       if (id.startsWith(APP_CONFIG_PREFIX)) return '\0' + id;
       if (id.startsWith(PARCHE_PREFIX)) {
         return '\0' + id;
@@ -616,6 +632,8 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
       }
       if (id === LAYOUT_CONFIG_VIRTUAL) return generateLayoutConfigModule(registry);
       if (id === RESOLVERS_VIRTUAL) return generateResolversModule(registry);
+      // Where each routed collection's entries are served, loaded on demand.
+      if (id === ENTRY_URLS_VIRTUAL) return generateEntryUrlsModule(registry);
       // Each parche's module for development tools, loaded on demand, by name.
       if (id === DEV_TOOLS_VIRTUAL) {
         const entries = Object.entries(registry.devTools).map(([name, file]) => `  ${JSON.stringify(name)}: () => import(${JSON.stringify(file)}),`);

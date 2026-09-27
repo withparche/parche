@@ -1,20 +1,18 @@
 ---
-import 'parche:config/styles';
-import BaseLayout from 'parche:layouts/BaseLayout';
-import ThemePanel from 'parche:components/ThemePanel';
-import LayoutRenderer from 'parche:LayoutRenderer';
+import Page from 'parche:Page';
 import NodeRenderer from 'parche:NodeRenderer';
 import config from 'parche:config';
 import { templateMap } from 'parche:registry/templates';
 import { defaultLocale, locales } from 'parche:config/i18n';
 import { localizeSiteConfig } from 'parche:utils/site';
-import { showPanel } from 'parche:config/themes';
 import { resolveContent, getResolverPaths } from 'parche:registry/resolvers';
 import { getEntry, render } from 'astro:content';
 import {
   buildSlugMap,
   getAlternateUrls,
   resolvePageFromSlug,
+  pagePath,
+  splitLocale as splitLocaleId,
 } from 'parche:utils/i18n';
 import { resolveMetadata } from 'parche:utils/metadata';
 import { resolveLayout, outletWrapper } from 'parche:utils/layout';
@@ -25,14 +23,8 @@ export async function getStaticPaths() {
   const pagePaths = slugMap.map((entry) => {
     const { locale, pageKey, slug, data, entryId } = entry;
 
-    let urlSlug: string | undefined;
-    if (pageKey === 'home') {
-      urlSlug = locale === defaultLocale ? undefined : locale;
-    } else if (locale === defaultLocale) {
-      urlSlug = slug;
-    } else {
-      urlSlug = `${locale}/${slug}`;
-    }
+    // Where the page is served (core's one rule for page addresses), without the leading slash.
+    const urlSlug = pagePath(pageKey, locale, defaultLocale, slug).slice(1) || undefined;
 
     return {
       params: { slug: urlSlug },
@@ -53,13 +45,9 @@ export async function getStaticPaths() {
  * expects the bare key plus the locale, not the prefixed path.
  */
 function splitLocale(slug: string | undefined): { locale: string; rest: string } {
-  if (!slug) return { locale: defaultLocale, rest: '' };
-  const idx = slug.indexOf('/');
-  const head = idx === -1 ? slug : slug.slice(0, idx);
-  if (head !== defaultLocale && locales.includes(head)) {
-    return { locale: head, rest: idx === -1 ? '' : slug.slice(idx + 1) };
-  }
-  return { locale: defaultLocale, rest: slug };
+  // In a URL the default locale is never a prefix, so only the others split off.
+  const { locale, key } = splitLocaleId(slug ?? '', locales.filter((l) => l !== defaultLocale), defaultLocale);
+  return { locale, rest: key };
 }
 
 // ---- Render-time ----
@@ -210,46 +198,29 @@ const pageSlots: Record<string, any[]> = mode === 'page' && pageData
 const pageWrappers = mode === 'page' && pageData?.wrapper !== undefined ? { default: pageData.wrapper } : undefined;
 ---
 
-<BaseLayout metadata={metadata} config={siteConfig} lang={locale}>
-  {alternates.length > 1 && (
-    <Fragment slot="head">
-      {alternates.map((alt) => (
-        <link rel="alternate" hreflang={alt.locale} href={alt.href} />
-      ))}
-      <link
-        rel="alternate"
-        hreflang="x-default"
-        href={alternates.find((a) => a.locale === defaultLocale)?.href}
-      />
-    </Fragment>
-  )}
+{mode === 'resolver' && resolvedApp ? (
+  <Page metadata={metadata} site={siteConfig} locale={locale} alternates={alternates} layoutSections={layoutSections}>
+    {AppTemplate ? (
+      <AppTemplate {...resolvedApp.templateProps}>
+        {AppContent && <AppContent />}
+      </AppTemplate>
+    ) : (
+      <article class="prose max-w-4xl mx-auto py-16 px-4">
+        {AppContent && <AppContent />}
+      </article>
+    )}
 
-  {mode === 'resolver' && resolvedApp ? (
-    <LayoutRenderer layoutSections={layoutSections}>
-      {AppTemplate ? (
-        <AppTemplate {...resolvedApp.templateProps}>
-          {AppContent && <AppContent />}
-        </AppTemplate>
-      ) : (
-        <article class="prose max-w-4xl mx-auto py-16 px-4">
-          {AppContent && <AppContent />}
-        </article>
-      )}
-
-      {appExtras.sections?.length > 0 && (
-        <NodeRenderer nodes={appExtras.sections} wrapper={outletWrapper(layoutSections)} />
-      )}
-    </LayoutRenderer>
-  ) : (
-    <LayoutRenderer layoutSections={layoutSections} pageSlots={pageSlots} pageWrappers={pageWrappers}>
-      {/* A Markdown page's body renders after its sections, in the page's own outlet. */}
-      {PageMarkdownContent && (
-        <div class="mx-auto max-w-4xl px-4 md:px-6 pb-12 md:pb-16 prose">
-          <PageMarkdownContent />
-        </div>
-      )}
-    </LayoutRenderer>
-  )}
-
-  {showPanel && <ThemePanel />}
-</BaseLayout>
+    {appExtras.sections?.length > 0 && (
+      <NodeRenderer nodes={appExtras.sections} wrapper={outletWrapper(layoutSections)} />
+    )}
+  </Page>
+) : PageMarkdownContent ? (
+  <Page metadata={metadata} site={siteConfig} locale={locale} alternates={alternates} layoutSections={layoutSections} pageSlots={pageSlots} pageWrappers={pageWrappers}>
+    {/* A Markdown page's body renders after its sections, in the page's own outlet. */}
+    <div class="mx-auto max-w-4xl px-4 md:px-6 pb-12 md:pb-16 prose">
+      <PageMarkdownContent />
+    </div>
+  </Page>
+) : (
+  <Page metadata={metadata} site={siteConfig} locale={locale} alternates={alternates} layoutSections={layoutSections} pageSlots={pageSlots} pageWrappers={pageWrappers} />
+)}

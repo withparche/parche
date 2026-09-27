@@ -29,6 +29,7 @@ function makeRegistry(partial: Partial<ResolvedRegistry>): ResolvedRegistry {
     apps: [],
     resolvers: [],
     devTools: {},
+    entryUrls: {},
     ...partial,
   };
 }
@@ -169,4 +170,11 @@ test('dev tools: each parche\'s module loads on demand by its name', () => {
   const code = load(makeRegistry({ devTools: { blog: '/abs/blog/dev.ts' } }), '\0parche:registry/dev');
   assert.match(code, /"blog": \(\) => import\("\/abs\/blog\/dev\.ts"\)/);
   assert.equal(load(makeRegistry({ devTools: {} }), '\0parche:registry/dev').trim(), 'export default {\n\n};');
+});
+
+test('entry urls: a routed collection loads its address function on demand; others have none', () => {
+  const code = load(makeRegistry({ entryUrls: { posts: '/abs/blog/urls.ts' } }), '\0parche:registry/urls');
+  assert.match(code, /"posts": \(\) => import\("\/abs\/blog\/urls\.ts"\)/);
+  assert.match(code, /export async function urlFor\(collection\)/);
+  assert.match(load(makeRegistry({ entryUrls: {} }), '\0parche:registry/urls'), /const modules = \{\n\n\};/);
 });

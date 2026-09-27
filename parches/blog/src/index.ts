@@ -173,5 +173,7 @@ export default function createBlog(config?: BlogConfig): ParcheManifest {
     ...(useResolver ? { resolver: { entrypoint: resolverPath } } : {}),
     // For development tools (the builder): schemas, views and where pages live.
     dev: path.resolve(srcDir, 'dev.ts'),
+    // Where each post is served: a list of posts anywhere links to them.
+    urls: { posts: path.resolve(srcDir, 'urls.ts') },
   };
 }

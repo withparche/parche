@@ -43,14 +43,5 @@ export async function getRouteAlternates(opts: {
   return out;
 }
 
-/** Turn route alternates into the absolute-href shape core expects. */
-export function toAbsolute(
-  alternates: RouteAlternate[],
-  site: URL | undefined,
-): Array<{ locale: string; href: string; path: string }> {
-  return alternates.map((alt) => ({
-    locale: alt.locale,
-    path: alt.path,
-    href: site ? new URL(alt.path, site).href : alt.path,
-  }));
-}
+/** Route alternates as absolute hrefs, by core's rule (relative when the site has no URL). */
+export { absoluteAlternates as toAbsolute } from '@parche/astro/content/pure';

@@ -15,7 +15,8 @@ import { getPublishedPosts, extractPostLocale, getPostAlternates } from './utils
 import { querySinglePost } from './utils/blog-query.js';
 import { calculateReadingTime } from './utils/reading-time.js';
 import { extractTOC } from './utils/toc.js';
-import { generateBlogPostingJsonLd, generateBreadcrumbJsonLd } from './utils/blog-metadata.js';
+import { generateBlogPostingJsonLd } from './utils/blog-metadata.js';
+import { generateJsonLdBreadcrumbList } from 'parche:utils/metadata';
 import { resolvePostPermalink, resolveTaxonomyPermalink, resolveAuthorHref, localizePath } from './types.js';
 import { createTaxonomyResolver } from './utils/taxonomy.js';
 
@@ -129,7 +130,7 @@ export async function resolve(
     authorName: authorData[0]?.name,
     ...(authorData[0]?.slug ? { authorUrl: `${siteUrl.replace(/\/$/, '')}${resolveAuthorHref(cfg, authorData[0].slug, locale, defaultLocale)}` } : {}),
   });
-  const breadcrumbJsonLd = generateBreadcrumbJsonLd([
+  const breadcrumbJsonLd = generateJsonLdBreadcrumbList([
     { name: labels.home, url: `${base}${localizePath('/', locale, defaultLocale)}` || '/' },
     { name: labels.blog, url: `${base}${localizePath(permalinks.listing, locale, defaultLocale)}` },
     ...(post.data.category
