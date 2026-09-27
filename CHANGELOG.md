@@ -38,6 +38,95 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   itself is reported and not rendered. Export the `patterns` collection from
   `createCollections()`.
 
+- **The node model** (`ba3e5b1`, `b831257`, `e4b5c11`, `7a0115d`). A page, a
+  layout and a pattern are one shape, a tree of nodes `{ widget, props,
+  slots, wrapper, notes, id }`. A widget that declares slots in its
+  `.props.ts` takes nodes by slot name into its Astro slots; `*` accepts any
+  name. Layouts place `Outlet` nodes at any depth: the page's `sections`
+  fill the unnamed one and `slots[name]` the named ones. Nothing is wrapped
+  unless a list declares it (an Outlet's `wrapper`, or the page's), and a
+  node may say how it is wrapped itself: `{ props }` over the list's
+  wrapper, `{ widget, props }` another widget, `false` none. Section is
+  ui's wrapper widget, with tones, widths, rhythm and an anchor; Columns,
+  Column and Switch are the containers. See `docs-wip/content-model.md`.
+
+- **Content is checked against the catalog** (`1e73cae`, `dbc1a88`). Unknown
+  widgets, slots a widget does not declare, widgets a slot does not allow,
+  `min` and `max`, wrappers and tones nobody registered, broken references
+  and patterns, each reported with its path: a warning in dev, and a failed
+  build for a prerendered page, which makes `astro build` the CI check.
+
+- **References in props** (`20f3ab2`, `b6afd6b`). `{ "$ref":
+  "<collection>/<id>[#/pointer]" }` names one entry, looked up in the page's
+  locale first; `{ "$collection": name, filter, sort, limit }` is a query.
+  Both are resolved before a widget sees its props. Menus live in the
+  `navigation` collection and are referenced this way, so Header and Footer
+  keep plain list props.
+
+- **Pages in YAML** (`b9cb266`), alongside JSON, with the same schema. JSON
+  stays the format everything ships and scaffolds in.
+
+- **Tokens from a DTCG source, in layers** (`ce2642c`, `79050cc`, `42aef7b`,
+  `1416d9d`, `bc6c5c4`). `packages/core/tokens/{ref,sys,conf}.json` in the
+  W3C Design Tokens format generate the CSS, the Tailwind bridges, a flat
+  catalog and a type: `--ds-ref-*` primitives, `--ds-sys-*` roles and type
+  styles, `--ds-conf-*` knobs (radius scale, section rhythm, measures,
+  gutter) and `--ds-comp-*` per element. New roles `surface-2`,
+  `border-soft`, `link`, `primary-hover`, and the type roles `lead`,
+  `title`, `title-sm`, `body-sm`, `small`, `meta`, `figure`, `figure-sm` as
+  `.type-*` classes. CI fails when the generated CSS is stale.
+
+- **Two themes, Product and Editorial** (`3fa64a2`, `3cdacc6`). The
+  redesign's two directions on the same markup, overriding only roles, type
+  styles, radii, shadows and the conf knobs.
+
+- **New elements** (`0f136c9`, `bc6c5c4`, `ec5d94d`, `f9657a1`, `b74593a`,
+  `3a37a6e`, `25831cb`, `d55bdc5`, `24a14a4`, `a54e553`, `1d7d56d`,
+  `0943e7e`): Command, Frame, Placeholder, List, Table, Callout, Form (in-place
+  validation and sending states on a real form), Gallery (a lightbox over
+  links), Filter, Calculator, Countdown, Compare, StickyBar, LoadMore, Search
+  (Pagefind), Consent, AdSlot and Comments (giscus, after consent). Each works
+  without script in a documented form.
+
+- **New and reworked ui widgets** (`1aec631`, `749beac`, `4187629`, `b16f0c6`,
+  `d85e0b3`, `a42a266`, `158d258`, `d55bdc5`, `b34e5e2`, `f9d4d8b`). One Hero
+  (center, split, text, side, overlay layouts; media and proof slots), one
+  Features (grid, cards, list, panels, tiles, rows, gallery), one Steps
+  (timeline, grid, numbered, rows, columns), CallToAction layouts, Pricing
+  with billing periods, Stats on sourced numbers, Testimonials on verified
+  quotes; and Section, Columns, Column, Switch, Screenshot, Command,
+  Showcase, Cases, Team, Timeline, Newsletter, Table, Callout, Gallery,
+  Releases, Products, Prose, Heading, PageHeader, SideNav, Code, OnThisPage,
+  PrevNext, Calculator, Countdown, Compare, StickyBar, Consent and AdSlot.
+  Every section widget shares one heading (tagline, title, subtitle, link,
+  align) and one vocabulary (`items`, `actions`, `link`, `layout`), and
+  short texts read inline Markdown (`501784e`).
+
+- **Images on their best path** (`12f3125`). The Image element sends each
+  picture through Astro's image service when local, as a srcset of an image
+  CDN's URLs when remote on one (detected by unpic), through Astro when its
+  domain is allowed, and as a plain `<img>` with a build warning otherwise.
+  `parche({ images })` chooses: `remote`, `cdn.hosts`, `cdn.providers`,
+  `cdn.fallback`, `layout`, `breakpoints`, `warnUnoptimized`. `priority`
+  marks a page's main picture. See `docs-wip/images.md`.
+
+- **The blog, rebuilt on views** (`f8e7104`, `882a491`, `f700837`, `ab484fc`,
+  `9659e70`, `3b0e53b`, `a54e553`, `1d7d56d`, `0943e7e`, `bc5a876`,
+  `24a14a4`, `e6d1fa8`, `2bfef89`). `createBlog({ preset })` picks the
+  structure: `personal`, `company` (default), `magazine` or `newsletter`,
+  with options validated when the config loads. Listings, terms, authors,
+  series, the archive and the article each render a JSON view a site can
+  replace (`src/content/views/blog-<name>.json`), with widgets that read the
+  route's data. New: series and issues, author and series pages, an archive
+  by month, a subscribe page and forms, static search with Pagefind, ad
+  slots and placements behind consent, comments from GitHub Discussions,
+  load more, a table of contents as a setting (`toc`), and structured data
+  for every blog page, with no page described twice. See `docs-wip/blog.md`.
+
+- **For parches** (`417abbc`, `a54e553`, `bc5a876`): head links
+  (`head.links`), `hooks['astro:build:done']`, `siteSearch` for the
+  WebSite's SearchAction, and a route's `pageType` for its WebPage node.
+
 - **Design-system pages in the playground** (`/design`). The three token layers
   read from the real stylesheets: every colour role with its light and dark
   value and which elements consume it, the contrast of the pairs the elements
@@ -47,11 +136,52 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   element pages, and the fixture for reviewing the tokens before they reach
   the public documentation.
 
+### Changed
+
+These break content written for 0.7. `node scripts/migrate-nodes.mjs [paths]`
+rewrites pages, layouts and views in place (idempotent), and
+`node scripts/codemod-tokens.mjs [paths]` renames tokens in CSS and components.
+
+- **Page templates, `wrapper` objects and section backgrounds are gone**
+  (`ba3e5b1`): what they did is a layout, a Section node or a node's
+  `wrapper`; `layout/Main` becomes `Outlet`.
+- **One widget per purpose** (`1aec631`, `749beac`, `4187629`): Hero2 and
+  HeroText become Hero layouts, Features2 and Features3 Features layouts,
+  Steps2 a Steps layout; Header and Footer drop the `layout/` prefix.
+- **One prop vocabulary** (`0fb2dc8`, `b16f0c6`, `b74593a`): `stats`,
+  `testimonials`, `members`, `entries`, `projects`, `prices`, `demos` →
+  `items`; `callToAction` → `actions`; Features `style` → `layout`; Pricing
+  `hasRibbon`/`ribbonTitle` → `recommended`/`badge`; forms post to `endpoint`
+  with a `submit` label and one `fields` list.
+- **Token names** (`79050cc`): `--color-<family>-<step>` →
+  `--ds-ref-color-<family>-<step>`, `--ds-color-<role>` →
+  `--ds-sys-color-<role>`, type and font roles under `--ds-sys-type-*` and
+  `--ds-sys-font-*`; `tokens.css` and `semantic.css` are replaced by the
+  generated layers.
+- **Blog widgets** (`882a491`, `f700837`, `e6d1fa8`): BlogList, BlogPostCard,
+  BlogPostHeader, CategoryNav, TagCloud, RelatedPosts, SeriesNav,
+  ShareButtons, ToBlogLink, AuthorCard and blog/TOC give way to the views and
+  the `blog/*` widgets.
+
 ### Fixed
 
 - **Links inside `.prose` are underlined.** They relied on colour alone, at
   1.3:1 against the surrounding muted text, which the new contrast page and
   axe's link-in-text-block rule both flagged.
+
+- **Local images are optimised** (`12f3125`). A `@/assets/…` path became a
+  URL before the Image element saw it, so it was treated as remote and
+  never went through Astro's image service.
+
+- **No empty prose block at the end of JSON pages** (`69a2412`): the route
+  rendered an empty Markdown body for them, 64px of blank space.
+
+- **Blog** (`417abbc`, `ab484fc`, `2bfef89`): category pages are built at the
+  slug their links use; a post without a description shows its excerpt as
+  the lead; related posts link to the listing on both post paths; prefixed
+  permalinks emit their hreflang alternates; the feed carries rendered HTML;
+  frontmatter dates read as written in every time zone; a paragraph after a
+  code block or a list is spaced.
 
 ## [0.7.0] — 2026-09-23
 
