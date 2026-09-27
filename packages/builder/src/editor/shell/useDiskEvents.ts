@@ -22,7 +22,7 @@ export function useDiskEvents() {
         useDocs.getState().markDiskChanged(e.collection, e.id);
       }
       // Which pages use a layout or a menu, and the outlets a layout offers, are in the catalog.
-      const shapes = e.type === 'file-changed' && ['pages', 'layouts', 'navigation', 'patterns'].includes(e.collection ?? '');
+      const shapes = e.type === 'file-changed' && ['pages', 'layouts', 'navigation', 'patterns', 'posts', 'views', 'authors', 'series', 'taxonomies'].includes(e.collection ?? '');
       if (e.type === 'catalog-changed' || shapes) refreshCatalog();
     };
     return () => source.close();

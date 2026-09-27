@@ -101,6 +101,7 @@ export default function SitePanel() {
           </button>
         </div>
       )}
+      <BlogOptions />
       {!site && error && (
         <p role="alert" className="m-3 text-xs text-danger">
           {error}
@@ -129,4 +130,37 @@ async function waitForRestart(timeout = 60_000) {
     }
     await pause(400);
   }
+}
+
+/** The blog's options, when the site has it: set in astro.config (`createBlog({ … })`), shown here, not written. */
+function BlogOptions() {
+  const blog = useUi((s) => s.catalog?.blog);
+  if (!blog) return null;
+  const c = blog.config as Record<string, any>;
+  const rows: [string, string][] = [
+    ['Preset', String(c.preset)],
+    ['Post URL', String(c.permalinks?.post)],
+    ['Listing', String(c.permalinks?.listing)],
+    ['Writers', c.authors === 'one' ? 'One' : 'Several'],
+    ['Table of contents', c.toc ? 'On' : 'Off'],
+    ['Series', c.series ? 'On' : 'Off'],
+    ['Archive', c.archive ? String(c.permalinks?.archive) : 'Off'],
+    ['Search', c.search ? String(c.search.path) : 'Off'],
+    ['Subscribe', c.subscribe ? String(c.subscribe.path) : 'Off'],
+    ['Feed', c.rss ? String(c.permalinks?.rss) : 'Off'],
+  ];
+  return (
+    <section aria-label="Blog options" className="border-t border-border p-3">
+      <h3 className="m-0 pb-1 text-[10px] font-semibold tracking-[0.08em] text-muted uppercase">Blog</h3>
+      <p className="m-0 pb-2 text-[11px] text-muted">Set in astro.config, in createBlog({'{ … }'}): shown here, not edited.</p>
+      <dl className="m-0 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-[11px]">
+        {rows.map(([k, v]) => (
+          <div key={k} className="contents">
+            <dt className="text-muted">{k}</dt>
+            <dd className="m-0 truncate font-mono text-heading">{v}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  );
 }

@@ -19,6 +19,9 @@ export default function PreviewFrame({ src, rev, onReload, children }: { src: st
   const frame = useRef<HTMLIFrameElement>(null);
   const { onLoad, ready } = usePreview(frame);
   const current = useDocs((s) => s.current);
+  const isMarkdown = useDocs((s) => (s.current ? s.docs[s.current]?.format === 'md' : false));
+  const bodyEditor = useUi((s) => s.bodyEditor);
+  const setBodyEditor = useUi((s) => s.setBodyEditor);
   const url = `/_parche/preview/${previewToken}${src}`;
   const themes = useUi((s) => s.catalog?.themes);
   // Look at the page under another theme or scheme, without touching the site:
@@ -48,6 +51,15 @@ export default function PreviewFrame({ src, rev, onReload, children }: { src: st
             </button>
           ))}
         </div>
+        {isMarkdown && (
+          <div role="radiogroup" aria-label="Show" className="flex gap-px rounded bg-surface-hover p-0.5">
+            {([false, true] as const).map((on) => (
+              <button key={String(on)} type="button" role="radio" aria-checked={bodyEditor === on} onClick={() => setBodyEditor(on)} className="rounded px-1.5 py-0.5 aria-checked:bg-background aria-checked:text-heading">
+                {on ? 'Markdown' : 'Page'}
+              </button>
+            ))}
+          </div>
+        )}
         <span className="truncate font-mono">{src}</span>
         {themes && themes.list.length > 1 && (
           <select aria-label="Preview theme" value={theme} onChange={(e) => setLook({ theme: e.target.value })} className="rounded border border-border bg-background px-1 py-0.5 text-[11px]">

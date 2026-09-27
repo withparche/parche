@@ -23,6 +23,20 @@ export const previewToken = document.querySelector<HTMLMetaElement>('meta[name="
  * drafts — with their node ids, which the render turns into markers — and
  * asks the frame to refresh in place.
  */
+/**
+ * Refresh the page in the preview; a 404 is tried again a few times, a
+ * moment apart: a document just created is known to the dev server only once
+ * its content is synced, about a second later.
+ */
+async function refreshUntilFound(c: PreviewApi, tries = 6): Promise<Awaited<ReturnType<PreviewApi['refresh']>>> {
+  let res = await c.refresh();
+  for (let i = 1; i < tries && res.status === 404; i++) {
+    await new Promise((r) => setTimeout(r, 500));
+    res = await c.refresh();
+  }
+  return res;
+}
+
 export function usePreview(frame: React.RefObject<HTMLIFrameElement | null>) {
   const client = useRef<PreviewApi | null>(null);
   // The document whose drafts the server holds: the frame loads a page only
@@ -37,17 +51,18 @@ export function usePreview(frame: React.RefObject<HTMLIFrameElement | null>) {
       const { docs, current } = useDocs.getState();
       const open = Object.values(docs).filter((d) => d.key === current || isDirty(d));
       try {
-        await api('drafts', { method: 'PUT', body: { docs: open.map((d) => ({ collection: d.collection, id: d.id, data: d.data })) } });
+        await api('drafts', { method: 'PUT', body: { docs: open.map((d) => ({ collection: d.collection, id: d.id, data: d.data, ...(d.format === 'md' ? { body: d.body ?? '' } : {}) })) } });
       } catch {
         return;
       }
       setReady(current);
-      const res = await client.current?.refresh();
+      const res = client.current ? await refreshUntilFound(client.current) : undefined;
       if (res) useUi.getState().setPreviewError(res.ok ? null : `The preview could not render (${res.status}). ${res.excerpt ?? ''}`);
     };
     const unsub = useDocs.subscribe((s) => {
       const doc = s.current ? s.docs[s.current] : undefined;
-      const key = doc ? `${doc.key}:${doc.past.length}:${doc.future.length}` : null;
+      // The last step's time too: typing in one field merges into one step, and each keystroke must show.
+      const key = doc ? `${doc.key}:${doc.past.length}:${doc.future.length}:${doc.past[doc.past.length - 1]?.at ?? 0}` : null;
       if (key === last) return;
       last = key;
       clearTimeout(timer);
@@ -88,7 +103,7 @@ export function usePreview(frame: React.RefObject<HTMLIFrameElement | null>) {
       c.setMode(useUi.getState().previewMode);
       c.select(useSelection.getState().node);
       // Drafts sent before this load may have missed it: render them now.
-      void c.refresh();
+      void refreshUntilFound(c).then((res) => useUi.getState().setPreviewError(res.ok ? null : `The preview could not render (${res.status}). ${res.excerpt ?? ''}`));
     };
     if (win.__parchePreview) return wire();
     win.addEventListener('parche-preview-ready', wire, { once: true });

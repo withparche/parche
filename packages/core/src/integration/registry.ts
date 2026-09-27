@@ -454,6 +454,10 @@ export function createRegistry(
     styleEntries.push(path.resolve(rootDir, userConfig.styles.entry));
   }
 
+  // The parches' modules for development tools.
+  const devTools: Record<string, string> = {};
+  for (const parche of parches) if (parche.dev) devTools[parche.name] = parche.dev;
+
   // Collect app resolvers
   const resolvers: Array<{ appName: string; entrypoint: string }> = [];
   for (const app of apps) {
@@ -485,5 +489,6 @@ export function createRegistry(
     contentGlobs,
     apps,
     resolvers,
+    devTools,
   };
 }

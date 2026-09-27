@@ -98,6 +98,8 @@ const ELEMENTS_ID = 'parche:registry/elements';
 const ELEMENTS_VIRTUAL = '\0parche:registry/elements';
 const RESOLVERS_ID = 'parche:registry/resolvers';
 const RESOLVERS_VIRTUAL = '\0parche:registry/resolvers';
+const DEV_TOOLS_ID = 'parche:registry/dev';
+const DEV_TOOLS_VIRTUAL = '\0parche:registry/dev';
 const APP_CONFIG_PREFIX = 'parche:app/';
 const APP_CONFIG_VIRTUAL_PREFIX = '\0parche:app/';
 
@@ -575,6 +577,7 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
       if (id === WIDGET_SCHEMAS_ID) return WIDGET_SCHEMAS_VIRTUAL;
       if (id === ELEMENTS_ID) return ELEMENTS_VIRTUAL;
       if (id === RESOLVERS_ID) return RESOLVERS_VIRTUAL;
+      if (id === DEV_TOOLS_ID) return DEV_TOOLS_VIRTUAL;
       if (id.startsWith(APP_CONFIG_PREFIX)) return '\0' + id;
       if (id.startsWith(PARCHE_PREFIX)) {
         return '\0' + id;
@@ -613,6 +616,11 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
       }
       if (id === LAYOUT_CONFIG_VIRTUAL) return generateLayoutConfigModule(registry);
       if (id === RESOLVERS_VIRTUAL) return generateResolversModule(registry);
+      // Each parche's module for development tools, loaded on demand, by name.
+      if (id === DEV_TOOLS_VIRTUAL) {
+        const entries = Object.entries(registry.devTools).map(([name, file]) => `  ${JSON.stringify(name)}: () => import(${JSON.stringify(file)}),`);
+        return `export default {\n${entries.join('\n')}\n};\n`;
+      }
       if (id === WIDGET_SCHEMAS_VIRTUAL) {
         // Watch .props.ts and .defaults.json files for HMR
         for (const [virtualId, filePath] of Object.entries(registry.modules)) {

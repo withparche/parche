@@ -17,12 +17,23 @@ interface Summary {
 }
 
 /** The collections the builder edits as documents, with what a new one starts as (none: made elsewhere). */
-const COLLECTIONS: { id: string; label: string; one: string; create?: (title: string) => Record<string, unknown> }[] = [
+/** What a new document of a collection is asked for besides its name. */
+const humanTitle = (collection: string) => ({ pages: 'Title', posts: 'Title', series: 'Title', authors: 'Name' } as Record<string, string>)[collection] ?? 'Label';
+
+const today = () => new Date().toISOString().slice(0, 10);
+
+const COLLECTIONS: { id: string; label: string; one: string; create?: (title: string) => Record<string, unknown>; format?: 'md'; blog?: true }[] = [
   { id: 'pages', label: 'Pages', one: 'page', create: (title) => ({ title, sections: [] }) },
   { id: 'layouts', label: 'Layouts', one: 'layout', create: () => ({ sections: [{ widget: 'Outlet' }] }) },
   { id: 'navigation', label: 'Menus', one: 'menu', create: (title) => ({ label: title, items: [] }) },
   // A pattern starts from a widget the person picks (NewPattern), never empty.
   { id: 'patterns', label: 'Patterns', one: 'pattern', create: () => ({}) },
+  // The blog's, when the site has it. A new post starts as a draft dated today.
+  { id: 'posts', label: 'Posts', one: 'post', create: (title) => ({ title, publishDate: today(), draft: true }), format: 'md', blog: true },
+  { id: 'views', label: 'Blog views', one: 'view', blog: true },
+  { id: 'authors', label: 'Authors', one: 'author', create: (title) => ({ name: title }), blog: true },
+  { id: 'series', label: 'Series', one: 'series', create: (title) => ({ title }), blog: true },
+  { id: 'taxonomies', label: 'Taxonomies', one: 'taxonomy', blog: true },
 ];
 
 /**
@@ -38,7 +49,9 @@ export default function PagesPanel() {
   const open = useDocs((s) => s.open);
   const collection = useUi((s) => s.docsCollection);
   const setCollection = useUi((s) => s.setDocsCollection);
-  const coll = COLLECTIONS.find((c) => c.id === collection) ?? COLLECTIONS[0];
+  const hasBlog = useUi((s) => !!s.catalog?.blog);
+  const offered = COLLECTIONS.filter((c) => !c.blog || hasBlog);
+  const coll = offered.find((c) => c.id === collection) ?? offered[0];
   const [pages, setPages] = useState<Summary[]>([]);
   const [query, setQuery] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -96,7 +109,7 @@ export default function PagesPanel() {
       subHeader={
         <div className="flex flex-col gap-1.5">
         <select aria-label="Documents" value={collection} onChange={(e) => { setCollection(e.target.value); setCreating(false); setQuery(''); }} className="rounded-md border border-border bg-background px-1.5 py-1 text-xs text-heading">
-          {COLLECTIONS.map((c) => (
+          {offered.map((c) => (
             <option key={c.id} value={c.id}>
               {c.label}
             </option>
@@ -122,8 +135,9 @@ export default function PagesPanel() {
         </p>
       )}
       {creating && collection === 'patterns' && <NewPattern locales={locales} onDone={(id) => { setCreating(false); if (id) { refresh(); openPage(id); } }} />}
-      {creating && coll.create && collection !== 'patterns' && <NewPage collection={collection} one={coll.one} make={coll.create} locales={locales} defaultLocale={defaultLocale} onDone={(id) => { setCreating(false); if (id) { refresh(); openPage(id); } }} />}
-      {groups.map(([locale, list]) => (
+      {creating && coll.create && collection !== 'patterns' && <NewPage collection={collection} one={coll.one} make={coll.create} format={coll.format} locales={locales} defaultLocale={defaultLocale} onDone={(id) => { setCreating(false); if (id) { refresh(); openPage(id); } }} />}
+      {collection === 'views' && <BlogViews docs={pages} onOpen={openPage} onCreated={(id) => { refresh(); openPage(id); }} />}
+      {collection !== 'views' && groups.map(([locale, list]) => (
         <div key={locale} className="px-2 pt-3">
           <h3 className="m-0 px-1 pb-1 text-[10px] font-semibold tracking-[0.08em] text-muted uppercase">{locale}</h3>
           <ul className="m-0 list-none p-0">
@@ -155,7 +169,7 @@ export default function PagesPanel() {
   );
 }
 
-function NewPage({ collection, one, make, locales, defaultLocale, onDone }: { collection: string; one: string; make: (title: string) => Record<string, unknown>; locales: string[]; defaultLocale: string; onDone: (id: string | null) => void }) {
+function NewPage({ collection, one, make, format, locales, defaultLocale, onDone }: { collection: string; one: string; make: (title: string) => Record<string, unknown>; format?: 'md'; locales: string[]; defaultLocale: string; onDone: (id: string | null) => void }) {
   const [locale, setLocale] = useState(defaultLocale);
   const [name, setName] = useState('');
   const [title, setTitle] = useState('');
@@ -163,7 +177,9 @@ function NewPage({ collection, one, make, locales, defaultLocale, onDone }: { co
   const create = async () => {
     const id = `${locale}/${name.trim().replace(/^\/+|\/+$/g, '')}`;
     try {
-      await api(`doc?collection=${collection}&id=${encodeURIComponent(id)}`, { method: 'POST', body: { data: make(title || name) } });
+      await api(`doc?collection=${collection}&id=${encodeURIComponent(id)}`, { method: 'POST', body: { data: make(title || name), ...(format ? { format, body: '' } : {}) } });
+      // Where it shows (a post's address) and what uses it are in the catalog.
+      await api<Catalog>('catalog').then(useUi.getState().setCatalog, () => undefined);
       onDone(id);
     } catch (e) {
       setError(e instanceof ApiError ? e.message : String(e));
@@ -180,7 +196,7 @@ function NewPage({ collection, one, make, locales, defaultLocale, onDone }: { co
         </select>
         <input autoFocus className={input} placeholder={collection === 'pages' ? 'name (about, landing/sale)' : 'name'} aria-label={`New ${one} name`} value={name} onChange={(e) => setName(e.target.value)} />
       </div>
-      {collection !== 'layouts' && <input className={input} placeholder={collection === 'pages' ? 'Title' : 'Label'} aria-label={`New ${one} ${collection === 'pages' ? 'title' : 'label'}`} value={title} onChange={(e) => setTitle(e.target.value)} />}
+      {collection !== 'layouts' && <input className={input} placeholder={humanTitle(collection)} aria-label={`New ${one} ${humanTitle(collection).toLowerCase()}`} value={title} onChange={(e) => setTitle(e.target.value)} />}
       {error && <p className="m-0 text-[11px] text-danger">{error}</p>}
       <div className="flex justify-end gap-1.5">
         <button type="button" onClick={() => onDone(null)} className="rounded-md px-2 py-1 text-xs text-muted hover:text-heading">
@@ -249,5 +265,54 @@ function NewPattern({ locales, onDone }: { locales: string[]; onDone: (id: strin
         </button>
       </div>
     </form>
+  );
+}
+
+/**
+ * The blog's views: each page type the preset renders (index, post, author…).
+ * One the site has not customised shows the preset's; "Customize" copies it
+ * into the site (`views/blog-<name>.json`), where the outline edits it.
+ * Deleting that copy goes back to the preset's.
+ */
+function BlogViews({ docs, onOpen, onCreated }: { docs: Summary[]; onOpen: (id: string) => void; onCreated: (id: string) => void }) {
+  const blog = useUi((s) => s.catalog?.blog);
+  const [error, setError] = useState<string | null>(null);
+  if (!blog) return null;
+  const customize = async (name: string, view: { sections: unknown[]; wrapper?: unknown }) => {
+    try {
+      await api(`doc?collection=views&id=${encodeURIComponent(`blog-${name}`)}`, { method: 'POST', body: { data: view } });
+      onCreated(`blog-${name}`);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
+    }
+  };
+  return (
+    <div className="px-2 pt-3">
+      <p className="m-0 px-1 pb-2 text-[11px] text-muted">
+        The pages the <span className="font-mono">{blog.preset}</span> preset renders. Customize one to edit it for this site.
+      </p>
+      {error && <p role="alert" className="m-1 text-[11px] text-danger">{error}</p>}
+      <ul className="m-0 list-none p-0">
+        {blog.views.map((v) => {
+          const own = docs.filter((d) => d.id === `blog-${v.name}` || d.id.endsWith(`/blog-${v.name}`));
+          return (
+            <li key={v.name} className="flex items-center gap-1.5 rounded-md px-2 py-1.5 hover:bg-surface-hover">
+              <span className="flex-1 text-xs text-heading">{v.name}</span>
+              {own.length ? (
+                own.map((d) => (
+                  <button key={d.id} type="button" onClick={() => onOpen(d.id)} className="rounded px-1.5 text-[11px] text-primary hover:underline" aria-label={`Open ${d.id}`}>
+                    {d.id.includes('/') ? d.id.split('/')[0] : 'Open'}
+                  </button>
+                ))
+              ) : (
+                <button type="button" onClick={() => void customize(v.name, v.preset)} className="rounded border border-border px-1.5 py-0.5 text-[10px] text-muted hover:text-heading" aria-label={`Customize ${v.name}`}>
+                  Customize
+                </button>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }

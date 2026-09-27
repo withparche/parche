@@ -22,6 +22,8 @@ export interface Issue {
 interface Step {
   patches: Patch[];
   inverse: Patch[];
+  /** A Markdown body's change, before and after (outside the data the patches cover). */
+  body?: [string | undefined, string];
   group?: string;
   at: number;
 }
@@ -74,6 +76,8 @@ interface DocsState {
   open: (collection: string, id: string) => Promise<void>;
   close: (key: string) => void;
   edit: (key: string, recipe: (data: Record<string, any>) => void, group?: string) => void;
+  /** Change a Markdown document's body; typing close together is one undo step. */
+  editBody: (key: string, body: string) => void;
   undo: (key: string) => void;
   redo: (key: string) => void;
   save: (key: string) => Promise<boolean>;
@@ -177,11 +181,22 @@ export const useDocs = create<DocsState>((set, get) => {
       afterChange(key);
     },
 
+    editBody: (key, body) => {
+      const d = get().docs[key];
+      if (!d || d.readOnly || body === d.body) return;
+      const now = Date.now();
+      const last = d.past[d.past.length - 1];
+      const merge = last?.body && last.group === 'body' && now - last.at < GROUP_MS && d.past.length > d.saved;
+      const step: Step = merge ? { ...last!, body: [last!.body![0], body], at: now } : { patches: [], inverse: [], body: [d.body, body], group: 'body', at: now };
+      patch(key, () => ({ body, past: merge ? [...d.past.slice(0, -1), step] : [...d.past, step], future: [] }));
+      afterChange(key);
+    },
+
     undo: (key) => {
       const d = get().docs[key];
       const step = d?.past[d.past.length - 1];
       if (!d || !step) return;
-      patch(key, () => ({ data: applyPatches(d.data, step.inverse), past: d.past.slice(0, -1), future: [step, ...d.future] }));
+      patch(key, () => ({ data: applyPatches(d.data, step.inverse), ...(step.body ? { body: step.body[0] } : {}), past: d.past.slice(0, -1), future: [step, ...d.future] }));
       afterChange(key);
     },
 
@@ -189,7 +204,7 @@ export const useDocs = create<DocsState>((set, get) => {
       const d = get().docs[key];
       const step = d?.future[0];
       if (!d || !step) return;
-      patch(key, () => ({ data: applyPatches(d.data, step.patches), past: [...d.past, step], future: d.future.slice(1) }));
+      patch(key, () => ({ data: applyPatches(d.data, step.patches), ...(step.body ? { body: step.body[1] } : {}), past: [...d.past, step], future: d.future.slice(1) }));
       afterChange(key);
     },
 

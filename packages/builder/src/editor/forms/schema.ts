@@ -16,7 +16,7 @@ interface Common {
 
 export type Field = Common &
   (
-    | { kind: 'text'; input?: 'textarea' | 'icon' | 'url' | 'image' | 'tone' | 'color' | 'date'; markdown?: boolean; placeholder?: string }
+    | { kind: 'text'; input?: 'textarea' | 'icon' | 'url' | 'image' | 'tone' | 'color' | 'date'; markdown?: boolean; placeholder?: string; suggestions?: string[] }
     | { kind: 'number'; integer: boolean; min?: number; max?: number }
     | { kind: 'boolean' }
     | { kind: 'enum'; options: (string | number | boolean)[] }
@@ -62,7 +62,9 @@ export function fieldOf(input: JsonSchema, key = '', root: JsonSchema = input, s
   switch (typeOf(schema)) {
     case 'string': {
       const input = schema.input ?? (schema.format === 'date' || schema.format === 'date-time' ? 'date' : undefined);
-      return { ...common, kind: 'text', input, markdown: schema.markdown === 'inline', placeholder: schema.placeholder };
+      // `examples` are offered as suggestions, not a closed list (a post's category, its tags).
+      const suggestions = Array.isArray(schema.examples) ? schema.examples.filter((e: unknown): e is string => typeof e === 'string') : undefined;
+      return { ...common, kind: 'text', input, markdown: schema.markdown === 'inline', placeholder: schema.placeholder, suggestions };
     }
     case 'number':
     case 'integer':
@@ -92,7 +94,7 @@ export function fieldOf(input: JsonSchema, key = '', root: JsonSchema = input, s
 /** The meta a union carries for all its branches (help, label), so each branch shows it. */
 function pick(schema: JsonSchema, withoutDefault = false): JsonSchema {
   const out: JsonSchema = {};
-  for (const k of ['help', 'label', 'description', 'placeholder', 'input', 'markdown', 'default']) {
+  for (const k of ['help', 'label', 'description', 'placeholder', 'input', 'markdown', 'default', 'examples']) {
     if (k in schema && !(withoutDefault && k === 'default')) out[k] = schema[k];
   }
   return out;

@@ -1,0 +1,4 @@
+{
+  "categories": [{ "key": "Guides", "title": "Guides" }, { "key": "News", "title": "News" }],
+  "tags": [{ "key": "builder", "title": "Builder" }]
+}

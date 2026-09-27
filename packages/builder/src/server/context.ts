@@ -13,6 +13,7 @@ import { tones, wrapper } from 'parche:config/layout';
 import { defaultLocale } from 'parche:config/i18n';
 import { definePattern, resolveRefs } from '@parche/astro/dev';
 import { patternsByName } from './patterns.js';
+import { loadBlog } from './blog.js';
 import { session } from './session.js';
 import { layoutSchema, navigationSchema, pageSchema, patternSchema } from '@parche/astro/content/pure';
 import type { ZodType } from 'zod';
@@ -25,13 +26,15 @@ export const localeOf = (id: string) => (id.includes('/') ? id.split('/')[0] : d
 
 export async function validationContext(collection: string, id: string): Promise<ValidationContext> {
   const patterns = await patternsByName(session().root, localeOf(id));
+  const blog = collection in schemas ? null : await loadBlog();
   return {
     widgetMeta,
     widgetPropSchemas,
     tones: (tones as { name: string }[]).map((t) => t.name),
     wrapper: wrapper ?? null,
     definitions: patterns,
-    collectionSchema: schemas[collection],
+    collectionSchema: schemas[collection] ?? (blog?.schemas as Record<string, ZodType> | undefined)?.[collection],
+    ...(collection === 'views' && blog ? { checkPlacements: blog.checkPlacements } : {}),
     resolveRefs: (nodes, base) => resolveRefs(nodes, localeOf(id), base),
     definePattern,
   };

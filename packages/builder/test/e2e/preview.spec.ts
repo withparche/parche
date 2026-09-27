@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { settle } from './_shared';
 
 async function openHome(page: Page) {
   await page.goto('/_parche/builder');
@@ -11,14 +12,6 @@ async function openHome(page: Page) {
   await settle(page);
 }
 
-async function settle(page: Page) {
-  let last = Date.now();
-  const onNav = (f: { parentFrame(): unknown }) => { if (f.parentFrame()) last = Date.now(); };
-  page.on('framenavigated', onNav);
-  await expect.poll(() => Date.now() - last > 1200, { timeout: 15_000 }).toBe(true);
-  page.off('framenavigated', onNav);
-  await expect.poll(() => page.locator('iframe[title="Preview"]').evaluate((f: HTMLIFrameElement) => typeof (f.contentWindow as any)?.__parchePreview?.onSelect)).toBe('function');
-}
 const frame = (page: Page) => page.frameLocator('iframe[title="Preview"]');
 const outline = (page: Page) => page.getByRole('region', { name: 'Outline' });
 

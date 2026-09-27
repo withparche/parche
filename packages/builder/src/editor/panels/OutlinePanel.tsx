@@ -53,7 +53,7 @@ export default function OutlinePanel() {
       <div className="flex min-h-full flex-col">
         <button type="button" onClick={() => { select(null); useUi.getState().setInspectorOpen(true); }} aria-current={selected === null} className="mx-2 mt-2 rounded-md px-2 py-1.5 text-left text-xs font-medium text-heading hover:bg-surface-hover aria-[current=true]:bg-primary-soft">
           {(doc.data.title as string | undefined) ?? (doc.data.label as string | undefined) ?? doc.id}
-          <span className="block text-[10px] font-normal text-muted">{doc.kind === 'page' ? 'Page settings' : doc.collection === 'navigation' ? 'Menu: its items are in the inspector' : doc.kind}</span>
+          <span className="block text-[10px] font-normal text-muted">{doc.kind === 'page' ? 'Page settings' : doc.collection === 'posts' ? 'Post settings; its text is Markdown' : doc.collection === 'navigation' ? 'Menu: its items are in the inspector' : doc.kind}</span>
         </button>
         {roots.map((base) => (
           <RootList key={base} doc={doc} base={base} />
@@ -80,7 +80,7 @@ export default function OutlinePanel() {
 
 function RootList({ doc, base }: { doc: Doc; base: string }) {
   const nodes = (base.startsWith('slots.') ? doc.data.slots?.[base.slice(6)] : doc.data[base]) as Node[] | undefined;
-  const title = base === 'sections' ? (doc.kind === 'page' ? 'Sections' : 'Tree') : base === 'tree' ? 'Tree' : `Outlet · ${base.slice(6)}`;
+  const title = base === 'sections' ? (doc.kind === 'page' ? 'Sections' : doc.kind === 'post' ? 'Sections above the post' : 'Tree') : base === 'tree' ? 'Tree' : `Outlet · ${base.slice(6)}`;
   return (
     <section className="mt-2 px-2" aria-label={title}>
       <h3 className="m-0 px-1 pb-0.5 text-[10px] font-semibold tracking-[0.08em] text-muted uppercase">{title}</h3>

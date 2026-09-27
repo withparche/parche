@@ -40,6 +40,9 @@ interface UiState {
   toggleDark: () => void;
   /** Pinned, a side panel takes its own space; unpinned, it floats over the preview. Remembered per browser. */
   pinned: { left: boolean; right: boolean };
+  /** A Markdown document shows its body as text instead of the preview. */
+  bodyEditor: boolean;
+  setBodyEditor: (on: boolean) => void;
   /** The inspector can be closed (to see the whole preview); selecting something opens it again. */
   inspectorOpen: boolean;
   setInspectorOpen: (open: boolean) => void;
@@ -99,6 +102,8 @@ export const useUi = create<UiState>((set) => ({
   inspect: (inspected) => set({ inspected }),
   pinned: storedPins,
   inspectorOpen: true,
+  bodyEditor: false,
+  setBodyEditor: (bodyEditor) => set({ bodyEditor }),
   setInspectorOpen: (inspectorOpen) => set({ inspectorOpen }),
   togglePin: (side) =>
     set((s) => {

@@ -24,6 +24,16 @@ export interface CatalogPattern {
   usedBy: string[];
 }
 
+export interface BlogCatalog {
+  preset: string;
+  /** The resolved blog options: set in astro.config, shown read-only. */
+  config: Record<string, unknown>;
+  forms: { posts: Record<string, unknown>; authors: Record<string, unknown>; taxonomies: Record<string, unknown>; series: Record<string, unknown> };
+  views: { name: string; overrides: string[]; preset: { sections: unknown[]; wrapper?: unknown } }[];
+  postPaths: Record<string, string>;
+  viewPaths: Record<string, string | null>;
+}
+
 export interface Catalog {
   widgets: Record<string, CatalogWidget>;
   /** The site's patterns, each once by its entry; `patternsIn` resolves `pattern/<id>` for a locale. */
@@ -33,6 +43,8 @@ export interface Catalog {
   navigation: { id: string; locale: string; name: string; usedBy: { doc: string; widget: string; prop: string }[]; itemsSchema: unknown }[];
   /** Each page's URL on the site, by page id. */
   pageUrls: Record<string, string>;
+  /** The blog, when the site has it: its forms, its views, where posts and views are shown. */
+  blog: BlogCatalog | null;
   /** The page's own fields (title, description, urlSlug, metadata) as JSON Schema. */
   pageSettings: Record<string, unknown>;
   limits: { maxFilledSlots: number };

@@ -552,6 +552,9 @@ importers:
       '@parche/astro':
         specifier: workspace:*
         version: link:../../core
+      '@parche/astro-blog':
+        specifier: workspace:*
+        version: link:../../../parches/blog
       '@parche/elements':
         specifier: workspace:*
         version: link:../../../parches/elements

@@ -39,7 +39,8 @@ It edits the files themselves: a save writes the JSON (or Markdown) in
 ## The screen
 
 - **The rail** (left) opens a panel:
-  - **Documents**: pages, layouts, menus and patterns, grouped by language.
+  - **Documents**: pages, layouts, menus and patterns, grouped by language;
+    with the blog, also its posts, views, authors, series and taxonomies.
   - **Outline**: the open document as a tree.
   - **Widgets**: the site's widgets and patterns, to drag or add.
   - **Design**: the token values.
@@ -92,6 +93,31 @@ linked value in a form (`{ "$ref": "navigation/main" }`) opens the menu.
   remove.
 - A pattern previews through a page that uses it.
 
+**The blog** (when the site has the blog parche):
+
+- **Posts.** The frontmatter as a form: dates as dates, the image from the
+  assets, the category, tags and authors suggested from what the site has.
+  The body is Markdown, edited in place of the preview ("Markdown" in the
+  preview's toolbar, or "Edit the text"). Title and text both show in the
+  preview before a save: the body is rendered with the site's own Markdown
+  pipeline. A save writes the frontmatter and leaves the rest of the file as
+  it was. **New** makes a draft dated today.
+- **Views.** Each page type the preset renders (index, post, author,
+  taxonomy…) is listed; **Customize** copies the preset's view into
+  `src/content/views/blog-<name>.json`, which the outline then edits like a
+  page. `{ "$label": … }` values stay the blog's words in each language, and
+  the placement rules (no ad before the title) are checked. Deleting the file
+  goes back to the preset's.
+- **Authors, series and taxonomies** are edited with their collection's form.
+- A post previews at its address; a view at the first page that renders it.
+- The blog's options (`createBlog({ … })` in `astro.config`) show in the Site
+  panel, read-only.
+
+The blog tells the builder what it needs through a module it declares for
+development tools (`dev` in its manifest, reached through
+`parche:registry/dev`): its schemas, its resolved config, its views and where
+its pages live. The builder does not depend on the blog package.
+
 **Design tokens.** The site's own values over the base look or over one
 theme, light or dark, written to `src/parche.tokens.json`. Each token shows
 its base value, what the page resolves it to now and, when the site sets
@@ -126,6 +152,10 @@ sees it read-only.
   each edit and morphs the body in place (Idiomorph), so scroll, focus and
   state survive. It also draws the hover and selection outlines from the
   markers.
+- A Markdown draft's body is rendered to HTML with the site's Markdown
+  renderer (made once when the server starts) and served with the draft.
+- A page that answers 404 is tried again a few times: a document just
+  created is known to the dev server only once its content is synced.
 - The rest of the site, in another tab, keeps serving the saved files.
 
 The editor itself is a prebuilt React bundle, not a page of the site's
@@ -138,7 +168,6 @@ Vite, so the dev server's reloads never touch its state.
 - The builder assumes the collections live in `src/content/<name>` and
   computes page URLs itself: a site that moves its collections or changes
   its routing is not supported yet.
-- The blog (posts, views, authors, taxonomies) is not editable yet.
 - The token editor has no colour picker and no contrast check.
 - A `$ref`, `$collection` or `$label` value can be opened but not chosen
   from a form.

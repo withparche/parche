@@ -286,7 +286,21 @@ function TextInput({ id, field, value, onChange }: { id: string; field: Extract<
   if (field.input === 'icon') return <IconInput id={id} value={value} onChange={set} />;
   if (field.input === 'image') return <ImageInput id={id} value={value} onChange={set} />;
   if (field.input === 'url') return <UrlInput id={id} value={value} placeholder={placeholder} onChange={set} />;
-  return <input id={id} type={field.input === 'date' ? 'date' : 'text'} className={inputClass} value={value ?? ''} placeholder={placeholder} onChange={(e) => set(e.target.value)} />;
+  // A date field shows the day of a stored date or date-time.
+  if (field.input === 'date') return <input id={id} type="date" className={inputClass} value={(value ?? '').slice(0, 10)} onChange={(e) => set(e.target.value)} />;
+  if (field.suggestions?.length) {
+    return (
+      <>
+        <input id={id} list={`${id}-suggestions`} className={inputClass} value={value ?? ''} placeholder={placeholder} onChange={(e) => set(e.target.value)} />
+        <datalist id={`${id}-suggestions`}>
+          {field.suggestions.map((s) => (
+            <option key={s} value={s} />
+          ))}
+        </datalist>
+      </>
+    );
+  }
+  return <input id={id} type="text" className={inputClass} value={value ?? ''} placeholder={placeholder} onChange={(e) => set(e.target.value)} />;
 }
 
 function ToneSelect({ id, value, fallback, onChange }: { id: string; value?: string; fallback?: string; onChange: (v: string | undefined) => void }) {

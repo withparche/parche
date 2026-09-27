@@ -274,6 +274,13 @@ export interface ParcheManifest {
   };
   /** What this parche needs the system to provide. */
   requires?: ParcheRequires;
+  /**
+   * A module development tools (the builder) import to edit this parche's
+   * content: its collections' schemas, its defaults, where its pages live.
+   * Absolute path. Reached through `parche:registry/dev` under `astro dev`
+   * only, by the parche's name; an unstable, tooling-only contract.
+   */
+  dev?: string;
 }
 
 /** @deprecated Use ParcheManifest. Kept as an alias for existing app factories. */
@@ -454,6 +461,8 @@ export interface ResolvedRegistry {
   apps: ParcheApp[];
   /** App resolvers — modules that export resolve() and getPaths() */
   resolvers: Array<{ appName: string; entrypoint: string }>;
+  /** The parches' modules for development tools, by parche name (see ParcheManifest.dev). */
+  devTools: Record<string, string>;
 }
 
 /** A `<link>` a parche adds to every page's head. */

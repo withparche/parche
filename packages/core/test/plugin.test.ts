@@ -28,6 +28,7 @@ function makeRegistry(partial: Partial<ResolvedRegistry>): ResolvedRegistry {
     contentGlobs: [],
     apps: [],
     resolvers: [],
+    devTools: {},
     ...partial,
   };
 }
@@ -162,4 +163,10 @@ test('elements catalog: an overridden compound primitive is checked for the orig
   assert.ok(code.includes(`import * as o0 from ${JSON.stringify(EJECTED_TABS)}`));
   assert.match(code, /for \(const __p of \["Root","Panel"\]\) \{ if \(!\(__p in o0\)\)/);
   assert.match(code, /override \\"elements:Tabs\\" is missing export/);
+});
+
+test('dev tools: each parche\'s module loads on demand by its name', () => {
+  const code = load(makeRegistry({ devTools: { blog: '/abs/blog/dev.ts' } }), '\0parche:registry/dev');
+  assert.match(code, /"blog": \(\) => import\("\/abs\/blog\/dev\.ts"\)/);
+  assert.equal(load(makeRegistry({ devTools: {} }), '\0parche:registry/dev').trim(), 'export default {\n\n};');
 });

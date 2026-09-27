@@ -18,7 +18,9 @@ const overlay = (entry) => {
   const c = context();
   if (!c || !entry || !entry.filePath) return entry;
   const draft = c.drafts.get(entry.filePath);
-  return draft ? { ...entry, data: draft } : entry;
+  if (!draft) return entry;
+  // A Markdown draft brings its body, rendered as the content layer would.
+  return draft.rendered ? { ...entry, data: draft.data, body: draft.body, rendered: draft.rendered } : { ...entry, data: draft.data };
 };
 export async function getCollection(name, filter) {
   if (!context()) return real.getCollection(name, filter);

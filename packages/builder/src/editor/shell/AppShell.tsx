@@ -13,6 +13,7 @@ import { PanelSide } from './panelSide';
 import { useEditorKeys } from './useEditorKeys';
 import { useDiskEvents } from './useDiskEvents';
 import PreviewFrame from '../preview/PreviewFrame';
+import BodyEditor from '../preview/BodyEditor';
 import WidgetsPanel from '../panels/WidgetsPanel';
 import PagesPanel from '../panels/PagesPanel';
 import OutlinePanel from '../panels/OutlinePanel';
@@ -84,6 +85,7 @@ export default function AppShell() {
 
   const Left = panel ? panels[panel] : null;
   const inspectorOpen = useUi((s) => s.inspectorOpen);
+  const bodyEditor = useUi((s) => s.bodyEditor);
   const showRight = !!(doc || inspected) && inspectorOpen;
   const dirty = isDirty(doc);
   const iconBtn = 'grid size-7 place-items-center rounded-md text-muted hover:bg-surface-hover hover:text-heading disabled:opacity-30';
@@ -145,6 +147,8 @@ export default function AppShell() {
           {doc && <Notices doc={doc} />}
           <div className="min-h-0 flex-1">
             <PreviewFrame src={previewSrc(doc, catalog, via)} rev={previewRev} onReload={bumpPreview}>
+              {/* A Markdown document's body, as text, in place of the page when asked. */}
+              {doc?.format === 'md' && bodyEditor && <BodyEditor doc={doc} />}
               {/* Unpinned panels float over the page, under the preview's toolbar. */}
               {Left && !pinned.left && (
                 <div className="absolute inset-y-0 left-0 z-10 flex shadow-[4px_0_16px_rgb(0_0_0/0.35)]">

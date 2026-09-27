@@ -33,6 +33,8 @@ export interface ValidationContext {
   collectionSchema?: ZodType;
   /** Resolves `$ref` / `$collection` values as a page does; without one, nodes holding references skip the props check. */
   resolveRefs?: (nodes: Node[], base: string) => Promise<{ nodes: Node[]; issues: { path: string; message: string }[] }>;
+  /** A blog view's placement rules (no ad before the title…), when the site has the blog. */
+  checkPlacements?: (view: { sections: unknown[] }) => string[];
   /** Builds a pattern from a `patterns` document, to check the one being edited. */
   definePattern?: (entry: string, data: unknown) => { pattern?: Pattern; error?: string };
 }
@@ -78,6 +80,10 @@ export async function validateDoc(collection: string, data: Record<string, any>,
     if (!parsed.success) {
       for (const i of parsed.error.issues) issues.push({ path: zodPath(i.path).replace(/^\./, '') || '(document)', message: i.message, severity: 'error', source: 'schema' });
     }
+  }
+
+  if (kind === 'view' && ctx.checkPlacements && Array.isArray(data.sections)) {
+    for (const message of ctx.checkPlacements({ sections: data.sections })) issues.push({ path: 'sections', message, severity: 'error', source: 'tree' });
   }
 
   let roots = rootsOf(kind, data);

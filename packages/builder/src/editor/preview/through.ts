@@ -30,7 +30,32 @@ export function previewSrc(doc: Doc | undefined, catalog: Catalog | null, via: R
   if (!doc || !catalog) return '/';
   const defaultLocale = catalog.i18n.defaultLocale;
   if (doc.collection === 'pages') return pageUrl(doc.id, doc.data.urlSlug as string | undefined, defaultLocale);
+  const blog = catalog.blog;
+  if (blog && ['posts', 'views', 'authors', 'series', 'taxonomies'].includes(doc.collection)) return blogPath(doc, catalog) ?? '/';
   const pages = pagesShowing(doc, catalog);
   const page = via[doc.key] && pages.includes(via[doc.key]) ? via[doc.key] : pages[0];
   return page ? catalog.pageUrls[page] ?? pageUrl(page, undefined, defaultLocale) : '/';
+}
+
+/**
+ * Where a blog document shows: a post at its permalink, a view at the first
+ * page that renders it, an author or a series at its own page, the rest at
+ * the listing.
+ */
+function blogPath(doc: Doc, catalog: Catalog): string | null {
+  const blog = catalog.blog!;
+  const cfg = blog.config as { permalinks: Record<string, string>; authors?: string; series?: boolean };
+  const key = doc.id.includes('/') && catalog.i18n.locales.includes(doc.id.split('/')[0]) ? doc.id.split('/').slice(1).join('/') : doc.id;
+  switch (doc.collection) {
+    case 'posts':
+      return blog.postPaths[doc.id] ?? null;
+    case 'views':
+      return blog.viewPaths[key.replace(/^blog-/, '')] ?? null;
+    case 'authors':
+      return cfg.authors === 'many' ? cfg.permalinks.author.replace('%author%', key.toLowerCase()) : blog.viewPaths.index;
+    case 'series':
+      return cfg.series ? cfg.permalinks.series.replace('%series%', key.toLowerCase()) : blog.viewPaths.index;
+    default:
+      return blog.viewPaths.index;
+  }
 }

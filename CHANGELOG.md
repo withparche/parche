@@ -18,7 +18,9 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   only: the CLI adds it through Astro's programmatic `dev()`, it refuses any
   other command, and no build carries it. Pages with their slots and
   wrappers, layouts and their outlets, menus (with the form of the prop that
-  uses them), patterns, the design tokens (the base look or a theme, light
+  uses them), patterns, the blog (posts with their Markdown text, views
+  customised from the preset's, authors, series, taxonomies), the design
+  tokens (the base look or a theme, light
   or dark, into `src/parche.tokens.json`) and the site config (the dev server
   restarts to read it). The preview is the real page with the unsaved edits
   in place, updated without a reload, with hover and selection outlines; a
@@ -125,7 +127,8 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
 
 - **For parches** (`417abbc`, `a54e553`, `bc5a876`): head links
   (`head.links`), `hooks['astro:build:done']`, `siteSearch` for the
-  WebSite's SearchAction, and a route's `pageType` for its WebPage node.
+  WebSite's SearchAction, a route's `pageType` for its WebPage node, and
+  `dev`, a module development tools reach through `parche:registry/dev`.
 
 - **Design-system pages in the playground** (`/design`). The three token layers
   read from the real stylesheets: every colour role with its light and dark

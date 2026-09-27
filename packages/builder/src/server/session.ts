@@ -16,10 +16,24 @@ export interface Session {
   previewToken: string;
   host: string | boolean;
   root: string;
-  /** The editor's unsaved documents, by the file each stands in for, for the preview. */
-  drafts: Map<string, Record<string, unknown>>;
+  /**
+   * The editor's unsaved documents, by the file each stands in for, for the
+   * preview: the data, and for Markdown the body with its HTML rendered.
+   */
+  drafts: Map<string, Draft>;
+  /** The site's Markdown and image config, to render a draft's body as the content layer would. */
+  markdown?: { processor: { createRenderer(opts: Record<string, unknown>): Promise<{ render(body: string, opts: Record<string, unknown>): Promise<{ code: string; metadata: Record<string, unknown> }> }> }; [k: string]: unknown };
+  image?: unknown;
+  /** The site's Markdown renderer, made once (it loads Shiki), started with the server. */
+  renderer?: Promise<{ render(body: string, opts: Record<string, unknown>): Promise<{ code: string; metadata: Record<string, unknown> }> }>;
   /** Who listens for changes on disk: one per open editor (SSE). */
   listeners: Set<(e: BuilderEvent) => void>;
+}
+
+export interface Draft {
+  data: Record<string, unknown>;
+  body?: string;
+  rendered?: { html: string; metadata: Record<string, unknown> };
 }
 
 const KEY = Symbol.for('parche.builder');

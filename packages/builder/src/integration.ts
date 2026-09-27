@@ -5,6 +5,7 @@ import { session } from './server/session.js';
 import { previewAls } from './server/preview.js';
 import { previewMiddleware } from './server/preview-server.js';
 import { draftContent } from './vite/draft-content.js';
+import { markdownRenderer } from './server/markdown.js';
 
 export interface BuilderOptions {
   /** The session secret every editor request must carry; the CLI generates it. */
@@ -60,6 +61,14 @@ export default function builder(options: BuilderOptions): AstroIntegration {
         previewAls();
         // The editor has its own chrome; the dev toolbar would sit on top of the preview.
         updateConfig({ devToolbar: { enabled: false }, vite: { plugins: [draftContent()] } });
+      },
+      'astro:config:done': ({ config }) => {
+        // A post's unsaved body renders with the site's own Markdown pipeline.
+        const s = session();
+        s.markdown = config.markdown as never;
+        s.image = config.image;
+        s.renderer = undefined;
+        void markdownRenderer()?.catch(() => undefined);
       },
       'astro:server:setup': ({ server, logger }) => {
         server.middlewares.use(previewMiddleware);

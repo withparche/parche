@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { existsSync } from 'node:fs';
-import { CONTENT, file } from './_shared';
+import { CONTENT, file, settle } from './_shared';
 
 const TOKENS = CONTENT.replace(/content\/$/, 'parche.tokens.json');
 
@@ -9,6 +9,7 @@ test('a token change shows in the preview at once, and Save writes it to parche.
   await page.getByRole('region', { name: 'Pages' }).getByRole('button', { name: /^home(\s|$)/ }).click();
   const frame = page.locator('iframe[title="Preview"]');
   await expect.poll(() => frame.evaluate((f: HTMLIFrameElement) => typeof (f.contentWindow as any)?.__parchePreview?.setTokens)).toBe('function');
+  await settle(page);
   await frame.evaluate((f: HTMLIFrameElement) => ((f.contentWindow as any).__probe = 'alive'));
 
   await page.getByRole('button', { name: 'Design', exact: true }).click();

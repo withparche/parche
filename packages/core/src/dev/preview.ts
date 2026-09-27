@@ -7,8 +7,12 @@
  * there is no context, and nothing here changes a thing.
  */
 export interface PreviewContext {
-  /** Drafts by the file they replace (`src/content/pages/en/home.json`), as the collection would parse them. */
-  drafts: Map<string, Record<string, unknown>>;
+  /**
+   * Drafts by the file they replace (`src/content/pages/en/home.json`): the
+   * data as the collection would parse it and, for Markdown, the body with
+   * its HTML rendered as the content layer would.
+   */
+  drafts: Map<string, { data: Record<string, unknown>; body?: string; rendered?: { html: string; metadata: Record<string, unknown> } }>;
   /** Wrap each node's output in comments naming its id, for the overlay. */
   markers: boolean;
 }

@@ -345,6 +345,9 @@ function DocSettings({ doc }: { doc: Doc }) {
   if (catalog && doc.collection === 'layouts') return <LayoutSettings doc={doc} />;
   if (catalog && doc.collection === 'navigation') return <MenuSettings doc={doc} />;
   if (catalog && doc.collection === 'patterns') return <PatternSettings doc={doc} />;
+  if (catalog?.blog && doc.collection === 'posts') return <PostSettings doc={doc} />;
+  if (catalog?.blog && doc.collection === 'views') return <ViewSettings doc={doc} />;
+  if (catalog?.blog && (doc.collection === 'authors' || doc.collection === 'taxonomies' || doc.collection === 'series')) return <BlogDataSettings doc={doc} />;
   if (doc.kind !== 'page' || !catalog) {
     return (
       <PanelShell title="Document" onClose={closeInspector}>
@@ -477,6 +480,65 @@ function MenuSettings({ doc }: { doc: Doc }) {
       ) : (
         <JsonField label="Items" value={doc.data.items ?? []} onChange={(v) => editCurrent((d) => void (d.items = v))} />
       )}
+    </PanelShell>
+  );
+}
+
+/**
+ * A post: its frontmatter as a form (dates as dates, the image from the
+ * assets, the category, tags and authors suggested from the site's). Its
+ * body is Markdown, edited in place of the preview; its sections, if any,
+ * in the outline.
+ */
+function PostSettings({ doc }: { doc: Doc }) {
+  const blog = useUi((s) => s.catalog!.blog!);
+  const setBodyEditor = useUi((s) => s.setBodyEditor);
+  const bodyEditor = useUi((s) => s.bodyEditor);
+  const onChange = (pointer: Pointer, value: unknown, group?: string) => editCurrent((d) => (pointer.length === 0 ? undefined : setIn(d, pointer, value)), group);
+  return (
+    <PanelShell title="Post" subtitle={doc.relPath} onClose={closeInspector}>
+      <div className="flex items-center gap-2 border-b border-border px-3 py-2">
+        <span className="flex-1 text-[11px] text-muted">{doc.data.draft ? 'A draft: shown in dev, never built.' : 'Published.'}</span>
+        <button type="button" onClick={() => setBodyEditor(!bodyEditor)} className="rounded-md border border-border px-2 py-1 text-[11px] text-muted hover:text-heading">
+          {bodyEditor ? 'Show the page' : 'Edit the text'}
+        </button>
+      </div>
+      <Form key={doc.key} schema={blog.forms.posts} value={doc.data} onChange={onChange} scope={`${doc.key}:post`} />
+    </PanelShell>
+  );
+}
+
+/** An author, a locale's taxonomies or a series: the form of its collection. */
+function BlogDataSettings({ doc }: { doc: Doc }) {
+  const blog = useUi((s) => s.catalog!.blog!);
+  const schema = blog.forms[doc.collection as 'authors' | 'taxonomies' | 'series'];
+  const title = { authors: 'Author', taxonomies: 'Taxonomies', series: 'Series' }[doc.collection as 'authors'] ?? doc.collection;
+  const onChange = (pointer: Pointer, value: unknown, group?: string) => editCurrent((d) => (pointer.length === 0 ? undefined : setIn(d, pointer, value)), group);
+  return (
+    <PanelShell title={title} subtitle={doc.relPath} onClose={closeInspector}>
+      <Form key={doc.key} schema={schema} value={doc.data} onChange={onChange} scope={`${doc.key}:data`} />
+    </PanelShell>
+  );
+}
+
+/**
+ * A blog view the site customised: its widgets are in the outline, where
+ * `{ "$label": … }` values stay the blog's labels in each language. Deleting
+ * the file (Documents) goes back to the preset's.
+ */
+function ViewSettings({ doc }: { doc: Doc }) {
+  const catalog = useUi((s) => s.catalog!);
+  const name = doc.id.split('/').pop()!.replace(/^blog-/, '');
+  const path = catalog.blog!.viewPaths[name];
+  return (
+    <PanelShell title="Blog view" subtitle={doc.relPath} onClose={closeInspector}>
+      <div className="flex flex-col gap-2 p-3 text-[11px] text-muted">
+        <p className="m-0">
+          The <span className="font-mono text-heading">{name}</span> view of the blog, customised for this site over the <span className="font-mono">{catalog.blog!.preset}</span> preset's.
+        </p>
+        <p className="m-0">{path ? <>Shown here through <span className="font-mono text-heading">{path}</span>.</> : 'The blog builds no page for it with its current options.'}</p>
+        <p className="m-0">Labels such as {'{ "$label": "sectionsLabel" }'} are the blog's own words in each language. Delete this file to go back to the preset's view.</p>
+      </div>
     </PanelShell>
   );
 }

@@ -49,6 +49,12 @@ declare module 'parche:registry/templates' {
   export const templateMap: Record<string, import('astro').AstroComponentFactory>;
 }
 
+declare module 'parche:registry/dev' {
+  /** Each parche's module for development tools, by parche name, loaded on demand. */
+  const tools: Record<string, () => Promise<Record<string, unknown>>>;
+  export default tools;
+}
+
 declare module 'parche:registry/resolvers' {
   export function resolveContent(
     slug: string,

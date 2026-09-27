@@ -15,6 +15,7 @@ import { locales, defaultLocale } from 'parche:config/i18n';
 import { z } from 'zod';
 import { outletWrappers, pageSchema, patternsFor, rootWidgets, widgetNames } from '@parche/astro/content/pure';
 import { readPatterns } from './patterns.js';
+import { blogCatalog } from './blog-catalog.js';
 import { listDocs, readDoc } from './files.js';
 import { session } from './session.js';
 import { navRefs, schemaAt } from '../shared/usage.js';
@@ -133,6 +134,7 @@ export async function buildCatalog() {
     layouts,
     navigation,
     pageUrls,
+    blog: await blogCatalog(root, locales, defaultLocale),
     pageSettings,
     limits: { maxFilledSlots: 6 },
     tones: (tones as { name: string }[]).map((t) => t.name),
