@@ -1,23 +1,14 @@
-import { localizePath, splitLocale } from '@parche/astro/content/pure';
+import { localizePath, splitLocale } from '../utils/paths.js';
+import type { CollectionPages } from '../types/config.js';
 
 /**
- * What a collection's pages are, as data: where each entry is served, and
- * what the widget that renders it is given. Pure, so it is tested without a
- * site; the resolver and the entry addresses both use it, so a page is
- * always linked where it is served.
+ * The pages of the site's collections of plain data (`collections` in the
+ * site config), as data: where each entry is served, and what the widget that
+ * renders it is given. Pure, so it is tested without a site; the resolver and
+ * the entry addresses both use it, so a page is always linked where it is
+ * served.
  */
-export interface CollectionPages {
-  /** Where each entry is served: `/products/%slug%`. `%slug%` is the entry's `slug`, else its id without the locale folder. */
-  path: string;
-  /** What renders each entry, as in any node: a widget (`ProductDetail`, `Hero`) or a pattern (`pattern/product-page`). */
-  widget: string;
-  /** Widget prop ← entry field (a dotted path), for the props whose names differ. The rest go by name. */
-  props?: Record<string, string>;
-  /** The layout the pages use. Default `default`. */
-  layout?: string;
-  /** Which fields give the page its title, description and picture (dotted paths). Defaults: `title` or `name`, `description` or `summary`. */
-  metadata?: { title?: string; description?: string; image?: string };
-}
+export type { CollectionPages };
 
 export interface Entry {
   id: string;

@@ -24,7 +24,6 @@ parche astro new hello-parche my-app  # or name a starter directly
 | `@parche/elements` | Foundational building blocks, consumed as `parche:elements/*`. |
 | `@parche/ui` | Widget library — section widgets and blog widgets. |
 | `@parche/astro-blog` | Blog app: routes, collections, taxonomies, RSS. |
-| `@parche/astro-collections` | A page for every entry of a collection of plain data, rendered by a widget or a pattern. |
 | `@parche/themes` | Theme parches. Each contributes its CSS, its fonts and a switcher entry. |
 | `@parche/cli` | The `parche` command. |
 

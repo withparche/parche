@@ -30,14 +30,17 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   panels can be pinned beside the preview or float over it. Private while
   on `experimental`; see `docs-wip/builder.md`.
 
-- **Pages from a collection, `@parche/astro-collections`.** A collection of
-  plain data (products, courses, places) gets a page for every entry at a
-  `path`, rendered by a widget or a pattern that takes the entry's fields as
-  props: the ones it declares by name, the others through a `props` map, the
-  rest left out. The collection keeps only its data and its own schema; the
-  page's structure is the pattern's. Entries carry their address as `href` in
-  a `$collection`, so lists link to the pages. The demo store's three products
-  are the example (`docs-wip/collections.md`).
+- **Pages from a collection, `collections` in the site config.** A
+  collection of plain data (products, courses, places) named in
+  `parche.config.json` gets a page for every entry at a `path`, rendered by a
+  widget or a pattern that takes the entry's fields as props: the ones it
+  declares by name, the others through a `props` map, the rest left out. The
+  collection keeps only its data and its own schema in `content.config.ts`;
+  the page's structure is the pattern's. Entries carry their address as
+  `href` in a `$collection`, so lists link to the pages. A name with no
+  entries, or one an app already serves, fails the build. The builder's Site
+  panel edits it like the rest of the site config. The demo store's three
+  products are the example (`docs-wip/collections.md`).
 
 - **Patterns** (`src/content/patterns/`). A composition of widgets kept once
   and used wherever a widget goes, as `{ "widget": "pattern/<id>" }`. Without

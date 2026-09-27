@@ -464,6 +464,19 @@ export function createRegistry(
   // Where routed collections' entries are served; a later parche overrides an earlier one.
   const entryUrls: Record<string, string> = {};
   for (const parche of parches) Object.assign(entryUrls, parche.urls ?? {});
+  // The site's own collections with pages (`collections` in the site config),
+  // which core serves. A collection an app already serves cannot have both.
+  const collectionPages = Object.keys(inlineSiteConfig?.collections ?? {});
+  for (const name of collectionPages) {
+    const owner = parches.find((p) => p.urls?.[name]);
+    if (owner) {
+      throw new Error(
+        `[parche] collections.${name} in the site config: "${owner.name}" already serves the "${name}" collection's pages. ` +
+          `Remove it from collections, or configure its pages in that parche.`,
+      );
+    }
+    entryUrls[name] = corePath('utils/collection-urls.ts');
+  }
 
   // Collect app resolvers
   const resolvers: Array<{ appName: string; entrypoint: string }> = [];
@@ -472,6 +485,7 @@ export function createRegistry(
       resolvers.push({ appName: app.name, entrypoint: app.resolver.entrypoint });
     }
   }
+  if (collectionPages.length) resolvers.push({ appName: 'collections', entrypoint: corePath('utils/collections.ts') });
 
   return {
     modules,

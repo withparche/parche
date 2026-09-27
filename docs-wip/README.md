@@ -18,7 +18,7 @@ duplicate it here.
 - [builder.md](./builder.md) — the visual builder: running it, what it edits,
   how the preview works, and its known gaps.
 - [collections.md](./collections.md) — pages from a collection of plain data,
-  rendered by a widget or a pattern (@parche/astro-collections).
+  rendered by a widget or a pattern (`collections` in the site config).
 
 ## Status
 

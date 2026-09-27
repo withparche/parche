@@ -17,7 +17,7 @@ materialization.
   - `parches/elements` — foundational components, exposed as `parche:elements/*`.
   - `parches/ui` — widget library (`parche:widgets/*`).
   - `parches/blog` — app parche: routes, collections, RSS (`@parche/astro-blog`).
-  - `parches/collections` — a page for every entry of a collection of plain data, rendered by a widget or a pattern (`@parche/astro-collections`). Apps like it and the blog build on core's page kit (`parche:Page`, `utils/paths.ts`, `urls` in the manifest) instead of copying core.
+  - An app parche is an application with a domain and its own rules, as the blog is. It builds on core's page kit (`parche:Page`, `utils/paths.ts`, `urls` in the manifest, resolvers) instead of copying core. A mechanism with no domain vocabulary belongs in core: pages for any collection of plain data are `collections` in the site config (`utils/collections.ts`, `docs-wip/collections.md`), not a parche.
   - `parches/themes` — theme parches (`corporate`, `minimal`, …): each contributes its `[data-theme]` CSS + switcher entry, so a site bundles only the themes it imports.
 - `packages/cli` — `@parche/cli`, the `parche` command (`parche astro new`, `parche astro builder`). Built with tsup.
 - `packages/builder` — `@parche/builder`, the visual editor. Dev only: `parche astro builder` adds it through Astro's programmatic `dev()`, it throws under any other command, and no build may carry it (`test/assert-dist.mjs`). The editor is a prebuilt React bundle (`pnpm --filter @parche/builder build`); its routes live under `/_parche/`.

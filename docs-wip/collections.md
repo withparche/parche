@@ -1,9 +1,9 @@
 # Pages from a collection
 
-Provisional, like everything in `docs-wip/`. `@parche/astro-collections`
-gives every entry of a collection of plain data a page of its own, laid out
-with Parche. The demo's store is the example: three products, each at
-`/homes/store/<id>`.
+Provisional, like everything in `docs-wip/`. `collections` in the site
+config gives every entry of a collection of plain data a page of its own,
+laid out with Parche. The demo's store is the example: three products, each
+at `/homes/store/<id>`.
 
 ## The idea
 
@@ -16,19 +16,19 @@ The page's structure is a widget's: a registered one, the site's own, or a
 pattern (`pattern/product-page`), which lays the page out with widgets that
 exist and takes the entry's fields as props.
 
-```js
-// astro.config.mjs
-import createCollectionPages from '@parche/astro-collections';
-
-parche({
-  parches: [
-    createElements(), createUI(),
-    createCollectionPages({
-      products: { path: '/homes/store/%slug%', widget: 'pattern/product-page', layout: 'corvo' },
-    }),
-  ],
-});
+```json
+// src/parche.config.json
+{
+  "collections": {
+    "products": { "path": "/homes/store/%slug%", "widget": "pattern/product-page", "layout": "corvo" }
+  }
+}
 ```
+
+The name is the collection's, as `content.config.ts` declares it. This only
+gives the collection pages: its entries and its schema stay where Astro keeps
+them. It is plain data, so the builder's Site panel edits it as it edits the
+rest of the site config.
 
 ```json
 // src/content/products/moss-weekender.json: only the product
@@ -54,6 +54,11 @@ parche({
 | `layout` | The layout the pages use. Default `default`. |
 | `metadata` | Optional. Which fields give the page's title, description and picture. Defaults: `title` or `name`, `description` or `summary`. |
 
+A `path` without `%slug%`, an empty `widget` or an unknown key fails the
+config. A name with no entries (a collection `content.config.ts` does not
+declare, or an empty one) fails the build, and so does a collection an app
+already serves (the blog's `posts`).
+
 ## What the widget is given
 
 - The entry's fields the widget declares, by name, and the ones `props` maps.
@@ -69,8 +74,8 @@ actions. A placeholder with no value drops out.
 
 ## Links to the pages
 
-The parche declares each collection's addresses to core (`urls` in its
-manifest), so an entry a `{ "$collection": "products" }` yields carries its
+Core knows each collection's addresses, as it knows those an app declares
+(`urls` in its manifest), so an entry a `{ "$collection": "products" }` yields carries its
 `href`. The store's list is one:
 
 ```json
@@ -79,8 +84,9 @@ manifest), so an entry a `{ "$collection": "products" }` yields carries its
 
 ## How it works
 
-- It uses core's page route through a resolver, as the blog's root-level
-  posts do: `getPaths` lists an address per entry, `resolve` finds the entry
+- Core serves the pages from its page route through a resolver, as the
+  blog's root-level posts are, registered only when the site names a
+  collection: `getPaths` lists an address per entry, `resolve` finds the entry
   an address names.
 - The page is its layout and one node, `{ widget, props }`, rendered with the
   layout's wrapper.
@@ -88,6 +94,15 @@ manifest), so an entry a `{ "$collection": "products" }` yields carries its
   with the entry's own `metadata` first.
 - Translations are the same entry id in another locale folder. An entry with
   `draft: true` is shown in dev only.
+
+## Why it is core and not a parche
+
+It was a parche first (`@parche/astro-collections`). It moved into core
+because it has no domain of its own: it is core's own idea of a page, an
+entry rendered by widgets, opened to any collection, and its settings are
+plain data. What stays out of core is an application with a domain and its
+own rules, as the blog is (dates, authors, taxonomies, feeds); such apps
+build on the same mechanisms.
 
 ## Not yet
 

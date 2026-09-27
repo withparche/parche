@@ -5,7 +5,6 @@ import parche from '@parche/astro';
 import createElements from '@parche/elements';
 import createUI from '@parche/ui';
 import createBlog from '@parche/astro-blog';
-import createCollectionPages from '@parche/astro-collections';
 import { astrowind, product, editorial } from '@parche/themes';
 import { blogLabels } from './src/blog-labels.js';
 
@@ -33,11 +32,6 @@ export default defineConfig({
           relatedPostsCount: 4,
           permalinks: { post: '/%slug%' },
           labels: blogLabels,
-        }),
-        // A page for each of the store's products: the collection holds only
-        // the product's data, the product-page pattern lays the page out.
-        createCollectionPages({
-          products: { path: '/homes/store/%slug%', widget: 'pattern/product-page', layout: 'corvo' },
         }),
         astrowind(),
         product(),

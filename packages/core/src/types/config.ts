@@ -39,6 +39,33 @@ const addressSchema = z.object({
   country: z.string().optional(),
 });
 
+/**
+ * The pages of one collection of plain data: where each entry is served, and
+ * what renders it. The collection itself (its entries, its schema) is the
+ * site's, declared in content.config.ts; this only gives it pages.
+ */
+export const collectionPagesSchema = z
+  .object({
+    /** Where each entry is served: `/products/%slug%`. `%slug%` is the entry's `slug`, else its id without the locale folder. */
+    path: z.string().refine((p) => p.startsWith('/') && p.includes('%slug%'), {
+      message: 'must start with "/" and hold %slug%, as in "/products/%slug%"',
+    }),
+    /** What renders each entry, as in any node: a widget (`Hero`) or a pattern (`pattern/product-page`). */
+    widget: z.string().min(1),
+    /** Widget prop ← entry field (a dotted path), for the props whose names differ. The rest go by name. */
+    props: z.record(z.string(), z.string()).optional(),
+    /** The layout the pages use. Default `default`. */
+    layout: z.string().optional(),
+    /** Which fields give the page its title, description and picture (dotted paths). Defaults: `title` or `name`, `description` or `summary`. */
+    metadata: z
+      .object({ title: z.string().optional(), description: z.string().optional(), image: z.string().optional() })
+      .strict()
+      .optional(),
+  })
+  .strict();
+
+export type CollectionPages = z.infer<typeof collectionPagesSchema>;
+
 const contactPointSchema = z.object({
   telephone: z.string().optional(),
   contactType: z.string().optional(),
@@ -133,6 +160,23 @@ export const siteConfigSchema = z.object({
     })
     .strict()
     .prefault({}),
+
+  /**
+   * Pages for the site's collections of plain data: every entry of a
+   * collection named here (a product, a course, a place) gets a page at
+   * `path`, rendered by `widget` with the entry's fields as its props.
+   *
+   *   collections: {
+   *     products: { path: '/products/%slug%', widget: 'pattern/product-page', layout: 'store' },
+   *   }
+   *
+   * The name is the collection's, as content.config.ts declares it. The
+   * widget takes the fields it declares, by name; `props` maps the ones whose
+   * names differ, and the rest are left out. Each entry carries its address as
+   * `href` wherever a `{ "$collection": … }` lists it. A collection an app
+   * already serves (the blog's posts) cannot be named here.
+   */
+  collections: z.record(z.string(), collectionPagesSchema).optional(),
 
   /**
    * Web fonts, as data.

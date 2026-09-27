@@ -89,7 +89,7 @@ Not scheduled; they change what Parche *is*, not how well it works.
   - Done (phases 0–5): the dev-only shell and CLI; pages with the full node model; a preview that morphs drafts in place; tokens and themes; layouts, menus and the site config; patterns (create, save a node as one, detach a use, link fields to props); side panels pinned or floating; the blog (posts with their Markdown text previewed before a save, views customised from the preset's, authors, series, taxonomies).
   - Next: renaming or deleting a pattern, menu or layout updates or warns about its uses; collection paths and page URLs from core instead of the builder's own assumptions; a colour picker and contrast checks in the token editor; choosing `$ref` / `$collection` / `$label` values from a form.
 - Patterns that take widgets from the page (`{ "$slot": … }`), not only values.
-- Pages from a collection (`@parche/astro-collections`, see
+- Pages from a collection (`collections` in the site config, see
   [docs-wip/collections.md](./docs-wip/collections.md)): done on `experimental`
   with the demo store's three products. Next: paginated listing pages for a
   collection, and editing its entries in the builder.

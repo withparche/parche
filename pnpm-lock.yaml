@@ -101,9 +101,6 @@ importers:
       '@parche/astro-blog':
         specifier: workspace:*
         version: link:../../parches/blog
-      '@parche/astro-collections':
-        specifier: workspace:*
-        version: link:../../parches/collections
       '@parche/elements':
         specifier: workspace:*
         version: link:../../parches/elements
@@ -664,16 +661,6 @@ importers:
       zod:
         specifier: 'catalog:'
         version: 4.4.3
-    devDependencies:
-      astro:
-        specifier: 'catalog:'
-        version: 7.3.2(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@22.20.1)(jiti@2.7.0)(tsx@4.23.12)(yaml@2.9.1)
-
-  parches/collections:
-    dependencies:
-      '@parche/astro':
-        specifier: workspace:*
-        version: link:../../packages/core
     devDependencies:
       astro:
         specifier: 'catalog:'

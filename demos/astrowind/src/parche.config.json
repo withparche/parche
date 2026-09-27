@@ -13,6 +13,9 @@
       }
     }
   },
+  "collections": {
+    "products": { "path": "/homes/store/%slug%", "widget": "pattern/product-page", "layout": "corvo" }
+  },
   "metadata": {
     "ogImage": "@/assets/images/default.png",
     "twitterHandle": "@arthelokyo",

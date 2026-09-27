@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Pages from a collection (@parche/astro-collections), built for real: the
+ * Pages from a collection (`collections` in the site config), built for real: the
  * demo's products collection holds only data, and each product gets a page
  * at /homes/store/<id> rendered by the product-page pattern. Checks that every
  * product has its page with its own title, heading, price and stock, that the
