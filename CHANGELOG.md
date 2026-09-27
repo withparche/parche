@@ -127,8 +127,13 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
 
 - **For parches** (`6ca9e88`, `766d362`, `8da6bcb`): head links
   (`head.links`), `hooks['astro:build:done']`, `siteSearch` for the
-  WebSite's SearchAction, a route's `pageType` for its WebPage node, and
-  `dev`, a module development tools reach through `parche:registry/dev`.
+  WebSite's SearchAction, a route's `pageType` for its WebPage node,
+  `dev`, a module development tools reach through `parche:registry/dev`, and
+  `urls`, where a routed collection's entries are served: an entry a
+  `$collection` or `$ref` yields then carries its `href` (`56e67fa`). Apps
+  render their pages through core's `parche:Page` and build addresses with
+  core's rules (`localizePath`, `pagePath`, `slugify` in
+  `@parche/astro/content/pure`).
 
 - **Design-system pages in the playground** (`/design`). The three token layers
   read from the real stylesheets: every colour role with its light and dark
@@ -171,6 +176,13 @@ rewrites pages, layouts and views in place (idempotent), and
 - **Links inside `.prose` are underlined.** They relied on colour alone, at
   1.3:1 against the surrounding muted text, which the new contrast page and
   axe's link-in-text-block rule both flagged.
+
+- **Blog pages carry the site's metadata** (`c1ff324`). They built theirs by
+  hand: `og:site_name` was empty on every one, a post without a picture had
+  no `og:image` even when the site sets a default, and the site's robots and
+  Twitter card were ignored. They now resolve it as pages do. A post at a
+  prefixed permalink (`/blog/%slug%`, the default) resolves its `@/assets`
+  pictures in `og:image` and its structured data, as a root-level one did.
 
 - **Local images are optimised** (`e342e6e`). A `@/assets/…` path became a
   URL before the Image element saw it, so it was treated as remote and

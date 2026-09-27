@@ -89,6 +89,14 @@ Not scheduled; they change what Parche *is*, not how well it works.
   - Done (phases 0–5): the dev-only shell and CLI; pages with the full node model; a preview that morphs drafts in place; tokens and themes; layouts, menus and the site config; patterns (create, save a node as one, detach a use, link fields to props); side panels pinned or floating; the blog (posts with their Markdown text previewed before a save, views customised from the preset's, authors, series, taxonomies).
   - Next: renaming or deleting a pattern, menu or layout updates or warns about its uses; collection paths and page URLs from core instead of the builder's own assumptions; a colour picker and contrast checks in the token editor; choosing `$ref` / `$collection` / `$label` values from a form.
 - Patterns that take widgets from the page (`{ "$slot": … }`), not only values.
+- Pages from a collection, as a parche: a collection of plain data (products)
+  gets a page per entry at a permalink, rendered by any widget — registered,
+  the site's own, or `pattern/<id>` — that takes the entry's fields as props
+  (by name, or through a `props` map; the fields it does not declare are left
+  out, a required one missing fails the build). Built on core's page kit
+  (`parche:Page`, the address rules, `urls`). First example: three of the
+  demo store's products (a bestseller, one low in stock, one sold out), with
+  the store's list fed by `$collection`.
 - Narrans / narrative-first AI generation → `parche astro generate <prompt>`.
 
 ## Not doing (and why)
