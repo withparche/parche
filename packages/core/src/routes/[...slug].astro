@@ -85,7 +85,8 @@ if (Astro.props.fromResolver) {
   resolvedApp = await resolveContent(Astro.props.resolverSlug ?? fromProps.rest, locale, {
     showDrafts: isDev,
     siteUrl: config.site || Astro.site?.href || '',
-    siteName: config.brand.name,
+    // The site's name in the page's language: the app puts it in the title.
+    siteName: localizeSiteConfig(config, locale).brand.name,
   });
   if (resolvedApp) {
     mode = 'resolver';
@@ -103,7 +104,7 @@ if (Astro.props.fromResolver) {
   resolvedApp = await resolveContent(fromUrl.rest, locale, {
     showDrafts: isDev,
     siteUrl: config.site || Astro.site?.href || '',
-    siteName: config.brand.name,
+    siteName: localizeSiteConfig(config, locale).brand.name,
   });
 
   if (resolvedApp) {

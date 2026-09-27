@@ -7,6 +7,7 @@
  * In SSR mode, getStaticPaths is ignored.
  * In both cases, the actual locale-filtered query happens at render time.
  */
+import { blogMetadata } from '../../utils/page-metadata.js';
 import config from 'parche:config';
 import { generateItemListJsonLd } from '../../utils/blog-metadata.js';
 import blogConfig from 'parche:app/blog';
@@ -84,16 +85,14 @@ const context = {
 };
 
 const siteUrl = config.site || Astro.site?.href || '';
-const metadata = {
+const metadata = blogMetadata(site, locale, {
   pageType: 'CollectionPage',
   jsonLd: [generateItemListJsonLd(context.posts.map((c) => ({ name: c.title, url: c.href })), siteUrl)],
-  title: `${context.listing.title}${pageNum > 1 ? ` · ${pageNum}` : ''} — ${site.brand.name}`,
+  title: `${context.listing.title}${pageNum > 1 ? ` · ${pageNum}` : ''}`,
   description: site.brand.description,
   noindex: false,
-  nofollow: false,
   ogType: 'website' as const,
-  twitterCard: 'summary_large_image' as const,
-};
+});
 ---
 
 <BlogPage view="index" {context} {metadata} {site} {locale} {defaultLocale} {alternates} />

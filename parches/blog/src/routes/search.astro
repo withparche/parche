@@ -3,6 +3,7 @@
  * The search page: the `search` view over the Pagefind index the blog builds
  * with the site. Result pages are noindex: a search box is not content.
  */
+import { blogMetadata } from '../utils/page-metadata.js';
 import BlogPage from '../components/BlogPage.astro';
 import { baseContext } from '../utils/context.js';
 import config from 'parche:config';
@@ -26,15 +27,14 @@ const context = {
   ...(cfg.archive ? { archiveHref: localizePath(cfg.permalinks.archive, locale, defaultLocale) } : {}),
 };
 
-const metadata = {
+const metadata = blogMetadata(site, locale, {
   pageType: 'SearchResultsPage',
-  title: `${labels.searchTitle} — ${site.brand.name}`,
+  title: `${labels.searchTitle}`,
   description: site.brand.description,
   noindex: true,
-  nofollow: false,
   ogType: 'website' as const,
   twitterCard: 'summary' as const,
-};
+});
 ---
 
 <BlogPage view="search" {context} {metadata} {site} {locale} {defaultLocale} {alternates} />

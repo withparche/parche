@@ -1,10 +1,12 @@
 ---
 /**
- * Single blog post page.
+ * A blog post at a prefixed permalink (`/blog/%slug%`, the default).
  * Works in both static (output: 'static') and SSR (output: 'server') modes.
  *
- * getStaticPaths enumerates all valid slugs across all locales.
- * Render-time resolves the correct post for the current locale.
+ * getStaticPaths enumerates all valid slugs across all locales. At render
+ * time the post is resolved by the same function core calls for root-level
+ * permalinks (resolver.ts): one assembly of the post's page — its authors,
+ * metadata, structured data, assets and translations — for both paths.
  */
 import 'parche:config/styles';
 import BaseLayout from 'parche:layouts/BaseLayout';
@@ -14,22 +16,11 @@ import { showPanel } from 'parche:config/themes';
 import ThemePanel from 'parche:components/ThemePanel';
 import config from 'parche:config';
 import blogConfig from 'parche:app/blog';
-import { getCollection, getEntry, render } from 'astro:content';
-import { getPublishedPosts, extractPostLocale, getPostAlternates } from '../../utils/post-helpers.js';
-import { toAbsolute } from '../../utils/alternates.js';
-import { querySinglePost } from '../../utils/blog-query.js';
-import { calculateReadingTime } from '../../utils/reading-time.js';
-import { generateBlogPostingJsonLd, generateBreadcrumbJsonLd } from '../../utils/blog-metadata.js';
-import { resolvePostPermalink, resolveTaxonomyPermalink, resolveAuthorHref, localizePath } from '../../types.js';
+import { getEntry, render } from 'astro:content';
 import { resolveLayout } from 'parche:utils/layout';
 import { defaultLocale } from 'parche:config/i18n';
 import { localizeSiteConfig } from 'parche:utils/site';
-import { resolveAssets } from 'parche:utils/assets';
-import { resolveLabels } from '../../labels.js';
-import { createTaxonomyResolver } from '../../utils/taxonomy.js';
-
-const cfg = blogConfig as any;
-const permalinks = cfg.permalinks;
+import { resolve } from '../../resolver.js';
 
 export async function getStaticPaths() {
   const { getPublishedPosts: gpp, extractPostLocale: epl } = await import('../../utils/post-helpers.js');
@@ -57,106 +48,27 @@ export async function getStaticPaths() {
 // --- Render-time (both static & SSR) ---
 const locale = Astro.currentLocale ?? defaultLocale;
 const site = localizeSiteConfig(config, locale);
-const labels = resolveLabels(cfg.labels, locale, defaultLocale);
-const tax = await createTaxonomyResolver(locale);
-const isDev = import.meta.env.DEV;
-const showDrafts = isDev && cfg.showDraftsInDev;
-const { slug } = Astro.params;
+const showDrafts = import.meta.env.DEV && (blogConfig as any).showDraftsInDev;
 
-const { post, allPosts } = await querySinglePost({ slug: slug!, locale, showDrafts });
-
-if (!post) {
+const resolved = await resolve(Astro.params.slug!, locale, {
+  showDrafts,
+  siteUrl: config.site || Astro.site?.href || '',
+  siteName: site.brand.name,
+});
+if (!resolved) {
   return Astro.redirect('/404');
 }
 
-const siteUrl = config.site || Astro.site?.href || '';
-
-// Translations of this post: the same file name under another locale folder,
-// as the resolver path does for root-level permalinks.
-const { postKey: currentKey } = extractPostLocale(post.id, defaultLocale);
-const alternates = toAbsolute(
-  getPostAlternates(await getCollection('posts'), currentKey, defaultLocale, showDrafts).map(({ locale: l, post: p }) => ({
-    locale: l,
-    path: resolvePostPermalink(permalinks.post, p, l, defaultLocale),
-  })),
-  Astro.site,
-);
+const alternates = resolved.alternates.map((alt) => ({ locale: alt.locale, href: Astro.site ? new URL(alt.path, Astro.site).href : alt.path }));
 Astro.locals.parche = { ...(Astro.locals.parche ?? {}), locale, alternates };
 
-// Render markdown
-const { Content } = await render(post);
-
-// Reading time
-const rt = cfg.readingTime
-  ? calculateReadingTime(post.body ?? '', cfg.wordsPerMinute)
-  : null;
-const readingTime = post.data.readingTime ?? rt?.minutes;
-
-// Resolve authors (try locale-prefixed ID first, then bare slug)
-const authorData: any[] = [];
-for (const authorSlug of post.data.authors) {
-  try {
-    const author = await getEntry('authors', `${locale}/${authorSlug}`)
-      ?? await getEntry('authors', authorSlug);
-    if (author) {
-      // The author route generates its paths from the entry key (or an explicit
-      // `urlSlug`), so links must use that — not a slugified display name.
-      const key = author.id.includes('/') ? author.id.slice(author.id.indexOf('/') + 1) : author.id;
-      authorData.push({ ...author.data, slug: (author.data as any).urlSlug ?? key });
-    }
-  } catch { /* author not found */ }
-}
-if (authorData.length === 0 && post.data.authorName) {
-  authorData.push({ name: post.data.authorName });
-}
-
-// Resolve layout & template
-const layoutSections = await resolveLayout(post.data.layout || 'default', locale, defaultLocale);
-const TemplateComponent = templateMap[post.data.template || 'blog-post'];
-
-// JSON-LD
-const base = siteUrl.replace(/\/$/, '');
-const pageUrl = `${base}${resolvePostPermalink(permalinks.post, post, locale, defaultLocale)}`;
-const blogPostingJsonLd = generateBlogPostingJsonLd({
-  type: cfg.preset === 'magazine' ? 'NewsArticle' : 'BlogPosting',
-  post: { ...post.data, readingTime },
-  url: pageUrl,
-  siteUrl,
-  authorName: authorData[0]?.name,
-  ...(authorData[0]?.slug ? { authorUrl: `${base}${resolveAuthorHref(cfg, authorData[0].slug, locale, defaultLocale)}` } : {}),
-});
-const breadcrumbJsonLd = generateBreadcrumbJsonLd([
-  { name: labels.home, url: `${base}${localizePath('/', locale, defaultLocale)}` || '/' },
-  { name: labels.blog, url: `${base}${localizePath(permalinks.listing, locale, defaultLocale)}` },
-  ...(post.data.category ? [{ name: post.data.category, url: `${base}${resolveTaxonomyPermalink(permalinks.category, tax.slugFor('categories', post.data.category), locale, defaultLocale)}` }] : []),
-  { name: post.data.title, url: pageUrl },
-]);
-
-const metadata = {
-  title: `${post.data.metadata?.title ?? post.data.title} — ${site.brand.name}`,
-  description: post.data.metadata?.description ?? post.data.description ?? post.data.excerpt,
-  canonical: post.data.metadata?.canonical,
-  noindex: post.data.metadata?.noindex ?? post.data.draft ?? false,
-  nofollow: post.data.metadata?.nofollow ?? false,
-  ogType: 'article' as const,
-  ogTitle: post.data.metadata?.ogTitle ?? post.data.title,
-  ogDescription: post.data.metadata?.ogDescription ?? post.data.description,
-  ogImage: post.data.metadata?.ogImage ?? post.data.image?.src,
-  twitterCard: post.data.metadata?.twitterCard ?? ('summary_large_image' as const),
-  article: {
-    author: authorData[0]?.name,
-    publishedDate: post.data.publishDate.toISOString(),
-    modifiedDate: post.data.modifiedDate?.toISOString(),
-    section: post.data.category,
-    tags: post.data.tags,
-  },
-  jsonLd: [blogPostingJsonLd, breadcrumbJsonLd],
-};
-
-const postData = { ...post.data, readingTime };
+const entry = await getEntry('posts', resolved.entryId);
+const { Content } = await render(entry!);
+const layoutSections = await resolveLayout(resolved.layout, locale, defaultLocale);
+const TemplateComponent = templateMap[resolved.template];
 ---
 
-<BaseLayout metadata={metadata} config={site} lang={locale}>
+<BaseLayout metadata={resolved.metadata} config={site} lang={locale}>
   {alternates.length > 1 && (
     <Fragment slot="head">
       {alternates.map((alt) => (
@@ -167,7 +79,7 @@ const postData = { ...post.data, readingTime };
   )}
   <LayoutRenderer layoutSections={layoutSections}>
     {TemplateComponent ? (
-      <TemplateComponent data={postData} authorData={authorData} permalinks={permalinks} entry={post}>
+      <TemplateComponent {...resolved.templateProps}>
         <Content />
       </TemplateComponent>
     ) : (
@@ -175,7 +87,6 @@ const postData = { ...post.data, readingTime };
         <Content />
       </article>
     )}
-
   </LayoutRenderer>
   {showPanel && <ThemePanel />}
 </BaseLayout>

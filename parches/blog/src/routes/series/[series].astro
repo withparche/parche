@@ -3,6 +3,7 @@
  * Series overview page.
  * Works in both static and SSR modes.
  */
+import { blogMetadata } from '../../utils/page-metadata.js';
 import BlogPage from '../../components/BlogPage.astro';
 import { baseContext, seriesContext } from '../../utils/context.js';
 import config from 'parche:config';
@@ -69,16 +70,14 @@ const series = await seriesContext(seriesName, posts, opts);
 const context = { ...(await baseContext('series', opts)), posts: [], series };
 
 const siteUrl = config.site || Astro.site?.href || '';
-const metadata = {
+const metadata = blogMetadata(site, locale, {
   pageType: 'CollectionPage',
   jsonLd: [generateItemListJsonLd(series.parts.map((p) => ({ name: p.title, url: p.href })), siteUrl)],
-  title: `${series.title} — ${site.brand.name}`,
+  title: `${series.title}`,
   description: series.description ?? format(labels.seriesDescription, { value: series.title }),
   noindex: false,
-  nofollow: false,
   ogType: 'website' as const,
-  twitterCard: 'summary_large_image' as const,
-};
+});
 ---
 
 <BlogPage view="series" {context} {metadata} {site} {locale} {defaultLocale} {alternates} />

@@ -36,6 +36,25 @@ for (const [preset, want] of Object.entries(PRESETS)) {
   for (const page of ['blog/index.html', 'blog/archive/index.html', 'search/index.html', 'subscribe/index.html']) check(existsSync(join(DIST, page)), `${preset}: ${page} missing`);
   console.log(`  ${preset}: ok`);
 }
+// The two post paths render one page: a root-level permalink (core's route,
+// through the blog's resolver) and a prefixed one (the blog's own route)
+// must give the same head and structured data, bar the address.
+const head = (file) => {
+  const html = readFileSync(file, 'utf8');
+  const tags = [...html.matchAll(/<(title|meta|link)\b[^>]*>(?:[^<]*<\/title>)?|<script type="application\/ld\+json"[^>]*>[^<]*<\/script>/g)].map((m) => m[0]);
+  return tags.filter((t) => !/vite|stylesheet|modulepreload|icon/.test(t)).join('\n').replaceAll('/blog/elements-and-widgets', '/elements-and-widgets');
+};
+execFileSync('pnpm', ['exec', 'astro', 'build'], { cwd: SITE, env: { ...process.env, BLOG_PRESET: 'company' }, stdio: 'pipe' });
+const rootLevel = head(join(DIST, 'elements-and-widgets', 'index.html'));
+execFileSync('pnpm', ['exec', 'astro', 'build'], { cwd: SITE, env: { ...process.env, BLOG_PRESET: 'company', BLOG_POST_PERMALINK: '/blog/%slug%' }, stdio: 'pipe' });
+const prefixedFile = join(DIST, 'blog', 'elements-and-widgets', 'index.html');
+check(existsSync(prefixedFile), 'prefixed permalink: the post was not built at /blog/elements-and-widgets');
+if (existsSync(prefixedFile)) {
+  const prefixed = head(prefixedFile);
+  check(prefixed === rootLevel, `prefixed permalink: the post's head differs from the root-level one\n--- root-level\n${rootLevel}\n--- prefixed\n${prefixed}`);
+}
+console.log('  both post paths: checked');
+
 // Leave the example built as it ships.
 execFileSync('pnpm', ['exec', 'astro', 'build'], { cwd: SITE, stdio: 'pipe' });
 

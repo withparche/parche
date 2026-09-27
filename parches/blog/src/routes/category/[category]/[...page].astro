@@ -3,6 +3,7 @@
  * Posts filtered by category, with pagination.
  * Works in both static and SSR modes.
  */
+import { blogMetadata } from '../../../utils/page-metadata.js';
 import BlogPage from '../../../components/BlogPage.astro';
 import { baseContext, toCards, toPage } from '../../../utils/context.js';
 import config from 'parche:config';
@@ -106,16 +107,14 @@ const context = {
 };
 
 const siteUrl = config.site || Astro.site?.href || '';
-const metadata = {
+const metadata = blogMetadata(site, locale, {
   pageType: 'CollectionPage',
   jsonLd: [generateItemListJsonLd(context.posts.map((c) => ({ name: c.title, url: c.href })), siteUrl)],
-  title: `${format(labels.categoryTitle, { value: term.title })}${pageNum > 1 ? ` · ${pageNum}` : ''} — ${site.brand.name}`,
+  title: `${format(labels.categoryTitle, { value: term.title })}${pageNum > 1 ? ` · ${pageNum}` : ''}`,
   description: term.description ?? format(labels.categoryDescription, { value: term.title }),
   noindex: false,
-  nofollow: false,
   ogType: 'website' as const,
-  twitterCard: 'summary_large_image' as const,
-};
+});
 ---
 
 <BlogPage view="taxonomy" {context} {metadata} {site} {locale} {defaultLocale} {alternates} />

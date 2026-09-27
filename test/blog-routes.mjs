@@ -105,6 +105,9 @@ for (const [site, want] of Object.entries(SITES)) {
   const feedLink = new RegExp(`<link[^>]*rel="alternate"[^>]*type="application/rss\\+xml"[^>]*href="${want.rss}"|<link[^>]*href="${want.rss}"[^>]*type="application/rss\\+xml"`);
   const noFeed = pages.filter((f) => !feedLink.test(readFileSync(f, 'utf8')));
   check(noFeed.length === 0, `${site}: ${noFeed.length} page(s) without the feed link in their head (e.g. ${noFeed[0]?.slice(dist.length)})`);
+  // Every page names the site, the blog's as much as the rest (they build their metadata through core's).
+  const unnamed = pages.filter((f) => !/<meta property="og:site_name" content="[^"]+"/.test(readFileSync(f, 'utf8')));
+  check(unnamed.length === 0, `${site}: ${unnamed.length} page(s) without og:site_name (e.g. ${unnamed[0]?.slice(dist.length)})`);
 
   // Posts: a page with BlogPosting data. Each shows a lead paragraph and, when
   // it has related posts, a link back to the listing.

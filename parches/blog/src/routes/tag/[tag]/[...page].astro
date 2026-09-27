@@ -3,6 +3,7 @@
  * Posts filtered by tag, with pagination.
  * Works in both static and SSR modes.
  */
+import { blogMetadata } from '../../../utils/page-metadata.js';
 import BlogPage from '../../../components/BlogPage.astro';
 import { baseContext, toCards, toPage } from '../../../utils/context.js';
 import config from 'parche:config';
@@ -110,17 +111,15 @@ const context = {
 };
 
 const siteUrl = config.site || Astro.site?.href || '';
-const metadata = {
+const metadata = blogMetadata(site, locale, {
   pageType: 'CollectionPage',
   jsonLd: [generateItemListJsonLd(context.posts.map((c) => ({ name: c.title, url: c.href })), siteUrl)],
-  title: `${format(labels.tagTitle, { value: term.title })}${pageNum > 1 ? ` · ${pageNum}` : ''} — ${site.brand.name}`,
+  title: `${format(labels.tagTitle, { value: term.title })}${pageNum > 1 ? ` · ${pageNum}` : ''}`,
   description: term.description ?? format(labels.tagDescription, { value: term.title }),
   // A tag with only a post or two is a thin page: kept for readers, out of the index.
   noindex: page.total < (cfg.tagIndexThreshold ?? 3),
-  nofollow: false,
   ogType: 'website' as const,
-  twitterCard: 'summary_large_image' as const,
-};
+});
 ---
 
 <BlogPage view="taxonomy" {context} {metadata} {site} {locale} {defaultLocale} {alternates} />

@@ -9,6 +9,7 @@
  *   resolve(slug, locale, opts) — find and prepare a single blog post
  *   getPaths(locales, defaultLocale, opts) — enumerate all post slugs for static mode
  */
+import { blogMetadata } from './utils/page-metadata.js';
 import { getCollection, getEntry } from 'astro:content';
 import { getPublishedPosts, extractPostLocale, getPostAlternates } from './utils/post-helpers.js';
 import { querySinglePost } from './utils/blog-query.js';
@@ -21,6 +22,7 @@ import { createTaxonomyResolver } from './utils/taxonomy.js';
 interface ResolveOptions {
   showDrafts?: boolean;
   siteUrl?: string;
+  /** The site's name; the title takes it from the site config, in the page's language. */
   siteName?: string;
 }
 
@@ -108,7 +110,6 @@ export async function resolve(
 
   // JSON-LD
   const siteUrl = opts.siteUrl ?? '';
-  const siteName = opts.siteName ?? '';
   const base = siteUrl.replace(/\/$/, '');
   const pageUrl = `${base}${resolvePostPermalink(permalinks.post, post, locale, defaultLocale)}`;
 
@@ -116,6 +117,8 @@ export async function resolve(
   // the site origin onto image.src, and after that the path is no longer
   // recognisable as an asset reference.
   const { resolveAssets } = await import('parche:utils/assets');
+  const { default: siteConfig } = await import('parche:config');
+  const { localizeSiteConfig } = await import('parche:utils/site');
   const postData = await resolveAssets({ ...post.data, readingTime });
 
   const blogPostingJsonLd = generateBlogPostingJsonLd({
@@ -162,26 +165,26 @@ export async function resolve(
       // related posts, authors), the same way on both post paths.
       entry: post,
     },
-    metadata: await resolveAssets({
-      title: `${post.data.metadata?.title ?? post.data.title} — ${siteName}`,
-      description: post.data.metadata?.description ?? post.data.description ?? post.data.excerpt,
-      canonical: post.data.metadata?.canonical,
-      noindex: post.data.metadata?.noindex ?? post.data.draft ?? false,
-      nofollow: post.data.metadata?.nofollow ?? false,
-      ogType: 'article' as const,
-      ogTitle: post.data.metadata?.ogTitle ?? post.data.title,
-      ogDescription: post.data.metadata?.ogDescription ?? post.data.description,
-      ogImage: post.data.metadata?.ogImage ?? postData.image?.src,
-      twitterCard: post.data.metadata?.twitterCard ?? ('summary_large_image' as const),
-      article: {
-        author: authorData[0]?.name,
-        publishedDate: post.data.publishDate.toISOString(),
-        modifiedDate: post.data.modifiedDate?.toISOString(),
-        section: post.data.category,
-        tags: post.data.tags,
-      },
-      jsonLd: [blogPostingJsonLd, breadcrumbJsonLd],
-    }),
+    // The post's metadata, resolved as a page's is (its own `metadata`, then the
+    // post, then the site's defaults), in the page's language.
+    metadata: await resolveAssets(
+      blogMetadata(localizeSiteConfig(siteConfig, locale), locale, {
+        title: post.data.title,
+        description: post.data.description ?? post.data.excerpt,
+        metadata: post.data.metadata,
+        ogType: 'article',
+        ogImage: postData.image?.src,
+        noindex: post.data.draft ?? false,
+        article: {
+          author: authorData[0]?.name,
+          publishedDate: post.data.publishDate.toISOString(),
+          modifiedDate: post.data.modifiedDate?.toISOString(),
+          section: post.data.category,
+          tags: post.data.tags,
+        },
+        jsonLd: [blogPostingJsonLd, breadcrumbJsonLd],
+      }),
+    ),
     extras: { sections: extraSections },
   };
 }
