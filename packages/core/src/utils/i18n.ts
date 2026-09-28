@@ -1,5 +1,5 @@
 import { getCollection } from 'astro:content';
-import { pagePath } from './paths.js';
+import { ancestorKeys, pagePath } from './paths.js';
 
 export { localizePath, splitLocale, pagePath, slugify, absoluteAlternates } from './paths.js';
 
@@ -91,6 +91,21 @@ function translationsOf(pageKey: string, slugMap: SlugMapEntry[]): SlugMapEntry[
     byPageKey.set(slugMap, groups);
   }
   return groups.get(pageKey) ?? [];
+}
+
+/**
+ * A page's breadcrumb trail below the site's root: the ancestors that exist
+ * as pages in its locale (by key: `services` above `services/design`), then
+ * the page itself, each with its title and address. An ancestor with no page
+ * in that locale is skipped, so every crumb is a page a reader can open.
+ */
+export function pageTrail(pageKey: string, locale: string, slugMap: SlugMapEntry[], defaultLocale: string): Array<{ name: string; path: string }> {
+  const crumbs: Array<{ name: string; path: string }> = [];
+  for (const key of [...ancestorKeys(pageKey), pageKey]) {
+    const entry = translationsOf(key, slugMap).find((e) => e.locale === locale);
+    if (entry) crumbs.push({ name: (entry.data.title as string) ?? key, path: pagePath(entry.pageKey, entry.locale, defaultLocale, entry.slug) });
+  }
+  return crumbs;
 }
 
 export function getAlternateUrls(

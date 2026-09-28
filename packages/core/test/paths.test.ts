@@ -1,6 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { absoluteAlternates, localizePath, pagePath, slugify, splitLocale } from '../src/utils/paths.ts';
+import { absoluteAlternates, ancestorKeys, localizePath, pagePath, slugify, splitLocale } from '../src/utils/paths.ts';
+
+test('the pages above a page, by key, outermost first; the top level has none', () => {
+  assert.deepEqual(ancestorKeys('services/design/print'), ['services', 'services/design']);
+  assert.deepEqual(ancestorKeys('services'), []);
+  assert.deepEqual(ancestorKeys('home'), []);
+});
 
 test('the default locale is never prefixed; the others are', () => {
   assert.equal(localizePath('/blog', 'en', 'en'), '/blog');

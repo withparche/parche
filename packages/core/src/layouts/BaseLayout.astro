@@ -4,6 +4,8 @@ import { ClientRouter } from 'astro:transitions';
 import Font from 'astro/components/Font.astro';
 import { fonts as parcheFontDefs } from 'parche:config/fonts';
 import { headLinks, siteSearch } from 'parche:config/head';
+import { defaultLocale } from 'parche:config/i18n';
+import { pagePath } from '../utils/paths.js';
 import type { ResolvedMetadata } from '../utils/metadata';
 import { buildRobotsContent, buildBreadcrumbs, buildJsonLdGraph } from '../utils/metadata';
 import type { SiteConfig } from '../types/config';
@@ -48,7 +50,12 @@ const ogImageURL = ogImage && Astro.site
 
 const robotsContent = buildRobotsContent(metadata);
 const siteUrl = Astro.site?.href ?? config.site ?? '';
-const breadcrumbs = siteUrl ? buildBreadcrumbs(Astro.url.pathname, siteUrl, metadata.title) : undefined;
+// The trail: the site's name at this language's home, then what the route
+// knows (the ancestors that are pages, the page: utils/i18n.ts pageTrail),
+// or the page alone. Every crumb is a page a reader can open.
+const breadcrumbs = siteUrl
+  ? buildBreadcrumbs({ name: config.brand.name, path: pagePath('home', locale, defaultLocale) }, metadata.breadcrumbs ?? [{ name: metadata.title, path: Astro.url.pathname }], siteUrl)
+  : undefined;
 // Structured data is built from the config, which can name assets ('@/assets/…')
 // and is another path that never sees DynamicRenderer. Absolute URLs matter here
 // too: schema.org consumers cannot resolve a site-relative logo.

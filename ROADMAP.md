@@ -97,9 +97,7 @@ on the components being accessible and themeable.
   without it); `$ref` has no fallback to the default locale, so a translated
   site copies every menu; two parches setting the same font variable with
   different families silently keep the last one (a warning, the site's
-  `fonts` win); the breadcrumbs' root and intermediate crumbs come
-  from the URL, not from pages (approved: the site's name at the locale's
-  home, then only ancestors that exist as pages).
+  `fonts` win).
 
 ## v0.9 — splitting things out
 

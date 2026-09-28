@@ -264,6 +264,15 @@ rewrites pages, layouts and views in place (idempotent), and
   and `fonts`; `base` (not supported yet, now an error); page-route options
   or resolvers without `routes.pages`; `ads.txt` once, at the root.
 
+- **Breadcrumbs name the site and real pages.** The trail in the structured
+  data started with "Home" in every language and made a crumb of every URL
+  segment, the locale included ("Es › Servicios › Diseño"), pointing at
+  addresses that were not pages. It now starts with the site's name at the
+  language's home, lists the pages above the page (by key, with their
+  titles, only those that exist in that language) and ends with the page;
+  the home has no trail. A post keeps the blog's own trail (the blog, the
+  category, the post), now starting with the site's name too.
+
 - **A post without a locale folder belongs to the site's default locale.**
   The lookup assumed `en`, so on a site whose default locale is another
   language such a post was not found at its address.

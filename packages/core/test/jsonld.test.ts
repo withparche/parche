@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildJsonLdGraph } from '../src/utils/metadata.ts';
+import { buildBreadcrumbs, buildJsonLdGraph } from '../src/utils/metadata.ts';
 
 const resolved = { title: 'Blog', description: 'Posts', noindex: false, nofollow: false, ogTitle: 'Blog', ogDescription: '', ogType: 'website', twitterCard: 'summary', siteName: 'AstroWind', locale: 'en' } as any;
 const config = { brand: { name: 'AstroWind', description: 'A template' } } as any;
@@ -31,6 +31,18 @@ test("a page's own article and trail replace the generated ones, never doubled",
   assert.deepEqual(own.filter((t: string) => t === 'BreadcrumbList').length, 1);
   assert.ok(!own.includes('Article'));
   assert.ok(own.includes('BlogPosting'));
+});
+
+test("the trail is the site at the language's home, the pages above, the page; the home is the root alone", () => {
+  const root = { name: 'Mi sitio', path: '/es' };
+  assert.deepEqual(buildBreadcrumbs(root, [{ name: 'Servicios', path: '/es/servicios' }, { name: 'Diseño', path: '/es/servicios/diseno' }], 'https://ex.com'), [
+    { name: 'Mi sitio', url: 'https://ex.com/es' },
+    { name: 'Servicios', url: 'https://ex.com/es/servicios' },
+    { name: 'Diseño', url: 'https://ex.com/es/servicios/diseno' },
+  ]);
+  // The home's own crumb is the root: no trail to list.
+  assert.deepEqual(buildBreadcrumbs(root, [{ name: 'Inicio', path: '/es' }], 'https://ex.com'), [{ name: 'Mi sitio', url: 'https://ex.com/es' }]);
+  assert.deepEqual(buildBreadcrumbs({ name: 'X', path: '/' }, [], 'https://ex.com').length, 1);
 });
 
 test('a value holding </script> cannot close the tag, and reads back as written', () => {

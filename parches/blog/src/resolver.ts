@@ -130,8 +130,9 @@ export async function resolve(
     authorName: authorData[0]?.name,
     ...(authorData[0]?.slug ? { authorUrl: `${siteUrl.replace(/\/$/, '')}${resolveAuthorHref(cfg, authorData[0].slug, locale, defaultLocale)}` } : {}),
   });
+  // The trail starts where core's does: the site's name at the language's home.
   const breadcrumbJsonLd = generateJsonLdBreadcrumbList([
-    { name: labels.home, url: `${base}${localizePath('/', locale, defaultLocale)}` || '/' },
+    { name: opts.siteName ?? labels.home, url: `${base}${localizePath('/', locale, defaultLocale)}` || '/' },
     { name: labels.blog, url: `${base}${localizePath(permalinks.listing, locale, defaultLocale)}` },
     ...(post.data.category
       ? [{ name: post.data.category, url: `${base}${resolveTaxonomyPermalink(permalinks.category, tax.slugFor('categories', post.data.category), locale, defaultLocale)}` }]

@@ -12,6 +12,7 @@ import {
   getAlternateUrls,
   resolvePageFromSlug,
   pagePath,
+  pageTrail,
   splitLocale as splitLocaleId,
 } from 'parche:utils/i18n';
 import { resolveMetadata } from 'parche:utils/metadata';
@@ -173,6 +174,8 @@ if (mode === 'page' && pageData) {
   resolved.title = pageKey === 'home'
     ? config.brand.name
     : `${resolved.title} — ${config.brand.name}`;
+  // The trail for the structured data: the pages above this one, and this one.
+  resolved.breadcrumbs = pageTrail(pageKey, locale, slugMap, defaultLocale);
   pageMetadata = resolved;
 
   // Only a Markdown page has a body to render. A JSON entry renders to an

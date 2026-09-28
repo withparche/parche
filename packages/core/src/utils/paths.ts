@@ -36,6 +36,12 @@ export function pagePath(key: string, locale: string, defaultLocale: string, url
   return localizePath(`/${urlSlug ?? key}`, locale, defaultLocale);
 }
 
+/** The keys of the pages above one, outermost first: `services/design/print` sits under `services` and `services/design`. */
+export function ancestorKeys(pageKey: string): string[] {
+  const parts = pageKey.split('/');
+  return parts.slice(0, -1).map((_, i) => parts.slice(0, i + 1).join('/'));
+}
+
 /**
  * A string as a URL segment: accents dropped ("Guías" → "guias"), lowercase,
  * words joined by hyphens, anything else removed.

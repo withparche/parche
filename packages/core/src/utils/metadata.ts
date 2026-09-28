@@ -29,6 +29,14 @@ export interface ResolvedMetadata {
   siteName: string;
   locale: string;
   /**
+   * The breadcrumb trail below the site's root, ending with the page
+   * itself: the ancestors that exist as pages, then the page, each with its
+   * title and site-relative address. The route that knows the pages sets it
+   * (utils/i18n.ts pageTrail); without it the page stands alone under the
+   * root.
+   */
+  breadcrumbs?: Array<{ name: string; path: string }>;
+  /**
    * The schema.org type of the page's WebPage node: 'CollectionPage' for a
    * list of posts, 'ProfilePage' for a person, 'SearchResultsPage'. Default
    * 'WebPage'.
@@ -135,19 +143,19 @@ export interface BreadcrumbItem {
   url: string;
 }
 
-export function buildBreadcrumbs(urlPath: string, siteUrl: string, pageTitle: string): BreadcrumbItem[] {
-  const items: BreadcrumbItem[] = [{ name: 'Home', url: siteUrl }];
-  const segments = urlPath.replace(/^\/|\/$/g, '').split('/').filter(Boolean);
-
-  let accumulated = siteUrl.replace(/\/$/, '');
-  for (let i = 0; i < segments.length; i++) {
-    accumulated += `/${segments[i]}`;
-    const name = i === segments.length - 1
-      ? pageTitle
-      : segments[i].charAt(0).toUpperCase() + segments[i].slice(1).replace(/-/g, ' ');
-    items.push({ name, url: accumulated });
+/**
+ * The breadcrumb trail of a page: the site's name at the language's home,
+ * then the trail the route gives (the ancestors that exist as pages, the
+ * page itself), absolute. Every crumb is a page a reader can open, which is
+ * what structured data asks of a trail; the home is the root alone.
+ */
+export function buildBreadcrumbs(root: { name: string; path: string }, trail: Array<{ name: string; path: string }>, siteUrl: string): BreadcrumbItem[] {
+  const absolute = (path: string) => new URL(path, siteUrl).href;
+  const items: BreadcrumbItem[] = [{ name: root.name, url: absolute(root.path) }];
+  for (const crumb of trail) {
+    const url = absolute(crumb.path);
+    if (url !== items[0].url) items.push({ name: crumb.name, url });
   }
-
   return items;
 }
 
