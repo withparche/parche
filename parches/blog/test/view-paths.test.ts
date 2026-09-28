@@ -15,7 +15,7 @@ test("a post's path follows the permalink, in its locale, with its own urlSlug",
 });
 
 test('each view is shown at the first page that renders it, or nowhere when the blog builds none', () => {
-  const views = ['index', 'post', 'taxonomy', 'author', 'series', 'archive', 'subscribe', 'search'];
+  const views = ['index', 'post', 'taxonomy', 'author', 'series', 'archive', 'subscribe'];
   const company = viewPaths(resolveBlogConfig({ preset: 'company' }), posts, views, 'en');
   assert.deepEqual(company, {
     index: '/blog',
@@ -25,7 +25,6 @@ test('each view is shown at the first page that renders it, or nowhere when the 
     series: null,
     archive: '/blog/archive',
     subscribe: null,
-    search: '/search',
   });
   // One writer: no author pages.
   assert.equal(viewPaths(resolveBlogConfig({ preset: 'personal' }), posts, ['author'], 'en').author, null);

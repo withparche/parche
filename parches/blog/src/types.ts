@@ -138,12 +138,6 @@ export interface BlogConfig {
    */
   subscribe?: false | { endpoint?: string; path?: string };
   /**
-   * Search over the posts: a Pagefind index built with the site, and a search
-   * page at `path` (default '/search', noindex). Static: it needs the posts
-   * prerendered. Default: on.
-   */
-  search?: boolean | { path?: string };
-  /**
    * Ads, placed by the views with `AdSlot` nodes named after a placement
    * (`indexLeaderboard`, `inFeed`, `inArticle`, `articleSidebar`,
    * `articleEnd`, or any name a site's view uses). AdSense: `client` and a
@@ -209,7 +203,6 @@ export interface ResolvedBlogConfig {
   tagIndexThreshold: number;
   archive: boolean;
   subscribe: false | { endpoint?: string; path: string };
-  search: false | { path: string };
   comments: false | { provider: 'giscus'; repo: string; repoId: string; category: string; categoryId: string; mapping: 'pathname' | 'url' | 'title' | 'og:title'; consent: boolean };
   ads: false | { provider: 'adsense' | 'script'; client?: string; src?: string; html?: string; slots: Record<string, string>; consent: 'builtin' | 'cmp' };
 }
@@ -255,7 +248,6 @@ export function resolveBlogConfig(config?: BlogConfig): ResolvedBlogConfig {
     subscribe: config?.subscribe ? { ...config.subscribe, path: config.subscribe.path ?? '/subscribe' } : false,
     comments: config?.comments ? { provider: 'giscus', mapping: 'pathname', consent: true, ...config.comments } : false,
     ads: config?.ads ? { ...config.ads, provider: config.ads.provider ?? 'adsense', slots: config.ads.slots ?? {}, consent: config.ads.consent ?? 'builtin' } : false,
-    search: config?.search === false ? false : { path: (typeof config?.search === 'object' ? config.search.path : undefined) ?? '/search' },
   };
 }
 

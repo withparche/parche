@@ -9,7 +9,6 @@
   "dependencies": {
     "@astrojs/rss": "catalog:",
     "@parche/astro": "workspace:*",
-    "pagefind": "catalog:",
     "zod": "catalog:"
   },
   "peerDependencies": {
@@ -21,7 +20,7 @@
   "engines": {
     "node": ">=20"
   },
-  "description": "Parche blog: routes, collections, RSS and search, as a parche.",
+  "description": "Parche blog: routes, collections and RSS, as a parche.",
   "license": "MIT",
   "author": "Arthelokyo",
   "homepage": "https://github.com/withparche/parche#readme",
@@ -37,8 +36,7 @@
     "astro",
     "parche",
     "blog",
-    "rss",
-    "search"
+    "rss"
   ],
   "publishConfig": {
     "access": "public"

@@ -72,10 +72,10 @@ for (const [site, want] of Object.entries(SITES)) {
   for (const [href, from] of broken) failures.push(`${site}: ${from} links to ${href}, which was not built`);
 
   // The listing is a CollectionPage with its posts as an ItemList, and the
-  // site advertises its search.
+  // site advertises no search it does not have (search is not the blog's).
   const listingHtml = readFileSync(join(dist, want.listing, 'index.html'), 'utf8');
   check(/"@type":"CollectionPage"/.test(listingHtml) && /"@type":"ItemList"/.test(listingHtml), `${site}: the listing is not a CollectionPage with an ItemList`);
-  check(/"@type":"SearchAction"/.test(listingHtml), `${site}: the WebSite does not advertise the search`);
+  check(!/"@type":"SearchAction"/.test(listingHtml), `${site}: the WebSite advertises a search the site does not have`);
 
   // The listing and its pages.
   const lastPage = Math.max(1, Math.ceil(want.posts / want.perPage));
@@ -86,10 +86,8 @@ for (const [site, want] of Object.entries(SITES)) {
   // The archive, newest year at its own address.
   check(existsSync(join(dist, want.listing, 'archive', 'index.html')), `${site}: no archive at ${want.listing}/archive`);
 
-  // Search: a noindex page, and the index the blog builds after the site.
-  const search = join(dist, 'search', 'index.html');
-  check(existsSync(search) && /<meta name="robots" content="noindex/.test(readFileSync(search, 'utf8')), `${site}: no noindex search page at /search`);
-  check(existsSync(join(dist, 'pagefind', 'pagefind.js')), `${site}: no search index (dist/pagefind)`);
+  // No search page and no search index: search belongs to the whole site, not to the blog.
+  check(!existsSync(join(dist, 'search', 'index.html')) && !existsSync(join(dist, 'pagefind')), `${site}: the blog built a search page or index`);
 
   // Author pages exist only for a blog with several writers.
   const authorDir = join(dist, want.listing, 'author');

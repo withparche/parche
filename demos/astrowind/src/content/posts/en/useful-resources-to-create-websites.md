@@ -126,11 +126,9 @@ shared or indexed. These references cover the markup that controls that.
 - **[The Open Graph protocol](https://ogp.me)** defines the tags that decide the
   title, description and image a link shows when it is shared.
 
-Two smaller tools round out the blog. **[Pagefind](https://pagefind.app)** builds
-a static search index after the site is built, which is how the search page
-here works without a server. **[giscus](https://giscus.app)** puts comments from
-GitHub Discussions under a post, and it is what the blog's optional comments
-use.
+One smaller tool rounds out the blog: **[giscus](https://giscus.app)** puts
+comments from GitHub Discussions under a post, and it is what the blog's
+optional comments use.
 
 > A resource list is only useful if you go back to it. Bookmark the few you
 > will use this month and ignore the rest.

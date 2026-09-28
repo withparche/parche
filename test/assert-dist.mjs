@@ -32,7 +32,7 @@ const LAZY_MAX = 40_000;
 // of their client chunks (`clientJsMax`).
 const PROJECTS = {
   'demos/astrowind': { kind: 'static', pageJsMax: 36_500 }, // 33.7 KB on /
-  'examples/blog': { kind: 'static', pageJsMax: 27_500 }, // 25.3 KB on /search/
+  'examples/blog': { kind: 'static', pageJsMax: 27_500 },
   'examples/custom-widget': { kind: 'static', pageJsMax: 23_500 }, // 21.5 KB
   'examples/i18n': { kind: 'static', pageJsMax: 29_500 }, // 27.3 KB
   'examples/import-widget': { kind: 'static', pageJsMax: 1_000 }, // no JS at all

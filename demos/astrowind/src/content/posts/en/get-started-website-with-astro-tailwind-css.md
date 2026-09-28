@@ -199,11 +199,10 @@ cd demos/astrowind
 pnpm build
 ```
 
-The output in `dist/` is static HTML, CSS and a little JavaScript. After the
-pages are written, the blog runs Pagefind over them and adds a `pagefind/`
-folder, which is what the search page reads. There is no server to run, so any
-static host will do: upload `dist/`, point your domain at it, and set `site` in
-`parche.config.json` to that domain so canonical URLs and the RSS feed use it.
+The output in `dist/` is static HTML, CSS and a little JavaScript. There is no
+server to run, so any static host will do: upload `dist/`, point your domain at
+it, and set `site` in `parche.config.json` to that domain so canonical URLs and
+the RSS feed use it.
 
 From here, the fastest way to learn the template is to change something on
 purpose and watch what happens. Swap a widget's `layout`, move a section, give a

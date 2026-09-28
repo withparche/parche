@@ -17,7 +17,6 @@ export interface BlogTools {
     toc: boolean;
     archive: boolean;
     subscribe: false | { path: string };
-    search: false | { path: string };
     [k: string]: unknown;
   };
   schemas: Record<'posts' | 'authors' | 'taxonomies' | 'series' | 'views', ZodType>;

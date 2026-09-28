@@ -69,7 +69,6 @@ export const blogConfigSchema = z
           .strict(),
       ])
       .optional(),
-    search: z.union([z.boolean(), z.object({ path: permalink.optional() }).strict()]).optional(),
     subscribe: z.union([z.literal(false), z.object({ endpoint: z.string().optional(), path: permalink.optional() }).strict()]).optional(),
   })
   .strict();

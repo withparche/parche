@@ -33,7 +33,7 @@ for (const [preset, want] of Object.entries(PRESETS)) {
   check(post.includes(`"@type":"${want.article}"`), `${preset}: the article is not a ${want.article}`);
   check(post.includes('parche-read-next') === want.readNext, `${preset}: "Read next" ${want.readNext ? 'missing' : 'shown'}`);
   check(post.includes('<parche-toc') === want.toc, `${preset}: table of contents ${want.toc ? 'missing' : 'shown'}`);
-  for (const page of ['blog/index.html', 'blog/archive/index.html', 'search/index.html', 'subscribe/index.html']) check(existsSync(join(DIST, page)), `${preset}: ${page} missing`);
+  for (const page of ['blog/index.html', 'blog/archive/index.html', 'subscribe/index.html']) check(existsSync(join(DIST, page)), `${preset}: ${page} missing`);
   console.log(`  ${preset}: ok`);
 }
 // The two post paths render one page: a root-level permalink (core's route,

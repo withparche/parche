@@ -12,11 +12,6 @@
         "links": {
           "$ref": "navigation/main"
         },
-        "search": {
-          "label": "Search",
-          "shortcut": "⌘K",
-          "href": "/search"
-        },
         "controls": {
           "theme": "text",
           "locale": "code"

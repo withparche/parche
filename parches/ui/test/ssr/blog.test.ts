@@ -21,7 +21,6 @@ import Writers from '../../src/widgets/blog/Writers.astro';
 import Archive from '../../src/widgets/blog/Archive.astro';
 import Subscribe from '../../src/widgets/blog/Subscribe.astro';
 import IssuePreview from '../../src/widgets/blog/IssuePreview.astro';
-import BlogSearch from '../../src/widgets/blog/Search.astro';
 import AdSlot from '../../src/widgets/AdSlot.astro';
 import BlogComments from '../../src/widgets/blog/Comments.astro';
 import type { BlogArticle, BlogCard, BlogContext } from '../../src/lib/blog-context';
@@ -189,7 +188,7 @@ test('wide: the title centred, a 300px sidebar, and the start rail in three colu
   expect(body).not.toContain('xl:grid-cols-');
   const railed = await render(ArticleBody, { layout: 'wide' }, post(), { start: '<div>SHARE</div>' });
   expect(railed).toContain('xl:grid-cols-[160px_minmax(0,680px)_300px]');
-  expect(railed).toMatch(/data-placement="start"[\s\S]*SHARE[\s\S]*data-pagefind-body/);
+  expect(railed).toMatch(/data-placement="start"[\s\S]*SHARE[\s\S]*class="prose/);
   // The rail is for the wide layout only.
   expect(await render(ArticleBody, {}, post(), { start: '<div>SHARE</div>' })).not.toContain('SHARE');
   expect(await render(ArticleBody, {}, post())).toContain('lg:grid-cols-[minmax(0,680px)_220px]');
@@ -339,16 +338,6 @@ test("IssuePreview shows the latest post as an email from the site; AuthorBox's 
   expect(preview).toContain('href="/post-2"');
   const box = await render(AuthorBox, {}, post({}, { authors: 'one', subscribe: { href: '/subscribe' }, labels: { ...post().labels, subscribeNext: 'Get the next one by email' } }));
   expect(box).toMatch(/href="\/subscribe"[^>]*>Get the next one by email/);
-});
-
-test('the blog search offers topics, the archive and the subscription for when nothing matches', async () => {
-  const html = await render(BlogSearch, {}, ctx({ archiveHref: '/blog/archive', subscribe: { href: '/subscribe' }, labels: { searchSuggest: 'Try a topic', searchArchive: 'Browse the archive' } } as any));
-  expect(html).toContain('<parche-search');
-  expect(html).toContain('role="search"');
-  expect(html).toContain('href="/blog/category/guides"');
-  expect(html).toContain('#astro');
-  expect(html).toContain('href="/blog/archive"');
-  expect(html).toContain('href="/subscribe"');
 });
 
 const ads = { provider: 'adsense' as const, client: 'ca-pub-1', slots: { inArticle: '42' }, consent: 'builtin' as const };

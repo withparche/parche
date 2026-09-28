@@ -100,7 +100,6 @@ export default function createUI(): ParcheManifest {
       'blog/Archive': w('blog/Archive.astro'),
       'blog/Subscribe': w('blog/Subscribe.astro'),
       'blog/IssuePreview': w('blog/IssuePreview.astro'),
-      'blog/Search': w('blog/Search.astro'),
       'blog/Picks': w('blog/Picks.astro'),
       'blog/Comments': w('blog/Comments.astro'),
       'blog/ShareBar': w('blog/ShareBar.astro'),

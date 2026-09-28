@@ -55,7 +55,6 @@ the keys given. Components read the resolved values, never `preset`.
 | `archive` | `true` | The archive: the newest year by month at `/blog/archive`, earlier years at `/blog/archive/2025`. |
 | `comments` | off | `{ repo, repoId, category, categoryId, mapping?, consent? }`: giscus comments under posts (see *Comments*). |
 | `ads` | off | `{ provider?, client?, slots?, src?, html?, consent? }`: see *Ads and other placements*. |
-| `search` | on | `true`, `false` or `{ path? }`: a Pagefind index built after the site and a search page at `path` (default `/search`, noindex). Needs the posts prerendered. |
 | `subscribe` | off | `{ endpoint?, path? }`: a subscribe page at `path` (default `/subscribe`) and the forms the views place. `endpoint` is where the form posts; without one the send is simulated, for a demo. |
 | `readingTime`, `wordsPerMinute` | `true`, `200` | Reading time, computed from the body. |
 | `rss` | `true` | The feed, advertised in every page's head. |
@@ -69,8 +68,8 @@ value or a permalink without a leading slash stops the build with its name.
 ## Views
 
 Each blog page type renders a view: `index`, `taxonomy` (tag and category
-pages), `author`, `post` (the article). More come with the series, archive,
-subscribe and search pages.
+pages), `author`, `post` (the article). More come with the series, archive
+and subscribe pages.
 
 A view is `{ "sections": [ …nodes ], "wrapper"?: … }`. The preset's ships
 with the blog; a site replaces one by adding it to the `views` collection:
@@ -223,16 +222,10 @@ renders and no page is built: a form that goes nowhere is not a subscription.
 
 ### Search
 
-After the build the blog runs Pagefind over the built site (a parche
-`astro:build:done` hook) and writes `pagefind/` next to it. Only articles are
-indexed: the article body carries `data-pagefind-body`, and the title,
-category and date are its metadata. The `search` view is the page header over
-`blog/Search`, the Search element on that index: it loads the index on the
-first search, searches as the reader types, keeps the query in the address
-(`/search?q=postgres`, so a link to a search works), lists category · date,
-title and an excerpt with the match marked, and, when nothing matches, offers
-the most used topics, the archive and the subscription. Without script the
-page says where to go instead.
+The blog has no search. A search that finds only posts is not the site's
+search, and one built from the prerendered HTML does not work the same on a
+server. Search is the whole site's, to be designed in core: see
+`app-ideas.md`.
 
 ### Ads and other placements
 
@@ -320,11 +313,9 @@ Every blog page says what it is:
 | Index, tag, category, archive, series | `CollectionPage` with an `ItemList` of the page's posts (or the series' parts) in order |
 | Author | `ProfilePage` with a `Person` (role, bio, portrait, profiles as `sameAs`) and the posts |
 | Article | `BlogPosting`, or `NewsArticle` for the magazine preset, with the author and their page, and one `BreadcrumbList` |
-| Search | `SearchResultsPage`, noindex |
 
-The site's `WebSite` node advertises the search as a `SearchAction`
-(`/search?q={search_term_string}`). Two generic pieces of core make this
-work for any parche: a route's metadata may set `pageType` for the WebPage
+Two generic pieces of core help any parche here: a route's metadata may set
+`pageType` for the WebPage
 node, and a page's own structured data of a kind (an article, a trail)
 replaces the one core would generate, so nothing is described twice.
 
@@ -343,7 +334,7 @@ is built; a `timeZone` in `dateFormat` wins.
 ## How it is checked
 
 - `test/blog-routes.mjs` walks the built blog sites: every internal link
-  resolves, the listing, its pages, the archive, search and feed exist, the
+  resolves, the listing, its pages, the archive and feed exist (and no search), the
   feed is in every head, each post has its lead, "Read next", its table of
   contents when the blog's `toc` is on, and one article and one trail in its
   structured data.
@@ -352,7 +343,7 @@ is built; a `timeZone` in `dateFormat` wins.
   the ones it says do not: author pages, series pages, the article type,
   "Read next", the table of contents.
 - The widgets are rendered with a sample context in
-  `parches/ui/test/ssr/blog.test.ts`; the elements (LoadMore, Search,
+  `parches/ui/test/ssr/blog.test.ts`; the elements (LoadMore,
   Consent, AdSlot, Comments) run in the browser suite, the network ones
   against stand-ins.
 

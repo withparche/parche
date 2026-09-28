@@ -145,7 +145,6 @@ function BlogOptions() {
     ['Table of contents', c.toc ? 'On' : 'Off'],
     ['Series', c.series ? 'On' : 'Off'],
     ['Archive', c.archive ? String(c.permalinks?.archive) : 'Off'],
-    ['Search', c.search ? String(c.search.path) : 'Off'],
     ['Subscribe', c.subscribe ? String(c.subscribe.path) : 'Off'],
     ['Feed', c.rss ? String(c.permalinks?.rss) : 'Off'],
   ];

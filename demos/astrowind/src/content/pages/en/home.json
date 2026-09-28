@@ -160,10 +160,10 @@
             "label": "SaaS",
             "caption": "saas demo · 1000×625",
             "title": "SaaS — pricing, changelog, docs",
-            "description": "The full funnel: feature grid, three-tier pricing with comparison, changelog and a docs section with sidebar search.",
+            "description": "The full funnel: feature grid, three-tier pricing with comparison, changelog and a docs section with a sidebar.",
             "points": [
               "Pricing table with per-plan feature matrix",
-              "Docs layout with Pagefind search built in",
+              "Docs layout with sidebar navigation",
               "Public changelog fed by one content collection"
             ],
             "link": {
@@ -407,8 +407,8 @@
             "description": "Deploy presets"
           },
           {
-            "title": "Algolia / Pagefind",
-            "description": "Site search"
+            "title": "giscus",
+            "description": "Blog comments"
           },
           {
             "title": "shadcn/ui",

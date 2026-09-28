@@ -35,7 +35,6 @@ export function viewPaths(config: ResolvedBlogConfig, posts: PostLike[], views: 
       : view === 'series' ? (config.series && series ? resolveTaxonomyPermalink(config.permalinks.series, series) : null)
       : view === 'archive' ? (config.archive ? config.permalinks.archive : null)
       : view === 'subscribe' ? (config.subscribe ? config.subscribe.path : null)
-      : view === 'search' ? (config.search ? config.search.path : null)
       : null;
     if (out[view]) out[view] = localizePath(out[view]!, defaultLocale, defaultLocale);
   }

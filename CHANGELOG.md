@@ -161,10 +161,10 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   series, the archive and the article each render a JSON view a site can
   replace (`src/content/views/blog-<name>.json`), with widgets that read the
   route's data. New: series and issues, author and series pages, an archive
-  by month, a subscribe page and forms, static search with Pagefind, ad
-  slots and placements behind consent, comments from GitHub Discussions,
-  load more, a table of contents as a setting (`toc`), and structured data
-  for every blog page, with no page described twice. See `docs-wip/blog.md`.
+  by month, a subscribe page and forms, ad slots and placements behind
+  consent, comments from GitHub Discussions, load more, a table of contents
+  as a setting (`toc`), and structured data for every blog page, with no page
+  described twice. See `docs-wip/blog.md`.
 
 - **For parches** (`6ca9e88`, `766d362`, `8da6bcb`): head links
   (`head.links`), `hooks['astro:build:done']`, `siteSearch` for the
