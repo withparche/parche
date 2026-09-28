@@ -23,6 +23,20 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   together at run time is added with `also`. The demo, the templates and
   the server examples use it.
 
+- **`Parche.*` types for the site's own TypeScript.** The integration
+  writes `parche.d.ts` into the site's types on every start (Astro's
+  `injectTypes`): `Parche.Widget`, `Template`, `Element`, `Locale`, `Theme`
+  and `App`, the unions of what the site's parches provide, for a custom
+  route picking a widget by key or a script naming a locale.
+
+- **The site config file is watched in dev**: a change to
+  `parche.config.json` restarts the dev server, from core, for every site;
+  the builder no longer has to.
+
+- **Two parches setting one font variable with different families are
+  warned about**, naming both and the family that applies; set `fonts` in
+  the site config to choose. The same family twice is one font, silently.
+
 - **`transitions: false`** in `parche({ … })` leaves Astro's ClientRouter
   (view transitions, about 16 KB of script on every page) out. Default:
   on, as before.
@@ -214,6 +228,14 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   the public documentation.
 
 ### Changed
+
+- **The integration speaks through Astro's logger and follows `srcDir`.**
+  What does not stop a build (a duplicate registration, a bad path, a font
+  set twice, a token override left out, a translation for a locale Astro
+  does not list) is said as `[parche]` through Astro's logger, where the
+  rest of a build's messages are. A site that moves Astro's `srcDir` keeps
+  its config, its tokens, its images and its icons there: nothing in core
+  assumes `src/` any more.
 
 - **A server loads on a cold start only what a request needs.** The apps'
   templates load on demand (`loadTemplate(name)` in

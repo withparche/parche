@@ -10,6 +10,7 @@ import { createRegistry } from './registry/index.js';
 import { assertBaseSupported, assertRoutesConsistent, prepareParcheConfig, validateUserConfig, type ParcheConfigContext, type ParcheConfigInput, type PreparedConfig } from './options.js';
 import { injectParcheRoutes, removeCheckOutput } from './routes.js';
 import { processRobotsTxt } from './robots.js';
+import { generateTypesDeclaration } from './codegen/types.js';
 import type { ResolvedRegistry } from './types.js';
 import type { ParcheUserConfig, ParchePreset, UIRegistry, ParcheApp, ParcheManifest, ParcheRequires } from './types.js';
 
@@ -27,10 +28,15 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
   let hasSitemap = false;
   // The parches' build-done hooks, collected at setup.
   let buildDone: ResolvedRegistry['buildDone'] = [];
+  // What the site's parches provide, for the types written once the config is done.
+  let registry: ResolvedRegistry | undefined;
   return {
     name: 'parche',
     hooks: {
-      'astro:config:setup': async ({ command, updateConfig, config, injectRoute, addMiddleware }) => {
+      'astro:config:setup': async ({ command, updateConfig, config, injectRoute, addMiddleware, addWatchFile, logger }) => {
+        // Everything that does not stop the build is said through Astro's
+        // logger, under the integration's name.
+        const warn = (message: string) => logger.warn(message);
         const ctx: ParcheConfigContext = {
           command,
           mode: command === 'dev' ? 'development' : 'production',
@@ -49,15 +55,19 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
         // Inline mode hands us the site config directly; separate-file mode needs
         // it read from disk, since the virtual module resolves far too late.
         const rootDirEarly = fileURLToPath(config.root);
-        const configFile = resolveSiteConfigPath(rootDirEarly, resolved.config);
+        const srcDir = fileURLToPath(config.srcDir);
+        const configFile = resolveSiteConfigPath(rootDirEarly, resolved.config, srcDir);
         const siteConfig =
-          prepared.inlineSiteConfig ?? (await tryLoadSiteConfig(rootDirEarly, resolved.config));
+          prepared.inlineSiteConfig ?? (await tryLoadSiteConfig(rootDirEarly, resolved.config, srcDir));
         if (command === 'dev') {
           setDevInfo({
             root: rootDirEarly,
             siteConfigPath: prepared.inlineSiteConfig ? null : configFile,
             siteConfigMode: prepared.inlineSiteConfig ? 'inline' : 'json',
           });
+          // The site config is read here, once: a change to the file restarts
+          // the dev server, which Astro does for a file an integration watches.
+          if (configFile) addWatchFile(configFile);
         }
         if (configFile) {
           // Pin the probed file so the registry does not fall back to a .ts path
@@ -77,12 +87,13 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
         }
 
         // Same rule for i18n: one declaration, either side.
-        const parcheI18n = resolveI18n(config.i18n, (siteConfig as any)?.i18n);
+        const parcheI18n = resolveI18n(config.i18n, (siteConfig as any)?.i18n, warn);
         if (parcheI18n) {
           updateConfig({ i18n: parcheI18n });
         }
         const rootDir = fileURLToPath(config.root);
-        const resolvedRegistry = createRegistry(resolved, rootDir, parcheI18n ?? config.i18n, servedSiteConfig, fileURLToPath(config.srcDir));
+        const resolvedRegistry = createRegistry(resolved, rootDir, parcheI18n ?? config.i18n, servedSiteConfig, srcDir, { warn });
+        registry = resolvedRegistry;
         buildDone = resolvedRegistry.buildDone;
         assertRoutesConsistent(resolved.routes, resolvedRegistry.resolvers);
 
@@ -123,7 +134,7 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
         const coreDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
         updateConfig({
           vite: {
-            plugins: [vitePluginParche(resolvedRegistry)],
+            plugins: [vitePluginParche(resolvedRegistry, { warn })],
             resolve: {
               alias: {
                 '@core': coreDir,
@@ -131,6 +142,12 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
             },
           },
         });
+      },
+
+      // What the site can name in its own TypeScript: the widgets, templates,
+      // elements, locales, themes and apps its parches provide, as `Parche.*`.
+      'astro:config:done': ({ injectTypes }) => {
+        if (registry) injectTypes({ filename: 'parche.d.ts', content: generateTypesDeclaration(registry) });
       },
 
       'astro:build:done': async ({ dir, logger }) => {

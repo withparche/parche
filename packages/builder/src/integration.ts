@@ -33,7 +33,7 @@ export default function builder(options: BuilderOptions): AstroIntegration {
   return {
     name: '@parche/builder',
     hooks: {
-      'astro:config:setup': ({ command, injectRoute, updateConfig, addWatchFile, config }) => {
+      'astro:config:setup': ({ command, injectRoute, updateConfig, config }) => {
         if (command !== 'dev') {
           throw new Error('[parche] @parche/builder runs only under "astro dev"; start it with `parche astro builder`.');
         }
@@ -49,12 +49,9 @@ export default function builder(options: BuilderOptions): AstroIntegration {
           injectRoute({ pattern: `/_parche/api/${api}`, entrypoint: route(`api/${api}.ts`), prerender: false });
         }
 
-        // The site config is read once, at startup: a save from the editor (or
-        // by hand, while the builder runs) restarts the dev server, which Astro
-        // does itself for a file an integration watches. The editor is not a
-        // page of that server's Vite, so it stays as it is.
-        const info = (globalThis as { [k: symbol]: { siteConfigPath: string | null; siteConfigMode: string } | undefined })[Symbol.for('parche.dev')];
-        if (info?.siteConfigMode === 'json' && info.siteConfigPath) addWatchFile(info.siteConfigPath);
+        // A save of the site config from the editor restarts the dev server:
+        // core watches the file (its integration adds it to Astro's watch), and
+        // the editor is not a page of that server's Vite, so it stays as it is.
 
         // The preview: pages asked for under /_parche/preview/<token>/ render
         // with the editor's drafts (a stand-in for astro:content) and mark their nodes.

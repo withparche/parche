@@ -66,6 +66,7 @@ export function resolveI18n(
   parcheI18n:
     | { defaultLocale?: string; locales?: unknown[]; translations?: Record<string, unknown> }
     | undefined,
+  warn: (message: string) => void = (message) => console.warn(`[parche] ${message}`),
 ): { defaultLocale: string; locales: unknown[]; routing: { prefixDefaultLocale: false; redirectToDefaultLocale: false; fallbackType: 'redirect' } } | null {
   const parcheDeclares = Boolean(parcheI18n?.defaultLocale) || Boolean(parcheI18n?.locales?.length);
 
@@ -86,10 +87,7 @@ export function resolveI18n(
     const known = codesOf(astroI18n.locales);
     for (const code of Object.keys(parcheI18n?.translations ?? {})) {
       if (known.length > 0 && !known.includes(code)) {
-        console.warn(
-          `[parche] i18n.translations has an entry for "${code}", which astro.config does not list. ` +
-            'It will never be used.',
-        );
+        warn(`i18n.translations has an entry for "${code}", which astro.config does not list. It will never be used.`);
       }
     }
     return null;

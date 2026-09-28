@@ -80,6 +80,14 @@ on the components being accessible and themeable.
   without parsing in production (~6 % of a page request), because `parse`
   is also what validates and coerces a widget's props, and skipping it
   would let a bad prop through in production alone.
+- Core's integration, reorganised: split by responsibility (what `parche()`
+  takes, the routes, robots.txt, the registry's merge in `registry/`, one
+  generator per module family in `codegen/`), the demo byte-identical; it
+  speaks through Astro's logger, follows `srcDir`, watches the site config
+  in dev, writes `parche.d.ts` (`Parche.Widget`, `Locale`, `Theme`…) and
+  warns about a font variable two parches set differently. Next: the config
+  redesign (a merge-rules table, `defineParche` with a `configKey`, the
+  naming cleanup in one minor with a codemod).
 - Limits found, documented in [docs-wip/sizing.md](./docs-wip/sizing.md): a
   server build ships all its content in the bundle (Astro's data layer) —
   4,000 files are 18 MB and 0.5 s to start, 10,000 are 83 MB and 42 s,

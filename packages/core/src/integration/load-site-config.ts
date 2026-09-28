@@ -26,9 +26,9 @@ const CONFIG_FILENAME = 'parche.config.json';
 /** Formats that used to be probed. Found now, they are reported, not ignored. */
 const LEGACY_EXTENSIONS = ['.ts', '.mjs', '.js'] as const;
 
-function legacyCandidates(rootDir: string): string[] {
+function legacyCandidates(rootDir: string, srcDir: string): string[] {
   const found: string[] = [];
-  for (const dir of [path.resolve(rootDir, 'src'), rootDir]) {
+  for (const dir of [srcDir, rootDir]) {
     for (const ext of LEGACY_EXTENSIONS) {
       const candidate = path.join(dir, `parche.config${ext}`);
       if (fs.existsSync(candidate)) found.push(candidate);
@@ -40,16 +40,19 @@ function legacyCandidates(rootDir: string): string[] {
 /**
  * Find the site config file, honouring an explicit path or probing for one.
  *
- * Probes `src/parche.config.json` first, then the project root, which is where
- * it used to live. Throws rather than returning null whenever something is
- * clearly meant to be the config but cannot be used — a `.ts` file, or a copy
- * in both places. A config that fails to load is why `site` goes missing, and
- * that has to be loud.
+ * Probes `<srcDir>/parche.config.json` first (Astro's `srcDir`, `src` unless
+ * the site moves it), then the project root, which is where it used to live.
+ * Throws rather than returning null whenever something is clearly meant to be
+ * the config but cannot be used — a `.ts` file, or a copy in both places. A
+ * config that fails to load is why `site` goes missing, and that has to be
+ * loud.
  */
 export function resolveSiteConfigPath(
   rootDir: string,
   configPath: string | undefined,
+  srcDir: string = path.resolve(rootDir, 'src'),
 ): string | null {
+  const home = path.relative(rootDir, srcDir).split(path.sep).join('/') || '.';
   if (configPath) {
     const absolute = path.resolve(rootDir, configPath);
     if (!absolute.endsWith('.json')) {
@@ -61,26 +64,26 @@ export function resolveSiteConfigPath(
     return fs.existsSync(absolute) ? absolute : null;
   }
 
-  const inSrc = path.resolve(rootDir, 'src', CONFIG_FILENAME);
+  const inSrc = path.resolve(srcDir, CONFIG_FILENAME);
   const atRoot = path.resolve(rootDir, CONFIG_FILENAME);
-  const found = [inSrc, atRoot].filter((f) => fs.existsSync(f));
+  const found = [...new Set([inSrc, atRoot])].filter((f) => fs.existsSync(f));
 
   if (found.length > 1) {
     throw new Error(
       `[parche] Two site configs found:\n` +
         found.map((f) => `  - ${path.relative(rootDir, f)}`).join('\n') +
-        `\n  Keep one. src/${CONFIG_FILENAME} is the home.`,
+        `\n  Keep one. ${home}/${CONFIG_FILENAME} is the home.`,
     );
   }
   if (found.length === 1) return found[0];
 
-  const legacy = legacyCandidates(rootDir);
+  const legacy = legacyCandidates(rootDir, srcDir);
   if (legacy.length > 0) {
     throw new Error(
       `[parche] The site config must be JSON. Found ${legacy
         .map((f) => `"${path.relative(rootDir, f)}"`)
         .join(', ')}, which core cannot read.\n` +
-        `  Rename it to src/${CONFIG_FILENAME} and drop the defineConfig() wrapper —\n` +
+        `  Rename it to ${home}/${CONFIG_FILENAME} and drop the defineConfig() wrapper —\n` +
         `  the object inside it is already plain data, so nothing else changes.`,
     );
   }
@@ -102,8 +105,9 @@ export function resolveSiteConfigPath(
 export async function tryLoadSiteConfig(
   rootDir: string,
   configPath: string | undefined,
+  srcDir?: string,
 ): Promise<SiteConfig | null> {
-  const absolute = resolveSiteConfigPath(rootDir, configPath);
+  const absolute = resolveSiteConfigPath(rootDir, configPath, srcDir);
   if (!absolute) return null;
 
   return siteConfigSchema.parse(JSON.parse(fs.readFileSync(absolute, 'utf8'))) as SiteConfig;

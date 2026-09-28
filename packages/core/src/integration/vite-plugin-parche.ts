@@ -105,7 +105,14 @@ const GENERATE: Record<string, (registry: ResolvedRegistry) => string> = {
  * re-export it. It also feeds Tailwind's root with the parches' sources and
  * reloads the site's token overrides when they change.
  */
-export function vitePluginParche(registry: ResolvedRegistry): Plugin {
+export function vitePluginParche(
+  registry: ResolvedRegistry,
+  options: {
+    /** Where a problem that does not stop the build is reported: Astro's logger, from the integration; the console on its own. */
+    warn?: (message: string) => void;
+  } = {},
+): Plugin {
+  const warn = options.warn ?? ((message: string) => console.warn(`[parche] ${message}`));
   return {
     name: 'vite-plugin-parche',
     enforce: 'pre',
@@ -166,7 +173,7 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
 
       if (id === TOKEN_OVERRIDES_VIRTUAL) {
         if (fs.existsSync(registry.tokenOverridesPath)) this.addWatchFile(registry.tokenOverridesPath);
-        return generateTokenOverrides(registry);
+        return generateTokenOverrides(registry, warn);
       }
       if (id === WIDGET_SCHEMAS_VIRTUAL) {
         // Watch .props.ts and .defaults.json files for HMR

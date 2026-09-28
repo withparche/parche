@@ -21,14 +21,19 @@ export function createRegistry(
   inlineSiteConfig?: SiteConfig,
   /** Astro's `srcDir`, absolute; defaults to `<root>/src`. */
   srcDirAbs: string = path.join(rootDir, 'src'),
+  options: {
+    /** Where a problem that does not stop the build is reported: Astro's logger, from the integration; the console on its own. */
+    warn?: (message: string) => void;
+  } = {},
 ): ResolvedRegistry {
+  const warn = options.warn ?? ((message: string) => console.warn(`[parche] ${message}`));
   const modules: Record<string, string> = { ...CORE_MODULES };
 
   // Site config: `parche({ site })` passes it inline (served as parche:config by
-  // the vite plugin); otherwise parche:config points at the user's config file.
+  // the vite plugin); otherwise parche:config points at the user's config file,
+  // or at its home in the site's srcDir.
   if (!inlineSiteConfig) {
-    const configPath = userConfig.config || './src/parche.config.json';
-    modules['parche:config'] = path.resolve(rootDir, configPath);
+    modules['parche:config'] = userConfig.config ? path.resolve(rootDir, userConfig.config) : path.join(srcDirAbs, 'parche.config.json');
   }
 
   // Modules that use named exports — instance-local, seeded from the frozen base
@@ -137,11 +142,11 @@ export function createRegistry(
   }
 
   if (badPaths.length) {
-    console.warn('[parche] Parche path problems (these modules will fail to load):\n  - ' + badPaths.join('\n  - '));
+    warn('Parche path problems (these modules will fail to load):\n  - ' + badPaths.join('\n  - '));
   }
   if (collisions.length) {
-    console.warn(
-      '[parche] Duplicate registrations — the last parche wins. If this is intentional, use `overrides` to make it explicit:\n  - ' +
+    warn(
+      'Duplicate registrations — the last parche wins. If this is intentional, use `overrides` to make it explicit:\n  - ' +
         collisions.join('\n  - '),
     );
   }
@@ -193,7 +198,7 @@ export function createRegistry(
     }
   }
   if (badOverrides.length) {
-    console.warn('[parche] Override path problems (these modules will fail to load):\n  - ' + badOverrides.join('\n  - '));
+    warn('Override path problems (these modules will fail to load):\n  - ' + badOverrides.join('\n  - '));
   }
 
   // The widgets that take no wrapper, read from the module each name finally
@@ -230,12 +235,26 @@ export function createRegistry(
   // Fonts: whatever the parches (typically themes) ask for, then the site's own.
   // Core contributes none — a typeface belongs to a visual identity, so a project
   // with no theme downloads nothing and renders in the system stack. Later wins
-  // per cssVariable, so a site can replace a theme's choice.
-  const fontsByVariable = new Map<string, any>();
-  for (const font of [...contributedFonts, ...(inlineSiteConfig as any)?.fonts ?? []]) {
-    fontsByVariable.set(font.cssVariable, font);
+  // per cssVariable, so a site can replace a theme's choice. Two parches giving
+  // one variable different families is said, since only the last one shows (a
+  // site that imports several themes sees them all in the last theme's face);
+  // the site's own choice is the fix, and is never warned about.
+  const fontsByVariable = new Map<string, { font: any; from: string }>();
+  const declared = [
+    ...parches.flatMap((p) => (p.fonts ?? []).map((font) => ({ font, from: p.name }))),
+    ...((inlineSiteConfig as any)?.fonts ?? []).map((font: any) => ({ font, from: '' })),
+  ];
+  for (const { font, from } of declared) {
+    const prev = fontsByVariable.get(font.cssVariable);
+    if (prev && from && prev.from !== from && prev.font.name !== font.name) {
+      warn(
+        `"${prev.from}" and "${from}" both set the font ${font.cssVariable}, with different families (${prev.font.name}, ${font.name}); ` +
+          `the last one, ${font.name}, applies everywhere. Set \`fonts\` in the site config to choose.`,
+      );
+    }
+    fontsByVariable.set(font.cssVariable, { font, from });
   }
-  const fonts = [...fontsByVariable.values()];
+  const fonts = [...fontsByVariable.values()].map((f) => f.font);
 
   const styleEntries = [...contributedStyles];
   if (userConfig.styles?.entry) {

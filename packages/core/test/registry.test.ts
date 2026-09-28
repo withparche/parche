@@ -384,3 +384,24 @@ test("the tokens file sits in the site's srcDir", () => {
   assert.equal(reg.tokenOverridesPath, `${ROOT}/app/parche.tokens.json`);
   assert.equal(reg.srcDir, 'app');
 });
+
+test('fonts: two parches setting one variable with different families are warned about; the site choosing, or the same family, is not', () => {
+  const inter = { cssVariable: '--font-sans', name: 'Inter', weights: [400], fallbacks: ['sans-serif'], preload: true };
+  const plex = { ...inter, name: 'IBM Plex Sans' };
+  const themes = (a: object, b: object) => [{ name: 'theme-a', fonts: [a] }, { name: 'theme-b', fonts: [b] }] as any;
+  const warned: string[] = [];
+  const reg = createRegistry({ parches: themes(inter, plex) }, FIXTURES, undefined, undefined, undefined, { warn: (m) => warned.push(m) });
+  assert.equal(warned.length, 1);
+  assert.match(warned[0], /"theme-a" and "theme-b" both set the font --font-sans/);
+  assert.match(warned[0], /Inter, IBM Plex Sans/);
+  assert.equal(reg.fonts[0].name, 'IBM Plex Sans');
+  // The same family twice is one font, silently.
+  const same: string[] = [];
+  createRegistry({ parches: themes(inter, { ...inter }) }, FIXTURES, undefined, undefined, undefined, { warn: (m) => same.push(m) });
+  assert.deepEqual(same, []);
+  // The site's own choice is the fix, never a warning: no theme conflict, the site overrides one theme.
+  const site: string[] = [];
+  const chosen = createRegistry({ parches: [{ name: 'theme-a', fonts: [inter] }] as any }, FIXTURES, undefined, { brand: { name: 'X' }, fonts: [plex] } as any, undefined, { warn: (m) => site.push(m) });
+  assert.deepEqual(site, []);
+  assert.equal(chosen.fonts[0].name, 'IBM Plex Sans');
+});

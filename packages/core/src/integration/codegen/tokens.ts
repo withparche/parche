@@ -18,17 +18,18 @@ function tokenNames(): Set<string> {
   return knownTokens;
 }
 
-/** `src/parche.tokens.json` as CSS; nothing when the file is absent. Problems are warned about, and left out. */
-export function generateTokenOverrides(registry: ResolvedRegistry): string {
+/** `<srcDir>/parche.tokens.json` as CSS; nothing when the file is absent. Problems are warned about, and left out. */
+export function generateTokenOverrides(registry: ResolvedRegistry, warn: (message: string) => void = (m) => console.warn(`[parche] ${m}`)): string {
   if (!fs.existsSync(registry.tokenOverridesPath)) return '';
+  const file = `${registry.srcDir}/parche.tokens.json`;
   let raw: unknown;
   try {
     raw = JSON.parse(fs.readFileSync(registry.tokenOverridesPath, 'utf-8'));
   } catch (e) {
-    console.warn(`[parche] src/parche.tokens.json is not valid JSON: ${(e as Error).message}`);
+    warn(`${file} is not valid JSON: ${(e as Error).message}`);
     return '';
   }
   const { overrides, issues } = validateOverrides(raw, tokenNames());
-  for (const i of issues) console.warn(`[parche] src/parche.tokens.json ${i.path}: ${i.message} (left out)`);
+  for (const i of issues) warn(`${file} ${i.path}: ${i.message} (left out)`);
   return tokensToCss(overrides);
 }

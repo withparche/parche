@@ -18,8 +18,10 @@ import type { ParcheManifest } from './integration/types.js';
  * it with `also`.
  */
 export interface UsedIconsOptions {
-  /** The project root; `src/` under it is scanned. Default: the working directory. */
+  /** The project root. Default: the working directory. */
   root?: string;
+  /** The site's source folder, scanned whole (Astro's `srcDir`). Default: `src` under the root. */
+  srcDir?: string;
   /** Icons to include besides the ones found, by set. */
   also?: Record<string, string[]>;
   /** The sets to consider. Default: every set installed as `@iconify-json/<set>`. */
@@ -32,7 +34,7 @@ const NAME = /(?<![\w./-])([a-z][a-z0-9-]*):([a-z0-9][a-z0-9-]*)(?![\w-])/g;
 
 export function usedIcons(parches: ParcheManifest[] = [], options: UsedIconsOptions = {}): Record<string, string[]> {
   const root = path.resolve(options.root ?? process.cwd());
-  const dirs = new Set<string>([path.join(root, 'src')]);
+  const dirs = new Set<string>([path.resolve(root, options.srcDir ?? 'src')]);
   for (const manifest of parches) for (const dir of sourceDirs(manifest)) dirs.add(dir);
 
   const installed = new Map<string, boolean>();
