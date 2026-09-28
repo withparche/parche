@@ -19,6 +19,10 @@ duplicate it here.
   how the preview works, and its known gaps.
 - [collections.md](./collections.md) — pages from a collection of plain data,
   rendered by a widget or a pattern (`collections` in the site config).
+- [research/](./research/) — how today's blogs lay out their pages, measured
+  on live sites at 1440, 1024 and phone width, for the redesign of the blog
+  presets: [personal](./research/personal.md), [magazine](./research/magazine.md),
+  [company](./research/company.md), [newsletter](./research/newsletter.md).
 
 ## Status
 
