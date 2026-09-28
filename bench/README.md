@@ -17,6 +17,7 @@ node generate.mjs --pages 1000 --posts 1000 --entries 0 --locales en,es --seed 1
 node generate.mjs --pages 1000 --posts 5000 --entries 1000 --locales en,es --seed 1 --sections 15-20   # heavy pages
 node build.mjs --label n1000                  # static build: time, memory, per page
 PARCHE_PROFILE=1 node build.mjs               # and where the time went, by phase
+PARCHE_DEBUG_FREEZE=1 node build.mjs          # content frozen: a widget mutating its props fails the build
 BENCH_OUTPUT=server node build.mjs            # server build, then:
 node ssr.mjs --label n1000                    # cold start and latency per kind of address
 node chunks.mjs                               # what the server loads on a cold start

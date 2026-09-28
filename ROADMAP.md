@@ -72,10 +72,10 @@ on the components being accessible and themeable.
   build 89 → 36 s; the collections' pages and the pages' translations the
   same way, a 5,000-product site 20 → 15 s; related posts declared in the
   post, the latest of its category when none are). Next, in order:
-  - a check warning for a `$collection` without `limit` over a large
-    collection (every page carrying it renders the whole collection);
-  - elements applying their defaults without parsing in production; a
-    `transitions` option; a frozen-content guard in the test builds.
+  - elements applying their defaults without parsing in production (~6 %
+    of a page request): not done, because `parse` is also what validates
+    and coerces a widget's props, and skipping it would let a bad prop
+    through in production alone.
 - Limits found and to document on a sizing page: a server build ships all
   its content in the bundle (Astro's data layer) — 4,000 files are 18 MB and
   0.5 s to start, 10,000 are 83 MB and 42 s, 20,000 are 133 MB and 120 s —

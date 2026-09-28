@@ -1,5 +1,6 @@
 import { getCollection } from 'astro:content';
 import { ancestorKeys, pagePath } from './paths.js';
+import { guarded } from './entries.js';
 
 export { localizePath, splitLocale, pagePath, slugify, absoluteAlternates } from './paths.js';
 
@@ -36,7 +37,7 @@ export async function buildSlugMap(): Promise<SlugMapEntry[]> {
     const locale = parts[0];
     const pageKey = parts.slice(1).join('/');
     const slug = entry.data.urlSlug ?? pageKey;
-    map.push({ locale, pageKey, slug, data: entry.data, entryId: entry.id });
+    map.push({ locale, pageKey, slug, data: guarded(entry.data), entryId: entry.id });
   }
 
   if (CACHE) _slugMapCache = map;

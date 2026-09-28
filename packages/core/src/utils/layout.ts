@@ -1,4 +1,5 @@
 import { getCollection } from 'astro:content';
+import { guarded } from './entries.js';
 import type { Node } from '../content/node.js';
 import { outletWrappers, type WrapperSpec } from '../content/wrapper.js';
 
@@ -23,7 +24,7 @@ async function getLayoutIndex(): Promise<Map<string, LayoutEntry> | null> {
   }
   if (!allLayouts || allLayouts.length === 0) return null;
   const index = new Map<string, LayoutEntry>(
-    (allLayouts as LayoutEntry[]).map((entry) => [entry.id, entry]),
+    (allLayouts as LayoutEntry[]).map((entry) => [entry.id, { id: entry.id, data: guarded(entry.data) }]),
   );
   if (CACHE) _layoutIndex = index;
   return index;

@@ -267,6 +267,8 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
               'import.meta.env.PARCHE_IMAGES': JSON.stringify(JSON.stringify(images)),
               // Measuring Parche itself (bench/, utils/profile.ts): off unless the build runs with PARCHE_PROFILE=1.
               'import.meta.env.PARCHE_PROFILE': JSON.stringify(process.env.PARCHE_PROFILE ?? ''),
+              // Content frozen in place (utils/entries.ts), so a widget that mutates its props fails the build instead of changing the next page: on in the test builds.
+              'import.meta.env.PARCHE_DEBUG_FREEZE': JSON.stringify(process.env.PARCHE_DEBUG_FREEZE ?? ''),
             },
           },
         });

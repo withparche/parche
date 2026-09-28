@@ -11,6 +11,29 @@ import { getCollection } from 'astro:content';
  * and patterns.ts already follow for pages, layouts and patterns.
  */
 const CACHE = import.meta.env.PROD;
+const FREEZE = import.meta.env.PARCHE_DEBUG_FREEZE === '1';
+
+/**
+ * Content shared between pages, guarded when a build runs with
+ * PARCHE_DEBUG_FREEZE=1 (the test builds do): a deep-frozen copy, so a
+ * widget that mutates what it is given throws where it does it, instead of
+ * changing what the next page sees. Entries are read once, and a tree
+ * without references is the same object on every page, so a mutation would
+ * otherwise travel silently. Off, the value passes through untouched.
+ */
+export function guarded<T>(value: T): T {
+  if (!FREEZE) return value;
+  const copy = structuredClone(value);
+  const seen = new WeakSet<object>();
+  const freeze = (v: unknown): void => {
+    if (!v || typeof v !== 'object' || seen.has(v) || v instanceof Date || v instanceof Map || v instanceof Set) return;
+    seen.add(v);
+    Object.freeze(v);
+    for (const key of Object.keys(v)) freeze((v as Record<string, unknown>)[key]);
+  };
+  freeze(copy);
+  return copy;
+}
 
 export interface CollectionEntry {
   id: string;
@@ -25,7 +48,7 @@ const lists = new Map<string, Promise<CollectionEntry[]>>();
 export function entriesOf(collection: string): Promise<CollectionEntry[]> {
   if (CACHE && lists.has(collection)) return lists.get(collection)!;
   const list = getCollection(collection as never)
-    .then((entries) => entries as unknown as CollectionEntry[])
+    .then((entries) => guarded(entries as unknown as CollectionEntry[]))
     .catch(() => [] as CollectionEntry[]);
   if (CACHE) lists.set(collection, list);
   return list;

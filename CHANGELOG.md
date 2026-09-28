@@ -23,11 +23,23 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   together at run time is added with `also`. The demo, the templates and
   the server examples use it.
 
-- **`bench/`, and `PARCHE_PROFILE=1`.** A site of any size generated from
-  the demo (pages, posts, products, locales, sections per page) and the
-  scripts that measure a build, a server's latency and what it loads on a
-  cold start, so a change to core is judged by numbers. With
-  `PARCHE_PROFILE=1` a build prints where its time went, by phase.
+- **`transitions: false`** in `parche({ … })` leaves Astro's ClientRouter
+  (view transitions, about 16 KB of script on every page) out. Default:
+  on, as before.
+
+- **A `$collection` without `limit` over a large collection is warned
+  about**, once per collection: every page carrying it renders the whole
+  collection (a thousand cards on one page, measured on the bench's own
+  mistake). Add `limit` to the query.
+
+- **`bench/`, `PARCHE_PROFILE=1` and `PARCHE_DEBUG_FREEZE=1`.** A site of
+  any size generated from the demo (pages, posts, products, locales,
+  sections per page) and the scripts that measure a build, a server's
+  latency and what it loads on a cold start, so a change to core is judged
+  by numbers. With `PARCHE_PROFILE=1` a build prints where its time went,
+  by phase; with `PARCHE_DEBUG_FREEZE=1` (on in the test builds) the
+  content pages share is frozen, so a widget that mutates what it is given
+  fails the build instead of changing the next page.
 
 - **The visual builder, `@parche/builder`, and `parche astro builder`.** An
   editor for a site's content over the site's own render, in development
