@@ -71,18 +71,24 @@ on the components being accessible and themeable.
   5.8 at 10,000, against 12, 30 and 76 ms before; the typical site's static
   build 89 → 36 s; the collections' pages and the pages' translations the
   same way, a 5,000-product site 20 → 15 s; related posts declared in the
-  post, the latest of its category when none are). Next, in order:
-  - elements applying their defaults without parsing in production (~6 %
-    of a page request): not done, because `parse` is also what validates
-    and coerces a widget's props, and skipping it would let a bad prop
-    through in production alone.
-- Limits found and to document on a sizing page: a server build ships all
-  its content in the bundle (Astro's data layer) — 4,000 files are 18 MB and
-  0.5 s to start, 10,000 are 83 MB and 42 s, 20,000 are 133 MB and 120 s —
-  so a large site is static, or reads a live source; the blog's index
-  (`bySlug`, `published`, `translations`, `terms`) is the seam a live-backed
-  blog would implement (design note first). A static build of 15,000 pages
-  takes 1 m 44 s and 2 GB.
+  post, the latest of its category when none are; templates, widget props
+  and the theme panel loaded on demand and `usedIcons()` for astro-icon, so
+  a server's cold start carries 718 KB instead of 3 MB; one lookup for
+  static and server builds; `transitions`; a warning for a `$collection`
+  without `limit`; the content frozen in the test builds; no
+  `src/middleware.ts` needed). Not done: elements applying their defaults
+  without parsing in production (~6 % of a page request), because `parse`
+  is also what validates and coerces a widget's props, and skipping it
+  would let a bad prop through in production alone.
+- Limits found, documented in [docs-wip/sizing.md](./docs-wip/sizing.md): a
+  server build ships all its content in the bundle (Astro's data layer) —
+  4,000 files are 18 MB and 0.5 s to start, 10,000 are 83 MB and 42 s,
+  20,000 are 133 MB and 120 s — so a large site is static, or reads a live
+  source. The blog's index (`bySlug`, `published`, `translations`, `terms`)
+  is the seam a live-backed blog would implement:
+  [docs-wip/live-sources.md](./docs-wip/live-sources.md) is the design, to
+  build after the config redesign (`source` is an app option). A static
+  build of 15,000 pages takes 1 m 44 s and 2 GB.
 - Found in the audit, not done: a server build checks `pages` but not a
   site's own blog views (`src/content/views`); the server build's
   `getStaticPaths` warning (a server entry without it); `$ref` has no fallback to the default locale, so a translated

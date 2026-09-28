@@ -19,6 +19,13 @@ duplicate it here.
   how the preview works, and its known gaps.
 - [collections.md](./collections.md) — pages from a collection of plain data,
   rendered by a widget or a pattern (`collections` in the site config).
+- [sizing.md](./sizing.md) — what a site costs to build and to serve at each
+  size, measured with `bench/`, and the rule that follows: static for any
+  size, a server with local collections up to a few thousand entries, a
+  live source beyond.
+- [live-sources.md](./live-sources.md) — the design for reading content from
+  a database or a CMS per request: the questions the blog's index already
+  answers are the seam, what would change, what would not, what is open.
 - [app-ideas.md](./app-ideas.md) — what comes after the blog: a site-wide
   search in core, and app parches worth building (careers, changelog; for
   small businesses locations and hours, booking, menu, a catalogue with
