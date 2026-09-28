@@ -23,13 +23,15 @@ const SRC = join(HERE, 'src');
 const CONTENT = join(SRC, 'content');
 
 function args() {
-  const out = { pages: 100, posts: 100, entries: 0, locales: ['en'], seed: 1 };
+  // `sections` is how many a page gets, as a range: `--sections 15-20`.
+  const out = { pages: 100, posts: 100, entries: 0, locales: ['en'], seed: 1, sections: [3, 6] };
   const argv = process.argv.slice(2);
   for (let i = 0; i < argv.length; i += 2) {
     const [k, v] = [argv[i].replace(/^--/, ''), argv[i + 1]];
-    if (!(k in out) || v === undefined) throw new Error(`Unknown or empty option --${k}. Options: --pages --posts --entries --locales --seed`);
-    out[k] = k === 'locales' ? v.split(',').map((s) => s.trim()).filter(Boolean) : Number(v);
+    if (!(k in out) || v === undefined) throw new Error(`Unknown or empty option --${k}. Options: --pages --posts --entries --locales --seed --sections`);
+    out[k] = k === 'locales' ? v.split(',').map((s) => s.trim()).filter(Boolean) : k === 'sections' ? v.split('-').map(Number) : Number(v);
   }
+  if (out.sections.length !== 2 || out.sections.some((n) => !Number.isInteger(n) || n < 1) || out.sections[0] > out.sections[1]) throw new Error('--sections takes a range like 3-6');
   return out;
 }
 
@@ -110,11 +112,21 @@ for (const locale of opts.locales) {
   }
 }
 for (let i = 0; i < opts.pages; i++) {
-  const count = 3 + Math.floor(random() * 4);
+  const [least, most] = opts.sections;
+  const count = least + Math.floor(random() * (most - least + 1));
   const sections = Array.from({ length: count }, () => structuredClone(pick(pool)));
   const roll = random();
   if (roll < 0.3) {
-    if (productList) sections.push(structuredClone(productList));
+    // A page lists a few products, as a real page does. The demo's list has
+    // no limit (its store has 24 products); copied as is, every such page
+    // would render the whole catalog, 1,000 cards with an image at the top
+    // size, which measures the catalog, not the page.
+    if (productList) {
+      const list = structuredClone(productList);
+      const items = list.props?.items;
+      if (items && typeof items === 'object' && items.limit === undefined) items.limit = 8;
+      sections.push(list);
+    }
     sections.push({ widget: 'BlogLatestPosts', props: { count: 3 } });
   } else if (roll < 0.5) {
     sections.splice(1, 0, { widget: 'pattern/tour-step', props: { url: `page ${i} · 1200×760`, title: sentence(5), subtitle: sentence(12) } });
@@ -143,6 +155,9 @@ for (let i = 0; i < opts.posts; i++) {
     const front = [
       '---',
       `title: "Post ${i} ${sentence(4).slice(0, -1)}"`,
+      // A translation keeps the file name (that is what pairs it with the
+      // original) and takes its own address, as a translated post does.
+      ...(locale === defaultLocale ? [] : [`urlSlug: "${locale}-post-${i}"`]),
       `excerpt: "${sentence(16)}"`,
       `publishDate: "${day}"`,
       `category: "${pick(categories)}"`,

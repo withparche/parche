@@ -14,6 +14,7 @@ the scripts are kept.
 ```bash
 cd bench
 node generate.mjs --pages 1000 --posts 1000 --entries 0 --locales en,es --seed 1
+node generate.mjs --pages 1000 --posts 5000 --entries 1000 --locales en,es --seed 1 --sections 15-20   # heavy pages
 node build.mjs --label n1000                  # static build: time, memory, per page
 PARCHE_PROFILE=1 node build.mjs               # and where the time went, by phase
 BENCH_OUTPUT=server node build.mjs            # server build, then:
