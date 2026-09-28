@@ -9,13 +9,11 @@
 import { loadWidgets } from 'parche:registry/widgets';
 import { wrapper as wrapperName, unwrapped } from 'parche:config/layout';
 import { resolveAssets } from '../utils/assets.js';
-import { resolveRefs } from '../utils/refs.js';
-import { loadPatterns } from '../utils/patterns.js';
 import { span } from '../utils/profile.js';
-import { isPatternUse, usedPatterns, type Pattern } from '../content/patterns';
+import { prepareTrees, checkPrepared } from '../utils/prepare.js';
+import type { Pattern } from '../content/patterns';
 import type { Node as NodeData } from '../content/node';
-import { walkNodes, widgetNames } from '../content/node';
-import { listWrapper, outletWrappers, type WrapperSpec } from '../content/wrapper';
+import { listWrapper, type WrapperSpec } from '../content/wrapper';
 import Node from './Node.astro';
 
 interface Props {
@@ -29,93 +27,37 @@ interface Props {
 }
 
 const { nodes: givenNodes, wrapper: rootSpec, outlets: givenOutlets, base: givenBase } = Astro.props;
-const wrap = rootSpec !== undefined;
-
-// References first: a `$ref` or `$collection` value becomes the content it names.
 const locale = (Astro.locals as any).parche?.locale as string | undefined;
-const expand = (tree: NodeData[], base: string) => span('refs', () => resolveRefs(tree, locale, base));
-const base = givenBase ?? (givenOutlets ? 'layout' : 'sections');
-const root = await expand(givenNodes, base);
-const rawNodes = root.nodes;
-const outletResults = givenOutlets
-  ? await Promise.all(Object.entries(givenOutlets.nodes).map(async ([k, v]) => [k, await expand(v, k === 'default' ? 'sections' : `slots.${k}`)] as const))
-  : [];
-const rawOutlets = givenOutlets
-  ? { nodes: Object.fromEntries(outletResults.map(([k, r]) => [k, r.nodes])), html: givenOutlets.html, wrappers: givenOutlets.wrappers }
-  : undefined;
-const refIssues = [...root.issues, ...outletResults.flatMap(([, r]) => r.issues)];
 
-// The wrappers the lists declare: each Outlet's (or the page's over it), and
-// the one given for these roots.
-const outletDecls = outletWrappers(rawNodes).map((o) => ({ ...o, spec: rawOutlets?.wrappers?.[o.name] ?? o.spec }));
-const declared = [
-  ...outletDecls.map((o) => ({ path: `${o.path}.props.wrapper`, wrapper: listWrapper(o.spec, wrapperName) })),
-  ...(wrap ? [{ path: 'wrapper', wrapper: listWrapper(rootSpec, wrapperName) }] : []),
-];
-const rootWrapper = wrap ? listWrapper(rootSpec, wrapperName) : null;
+// References, patterns, declared wrappers and the widgets needed, the way the
+// build's content check prepares a page too (utils/prepare.ts).
+const prepared = await prepareTrees({
+  nodes: givenNodes,
+  outlets: givenOutlets ? { nodes: givenOutlets.nodes, wrappers: givenOutlets.wrappers } : undefined,
+  wrapper: rootSpec,
+  base: givenBase,
+  locale,
+});
+const rootWrapper = rootSpec !== undefined ? listWrapper(rootSpec, wrapperName) : null;
+const widgets = await span('widgets.load', () => loadWidgets(prepared.widgets));
 
-// The patterns the trees use (and the ones inside those), each tree made
-// ready like a page's: references, then asset paths. The collection is read
-// only when a tree uses a pattern, so a site without them never touches it.
-const outletTrees = Object.values(rawOutlets?.nodes ?? {}).flat();
-const usesPatterns = widgetNames([...rawNodes, ...outletTrees]).some(isPatternUse);
-const loaded = usesPatterns ? await span('patterns.load', () => loadPatterns(locale)) : { patterns: {} as Record<string, Pattern>, issues: [] };
-const used = [...usedPatterns([...rawNodes, ...outletTrees], loaded.patterns)];
-const definitionRefs = await Promise.all(
-  used.map(async (name) => {
-    const p = loaded.patterns[name];
-    const r = await expand(p.tree, `patterns/${p.entry}.tree`);
-    return [name, { ...p, tree: r.nodes }, r.issues] as const;
-  }),
-);
-const rawDefinitions: Record<string, Pattern> = Object.fromEntries(definitionRefs.map(([n, d]) => [n, d]));
-const definitionTrees = Object.values(rawDefinitions).flatMap((d) => d.tree);
-
-// Everything the render will touch, loaded once: the tree, the outlet trees,
-// the patterns' trees and the wrappers. Widgets not referenced are never imported.
-const names = widgetNames([...rawNodes, ...outletTrees, ...definitionTrees]).filter((n) => !isPatternUse(n));
-for (const d of declared) if (d.wrapper) names.push(d.wrapper.name);
-// A node that asks for the default wrapper by props alone needs it loaded too.
-const asksDefault = [...walkNodes([...rawNodes, ...outletTrees, ...definitionTrees])].some(({ node }) => node.wrapper && !node.wrapper.widget);
-if (asksDefault && wrapperName) names.push(wrapperName);
-const widgets = await span('widgets.load', () => loadWidgets([...new Set(names)]));
-
-const nodes = await span('assets', () => resolveAssets(rawNodes));
-const outlets = rawOutlets
-  ? { nodes: await resolveAssets(rawOutlets.nodes), html: rawOutlets.html }
+const nodes = await span('assets', () => resolveAssets(prepared.nodes));
+const outlets = givenOutlets
+  ? { nodes: await resolveAssets(prepared.outlets!.nodes), html: givenOutlets.html }
   : undefined;
 const definitions: Record<string, Pattern> = Object.fromEntries(
-  await Promise.all(Object.entries(rawDefinitions).map(async ([n, d]) => [n, { ...d, tree: await resolveAssets(d.tree) }] as const)),
+  await Promise.all(Object.entries(prepared.definitions).map(async ([n, d]) => [n, { ...d, tree: await resolveAssets(d.tree) }] as const)),
 );
-
 
 // Check the trees against the catalog: slots a widget does not declare,
 // widgets a slot does not allow, counts, tones, patterns. In dev every issue is
 // a warning with its path; in a build, a prerendered page with issues fails
 // the build, which is the CI check. The catalog imports every widget's
-// schema, so it is loaded only here and never on a server-rendered request.
+// schema, so it is loaded only here and never on a server-rendered request
+// (a server build checks its pages once, at build time: routes/check.ts).
 if (import.meta.env.DEV || Astro.isPrerendered) {
-  const [{ widgetMeta }, { tones }, { checkTrees }] = await Promise.all([
-    import('parche:registry/widgetSchemas'),
-    import('parche:config/layout'),
-    import('../content/check.js'),
-  ]);
-  const issues = [
-    ...refIssues,
-    ...loaded.issues,
-    ...span('check', () => checkTrees({
-      roots: [
-        { nodes: rawNodes, base },
-        ...Object.entries(rawOutlets?.nodes ?? {}).map(([name, tree]) => ({ nodes: tree, base: name === 'default' ? 'sections' : `slots.${name}` })),
-      ],
-      definitions: rawDefinitions,
-      definitionIssues: definitionRefs.flatMap(([, , issues]) => issues),
-      widgetMeta: widgetMeta as any,
-      tones: tones.map((t: { name: string }) => t.name),
-      wrapper: wrapperName,
-      declared,
-    })),
-  ];
+  const [{ widgetMeta }, { tones }] = await Promise.all([import('parche:registry/widgetSchemas'), import('parche:config/layout')]);
+  const issues = checkPrepared(prepared, { widgetMeta, tones });
   if (issues.length && !import.meta.env.DEV) {
     throw new Error(
       `[parche] ${issues.length} content issue(s) on ${Astro.url.pathname}:\n` + issues.map((i) => `  ${i.path}: ${i.message}`).join('\n'),
