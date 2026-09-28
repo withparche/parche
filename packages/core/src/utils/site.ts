@@ -66,7 +66,7 @@ export function resolveI18n(
   parcheI18n:
     | { defaultLocale?: string; locales?: unknown[]; translations?: Record<string, unknown> }
     | undefined,
-): { defaultLocale: string; locales: unknown[]; routing: 'manual' } | null {
+): { defaultLocale: string; locales: unknown[]; routing: { prefixDefaultLocale: false; redirectToDefaultLocale: false; fallbackType: 'redirect' } } | null {
   const parcheDeclares = Boolean(parcheI18n?.defaultLocale) || Boolean(parcheI18n?.locales?.length);
 
   const codesOf = (list: unknown[] | undefined) =>
@@ -102,6 +102,11 @@ export function resolveI18n(
     : [parcheI18n?.defaultLocale ?? 'en'];
   const defaultLocale = parcheI18n?.defaultLocale ?? codesOf(locales)[0] ?? 'en';
 
-  // Parche resolves URLs itself, so Astro's automatic routing must stay out.
-  return { defaultLocale, locales, routing: 'manual' };
+  // Astro's own routing, at its defaults: with the default locale unprefixed
+  // and no fallback it only refuses a default-locale prefix (`/en/about`),
+  // which Parche never serves. Spelled out because a config handed over from
+  // an integration gets no defaults filled in, and Astro's validator reads
+  // them. `routing: 'manual'` here made Astro demand a `src/middleware.ts`
+  // from every site, for nothing.
+  return { defaultLocale, locales, routing: { prefixDefaultLocale: false, redirectToDefaultLocale: false, fallbackType: 'redirect' } };
 }

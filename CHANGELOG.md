@@ -304,6 +304,16 @@ rewrites pages, layouts and views in place (idempotent), and
   the home has no trail. A post keeps the blog's own trail (the blog, the
   category, the post), now starting with the site's name too.
 
+- **No site needs an empty `src/middleware.ts` any more.** Parche set
+  Astro's i18n routing to `manual`, and Astro then demands a middleware
+  file from the site, so every demo, example and template carried an empty
+  one. Astro's own routing at its defaults does nothing Parche minds (it
+  only refuses a default-locale prefix such as `/en/about`, which Parche
+  never serves), so Parche hands it those defaults instead — spelled out,
+  because a config an integration hands over gets none filled in. The
+  empty files are gone from every site here; delete yours, and drop
+  `routing: 'manual'` from `astro.config` if you set it.
+
 - **A post without a locale folder belongs to the site's default locale.**
   The lookup assumed `en`, so on a site whose default locale is another
   language such a post was not found at its address.

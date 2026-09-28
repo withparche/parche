@@ -20,7 +20,7 @@ export default defineConfig({
     // Only the icons the content and the parches name, not whole icon sets.
     icon({ include: usedIcons(parches) }),
   ],
-  i18n: { defaultLocale: 'en', locales: ['en'], routing: 'manual' },
+  i18n: { defaultLocale: 'en', locales: ['en'] },
   image: { remotePatterns: [{ protocol: 'https' }] },
   vite: { plugins: [tailwindcss()] },
 });

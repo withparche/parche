@@ -60,7 +60,7 @@ export default defineConfig({
     // parses it once, a server on every cold start.
     icon({ include: usedIcons(parches) }),
   ],
-  i18n: { defaultLocale: 'en', locales: ['en'], routing: 'manual' },
+  i18n: { defaultLocale: 'en', locales: ['en'] },
   image: { remotePatterns: [{ protocol: 'https' }] },
   vite: { plugins: [tailwindcss()] },
 });

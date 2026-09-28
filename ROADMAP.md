@@ -84,10 +84,8 @@ on the components being accessible and themeable.
   blog would implement (design note first). A static build of 15,000 pages
   takes 1 m 44 s and 2 GB.
 - Found in the audit, not done: a server build checks `pages` but not a
-  site's own blog views (`src/content/views`); Astro requires the site's own
-  `src/middleware.ts` under manual i18n routing (try dropping `routing:
-  'manual'`); the server build's `getStaticPaths` warning (a server entry
-  without it); `$ref` has no fallback to the default locale, so a translated
+  site's own blog views (`src/content/views`); the server build's
+  `getStaticPaths` warning (a server entry without it); `$ref` has no fallback to the default locale, so a translated
   site copies every menu; two parches setting the same font variable with
   different families silently keep the last one (a warning, the site's
   `fonts` win).

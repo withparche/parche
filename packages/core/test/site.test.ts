@@ -72,7 +72,7 @@ test('i18n: overrides alongside an Astro declaration are not a conflict', () => 
 
 test('i18n: a Parche-only declaration is handed to Astro', () => {
   const out = resolveI18n(undefined, { defaultLocale: 'en', locales: ['en', 'es'] });
-  assert.deepEqual(out, { defaultLocale: 'en', locales: ['en', 'es'], routing: 'manual' });
+  assert.deepEqual(out, { defaultLocale: 'en', locales: ['en', 'es'], routing: { prefixDefaultLocale: false, redirectToDefaultLocale: false, fallbackType: 'redirect' } });
 });
 
 test('i18n: the locale list alone is enough — its first entry is the default', () => {
@@ -87,8 +87,10 @@ test("i18n: Astro's object locale form round-trips", () => {
   assert.deepEqual(out?.locales, [{ path: 'espanol', codes: ['es'] }]);
 });
 
-test('i18n: routing is forced to manual, since Parche resolves URLs itself', () => {
-  assert.equal(resolveI18n(undefined, { defaultLocale: 'en', locales: ['en'] })?.routing, 'manual');
+test("i18n: Astro's routing at its defaults, never manual, so no site needs a middleware file", () => {
+  const routing = resolveI18n(undefined, { defaultLocale: 'en', locales: ['en'] })?.routing;
+  assert.notEqual(routing, 'manual');
+  assert.equal(routing?.prefixDefaultLocale, false);
 });
 
 test('i18n: declaring the languages on both sides is an error', () => {

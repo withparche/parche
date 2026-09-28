@@ -15,7 +15,7 @@ export default defineConfig({
     icon(),
   ],
   // Three locales; the default (en) is served without a prefix, es under /es, zh under /zh.
-  i18n: { defaultLocale: 'en', locales: ['en', 'es', 'zh'], routing: 'manual' },
+  i18n: { defaultLocale: 'en', locales: ['en', 'es', 'zh'] },
   image: { remotePatterns: [{ protocol: 'https' }] },
   vite: { plugins: [tailwindcss()] },
 });
