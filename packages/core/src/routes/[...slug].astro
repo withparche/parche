@@ -16,9 +16,10 @@ import {
 } from 'parche:utils/i18n';
 import { resolveMetadata } from 'parche:utils/metadata';
 import { resolveLayout, outletWrapper } from 'parche:utils/layout';
+import { span } from '../utils/profile.js';
 
 export async function getStaticPaths() {
-  const slugMap = await buildSlugMap();
+  const slugMap = await span('paths.pages', () => buildSlugMap());
 
   const pagePaths = slugMap.map((entry) => {
     const { locale, pageKey, slug, data, entryId } = entry;
@@ -34,7 +35,7 @@ export async function getStaticPaths() {
 
   // Add paths from app resolvers (e.g. blog posts at root level)
   const isDev = import.meta.env.DEV;
-  const resolverPaths = await getResolverPaths(locales, defaultLocale, { showDrafts: isDev });
+  const resolverPaths = await span('paths.resolvers', () => getResolverPaths(locales, defaultLocale, { showDrafts: isDev }));
 
   return [...pagePaths, ...resolverPaths];
 }
@@ -70,12 +71,12 @@ if (Astro.props.fromResolver) {
   // date segments that the lookup must not see).
   const fromProps = splitLocale(Astro.params.slug);
   locale = Astro.props.resolverLocale ?? fromProps.locale;
-  resolvedApp = await resolveContent(Astro.props.resolverSlug ?? fromProps.rest, locale, {
+  resolvedApp = await span('resolver.resolve', () => resolveContent(Astro.props.resolverSlug ?? fromProps.rest, locale, {
     showDrafts: isDev,
     siteUrl: config.site || Astro.site?.href || '',
     // The site's name in the page's language: the app puts it in the title.
     siteName: localizeSiteConfig(config, locale).brand.name,
-  });
+  }));
   if (resolvedApp) {
     mode = 'resolver';
   } else {
@@ -89,11 +90,11 @@ if (Astro.props.fromResolver) {
   // URL here, so peel it off before asking the app to resolve the content.
   const fromUrl = splitLocale(Astro.params.slug);
   locale = fromUrl.locale;
-  resolvedApp = await resolveContent(fromUrl.rest, locale, {
+  resolvedApp = await span('resolver.resolve', () => resolveContent(fromUrl.rest, locale, {
     showDrafts: isDev,
     siteUrl: config.site || Astro.site?.href || '',
     siteName: localizeSiteConfig(config, locale).brand.name,
-  });
+  }));
 
   if (resolvedApp) {
     mode = 'resolver';
@@ -145,7 +146,7 @@ if (freshEntry) pageData = freshEntry.data;
 
 if (mode === 'page' && pageData) {
   const slugMap = await buildSlugMap();
-  alternates = getAlternateUrls(pageKey, slugMap, defaultLocale, Astro.site);
+  alternates = span('alternates', () => getAlternateUrls(pageKey, slugMap, defaultLocale, Astro.site));
 
   const resolved = resolveMetadata(pageData, config, { locale });
   resolved.title = pageKey === 'home'
@@ -188,7 +189,7 @@ const metadata = mode === 'resolver' ? appMetadata : pageMetadata;
 const layoutName = mode === 'resolver'
   ? (resolvedApp?.layout || 'default')
   : pageLayoutName;
-const layoutSections = await resolveLayout(layoutName, locale, defaultLocale);
+const layoutSections = await span('layout.resolve', () => resolveLayout(layoutName, locale, defaultLocale));
 
 // The page's trees by outlet: `sections` is the unnamed outlet, `slots` the named ones.
 const pageSlots: Record<string, any[]> = mode === 'page' && pageData

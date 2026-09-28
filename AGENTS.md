@@ -22,6 +22,7 @@ materialization.
 - `packages/cli` — `@parche/cli`, the `parche` command (`parche astro new`, `parche astro builder`). Built with tsup.
 - `packages/builder` — `@parche/builder`, the visual editor. Dev only: `parche astro builder` adds it through Astro's programmatic `dev()`, it throws under any other command, and no build may carry it (`test/assert-dist.mjs`). The editor is a prebuilt React bundle (`pnpm --filter @parche/builder build`); its routes live under `/_parche/`.
 - `packages/create-parche` — the `npm create parche` entry (reuses the CLI's scaffolder).
+- `bench/` — measuring Parche: a site generated from `demos/astrowind` at any size, and scripts for build time, SSR latency and server chunks (`bench/README.md`). No build script, so CI skips it; a performance change carries its before/after numbers in the commit message. `PARCHE_PROFILE=1` makes a build print where its time went (`packages/core/src/utils/profile.ts`).
 - `templates/*` — project starters consumed by the CLI (each may have a `parche.template.json`).
 - `examples/*` — small per-feature demos.
 - `demos/*` — full sites, bigger than an example and not CLI-served. `demos/astrowind` is a bilingual port of AstroWind, built to find gaps a small example never would.

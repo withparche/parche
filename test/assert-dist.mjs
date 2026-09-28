@@ -5,6 +5,7 @@
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { sitePages, walkHtml } from './page-js.mjs';
+import { siteCss } from './page-css.mjs';
 
 const ROOT = process.cwd();
 
@@ -30,23 +31,27 @@ const LAZY_MAX = 40_000;
 //
 // SSR projects have no built HTML to read: they keep a budget on the total
 // of their client chunks (`clientJsMax`).
+// CSS is budgeted per page the same way (test/page-css.mjs: its stylesheets
+// and inline styles). Today every page loads one stylesheet with the utilities
+// of every widget the site's parches ship, whether the page uses them or not,
+// so the budget is about that sheet: measured with a margin of about 8%.
 const PROJECTS = {
-  'demos/astrowind': { kind: 'static', pageJsMax: 36_500 }, // 33.7 KB on /
-  'examples/blog': { kind: 'static', pageJsMax: 27_500 },
-  'examples/custom-widget': { kind: 'static', pageJsMax: 23_500 }, // 21.5 KB
-  'examples/i18n': { kind: 'static', pageJsMax: 29_500 }, // 27.3 KB
-  'examples/import-widget': { kind: 'static', pageJsMax: 1_000 }, // no JS at all
-  'examples/markdown-pages': { kind: 'static', pageJsMax: 23_500 }, // 21.5 KB
+  'demos/astrowind': { kind: 'static', pageJsMax: 36_500, pageCssMax: 140_000 }, // 33.7 KB on /
+  'examples/blog': { kind: 'static', pageJsMax: 27_500, pageCssMax: 118_000 },
+  'examples/custom-widget': { kind: 'static', pageJsMax: 23_500, pageCssMax: 118_000 }, // 21.5 KB
+  'examples/i18n': { kind: 'static', pageJsMax: 29_500, pageCssMax: 118_000 }, // 27.3 KB
+  'examples/import-widget': { kind: 'static', pageJsMax: 1_000, pageCssMax: 105_500 }, // no JS at all
+  'examples/markdown-pages': { kind: 'static', pageJsMax: 23_500, pageCssMax: 118_000 }, // 21.5 KB
   'examples/react': { kind: 'static', skipClientBudget: true }, // ships React islands
   'examples/shadcn': { kind: 'static', skipClientBudget: true }, // ships React islands
   // The SSR examples serve /elements: every interactive element's script.
   'examples/ssr-cloudflare': { kind: 'ssr', clientJsMax: 69_000 },
   'examples/ssr-node': { kind: 'ssr', clientJsMax: 69_000 },
-  'examples/themes': { kind: 'static', pageJsMax: 27_500 }, // 25.3 KB
+  'examples/themes': { kind: 'static', pageJsMax: 27_500, pageCssMax: 133_500 }, // 25.3 KB
   // The elements playground: one page per element; the heaviest is the
   // Calculator's (its formula reader).
-  'parches/elements/playground': { kind: 'static', pageJsMax: 36_500 }, // 33.5 KB on /calculator/
-  'templates/portfolio': { kind: 'static', pageJsMax: 18_000 }, // 16.4 KB: the ClientRouter
+  'parches/elements/playground': { kind: 'static', pageJsMax: 36_500, pageCssMax: 106_500 }, // 33.5 KB on /calculator/
+  'templates/portfolio': { kind: 'static', pageJsMax: 18_000, pageCssMax: 117_000 }, // 16.4 KB: the ClientRouter
   'templates/saas-landing': {
     kind: 'ssr',
     clientJsMax: 60_500,
@@ -75,6 +80,15 @@ function checkClientBudget(proj, cfg, dir) {
   }
   const lazy = jsBytes(dir, (f) => LAZY.test(f));
   check(lazy <= LAZY_MAX, `${proj}: lazy JS ${lazy}B > ${LAZY_MAX}B budget`);
+}
+
+function checkPageCss(proj, cfg, dist) {
+  const [heaviest] = siteCss(dist);
+  if (!heaviest || !cfg.pageCssMax) return;
+  check(
+    heaviest.bytes <= cfg.pageCssMax,
+    `${proj}: ${heaviest.page} loads ${heaviest.bytes}B of CSS (${heaviest.gzip}B gzipped) > ${cfg.pageCssMax}B per-page budget — \`node test/page-css.mjs ${proj}\` lists the pages`,
+  );
 }
 
 function checkPageBudget(proj, cfg, dist) {
@@ -142,6 +156,7 @@ for (const [proj, cfg] of Object.entries(PROJECTS)) {
       checkClientBudget(proj, cfg, join(dist, '_astro'));
       checkPageBudget(proj, cfg, dist);
     }
+    checkPageCss(proj, cfg, dist);
 
     const withMissing = htmls.filter((h) => readFileSync(h, 'utf8').includes('data-parche-missing-widget'));
     check(withMissing.length === 0, `${proj}: ${withMissing.length} page(s) with unresolved widgets`);

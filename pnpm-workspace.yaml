@@ -14,6 +14,9 @@ packages:
   - "examples/*"
   # Full-site demos: bigger than an example, not a CLI-served starter.
   - "demos/*"
+  # A site generated at any size, for measuring (bench/README.md). It has no
+  # build script, so CI's `pnpm -r build` leaves it alone.
+  - "bench"
   # Templates declare published ranges so they install anywhere — that is what
   # makes `npm create astro -- --template <repo>/templates/<name>` work. Inside
   # the repo, pnpm.overrides in the root package.json redirects those ranges to

@@ -1,0 +1,6 @@
+# Everything the generator writes: the content, the assets and the site config
+# copied or made from demos/astrowind. Only the skeleton and the scripts are kept.
+src/content/
+src/assets/
+src/parche.config.json
+results/

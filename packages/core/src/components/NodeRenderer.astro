@@ -11,6 +11,7 @@ import { wrapper as wrapperName, unwrapped } from 'parche:config/layout';
 import { resolveAssets } from '../utils/assets.js';
 import { resolveRefs } from '../utils/refs.js';
 import { loadPatterns } from '../utils/patterns.js';
+import { span } from '../utils/profile.js';
 import { isPatternUse, usedPatterns, type Pattern } from '../content/patterns';
 import type { Node as NodeData } from '../content/node';
 import { walkNodes, widgetNames } from '../content/node';
@@ -32,7 +33,7 @@ const wrap = rootSpec !== undefined;
 
 // References first: a `$ref` or `$collection` value becomes the content it names.
 const locale = (Astro.locals as any).parche?.locale as string | undefined;
-const expand = (tree: NodeData[], base: string) => resolveRefs(tree, locale, base);
+const expand = (tree: NodeData[], base: string) => span('refs', () => resolveRefs(tree, locale, base));
 const base = givenBase ?? (givenOutlets ? 'layout' : 'sections');
 const root = await expand(givenNodes, base);
 const rawNodes = root.nodes;
@@ -58,7 +59,7 @@ const rootWrapper = wrap ? listWrapper(rootSpec, wrapperName) : null;
 // only when a tree uses a pattern, so a site without them never touches it.
 const outletTrees = Object.values(rawOutlets?.nodes ?? {}).flat();
 const usesPatterns = widgetNames([...rawNodes, ...outletTrees]).some(isPatternUse);
-const loaded = usesPatterns ? await loadPatterns(locale) : { patterns: {} as Record<string, Pattern>, issues: [] };
+const loaded = usesPatterns ? await span('patterns.load', () => loadPatterns(locale)) : { patterns: {} as Record<string, Pattern>, issues: [] };
 const used = [...usedPatterns([...rawNodes, ...outletTrees], loaded.patterns)];
 const definitionRefs = await Promise.all(
   used.map(async (name) => {
@@ -77,9 +78,9 @@ for (const d of declared) if (d.wrapper) names.push(d.wrapper.name);
 // A node that asks for the default wrapper by props alone needs it loaded too.
 const asksDefault = [...walkNodes([...rawNodes, ...outletTrees, ...definitionTrees])].some(({ node }) => node.wrapper && !node.wrapper.widget);
 if (asksDefault && wrapperName) names.push(wrapperName);
-const widgets = await loadWidgets([...new Set(names)]);
+const widgets = await span('widgets.load', () => loadWidgets([...new Set(names)]));
 
-const nodes = await resolveAssets(rawNodes);
+const nodes = await span('assets', () => resolveAssets(rawNodes));
 const outlets = rawOutlets
   ? { nodes: await resolveAssets(rawOutlets.nodes), html: rawOutlets.html }
   : undefined;
@@ -102,7 +103,7 @@ if (import.meta.env.DEV || Astro.isPrerendered) {
   const issues = [
     ...refIssues,
     ...loaded.issues,
-    ...checkTrees({
+    ...span('check', () => checkTrees({
       roots: [
         { nodes: rawNodes, base },
         ...Object.entries(rawOutlets?.nodes ?? {}).map(([name, tree]) => ({ nodes: tree, base: name === 'default' ? 'sections' : `slots.${name}` })),
@@ -113,7 +114,7 @@ if (import.meta.env.DEV || Astro.isPrerendered) {
       tones: tones.map((t: { name: string }) => t.name),
       wrapper: wrapperName,
       declared,
-    }),
+    })),
   ];
   if (issues.length && !import.meta.env.DEV) {
     throw new Error(

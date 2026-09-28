@@ -259,7 +259,13 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
             ...(config.image?.layout ? {} : { layout: imageLayout }),
             ...(images.breakpoints && !config.image?.breakpoints ? { breakpoints: images.breakpoints } : {}),
           },
-          vite: { define: { 'import.meta.env.PARCHE_IMAGES': JSON.stringify(JSON.stringify(images)) } },
+          vite: {
+            define: {
+              'import.meta.env.PARCHE_IMAGES': JSON.stringify(JSON.stringify(images)),
+              // Measuring Parche itself (bench/, utils/profile.ts): off unless the build runs with PARCHE_PROFILE=1.
+              'import.meta.env.PARCHE_PROFILE': JSON.stringify(process.env.PARCHE_PROFILE ?? ''),
+            },
+          },
         });
 
 
@@ -319,6 +325,12 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
 
       'astro:build:done': async ({ dir, logger }) => {
         processRobotsTxt(dir, resolvedSiteUrl, allowAICrawlers, hasSitemap);
+        if (process.env.PARCHE_PROFILE === '1') {
+          // utils/profile.ts keeps its totals on this process-wide symbol.
+          const totals = (globalThis as any)[Symbol.for('parche.profile')] as Map<string, { calls: number; ms: number }> | undefined;
+          const rows = [...(totals ?? new Map()).entries()].map(([name, t]) => ({ name, calls: t.calls, ms: Math.round(t.ms) })).sort((a, b) => b.ms - a.ms);
+          logger.info(rows.length ? 'profile (ms, calls):\n' + rows.map((r) => `  ${r.name.padEnd(24)} ${String(r.ms).padStart(8)}  ${r.calls}`).join('\n') : 'profile: no spans recorded in this process');
+        }
         // Then each parche's own, in order, with its name on what it logs.
         for (const hook of buildDone) {
           await hook.run({ dir, logger: logger.fork(`parche:${hook.name}`) });
