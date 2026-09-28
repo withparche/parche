@@ -1,4 +1,5 @@
 import { defineMiddleware } from 'astro:middleware';
+import { defaultLocale } from 'parche:config/i18n';
 
 /**
  * Parche middleware — required by Astro's `routing: 'manual'` i18n mode.
@@ -8,7 +9,7 @@ import { defineMiddleware } from 'astro:middleware';
 export const onRequest = defineMiddleware((context, next) => {
   // Astro's i18n system sets currentLocale automatically even in manual mode
   // We expose it in locals for convenience in user components
-  const locale = context.currentLocale || 'en';
+  const locale = context.currentLocale || defaultLocale;
 
   context.locals.parche = {
     locale,

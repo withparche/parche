@@ -47,13 +47,13 @@ const { themes = configuredThemes, id = 'parche-theme-selector' } = Astro.props;
 
       this.addEventListener('parche:select', (event) => {
         const value = (event as CustomEvent<{ value: string }>).detail.value || '';
-        if (value) {
-          document.documentElement.setAttribute('data-theme', value);
-          localStorage.setItem('site-theme', value);
-        } else {
-          document.documentElement.removeAttribute('data-theme');
-          localStorage.removeItem('site-theme');
-        }
+        if (value) document.documentElement.setAttribute('data-theme', value);
+        else document.documentElement.removeAttribute('data-theme');
+        // Remembered where storage is allowed; the choice applies either way.
+        try {
+          if (value) localStorage.setItem('site-theme', value);
+          else localStorage.removeItem('site-theme');
+        } catch {}
         mark(value);
       });
     }

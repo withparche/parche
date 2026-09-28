@@ -52,13 +52,13 @@ const { themes = configuredThemes } = Astro.props;
       this.addEventListener('change', (event) => {
         const radio = event.target as HTMLInputElement;
         if (radio.name !== 'site-theme') return;
-        if (radio.value) {
-          document.documentElement.setAttribute('data-theme', radio.value);
-          localStorage.setItem('site-theme', radio.value);
-        } else {
-          document.documentElement.removeAttribute('data-theme');
-          localStorage.removeItem('site-theme');
-        }
+        if (radio.value) document.documentElement.setAttribute('data-theme', radio.value);
+        else document.documentElement.removeAttribute('data-theme');
+        // Remembered where storage is allowed; the choice applies either way.
+        try {
+          if (radio.value) localStorage.setItem('site-theme', radio.value);
+          else localStorage.removeItem('site-theme');
+        } catch {}
       });
     }
   }

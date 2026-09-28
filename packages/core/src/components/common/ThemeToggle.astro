@@ -81,7 +81,10 @@ const { display = 'icon', labels = { light: 'Light', dark: 'Dark' } } = Astro.pr
       button.addEventListener('click', () => {
         document.documentElement.classList.toggle('dark');
         const isDark = document.documentElement.classList.contains('dark');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        // Remembered where storage is allowed; the switch works either way.
+        try {
+          localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        } catch {}
         this.updateIcons();
       });
     }

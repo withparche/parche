@@ -45,7 +45,8 @@ const hasChildren = Astro.slots.has('default');
   {alternates.length > 1 && (
     <Fragment slot="head">
       {alternates.map((alt) => <link rel="alternate" hreflang={alt.locale} href={alt.href} />)}
-      <link rel="alternate" hreflang="x-default" href={alternates.find((a) => a.locale === defaultLocale)?.href} />
+      {/* x-default names the default locale's version; without one there is nothing to name. */}
+      {alternates.some((a) => a.locale === defaultLocale) && <link rel="alternate" hreflang="x-default" href={alternates.find((a) => a.locale === defaultLocale)!.href} />}
     </Fragment>
   )}
   {hasChildren ? (

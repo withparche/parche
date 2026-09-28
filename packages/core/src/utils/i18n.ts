@@ -88,14 +88,8 @@ export function getAlternateUrls(
   for (const entry of slugMap) {
     if (entry.pageKey !== pageKey) continue;
 
-    let path: string;
-    if (entry.pageKey === 'home') {
-      path = entry.locale === defaultLocale ? '/' : `/${entry.locale}`;
-    } else if (entry.locale === defaultLocale) {
-      path = `/${entry.slug}`;
-    } else {
-      path = `/${entry.locale}/${entry.slug}`;
-    }
+    // The one rule for page addresses (utils/paths.ts), as the route serves them.
+    const path = pagePath(entry.pageKey, entry.locale, defaultLocale, entry.slug);
 
     const href = site ? new URL(path, site).href : path;
     alternates.push({ locale: entry.locale, href, path });

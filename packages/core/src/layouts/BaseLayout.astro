@@ -129,14 +129,19 @@ const article = metadata.ogType === 'article' ? metadata.article : undefined;
     <script is:inline>
       (function() {
         var d = document.documentElement;
-        var stored = localStorage.getItem('theme');
+        // Storage can be blocked (a strict privacy setting, some embeds): the
+        // page then follows the system scheme and the server's theme.
+        var stored = null, siteTheme = null;
+        try {
+          stored = localStorage.getItem('theme');
+          siteTheme = localStorage.getItem('site-theme');
+        } catch (e) {}
         if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
           d.classList.add('dark');
         }
         // The server may already have rendered data-theme (themes.default), so a
         // first paint is correct with no script. A visitor's own choice wins, and
         // choosing the base look ('') must clear the attribute, not be ignored.
-        var siteTheme = localStorage.getItem('site-theme');
         if (siteTheme !== null) {
           if (siteTheme) d.setAttribute('data-theme', siteTheme);
           else d.removeAttribute('data-theme');
