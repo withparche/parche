@@ -3,7 +3,10 @@
  * The top of an article: a trail to the blog and the category, the h1, the
  * lead, a byline row (the author on a blog with several writers; date and
  * reading time always; copy link and share), then the image, wider than the
- * text. Nothing else goes between the title and the first paragraph.
+ * text, or across the page (`wide`, over an ArticleBody laid out wide),
+ * cropped to 16:9, and to 21:9 across a wide screen, whatever the picture's
+ * own shape.
+ * Nothing else goes between the title and the first paragraph.
  */
 import Avatar from 'parche:elements/Avatar';
 import Image from 'parche:elements/Image';
@@ -17,6 +20,7 @@ const a = ctx?.article;
 const labels = ctx?.labels ?? {};
 const post = a?.post;
 const byline = ctx?.authors !== 'one' ? a?.authors[0] : undefined;
+const wide = p.layout === 'wide';
 const title = post ? (post.issue ? `#${post.issue} · ${post.title}` : post.title) : '';
 ---
 
@@ -49,8 +53,8 @@ const title = post ? (post.issue ? `#${post.issue} · ${post.title}` : post.titl
       </div>
     </div>
     {p.image && post.image && (
-      <figure class="mx-auto mt-10 max-w-[1040px]">
-        <Image src={post.image.src} alt={post.image.alt ?? ''} width={1600} sizes="(min-width: 1100px) 1040px, 100vw" priority class="w-full rounded-xl" />
+      <figure class:list={['mt-10', !wide && 'mx-auto max-w-[1040px]']}>
+        <Image src={post.image.src} alt={post.image.alt ?? ''} width={1600} ratio="16/9" sizes={wide ? '(min-width: 1360px) 1300px, 100vw' : '(min-width: 1100px) 1040px, 100vw'} priority class={wide ? 'w-full rounded-xl lg:aspect-[21/9]' : 'w-full rounded-xl'} />
         {post.image.caption && <figcaption class="mt-2 text-center text-xs text-muted">{post.image.caption}</figcaption>}
       </figure>
     )}

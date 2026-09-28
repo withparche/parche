@@ -1,0 +1,73 @@
+{
+  "sections": [
+    {
+      "widget": "Section",
+      "slots": {
+        "default": [
+          {
+            "widget": "blog/ArticleHeader",
+            "props": {
+              "layout": "wide",
+              "share": false
+            }
+          },
+          {
+            "widget": "blog/ArticleBody",
+            "props": {
+              "layout": "wide"
+            },
+            "slots": {
+              "start": [
+                {
+                  "widget": "blog/ShareBar"
+                }
+              ],
+              "before": [
+                {
+                  "widget": "blog/SeriesBox"
+                }
+              ],
+              "after": [
+                {
+                  "widget": "blog/SeriesBox",
+                  "props": {
+                    "variant": "next"
+                  }
+                },
+                {
+                  "widget": "blog/AuthorBox"
+                },
+                {
+                  "widget": "AdSlot",
+                  "props": {
+                    "slot": "articleEnd",
+                    "size": "leaderboard"
+                  }
+                }
+              ],
+              "aside": [
+                {
+                  "widget": "AdSlot",
+                  "props": {
+                    "slot": "articleSidebar",
+                    "size": "rectangle"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "slots": {
+        "default": [
+          {
+            "widget": "blog/ReadNext"
+          }
+        ]
+      }
+    }
+  ]
+}

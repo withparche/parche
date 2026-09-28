@@ -1,9 +1,10 @@
 ---
 /**
- * The post's text, rendered by the route, at a reading measure. `before`
- * holds what opens it (the series box), `after` what closes it (the next part,
- * the author), and `aside` a sticky sidebar, which only appears on wide
- * screens and only when something in it renders.
+ * The post's text, rendered by the route, at a reading measure, in the
+ * middle of the page or, `wide`, across it. `before` holds what opens it (the
+ * series box), `after` what closes it (the next part, the author), and
+ * `aside` a sticky sidebar, which only appears on wide screens and only when
+ * something in it renders.
  *
  * The table of contents is not a slot: it is the blog's `toc` setting, and it
  * is drawn here, always the same way, for a post with two sections or more —
@@ -13,7 +14,9 @@
  */
 import Toc from 'parche:elements/Toc';
 import { blogContext } from '../../lib/blog-context';
+import { schema, type Props } from './ArticleBody.props';
 
+const p = schema.parse(Astro.props) as Props;
 const ctx = blogContext(Astro.locals);
 const html = ctx?.article?.html ?? '';
 const outline = ctx?.article?.toc ?? [];
@@ -22,7 +25,16 @@ const tocTitle = ctx?.labels?.onThisPage ?? 'On this page';
 // The sidebar takes a column only when something in it rendered: a table of
 // contents hides itself for a one-section post, and an ad slot without ads.
 const asideHtml = Astro.slots.has('aside') ? await Astro.slots.render('aside') : '';
-const aside = toc || asideHtml.replace(/<!--[\s\S]*?-->/g, '').trim().length > 0;
+const filled = (h: string) => h.replace(/<!--[\s\S]*?-->/g, '').trim().length > 0;
+const aside = toc || filled(asideHtml);
+// What opens the text (the series box renders nothing outside a series). When
+// only the table's disclosure is there, the block goes with it on wide
+// screens, so the text starts level with the columns beside it.
+const beforeHtml = Astro.slots.has('before') ? await Astro.slots.render('before') : '';
+const before = filled(beforeHtml);
+// The rail before the text (share buttons, say): wide only, from 1280px.
+const startHtml = p.layout === 'wide' && Astro.slots.has('start') ? await Astro.slots.render('start') : '';
+const start = filled(startHtml);
 // `inArticle` goes after the first section: where the second h2 starts (or the
 // first, when text comes before any), never between the title and the first
 // paragraph. A post with a single section gets none.
@@ -30,14 +42,29 @@ const heads = [...html.matchAll(/<h2[\s>]/g)].map((m) => m.index!);
 const cut = heads[0] === 0 || /^\s*<h2[\s>]/.test(html) ? heads[1] : heads[0];
 const inArticle = cut !== undefined && Astro.slots.has('inArticle') ? await Astro.slots.render('inArticle') : '';
 const [first, rest] = inArticle ? [html.slice(0, cut), html.slice(cut)] : [html, ''];
+// Wide spans the page in three columns from 1280px, as editorial sites lay
+// out an article: the rail, the text at its measure, and a sidebar as wide as
+// a standard 300×250 ad. Without a rail, or between 1024 and 1280, the text
+// and the sidebar sit together in the middle.
+const wideGrid = 'mx-auto grid gap-x-12 lg:grid-cols-[minmax(0,680px)_300px] lg:justify-center';
+const layout = p.layout === 'wide'
+  ? start
+    ? `${wideGrid} xl:grid-cols-[160px_minmax(0,680px)_300px] xl:justify-between xl:gap-x-12`
+    : aside ? wideGrid : 'mx-auto max-w-[680px]'
+  : aside ? 'mx-auto grid max-w-[1040px] gap-x-[clamp(32px,5vw,72px)] lg:grid-cols-[minmax(0,680px)_220px] lg:justify-between' : 'mx-auto max-w-[680px]';
 const prose = 'prose max-w-none text-[clamp(16px,1.25vw,17.5px)] leading-[1.72] text-text [&_:is(h2,h3)]:scroll-mt-24';
 ---
 
-<div class:list={['parche-article-body mx-auto w-full min-w-0', aside ? 'grid max-w-[1040px] gap-x-[clamp(32px,5vw,72px)] lg:grid-cols-[minmax(0,680px)_220px] lg:justify-between' : 'max-w-[680px]']}>
+<div class:list={['parche-article-body w-full min-w-0', layout]} data-layout={p.layout}>
+  {start && (
+    <div class="hidden xl:block">
+      <div class="sticky top-24" data-placement="start"><Fragment set:html={startHtml} /></div>
+    </div>
+  )}
   <div class="min-w-0">
-    {(Astro.slots.has('before') || toc) && (
-      <div class="mb-9 flex flex-col gap-4">
-        <slot name="before" />
+    {(before || toc) && (
+      <div class:list={['mb-9 flex flex-col gap-4', !before && 'lg:hidden']}>
+        {before && <Fragment set:html={beforeHtml} />}
         {toc && <Toc items={outline} title={tocTitle} layout="disclosure" class="lg:hidden" />}
       </div>
     )}

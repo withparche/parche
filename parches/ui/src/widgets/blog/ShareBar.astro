@@ -1,0 +1,27 @@
+---
+/**
+ * The post's share buttons in a column, aligned against the text: the rail
+ * beside it on wide screens (ArticleBody's `start`), where professional blogs
+ * keep them. The networks are links that work without script; copy link
+ * needs it.
+ */
+import Share from 'parche:elements/Share';
+import { blogContext } from '../../lib/blog-context';
+import { schema, type Props } from './ShareBar.props';
+
+const p = schema.parse(Astro.props) as Props;
+const ctx = blogContext(Astro.locals);
+const a = ctx?.article;
+const labels = ctx?.labels ?? {};
+---
+
+{a && (
+  <Share
+    url={a.url}
+    title={a.post.title}
+    networks={p.networks}
+    label={p.label ?? labels.shareAction ?? 'Share'}
+    copiedText={labels.copied ?? 'Link copied'}
+    class="parche-share-bar flex w-full flex-col items-end gap-2 [&_[data-part=label]]:mb-1 [&_[data-part=label]]:text-xs"
+  />
+)}

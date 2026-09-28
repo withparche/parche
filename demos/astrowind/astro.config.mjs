@@ -32,6 +32,15 @@ export default defineConfig({
           relatedPostsCount: 4,
           permalinks: { post: '/%slug%' },
           labels: blogLabels,
+          // Placeholders where the ads go, with no ad network behind them: the
+          // views place AdSlots (index, in the list, in and after the article)
+          // and each shows this box. `consent: 'cmp'` shows them at once; a
+          // real network needs the Consent widget ('builtin') or a CMP.
+          ads: {
+            provider: 'script',
+            html: '<div style="display:flex;height:100%;align-items:center;justify-content:center;border:1px dashed currentColor;opacity:.5;font:500 11px/1 ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase">Ad placeholder</div>',
+            consent: 'cmp',
+          },
         }),
         astrowind(),
         product(),

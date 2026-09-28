@@ -10,6 +10,7 @@ export const schema = z.object({
     .meta({ help: 'list: a date column, title and lead, for a personal blog · cards: a grid with images · rows: category, title, lead and a thumbnail, for a magazine · compact: title and date only.' }),
   density: z.enum(['airy', 'compact']).default('airy').meta({ help: 'compact tightens rows, cards and titles for a busy publication.' }),
   columns: z.enum(['2', '3']).default('3').meta({ help: 'Cards per row at full width.' }),
+  thumbnail: z.enum(['square', 'wide']).default('square').meta({ help: "rows: the picture beside each post · square 120px · wide 200px at 3:2, as a feed's (Medium, Substack)." }),
   // What each post shows. Left unset, the layout decides.
   date: toggle(),
   excerpt: toggle(),
@@ -41,7 +42,7 @@ export const meta: WidgetMeta = {
   },
   ui: {
     groups: [
-      { key: 'layout', label: 'Layout', fields: ['layout', 'density', 'columns'] },
+      { key: 'layout', label: 'Layout', fields: ['layout', 'density', 'columns', 'thumbnail'] },
       { key: 'show', label: 'Show', fields: ['date', 'excerpt', 'image', 'author', 'readingTime', 'category', 'tags'] },
       { key: 'content', label: 'Content', fields: ['title', 'empty'] },
     ],

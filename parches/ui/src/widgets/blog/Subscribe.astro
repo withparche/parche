@@ -1,8 +1,8 @@
 ---
 /**
  * The blog's subscription, placed by a view: a band after a list (title and
- * text beside the form), the opening of the subscribe page, or the field alone
- * in a newsletter's hero. It posts to the blog's `subscribe.endpoint` and
+ * text beside the form), the opening of the subscribe page, the field alone
+ * in a newsletter's hero, or a card in a sidebar. It posts to the blog's `subscribe.endpoint` and
  * shows the sent state; with no subscription configured it renders nothing,
  * so a preset's view can place it without promising a form that goes nowhere.
  */
@@ -42,6 +42,13 @@ const eyebrow = 'mb-3 font-mono text-[10px] leading-none font-medium tracking-[0
         {p.points.map((pt) => <li class="flex gap-3 border-t border-border py-3 text-[15px] text-heading"><span aria-hidden="true" class="text-success">✓</span><span set:html={inline(pt)} /></li>)}
       </ul>
     )}
+  </div>
+) : p.layout === 'stack' ? (
+  <div class="parche-subscribe rounded-lg border border-border bg-surface p-6" data-layout="stack">
+    {p.eyebrow && <p class={eyebrow} set:html={inline(p.eyebrow)} />}
+    <h2 class="font-heading text-xl leading-[1.2] font-semibold tracking-[-0.015em] text-balance text-heading" set:html={inline(title)} />
+    {text && <p class="mt-2 text-sm leading-[1.6] text-pretty text-muted" set:html={inline(text)} />}
+    <div class="mt-5"><Newsletter {...form} /></div>
   </div>
 ) : (
   <div class="parche-subscribe grid items-center gap-[clamp(20px,3vw,48px)] border-t border-border pt-[clamp(32px,4vw,56px)] md:grid-cols-2" data-layout="band">

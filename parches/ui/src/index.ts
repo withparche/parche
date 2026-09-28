@@ -103,6 +103,7 @@ export default function createUI(): ParcheManifest {
       'blog/Search': w('blog/Search.astro'),
       'blog/Picks': w('blog/Picks.astro'),
       'blog/Comments': w('blog/Comments.astro'),
+      'blog/ShareBar': w('blog/ShareBar.astro'),
       Consent: w('Consent.astro'),
       AdSlot: w('AdSlot.astro'),
     },

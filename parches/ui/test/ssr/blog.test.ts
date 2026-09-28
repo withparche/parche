@@ -10,6 +10,7 @@ import Featured from '../../src/widgets/blog/Featured.astro';
 import TaxonomyNav from '../../src/widgets/blog/TaxonomyNav.astro';
 import Pagination from '../../src/widgets/blog/Pagination.astro';
 import ArticleHeader from '../../src/widgets/blog/ArticleHeader.astro';
+import ShareBar from '../../src/widgets/blog/ShareBar.astro';
 import ArticleBody from '../../src/widgets/blog/ArticleBody.astro';
 import SeriesBox from '../../src/widgets/blog/SeriesBox.astro';
 import AuthorBox from '../../src/widgets/blog/AuthorBox.astro';
@@ -105,6 +106,13 @@ test('Featured leads with the featured post; lead adds three beside it', async (
   expect(lead).not.toContain('Post 5');
 });
 
+test('PostList rows: a square thumbnail, or a wide one at 3:2 for a feed', async () => {
+  expect(await render(PostList, { layout: 'rows' }, ctx())).toContain('sm:grid-cols-[minmax(0,1fr)_120px]');
+  const wide = await render(PostList, { layout: 'rows', thumbnail: 'wide' }, ctx());
+  expect(wide).toContain('sm:grid-cols-[minmax(0,1fr)_200px]');
+  expect(wide).not.toContain('_120px]');
+});
+
 test('TaxonomyNav links every term, marks the current one, and keeps All and the feed', async () => {
   const html = await render(TaxonomyNav, { kind: 'categories' }, ctx({ term: { kind: 'categories', name: 'Guides', href: '/blog/category/guides', count: 3 } }));
   expect(html).toMatch(/href="\/blog\/category\/guides"[^>]*aria-current="page"/);
@@ -151,6 +159,37 @@ test('ArticleBody renders the body, and a sidebar only when one is filled', asyn
   const withAside = await render(ArticleBody, {}, post(noToc), { aside: '<nav>toc</nav>' });
   expect(withAside).toContain('<aside');
   expect(withAside).toContain('<nav>toc</nav>');
+});
+
+test('wide: the title centred, a 300px sidebar, and the start rail in three columns only when it is filled', async () => {
+  expect(await render(ArticleHeader, { layout: 'wide' }, post())).toContain('class="mx-auto max-w-[760px]"');
+  const body = await render(ArticleBody, { layout: 'wide' }, post());
+  expect(body).toContain('lg:grid-cols-[minmax(0,680px)_300px]');
+  expect(body).not.toContain('max-w-[1040px]');
+  expect(body).not.toContain('xl:grid-cols-');
+  const railed = await render(ArticleBody, { layout: 'wide' }, post(), { start: '<div>SHARE</div>' });
+  expect(railed).toContain('xl:grid-cols-[160px_minmax(0,680px)_300px]');
+  expect(railed).toMatch(/data-placement="start"[\s\S]*SHARE[\s\S]*data-pagefind-body/);
+  // The rail is for the wide layout only.
+  expect(await render(ArticleBody, {}, post(), { start: '<div>SHARE</div>' })).not.toContain('SHARE');
+  expect(await render(ArticleBody, {}, post())).toContain('lg:grid-cols-[minmax(0,680px)_220px]');
+});
+
+test('ArticleBody: with only the table above the text, the block hides on wide screens, so the text starts level with the columns', async () => {
+  expect(await render(ArticleBody, {}, post())).toContain('class="mb-9 flex flex-col gap-4 lg:hidden"');
+  expect(await render(ArticleBody, {}, post(), { before: '  <!-- no series -->  ' })).toContain('lg:hidden"');
+  const series = await render(ArticleBody, {}, post(), { before: '<div>SERIES</div>' });
+  expect(series).toContain('class="mb-9 flex flex-col gap-4"');
+  expect(series).toContain('SERIES');
+});
+
+test('ShareBar: the post\'s share buttons in a column, the networks asked for', async () => {
+  const html = await render(ShareBar, { networks: ['x', 'copy'] }, post());
+  expect(html).toContain('parche-share-bar');
+  expect(html).toContain('url="https://example.com/post-2"');
+  expect(html).toContain('data-network="x"');
+  expect(html).not.toContain('data-network="linkedin"');
+  expect(await render(ShareBar, {}, ctx())).not.toContain('parche-share');
 });
 
 test('SeriesBox: the part at the top, the next part or its date at the end, nothing outside a series', async () => {
@@ -253,6 +292,9 @@ test('Subscribe renders nothing without a subscription, and posts to its endpoin
   expect(hero).toMatch(/<h1[^>]*>Get new posts by email<\/h1>/);
   expect(hero).toContain('One idea per issue');
   expect(await render(Subscribe, { layout: 'field' }, sub)).not.toContain('Get new posts by email');
+  const stack = await render(Subscribe, { layout: 'stack' }, sub);
+  expect(stack).toContain('data-layout="stack"');
+  expect(stack).toMatch(/<h2[^>]*>Get new posts by email<\/h2>/);
 });
 
 test("IssuePreview shows the latest post as an email from the site; AuthorBox's one step is the subscription", async () => {

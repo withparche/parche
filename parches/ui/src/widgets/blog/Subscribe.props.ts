@@ -3,9 +3,9 @@ import type { WidgetMeta } from '@parche/astro/types';
 
 export const schema = z.object({
   layout: z
-    .enum(['band', 'hero', 'field'])
+    .enum(['band', 'hero', 'field', 'stack'])
     .default('band')
-    .meta({ help: "band: title and text beside the form, after a list · hero: a subscribe page's opening · field: only the form, under a heading that already says it all." }),
+    .meta({ help: "band: title and text beside the form, after a list · hero: a subscribe page's opening · field: only the form, under a heading that already says it all · stack: title, text and form one under another in a card, for a sidebar." }),
   eyebrow: z.string().optional().meta({ help: 'The cadence, over the title: "Every Tuesday, 8:00 CET".' }),
   title: z.string().optional().meta({ help: 'Default: "Get new posts by email".' }),
   text: z.string().optional().meta({ help: 'What arrives and how often: one promise, one frequency.' }),

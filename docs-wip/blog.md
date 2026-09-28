@@ -133,7 +133,7 @@ a reload lands where the reader is. On the last page it goes away.
 | `blog/PageHeader` | The page's h1: the blog's title, the term with a trail and its count, the author | `title`, `subtitle`, `tagline`, `align`, `size` |
 | `blog/Featured` | The posts marked `featured: true`, then the newest | `layout: one \| lead`, `label` |
 | `blog/TaxonomyNav` | Tags or categories as chips, with All and the feed | `kind`, `label`, `limit`, `all`, `rss` |
-| `blog/PostList` | The page's posts | `layout: list \| cards \| rows \| compact`, `density: airy \| compact`, `columns`, and toggles `date`, `excerpt`, `image`, `author`, `readingTime`, `category`, `tags` |
+| `blog/PostList` | The page's posts | `layout: list \| cards \| rows \| compact`, `density: airy \| compact`, `columns`, `thumbnail: square \| wide` (rows: 120px square, or 200px at 3:2 as a feed's), and toggles `date`, `excerpt`, `image`, `author`, `readingTime`, `category`, `tags` |
 | `blog/Pagination` | Newer, numbers, older, "Page 1 of 7 · 38 posts"; or a "Load more" button | `numbers`, `summary`, `more` |
 
 Bylines never show on a blog with one writer, and a category's own page does
@@ -157,8 +157,9 @@ permalink and on a root-level one.
 
 | Widget | What it shows | Main props |
 |---|---|---|
-| `blog/ArticleHeader` | Trail, h1, lead, byline (several writers only), date, reading time, copy link and share, then the image wider than the text. Nothing else before the first paragraph. | `image`, `share`, `breadcrumb` |
-| `blog/ArticleBody` | The text at a reading measure; slots `before`, `after`, and `aside`, a sticky sidebar on wide screens under the table of contents, only when something is in it | — |
+| `blog/ArticleHeader` | Trail, h1, lead, byline (several writers only), date, reading time, copy link and share, then the image wider than the text, cropped to 16:9. Nothing else before the first paragraph. `layout: 'wide'` puts the image across the page, cropped to 21:9 from 1024px. | `image`, `share`, `breadcrumb`, `layout` |
+| `blog/ArticleBody` | The text at a reading measure; slots `before`, `after`, and `aside`, a sticky sidebar on wide screens under the table of contents, only when something is in it. Centred with a 220px sidebar, or `layout: 'wide'`: a 300px sidebar, wide enough for a standard 300×250 ad, and from 1280px a `start` rail before the text (share buttons), in three columns across the page. Use the same layout on ArticleHeader. | `layout` |
+| `blog/ShareBar` | The post's share buttons in a column, aligned against the text, for ArticleBody's `start` rail | `networks`, `label` |
 | `blog/SeriesBox` | "Series · Part 2 of 5" and the part before; or the next part, or its date when only announced | `variant: top \| next` |
 | `blog/AuthorBox` | One writer: "Written by", bio, one next step. Several: role, post count, bio, "More from" | `action` |
 | `blog/ReadNext` | Three related posts under a rule; nothing when there are none | `title` |
@@ -211,8 +212,8 @@ real page, so nobody depends on scrolling to get back to March.
 ### Subscription
 
 With `subscribe` set, the views place `blog/Subscribe`: a band after the
-list (personal, company, magazine), the field alone under a newsletter's
-heading, and the opening of the `subscribe` page beside `blog/IssuePreview`
+list (personal, company, magazine), a card in a sidebar (`layout: 'stack'`),
+the field alone under a newsletter's heading, and the opening of the `subscribe` page beside `blog/IssuePreview`
 (the latest post as it arrives in an inbox, "what will I actually get?").
 The author box of a one-writer blog offers "Get the next one by email", and
 an announced series part links to the page. Without `subscribe` none of this

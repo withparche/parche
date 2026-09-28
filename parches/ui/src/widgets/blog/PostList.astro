@@ -81,7 +81,7 @@ const cardSizes = columns === '2' ? '(min-width: 640px) 50vw, 100vw' : '(min-wid
           class:list={[
             'grid gap-x-8 gap-y-1 border-t border-border py-(--row-y)',
             layout === 'list' && show.date && 'sm:grid-cols-[140px_minmax(0,1fr)]',
-            layout === 'rows' && show.image && 'grid-cols-[minmax(0,1fr)_96px] sm:grid-cols-[minmax(0,1fr)_120px]',
+            layout === 'rows' && show.image && (p.thumbnail === 'wide' ? 'grid-cols-[minmax(0,1fr)_112px] sm:grid-cols-[minmax(0,1fr)_200px]' : 'grid-cols-[minmax(0,1fr)_96px] sm:grid-cols-[minmax(0,1fr)_120px]'),
             layout === 'compact' && 'grid-cols-[minmax(0,1fr)_auto] items-baseline',
           ]}
         >
@@ -104,7 +104,9 @@ const cardSizes = columns === '2' ? '(min-width: 640px) 50vw, 100vw' : '(min-wid
           </div>
           {layout === 'rows' && show.image && (
             <a href={c.href} tabindex="-1" aria-hidden="true" class="col-start-2 row-span-full row-start-1 block self-start">
-              {c.image ? <Image src={c.image.src} alt="" width={120} ratio="1/1" layout="fixed" class="rounded-md" /> : <Placeholder ratio="1/1" />}
+              {p.thumbnail === 'wide'
+                ? (c.image ? <Image src={c.image.src} alt="" width={400} ratio="3/2" sizes="(min-width: 640px) 200px, 112px" class="rounded-md" /> : <Placeholder ratio="3/2" />)
+                : (c.image ? <Image src={c.image.src} alt="" width={120} ratio="1/1" layout="fixed" class="rounded-md" /> : <Placeholder ratio="1/1" />)}
             </a>
           )}
           {layout === 'compact' && show.date && <time datetime={c.date} class="font-mono text-xs whitespace-nowrap text-muted">{c.dateText}</time>}

@@ -30,6 +30,22 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   panels can be pinned beside the preview or float over it. Private while
   on `experimental`; see `docs-wip/builder.md`.
 
+- **A wide article layout** (`layout: 'wide'` on `blog/ArticleHeader` and
+  `blog/ArticleBody`). From 1280px the post is laid out in three columns
+  across the page: a `start` rail (the new `blog/ShareBar`, the share buttons
+  aligned against the text), the text at its 680px measure, and a 300px
+  sidebar, wide enough for a standard 300×250 ad. The image goes edge to edge
+  under a centred title, cropped to 21:9 (16:9 on smaller screens); the
+  centred layout's image is cropped to 16:9. Centred stays the default.
+
+- **Blog widgets for a feed with a sidebar:** `blog/PostList`
+  `thumbnail: 'wide'` (a 200px thumbnail at 3:2 in rows), `blog/Subscribe`
+  `layout: 'stack'` (a card for a sidebar). The demo's blog shows them: the
+  index leads with the featured post across the page, then the posts as rows
+  (an ad placeholder first) beside the categories and the subscription; each
+  post uses the wide layout, with ad placeholders in the sidebar and after
+  the article.
+
 - **Pages from a collection, `collections` in the site config.** A
   collection of plain data (products, courses, places) named in
   `parche.config.json` gets a page for every entry at a `path`, rendered by a
@@ -184,6 +200,10 @@ rewrites pages, layouts and views in place (idempotent), and
   the `blog/*` widgets.
 
 ### Fixed
+
+- **A post's text started lower than the columns beside it.** When only the
+  table of contents' narrow-screen disclosure sat above the text, its hidden
+  block still pushed the text 36px down on wide screens.
 
 - **Links inside `.prose` are underlined.** They relied on colour alone, at
   1.3:1 against the surrounding muted text, which the new contrast page and
