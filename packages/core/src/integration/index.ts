@@ -294,6 +294,13 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
               ?? path.resolve(routesDir, 'middleware.ts'),
             order: 'pre',
           });
+
+          // A server build renders pages per request, where nothing checks
+          // their content: one prerendered route checks them all at build
+          // time (routes/check.ts), and its file is removed when it is done.
+          if (command === 'build' && config.output === 'server') {
+            injectRoute({ pattern: CHECK_ROUTE, entrypoint: path.resolve(routesDir, 'check.ts'), prerender: true });
+          }
         }
 
         // Inject routes from registered apps (with i18n locale prefixes)
@@ -327,6 +334,7 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
       },
 
       'astro:build:done': async ({ dir, logger }) => {
+        removeCheckOutput(dir);
         processRobotsTxt(dir, resolvedSiteUrl, allowAICrawlers, hasSitemap);
         if (process.env.PARCHE_PROFILE === '1') {
           // utils/profile.ts keeps its totals on this process-wide symbol.
@@ -441,6 +449,20 @@ export function assertBaseSupported(parcheBase: unknown, astroBase: unknown) {
       `[parche] base "${set}" is not supported yet: Parche builds every address from the site root. ` +
         'Serve the site at the root of its domain (or a subdomain) for now.',
     );
+  }
+}
+
+/**
+ * The content check a server build prerenders (routes/check.ts); its file is
+ * never shipped. Not under /_parche/, the builder's prefix, which no build
+ * may contain (test/assert-dist.mjs): the server's route list names it.
+ */
+const CHECK_ROUTE = '__parche-check.json';
+
+function removeCheckOutput(outDir: URL) {
+  for (const root of [fileURLToPath(outDir), path.join(fileURLToPath(outDir), 'client')]) {
+    const file = path.join(root, CHECK_ROUTE);
+    if (fs.existsSync(file)) fs.rmSync(file);
   }
 }
 
