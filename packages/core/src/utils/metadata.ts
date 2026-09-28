@@ -335,5 +335,16 @@ export function buildJsonLdGraph(
     }
   }
 
-  return JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
+  return serializeJsonLd({ '@context': 'https://schema.org', '@graph': graph });
+}
+
+/**
+ * JSON for a `<script type="application/ld+json">`. A value holding
+ * `</script>` (a title, a description, anything a CMS lets an editor write)
+ * would close the tag and let the rest run as HTML; `<`, `>` and `&` are
+ * escaped as `\u003c` and friends, which JSON reads back as the same text. So
+ * are U+2028 and U+2029, which older parsers take for line ends.
+ */
+export function serializeJsonLd(value: unknown): string {
+  return JSON.stringify(value).replace(/[<>&\u2028\u2029]/g, (c) => `\\u${c.charCodeAt(0).toString(16).padStart(4, '0')}`);
 }

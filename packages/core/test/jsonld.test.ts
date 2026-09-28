@@ -32,3 +32,11 @@ test("a page's own article and trail replace the generated ones, never doubled",
   assert.ok(!own.includes('Article'));
   assert.ok(own.includes('BlogPosting'));
 });
+
+test('a value holding </script> cannot close the tag, and reads back as written', () => {
+  const title = 'Tips </script><script>alert(1)</script> & more  ';
+  const raw = buildJsonLdGraph({ ...resolved, title, ogTitle: title }, 'https://ex.com/blog', 'https://ex.com', config);
+  assert.ok(!/<\/script|<script/i.test(raw));
+  assert.ok(!raw.includes('&') && !raw.includes(' '));
+  assert.equal(JSON.parse(raw)['@graph'].find((n: any) => n.url === 'https://ex.com/blog').name, title);
+});
