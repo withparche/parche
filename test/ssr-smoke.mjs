@@ -1,6 +1,7 @@
 // SSR smoke: start each server-rendered example from its build output, fetch
-// the `/elements` page, and assert every element rendered. This is what proves
-// that no element touches `window` or `document` at request time — on Node
+// the `/elements` page, and assert every element rendered; then the data
+// route: a content page answers 200 and a missing address 404. This is what
+// proves that no element touches `window` or `document` at request time — on Node
 // (`node dist/server/entry.mjs`) and on Cloudflare's workerd (`wrangler dev`).
 // Run from the repo root after `pnpm -r build`: `node test/ssr-smoke.mjs`.
 import { spawn } from 'node:child_process';
@@ -72,6 +73,15 @@ for (const server of SERVERS) {
     if (roots < ELEMENTS.length) failures.push(`${server.name}: ${roots} data-part="root" (< ${ELEMENTS.length} elements)`);
     if (/data-parche-missing-widget/.test(html)) failures.push(`${server.name}: unresolved widget on /elements`);
     console.log(`${server.name}: /elements OK — ${ELEMENTS.length} elements, ${roots} roots, ${html.length} bytes`);
+
+    // The data route: a content page renders, and an address with nothing
+    // behind it answers 404 itself (a redirect to /404 used to loop back here).
+    const home = await fetch(`http://127.0.0.1:${server.port}/`, { redirect: 'manual' });
+    if (home.status !== 200) failures.push(`${server.name}: / (a content page) answered ${home.status}`);
+    const miss = await fetch(`http://127.0.0.1:${server.port}/does-not-exist`, { redirect: 'manual' });
+    await miss.arrayBuffer();
+    if (miss.status !== 404) failures.push(`${server.name}: /does-not-exist answered ${miss.status}${miss.headers.get('location') ? ` → ${miss.headers.get('location')}` : ''}, not 404`);
+    else console.log(`${server.name}: / 200, /does-not-exist 404`);
   } catch (e) {
     failures.push(`${server.name}: ${e.message}\n${log.split('\n').slice(-20).join('\n')}`);
   } finally {

@@ -80,31 +80,40 @@ if (Astro.props.fromResolver) {
   if (resolvedApp) {
     mode = 'resolver';
   } else {
-    return Astro.redirect('/404');
+    // The resolver listed this address and then could not find it: a bug in
+    // the app, and a build that must not ship a redirect in its place.
+    throw new Error(`[parche] ${Astro.url.pathname}: listed by a resolver's getPaths, but its resolve() found nothing for "${Astro.props.resolverSlug ?? fromProps.rest}" (${locale})`);
   }
 } else if (Astro.props.pageData) {
   // Static mode — page data provided by getStaticPaths
   ({ pageData, locale, pageKey, entryId } = Astro.props);
 } else {
-  // SSR mode — try resolvers first, then pages. The locale prefix is part of the
-  // URL here, so peel it off before asking the app to resolve the content.
+  // SSR mode — pages first, as in a static build (an index lookup), then the
+  // apps' resolvers. The locale prefix is part of the URL here, so it is
+  // peeled off before an app is asked.
   const fromUrl = splitLocale(Astro.params.slug);
   locale = fromUrl.locale;
-  resolvedApp = await span('resolver.resolve', () => resolveContent(fromUrl.rest, locale, {
-    showDrafts: isDev,
-    siteUrl: config.site || Astro.site?.href || '',
-    siteName: localizeSiteConfig(config, locale).brand.name,
-  }));
-
-  if (resolvedApp) {
-    mode = 'resolver';
+  const page = await resolvePageFromSlug(Astro.params.slug, defaultLocale);
+  if (page) {
+    ({ pageData, locale, pageKey, entryId } = page);
   } else {
-    const resolved = await resolvePageFromSlug(Astro.params.slug, defaultLocale);
-    if (!resolved) {
-      return Astro.redirect('/404');
+    resolvedApp = await span('resolver.resolve', () => resolveContent(fromUrl.rest, locale, {
+      showDrafts: isDev,
+      siteUrl: config.site || Astro.site?.href || '',
+      siteName: localizeSiteConfig(config, locale).brand.name,
+    }));
+    if (resolvedApp) {
+      mode = 'resolver';
+    } else {
+      // Nothing here: the site's own not-found page (in the address's locale,
+      // else the default one) with a 404 status, or, without one, a bare 404
+      // Astro answers with its error page. Never a redirect: /404 is caught by
+      // this same route, and a redirect to it looped.
+      const notFound = (locale !== defaultLocale && (await resolvePageFromSlug(`${locale}/404`, defaultLocale))) || (await resolvePageFromSlug('404', defaultLocale));
+      if (!notFound) return new Response(null, { status: 404 });
+      ({ pageData, locale, pageKey, entryId } = notFound);
+      Astro.response.status = 404;
     }
-    ({ pageData, locale, pageKey } = resolved);
-    entryId = resolved.entryId;
   }
 }
 
