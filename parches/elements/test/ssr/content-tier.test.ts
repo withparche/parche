@@ -44,6 +44,11 @@ describe('Share', () => {
     expect(html).toMatch(/role="status"/);
     expect(scriptCount(html)).toBe(1);
   });
+
+  it('leaves the share sheet out when native is off', async () => {
+    const html = await render(Share, { url: 'https://x.y/p', title: 'Hi', networks: ['x'], native: false });
+    expect(html).not.toMatch(/data-part="native"/);
+  });
 });
 
 describe('Stat', () => {

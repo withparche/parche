@@ -21,7 +21,8 @@ Every network, then a short list with a custom label.
 ## Anatomy
 
 `root` (`parche-share`, a labelled group) · `label` · `item` (one per
-network, `data-network`) · `native` · `status`. Hooks: class
+network, `data-network`) · `native` (left out with `native={false}`) ·
+`status`. Hooks: class
 `parche-share-*`, `data-part`.
 
 ## Keyboard

@@ -256,6 +256,10 @@
       "$value": "{ref.font.sans}",
       "$description": "Body and UI text."
     },
+    "reading": {
+      "$value": "{ref.font.serif}",
+      "$description": "Long-form reading text: the serif when the site has one, else the sans."
+    },
     "mono": {
       "$value": "{ref.font.mono}",
       "$description": "Code, eyebrows, meta."
@@ -322,6 +326,15 @@
         "letterSpacing": "0em",
         "lineHeight": 1.66
       }
+    },
+    "reading": {
+      "$value": {
+        "fontSize": "clamp(1.125rem, 0.9rem + 0.9vw, 1.25rem)",
+        "fontWeight": 400,
+        "letterSpacing": "0",
+        "lineHeight": 1.6
+      },
+      "$description": "Long-form reading: the text of a blog post. 20px from a tablet up, 18px on a phone."
     },
     "body-sm": {
       "$value": {

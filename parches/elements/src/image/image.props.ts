@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { defineElement } from '@parche/elements/utils';
 
-export const ratios = ['1/1', '4/3', '16/9', '3/2', '21/9', '16/10', '4/5', '3/4', '9/16'] as const;
+export const ratios = ['1/1', '4/3', '16/9', '3/2', '21/9', '16/10', '1.91/1', '4/5', '3/4', '9/16'] as const;
 
 /** A local image resolved by `resolveAssets` (astro:assets metadata) or a URL. */
 const source = z.union([

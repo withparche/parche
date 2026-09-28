@@ -9,6 +9,7 @@ export const schema = z.object({
   networks: z.array(z.enum(networks)).default([...networks]),
   label: z.string().default('Share').meta({ help: 'Leading text; also the accessible name of the group.' }),
   copiedText: z.string().default('Link copied'),
+  native: z.boolean().default(true).meta({ help: "The device's own share sheet, where the browser has one. Off where direct buttons to the networks are the point (a share bar on wide screens)." }),
 });
 
 export type Props = z.infer<typeof schema> & { class?: string };

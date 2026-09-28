@@ -12,65 +12,44 @@
             }
           },
           {
-            "widget": "blog/Featured",
+            "widget": "blog/TaxonomyNav",
             "props": {
-              "layout": "one"
+              "kind": "categories"
             }
           },
           {
-            "widget": "Columns",
+            "widget": "blog/Featured",
             "props": {
-              "ratio": "wide-start",
-              "gap": "lg",
-              "align": "start"
-            },
-            "slots": {
-              "default": [
-                {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
-                      {
-                        "widget": "AdSlot",
-                        "props": {
-                          "slot": "indexLeaderboard",
-                          "size": "leaderboard"
-                        }
-                      },
-                      {
-                        "widget": "blog/PostList",
-                        "props": {
-                          "layout": "rows",
-                          "thumbnail": "wide"
-                        }
-                      },
-                      {
-                        "widget": "blog/Pagination"
-                      }
-                    ]
-                  }
-                },
-                {
-                  "widget": "Column",
-                  "slots": {
-                    "default": [
-                      {
-                        "widget": "blog/TaxonomyNav",
-                        "props": {
-                          "kind": "categories"
-                        }
-                      },
-                      {
-                        "widget": "blog/Subscribe",
-                        "props": {
-                          "layout": "stack"
-                        }
-                      }
-                    ]
-                  }
-                }
-              ]
+              "layout": "trio"
             }
+          },
+          {
+            "widget": "AdSlot",
+            "props": {
+              "slot": "indexLeaderboard",
+              "size": "leaderboard"
+            }
+          },
+          {
+            "widget": "blog/PostList",
+            "props": {
+              "layout": "cards",
+              "columns": "3",
+              "ratio": "1.91/1"
+            }
+          },
+          {
+            "widget": "blog/Pagination"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "slots": {
+        "default": [
+          {
+            "widget": "blog/Subscribe"
           }
         ]
       }

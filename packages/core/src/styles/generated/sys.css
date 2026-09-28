@@ -33,6 +33,7 @@
   --ds-sys-color-danger-soft: var(--ds-ref-color-danger-50);
   --ds-sys-font-heading: var(--ds-ref-font-sans);
   --ds-sys-font-body: var(--ds-ref-font-sans);
+  --ds-sys-font-reading: var(--ds-ref-font-serif);
   --ds-sys-font-mono: var(--ds-ref-font-mono);
   --ds-sys-type-h1-size: 3.75rem;
   --ds-sys-type-h1-weight: 700;
@@ -62,6 +63,10 @@
   --ds-sys-type-body-weight: 400;
   --ds-sys-type-body-tracking: 0em;
   --ds-sys-type-body-leading: 1.66;
+  --ds-sys-type-reading-size: clamp(1.125rem, 0.9rem + 0.9vw, 1.25rem);
+  --ds-sys-type-reading-weight: 400;
+  --ds-sys-type-reading-tracking: 0;
+  --ds-sys-type-reading-leading: 1.6;
   --ds-sys-type-body-sm-size: 0.9375rem;
   --ds-sys-type-body-sm-weight: 400;
   --ds-sys-type-body-sm-tracking: 0;
@@ -156,4 +161,5 @@
   --color-danger-soft: var(--ds-sys-color-danger-soft);
   --font-heading: var(--ds-sys-font-heading);
   --font-body: var(--ds-sys-font-body);
+  --font-reading: var(--ds-sys-font-reading);
 }

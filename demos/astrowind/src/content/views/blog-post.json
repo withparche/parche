@@ -8,7 +8,9 @@
             "widget": "blog/ArticleHeader",
             "props": {
               "layout": "wide",
-              "share": false
+              "share": false,
+              "imageWidth": "wide",
+              "imageRatio": "1.91/1"
             }
           },
           {

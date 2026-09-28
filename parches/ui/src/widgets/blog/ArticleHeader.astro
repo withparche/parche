@@ -5,7 +5,7 @@
  * reading time always; copy link and share), then the image, wider than the
  * text, or across the page (`wide`, over an ArticleBody laid out wide),
  * cropped to 16:9, and to 21:9 across a wide screen, whatever the picture's
- * own shape.
+ * own shape; `imageWidth` and `imageRatio` set the frame and the shape.
  * Nothing else goes between the title and the first paragraph.
  */
 import Avatar from 'parche:elements/Avatar';
@@ -21,6 +21,15 @@ const labels = ctx?.labels ?? {};
 const post = a?.post;
 const byline = ctx?.authors !== 'one' ? a?.authors[0] : undefined;
 const wide = p.layout === 'wide';
+// The cover's frame: 1100px at most (wide), across the page (full), or the centred
+// layout's 1040px. Across the page and with no ratio set, it flattens to 21:9
+// on a wide screen.
+const width = p.imageWidth ?? (wide ? 'full' : undefined);
+const cover = width === 'full'
+  ? { full: true, frame: '', sizes: '(min-width: 1360px) 1300px, 100vw' }
+  : width === 'wide'
+    ? { full: false, frame: 'mx-auto max-w-[1100px]', sizes: '(min-width: 1160px) 1100px, 100vw' }
+    : { full: false, frame: 'mx-auto max-w-[1040px]', sizes: '(min-width: 1100px) 1040px, 100vw' };
 const title = post ? (post.issue ? `#${post.issue} · ${post.title}` : post.title) : '';
 ---
 
@@ -53,8 +62,8 @@ const title = post ? (post.issue ? `#${post.issue} · ${post.title}` : post.titl
       </div>
     </div>
     {p.image && post.image && (
-      <figure class:list={['mt-10', !wide && 'mx-auto max-w-[1040px]']}>
-        <Image src={post.image.src} alt={post.image.alt ?? ''} width={1600} ratio="16/9" sizes={wide ? '(min-width: 1360px) 1300px, 100vw' : '(min-width: 1100px) 1040px, 100vw'} priority class={wide ? 'w-full rounded-xl lg:aspect-[21/9]' : 'w-full rounded-xl'} />
+      <figure class:list={['mt-10', cover.frame]}>
+        <Image src={post.image.src} alt={post.image.alt ?? ''} width={1600} ratio={p.imageRatio ?? '16/9'} sizes={cover.sizes} priority class={!p.imageRatio && cover.full ? 'w-full rounded-xl lg:aspect-[21/9]' : 'w-full rounded-xl'} />
         {post.image.caption && <figcaption class="mt-2 text-center text-xs text-muted">{post.image.caption}</figcaption>}
       </figure>
     )}

@@ -126,6 +126,7 @@
     "$type": "fontFamily",
     "$description": "Font stacks. --font-sans and --font-mono are filled by Astro's Fonts API when a theme declares a typeface; the var() fallback is what applies when no theme does, so the stack must stay one string.",
     "sans": { "$value": "var(--font-sans, ui-sans-serif, system-ui, sans-serif)" },
+    "serif": { "$value": "var(--font-serif, var(--font-sans, ui-sans-serif, system-ui, sans-serif))", "$description": "A serif for reading, when a theme or the site declares one (--font-serif); the sans stack when none does." },
     "mono": { "$value": "var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace)" }
   }
 }

@@ -52,7 +52,7 @@ const cardSizes = columns === '2' ? '(min-width: 640px) 50vw, 100vw' : '(min-wid
         <li class="flex min-w-0 flex-col overflow-hidden rounded-lg border border-border bg-surface">
           {show.image && (
             <a href={c.href} tabindex="-1" aria-hidden="true" class="block">
-              {c.image ? <Image src={c.image.src} alt="" width={640} ratio="16/10" sizes={cardSizes} priority={lead(i)} /> : <Placeholder ratio="16/10" class="rounded-none" />}
+              {c.image ? <Image src={c.image.src} alt="" width={640} ratio={p.ratio} sizes={cardSizes} priority={lead(i)} /> : <Placeholder ratio={p.ratio} class="rounded-none" />}
             </a>
           )}
           <div class="flex flex-1 flex-col p-(--card-pad)">

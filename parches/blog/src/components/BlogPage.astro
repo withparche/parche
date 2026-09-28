@@ -26,7 +26,7 @@ const tree = await resolveView(view, { locale, preset: context.preset, labels: c
 // under it: the view says how many it features (one, or a lead and three).
 const featuring = (nodes: any[]): number => {
   for (const n of nodes ?? []) {
-    if (n?.widget === 'blog/Featured' && !n.props?.posts) return n.props?.layout === 'lead' ? 4 : 1;
+    if (n?.widget === 'blog/Featured' && !n.props?.posts) return ({ lead: 4, trio: 3 } as Record<string, number>)[n.props?.layout] ?? 1;
     for (const kids of Object.values(n?.slots ?? {})) {
       const found = featuring(kids as any[]);
       if (found) return found;

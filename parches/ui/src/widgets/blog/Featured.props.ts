@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { WidgetMeta } from '@parche/astro/types';
 
 export const schema = z.object({
-  layout: z.enum(['one', 'lead']).default('one').meta({ help: 'one: a single large card · lead: one lead story and three beside it, for a magazine front.' }),
+  layout: z.enum(['one', 'lead', 'trio']).default('one').meta({ help: 'one: a single large card · lead: one lead story and three beside it, for a magazine front · trio: a large post and two smaller ones beside it, all with pictures, for a company blog.' }),
   label: z.string().optional().meta({ help: 'The eyebrow: "Featured", "Latest issue". Default: "Featured".' }),
   /** Posts to feature instead of the blog's featured ones. */
   posts: z.array(z.any()).optional(),

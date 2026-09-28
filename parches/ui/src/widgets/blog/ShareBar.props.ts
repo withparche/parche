@@ -5,7 +5,7 @@ import type { WidgetMeta } from '@parche/astro/types';
 const networks = ['x', 'facebook', 'linkedin', 'whatsapp', 'mail', 'copy'] as const;
 
 export const schema = z.object({
-  networks: z.array(z.enum(networks)).default(['x', 'linkedin', 'facebook', 'mail', 'copy']).meta({ help: 'In this order. copy: the link to the clipboard.' }),
+  networks: z.array(z.enum(networks)).default(['x', 'linkedin', 'facebook', 'whatsapp', 'mail', 'copy']).meta({ help: 'In this order: direct buttons to where links are shared. copy: the link to the clipboard.' }),
   label: z.string().optional().meta({ help: 'Default: the blog\'s "Share".' }),
 });
 

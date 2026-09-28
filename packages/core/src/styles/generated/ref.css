@@ -93,6 +93,7 @@
   --ds-ref-shadow-xl: 0 20px 25px -5px oklch(0 0 0 / 0.1), 0 8px 10px -6px oklch(0 0 0 / 0.1);
   --ds-ref-shadow-2xl: 0 25px 50px -12px oklch(0 0 0 / 0.25);
   --ds-ref-font-sans: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
+  --ds-ref-font-serif: var(--font-serif, var(--font-sans, ui-sans-serif, system-ui, sans-serif));
   --ds-ref-font-mono: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
 }
 

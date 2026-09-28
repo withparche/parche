@@ -85,7 +85,7 @@ export type Picture = z.infer<typeof picture>;
 /** True when a picture is just an image: the widget draws it itself. */
 export const plainPicture = (p: Picture): p is Picture & { src: string } => Boolean(p.src) && !p.frame && p.device === 'none';
 
-const IMAGE_RATIOS = ['1/1', '4/3', '16/9', '3/2', '21/9', '16/10', '4/5', '3/4', '9/16'];
+const IMAGE_RATIOS = ['1/1', '4/3', '16/9', '3/2', '21/9', '16/10', '1.91/1', '4/5', '3/4', '9/16'];
 /**
  * The Image element's size for a picture at `width`: its ratio when the
  * element knows it (a crop), else the height the ratio gives, else nothing.

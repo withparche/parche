@@ -454,6 +454,12 @@
     "type": "fontFamily",
     "group": "font"
   },
+  "--ds-ref-font-serif": {
+    "layer": "ref",
+    "type": "fontFamily",
+    "group": "font",
+    "description": "A serif for reading, when a theme or the site declares one (--font-serif); the sans stack when none does."
+  },
   "--ds-ref-font-mono": {
     "layer": "ref",
     "type": "fontFamily",
@@ -630,6 +636,12 @@
     "group": "font",
     "description": "Body and UI text."
   },
+  "--ds-sys-font-reading": {
+    "layer": "sys",
+    "type": "fontFamily",
+    "group": "font",
+    "description": "Long-form reading text: the serif when the site has one, else the sans."
+  },
   "--ds-sys-font-mono": {
     "layer": "sys",
     "type": "fontFamily",
@@ -787,6 +799,30 @@
     "layer": "sys",
     "type": "typography",
     "group": "type"
+  },
+  "--ds-sys-type-reading-size": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "Long-form reading: the text of a blog post. 20px from a tablet up, 18px on a phone."
+  },
+  "--ds-sys-type-reading-weight": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "Long-form reading: the text of a blog post. 20px from a tablet up, 18px on a phone."
+  },
+  "--ds-sys-type-reading-tracking": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "Long-form reading: the text of a blog post. 20px from a tablet up, 18px on a phone."
+  },
+  "--ds-sys-type-reading-leading": {
+    "layer": "sys",
+    "type": "typography",
+    "group": "type",
+    "description": "Long-form reading: the text of a blog post. 20px from a tablet up, 18px on a phone."
   },
   "--ds-sys-type-body-sm-size": {
     "layer": "sys",

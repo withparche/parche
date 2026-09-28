@@ -352,4 +352,26 @@
       margin: 2em 0;
     }
   }
+
+  /* Long-form reading: a blog post's text. After .prose, so on the same
+     element it sets the size and the face, and prose keeps the rhythm. Its
+     headings scale with the text, so they always stand above it. */
+  .type-reading {
+    font-family: var(--ds-sys-font-reading);
+    font-size: var(--ds-sys-type-reading-size);
+    font-weight: var(--ds-sys-type-reading-weight);
+    letter-spacing: var(--ds-sys-type-reading-tracking);
+    line-height: var(--ds-sys-type-reading-leading);
+    color: var(--color-text);
+
+    & h2 {
+      font-size: 1.5em;
+      line-height: 1.2;
+    }
+
+    & h3 {
+      font-size: 1.2em;
+      line-height: 1.3;
+    }
+  }
 }

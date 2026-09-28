@@ -52,7 +52,9 @@ const layout = p.layout === 'wide'
     ? `${wideGrid} xl:grid-cols-[160px_minmax(0,680px)_300px] xl:justify-between xl:gap-x-12`
     : aside ? wideGrid : 'mx-auto max-w-[680px]'
   : aside ? 'mx-auto grid max-w-[1040px] gap-x-[clamp(32px,5vw,72px)] lg:grid-cols-[minmax(0,680px)_220px] lg:justify-between' : 'mx-auto max-w-[680px]';
-const prose = 'prose max-w-none text-[clamp(16px,1.25vw,17.5px)] leading-[1.72] text-text [&_:is(h2,h3)]:scroll-mt-24';
+// The reading type style (sys.type.reading, sys.font.reading): a post's text,
+// larger than the interface's body.
+const prose = 'prose type-reading max-w-none [&_:is(h2,h3)]:scroll-mt-24';
 ---
 
 <div class:list={['parche-article-body w-full min-w-0', layout]} data-layout={p.layout}>

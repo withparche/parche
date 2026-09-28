@@ -104,6 +104,16 @@ test('Featured leads with the featured post; lead adds three beside it', async (
   const lead = await render(Featured, { layout: 'lead' }, ctx({ featured: [card(1), card(2), card(3), card(4), card(5)] }));
   expect(lead).toContain('Post 4');
   expect(lead).not.toContain('Post 5');
+  const trio = await render(Featured, { layout: 'trio' }, ctx({ featured: [card(1), card(2), card(3), card(4)] }));
+  expect(trio).toContain('data-layout="trio"');
+  expect(trio).toContain('Post 3');
+  expect(trio).not.toContain('Post 4');
+});
+
+test('PostList cards take the shape of their pictures', async () => {
+  // The test posts have no picture: the placeholder keeps the shape.
+  expect(await render(PostList, { layout: 'cards' }, ctx())).toContain('aspect-ratio: 16/10');
+  expect(await render(PostList, { layout: 'cards', ratio: '1.91/1' }, ctx())).toContain('aspect-ratio: 1.91/1');
 });
 
 test('PostList rows: a square thumbnail, or a wide one at 3:2 for a feed', async () => {
@@ -183,12 +193,27 @@ test('ArticleBody: with only the table above the text, the block hides on wide s
   expect(series).toContain('SERIES');
 });
 
+test('ArticleHeader: the cover at 960px or across the page, in the shape asked for', async () => {
+  const pic = post({ post: { ...card(2), excerpt: 'The lead.', image: { src: 'https://example.com/cover.jpg', alt: '' } } as any });
+  const wide = await render(ArticleHeader, { layout: 'wide', imageWidth: 'wide', imageRatio: '1.91/1' }, pic);
+  expect(wide).toContain('mx-auto max-w-[1100px]');
+  expect(wide).toContain('aspect-[1.91/1]');
+  expect(wide).not.toContain('lg:aspect-[21/9]');
+  // Wide with no options keeps the cover across the page, 21:9 on a wide screen.
+  expect(await render(ArticleHeader, { layout: 'wide' }, pic)).toContain('lg:aspect-[21/9]');
+  expect(await render(ArticleHeader, {}, pic)).toContain('max-w-[1040px]');
+});
+
 test('ShareBar: the post\'s share buttons in a column, the networks asked for', async () => {
   const html = await render(ShareBar, { networks: ['x', 'copy'] }, post());
   expect(html).toContain('parche-share-bar');
   expect(html).toContain('url="https://example.com/post-2"');
   expect(html).toContain('data-network="x"');
   expect(html).not.toContain('data-network="linkedin"');
+  // By default: direct buttons to the networks and copy link, no device share sheet.
+  const plain = await render(ShareBar, {}, post());
+  for (const n of ['x', 'linkedin', 'facebook', 'whatsapp', 'mail', 'copy']) expect(plain).toContain(`data-network="${n}"`);
+  expect(plain).not.toContain('data-part="native"');
   expect(await render(ShareBar, {}, ctx())).not.toContain('parche-share');
 });
 

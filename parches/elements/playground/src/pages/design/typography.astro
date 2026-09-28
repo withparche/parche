@@ -8,6 +8,7 @@ const specimen: Record<string, string> = {
   h3: 'Those widgets are not a commitment',
   lead: 'A widget package covers most of what a site needs, and the page keeps working while you replace what renders it.',
   body: 'Swap in a different widget package, or eject the ones you want to change. The contract is the schema, not the code, so the page keeps working while you replace what renders it.',
+  reading: 'A post is read from top to bottom, so its text gets a size of its own: larger than the interface around it, in the reading face a theme may set.',
   caption: 'Measured on the saas-landing build: the layout server chunk went from 2.3 MB to 31 KB.',
   label: 'Design system',
 };
@@ -35,7 +36,7 @@ const specimen: Record<string, string> = {
 
   <section class="mb-12" aria-labelledby="fonts">
     <h2 id="fonts" class="docs-ui type-h2 mb-2">Font roles</h2>
-    <p class="docs-ui mb-4 text-sm text-muted">Three roles reading the ref font stacks, which Astro's fonts config fills when a theme declares a typeface (AstroWind and Corporate bring Inter; Playful and Startup their own). No theme, no download.</p>
+    <p class="docs-ui mb-4 text-sm text-muted">Four roles reading the ref font stacks, which Astro's fonts config fills when a theme declares a typeface (AstroWind and Corporate bring Inter; Playful and Startup their own). No theme, no download.</p>
     <div class="docs-ui overflow-x-auto rounded-lg border border-border">
       <table class="w-full text-sm">
         <thead><tr class="text-left text-muted"><th class="px-4 py-2">Role</th><th class="px-4 py-2">Value</th><th class="px-4 py-2">For</th></tr></thead>
@@ -45,6 +46,7 @@ const specimen: Record<string, string> = {
     <div class="docs-preview mt-4 rounded-lg border border-(--doc-border) px-6 py-5">
       <p class="type-h3" style="font-family: var(--ds-sys-font-heading)">Heading font: the quick brown fox jumps over the lazy dog</p>
       <p class="type-body mt-2" style="font-family: var(--ds-sys-font-body)">Body font: the quick brown fox jumps over the lazy dog. 0123456789</p>
+      <p class="type-reading mt-2">Reading font: the quick brown fox jumps over the lazy dog. 0123456789</p>
     </div>
   </section>
 
