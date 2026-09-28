@@ -2,7 +2,7 @@
 import Page from 'parche:Page';
 import NodeRenderer from 'parche:NodeRenderer';
 import config from 'parche:config';
-import { templateMap } from 'parche:registry/templates';
+import { loadTemplate } from 'parche:registry/templates';
 import { defaultLocale, locales } from 'parche:config/i18n';
 import { localizeSiteConfig } from 'parche:utils/site';
 import { resolveContent, getResolverPaths } from 'parche:registry/resolvers';
@@ -137,7 +137,7 @@ let appMetadata: any = null;
 let appExtras: any = {};
 
 if (mode === 'resolver' && resolvedApp) {
-  AppTemplate = templateMap[resolvedApp.template];
+  AppTemplate = await loadTemplate(resolvedApp.template);
   if (import.meta.env.DEV && resolvedApp.template && !AppTemplate) {
     console.warn(
       `[parche] Unknown template "${resolvedApp.template}" requested by a resolver — ` +

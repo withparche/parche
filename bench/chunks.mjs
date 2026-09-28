@@ -58,7 +58,9 @@ if (catchAll) {
     chunk: catchAll.replace(serverDir + '/', ''),
     closureKb: kb(c.reduce((a, f) => a + size(f), 0)),
     closureFiles: c.length,
-    evaluatesJsonSchema: c.some((f) => readFileSync(f, 'utf8').includes('toJSONSchema')),
+    // The generated catalog (parche:registry/widgetSchemas) is the only module
+    // that declares widgetPropSchemas; zod's own code mentions toJSONSchema.
+    evaluatesJsonSchema: c.some((f) => readFileSync(f, 'utf8').includes('widgetPropSchemas')),
   };
 }
 

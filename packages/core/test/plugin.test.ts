@@ -61,6 +61,23 @@ test('widget map is generated lazily (widgetLoaders + loadWidgets, no static imp
   assert.doesNotMatch(code, /^import \w+ from ["']parche:widgets\//m);
 });
 
+test('templates load on demand by name, with no static import', () => {
+  const code = load(makeRegistry({ modules: { 'parche:templates/blog-post': '/x/Post.astro', 'parche:widgets/Hero': '/x/Hero.astro' } }), '\0parche:registry/templates');
+  assert.match(code, /export const templateLoaders =/);
+  assert.match(code, /"blog-post": \(\) => import\("parche:templates\/blog-post"\)/);
+  assert.match(code, /export async function loadTemplate/);
+  assert.doesNotMatch(code, /^import /m);
+  assert.doesNotMatch(code, /Hero/);
+});
+
+test("widget props: a widget's prop names come from its own .props.ts, loaded on demand; no catalog", () => {
+  const code = load(makeRegistry({ modules: { 'parche:widgets/hero/Good': GOOD_ASTRO, 'parche:widgets/x/Bare': '/nowhere/Bare.astro' } }), '\0parche:registry/widgetProps');
+  assert.match(code, /"hero\/Good": \(\) => import\(".*Good\.props\.ts"\)/);
+  assert.doesNotMatch(code, /Bare/);
+  assert.match(code, /export async function propNames/);
+  assert.doesNotMatch(code, /toJSONSchema|widgetSchemas|^import /m);
+});
+
 test('layout config emits the wrapper, the unwrapped widgets and the tones', () => {
   const code = load(
     makeRegistry({ wrapper: 'Section', unwrapped: ['Hero', 'Note'], tones: [{ name: 'default', label: 'Default' }] }),

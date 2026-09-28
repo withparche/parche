@@ -9,7 +9,7 @@
  */
 import config from 'parche:config';
 import { defaultLocale, locales } from 'parche:config/i18n';
-import { widgetSchemas } from 'parche:registry/widgetSchemas';
+import { propNames } from 'parche:registry/widgetProps';
 import { localizeSiteConfig } from 'parche:utils/site';
 import { pageMetadata } from 'parche:utils/metadata';
 import { resolveAssets } from 'parche:utils/assets';
@@ -31,14 +31,17 @@ async function indexed(name: string, spec: CollectionPages) {
 
 const draft = (e: Entry) => e.data.draft === true;
 
-/** The props the widget declares: a pattern's from its JSON Schema, a registered widget's from its schema. */
+/**
+ * The props the widget declares: a pattern's from its JSON Schema, a
+ * registered widget's from its own `.props.ts`, loaded on demand: a server
+ * request never loads the catalog for this.
+ */
 async function declaredProps(widget: string, locale: string): Promise<string[] | null> {
   if (widget.startsWith(PATTERN_PREFIX)) {
     const pattern = (await loadPatterns(locale)).patterns[widget];
     return pattern ? Object.keys(pattern.props.properties ?? {}) : null;
   }
-  const schema = (widgetSchemas as Record<string, { properties?: Record<string, unknown> }>)[widget];
-  return schema?.properties ? Object.keys(schema.properties) : null;
+  return propNames(widget);
 }
 
 export async function getPaths(_locales: string[], _defaultLocale: string, opts: { showDrafts?: boolean } = {}) {

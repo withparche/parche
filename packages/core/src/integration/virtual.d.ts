@@ -46,7 +46,15 @@ declare module 'parche:registry/widgetSchemas' {
 }
 
 declare module 'parche:registry/templates' {
-  export const templateMap: Record<string, import('astro').AstroComponentFactory>;
+  /** The apps' templates by name, each loaded on demand. */
+  export const templateLoaders: Record<string, () => Promise<{ default: import('astro').AstroComponentFactory }>>;
+  /** The template a resolver names, loaded on demand; undefined when no parche registers it. */
+  export function loadTemplate(name: string): Promise<import('astro').AstroComponentFactory | undefined>;
+}
+
+declare module 'parche:registry/widgetProps' {
+  /** The props a widget declares by name, from its `.props.ts` alone; null when it declares none. */
+  export function propNames(key: string): Promise<string[] | null>;
 }
 
 declare module 'parche:registry/dev' {

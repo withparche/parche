@@ -96,6 +96,8 @@ const BASE_CSS_PATH = fileURLToPath(new URL('../styles/base.css', import.meta.ur
 const TOKENS_CATALOG_PATH = fileURLToPath(new URL('../styles/generated/tokens.json', import.meta.url));
 const WIDGET_SCHEMAS_ID = 'parche:registry/widgetSchemas';
 const WIDGET_SCHEMAS_VIRTUAL = '\0parche:registry/widgetSchemas';
+const WIDGET_PROPS_ID = 'parche:registry/widgetProps';
+const WIDGET_PROPS_VIRTUAL = '\0parche:registry/widgetProps';
 const ELEMENTS_ID = 'parche:registry/elements';
 const ELEMENTS_VIRTUAL = '\0parche:registry/elements';
 const RESOLVERS_ID = 'parche:registry/resolvers';
@@ -170,29 +172,56 @@ export async function loadWidgets(keys) {
 }
 
 /**
- * Generate a JS module that exports the template map.
- * The injected catch-all route imports this to render templates by name.
+ * The templates the apps register, as LAZY loaders by name, like the
+ * widgets: a route loads the one a resolver names, and nothing else comes
+ * with it. Imported eagerly, every template (and every widget, element and
+ * icon set it uses) sat in the page route's closure, loaded on every cold
+ * start of a server whether a request needed a template or not.
  */
 function generateTemplateMapModule(registry: ResolvedRegistry): string {
-  const entries: { varName: string; key: string; virtualId: string }[] = [];
-  let index = 0;
+  const entries = Object.keys(registry.modules)
+    .filter((virtualId) => virtualId.startsWith('parche:templates/'))
+    .map((virtualId) => `  ${JSON.stringify(extractTemplateKey(virtualId))}: () => import(${JSON.stringify(virtualId)}),`);
 
-  for (const virtualId of Object.keys(registry.modules)) {
-    if (virtualId.startsWith('parche:templates/')) {
-      const key = extractTemplateKey(virtualId);
-      entries.push({ varName: `T${index}`, key, virtualId });
-      index++;
-    }
-  }
-
-  const imports = entries.map((e) => `import ${e.varName} from '${e.virtualId}';`).join('\n');
-  const mapEntries = entries.map((e) => `  '${e.key}': ${e.varName},`).join('\n');
-
-  return `${imports}
-
-export const templateMap = {
-${mapEntries}
+  return `export const templateLoaders = {
+${entries.join('\n')}
 };
+
+/** The template a resolver names, loaded on demand; undefined when no parche registers it. */
+export async function loadTemplate(name) {
+  const load = templateLoaders[name];
+  return load ? (await load()).default : undefined;
+}
+`;
+}
+
+/**
+ * The names of the props each widget declares, read from that widget's
+ * `.props.ts` alone and on demand (`parche:registry/widgetProps`). What a
+ * page from a collection needs to hand its widget the entry's fields
+ * (utils/collections.ts) without the catalog: `parche:registry/widgetSchemas`
+ * imports every widget's schema and turns each into JSON Schema, which is
+ * for tools, never for a request.
+ */
+function generateWidgetPropsModule(registry: ResolvedRegistry): string {
+  const entries: string[] = [];
+  for (const [virtualId, filePath] of Object.entries(registry.modules)) {
+    if (!virtualId.startsWith('parche:widgets/') || !filePath.endsWith('.astro')) continue;
+    const propsPath = filePath.replace(/\.astro$/, '.props.ts');
+    if (fs.existsSync(propsPath)) entries.push(`  ${JSON.stringify(extractWidgetKey(virtualId))}: () => import(${JSON.stringify(propsPath)}),`);
+  }
+  return `const loaders = {
+${entries.join('\n')}
+};
+
+/** The props a widget declares by name, from its schema; null when it declares none (every field passes). */
+export async function propNames(key) {
+  const load = loaders[key];
+  if (!load) return null;
+  const m = await load();
+  const shape = m.schema && typeof m.schema === 'object' ? m.schema.shape : undefined;
+  return shape && typeof shape === 'object' ? Object.keys(shape) : null;
+}
 `;
 }
 
@@ -608,6 +637,7 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
       if (id === LAYOUT_CONFIG_ID) return LAYOUT_CONFIG_VIRTUAL;
 
       if (id === WIDGET_SCHEMAS_ID) return WIDGET_SCHEMAS_VIRTUAL;
+      if (id === WIDGET_PROPS_ID) return WIDGET_PROPS_VIRTUAL;
       if (id === ELEMENTS_ID) return ELEMENTS_VIRTUAL;
       if (id === RESOLVERS_ID) return RESOLVERS_VIRTUAL;
       if (id === DEV_TOOLS_ID) return DEV_TOOLS_VIRTUAL;
@@ -650,6 +680,7 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
         return generateTokenOverrides(registry);
       }
       if (id === LAYOUT_CONFIG_VIRTUAL) return generateLayoutConfigModule(registry);
+      if (id === WIDGET_PROPS_VIRTUAL) return generateWidgetPropsModule(registry);
       if (id === RESOLVERS_VIRTUAL) return generateResolversModule(registry);
       // Where each routed collection's entries are served, loaded on demand.
       if (id === ENTRY_URLS_VIRTUAL) return generateEntryUrlsModule(registry);

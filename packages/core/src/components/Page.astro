@@ -14,7 +14,6 @@
 import 'parche:config/styles';
 import BaseLayout from 'parche:layouts/BaseLayout';
 import LayoutRenderer from 'parche:LayoutRenderer';
-import ThemePanel from 'parche:components/ThemePanel';
 import { showPanel } from 'parche:config/themes';
 import { defaultLocale } from 'parche:config/i18n';
 import { resolveLayout } from '../utils/layout.js';
@@ -39,6 +38,9 @@ interface Props {
 const { metadata, site, locale, alternates = [], layout = 'default', layoutSections, pageSlots, pageWrappers } = Astro.props;
 const sections = layoutSections ?? (await resolveLayout(layout, locale, defaultLocale));
 const hasChildren = Astro.slots.has('default');
+// The theme panel is off on most sites: loaded only when it is on, so its
+// elements (and the icon set they bring) never sit in a page's closure otherwise.
+const ThemePanel = showPanel ? (await import('parche:components/ThemePanel')).default : null;
 ---
 
 <BaseLayout metadata={metadata} config={site} lang={locale}>
@@ -56,5 +58,5 @@ const hasChildren = Astro.slots.has('default');
   ) : (
     <LayoutRenderer layoutSections={sections} pageSlots={pageSlots} pageWrappers={pageWrappers} />
   )}
-  {showPanel && <ThemePanel />}
+  {ThemePanel && <ThemePanel />}
 </BaseLayout>
