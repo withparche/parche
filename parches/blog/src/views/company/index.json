@@ -8,21 +8,22 @@
             "widget": "blog/PageHeader"
           },
           {
-            "widget": "blog/Featured",
-            "props": {
-              "layout": "one"
-            }
-          },
-          {
             "widget": "blog/TaxonomyNav",
             "props": {
               "kind": "categories"
             }
           },
           {
+            "widget": "blog/Featured",
+            "props": {
+              "layout": "trio"
+            }
+          },
+          {
             "widget": "blog/PostList",
             "props": {
-              "layout": "cards"
+              "layout": "cards",
+              "ratio": "1.91/1"
             }
           },
           {

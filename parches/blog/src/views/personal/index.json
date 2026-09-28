@@ -2,6 +2,9 @@
   "sections": [
     {
       "widget": "Section",
+      "props": {
+        "width": "sm"
+      },
       "slots": {
         "default": [
           {
@@ -16,7 +19,9 @@
           {
             "widget": "blog/PostList",
             "props": {
-              "layout": "list"
+              "layout": "list",
+              "dateSide": "end",
+              "groupBy": "year"
             }
           },
           {
@@ -27,6 +32,9 @@
     },
     {
       "widget": "Section",
+      "props": {
+        "width": "sm"
+      },
       "slots": {
         "default": [
           {

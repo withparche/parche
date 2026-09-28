@@ -110,6 +110,16 @@ test('Featured leads with the featured post; lead adds three beside it', async (
   expect(trio).not.toContain('Post 4');
 });
 
+test('PostList list: the date on the right, and a heading for each year', async () => {
+  const posts = [card(1), card(2), card(3, { date: '2025-12-03T00:00:00.000Z' })];
+  const html = await render(PostList, { layout: 'list', dateSide: 'end', groupBy: 'year' }, ctx({ posts }));
+  expect(html).toContain('sm:order-last');
+  expect(html.match(/<h2[^>]*>(2026|2025)<\/h2>/g)).toEqual([expect.stringContaining('2026'), expect.stringContaining('2025')]);
+  const plain = await render(PostList, { layout: 'list' }, ctx({ posts }));
+  expect(plain).toContain('sm:grid-cols-[140px_minmax(0,1fr)]');
+  expect(plain).not.toMatch(/<h2[^>]*>2026<\/h2>/);
+});
+
 test('PostList cards take the shape of their pictures', async () => {
   // The test posts have no picture: the placeholder keeps the shape.
   expect(await render(PostList, { layout: 'cards' }, ctx())).toContain('aspect-ratio: 16/10');

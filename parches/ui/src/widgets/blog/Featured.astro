@@ -86,7 +86,7 @@ const eyebrow = 'font-mono text-[10px] leading-none font-medium tracking-[0.16em
 ) : (
   <article class="parche-featured grid overflow-hidden rounded-xl border border-border bg-surface md:grid-cols-2" data-layout="one">
     <a href={first.href} tabindex="-1" aria-hidden="true" class="block">
-      {first.image ? <Image src={first.image.src} alt="" width={960} ratio="16/10" sizes="(min-width: 768px) 50vw, 100vw" priority class="h-full min-h-[240px]" /> : <Placeholder ratio="16/10" caption="featured · 1200×750" class="h-full rounded-none" />}
+      {first.image ? <Image src={first.image.src} alt="" width={960} ratio="16/10" sizes="(min-width: 768px) 50vw, 100vw" priority class="h-full w-full min-h-[240px]" /> : <Placeholder ratio="16/10" caption="featured · 1200×750" class="h-full rounded-none" />}
     </a>
     <div class="flex flex-col justify-center p-[clamp(22px,3vw,40px)]">
       <p class={eyebrow}>{label}{first.category && <> · <a href={first.category.href} class="text-inherit no-underline hover:underline">{first.category.name}</a></>}</p>

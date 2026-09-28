@@ -93,6 +93,15 @@ Not scheduled; they change what Parche *is*, not how well it works.
   [docs-wip/collections.md](./docs-wip/collections.md)): done on `experimental`
   with the demo store's three products. Next: paginated listing pages for a
   collection, and editing its entries in the builder.
+- The blog's presets from a measured study of today's blogs
+  ([docs-wip/research/](./docs-wip/research/)): in progress on `experimental`.
+  - Done: the four index views; a reading type style for a post's text (`type.reading`, `font.reading`, a serif when the site has one); the cover's frame and ratio; a share bar with direct buttons.
+  - Next, for the index views:
+    - magazine: a row of four cards after the lead, bands per category with "See all", and "Most read" numbered from real counts;
+    - company: an archive of dense rows after the cards;
+    - newsletter: the cadence and issue count under the form ("every Sunday · 142 issues"), the issue number as a column of the list, and "what's in each issue" (the recurring sections);
+    - personal: a "Start here" block (possible now with `Picks`, from posts the site chooses).
+  - Then: each preset's article, category and author pages against the same study.
 - Narrans / narrative-first AI generation → `parche astro generate <prompt>`.
 
 ## Not doing (and why)

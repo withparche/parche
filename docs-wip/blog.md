@@ -29,7 +29,9 @@ createBlog({ preset: 'personal' })
 | Writers | one: no author pages, bylines link to `/about` | several, each with a page | several | one |
 | Series pages | yes | no | yes | no |
 | Related posts | 3 | 3 | 3 | 0 |
-| Index view | heading, #tags, a list with a date column | heading, featured post, categories, cards | lead story and three, sections, compact rows | centred heading, latest issue, #tags, list |
+| Index view | a reading column: heading, #tags, the posts by year with the date on the right, subscription | heading, categories, a large post and two beside it, cards at 1.91:1, subscription | lead story and three, ad, sections, rows with a rail (picks, ad) | a reading column: centred heading, the form, latest issue, list with the date on the right, a subscribe card |
+
+The index views follow the measured study in `docs-wip/research/`.
 
 A preset is a starting point, never a lock: any key given explicitly wins,
 and any view can be replaced. The type of each publication comes from the
@@ -97,7 +99,7 @@ src/content/views/es/blog-index.json     Spanish only
 ```
 
 The AstroWind demo does exactly this: it keeps the company preset and gives
-its index a title and a lead of its own in
+its index a title and a lead of its own, and an ad placeholder, in
 `demos/astrowind/src/content/views/blog-index.json`.
 
 The site exports the collection with the others:
@@ -133,7 +135,7 @@ a reload lands where the reader is. On the last page it goes away.
 | `blog/PageHeader` | The page's h1: the blog's title, the term with a trail and its count, the author | `title`, `subtitle`, `tagline`, `align`, `size` |
 | `blog/Featured` | The posts marked `featured: true`, then the newest | `layout: one \| lead \| trio` (a large post and two smaller ones beside it, all with pictures at 1.91:1), `label` |
 | `blog/TaxonomyNav` | Tags or categories as chips, with All and the feed | `kind`, `label`, `limit`, `all`, `rss` |
-| `blog/PostList` | The page's posts | `layout: list \| cards \| rows \| compact`, `density: airy \| compact`, `columns`, `ratio` (cards: `16/10`, `16/9`, `3/2`, or `1.91/1`, a social card's shape), `thumbnail: square \| wide` (rows: 120px square, or 200px at 3:2 as a feed's), and toggles `date`, `excerpt`, `image`, `author`, `readingTime`, `category`, `tags` |
+| `blog/PostList` | The page's posts | `layout: list \| cards \| rows \| compact`, `density: airy \| compact`, `columns`, `dateSide: start \| end` (list: the date before the title or on the right), `groupBy: none \| year` (list, compact: a heading per year), `ratio` (cards: `16/10`, `16/9`, `3/2`, or `1.91/1`, a social card's shape), `thumbnail: square \| wide` (rows: 120px square, or 200px at 3:2 as a feed's), and toggles `date`, `excerpt`, `image`, `author`, `readingTime`, `category`, `tags` |
 | `blog/Pagination` | Newer, numbers, older, "Page 1 of 7 · 38 posts"; or a "Load more" button | `numbers`, `summary`, `more` |
 
 Bylines never show on a blog with one writer, and a category's own page does

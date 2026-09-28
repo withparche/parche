@@ -2,6 +2,9 @@
   "sections": [
     {
       "widget": "Section",
+      "props": {
+        "width": "sm"
+      },
       "slots": {
         "default": [
           {
@@ -26,19 +29,30 @@
             }
           },
           {
-            "widget": "blog/TaxonomyNav",
-            "props": {
-              "kind": "tags"
-            }
-          },
-          {
             "widget": "blog/PostList",
             "props": {
-              "layout": "list"
+              "layout": "list",
+              "dateSide": "end"
             }
           },
           {
             "widget": "blog/Pagination"
+          }
+        ]
+      }
+    },
+    {
+      "widget": "Section",
+      "props": {
+        "width": "sm"
+      },
+      "slots": {
+        "default": [
+          {
+            "widget": "blog/Subscribe",
+            "props": {
+              "layout": "stack"
+            }
           }
         ]
       }

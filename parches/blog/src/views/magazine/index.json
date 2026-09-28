@@ -16,14 +16,7 @@
               "slot": "indexLeaderboard",
               "size": "leaderboard"
             }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Section",
-      "slots": {
-        "default": [
+          },
           {
             "widget": "blog/TaxonomyNav",
             "props": {
@@ -32,68 +25,69 @@
                 "$label": "sectionsLabel"
               }
             }
-          }
-        ]
-      }
-    },
-    {
-      "widget": "Columns",
-      "props": {
-        "ratio": "wide-start",
-        "gap": "lg",
-        "align": "start"
-      },
-      "slots": {
-        "default": [
+          },
           {
-            "widget": "Column",
+            "widget": "Columns",
+            "props": {
+              "ratio": "wide-start",
+              "gap": "lg",
+              "align": "start"
+            },
             "slots": {
               "default": [
                 {
-                  "widget": "blog/PostList",
-                  "props": {
-                    "layout": "rows",
-                    "density": "compact"
-                  },
+                  "widget": "Column",
                   "slots": {
-                    "inFeed": [
+                    "default": [
                       {
-                        "widget": "AdSlot",
+                        "widget": "blog/PostList",
                         "props": {
-                          "slot": "inFeed",
-                          "size": "rectangle"
+                          "layout": "rows",
+                          "density": "compact",
+                          "inFeedAfter": 6
+                        },
+                        "slots": {
+                          "inFeed": [
+                            {
+                              "widget": "AdSlot",
+                              "props": {
+                                "slot": "inFeed",
+                                "size": "rectangle"
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "widget": "blog/Pagination",
+                        "props": {
+                          "more": true
                         }
                       }
                     ]
                   }
                 },
                 {
-                  "widget": "blog/Pagination",
-                  "props": {
-                    "more": true
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "widget": "Column",
-            "slots": {
-              "default": [
-                {
-                  "widget": "blog/Picks",
-                  "props": {
-                    "title": {
-                      "$label": "editorsPicks"
-                    },
-                    "from": "featured"
-                  }
-                },
-                {
-                  "widget": "AdSlot",
-                  "props": {
-                    "slot": "indexSidebar",
-                    "size": "half-page"
+                  "widget": "Column",
+                  "slots": {
+                    "default": [
+                      {
+                        "widget": "blog/Picks",
+                        "props": {
+                          "title": {
+                            "$label": "editorsPicks"
+                          },
+                          "from": "featured"
+                        }
+                      },
+                      {
+                        "widget": "AdSlot",
+                        "props": {
+                          "slot": "indexSidebar",
+                          "size": "half-page"
+                        }
+                      }
+                    ]
                   }
                 }
               ]

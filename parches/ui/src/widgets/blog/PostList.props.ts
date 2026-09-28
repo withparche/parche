@@ -11,6 +11,8 @@ export const schema = z.object({
   density: z.enum(['airy', 'compact']).default('airy').meta({ help: 'compact tightens rows, cards and titles for a busy publication.' }),
   columns: z.enum(['2', '3']).default('3').meta({ help: 'Cards per row at full width.' }),
   ratio: z.enum(['16/10', '16/9', '3/2', '1.91/1']).default('16/10').meta({ help: "cards: the picture's shape. 1.91/1 is a social card's (1200×630), so one picture serves as card, thumbnail and cover." }),
+  dateSide: z.enum(['start', 'end']).default('start').meta({ help: "list: the date in a column before the title, or after it on the right, as a personal blog's index." }),
+  groupBy: z.enum(['none', 'year']).default('none').meta({ help: "list, compact: a heading before each year's posts." }),
   thumbnail: z.enum(['square', 'wide']).default('square').meta({ help: "rows: the picture beside each post · square 120px · wide 200px at 3:2, as a feed's (Medium, Substack)." }),
   // What each post shows. Left unset, the layout decides.
   date: toggle(),
@@ -43,7 +45,7 @@ export const meta: WidgetMeta = {
   },
   ui: {
     groups: [
-      { key: 'layout', label: 'Layout', fields: ['layout', 'density', 'columns', 'ratio', 'thumbnail'] },
+      { key: 'layout', label: 'Layout', fields: ['layout', 'density', 'columns', 'ratio', 'thumbnail', 'dateSide', 'groupBy'] },
       { key: 'show', label: 'Show', fields: ['date', 'excerpt', 'image', 'author', 'readingTime', 'category', 'tags'] },
       { key: 'content', label: 'Content', fields: ['title', 'empty'] },
     ],

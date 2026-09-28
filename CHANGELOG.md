@@ -30,6 +30,19 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   panels can be pinned beside the preview or float over it. Private while
   on `experimental`; see `docs-wip/builder.md`.
 
+- **The blog's presets redone from a measured study of today's blogs**
+  (`docs-wip/research/`). A post's text has its own type style
+  (`type.reading`: 20px, 18 on a phone) in `font.reading`, the site's serif
+  when one is declared (`ref.font.serif`), else the sans. The index views:
+  personal, a reading column by year with the date on the right; company, a
+  large post and two beside it over cards at 1.91:1; magazine, one section
+  with the lead story, ads and a river with a rail; newsletter, a reading
+  column with the form, the latest issue, the list and a subscribe card. New
+  options: `Featured` `trio`, `PostList` `ratio`, `dateSide` and `groupBy`,
+  `ArticleHeader` `imageWidth` and `imageRatio`, `Share` `native`, and the
+  1.91:1 ratio in `Image`. ShareBar shows buttons to X, LinkedIn, Facebook,
+  WhatsApp, email and copy link.
+
 - **A wide article layout** (`layout: 'wide'` on `blog/ArticleHeader` and
   `blog/ArticleBody`). From 1280px the post is laid out in three columns
   across the page: a `start` rail (the new `blog/ShareBar`, the share buttons
@@ -200,6 +213,9 @@ rewrites pages, layouts and views in place (idempotent), and
   the `blog/*` widgets.
 
 ### Fixed
+
+- **A featured post's picture overflowed its column** in a narrow container
+  and covered the text.
 
 - **A post's text started lower than the columns beside it.** When only the
   table of contents' narrow-screen disclosure sat above the text, its hidden
