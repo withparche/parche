@@ -4,7 +4,7 @@
  * Fetches specific blog posts by ID and renders them in a 4-column grid.
  * Falls back to latest posts if no postIds provided.
  */
-import { getCollection } from 'astro:content';
+import { entriesOf, memo } from 'parche:utils/entries';
 import { resolveAssets } from 'parche:utils/assets';
 import { getBlogLinkContext, postHref, postLocale, localizePath } from '../lib/blog-links.js';
 import { urlFor } from 'parche:registry/urls';
@@ -30,9 +30,19 @@ try {
 
   // The blog says where its posts are served; the pattern below is only for a site without it.
   const postUrl = await urlFor('posts');
-  const allPosts = await getCollection('posts');
-  const nonDraft = allPosts.filter((p: any) => !p.data.draft);
-  const localePosts = nonDraft.filter((p: any) => postLocale(p.id, defaultLocale) === locale);
+  // Read once per build or server (parche:utils/entries); this locale's
+  // posts newest first, sorted once too, the list BlogLatestPosts shares.
+  const allPosts = await entriesOf('posts');
+  const nonDraft = memo('ui:posts', () => allPosts.filter((p: any) => !p.data.draft));
+  const localePosts = memo(`ui:posts:${locale}`, () =>
+    nonDraft
+      .filter((p: any) => postLocale(p.id, defaultLocale) === locale)
+      .sort((a: any, b: any) => {
+        const dateA = a.data.publishDate ? new Date(a.data.publishDate).getTime() : 0;
+        const dateB = b.data.publishDate ? new Date(b.data.publishDate).getTime() : 0;
+        return dateB - dateA;
+      }),
+  );
 
   let selected: typeof allPosts;
 
@@ -46,13 +56,7 @@ try {
       .filter(Boolean) as typeof allPosts;
   } else {
     // Fallback: this locale's latest 4 posts
-    selected = localePosts
-      .sort((a: any, b: any) => {
-        const dateA = a.data.publishDate ? new Date(a.data.publishDate).getTime() : 0;
-        const dateB = b.data.publishDate ? new Date(b.data.publishDate).getTime() : 0;
-        return dateB - dateA;
-      })
-      .slice(0, 4);
+    selected = localePosts.slice(0, 4);
   }
 
   posts = await resolveAssets(selected.map((post: any) => ({

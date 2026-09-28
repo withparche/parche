@@ -4,7 +4,7 @@
  * Fetches latest blog posts and renders them in a 4-column grid.
  * Used on homepage sections.
  */
-import { getCollection } from 'astro:content';
+import { entriesOf, memo } from 'parche:utils/entries';
 import { resolveAssets } from 'parche:utils/assets';
 import { getBlogLinkContext, postHref, postLocale, localizePath } from '../lib/blog-links.js';
 import { urlFor } from 'parche:registry/urls';
@@ -30,17 +30,21 @@ try {
 
   // The blog says where its posts are served; the pattern below is only for a site without it.
   const postUrl = await urlFor('posts');
-  const allPosts = await getCollection('posts');
-  const sorted = allPosts
-    // Only this locale's posts — otherwise a Spanish page lists English posts.
-    .filter((p: any) => postLocale(p.id, defaultLocale) === locale)
-    .filter((p: any) => !p.data.draft)
-    .sort((a: any, b: any) => {
-      const dateA = a.data.publishDate ? new Date(a.data.publishDate).getTime() : 0;
-      const dateB = b.data.publishDate ? new Date(b.data.publishDate).getTime() : 0;
-      return dateB - dateA;
-    })
-    .slice(0, count);
+  // This locale's posts, newest first — otherwise a Spanish page lists
+  // English posts. Read and sorted once per build or server
+  // (parche:utils/entries): a page pays for the posts it shows, not for
+  // every post the site has.
+  const allPosts = await entriesOf('posts');
+  const sorted = memo(`ui:posts:${locale}`, () =>
+    allPosts
+      .filter((p: any) => postLocale(p.id, defaultLocale) === locale)
+      .filter((p: any) => !p.data.draft)
+      .sort((a: any, b: any) => {
+        const dateA = a.data.publishDate ? new Date(a.data.publishDate).getTime() : 0;
+        const dateB = b.data.publishDate ? new Date(b.data.publishDate).getTime() : 0;
+        return dateB - dateA;
+      }),
+  ).slice(0, count);
 
   posts = await resolveAssets(sorted.map((post: any) => ({
     title: post.data.title,
