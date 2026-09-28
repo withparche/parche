@@ -85,7 +85,8 @@ export interface RefIssue {
 export type Resolved = { value: unknown } | { error: string };
 
 /**
- * Replace every reference in the nodes' props (at any depth, in every slot) by
+ * Replace every reference in the nodes' props and wrapper props (at any
+ * depth, in every slot) by
  * `resolve(ref)`. An unresolved entry becomes `undefined` (the widget's default
  * applies), an unresolved query an empty list; both are reported with their
  * path, so the page renders in dev and the build fails on them.
@@ -106,6 +107,10 @@ export function substituteRefs(nodes: Node[], resolve: (ref: Ref) => Resolved, b
   const node = (n: Node, path: string): Node => ({
     ...n,
     ...(n.props ? { props: value(n.props, `${path}.props`) as Record<string, unknown> } : {}),
+    // A wrapper's props are props too: a section's tone or background may come from an entry.
+    ...(n.wrapper && typeof n.wrapper === 'object' && n.wrapper.props
+      ? { wrapper: { ...n.wrapper, props: value(n.wrapper.props, `${path}.wrapper.props`) as Record<string, unknown> } }
+      : {}),
     ...(n.slots
       ? { slots: Object.fromEntries(Object.entries(n.slots).map(([name, list]) => [name, list.map((c, i) => node(c, `${path}.slots.${name}[${i}]`))])) }
       : {}),

@@ -73,3 +73,13 @@ test('an object with other keys beside $ref is data, not a reference', () => {
   const props = { links: { $ref: 'navigation/main', extra: true } };
   assert.equal(hasRefs(props), false);
 });
+
+test("a wrapper's props are resolved like the node's own", () => {
+  const { nodes, issues } = substituteRefs(
+    [{ widget: 'Hero', props: {}, wrapper: { props: { tone: 'dark', author: { $ref: 'authors/marta#/name' }, broken: { $ref: 'authors/nope' } } } }],
+    resolver('en'),
+  );
+  assert.equal((nodes[0].wrapper as any).props.author, 'Marta Ibáñez');
+  assert.equal((nodes[0].wrapper as any).props.tone, 'dark');
+  assert.deepEqual(issues.map((i) => i.path), ['sections[0].wrapper.props.broken']);
+});
