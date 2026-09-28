@@ -57,6 +57,20 @@ function buildSlugIndex(slugMap: SlugMapEntry[], defaultLocale: string): Map<str
   return index;
 }
 
+/**
+ * The addresses a page and an app's entry both claim: one address, one
+ * page, so a build names them and stops (the static route's getStaticPaths
+ * and a server build's content check both ask). Each as `/address (entry)`.
+ */
+export function addressClashes(
+  slugMap: SlugMapEntry[],
+  resolverPaths: Array<{ params: { slug?: string }; props?: { resolverSlug?: string } }>,
+  defaultLocale: string,
+): string[] {
+  const pages = new Set(slugMap.map((entry) => expectedSlugFor(entry, defaultLocale)));
+  return resolverPaths.filter((p) => pages.has(p.params.slug ?? '')).map((p) => `/${p.params.slug ?? ''} (${p.props?.resolverSlug ?? 'entry'})`);
+}
+
 export async function resolvePageFromSlug(
   urlSlug: string | undefined,
   defaultLocale: string,

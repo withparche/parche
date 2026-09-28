@@ -10,9 +10,10 @@
 import type { APIRoute } from 'astro';
 import { widgetMeta } from 'parche:registry/widgetSchemas';
 import { tones } from 'parche:config/layout';
-import { defaultLocale } from 'parche:config/i18n';
-import { buildSlugMap } from 'parche:utils/i18n';
+import { defaultLocale, locales } from 'parche:config/i18n';
+import { addressClashes, buildSlugMap } from 'parche:utils/i18n';
 import { resolveLayout } from 'parche:utils/layout';
+import { getResolverPaths } from 'parche:registry/resolvers';
 import { prepareTrees, checkPrepared } from '../utils/prepare.js';
 
 export const prerender = true;
@@ -35,6 +36,11 @@ export const GET: APIRoute = async () => {
     for (const issue of checkPrepared(prepared, { widgetMeta: widgetMeta as Record<string, unknown>, tones })) {
       problems.push(`${page.entryId}: ${issue.path}: ${issue.message}`);
     }
+  }
+  // One address, one page, as a static build's getStaticPaths enforces: a
+  // server build lists the apps' addresses here to say the same.
+  for (const clash of addressClashes(pages, await getResolverPaths(locales, defaultLocale, { showDrafts: false }), defaultLocale)) {
+    problems.push(`${clash}: claimed by both a page and an app's entry; rename one of them (a page's urlSlug, or the entry's slug)`);
   }
   if (problems.length) {
     throw new Error(`[parche] ${problems.length} content issue(s) in the pages:\n  ${problems.join('\n  ')}`);

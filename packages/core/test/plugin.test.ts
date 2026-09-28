@@ -123,6 +123,7 @@ test('resolvers: empty registry yields stub functions', () => {
   const code = load(makeRegistry({ resolvers: [] }), '\0parche:registry/resolvers');
   assert.match(code, /export async function resolveContent\(\) \{ return null; \}/);
   assert.match(code, /export async function getResolverPaths\(\) \{ return \[\]; \}/);
+  assert.match(code, /export async function routeFor\(\) \{ return null; \}/);
 });
 
 test('resolvers: registered resolvers are imported and aggregated', () => {
@@ -132,6 +133,12 @@ test('resolvers: registered resolvers are imported and aggregated', () => {
   );
   assert.match(code, /import \{ resolve as resolve_0, getPaths as getPaths_0 \} from "\/x\/blog\/resolver\.ts"/);
   assert.match(code, /const resolvers = \[\{ resolve: resolve_0, getPaths: getPaths_0 \}\]/);
+  // A server's lookup: the addresses from the same lists a build uses, each
+  // kept with the key and locale the resolver listed, read once in production.
+  assert.match(code, /export async function routeFor/);
+  assert.match(code, /p\.props\?\.resolverSlug/);
+  assert.match(code, /import\.meta\.env\.PROD \? \(cached \?\?= routes/);
+  assert.match(code, /export async function resolveRoute\(route, locale, opts\)/);
 });
 
 test('elements catalog: props file emits guarded root + part schemas, meta and index', () => {

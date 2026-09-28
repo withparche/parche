@@ -539,6 +539,8 @@ function generateResolversModule(registry: ResolvedRegistry): string {
     return `
 export async function resolveContent() { return null; }
 export async function getResolverPaths() { return []; }
+export async function routeFor() { return null; }
+export async function resolveRoute() { return null; }
 `;
   }
 
@@ -573,6 +575,30 @@ export async function getResolverPaths(locales, defaultLocale, opts) {
     all.push(...paths);
   }
   return all;
+}
+
+// The addresses the resolvers serve, from the lists they give a static
+// build, read once per server (never in development, where content
+// changes): a request is one lookup, and the resolver gets the key and the
+// locale it listed, exactly as a built page does. The first to list an
+// address keeps it, as in a build.
+async function routes(locales, defaultLocale, opts) {
+  const map = new Map();
+  for (const [i, r] of resolvers.entries()) {
+    for (const p of await r.getPaths(locales, defaultLocale, opts)) {
+      const slug = p.params.slug ?? '';
+      if (!map.has(slug)) map.set(slug, { resolver: i, key: p.props?.resolverSlug ?? slug, locale: p.props?.resolverLocale });
+    }
+  }
+  return map;
+}
+let cached = null;
+export async function routeFor(slug, locales, defaultLocale, opts) {
+  const map = await (import.meta.env.PROD ? (cached ??= routes(locales, defaultLocale, opts)) : routes(locales, defaultLocale, opts));
+  return map.get(slug ?? '') ?? null;
+}
+export async function resolveRoute(route, locale, opts) {
+  return resolvers[route.resolver].resolve(route.key, locale, opts);
 }
 `;
 }

@@ -69,6 +69,19 @@ declare module 'parche:registry/urls' {
 }
 
 declare module 'parche:registry/resolvers' {
+  /** Which resolver lists an address (their `getPaths`, read once per server), with the key and locale it listed; null when none does. */
+  export function routeFor(
+    slug: string | undefined,
+    locales: readonly string[],
+    defaultLocale: string,
+    opts?: { showDrafts?: boolean },
+  ): Promise<{ resolver: number; key: string; locale?: string } | null>;
+  /** That resolver's `resolve`, with the key it listed, as a built page calls it. */
+  export function resolveRoute(
+    route: { resolver: number; key: string; locale?: string },
+    locale: string,
+    opts?: { showDrafts?: boolean; siteUrl?: string; siteName?: string },
+  ): ReturnType<typeof resolveContent>;
   export function resolveContent(
     slug: string,
     locale: string,

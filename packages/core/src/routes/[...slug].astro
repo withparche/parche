@@ -5,9 +5,10 @@ import config from 'parche:config';
 import { loadTemplate } from 'parche:registry/templates';
 import { defaultLocale, locales } from 'parche:config/i18n';
 import { localizeSiteConfig } from 'parche:utils/site';
-import { resolveContent, getResolverPaths } from 'parche:registry/resolvers';
+import { resolveContent, getResolverPaths, routeFor, resolveRoute } from 'parche:registry/resolvers';
 import { getEntry, render } from 'astro:content';
 import {
+  addressClashes,
   buildSlugMap,
   getAlternateUrls,
   resolvePageFromSlug,
@@ -40,13 +41,11 @@ export async function getStaticPaths() {
 
   // One address, one page: a page and an app's entry (a post at the root, a
   // product) claiming the same address is an error, never a silent winner.
-  const pageSlugs = new Set(pagePaths.map((p) => p.params.slug ?? ''));
-  const clashes = resolverPaths.filter((p: any) => pageSlugs.has(p.params.slug ?? ''));
+  const clashes = addressClashes(slugMap, resolverPaths, defaultLocale);
   if (clashes.length) {
     throw new Error(
-      `[parche] ${clashes.length} address(es) claimed by both a page and an app's entry: ` +
-        clashes.slice(0, 10).map((p: any) => `/${p.params.slug ?? ''} (${p.props?.resolverSlug ?? 'entry'})`).join(', ') +
-        '. Rename one of them (a page\'s urlSlug, or the entry\'s slug).',
+      `[parche] ${clashes.length} address(es) claimed by both a page and an app's entry: ${clashes.slice(0, 10).join(', ')}. ` +
+        "Rename one of them (a page's urlSlug, or the entry's slug).",
     );
   }
 
@@ -110,11 +109,18 @@ if (Astro.props.fromResolver) {
   if (page) {
     ({ pageData, locale, pageKey, entryId } = page);
   } else {
-    resolvedApp = await span('resolver.resolve', () => resolveContent(fromUrl.rest, locale, {
+    // One lookup, the same a built page got: the address in the resolvers'
+    // own lists, and that resolver called with the key and locale it listed.
+    // An address no resolver lists is still offered to each with the address
+    // itself, so a resolver that answers beyond its list keeps working.
+    const route = await span('resolver.route', () => routeFor(Astro.params.slug, locales, defaultLocale, { showDrafts: isDev }));
+    if (route?.locale) locale = route.locale;
+    const resolveOpts = {
       showDrafts: isDev,
       siteUrl: config.site || Astro.site?.href || '',
       siteName: localizeSiteConfig(config, locale).brand.name,
-    }));
+    };
+    resolvedApp = await span('resolver.resolve', () => (route ? resolveRoute(route, locale, resolveOpts) : resolveContent(fromUrl.rest, locale, resolveOpts)));
     if (resolvedApp) {
       mode = 'resolver';
     } else {

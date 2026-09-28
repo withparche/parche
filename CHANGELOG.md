@@ -211,6 +211,19 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   catalog, and the theme panel is loaded only when it is on. The page
   route's closure goes from 103 files to 41.
 
+- **A server finds an app's page the way a build does.** A request to an
+  address that is not a page asked every app's resolver in turn, each with
+  the address itself; a built page had asked the one resolver that listed
+  it, with the key and locale it listed. The server now reads the same
+  lists once (`routeFor` in `parche:registry/resolvers`) and makes one
+  lookup, so the resolver gets what it listed: a post at a dated permalink
+  (`/2026/03/my-post`) is found on a server too, where before the date
+  segments reached the lookup and it answered 404. An address no resolver
+  lists is still offered to each with the address, so a resolver that
+  answers beyond its list keeps working. A server build's content check
+  also fails on a page and an entry at the same address, as a static build
+  did.
+
 - **Related posts are declared.** A post names them in its frontmatter,
   `related: [key, key]`, by the file name that pairs a post with its
   translations, and they show in that order, each in the page's language.
