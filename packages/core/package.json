@@ -12,6 +12,7 @@
     "./content": "./src/content/index.ts",
     "./content/pure": "./src/content/pure.ts",
     "./schemas": "./src/content/schemas.ts",
+    "./icons": "./src/icons.ts",
     "./dev": "./src/dev/index.ts"
   },
   "dependencies": {

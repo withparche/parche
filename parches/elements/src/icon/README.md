@@ -35,3 +35,25 @@ One part, `root` — the inline `<svg>`. Hooks: class `parche-icon`,
 - Decorative by default: `aria-hidden="true"`, invisible to assistive tech.
 - With `label`: `role="img"` and `aria-label`, announced as that name.
 - Never the only focusable content: an icon that acts is a Button with an icon.
+
+## Bundling
+
+astro-icon bundles every set the site installs whole unless `include`
+says which icons to keep, and Tabler alone is 2 MB of SVG: a static build
+parses it once, a server on every cold start. Parche's widgets take their
+icon names from content, which astro-icon cannot see by scanning code, so
+core reads them for you:
+
+```js
+import { usedIcons } from '@parche/astro/icons';
+
+const parches = [createElements(), createUI()];
+export default defineConfig({
+  integrations: [parche({ parches }), icon({ include: usedIcons(parches) })],
+});
+```
+
+`usedIcons` scans the site's `src/` and the parches' sources for every
+`<set>:<name>`, for the sets installed as `@iconify-json/<set>`. A name put
+together at run time is not seen: add it with
+`usedIcons(parches, { also: { tabler: ['arrow-right'] } })`.

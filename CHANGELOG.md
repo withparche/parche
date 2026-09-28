@@ -13,6 +13,16 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
 
 ### Added
 
+- **`usedIcons()`, for astro-icon's `include`.** `import { usedIcons } from
+  '@parche/astro/icons'` and `icon({ include: usedIcons(parches) })` in
+  `astro.config`: the icons the site's content and its parches name, by
+  set, for the sets the project installs. Without `include`, astro-icon
+  bundles whole sets (Tabler is 2 MB of SVG) into a server build and the
+  server loads them on every cold start; Parche's widgets take icon names
+  from content, which astro-icon cannot see by scanning code. A name put
+  together at run time is added with `also`. The demo, the templates and
+  the server examples use it.
+
 - **`bench/`, and `PARCHE_PROFILE=1`.** A site of any size generated from
   the demo (pages, posts, products, locales, sections per page) and the
   scripts that measure a build, a server's latency and what it loads on a
@@ -192,6 +202,14 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   the public documentation.
 
 ### Changed
+
+- **A server loads on a cold start only what a request needs.** The apps'
+  templates load on demand (`loadTemplate(name)` in
+  `parche:registry/templates` replaces the eager `templateMap`), a page
+  from a collection reads its widget's prop names from that widget's
+  `.props.ts` alone (`parche:registry/widgetProps`) instead of the whole
+  catalog, and the theme panel is loaded only when it is on. The page
+  route's closure goes from 103 files to 41.
 
 - **Related posts are declared.** A post names them in its frontmatter,
   `related: [key, key]`, by the file name that pairs a post with its

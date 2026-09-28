@@ -3,8 +3,11 @@ import tailwindcss from '@tailwindcss/vite';
 import icon from 'astro-icon';
 import cloudflare from '@astrojs/cloudflare';
 import parche from '@parche/astro';
+import { usedIcons } from '@parche/astro/icons';
 import createElements from '@parche/elements';
 import createUI from '@parche/ui';
+
+const parches = [createElements(), createUI()];
 
 export default defineConfig({
   // Server output: every route is rendered per request (true SSR), on Cloudflare
@@ -14,22 +17,18 @@ export default defineConfig({
   adapter: cloudflare(),
   integrations: [
     parche({
-      parches: [createElements(), createUI()],
+      parches,
       config: './src/parche.config.json',
       // Pages are data: content/pages/<locale>/*.json, served by Parche's
       // catch-all route. With output: 'server' it resolves the slug per request.
       routes: { pages: true },
     }),
-    // Scoped icon set (SSR). Parche is data-driven: widgets receive icon `name`s
-    // from JSON content, so the names are dynamic and astro-icon can't tree-shake
-    // by scanning code. Without `include` it bundles the ENTIRE tabler set
-    // (~2 MB) into the worker. List exactly the icons this demo's content +
-    // widgets use; add here when you use a new one.
-    icon({
-      include: {
-        tabler: ['alert-circle', 'alert-triangle', 'align-center', 'arrow-right', 'article', 'bookmark', 'brand-facebook', 'brand-github', 'brand-linkedin', 'brand-mastodon', 'brand-whatsapp', 'brand-x', 'building', 'cards', 'chart-bar', 'check', 'chevron-down', 'chevron-left', 'chevron-right', 'circle-check', 'click', 'credit-card', 'external-link', 'help-circle', 'info-circle', 'info-square', 'layout-grid', 'layout-list', 'layout-rows', 'layout-sidebar', 'layout-sidebar-right', 'link', 'list-check', 'list-numbers', 'mail', 'menu-2', 'message-circle', 'palette', 'share', 'speakerphone', 'world', 'x'],
-      },
-    }),
+    // Only the icons this site's content and its parches name. Parche is
+    // data-driven: widgets take icon names from JSON, so astro-icon cannot
+    // see them by scanning code; without `include` it bundles the whole
+    // Tabler set (~2 MB) into the worker. A name built at run time goes in
+    // `also: { tabler: ['…'] }`.
+    icon({ include: usedIcons(parches) }),
   ],
   image: { remotePatterns: [{ protocol: 'https' }] },
   vite: { plugins: [tailwindcss()] },
