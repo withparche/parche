@@ -138,7 +138,14 @@ export const DEFAULT_POINTER: Record<string, string[]> = { navigation: ['items']
  * the page locale's entries when the collection is split by locale, leaves
  * drafts out, then filters, sorts and limits.
  */
-export function createResolver(entries: (collection: string) => RefEntry[] | undefined, locale?: string): (ref: Ref) => Resolved {
+/** Past this many entries, a `$collection` without `limit` is a page rendering a whole collection. */
+export const UNBOUNDED_AT = 50;
+
+export function createResolver(
+  entries: (collection: string) => RefEntry[] | undefined,
+  locale?: string,
+  options: { /** Called for a query without `limit` over more than UNBOUNDED_AT entries. */ onUnbounded?: (ref: QueryRef, size: number) => void } = {},
+): (ref: Ref) => Resolved {
   const byId = new Map<string, Map<string, RefEntry>>();
   const index = (name: string) => {
     if (!byId.has(name)) byId.set(name, new Map((entries(name) ?? []).map((e) => [e.id, e])));
@@ -185,6 +192,7 @@ export function createResolver(entries: (collection: string) => RefEntry[] | und
       });
     }
     if (ref.limit) out = out.slice(0, ref.limit);
+    else if (out.length > UNBOUNDED_AT) options.onUnbounded?.(ref, out.length);
     const strip = (id: string) => (locale && id.startsWith(`${locale}/`) ? id.slice(locale.length + 1) : id);
     return { value: out.map((e) => ({ id: strip(e.id), ...e.data })) };
   };

@@ -29,9 +29,19 @@ async function load(name: string): Promise<RefEntry[] | undefined> {
   return list;
 }
 
+// A `$collection` without `limit` over a large collection puts the whole
+// collection on every page that carries it (a thousand cards on one page,
+// measured). Said once per collection, in dev and in a build alike.
+const warned = new Set<string>();
+const onUnbounded = (ref: { $collection: string }, size: number) => {
+  if (warned.has(ref.$collection)) return;
+  warned.add(ref.$collection);
+  console.warn(`[parche] a $collection of "${ref.$collection}" without limit renders all its ${size} entries on every page that carries it; add "limit" to the query.`);
+};
+
 export async function resolveRefs(nodes: Node[], locale?: string, base = 'sections'): Promise<{ nodes: Node[]; issues: RefIssue[] }> {
   if (!hasRefs(nodes)) return { nodes, issues: [] };
   const names = [...referencedCollections(nodes)];
   const lists = new Map(await Promise.all(names.map(async (n) => [n, await load(n)] as const)));
-  return substituteRefs(nodes, createResolver((n) => lists.get(n), locale), base);
+  return substituteRefs(nodes, createResolver((n) => lists.get(n), locale, { onUnbounded }), base);
 }

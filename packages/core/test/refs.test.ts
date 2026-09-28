@@ -54,6 +54,16 @@ test('a query keeps the locale, leaves drafts out, filters, sorts and limits', (
   assert.deepEqual((nodes[0].props?.astro as any[]).map((p) => p.title), ['A']);
 });
 
+test('a query without limit over a large collection is reported to the caller, once it is large', () => {
+  const big = Array.from({ length: 60 }, (_, i) => ({ id: `en/${i}`, data: { title: String(i) } }));
+  const calls: Array<[string, number]> = [];
+  const resolve = createResolver((n) => (n === 'big' ? big : n === 'small' ? big.slice(0, 10) : undefined), 'en', { onUnbounded: (ref, size) => calls.push([ref.$collection, size]) });
+  resolve({ $collection: 'big' });
+  resolve({ $collection: 'big', limit: 5 });
+  resolve({ $collection: 'small' });
+  assert.deepEqual(calls, [['big', 60]]);
+});
+
 test('broken references are reported with their path and render empty', () => {
   const { nodes, issues } = substituteRefs(
     [{ widget: 'Header', props: { links: { $ref: 'navigation/nope' }, more: { $collection: 'nothing' }, bad: { $ref: 'main' } } }],
