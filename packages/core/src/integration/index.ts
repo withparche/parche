@@ -224,6 +224,7 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
         // defaults whichever format the site chose.
         const servedSiteConfig =
           prepared.inlineSiteConfig ?? (configFile?.endsWith('.json') ? siteConfig ?? undefined : undefined);
+        assertBaseSupported((siteConfig as any)?.base, config.base);
         const parcheSiteUrl = (siteConfig as any)?.site;
         resolvedSiteUrl = resolveSiteUrl(config.site ? String(config.site) : undefined, parcheSiteUrl);
         if (!config.site && parcheSiteUrl) {
@@ -236,8 +237,9 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
           updateConfig({ i18n: parcheI18n });
         }
         const rootDir = fileURLToPath(config.root);
-        const resolvedRegistry = createRegistry(resolved, rootDir, parcheI18n ?? config.i18n, servedSiteConfig);
+        const resolvedRegistry = createRegistry(resolved, rootDir, parcheI18n ?? config.i18n, servedSiteConfig, fileURLToPath(config.srcDir));
         buildDone = resolvedRegistry.buildDone;
+        assertRoutesConsistent(resolved.routes, resolvedRegistry.resolvers);
 
         // Fonts are data in the config and manifests; Astro needs provider
         // objects, which is code — so Parche builds them here. Same rule as the
@@ -303,7 +305,8 @@ function createIntegration(prepare: (ctx: ParcheConfigContext) => PreparedConfig
             for (const route of app.routes) {
               // Default locale route (no prefix)
               injectRoute({ pattern: route.pattern, entrypoint: route.entrypoint });
-              // Non-default locale routes (prefixed)
+              // Non-default locale routes (prefixed), unless the route is the site's once.
+              if (route.localized === false) continue;
               for (const locale of nonDefaultLocales) {
                 injectRoute({ pattern: `${locale}/${route.pattern}`, entrypoint: route.entrypoint });
               }
@@ -380,7 +383,7 @@ export function prepareParcheConfig(
   // Fold `extends` first (a preset may seed site data or parches), then split
   // the site identity out of the integration options.
   const merged = resolveExtends(cfg as unknown as ParcheUserConfig) as unknown as ParcheConfig;
-  const { site, base, brand, metadata, seo, i18n, config: configPath, ...rest } =
+  const { site, base, brand, metadata, seo, i18n, collections, fonts, config: configPath, ...rest } =
     merged as ParcheConfig & { config?: string };
   const userOpts = rest as ParcheUserConfig;
   // `seo` on the parche() options carries only the robots policy now; the
@@ -391,16 +394,54 @@ export function prepareParcheConfig(
   // — `site` is now just a URL, and a project may legitimately leave it to Astro.
   if (brand) {
     // Inline mode: validate + serve the site identity as parche:config.
-    const inlineSiteConfig = siteConfigSchema.parse({ site, base, brand, metadata, i18n });
+    const inlineSiteConfig = siteConfigSchema.parse({ site, base, brand, metadata, i18n, collections, fonts });
     return { userConfig: userOpts, inlineSiteConfig, allowAICrawlers: allowAICrawlers as boolean };
   }
 
   // Separate-file mode: site identity comes from `config` (or the default
   // ./src/parche.config.json). Only the robots policy is read from seo here.
+  if (collections || fonts) {
+    throw new Error(
+      '[parche] `collections` and `fonts` are site config: with the site config in a file, set them there, not in parche({...}).',
+    );
+  }
   return {
     userConfig: { ...userOpts, config: configPath },
     allowAICrawlers: allowAICrawlers as boolean,
   };
+}
+
+/**
+ * Options that only make sense with Parche's page route say so instead of
+ * being ignored: a custom catch-all or middleware, and any app that serves
+ * pages through a resolver (a blog with posts at the root, collection pages).
+ */
+export function assertRoutesConsistent(routes: ParcheUserConfig['routes'], resolvers: Array<{ appName: string }>) {
+  if (routes?.pages) return;
+  const unused = (['catchAllRoute', 'middleware'] as const).filter((k) => routes?.[k]);
+  if (unused.length) {
+    throw new Error(`[parche] routes.${unused.join(' and routes.')} replace parts of Parche's page route, which is off: add routes: { pages: true }.`);
+  }
+  if (resolvers.length) {
+    throw new Error(
+      `[parche] ${[...new Set(resolvers.map((r) => r.appName))].join(', ')} serve pages through Parche's page route (a resolver), which is off: add routes: { pages: true }.`,
+    );
+  }
+}
+
+/**
+ * A site under a sub-path (`base`) is not supported yet: the addresses core
+ * and the apps build (pages, posts, collection entries, links in content)
+ * would all need it, and ignoring it silently shipped broken links.
+ */
+export function assertBaseSupported(parcheBase: unknown, astroBase: unknown) {
+  const set = [parcheBase, astroBase].find((b) => typeof b === 'string' && b !== '' && b !== '/');
+  if (set) {
+    throw new Error(
+      `[parche] base "${set}" is not supported yet: Parche builds every address from the site root. ` +
+        'Serve the site at the root of its domain (or a subdomain) for now.',
+    );
+  }
 }
 
 const ROBOTS_MARKER = '# === PARCHE:AUTO-GENERATED';

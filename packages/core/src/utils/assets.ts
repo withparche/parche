@@ -12,13 +12,12 @@
  */
 
 /**
- * Lazy glob: a loader exists for every image under `src/assets/images`, but a
- * module (and its build-time optimization) is only produced for the ones a page
- * actually references.
+ * Lazy glob (parche:config/assets): a loader exists for every image under
+ * `<srcDir>/assets/images`, but a module (and its build-time optimization) is
+ * only produced for the ones a page actually references.
  */
-const imageLoaders = import.meta.glob<{ default: { src: string } }>(
-  '/src/assets/images/**/*.{png,jpg,jpeg,gif,svg,webp,avif}',
-);
+import { imageLoaders as loaders, assetRoot } from 'parche:config/assets';
+const imageLoaders = loaders as Record<string, () => Promise<{ default: { src: string } }>>;
 
 /**
  * Props stay plain data, so a resolved image is its URL; but the Image element
@@ -67,7 +66,7 @@ export async function resolveAssets<T>(value: T): Promise<T> {
   const resolved = new Map<string, string>();
   await Promise.all(
     [...paths].map(async (src) => {
-      const loader = imageLoaders[src.replace('@/', '/src/')];
+      const loader = imageLoaders[src.replace('@/', assetRoot)];
       if (loader) {
         const mod = await loader();
         resolved.set(src, mod.default.src);

@@ -350,3 +350,37 @@ test('overrides: a missing target is reported with attribution instead of failin
   assert.equal(reg.modules['parche:elements/Nope'], path.join(FIXTURES, 'does/not/exist'));
   assert.equal(reg.overridden['parche:elements/Nope'], undefined);
 });
+
+test('a tone keeps the first declaration of its name', () => {
+  const reg = createRegistry(
+    { parches: [{ name: 'a', tones: [{ name: 'glow', label: 'Glow' }, { name: 'dark', label: 'Mine' }] }, { name: 'b', tones: [{ name: 'glow', label: 'Other' }] }] },
+    ROOT,
+  );
+  assert.deepEqual(reg.tones.map((t) => t.name), ['default', 'muted', 'dark', 'primary', 'glow']);
+  assert.equal(reg.tones.find((t) => t.name === 'glow')?.label, 'Glow');
+  assert.equal(reg.tones.find((t) => t.name === 'dark')?.label, 'Dark');
+});
+
+test('whether a widget takes no wrapper follows the module an override puts in its place', () => {
+  const dir = path.join(FIXTURES, 'wrapping');
+  const plain = createRegistry({ parches: [{ name: 'ui', widgets: { Card: path.join(dir, 'Plain.astro') } }] }, ROOT);
+  assert.deepEqual(plain.unwrapped, ['Card']);
+  const overridden = createRegistry(
+    { parches: [{ name: 'ui', widgets: { Card: path.join(dir, 'Plain.astro') } }], overrides: { 'widgets:Card': path.join(dir, 'Boxed.astro') } },
+    ROOT,
+  );
+  assert.deepEqual(overridden.unwrapped, []);
+});
+
+test('a theme the site lists in themes.available satisfies a requirement', () => {
+  assert.doesNotThrow(() =>
+    createRegistry({ parches: [{ name: 'app', requires: { themes: ['corporate'] } }], themes: { available: [{ label: 'Corporate', value: 'corporate' }] } } as any, ROOT),
+  );
+});
+
+test("the tokens file sits in the site's srcDir", () => {
+  assert.equal(createRegistry({ parches: [] }, ROOT).tokenOverridesPath, `${ROOT}/src/parche.tokens.json`);
+  const reg = createRegistry({ parches: [] }, ROOT, undefined, undefined, `${ROOT}/app`);
+  assert.equal(reg.tokenOverridesPath, `${ROOT}/app/parche.tokens.json`);
+  assert.equal(reg.srcDir, 'app');
+});

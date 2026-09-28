@@ -75,6 +75,8 @@ const I18N_CONFIG_ID = 'parche:config/i18n';
 const I18N_CONFIG_VIRTUAL = '\0parche:config/i18n';
 const FONTS_CONFIG_ID = 'parche:config/fonts';
 const FONTS_CONFIG_VIRTUAL = '\0parche:config/fonts';
+const ASSETS_CONFIG_ID = 'parche:config/assets';
+const ASSETS_CONFIG_VIRTUAL = '\0parche:config/assets';
 const HEAD_CONFIG_ID = 'parche:config/head';
 const HEAD_CONFIG_VIRTUAL = '\0parche:config/head';
 const THEMES_CONFIG_ID = 'parche:config/themes';
@@ -472,6 +474,21 @@ ${statements.join('\n')}
 }
 
 /**
+ * The site's images, for utils/assets.ts: a lazy loader for every image under
+ * `<srcDir>/assets/images` (any case of the usual extensions), keyed as Vite
+ * keys a glob, and the prefix that turns an `@/assets/…` path into that key.
+ * Generated because a glob must be a literal and the folder is the site's.
+ */
+function generateAssetsModule(registry: ResolvedRegistry): string {
+  const root = `/${registry.srcDir === '.' ? '' : registry.srcDir + '/'}`;
+  const exts = ['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp', 'avif'];
+  const pattern = `${root}assets/images/**/*.{${[...exts, ...exts.map((e) => e.toUpperCase())].join(',')}}`;
+  return `export const assetRoot = ${JSON.stringify(root)};
+export const imageLoaders = import.meta.glob(${JSON.stringify(pattern)});
+`;
+}
+
+/**
  * Generate a JS module that aggregates all app resolvers.
  * Exports resolveContent(slug, locale, opts) and getResolverPaths(locales, defaultLocale, opts).
  */
@@ -584,6 +601,7 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
       if (id === I18N_CONFIG_ID) return I18N_CONFIG_VIRTUAL;
       if (id === FONTS_CONFIG_ID) return FONTS_CONFIG_VIRTUAL;
       if (id === HEAD_CONFIG_ID) return HEAD_CONFIG_VIRTUAL;
+      if (id === ASSETS_CONFIG_ID) return ASSETS_CONFIG_VIRTUAL;
       if (id === THEMES_CONFIG_ID) return THEMES_CONFIG_VIRTUAL;
       if (id === STYLES_CONFIG_ID) return STYLES_CONFIG_VIRTUAL;
       if (id === TOKEN_OVERRIDES_ID) return TOKEN_OVERRIDES_VIRTUAL;
@@ -623,6 +641,7 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
       if (id === TEMPLATE_MAP_VIRTUAL) return generateTemplateMapModule(registry);
       if (id === I18N_CONFIG_VIRTUAL) return generateI18nConfigModule(registry);
       if (id === FONTS_CONFIG_VIRTUAL) return `export const fonts = ${JSON.stringify(registry.fonts)};\n`;
+      if (id === ASSETS_CONFIG_VIRTUAL) return generateAssetsModule(registry);
       if (id === HEAD_CONFIG_VIRTUAL) return `export const headLinks = ${JSON.stringify(registry.headLinks ?? [])};\nexport const siteSearch = ${JSON.stringify(registry.siteSearch ?? null)};\n`;
       if (id === THEMES_CONFIG_VIRTUAL) return generateThemesConfigModule(registry);
       if (id === STYLES_CONFIG_VIRTUAL) return generateStylesModule(registry);

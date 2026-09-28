@@ -90,7 +90,8 @@ export default function createBlog(config?: BlogConfig): ParcheManifest {
 
   // ads.txt, which AdSense needs, from the publisher id
   if (resolved.ads && resolved.ads.provider === 'adsense' && resolved.ads.client) {
-    routes.push({ pattern: 'ads.txt', entrypoint: routePath('ads.txt.ts') });
+    // Once, at the root: crawlers read /ads.txt only.
+    routes.push({ pattern: 'ads.txt', entrypoint: routePath('ads.txt.ts'), localized: false });
   }
 
   // RSS feed

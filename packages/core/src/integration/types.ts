@@ -255,8 +255,12 @@ export interface ParcheManifest {
    *   content: [path.resolve(dir, '**\/*.astro')]
    */
   content?: string[];
-  /** Routes to inject */
-  routes?: Array<{ pattern: string; entrypoint: string }>;
+  /**
+   * Routes to inject. Each is also injected under every other locale's prefix
+   * (`es/…`) unless `localized: false`: a file that must sit at the site's
+   * root once, such as ads.txt.
+   */
+  routes?: Array<{ pattern: string; entrypoint: string; localized?: boolean }>;
   /** App config exposed via virtual module parche:app/{name} */
   config?: Record<string, unknown>;
   /** Module IDs that use named exports (export *) instead of default */
@@ -425,6 +429,8 @@ export type ParchePreset = Omit<ParcheUserConfig, 'extends'>;
 export interface ResolvedRegistry {
   /** The site's own token values (`src/parche.tokens.json`), which may not exist yet. */
   tokenOverridesPath: string;
+  /** The site's source folder (Astro's `srcDir`), relative to the root with slashes: `src`. */
+  srcDir: string;
   /** Map of virtual module ID → absolute file path */
   modules: Record<string, string>;
   /** Set of virtual IDs that use named exports (export *) instead of default */

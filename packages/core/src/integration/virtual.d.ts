@@ -96,6 +96,13 @@ declare module 'parche:config/fonts' {
   export const fonts: Array<{ cssVariable: string; name: string; weights: number[]; fallbacks: string[]; preload?: boolean }>;
 }
 
+declare module 'parche:config/assets' {
+  /** `@/` in an asset path becomes this: the site's srcDir from the root, `/src/`. */
+  export const assetRoot: string;
+  /** A lazy loader per image under `<srcDir>/assets/images`, keyed as Vite keys a glob. */
+  export const imageLoaders: Record<string, () => Promise<{ default: { src: string } }>>;
+}
+
 declare module 'parche:config/head' {
   /** `<link>` tags the parches add to every page's head (a blog's feed). */
   export const headLinks: Array<{ rel: string; href: string; type?: string; title?: string; hreflang?: string }>;

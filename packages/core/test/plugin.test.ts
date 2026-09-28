@@ -178,3 +178,10 @@ test('entry urls: a routed collection loads its address function on demand; othe
   assert.match(code, /export async function urlFor\(collection\)/);
   assert.match(load(makeRegistry({ entryUrls: {} }), '\0parche:registry/urls'), /const modules = \{\n\n\};/);
 });
+
+test("parche:config/assets globs the images of the site's srcDir, in any case", () => {
+  const src = load(makeRegistry({ srcDir: 'app' }), '\0parche:config/assets');
+  assert.match(src, /assetRoot = "\/app\/"/);
+  assert.match(src, /import\.meta\.glob\("\/app\/assets\/images\/\*\*\/\*\.\{png,.*,PNG,/);
+  assert.match(load(makeRegistry({ srcDir: 'src' }), '\0parche:config/assets'), /"\/src\/"/);
+});

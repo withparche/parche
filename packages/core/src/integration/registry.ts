@@ -187,6 +187,8 @@ export function createRegistry(
   rootDir: string,
   astroI18n?: { locales?: Array<string | { path: string; codes: string[] }>; defaultLocale?: string },
   inlineSiteConfig?: SiteConfig,
+  /** Astro's `srcDir`, absolute; defaults to `<root>/src`. */
+  srcDirAbs: string = path.join(rootDir, 'src'),
 ): ResolvedRegistry {
   const modules: Record<string, string> = { ...CORE_MODULES };
 
@@ -248,7 +250,8 @@ export function createRegistry(
     if (parche.themes) contributedThemes.push(...parche.themes);
     if (parche.content) contentGlobs.push(...parche.content);
     if (parche.wrapper) wrapper = parche.wrapper;
-    if (parche.tones) tones.push(...parche.tones);
+    // A tone is one name: the first to declare it (core's, then the parches in order) keeps it.
+    for (const tone of parche.tones ?? []) if (!tones.some((t) => t.name === tone.name)) tones.push(tone);
     if (parche.elements) {
       for (const [name, value] of Object.entries(parche.elements)) {
         const prim = resolveElement(parche.name, name, value);
@@ -269,7 +272,6 @@ export function createRegistry(
       for (const [name, absPath] of Object.entries(parche.widgets)) {
         setModule(parche.name, 'widget', `parche:widgets/${name}`, absPath);
         providedWidgets.add(name);
-        if (declaresNoWrapper(absPath)) unwrapped.push(name);
       }
     }
     if (parche.templates) {
@@ -330,7 +332,8 @@ export function createRegistry(
   // Validate parche requirements (V2: presence of every capability, plus
   // peer-parche version ranges). Structural widget-prop checks run where the
   // schemas are available (widgetSchemas generation), not here.
-  const providedThemes = new Set<string>(['', ...contributedThemes.map((t) => t.value)]);
+  // Themes the site lists itself (themes.available) count as provided too.
+  const providedThemes = new Set<string>(['', ...contributedThemes.map((t) => t.value), ...(userConfig.themes?.available ?? []).map((t) => t.value)]);
   const parcheVersions = new Map<string, string | undefined>(parches.map((p) => [p.name, p.version]));
 
   const missing: string[] = [];
@@ -417,6 +420,13 @@ export function createRegistry(
   }
   if (badOverrides.length) {
     console.warn('[parche] Override path problems (these modules will fail to load):\n  - ' + badOverrides.join('\n  - '));
+  }
+
+  // The widgets that take no wrapper, read from the module each name finally
+  // resolves to: an override may change it either way.
+  for (const name of providedWidgets) {
+    const file = modules[`parche:widgets/${name}`];
+    if (file && declaresNoWrapper(file)) unwrapped.push(name);
   }
 
   // Resolve i18n config from Astro's official i18n settings
@@ -506,7 +516,8 @@ export function createRegistry(
     siteSearch,
     buildDone,
     styleEntries,
-    tokenOverridesPath: path.join(rootDir, 'src', 'parche.tokens.json'),
+    tokenOverridesPath: path.join(srcDirAbs, 'parche.tokens.json'),
+    srcDir: path.relative(rootDir, srcDirAbs).split(path.sep).join('/') || '.',
     contentGlobs,
     apps,
     resolvers,
