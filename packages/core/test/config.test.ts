@@ -6,7 +6,7 @@ import {
   parchePreset,
   type ParcheConfigContext,
 } from '../src/integration/index.ts';
-import { satisfiesVersion } from '../src/integration/registry.ts';
+import { satisfiesVersion } from '../src/integration/registry/versions.ts';
 import { defineConfig } from '../src/types/config.ts';
 
 const CTX: ParcheConfigContext = {

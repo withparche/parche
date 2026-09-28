@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { entryPath, indexEntries, metadataFor, propsFor, type CollectionPages } from '../src/content/collections.ts';
 import { siteConfigSchema } from '../src/types/config.ts';
-import { createRegistry } from '../src/integration/registry.ts';
+import { createRegistry } from '../src/integration/registry/index.ts';
 
 const spec: CollectionPages = { path: '/store/%slug%', widget: 'pattern/product-page' };
 const lamp = { id: 'moss-weekender', data: { name: 'The Moss weekender', price: '£248', summary: 'Waxed canvas.', photos: [{ caption: 'front' }], specs: [], internalCode: 'MW-01' } };

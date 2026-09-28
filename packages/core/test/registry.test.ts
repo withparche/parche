@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createRegistry } from '../src/integration/registry.ts';
+import { createRegistry } from '../src/integration/registry/index.ts';
 
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

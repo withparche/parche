@@ -1,624 +1,110 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import type { Plugin } from 'vite';
 import { setTokenOverridesReloader } from '../dev/info.js';
 import type { ResolvedRegistry } from './types.js';
-import { tokensToCss, validateOverrides } from '../config/token-overrides.js';
+import {
+  APP_CONFIG_PREFIX,
+  APP_CONFIG_VIRTUAL_PREFIX,
+  ASSETS_CONFIG_ID,
+  ASSETS_CONFIG_VIRTUAL,
+  DEV_TOOLS_ID,
+  DEV_TOOLS_VIRTUAL,
+  ELEMENTS_ID,
+  ELEMENTS_VIRTUAL,
+  ENTRY_URLS_ID,
+  ENTRY_URLS_VIRTUAL,
+  FONTS_CONFIG_ID,
+  FONTS_CONFIG_VIRTUAL,
+  HEAD_CONFIG_ID,
+  HEAD_CONFIG_VIRTUAL,
+  I18N_CONFIG_ID,
+  I18N_CONFIG_VIRTUAL,
+  LAYOUT_CONFIG_ID,
+  LAYOUT_CONFIG_VIRTUAL,
+  PARCHE_PREFIX,
+  RESOLVERS_ID,
+  RESOLVERS_VIRTUAL,
+  STYLES_CONFIG_ID,
+  STYLES_CONFIG_VIRTUAL,
+  TEMPLATE_MAP_ID,
+  TEMPLATE_MAP_VIRTUAL,
+  THEMES_CONFIG_ID,
+  THEMES_CONFIG_VIRTUAL,
+  TOKEN_OVERRIDES_ID,
+  TOKEN_OVERRIDES_VIRTUAL,
+  VIRTUAL_PREFIX,
+  WIDGET_MAP_ID,
+  WIDGET_MAP_VIRTUAL,
+  WIDGET_PROPS_ID,
+  WIDGET_PROPS_VIRTUAL,
+  WIDGET_SCHEMAS_ID,
+  WIDGET_SCHEMAS_VIRTUAL,
+} from './codegen/ids.js';
+import { generateWidgetMapModule } from './codegen/widgets.js';
+import { generateTemplateMapModule } from './codegen/templates.js';
+import { generateWidgetPropsModule, generateWidgetSchemasModule, widgetCatalogWatchFiles } from './codegen/catalog.js';
+import { elementCatalogWatchFiles, generateElementsModule } from './codegen/elements.js';
+import { generateEntryUrlsModule, generateResolversModule } from './codegen/resolvers.js';
+import {
+  generateAppConfigModule,
+  generateAssetsModule,
+  generateDevToolsModule,
+  generateFontsConfigModule,
+  generateHeadConfigModule,
+  generateI18nConfigModule,
+  generateInlineSiteConfigModule,
+  generateLayoutConfigModule,
+  generateStylesModule,
+  generateThemesConfigModule,
+} from './codegen/config.js';
+import { generateTokenOverrides } from './codegen/tokens.js';
+import { BASE_CSS_PATH, baseCssWithSources, isCoreBaseCss } from './codegen/sources.js';
 
-/**
- * Resolve a bare specifier to an absolute path from @parche/astro's own location.
- *
- * Generated virtual modules have no place on disk, so a bare `import ... from 'zod'`
- * inside one is resolved by Vite relative to the consuming project root — which under
- * pnpm's isolated node_modules will not see core's dependencies. Emitting the absolute
- * path instead pins the import to the copy core itself declares.
- *
- * Uses `import.meta.resolve` rather than `require.resolve` so the package's `import`
- * export condition wins: `require.resolve` picks the CJS entry, which Vite then inlines
- * as ESM and blows up with "exports is not defined".
- */
-function resolveFromCore(specifier: string): string {
-  try {
-    return fileURLToPath(import.meta.resolve(specifier));
-  } catch {
-    // Fall back to the bare specifier; the consumer may hoist or declare it itself.
-    return specifier;
-  }
-}
-
-/**
- * A single variant of default props for a widget.
- * Widgets can provide multiple variants (e.g., "minimal", "with image")
- * so the builder can randomly pick one when adding a new section.
- */
-interface DefaultVariant {
-  label?: string;
-  props: Record<string, unknown>;
-}
-
-/**
- * Load widget default variants from a sibling `.defaults.json` file.
- * Supports two formats:
- *   - Array of variants: [{ label?: string, props: {...} }, ...]
- *   - Single props object: { title: "...", ... } (wrapped as one variant)
- * Returns null if the file doesn't exist or can't be parsed.
- */
-function loadWidgetDefaults(astroFilePath: string): DefaultVariant[] | null {
-  const defaultsPath = astroFilePath.replace(/\.astro$/, '.defaults.json');
-  try {
-    const raw = JSON.parse(fs.readFileSync(defaultsPath, 'utf-8'));
-    if (Array.isArray(raw)) {
-      // Array format: each element must have a `props` field
-      return raw.map((entry: unknown) => {
-        if (entry && typeof entry === 'object' && 'props' in entry) {
-          return entry as DefaultVariant;
-        }
-        // Bare props object inside array
-        return { props: entry as Record<string, unknown> };
-      });
-    }
-    // Single object format: wrap as one variant
-    return [{ props: raw as Record<string, unknown> }];
-  } catch {
-    return null;
-  }
-}
-
-const PARCHE_PREFIX = 'parche:';
-const VIRTUAL_PREFIX = '\0parche:';
-const WIDGET_MAP_ID = 'parche:registry/widgets';
-const WIDGET_MAP_VIRTUAL = '\0parche:registry/widgets';
-const TEMPLATE_MAP_ID = 'parche:registry/templates';
-const TEMPLATE_MAP_VIRTUAL = '\0parche:registry/templates';
-const I18N_CONFIG_ID = 'parche:config/i18n';
-const I18N_CONFIG_VIRTUAL = '\0parche:config/i18n';
-const FONTS_CONFIG_ID = 'parche:config/fonts';
-const FONTS_CONFIG_VIRTUAL = '\0parche:config/fonts';
-const ASSETS_CONFIG_ID = 'parche:config/assets';
-const ASSETS_CONFIG_VIRTUAL = '\0parche:config/assets';
-const HEAD_CONFIG_ID = 'parche:config/head';
-const HEAD_CONFIG_VIRTUAL = '\0parche:config/head';
-const THEMES_CONFIG_ID = 'parche:config/themes';
-const THEMES_CONFIG_VIRTUAL = '\0parche:config/themes';
-const STYLES_CONFIG_ID = 'parche:config/styles';
-const STYLES_CONFIG_VIRTUAL = '\0parche:config/styles';
-const TOKEN_OVERRIDES_ID = 'parche:config/token-overrides.css';
-const TOKEN_OVERRIDES_VIRTUAL = '\0parche:config/token-overrides.css';
-const LAYOUT_CONFIG_ID = 'parche:config/layout';
-const LAYOUT_CONFIG_VIRTUAL = '\0parche:config/layout';
-
-// Core's base.css is the Tailwind root (it has `@import "tailwindcss"`). We
-// append each parche's absolute @source globs into it at transform time —
-// Tailwind v4 only honors @source in the root's own cascade, and only absolute
-// paths reach sibling packages once installed from npm.
-const BASE_CSS_PATH = fileURLToPath(new URL('../styles/base.css', import.meta.url));
-const TOKENS_CATALOG_PATH = fileURLToPath(new URL('../styles/generated/tokens.json', import.meta.url));
-const WIDGET_SCHEMAS_ID = 'parche:registry/widgetSchemas';
-const WIDGET_SCHEMAS_VIRTUAL = '\0parche:registry/widgetSchemas';
-const WIDGET_PROPS_ID = 'parche:registry/widgetProps';
-const WIDGET_PROPS_VIRTUAL = '\0parche:registry/widgetProps';
-const ELEMENTS_ID = 'parche:registry/elements';
-const ELEMENTS_VIRTUAL = '\0parche:registry/elements';
-const RESOLVERS_ID = 'parche:registry/resolvers';
-const RESOLVERS_VIRTUAL = '\0parche:registry/resolvers';
-const DEV_TOOLS_ID = 'parche:registry/dev';
-const DEV_TOOLS_VIRTUAL = '\0parche:registry/dev';
-const ENTRY_URLS_ID = 'parche:registry/urls';
-const ENTRY_URLS_VIRTUAL = '\0parche:registry/urls';
-const APP_CONFIG_PREFIX = 'parche:app/';
-const APP_CONFIG_VIRTUAL_PREFIX = '\0parche:app/';
-
-/**
- * Extract a widget key from a virtual module ID. Widgets use the full path
- * after the prefix to avoid collisions.
- *
- * 'parche:widgets/hero/Hero'    → 'hero/Hero'
- * 'parche:widgets/legacy/Hero'  → 'legacy/Hero'
- */
-function extractWidgetKey(virtualId: string): string {
-  return virtualId.replace('parche:widgets/', '');
-}
-
-/**
- * Extract a template key from a virtual module ID.
- * 'parche:templates/contact' → 'contact'
- */
-function extractTemplateKey(virtualId: string): string {
-  return virtualId.replace('parche:templates/', '');
-}
-
-/**
- * Generate the widget catalog as LAZY loaders. Each widget is a `() => import()`
- * so Vite code-splits it into its own chunk, loaded only when a rendered section
- * references it — the SSR server never holds the whole catalog resident. Renderers
- * call `loadWidgets(keys)` in their (async) frontmatter to resolve just the
- * components a page uses before rendering synchronously.
- *
- * Elements are not widgets: nothing renders them by key, and a compound
- * element's parts (`Tabs/Panel`, `Menu/Panel`) would collide on a short name.
- * They have their own catalog, `parche:registry/elements`.
- */
-function generateWidgetMapModule(registry: ResolvedRegistry): string {
-  const entries: { key: string; importPath: string }[] = [];
-
-  for (const virtualId of Object.keys(registry.modules)) {
-    if (virtualId.startsWith('parche:widgets/')) {
-      entries.push({ key: extractWidgetKey(virtualId), importPath: virtualId });
-    }
-  }
-
-  const loaderEntries = entries
-    .map((e) => `  ${JSON.stringify(e.key)}: () => import(${JSON.stringify(e.importPath)}),`)
-    .join('\n');
-
-  return `export const widgetLoaders = {
-${loaderEntries}
+/** The ids a parche imports, and what Vite resolves each to. */
+const RESOLVE: Record<string, string> = {
+  [WIDGET_MAP_ID]: WIDGET_MAP_VIRTUAL,
+  [TEMPLATE_MAP_ID]: TEMPLATE_MAP_VIRTUAL,
+  [I18N_CONFIG_ID]: I18N_CONFIG_VIRTUAL,
+  [FONTS_CONFIG_ID]: FONTS_CONFIG_VIRTUAL,
+  [HEAD_CONFIG_ID]: HEAD_CONFIG_VIRTUAL,
+  [ASSETS_CONFIG_ID]: ASSETS_CONFIG_VIRTUAL,
+  [THEMES_CONFIG_ID]: THEMES_CONFIG_VIRTUAL,
+  [STYLES_CONFIG_ID]: STYLES_CONFIG_VIRTUAL,
+  [TOKEN_OVERRIDES_ID]: TOKEN_OVERRIDES_VIRTUAL,
+  [LAYOUT_CONFIG_ID]: LAYOUT_CONFIG_VIRTUAL,
+  [WIDGET_SCHEMAS_ID]: WIDGET_SCHEMAS_VIRTUAL,
+  [WIDGET_PROPS_ID]: WIDGET_PROPS_VIRTUAL,
+  [ELEMENTS_ID]: ELEMENTS_VIRTUAL,
+  [RESOLVERS_ID]: RESOLVERS_VIRTUAL,
+  [DEV_TOOLS_ID]: DEV_TOOLS_VIRTUAL,
+  [ENTRY_URLS_ID]: ENTRY_URLS_VIRTUAL,
 };
 
-/** Resolve the given widget keys (deduped) to their components. Keys with no
- *  loader (e.g. the synthetic 'Outlet') are skipped. */
-export async function loadWidgets(keys) {
-  const out = {};
-  await Promise.all(
-    [...new Set(keys)].map(async (key) => {
-      const loader = widgetLoaders[key];
-      if (loader) out[key] = (await loader()).default;
-    }),
-  );
-  return out;
-}
-`;
-}
-
-/**
- * The templates the apps register, as LAZY loaders by name, like the
- * widgets: a route loads the one a resolver names, and nothing else comes
- * with it. Imported eagerly, every template (and every widget, element and
- * icon set it uses) sat in the page route's closure, loaded on every cold
- * start of a server whether a request needed a template or not.
- */
-function generateTemplateMapModule(registry: ResolvedRegistry): string {
-  const entries = Object.keys(registry.modules)
-    .filter((virtualId) => virtualId.startsWith('parche:templates/'))
-    .map((virtualId) => `  ${JSON.stringify(extractTemplateKey(virtualId))}: () => import(${JSON.stringify(virtualId)}),`);
-
-  return `export const templateLoaders = {
-${entries.join('\n')}
+/** The generated modules that need nothing but the registry, by resolved id. */
+const GENERATE: Record<string, (registry: ResolvedRegistry) => string> = {
+  [WIDGET_MAP_VIRTUAL]: generateWidgetMapModule,
+  [TEMPLATE_MAP_VIRTUAL]: generateTemplateMapModule,
+  [I18N_CONFIG_VIRTUAL]: generateI18nConfigModule,
+  [FONTS_CONFIG_VIRTUAL]: generateFontsConfigModule,
+  [ASSETS_CONFIG_VIRTUAL]: generateAssetsModule,
+  [HEAD_CONFIG_VIRTUAL]: generateHeadConfigModule,
+  [THEMES_CONFIG_VIRTUAL]: generateThemesConfigModule,
+  [STYLES_CONFIG_VIRTUAL]: generateStylesModule,
+  [LAYOUT_CONFIG_VIRTUAL]: generateLayoutConfigModule,
+  [WIDGET_PROPS_VIRTUAL]: generateWidgetPropsModule,
+  [RESOLVERS_VIRTUAL]: generateResolversModule,
+  [ENTRY_URLS_VIRTUAL]: generateEntryUrlsModule,
+  [DEV_TOOLS_VIRTUAL]: generateDevToolsModule,
 };
 
-/** The template a resolver names, loaded on demand; undefined when no parche registers it. */
-export async function loadTemplate(name) {
-  const load = templateLoaders[name];
-  return load ? (await load()).default : undefined;
-}
-`;
-}
-
 /**
- * The names of the props each widget declares, read from that widget's
- * `.props.ts` alone and on demand (`parche:registry/widgetProps`). What a
- * page from a collection needs to hand its widget the entry's fields
- * (utils/collections.ts) without the catalog: `parche:registry/widgetSchemas`
- * imports every widget's schema and turns each into JSON Schema, which is
- * for tools, never for a request.
+ * The Vite plugin that serves every `parche:*` module: the generated ones
+ * (`codegen/`), each from the resolved registry, and the ones that stand for
+ * a file on disk (a widget, an element, a template, the site config), which
+ * re-export it. It also feeds Tailwind's root with the parches' sources and
+ * reloads the site's token overrides when they change.
  */
-function generateWidgetPropsModule(registry: ResolvedRegistry): string {
-  const entries: string[] = [];
-  for (const [virtualId, filePath] of Object.entries(registry.modules)) {
-    if (!virtualId.startsWith('parche:widgets/') || !filePath.endsWith('.astro')) continue;
-    const propsPath = filePath.replace(/\.astro$/, '.props.ts');
-    if (fs.existsSync(propsPath)) entries.push(`  ${JSON.stringify(extractWidgetKey(virtualId))}: () => import(${JSON.stringify(propsPath)}),`);
-  }
-  return `const loaders = {
-${entries.join('\n')}
-};
-
-/** The props a widget declares by name, from its schema; null when it declares none (every field passes). */
-export async function propNames(key) {
-  const load = loaders[key];
-  if (!load) return null;
-  const m = await load();
-  const shape = m.schema && typeof m.schema === 'object' ? m.schema.shape : undefined;
-  return shape && typeof shape === 'object' ? Object.keys(shape) : null;
-}
-`;
-}
-
-/**
- * Generate a JS module that exports i18n config.
- */
-function generateI18nConfigModule(registry: ResolvedRegistry): string {
-  return `export const locales = ${JSON.stringify(registry.i18n.locales)};
-export const defaultLocale = ${JSON.stringify(registry.i18n.defaultLocale)};
-`;
-}
-
-/**
- * Generate a JS module that exports available themes.
- */
-function generateThemesConfigModule(registry: ResolvedRegistry): string {
-  return `export const themes = ${JSON.stringify(registry.themes)};
-export const showPanel = ${JSON.stringify(registry.showPanel)};
-export const defaultTheme = ${JSON.stringify(registry.defaultTheme ?? null)};
-`;
-}
-
-/**
- * Generate a JS module that exports layout hints the render path needs — the
- * set of widget keys that render full-bleed (no default SectionWrapper). Kept as
- * a plain static array so DynamicRenderer imports zero widget schemas/components
- * for this decision. Which widgets are full-bleed is declared by the parches, not
- * hardcoded in core.
- */
-function generateLayoutConfigModule(registry: ResolvedRegistry): string {
-  return (
-    `export const wrapper = ${JSON.stringify(registry.wrapper)};\n` +
-    `export const unwrapped = ${JSON.stringify(registry.unwrapped)};\n` +
-    `export const tones = ${JSON.stringify(registry.tones)};\n`
-  );
-}
-
-/**
- * Generate the styles entry: side-effect CSS imports for every file the
- * imported parches contribute (plus any user entry). Empty when none — the
- * base look ships via BaseLayout's own base.css regardless.
- */
-function generateStylesModule(registry: ResolvedRegistry): string {
-  // The site's own token values come last, so they win where they are scoped.
-  return [...registry.styleEntries.map((p) => `import ${JSON.stringify(p)};`), `import ${JSON.stringify(TOKEN_OVERRIDES_ID)};`].join('\n') + '\n';
-}
-
-/** The token names the generated catalog knows, to check a site's overrides against. */
-let knownTokens: Set<string> | null = null;
-function tokenNames(): Set<string> {
-  if (knownTokens) return knownTokens;
-  try {
-    const catalog = JSON.parse(fs.readFileSync(TOKENS_CATALOG_PATH, 'utf-8')) as Record<string, Record<string, string>>;
-    knownTokens = new Set([...Object.keys(catalog.light ?? {}), ...Object.keys(catalog.dark ?? {})]);
-  } catch {
-    knownTokens = new Set();
-  }
-  return knownTokens;
-}
-
-/** `src/parche.tokens.json` as CSS; nothing when the file is absent. Problems are warned about, and left out. */
-function generateTokenOverrides(registry: ResolvedRegistry): string {
-  if (!fs.existsSync(registry.tokenOverridesPath)) return '';
-  let raw: unknown;
-  try {
-    raw = JSON.parse(fs.readFileSync(registry.tokenOverridesPath, 'utf-8'));
-  } catch (e) {
-    console.warn(`[parche] src/parche.tokens.json is not valid JSON: ${(e as Error).message}`);
-    return '';
-  }
-  const { overrides, issues } = validateOverrides(raw, tokenNames());
-  for (const i of issues) console.warn(`[parche] src/parche.tokens.json ${i.path}: ${i.message} (left out)`);
-  return tokensToCss(overrides);
-}
-
-/**
- * Tailwind `@source` directives (absolute globs) for every parche's component
- * files, appended into base.css so the classes those components use are
- * generated — including when the parches are installed from npm, where relative
- * @source paths can't reach sibling packages. Absolute paths come from each
- * parche's factory.
- */
-function generateSourceDirectives(registry: ResolvedRegistry): string {
-  return registry.contentGlobs.map((g) => `@source ${JSON.stringify(g)};`).join('\n');
-}
-
-/**
- * Derive the palette category from a widget virtual ID.
- * 'parche:widgets/hero/Hero'           → 'hero'
- * 'parche:widgets/call-to-action/CTA'  → 'call-to-action'
- */
-function extractWidgetCategory(virtualId: string): string {
-  const after = virtualId.replace('parche:widgets/', '');
-  const slashIdx = after.lastIndexOf('/');
-  return slashIdx >= 0 ? after.slice(0, slashIdx) : after;
-}
-
-/**
- * Convert a PascalCase component name to a human-readable label.
- * Splits at lowercase→uppercase transitions to preserve acronyms.
- * 'FeaturesList' → 'Features List'
- * 'CallToAction' → 'Call To Action'
- * 'FAQs'         → 'FAQs'   (no lowercase→uppercase transition)
- */
-function humanLabel(name: string): string {
-  return name.replace(/([a-z])([A-Z])/g, '$1 $2').trim();
-}
-
-/**
- * Generate a JS module that exports:
- *  - `widgetSchemas`  — JSON Schema per widget (from Zod v4 toJSONSchema)
- *  - `widgetMeta`     — label / category / description / defaultProps / ui per widget
- *  - `widgetPropSchemas` — the zod schema itself, for tools that validate props
- *    the way the widget will (refinements a JSON Schema cannot carry)
- *
- * Widgets with a sibling `.props.ts` get a full schema + metadata.
- * Widgets without one get only basic metadata (no schema / no form in builder).
- */
-function generateWidgetSchemasModule(registry: ResolvedRegistry): string {
-  const imports: string[] = [`import { z } from ${JSON.stringify(resolveFromCore('zod'))};`];
-  const statements: string[] = [];
-  let index = 0;
-
-  for (const [virtualId, filePath] of Object.entries(registry.modules)) {
-    if (!virtualId.startsWith('parche:widgets/')) continue;
-    if (!filePath.endsWith('.astro')) continue;
-
-    const key = extractWidgetKey(virtualId);
-
-
-    const propsPath = filePath.replace(/\.astro$/, '.props.ts');
-    const hasProps = fs.existsSync(propsPath);
-    const variants = loadWidgetDefaults(filePath);
-    const variantsJson = JSON.stringify(variants ?? [{ props: {} }]);
-    const defaultPropsJson = JSON.stringify(variants?.[0]?.props ?? {});
-    const keyJson = JSON.stringify(key);
-
-    if (hasProps) {
-      // Namespace import: a `.props.ts` missing `schema` or `meta` no longer
-      // fails the whole module (it would with a named import). Each widget's
-      // schema serialization is isolated in a try/catch so one bad/incompatible
-      // schema (e.g. Zod v3, or a construct toJSONSchema can't serialize) is
-      // skipped with a warning instead of killing the entire builder palette.
-      const m = `p${index}`;
-      imports.push(`import * as ${m} from ${JSON.stringify(propsPath)};`);
-      statements.push(`if (${m}.schema) widgetPropSchemas[${keyJson}] = ${m}.schema;`);
-      statements.push(
-        `if (${m}.schema) { try { widgetSchemas[${keyJson}] = z.toJSONSchema(${m}.schema); } ` +
-        `catch (e) { console.warn(${JSON.stringify(`[parche] Skipped JSON Schema for widget "${key}": `)} + ((e && e.message) || e)); } }`,
-      );
-      statements.push(`widgetMeta[${keyJson}] = {
-  label: ${m}.meta?.widget?.label ?? ${JSON.stringify(humanLabel(key))},
-  category: ${m}.meta?.widget?.category ?? ${JSON.stringify(extractWidgetCategory(virtualId))},
-  description: ${m}.meta?.widget?.description ?? '',
-  icon: ${m}.meta?.widget?.icon ?? '',
-  defaultProps: ${defaultPropsJson},
-  defaultVariants: ${variantsJson},
-  slots: ${m}.meta?.slots ?? {},
-  wrapper: ${m}.meta?.widget?.wrapper !== false,
-  hidden: ${m}.meta?.widget?.hidden === true,
-  ui: ${m}.meta?.ui ?? {},
-};`);
-      index++;
-    } else {
-      // No .props.ts — basic meta only, no schema
-      statements.push(`widgetMeta[${keyJson}] = {
-  label: ${JSON.stringify(humanLabel(key))},
-  category: ${JSON.stringify(extractWidgetCategory(virtualId))},
-  description: '',
-  icon: '',
-  defaultProps: ${defaultPropsJson},
-  defaultVariants: ${variantsJson},
-  slots: {},
-  wrapper: true,
-  hidden: false,
-  ui: {},
-};`);
-    }
-  }
-
-  // Structural requirements (V2): warn when a requiring parche expects a prop
-  // the provider's schema doesn't expose. Runs where the schemas exist (this
-  // module), so it fires for builder/dev; presence + versions are gated earlier
-  // in createRegistry for every build.
-  const requirementChecks = registry.widgetPropRequirements.map((r) => {
-    const nameJson = JSON.stringify(r.name);
-    const fromJson = JSON.stringify(r.from);
-    const propsJson = JSON.stringify(r.props);
-    return `{
-  const __s = widgetSchemas[${nameJson}];
-  if (__s && __s.properties) {
-    const __missing = ${propsJson}.filter((p) => !(p in __s.properties));
-    if (__missing.length) console.warn(${JSON.stringify(`[parche] ${r.from} requires widget "${r.name}" to expose prop(s): `)} + __missing.join(', ') + ${JSON.stringify(` — provider "${r.name}" schema does not.`)});
-  }
-}`;
-  });
-
-  return `${imports.join('\n')}
-
-export const widgetSchemas = {};
-export const widgetMeta = {};
-export const widgetPropSchemas = {};
-
-${statements.join('\n')}
-
-${requirementChecks.join('\n')}
-`;
-}
-
-/**
- * Generate the elements catalog, `parche:registry/elements`:
- *  - `elementSchemas` — JSON Schema per element: `{ root, parts: { Part: … } }`
- *  - `elementMeta`    — the `ElementMeta.element` block + `ui` per element
- *  - `elementIndex`   — `[{ name, parts, interactive, from, dir, overridden }]`
- *
- * Reads each element's `.props.ts` (exports `schema`, optional `parts` with a
- * `schema` each, and `meta`). Like the widget schemas module, every import is a
- * namespace import and every serialization is guarded, so one bad file skips
- * with a warning instead of killing the catalog. Overrides of compound
- * elements are checked here — the only place their module actually loads —
- * for the named parts the original exposed.
- */
-function generateElementsModule(registry: ResolvedRegistry): string {
-  const imports: string[] = [`import { z } from ${JSON.stringify(resolveFromCore('zod'))};`];
-  const statements: string[] = [];
-  const index: string[] = [];
-  let i = 0;
-
-  for (const prim of Object.values(registry.elements)) {
-    const nameJson = JSON.stringify(prim.name);
-    const partNames = Object.keys(prim.parts);
-    const virtualId = `parche:elements/${prim.name}`;
-    const overridden = registry.overridden[virtualId];
-
-    index.push(`{ name: ${nameJson}, parts: ${JSON.stringify(partNames)}, interactive: false, from: ${JSON.stringify(prim.from)}, dir: ${JSON.stringify(prim.dir)}, overridden: ${JSON.stringify(overridden ?? null)} }`);
-
-    if (prim.props) {
-      const m = `p${i}`;
-      imports.push(`import * as ${m} from ${JSON.stringify(prim.props)};`);
-      // `parts` is optional (single-part elements have none); read it through
-      // Reflect.get so Rollup does not warn about a missing named export.
-      statements.push(
-        `if (${m}.schema) { try { elementSchemas[${nameJson}] = { root: z.toJSONSchema(${m}.schema), parts: {} }; } ` +
-        `catch (e) { console.warn(${JSON.stringify(`[parche] Skipped JSON Schema for element "${prim.name}": `)} + ((e && e.message) || e)); } }`,
-      );
-      statements.push(
-        `const ${m}Parts = Reflect.get(${m}, 'parts'); if (${m}Parts && elementSchemas[${nameJson}]) { for (const [part, def] of Object.entries(${m}Parts)) { ` +
-        `if (def && def.schema) { try { elementSchemas[${nameJson}].parts[part] = z.toJSONSchema(def.schema); } ` +
-        `catch (e) { console.warn(${JSON.stringify(`[parche] Skipped JSON Schema for element "${prim.name}" part `)} + JSON.stringify(part) + ': ' + ((e && e.message) || e)); } } } }`,
-      );
-      statements.push(
-        `if (${m}.meta && ${m}.meta.element) { elementMeta[${nameJson}] = { ...${m}.meta.element, ui: ${m}.meta.ui ?? {} }; ` +
-        `const __e = elementIndex.find((e) => e.name === ${nameJson}); if (__e) __e.interactive = !!${m}.meta.element.tag; }`,
-      );
-      i++;
-    }
-
-    // An ejected compound element must keep the original's named parts.
-    if (overridden && prim.compound && partNames.length) {
-      const o = `o${i}`;
-      imports.push(`import * as ${o} from ${JSON.stringify(prim.entry)};`);
-      statements.push(
-        `for (const __p of ${JSON.stringify(partNames)}) { if (!(__p in ${o})) console.warn(${JSON.stringify(`[parche] override "elements:${prim.name}" is missing export "`)} + __p + '" — widgets that import it will fail.'); }`,
-      );
-      i++;
-    }
-  }
-
-  return `${imports.join('\n')}
-
-export const elementSchemas = {};
-export const elementMeta = {};
-export const elementIndex = [
-${index.map((e) => `  ${e},`).join('\n')}
-];
-
-${statements.join('\n')}
-`;
-}
-
-/**
- * The site's images, for utils/assets.ts: a lazy loader for every image under
- * `<srcDir>/assets/images` (any case of the usual extensions), keyed as Vite
- * keys a glob, and the prefix that turns an `@/assets/…` path into that key.
- * Generated because a glob must be a literal and the folder is the site's.
- */
-function generateAssetsModule(registry: ResolvedRegistry): string {
-  const root = `/${registry.srcDir === '.' ? '' : registry.srcDir + '/'}`;
-  const exts = ['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp', 'avif'];
-  const pattern = `${root}assets/images/**/*.{${[...exts, ...exts.map((e) => e.toUpperCase())].join(',')}}`;
-  return `export const assetRoot = ${JSON.stringify(root)};
-export const imageLoaders = import.meta.glob(${JSON.stringify(pattern)});
-`;
-}
-
-/**
- * Generate a JS module that aggregates all app resolvers.
- * Exports resolveContent(slug, locale, opts) and getResolverPaths(locales, defaultLocale, opts).
- */
-/** `urlFor(collection)`: the function that gives an entry of that collection its address, or undefined. */
-function generateEntryUrlsModule(registry: ResolvedRegistry): string {
-  const entries = Object.entries(registry.entryUrls ?? {}).map(([name, file]) => `  ${JSON.stringify(name)}: () => import(${JSON.stringify(file)}),`);
-  return `const modules = {\n${entries.join('\n')}\n};
-const loaded = {};
-export async function urlFor(collection) {
-  const load = modules[collection];
-  if (!load) return undefined;
-  return (loaded[collection] ??= (await load()).default);
-}
-`;
-}
-
-function generateResolversModule(registry: ResolvedRegistry): string {
-  if (registry.resolvers.length === 0) {
-    return `
-export async function resolveContent() { return null; }
-export async function getResolverPaths() { return []; }
-export async function routeFor() { return null; }
-export async function resolveRoute() { return null; }
-`;
-  }
-
-  const imports: string[] = [];
-  const resolverNames: string[] = [];
-
-  registry.resolvers.forEach((r, i) => {
-    const varResolve = `resolve_${i}`;
-    const varPaths = `getPaths_${i}`;
-    imports.push(
-      `import { resolve as ${varResolve}, getPaths as ${varPaths} } from ${JSON.stringify(r.entrypoint)};`,
-    );
-    resolverNames.push(`{ resolve: ${varResolve}, getPaths: ${varPaths} }`);
-  });
-
-  return `${imports.join('\n')}
-
-const resolvers = [${resolverNames.join(', ')}];
-
-export async function resolveContent(slug, locale, opts) {
-  for (const r of resolvers) {
-    const result = await r.resolve(slug, locale, opts);
-    if (result) return result;
-  }
-  return null;
-}
-
-export async function getResolverPaths(locales, defaultLocale, opts) {
-  const all = [];
-  for (const r of resolvers) {
-    const paths = await r.getPaths(locales, defaultLocale, opts);
-    all.push(...paths);
-  }
-  return all;
-}
-
-// The addresses the resolvers serve, from the lists they give a static
-// build, read once per server (never in development, where content
-// changes): a request is one lookup, and the resolver gets the key and the
-// locale it listed, exactly as a built page does. The first to list an
-// address keeps it, as in a build.
-async function routes(locales, defaultLocale, opts) {
-  const map = new Map();
-  for (const [i, r] of resolvers.entries()) {
-    for (const p of await r.getPaths(locales, defaultLocale, opts)) {
-      const slug = p.params.slug ?? '';
-      if (!map.has(slug)) map.set(slug, { resolver: i, key: p.props?.resolverSlug ?? slug, locale: p.props?.resolverLocale });
-    }
-  }
-  return map;
-}
-let cached = null;
-export async function routeFor(slug, locales, defaultLocale, opts) {
-  const map = await (import.meta.env.PROD ? (cached ??= routes(locales, defaultLocale, opts)) : routes(locales, defaultLocale, opts));
-  return map.get(slug ?? '') ?? null;
-}
-export async function resolveRoute(route, locale, opts) {
-  return resolvers[route.resolver].resolve(route.key, locale, opts);
-}
-`;
-}
-
-/**
- * Is this the core base.css (the Tailwind root we inject @source into)?
- * Compares by realpath so a symlinked path (pnpm's isolated layout) still
- * matches — otherwise a mismatch would silently drop every parche's classes.
- * A consuming app's own base.css has a different realpath and won't match.
- */
-function isCoreBaseCss(file: string): boolean {
-  if (file === BASE_CSS_PATH) return true;
-  if (!file.endsWith('base.css')) return false;
-  try {
-    return fs.realpathSync(file) === fs.realpathSync(BASE_CSS_PATH);
-  } catch {
-    return false;
-  }
-}
-
 export function vitePluginParche(registry: ResolvedRegistry): Plugin {
   return {
     name: 'vite-plugin-parche',
@@ -651,23 +137,7 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
     },
 
     resolveId(id) {
-      if (id === WIDGET_MAP_ID) return WIDGET_MAP_VIRTUAL;
-      if (id === TEMPLATE_MAP_ID) return TEMPLATE_MAP_VIRTUAL;
-      if (id === I18N_CONFIG_ID) return I18N_CONFIG_VIRTUAL;
-      if (id === FONTS_CONFIG_ID) return FONTS_CONFIG_VIRTUAL;
-      if (id === HEAD_CONFIG_ID) return HEAD_CONFIG_VIRTUAL;
-      if (id === ASSETS_CONFIG_ID) return ASSETS_CONFIG_VIRTUAL;
-      if (id === THEMES_CONFIG_ID) return THEMES_CONFIG_VIRTUAL;
-      if (id === STYLES_CONFIG_ID) return STYLES_CONFIG_VIRTUAL;
-      if (id === TOKEN_OVERRIDES_ID) return TOKEN_OVERRIDES_VIRTUAL;
-      if (id === LAYOUT_CONFIG_ID) return LAYOUT_CONFIG_VIRTUAL;
-
-      if (id === WIDGET_SCHEMAS_ID) return WIDGET_SCHEMAS_VIRTUAL;
-      if (id === WIDGET_PROPS_ID) return WIDGET_PROPS_VIRTUAL;
-      if (id === ELEMENTS_ID) return ELEMENTS_VIRTUAL;
-      if (id === RESOLVERS_ID) return RESOLVERS_VIRTUAL;
-      if (id === DEV_TOOLS_ID) return DEV_TOOLS_VIRTUAL;
-      if (id === ENTRY_URLS_ID) return ENTRY_URLS_VIRTUAL;
+      if (id in RESOLVE) return RESOLVE[id];
       if (id.startsWith(APP_CONFIG_PREFIX)) return '\0' + id;
       if (id.startsWith(PARCHE_PREFIX)) {
         return '\0' + id;
@@ -681,77 +151,37 @@ export function vitePluginParche(registry: ResolvedRegistry): Plugin {
       // of plugin ordering. Absolute paths are the only ones that reach sibling
       // packages once installed from npm.
       if (registry.contentGlobs.length > 0 && isCoreBaseCss(id.split('?')[0])) {
-        const css = fs.readFileSync(BASE_CSS_PATH, 'utf-8');
         this.addWatchFile(BASE_CSS_PATH);
-        return `${css}\n${generateSourceDirectives(registry)}\n`;
+        return baseCssWithSources(registry);
       }
 
       // Inline site config (parche({ site })) — serve the validated object directly
       // instead of re-exporting a user file. Must come before the generic
       // module resolution, which has no file path for parche:config here.
       if (id === '\0parche:config' && registry.inlineSiteConfig) {
-        return `export default ${JSON.stringify(registry.inlineSiteConfig)};\n`;
+        return generateInlineSiteConfigModule(registry);
       }
 
-      if (id === WIDGET_MAP_VIRTUAL) return generateWidgetMapModule(registry);
-      if (id === TEMPLATE_MAP_VIRTUAL) return generateTemplateMapModule(registry);
-      if (id === I18N_CONFIG_VIRTUAL) return generateI18nConfigModule(registry);
-      if (id === FONTS_CONFIG_VIRTUAL) return `export const fonts = ${JSON.stringify(registry.fonts)};\n`;
-      if (id === ASSETS_CONFIG_VIRTUAL) return generateAssetsModule(registry);
-      if (id === HEAD_CONFIG_VIRTUAL) {
-        return (
-          `export const headLinks = ${JSON.stringify(registry.headLinks ?? [])};\n` +
-          `export const siteSearch = ${JSON.stringify(registry.siteSearch ?? null)};\n` +
-          `export const transitions = ${JSON.stringify(registry.transitions ?? true)};\n`
-        );
-      }
-      if (id === THEMES_CONFIG_VIRTUAL) return generateThemesConfigModule(registry);
-      if (id === STYLES_CONFIG_VIRTUAL) return generateStylesModule(registry);
+      if (id in GENERATE) return GENERATE[id](registry);
+
       if (id === TOKEN_OVERRIDES_VIRTUAL) {
         if (fs.existsSync(registry.tokenOverridesPath)) this.addWatchFile(registry.tokenOverridesPath);
         return generateTokenOverrides(registry);
       }
-      if (id === LAYOUT_CONFIG_VIRTUAL) return generateLayoutConfigModule(registry);
-      if (id === WIDGET_PROPS_VIRTUAL) return generateWidgetPropsModule(registry);
-      if (id === RESOLVERS_VIRTUAL) return generateResolversModule(registry);
-      // Where each routed collection's entries are served, loaded on demand.
-      if (id === ENTRY_URLS_VIRTUAL) return generateEntryUrlsModule(registry);
-      // Each parche's module for development tools, loaded on demand, by name.
-      if (id === DEV_TOOLS_VIRTUAL) {
-        const entries = Object.entries(registry.devTools).map(([name, file]) => `  ${JSON.stringify(name)}: () => import(${JSON.stringify(file)}),`);
-        return `export default {\n${entries.join('\n')}\n};\n`;
-      }
       if (id === WIDGET_SCHEMAS_VIRTUAL) {
         // Watch .props.ts and .defaults.json files for HMR
-        for (const [virtualId, filePath] of Object.entries(registry.modules)) {
-          if (!virtualId.startsWith('parche:widgets/') || !filePath.endsWith('.astro')) continue;
-          for (const ext of ['.props.ts', '.defaults.json']) {
-            const sibling = filePath.replace(/\.astro$/, ext);
-            if (fs.existsSync(sibling)) {
-              this.addWatchFile(sibling);
-            }
-          }
-        }
+        for (const file of widgetCatalogWatchFiles(registry)) this.addWatchFile(file);
         return generateWidgetSchemasModule(registry);
       }
       if (id === ELEMENTS_VIRTUAL) {
         // Watch each element's props, client entry and README for HMR
-        for (const prim of Object.values(registry.elements)) {
-          if (prim.props) this.addWatchFile(prim.props);
-          try {
-            for (const f of fs.readdirSync(prim.dir)) {
-              if (f.endsWith('.element.ts') || f === 'README.md') this.addWatchFile(`${prim.dir}/${f}`);
-            }
-          } catch { /* dir may not exist for a bad override; already reported */ }
-        }
+        for (const file of elementCatalogWatchFiles(registry)) this.addWatchFile(file);
         return generateElementsModule(registry);
       }
 
       // App config virtual modules: parche:app/{name}
       if (id.startsWith(APP_CONFIG_VIRTUAL_PREFIX)) {
-        const appName = id.slice(APP_CONFIG_VIRTUAL_PREFIX.length);
-        const app = registry.apps.find((a) => a.name === appName);
-        return `export default ${JSON.stringify(app?.config ?? {})};\n`;
+        return generateAppConfigModule(registry, id.slice(APP_CONFIG_VIRTUAL_PREFIX.length));
       }
 
       if (!id.startsWith(VIRTUAL_PREFIX)) return;

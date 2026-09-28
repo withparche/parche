@@ -1,188 +1,18 @@
 import fs from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import type {
-  ParcheUserConfig,
-  ResolvedRegistry,
-  ParcheManifest,
-  ElementEntry,
-  ResolvedElement,
-} from './types.js';
-import type { SiteConfig } from '../types/config.js';
+import type { ParcheUserConfig, ResolvedRegistry, ParcheManifest, ResolvedElement, HeadLink } from '../types.js';
+import type { SiteConfig } from '../../types/config.js';
+import { BASE_NAMED_EXPORTS, CORE_MODULES, CORE_TONES, DEFAULT_THEME, corePath, declaresNoWrapper, dedupeThemes } from './core.js';
+import { overrideKeyToVirtualId, resolveElement, resolveOverridePath } from './elements.js';
+import { checkRequires } from './requires.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const coreDir = path.resolve(__dirname, '..');
-
-function corePath(...segments: string[]): string {
-  return path.resolve(coreDir, ...segments);
-}
-
-/** Keep the first entry per theme `value` (parche order = precedence). */
-function dedupeThemes(
-  themes: Array<{ label: string; value: string }>,
-): Array<{ label: string; value: string }> {
-  const seen = new Set<string>();
-  return themes.filter((t) => (seen.has(t.value) ? false : (seen.add(t.value), true)));
-}
-
-/** The always-present base look (no data-theme). Themes are added by parches. */
-const DEFAULT_THEME = { label: 'Default', value: '' };
-
-/** Parse "1.2.3" (ignoring build/prerelease suffix) into a numeric tuple. */
-function parseVersion(v: string): [number, number, number] | null {
-  const m = /^(\d+)\.(\d+)\.(\d+)/.exec(v.trim().replace(/^v/, ''));
-  return m ? [Number(m[1]), Number(m[2]), Number(m[3])] : null;
-}
-
-function cmpVersion(a: [number, number, number], b: [number, number, number]): number {
-  return a[0] - b[0] || a[1] - b[1] || a[2] - b[2];
-}
+export { satisfiesVersion } from './versions.js';
 
 /**
- * Minimal semver range check for peer requirements: `*`/``/`latest` = any;
- * caret `^x.y.z` (npm semantics, incl. 0.x pinning); tilde `~x.y.z`;
- * `>=x.y.z`; anything else is treated as an exact match. Exported for testing.
- */
-export function satisfiesVersion(actual: string, range: string): boolean {
-  const r = range.trim();
-  if (!r || r === '*' || r === 'latest') return true;
-  const a = parseVersion(actual);
-  if (!a) return false;
-  if (r.startsWith('>=')) {
-    const b = parseVersion(r.slice(2));
-    return !!b && cmpVersion(a, b) >= 0;
-  }
-  if (r.startsWith('^')) {
-    const b = parseVersion(r.slice(1));
-    if (!b || cmpVersion(a, b) < 0) return false;
-    if (b[0] > 0) return a[0] === b[0];
-    if (b[1] > 0) return a[0] === 0 && a[1] === b[1];
-    return a[0] === 0 && a[1] === 0 && a[2] === b[2];
-  }
-  if (r.startsWith('~')) {
-    const b = parseVersion(r.slice(1));
-    return !!b && a[0] === b[0] && a[1] === b[1] && cmpVersion(a, b) >= 0;
-  }
-  const b = parseVersion(r);
-  return !!b && cmpVersion(a, b) === 0;
-}
-
-/** Built-in core component registry */
-const CORE_MODULES: Record<string, string> = {
-  // Theme / i18n engine controls (consumed by the ui parche's Header)
-  'parche:components/ThemeToggle': corePath('components/common/ThemeToggle.astro'),
-  'parche:components/ThemeSelector': corePath('components/common/ThemeSelector.astro'),
-  'parche:components/OptimizedImage': corePath('components/common/OptimizedImage.astro'),
-  'parche:components/LocaleSwitcher': corePath('components/common/LocaleSwitcher.astro'),
-  'parche:components/ThemePanel': corePath('components/common/ThemePanel.astro'),
-
-  // Layouts
-  'parche:layouts/BaseLayout': corePath('layouts/BaseLayout.astro'),
-
-  // DynamicRenderer & LayoutRenderer
-  'parche:NodeRenderer': corePath('components/NodeRenderer.astro'),
-  'parche:LayoutRenderer': corePath('components/LayoutRenderer.astro'),
-  // The frame every page shares (core's route and the apps' routes).
-  'parche:Page': corePath('components/Page.astro'),
-
-  // Utils (named exports)
-  'parche:utils/metadata': corePath('utils/metadata.ts'),
-  'parche:utils/i18n': corePath('utils/i18n.ts'),
-  'parche:utils/layout': corePath('utils/layout.ts'),
-  'parche:utils/assets': corePath('utils/assets.ts'),
-  'parche:utils/patterns': corePath('utils/patterns.ts'),
-  'parche:utils/site': corePath('utils/site.ts'),
-  'parche:utils/entries': corePath('utils/entries.ts'),
-  // Note: Header and Footer are widgets of the ui parche (hidden from the
-  // palette by their meta); core ships no chrome and no elements.
-  // Historically:  // now provided by the ui parche — core no longer ships chrome or elements.
-};
-
-/** The tones every site has; a parche adds more with `tones` and a rule. */
-const CORE_TONES: ReadonlyArray<{ name: string; label: string }> = [
-  { name: 'default', label: 'Default' },
-  { name: 'muted', label: 'Muted' },
-  { name: 'dark', label: 'Dark' },
-  { name: 'primary', label: 'Primary' },
-];
-
-/**
- * Whether a widget's `.props.ts` declares `wrapper: false`. Read as text, not
- * imported: the registry runs in the config phase and must not evaluate widget
- * code, and the render path needs this list without loading any schema.
- */
-function declaresNoWrapper(astroPath: string): boolean {
-  const propsPath = astroPath.replace(/\.astro$/, '.props.ts');
-  try {
-    return /wrapper\s*:\s*false/.test(fs.readFileSync(propsPath, 'utf8'));
-  } catch {
-    return false;
-  }
-}
-
-/** Core modules that use named exports instead of default export. Frozen default —
- *  each createRegistry call gets its own Set seeded from this (never mutate this). */
-const BASE_NAMED_EXPORTS: readonly string[] = [
-  'parche:utils/metadata',
-  'parche:utils/i18n',
-  'parche:utils/layout',
-  'parche:utils/assets',
-  'parche:utils/patterns',
-  'parche:utils/site',
-  'parche:utils/entries',
-];
-
-/**
- * Convert an override key ('widgets:hero:Hero') to a virtual module ID ('parche:widgets/hero/Hero')
- */
-function overrideKeyToVirtualId(key: string): string {
-  return 'parche:' + key.replace(/:/g, '/');
-}
-
-/** 'Tabs' → 'tabs', 'CallToAction' → 'call-to-action' (the .props.ts naming). */
-function kebab(name: string): string {
-  return name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
-}
-
-/**
- * Normalise a manifest element (bare path or folder entry) into what the
- * registry tracks. A bare path is a single-part element whose folder is the
- * file's directory; `props` defaults to `<dir>/<kebab>.props.ts` when present.
- */
-function resolveElement(from: string, name: string, value: string | ElementEntry): ResolvedElement {
-  const entry = typeof value === 'string' ? { entry: value } : value;
-  const dir = path.dirname(entry.entry);
-  const props = entry.props ?? path.join(dir, `${kebab(name)}.props.ts`);
-  return {
-    name,
-    from,
-    entry: entry.entry,
-    dir,
-    parts: entry.parts ?? {},
-    props: fs.existsSync(props) ? props : undefined,
-    style: entry.style,
-    compound: !entry.entry.endsWith('.astro'),
-  };
-}
-
-/**
- * Resolve an override target: a file is used as-is; a directory resolves to
- * its `index.ts`, then `index.astro`. Returns null when nothing exists, so the
- * caller can report it with attribution instead of a later Vite resolve error.
- */
-function resolveOverridePath(rootDir: string, overridePath: string): string | null {
-  const abs = path.resolve(rootDir, overridePath);
-  if (!fs.existsSync(abs)) return null;
-  if (!fs.statSync(abs).isDirectory()) return abs;
-  for (const index of ['index.ts', 'index.astro']) {
-    const candidate = path.join(abs, index);
-    if (fs.existsSync(candidate)) return candidate;
-  }
-  return null;
-}
-
-/**
- * Build the complete resolved registry from user config.
+ * Build the complete resolved registry from user config: what every parche
+ * contributes, merged in order (later wins where two give the same thing),
+ * the site's overrides on top, the requirements checked, and the settings
+ * the generated modules read.
  */
 export function createRegistry(
   userConfig: ParcheUserConfig,
@@ -232,9 +62,9 @@ export function createRegistry(
   const apps: ParcheManifest[] = [];
   const contributedStyles: string[] = [];
   const contributedFonts: any[] = [];
-  const headLinks: import('./types.js').HeadLink[] = [];
+  const headLinks: HeadLink[] = [];
   let siteSearch: string | undefined;
-  const buildDone: import('./types.js').ResolvedRegistry['buildDone'] = [];
+  const buildDone: ResolvedRegistry['buildDone'] = [];
   const contributedThemes: Array<{ label: string; value: string }> = [];
   const contentGlobs: string[] = [];
   let wrapper: string | null = null;
@@ -259,7 +89,7 @@ export function createRegistry(
         const prim = resolveElement(parche.name, name, value);
         const virtualId = `parche:elements/${name}`;
         setModule(parche.name, 'element', virtualId, prim.entry);
-              // A compound element's entry is an index.ts with named parts.
+        // A compound element's entry is an index.ts with named parts.
         if (prim.compound) namedExportModules.add(virtualId);
         else namedExportModules.delete(virtualId);
         for (const [part, partPath] of Object.entries(prim.parts)) {
@@ -331,67 +161,9 @@ export function createRegistry(
     }
   }
 
-  // Validate parche requirements (V2: presence of every capability, plus
-  // peer-parche version ranges). Structural widget-prop checks run where the
-  // schemas are available (widgetSchemas generation), not here.
   // Themes the site lists itself (themes.available) count as provided too.
   const providedThemes = new Set<string>(['', ...contributedThemes.map((t) => t.value), ...(userConfig.themes?.available ?? []).map((t) => t.value)]);
-  const parcheVersions = new Map<string, string | undefined>(parches.map((p) => [p.name, p.version]));
-
-  const missing: string[] = [];
-  const widgetPropRequirements: Array<{ from: string; name: string; props: string[] }> = [];
-  for (const parche of parches) {
-    const req = parche.requires;
-    if (!req) continue;
-    for (const p of req.elements ?? []) {
-      const name = typeof p === 'string' ? p : p.name;
-      if (!providedElements.has(name)) {
-        missing.push(`"${parche.name}" requires element "${name}" (parche:elements/${name})`);
-      } else if (typeof p === 'object' && p.parts?.length) {
-        // Structural check: the provider must expose each named part. An
-        // override counts as providing the element but its parts are only
-        // known at load time (the catalog checks those), so skip it here.
-        const provided = elements[name];
-        if (provided) {
-          const absent = p.parts.filter((part) => !(part in provided.parts));
-          if (absent.length) {
-            missing.push(`"${parche.name}" requires element "${name}" to expose part(s): ${absent.join(', ')} — provider "${provided.from}" does not`);
-          }
-        }
-      }
-    }
-    for (const w of req.widgets ?? []) {
-      const name = typeof w === 'string' ? w : w.name;
-      if (!providedWidgets.has(name)) {
-        missing.push(`"${parche.name}" requires widget "${name}" (parche:widgets/${name})`);
-      } else if (typeof w === 'object' && w.props?.length) {
-        widgetPropRequirements.push({ from: parche.name, name, props: w.props });
-      }
-    }
-    for (const name of req.templates ?? []) {
-      if (!providedTemplates.has(name)) missing.push(`"${parche.name}" requires template "${name}" (parche:templates/${name})`);
-    }
-    for (const value of req.themes ?? []) {
-      if (!providedThemes.has(value)) missing.push(`"${parche.name}" requires theme "${value}"`);
-    }
-    for (const dep of req.parches ?? []) {
-      if (!parcheVersions.has(dep.name)) {
-        missing.push(`"${parche.name}" requires parche "${dep.name}"${dep.version ? ` (${dep.version})` : ''} — not imported`);
-      } else if (dep.version) {
-        const actual = parcheVersions.get(dep.name);
-        if (!actual) {
-          missing.push(`"${parche.name}" requires "${dep.name}@${dep.version}" but "${dep.name}" declares no version`);
-        } else if (!satisfiesVersion(actual, dep.version)) {
-          missing.push(`"${parche.name}" requires "${dep.name}@${dep.version}" but found ${actual}`);
-        }
-      }
-    }
-  }
-  if (missing.length) {
-    throw new Error(
-      '[parche] Unsatisfied parche requirements — add a parche that provides them:\n  - ' + missing.join('\n  - '),
-    );
-  }
+  const widgetPropRequirements = checkRequires({ parches, providedElements, elements, providedWidgets, providedTemplates, providedThemes });
 
   // Apply user overrides (these take priority). A directory resolves to its
   // index.ts / index.astro; a compound element stays a named-export module,
