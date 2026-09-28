@@ -37,6 +37,18 @@ export async function getStaticPaths() {
   const isDev = import.meta.env.DEV;
   const resolverPaths = await span('paths.resolvers', () => getResolverPaths(locales, defaultLocale, { showDrafts: isDev }));
 
+  // One address, one page: a page and an app's entry (a post at the root, a
+  // product) claiming the same address is an error, never a silent winner.
+  const pageSlugs = new Set(pagePaths.map((p) => p.params.slug ?? ''));
+  const clashes = resolverPaths.filter((p: any) => pageSlugs.has(p.params.slug ?? ''));
+  if (clashes.length) {
+    throw new Error(
+      `[parche] ${clashes.length} address(es) claimed by both a page and an app's entry: ` +
+        clashes.slice(0, 10).map((p: any) => `/${p.params.slug ?? ''} (${p.props?.resolverSlug ?? 'entry'})`).join(', ') +
+        '. Rename one of them (a page\'s urlSlug, or the entry\'s slug).',
+    );
+  }
+
   return [...pagePaths, ...resolverPaths];
 }
 
