@@ -1,46 +1,47 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { findRelatedPosts } from '../src/utils/related-posts.ts';
+import { buildPostIndex } from '../src/utils/post-index.ts';
+import { relatedPosts } from '../src/utils/related-posts.ts';
 
-const post = (id: string, data: Record<string, unknown>): any => ({
+const post = (id: string, data: Record<string, unknown> = {}): any => ({
   id,
-  data: { tags: [], authors: [], publishDate: new Date('2026-01-01'), ...data },
+  data: { title: id, tags: [], authors: [], publishDate: new Date('2026-01-01'), draft: false, ...data },
 });
 
-// Current post, far in the future so candidates below get no recency bonus.
-const current = post('cur', {
-  category: 'A',
-  tags: ['x', 'y'],
-  authors: ['jane'],
-  series: { name: 'S', order: 1 },
-  publishDate: new Date('2026-06-01'),
+const posts = [
+  post('en/a', { category: 'A', related: ['c', 'b', 'a', 'nope'], publishDate: new Date('2026-01-04') }),
+  post('en/b', { category: 'A', publishDate: new Date('2026-01-03') }),
+  post('en/c', { category: 'B', publishDate: new Date('2026-01-02') }),
+  post('en/d', { category: 'A', publishDate: new Date('2026-01-05') }),
+  post('en/e', { publishDate: new Date('2026-01-06') }),
+  post('en/hidden', { category: 'A', draft: true, publishDate: new Date('2026-01-07') }),
+  post('es/b', { category: 'A', publishDate: new Date('2026-01-03') }),
+  post('es/d', { category: 'A', related: ['b'], publishDate: new Date('2026-01-05') }),
+];
+const index = buildPostIndex(posts, 'en');
+const byId = (id: string) => posts.find((p) => p.id === id);
+
+test('declared: the keys in their order, in the page\'s locale; itself and unknown keys left out', () => {
+  assert.deepEqual(relatedPosts(byId('en/a'), index, 'en').map((p) => p.id), ['en/c', 'en/b']);
+  // The Spanish post declares the same key and gets the Spanish translation.
+  assert.deepEqual(relatedPosts(byId('es/d'), index, 'es').map((p) => p.id), ['es/b']);
 });
 
-test('scores by category/tags/series/author, sorts desc, excludes self + zero-score', () => {
-  const posts = [
-    current, // self → excluded
-    post('cat', { category: 'A', publishDate: new Date('2026-01-02') }), // +3
-    post('tagAuth', { tags: ['x', 'y'], authors: ['jane'], publishDate: new Date('2026-01-01') }), // +2 +1 = 3
-    post('series', { series: { name: 'S', order: 2 }, publishDate: new Date('2026-01-01') }), // +2
-    post('none', { tags: ['z'], publishDate: new Date('2026-01-01') }), // 0 → excluded
-  ];
-  const related = findRelatedPosts(current, posts);
-  // cat(3) and tagAuth(3) tie → newer publishDate wins (cat is 01-02 > 01-01); series(2) last.
-  assert.deepEqual(related.map((p) => p.id), ['cat', 'tagAuth', 'series']);
+test('declared: no topping up beyond what is declared, and the count caps it', () => {
+  assert.deepEqual(relatedPosts(byId('en/a'), index, 'en', 1).map((p) => p.id), ['en/c']);
+  assert.deepEqual(relatedPosts(byId('en/a'), index, 'en', 5).map((p) => p.id), ['en/c', 'en/b']);
 });
 
-test('respects the count limit', () => {
-  const posts = [
-    post('a', { category: 'A', publishDate: new Date('2026-01-03') }),
-    post('b', { category: 'A', publishDate: new Date('2026-01-02') }),
-    post('c', { category: 'A', publishDate: new Date('2026-01-01') }),
-  ];
-  assert.deepEqual(findRelatedPosts(current, posts, 2).map((p) => p.id), ['a', 'b']);
+test('nothing declared: the latest of the same category first, then the latest of the blog; itself and drafts left out', () => {
+  assert.deepEqual(relatedPosts(byId('en/d'), index, 'en').map((p) => p.id), ['en/a', 'en/b', 'en/e']);
+  assert.deepEqual(relatedPosts(byId('en/d'), index, 'en', 1).map((p) => p.id), ['en/a']);
+  // With drafts shown, the draft counts.
+  assert.deepEqual(relatedPosts(byId('en/d'), buildPostIndex(posts, 'en', true), 'en').map((p) => p.id), ['en/hidden', 'en/a', 'en/b']);
 });
 
-test('gives a recency bonus within 30 days', () => {
-  const near = post('near', { tags: ['z'], publishDate: new Date('2026-05-20') }); // no tag match, but ~12 days → +1
-  const far = post('far', { tags: ['z'], publishDate: new Date('2026-01-01') }); // >30 days → 0 (excluded)
-  const related = findRelatedPosts(current, [near, far]);
-  assert.deepEqual(related.map((p) => p.id), ['near']);
+test('nothing declared and no category: the latest of the blog; a count of zero: none', () => {
+  assert.deepEqual(relatedPosts(byId('en/e'), index, 'en').map((p) => p.id), ['en/d', 'en/a', 'en/b']);
+  assert.deepEqual(relatedPosts(byId('en/a'), index, 'en', 0), []);
+  // The only post of its locale has nothing to offer.
+  assert.deepEqual(relatedPosts(post('fr/solo', { category: 'A' }), buildPostIndex([...posts, post('fr/solo', { category: 'A' })], 'en'), 'fr'), []);
 });

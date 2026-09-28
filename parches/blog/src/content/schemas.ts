@@ -23,6 +23,10 @@ export const postSchema = z.object({
   // Taxonomy
   category: z.string().optional(),
   tags: z.array(z.string()).default([]),
+  /** The posts shown as related, by key (the file name without its locale
+   *  folder), in this order, each in the page's locale. Without it, the
+   *  latest posts of the same category. */
+  related: z.array(z.string()).default([]),
 
   // Authors
   authors: z.array(z.string()).default([]),

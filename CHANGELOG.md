@@ -193,6 +193,15 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
 
 ### Changed
 
+- **Related posts are declared.** A post names them in its frontmatter,
+  `related: [key, key]`, by the file name that pairs a post with its
+  translations, and they show in that order, each in the page's language.
+  A post that names none shows the latest posts of its category, then the
+  latest of the blog. The
+  scoring of every post by shared category, tags, series and author is
+  gone: it read the whole blog for every post, and nobody could tell why
+  a post was there.
+
 - **The posts are read and indexed once per build or server.** The blog
   looked a post up by reading, filtering and sorting the whole collection,
   and did it four or five times per post (its translations, the related

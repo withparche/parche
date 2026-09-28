@@ -1,68 +1,29 @@
-import type { PostEntry } from '../content/schemas.js';
-
-interface ScoredPost {
-  id: string;
-  data: PostEntry;
-  score: number;
-}
-
 /**
- * Find related posts by scoring similarity.
- *
- * Scoring:
- * - Same category: +3
- * - Each shared tag: +1
- * - Same series: +2
- * - Same author: +1
- * - Recency bonus: +1 (published within 30 days)
+ * The posts shown as related to one post: the ones it declares in its
+ * frontmatter (`related`, by key: the file name that pairs a post with its
+ * translations), in that order, each taken in the page's locale; and when
+ * it declares none, the latest posts of its category, then the latest of
+ * the blog, so a small blog without categories still offers something to
+ * read next. Declared is the editorial choice, never topped up; the
+ * fallback is one fixed rule, so what a reader sees follows from the
+ * content and nothing is scored behind their back.
  */
-export function findRelatedPosts(
-  current: { id: string; data: PostEntry },
-  allPosts: { id: string; data: PostEntry }[],
-  count = 3,
-): { id: string; data: PostEntry }[] {
-  const scored: ScoredPost[] = [];
+import type { Post, PostIndex } from './post-index.js';
 
-  for (const post of allPosts) {
-    if (post.id === current.id) continue;
-
-    let score = 0;
-
-    // Category match
-    if (current.data.category && post.data.category === current.data.category) {
-      score += 3;
+export function relatedPosts(current: Post, index: PostIndex, locale: string, count = 3): Post[] {
+  if (count <= 0) return [];
+  const declared = (current.data as { related?: string[] }).related ?? [];
+  if (declared.length) {
+    const out: Post[] = [];
+    for (const key of declared) {
+      const post = index.translations(key).find((t) => t.locale === locale)?.post;
+      if (post && post.id !== current.id && !out.includes(post)) out.push(post);
+      if (out.length === count) break;
     }
-
-    // Shared tags
-    const currentTags = new Set(current.data.tags);
-    for (const tag of post.data.tags) {
-      if (currentTags.has(tag)) score += 1;
-    }
-
-    // Same series
-    if (current.data.series && post.data.series?.name === current.data.series.name) {
-      score += 2;
-    }
-
-    // Shared author
-    const currentAuthors = new Set(current.data.authors);
-    for (const author of post.data.authors) {
-      if (currentAuthors.has(author)) score += 1;
-    }
-
-    // Recency bonus (within 30 days)
-    const daysDiff = Math.abs(
-      (current.data.publishDate.getTime() - post.data.publishDate.getTime()) / (1000 * 60 * 60 * 24),
-    );
-    if (daysDiff <= 30) score += 1;
-
-    if (score > 0) {
-      scored.push({ id: post.id, data: post.data, score });
-    }
+    return out;
   }
-
-  return scored
-    .sort((a, b) => b.score - a.score || b.data.publishDate.getTime() - a.data.publishDate.getTime())
-    .slice(0, count)
-    .map(({ id, data }) => ({ id, data }));
+  const others = index.published(locale).filter((p) => p.id !== current.id);
+  const category = current.data.category;
+  const same = category ? others.filter((p) => p.data.category === category) : [];
+  return [...same, ...others.filter((p) => !same.includes(p))].slice(0, count);
 }

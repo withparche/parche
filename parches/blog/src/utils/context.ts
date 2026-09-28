@@ -8,7 +8,7 @@ import { getCollection } from 'astro:content';
 import { resolveAssets } from 'parche:utils/assets';
 import { calculateReadingTime } from './reading-time.js';
 import { postIndex } from './posts.js';
-import { findRelatedPosts } from './related-posts.js';
+import { relatedPosts } from './related-posts.js';
 import { extractTOC } from './toc.js';
 import { formatDate } from './dates.js';
 import { createTaxonomyResolver } from './taxonomy.js';
@@ -209,7 +209,7 @@ export async function articleContext(entry: Post, html: string, url: string, o: 
     };
   }
 
-  const related = cfg.relatedPostsCount > 0 ? await toCards(findRelatedPosts(entry, all, cfg.relatedPostsCount), o) : [];
+  const related = cfg.relatedPostsCount > 0 ? await toCards(relatedPosts(entry, await postIndex(showDrafts), locale, cfg.relatedPostsCount), o) : [];
 
   return {
     ...(await baseContext('post', o)),

@@ -9,7 +9,7 @@ as the redesign lands; the parts not built yet are marked.
 The blog separates **structure** from **presentation**:
 
 - **Structure is configuration**: which pages exist, how posts link to
-  authors, how many related posts are looked up. It lives in
+  authors, how many related posts show. It lives in
   `createBlog({ … })` and changes routes and data. Turned off, a page is not
   generated at all; nothing is hidden with CSS.
 - **Presentation is a view**: a JSON tree of widgets per blog page type, the
@@ -48,7 +48,7 @@ the keys given. Components read the resolved values, never `preset`.
 | `authors` | from the preset | `'one'`: no author pages; a byline links to `aboutPath`. `'many'`: a page per author. |
 | `aboutPath` | `'/about'` | Where a single writer's name links. |
 | `series` | from the preset | Series pages and part-of-a-series boxes. |
-| `relatedPostsCount` | from the preset | Related posts after an article; `0` turns them off. |
+| `relatedPostsCount` | from the preset | How many related posts show after an article; `0` turns them off. Which ones: the post's own `related` list, else the latest of its category and then of the blog (see *Content*). |
 | `toc` | from the preset | A table of contents on posts with two sections or more (see *The table of contents*). On for company and magazine. |
 | `postsPerPage` | `12` | Posts per listing page. |
 | `tagIndexThreshold` | `3` | Tag pages (and archive years) with fewer posts are `noindex, follow`. |
@@ -145,8 +145,10 @@ not repeat the category on every card.
 The post template renders the body once, reads its outline (h2 and h3, by
 the ids the Markdown renderer gave them) and builds the article context: the
 post, its authors with bio and post count, its place in its series, the
-related posts. Then it renders the `post` view, the same on a prefixed
-permalink and on a root-level one.
+related posts (the ones the post declares in `related`, in that order, or
+the latest of its category and then of the blog). Then it renders the `post`
+view, the same on a
+prefixed permalink and on a root-level one.
 
 ```json
 { "widget": "blog/ArticleBody", "slots": {
@@ -327,6 +329,19 @@ is built; a `timeZone` in `dateFormat` wins.
 
 - Posts: `featured: true` puts a post in `blog/Featured`; `issue: 142` numbers
   a newsletter issue ("#142 · Title").
+- Translations: a post's key is its file name without the locale folder, and
+  the same key in another locale folder is its translation — `en/hello.md`
+  and `es/hello.md`. A translation keeps the file name and takes its own
+  address with `urlSlug: hola`; without one it is served under the key. The
+  translations of a post are what its language switcher and `hreflang`
+  links point at.
+- Related: `related: [key, key]` names the posts shown as related, by key,
+  in that order; each is taken in the page's locale, so one list serves
+  every translation, and a key with no post in that locale is skipped. A
+  post that declares none shows the latest posts of its category, then the
+  latest of the blog, so a small blog without categories still has a "Read
+  next". `relatedPostsCount` says how many at most; a declared list is
+  never topped up.
 - Series: a post joins with `series: { name, order }`. An optional
   `src/content/series/<key>.json` describes the series once (`title`,
   `description`, `status`, `upcoming` parts with their date).

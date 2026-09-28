@@ -70,9 +70,8 @@ on the components being accessible and themeable.
   (a post's cost no longer grows with the blog: 3.5 ms a post at 4,000 files,
   5.8 at 10,000, against 12, 30 and 76 ms before; the typical site's static
   build 89 → 36 s; the collections' pages and the pages' translations the
-  same way, a 5,000-product site 20 → 15 s). Next, in order:
-  - related posts declared in the post (`related`), the latest of the same
-    category when none are;
+  same way, a 5,000-product site 20 → 15 s; related posts declared in the
+  post, the latest of its category when none are). Next, in order:
   - the server's cold start: the whole Tabler icon set (2 MB) travels with
     the templates — a `usedIcons()` helper for `icon({ include })`, templates
     loaded on demand, and `collections` reading one widget's props without
@@ -98,8 +97,7 @@ on the components being accessible and themeable.
   without it); `$ref` has no fallback to the default locale, so a translated
   site copies every menu; two parches setting the same font variable with
   different families silently keep the last one (a warning, the site's
-  `fonts` win); how a post is translated (`urlSlug`, the file name pairing
-  it) is undocumented; the breadcrumbs' root and intermediate crumbs come
+  `fonts` win); the breadcrumbs' root and intermediate crumbs come
   from the URL, not from pages (approved: the site's name at the locale's
   home, then only ancestors that exist as pages).
 
