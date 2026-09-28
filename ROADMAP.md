@@ -65,8 +65,43 @@ on the components being accessible and themeable.
   Toggle Group, Stepper, Table, Progress, Marquee, Rating, Date picker, Tree,
   Image Compare.
 - The new tokens (state, `ring`, `overlay`) in the builder's token editor.
-- Measure the per-request SSR cost now that the catch-all is exercised under
-  `output: 'server'` (BACKLOG T1, info).
+- Performance, measured with `bench/` (a site of any size from the demo, old
+  against new on the same content). Done: the posts read and indexed once
+  (a post's cost no longer grows with the blog: 3.5 ms a post at 4,000 files,
+  5.8 at 10,000, against 12, 30 and 76 ms before; the typical site's static
+  build 89 → 36 s). Next, in order:
+  - the collections resolver and the pages' alternates through the same
+    kind of index; related posts declared in the post (`related`), the latest
+    of the same category when none are;
+  - the server's cold start: the whole Tabler icon set (2 MB) travels with
+    the templates — a `usedIcons()` helper for `icon({ include })`, templates
+    loaded on demand, and `collections` reading one widget's props without
+    the whole catalog;
+  - one lookup for static and server builds, built from the resolvers'
+    `getPaths()`, so a server build also fails on a page and an entry at the
+    same address;
+  - a check warning for a `$collection` without `limit` over a large
+    collection (every page carrying it renders the whole collection);
+  - elements applying their defaults without parsing in production; a
+    `transitions` option; a frozen-content guard in the test builds.
+- Limits found and to document on a sizing page: a server build ships all
+  its content in the bundle (Astro's data layer) — 4,000 files are 18 MB and
+  0.5 s to start, 10,000 are 83 MB and 42 s, 20,000 are 133 MB and 120 s —
+  so a large site is static, or reads a live source; the blog's index
+  (`bySlug`, `published`, `translations`, `terms`) is the seam a live-backed
+  blog would implement (design note first). A static build of 15,000 pages
+  takes 1 m 44 s and 2 GB.
+- Found in the audit, not done: a server build checks `pages` but not a
+  site's own blog views (`src/content/views`); Astro requires the site's own
+  `src/middleware.ts` under manual i18n routing (try dropping `routing:
+  'manual'`); the server build's `getStaticPaths` warning (a server entry
+  without it); `$ref` has no fallback to the default locale, so a translated
+  site copies every menu; two parches setting the same font variable with
+  different families silently keep the last one (a warning, the site's
+  `fonts` win); how a post is translated (`urlSlug`, the file name pairing
+  it) is undocumented; the breadcrumbs' root and intermediate crumbs come
+  from the URL, not from pages (approved: the site's name at the locale's
+  home, then only ancestors that exist as pages).
 
 ## v0.9 — splitting things out
 

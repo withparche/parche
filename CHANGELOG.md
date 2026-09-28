@@ -13,6 +13,12 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
 
 ### Added
 
+- **`bench/`, and `PARCHE_PROFILE=1`.** A site of any size generated from
+  the demo (pages, posts, products, locales, sections per page) and the
+  scripts that measure a build, a server's latency and what it loads on a
+  cold start, so a change to core is judged by numbers. With
+  `PARCHE_PROFILE=1` a build prints where its time went, by phase.
+
 - **The visual builder, `@parche/builder`, and `parche astro builder`.** An
   editor for a site's content over the site's own render, in development
   only: the CLI adds it through Astro's programmatic `dev()`, it refuses any
@@ -187,6 +193,20 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
 
 ### Changed
 
+- **The posts are read and indexed once per build or server.** The blog
+  looked a post up by reading, filtering and sorting the whole collection,
+  and did it four or five times per post (its translations, the related
+  posts, the categories' counts, the latest posts on a page), so a post
+  cost more the more posts the site had, and a build cost the square. Now
+  `parche:utils/entries` reads a collection once and keeps what is derived
+  from it, and the blog's index answers by lookup: a post by its address,
+  its translations by its key, a locale's posts sorted once, the terms
+  counted once; `BlogLatestPosts` and `BlogHighlightedPosts` share the
+  sorted list. Measured on a 2,000-post site in two languages: the static
+  build 89 → 36 s, a post on a server 12 → 3.5 ms, a missing address 3.6 →
+  1.6 ms; at 10,000 post files a post costs 5.8 ms where it cost 30. In
+  development nothing is kept, so an edit shows at once.
+
 These break content written for 0.7. `node scripts/migrate-nodes.mjs [paths]`
 rewrites pages, layouts and views in place (idempotent), and
 `node scripts/codemod-tokens.mjs [paths]` renames tokens in CSS and components.
@@ -213,6 +233,35 @@ rewrites pages, layouts and views in place (idempotent), and
   the `blog/*` widgets.
 
 ### Fixed
+
+- **A missing address answers 404 on a server build.** It redirected to
+  `/404`, which the same route caught again (a loop without a 404 page);
+  now the site's 404 page renders with a 404 status. Pages are looked up
+  before the apps' resolvers, as in a static build.
+
+- **Server builds check their content.** Nothing checked it before: an
+  unknown widget or a wrong slot rendered as nothing. Every page is checked
+  once at build time, and an issue fails the build.
+
+- **Structured data can't be broken by content**: a `</script>` in a title
+  no longer closes the JSON-LD tag.
+
+- **A page and an app's entry at the same address fail the build**, instead
+  of one of them winning silently.
+
+- **Options that were ignored now work or say why:** inline `collections`
+  and `fonts`; `base` (not supported yet, now an error); page-route options
+  or resolvers without `routes.pages`; `ads.txt` once, at the root.
+
+- **A post without a locale folder belongs to the site's default locale.**
+  The lookup assumed `en`, so on a site whose default locale is another
+  language such a post was not found at its address.
+
+- Smaller: the middleware's default locale, `x-default` only when it
+  exists, blocked storage no longer breaks the theme switch, references in
+  `wrapper.props`, images in any extension case and in the site's `srcDir`,
+  deduplicated tones, overridden widgets' wrapper, `themes.available`
+  meeting requirements.
 
 - **A featured post's picture overflowed its column** in a narrow container
   and covered the text.

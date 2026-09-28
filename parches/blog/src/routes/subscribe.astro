@@ -9,10 +9,9 @@ import BlogPage from '../components/BlogPage.astro';
 import { baseContext, toCards } from '../utils/context.js';
 import config from 'parche:config';
 import blogConfig from 'parche:app/blog';
-import { getCollection } from 'astro:content';
 import { defaultLocale, locales } from 'parche:config/i18n';
 import { localizeSiteConfig } from 'parche:utils/site';
-import { getPublishedPosts } from '../utils/post-helpers.js';
+import { postIndex } from '../utils/posts.js';
 import { getRouteAlternates, toAbsolute } from '../utils/alternates.js';
 import { resolveLabels } from '../labels.js';
 
@@ -22,7 +21,7 @@ const showDrafts = import.meta.env.DEV && cfg.showDraftsInDev;
 const opts = { cfg, locale, defaultLocale, showDrafts };
 const site = localizeSiteConfig(config, locale);
 const labels = resolveLabels(cfg.labels, locale, defaultLocale);
-const latest = getPublishedPosts(await getCollection('posts'), showDrafts, locale).slice(0, 1);
+const latest = (await postIndex(showDrafts)).published(locale).slice(0, 1);
 const alternates = toAbsolute(await getRouteAlternates({ path: cfg.subscribe.path, locales: locales as string[], defaultLocale }), Astro.site);
 const context = { ...(await baseContext('subscribe', opts)), posts: await toCards(latest, opts) };
 

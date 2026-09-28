@@ -5,10 +5,13 @@
  * via `Astro.props.page`. In SSR mode, `getStaticPaths` is ignored and we
  * need to query posts at request time.
  *
- * These helpers provide a unified pagination interface for both modes.
+ * These helpers provide a unified pagination interface for both modes. Every
+ * query answers from the index (utils/posts.ts): the posts read and sorted
+ * once, a post found by its address, a listing filtered from a list that is
+ * already in order. Without a locale, a query covers every locale.
  */
-import { getCollection } from 'astro:content';
-import { getPublishedPosts, getPostsByTag, getPostsByCategory, getPostsByAuthor, getPostsBySeries, getAllTags, getAllCategories, getAllSeries, extractPostLocale } from './post-helpers.js';
+import { postIndex } from './posts.js';
+import { hasTag, inCategory, byAuthor, inSeries, bySeriesOrder } from './post-helpers.js';
 
 export interface PageData<T = any> {
   data: T[];
@@ -40,9 +43,8 @@ function paginateArray<T>(items: T[], page: number, pageSize: number, baseUrl: s
   };
 }
 
-async function fetchPublishedPosts(locale?: string, showDrafts = false) {
-  const allPosts = await getCollection('posts');
-  return getPublishedPosts(allPosts, showDrafts, locale);
+async function published(locale?: string, showDrafts = false) {
+  return (await postIndex(showDrafts)).published(locale);
 }
 
 /* ------------------------------------------------------------------ */
@@ -56,7 +58,7 @@ export async function queryBlogListing(opts: {
   showDrafts?: boolean;
   baseUrl?: string;
 }): Promise<PageData> {
-  const posts = await fetchPublishedPosts(opts.locale, opts.showDrafts);
+  const posts = await published(opts.locale, opts.showDrafts);
   return paginateArray(posts, opts.page ?? 1, opts.pageSize ?? 12, opts.baseUrl ?? '/blog');
 }
 
@@ -68,8 +70,7 @@ export async function queryPostsByTag(opts: {
   showDrafts?: boolean;
   baseUrl?: string;
 }): Promise<PageData> {
-  const allPosts = await getCollection('posts');
-  const posts = getPostsByTag(allPosts, opts.tag, opts.showDrafts, opts.locale);
+  const posts = (await published(opts.locale, opts.showDrafts)).filter(hasTag(opts.tag));
   return paginateArray(posts, opts.page ?? 1, opts.pageSize ?? 12, opts.baseUrl ?? '/blog/tag/' + opts.tag.toLowerCase());
 }
 
@@ -81,8 +82,7 @@ export async function queryPostsByCategory(opts: {
   showDrafts?: boolean;
   baseUrl?: string;
 }): Promise<PageData> {
-  const allPosts = await getCollection('posts');
-  const posts = getPostsByCategory(allPosts, opts.category, opts.showDrafts, opts.locale);
+  const posts = (await published(opts.locale, opts.showDrafts)).filter(inCategory(opts.category));
   return paginateArray(posts, opts.page ?? 1, opts.pageSize ?? 12, opts.baseUrl ?? '/blog/category/' + opts.category.toLowerCase());
 }
 
@@ -94,8 +94,7 @@ export async function queryPostsByAuthor(opts: {
   showDrafts?: boolean;
   baseUrl?: string;
 }): Promise<PageData> {
-  const allPosts = await getCollection('posts');
-  const posts = getPostsByAuthor(allPosts, opts.authorKey, opts.showDrafts, opts.locale);
+  const posts = (await published(opts.locale, opts.showDrafts)).filter(byAuthor(opts.authorKey));
   return paginateArray(posts, opts.page ?? 1, opts.pageSize ?? 12, opts.baseUrl ?? '/blog/author/' + opts.authorKey.toLowerCase());
 }
 
@@ -104,22 +103,23 @@ export async function queryPostsBySeries(opts: {
   locale?: string;
   showDrafts?: boolean;
 }): Promise<any[]> {
-  const allPosts = await getCollection('posts');
-  return getPostsBySeries(allPosts, opts.seriesName, opts.showDrafts, opts.locale);
+  return (await published(opts.locale, opts.showDrafts)).filter(inSeries(opts.seriesName)).sort(bySeriesOrder);
 }
 
+/**
+ * The post served at `slug`: in `locale`, a lookup; without one, the first
+ * of any locale at that address.
+ */
 export async function querySinglePost(opts: {
   slug: string;
   locale?: string;
   showDrafts?: boolean;
 }) {
-  const allPosts = await getCollection('posts');
-  const published = getPublishedPosts(allPosts, opts.showDrafts, opts.locale);
-
-  const post = published.find((p) => {
-    const { postKey } = extractPostLocale(p.id);
-    return (p.data.urlSlug ?? postKey) === opts.slug;
-  });
+  const index = await postIndex(opts.showDrafts);
+  const published = index.published(opts.locale);
+  const post = opts.locale
+    ? index.bySlug(opts.slug, opts.locale)
+    : published.find((p) => (p.data.urlSlug ?? p.id.slice(p.id.indexOf('/') + 1)) === opts.slug);
 
   return { post, allPosts: published };
 }
@@ -128,22 +128,19 @@ export async function querySinglePost(opts: {
  * Resolve all unique tags for a locale (SSR mode).
  */
 export async function queryAllTags(locale?: string, showDrafts = false) {
-  const allPosts = await getCollection('posts');
-  return getAllTags(allPosts, showDrafts, locale);
+  return (await postIndex(showDrafts)).terms(locale).tags;
 }
 
 /**
  * Resolve all unique categories for a locale (SSR mode).
  */
 export async function queryAllCategories(locale?: string, showDrafts = false) {
-  const allPosts = await getCollection('posts');
-  return getAllCategories(allPosts, showDrafts, locale);
+  return (await postIndex(showDrafts)).terms(locale).categories;
 }
 
 /**
  * Resolve all unique series for a locale (SSR mode).
  */
 export async function queryAllSeries(locale?: string, showDrafts = false) {
-  const allPosts = await getCollection('posts');
-  return getAllSeries(allPosts, showDrafts, locale);
+  return (await postIndex(showDrafts)).terms(locale).series;
 }

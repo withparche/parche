@@ -33,40 +33,44 @@ export function getFeaturedPosts(posts: Post[], showDrafts = false, locale?: str
   return getPublishedPosts(posts, showDrafts, locale).filter((post) => post.data.featured);
 }
 
+/*
+ * What the queries filter a published list by. The functions below apply
+ * them after `getPublishedPosts`; the index (post-index.ts) applies them to
+ * a list it sorted once. Matching is case-insensitive, as a URL segment is.
+ */
+export const hasTag = (tag: string) => (post: Post) => post.data.tags.some((t) => t.toLowerCase() === tag.toLowerCase());
+export const inCategory = (category: string) => (post: Post) => post.data.category?.toLowerCase() === category.toLowerCase();
+export const byAuthor = (author: string) => (post: Post) => post.data.authors.some((a) => a.toLowerCase() === author.toLowerCase());
+export const inSeries = (name: string) => (post: Post) => post.data.series?.name === name;
+/** A series' parts in their declared order. */
+export const bySeriesOrder = (a: Post, b: Post) => a.data.series!.order - b.data.series!.order;
+
 /**
  * Get posts filtered by tag.
  */
 export function getPostsByTag(posts: Post[], tag: string, showDrafts = false, locale?: string): Post[] {
-  return getPublishedPosts(posts, showDrafts, locale).filter((post) =>
-    post.data.tags.some((t) => t.toLowerCase() === tag.toLowerCase()),
-  );
+  return getPublishedPosts(posts, showDrafts, locale).filter(hasTag(tag));
 }
 
 /**
  * Get posts filtered by category.
  */
 export function getPostsByCategory(posts: Post[], category: string, showDrafts = false, locale?: string): Post[] {
-  return getPublishedPosts(posts, showDrafts, locale).filter(
-    (post) => post.data.category?.toLowerCase() === category.toLowerCase(),
-  );
+  return getPublishedPosts(posts, showDrafts, locale).filter(inCategory(category));
 }
 
 /**
  * Get posts filtered by author slug.
  */
 export function getPostsByAuthor(posts: Post[], author: string, showDrafts = false, locale?: string): Post[] {
-  return getPublishedPosts(posts, showDrafts, locale).filter((post) =>
-    post.data.authors.some((a) => a.toLowerCase() === author.toLowerCase()),
-  );
+  return getPublishedPosts(posts, showDrafts, locale).filter(byAuthor(author));
 }
 
 /**
  * Get posts in a series, sorted by series order.
  */
 export function getPostsBySeries(posts: Post[], seriesName: string, showDrafts = false, locale?: string): Post[] {
-  return getPublishedPosts(posts, showDrafts, locale)
-    .filter((post) => post.data.series?.name === seriesName)
-    .sort((a, b) => (a.data.series!.order - b.data.series!.order));
+  return getPublishedPosts(posts, showDrafts, locale).filter(inSeries(seriesName)).sort(bySeriesOrder);
 }
 
 /**

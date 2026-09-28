@@ -18,10 +18,9 @@ import { resolveLabels, format } from '../../labels.js';
 const cfg = blogConfig as any;
 
 export async function getStaticPaths() {
-  const { getCollection } = await import('astro:content');
-  const { getPublishedPosts } = await import('../../utils/post-helpers.js');
+  const { postIndex } = await import('../../utils/posts.js');
   const showDrafts = import.meta.env.DEV && (blogConfig as any).showDraftsInDev;
-  const years = [...new Set(getPublishedPosts(await getCollection('posts'), showDrafts).map((p: any) => p.data.publishDate.getUTCFullYear()))].sort((a, b) => b - a);
+  const years = [...new Set((await postIndex(showDrafts)).all.map((p: any) => p.data.publishDate.getUTCFullYear()))].sort((a, b) => b - a);
   // The newest year is the archive's own page; earlier years have their own.
   return [{ params: { year: undefined } }, ...years.slice(1).map((y) => ({ params: { year: String(y) } }))];
 }

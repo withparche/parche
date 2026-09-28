@@ -10,9 +10,9 @@
  *   getPaths(locales, defaultLocale, opts) — enumerate all post slugs for static mode
  */
 import { blogMetadata } from './utils/page-metadata.js';
-import { getCollection, getEntry } from 'astro:content';
-import { getPublishedPosts, extractPostLocale, getPostAlternates } from './utils/post-helpers.js';
-import { querySinglePost } from './utils/blog-query.js';
+import { getEntry } from 'astro:content';
+import { extractPostLocale } from './utils/post-helpers.js';
+import { postIndex } from './utils/posts.js';
 import { calculateReadingTime } from './utils/reading-time.js';
 import { extractTOC } from './utils/toc.js';
 import { generateBlogPostingJsonLd } from './utils/blog-metadata.js';
@@ -72,15 +72,15 @@ export async function resolve(
   const { defaultLocale } = await import('parche:config/i18n');
   const { resolveLabels } = await import('./labels.js');
   const labels = resolveLabels(cfg.labels, locale, defaultLocale);
-  const tax = await createTaxonomyResolver(locale);
 
-  const { post } = await querySinglePost({
-    slug,
-    locale,
-    showDrafts: opts.showDrafts,
-  });
+  // The post at this address, by lookup (utils/posts.ts): what a post costs
+  // does not grow with the number of posts. Nothing else is prepared before
+  // it is found, so a miss costs a lookup.
+  const index = await postIndex(opts.showDrafts);
+  const post = index.bySlug(slug, locale);
 
   if (!post) return null;
+  const tax = await createTaxonomyResolver(locale);
 
   // Reading time
   const rt = cfg.readingTime
@@ -148,7 +148,7 @@ export async function resolve(
 
   // Translations of this post: same file name under a different locale directory.
   const { postKey: currentKey } = extractPostLocale(post.id, defaultLocale);
-  const alternates = getPostAlternates(await getCollection('posts'), currentKey, defaultLocale, opts.showDrafts)
+  const alternates = index.translations(currentKey)
     .map(({ locale: altLocale, post: altPost }) => ({
       locale: altLocale,
       path: resolvePostPermalink(permalinks.post, altPost, altLocale, defaultLocale),
@@ -201,8 +201,7 @@ export async function getPaths(
   const blogConfigModule = await import('parche:app/blog');
   const permalinks = (blogConfigModule.default as any).permalinks;
 
-  const allPosts = await getCollection('posts');
-  const published = getPublishedPosts(allPosts, opts.showDrafts);
+  const published = (await postIndex(opts.showDrafts)).all;
 
   const seen = new Set<string>();
   const paths: Array<{

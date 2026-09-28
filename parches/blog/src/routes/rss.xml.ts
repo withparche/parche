@@ -1,12 +1,10 @@
 import rss from '@astrojs/rss';
 import type { APIContext } from 'astro';
-import { getCollection } from 'astro:content';
-import { getPublishedPosts } from '../utils/post-helpers.js';
+import { postIndex } from '../utils/posts.js';
 import { resolvePostPermalink } from '../types.js';
 import { resolveLabels } from '../labels.js';
 
 export async function GET(context: APIContext) {
-  const allPosts = await getCollection('posts');
   const siteUrl = context.site?.href ?? '';
   const base = siteUrl.replace(/\/$/, '');
 
@@ -14,7 +12,7 @@ export async function GET(context: APIContext) {
   const blogConfigModule = await import('parche:app/blog');
   const i18nModule = await import('parche:config/i18n');
   const locale = context.currentLocale ?? i18nModule.defaultLocale;
-  const published = getPublishedPosts(allPosts, false, locale);
+  const published = (await postIndex(false)).published(locale);
   const { localizeSiteConfig } = await import('parche:utils/site');
   const config = localizeSiteConfig(configModule.default, locale);
   const blogConfig = blogConfigModule.default;

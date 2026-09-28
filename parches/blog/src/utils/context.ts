@@ -7,7 +7,7 @@
 import { getCollection } from 'astro:content';
 import { resolveAssets } from 'parche:utils/assets';
 import { calculateReadingTime } from './reading-time.js';
-import { getPublishedPosts } from './post-helpers.js';
+import { postIndex } from './posts.js';
 import { findRelatedPosts } from './related-posts.js';
 import { extractTOC } from './toc.js';
 import { formatDate } from './dates.js';
@@ -103,7 +103,8 @@ export async function toCards(posts: Post[], o: ContextOptions) {
 /** Every tag and category of the locale, with counts and links, most used first. */
 export async function toTerms(o: ContextOptions) {
   const { cfg, locale, defaultLocale, showDrafts } = o;
-  const posts = getPublishedPosts(await getCollection('posts'), showDrafts, locale);
+  // Counted once per locale by the index (utils/posts.ts).
+  const counted = (await postIndex(showDrafts)).terms(locale);
   const tax = await createTaxonomyResolver(locale);
   const termOf = (kind: 'tags' | 'categories', value: string, n: number) => {
     const t = tax.term(kind, value);
@@ -115,14 +116,11 @@ export async function toTerms(o: ContextOptions) {
       ...(t.description ? { description: t.description } : {}),
     };
   };
-  const count = (values: (string | undefined)[]) => {
-    const m = new Map<string, number>();
-    for (const v of values) if (v) m.set(v, (m.get(v) ?? 0) + 1);
-    return [...m].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-  };
+  // Most used first, then by name.
+  const ranked = (m: Map<string, number>) => [...m].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
   return {
-    tags: count(posts.flatMap((p: Post) => p.data.tags ?? [])).map(([value, n]) => termOf('tags', value, n)),
-    categories: count(posts.map((p: Post) => p.data.category)).map(([value, n]) => termOf('categories', value, n)),
+    tags: ranked(counted.tags).map(([value, n]) => termOf('tags', value, n)),
+    categories: ranked(counted.categories).map(([value, n]) => termOf('categories', value, n)),
   };
 }
 
@@ -140,7 +138,7 @@ export function toPage(page: PageData, baseUrl: string) {
 export async function baseContext(view: string, o: ContextOptions) {
   const { cfg, locale, defaultLocale, showDrafts } = o;
   const labels = resolveLabels(cfg.labels, locale, defaultLocale);
-  const all = getPublishedPosts(await getCollection('posts'), showDrafts, locale);
+  const all = (await postIndex(showDrafts)).published(locale);
   const marked = all.filter((p: Post) => p.data.featured);
   return {
     view,
@@ -166,7 +164,7 @@ export async function baseContext(view: string, o: ContextOptions) {
  */
 export async function articleContext(entry: Post, html: string, url: string, o: ContextOptions) {
   const { cfg, locale, defaultLocale, showDrafts } = o;
-  const all = getPublishedPosts(await getCollection('posts'), showDrafts, locale);
+  const all = (await postIndex(showDrafts)).published(locale);
   const [card] = await toCards([entry], o);
   const d = entry.data;
   const author = await authorLookup(locale);
@@ -274,7 +272,7 @@ export async function seriesContext(name: string, posts: Post[], o: ContextOptio
 /** Every writer of the locale with at least one post, most published first. */
 export async function writersContext(o: ContextOptions) {
   const { cfg, locale, defaultLocale, showDrafts } = o;
-  const all = getPublishedPosts(await getCollection('posts'), showDrafts, locale);
+  const all = (await postIndex(showDrafts)).published(locale);
   const author = await authorLookup(locale);
   const counts = new Map<string, number>();
   for (const p of all) for (const key of p.data.authors ?? []) counts.set(key, (counts.get(key) ?? 0) + 1);
@@ -300,7 +298,7 @@ export async function writersContext(o: ContextOptions) {
  */
 export async function archiveContext(year: number | undefined, o: ContextOptions) {
   const { cfg, locale, defaultLocale, showDrafts } = o;
-  const all = getPublishedPosts(await getCollection('posts'), showDrafts, locale);
+  const all = (await postIndex(showDrafts)).published(locale);
   const yearOf = (p: Post) => p.data.publishDate.getUTCFullYear();
   const counts = new Map<number, number>();
   for (const p of all) counts.set(yearOf(p), (counts.get(yearOf(p)) ?? 0) + 1);

@@ -18,12 +18,11 @@ import { localizeSiteConfig } from 'parche:utils/site';
 import { resolve } from '../../resolver.js';
 
 export async function getStaticPaths() {
-  const { getPublishedPosts: gpp, extractPostLocale: epl } = await import('../../utils/post-helpers.js');
-  const { getCollection: gc } = await import('astro:content');
-  const allPosts = await gc('posts');
+  const { extractPostLocale: epl } = await import('../../utils/post-helpers.js');
+  const { postIndex } = await import('../../utils/posts.js');
   const isDev = import.meta.env.DEV;
   const showDrafts = isDev && (blogConfig as any).showDraftsInDev;
-  const published = gpp(allPosts, showDrafts);
+  const published = (await postIndex(showDrafts)).all;
 
   // Enumerate all valid slugs. Multiple locales may share the same slug.
   // We deduplicate so each slug appears once in params.
