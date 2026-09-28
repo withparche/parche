@@ -69,10 +69,10 @@ on the components being accessible and themeable.
   against new on the same content). Done: the posts read and indexed once
   (a post's cost no longer grows with the blog: 3.5 ms a post at 4,000 files,
   5.8 at 10,000, against 12, 30 and 76 ms before; the typical site's static
-  build 89 → 36 s). Next, in order:
-  - the collections resolver and the pages' alternates through the same
-    kind of index; related posts declared in the post (`related`), the latest
-    of the same category when none are;
+  build 89 → 36 s; the collections' pages and the pages' translations the
+  same way, a 5,000-product site 20 → 15 s). Next, in order:
+  - related posts declared in the post (`related`), the latest of the same
+    category when none are;
   - the server's cold start: the whole Tabler icon set (2 MB) travels with
     the templates — a `usedIcons()` helper for `icon({ include })`, templates
     loaded on demand, and `collections` reading one widget's props without

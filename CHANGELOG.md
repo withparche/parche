@@ -204,8 +204,10 @@ For where the project is going, see [ROADMAP.md](./ROADMAP.md).
   counted once; `BlogLatestPosts` and `BlogHighlightedPosts` share the
   sorted list. Measured on a 2,000-post site in two languages: the static
   build 89 → 36 s, a post on a server 12 → 3.5 ms, a missing address 3.6 →
-  1.6 ms; at 10,000 post files a post costs 5.8 ms where it cost 30. In
-  development nothing is kept, so an edit shows at once.
+  1.6 ms; at 10,000 post files a post costs 5.8 ms where it cost 30. The
+  pages of a collection (`collections`) and a page's translations are
+  found the same way: a 5,000-product site builds in 14.7 s instead of
+  20.2. In development nothing is kept, so an edit shows at once.
 
 These break content written for 0.7. `node scripts/migrate-nodes.mjs [paths]`
 rewrites pages, layouts and views in place (idempotent), and

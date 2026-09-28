@@ -38,6 +38,27 @@ export function entryPath(spec: CollectionPages, entry: Entry, locales: readonly
 }
 
 /**
+ * A collection's entries prepared once, so a page is a lookup: by id (a
+ * built page asks by entry), by the address it is served at (a server
+ * request asks by path), and by key for the translations of one entry. At
+ * an address two entries claim, the first in the list wins, as a scan did.
+ * Drafts are indexed too; whoever looks one up decides whether to serve it.
+ */
+export function indexEntries(spec: CollectionPages, entries: Entry[], locales: readonly string[], defaultLocale: string): { byId: Map<string, Entry>; byPath: Map<string, Entry>; byKey: Map<string, Entry[]> } {
+  const byId = new Map<string, Entry>();
+  const byPath = new Map<string, Entry>();
+  const byKey = new Map<string, Entry[]>();
+  for (const entry of entries) {
+    byId.set(entry.id, entry);
+    const path = entryPath(spec, entry, locales, defaultLocale);
+    if (!byPath.has(path)) byPath.set(path, entry);
+    const { key } = entryLocale(entry, locales, defaultLocale);
+    (byKey.get(key) ?? byKey.set(key, []).get(key)!).push(entry);
+  }
+  return { byId, byPath, byKey };
+}
+
+/**
  * What the widget is given: the entry's fields it declares, by name, and
  * those `props` maps from other fields. A field the widget does not declare
  * is left out, so a collection can describe its entries fully while a page

@@ -77,23 +77,31 @@ export async function resolvePageFromSlug(
     : undefined;
 }
 
+// A page's translations are the entries that share its key. Grouped once per
+// slug map (the cached one, in production; a fresh one in dev, where the map
+// is rebuilt per request anyway), so every page is a lookup rather than a
+// scan of every page, which made a build cost the square of its pages.
+const byPageKey = new WeakMap<SlugMapEntry[], Map<string, SlugMapEntry[]>>();
+
+function translationsOf(pageKey: string, slugMap: SlugMapEntry[]): SlugMapEntry[] {
+  let groups = byPageKey.get(slugMap);
+  if (!groups) {
+    groups = new Map();
+    for (const entry of slugMap) (groups.get(entry.pageKey) ?? groups.set(entry.pageKey, []).get(entry.pageKey)!).push(entry);
+    byPageKey.set(slugMap, groups);
+  }
+  return groups.get(pageKey) ?? [];
+}
+
 export function getAlternateUrls(
   pageKey: string,
   slugMap: SlugMapEntry[],
   defaultLocale: string,
   site?: URL,
 ): Array<{ locale: string; href: string; path: string }> {
-  const alternates: Array<{ locale: string; href: string; path: string }> = [];
-
-  for (const entry of slugMap) {
-    if (entry.pageKey !== pageKey) continue;
-
+  return translationsOf(pageKey, slugMap).map((entry) => {
     // The one rule for page addresses (utils/paths.ts), as the route serves them.
     const path = pagePath(entry.pageKey, entry.locale, defaultLocale, entry.slug);
-
-    const href = site ? new URL(path, site).href : path;
-    alternates.push({ locale: entry.locale, href, path });
-  }
-
-  return alternates;
+    return { locale: entry.locale, href: site ? new URL(path, site).href : path, path };
+  });
 }

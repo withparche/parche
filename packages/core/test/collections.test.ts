@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { entryPath, metadataFor, propsFor, type CollectionPages } from '../src/content/collections.ts';
+import { entryPath, indexEntries, metadataFor, propsFor, type CollectionPages } from '../src/content/collections.ts';
 import { siteConfigSchema } from '../src/types/config.ts';
 import { createRegistry } from '../src/integration/registry.ts';
 
@@ -19,6 +19,30 @@ test('the widget gets the fields it declares by name, the mapped ones, and nothi
   assert.deepEqual(propsFor(hero, lamp, ['title', 'subtitle', 'image', 'tagline']), { title: 'The Moss weekender', subtitle: 'Waxed canvas.', image: { caption: 'front' } });
   // No declaration known: every field goes through.
   assert.equal(Object.keys(propsFor(spec, lamp, null)).length, Object.keys(lamp.data).length);
+});
+
+test('the index answers by id, by address in its locale, and by key for translations, in the entries\' order', () => {
+  const entries = [
+    { id: 'lamp', data: { name: 'Lamp' } },
+    { id: 'es/lamp', data: { name: 'Lámpara', slug: 'lampara' } },
+    { id: 'chair', data: { name: 'Chair', draft: true } },
+    { id: 'es/chair', data: { name: 'Silla' } },
+    // Two entries at one address: the first in the list wins, as a scan did.
+    { id: 'same-a', data: { slug: 'same' } },
+    { id: 'same-b', data: { slug: 'same' } },
+  ];
+  const index = indexEntries(spec, entries, ['en', 'es'], 'en');
+  assert.equal(index.byId.get('es/lamp')?.data.name, 'Lámpara');
+  assert.equal(index.byPath.get('/store/lamp')?.id, 'lamp');
+  assert.equal(index.byPath.get('/es/store/lampara')?.id, 'es/lamp');
+  // The translation is not served under the original's slug, nor at the wrong prefix.
+  assert.equal(index.byPath.get('/es/store/lamp'), undefined);
+  assert.equal(index.byPath.get('/store/lampara'), undefined);
+  assert.equal(index.byPath.get('/store/same')?.id, 'same-a');
+  assert.deepEqual(index.byKey.get('lamp')?.map((e) => e.id), ['lamp', 'es/lamp']);
+  // Drafts are indexed (the caller decides whether to serve them) and keyed like the rest.
+  assert.deepEqual(index.byKey.get('chair')?.map((e) => e.id), ['chair', 'es/chair']);
+  assert.equal(index.byKey.get('nope'), undefined);
 });
 
 test("the page's title and description come from the fields named, else the usual ones", () => {
