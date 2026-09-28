@@ -230,6 +230,10 @@ declare module 'parche:utils/patterns' {
   export * from '../utils/patterns.js';
 }
 
+declare module 'parche:utils/entries' {
+  export * from '../utils/entries.js';
+}
+
 declare module 'parche:utils/assets' {
   /** Replace every `@/assets/…` string at any depth with its built asset URL. */
   export function resolveAssets<T>(value: T): Promise<T>;
