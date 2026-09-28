@@ -3,7 +3,7 @@ import '../styles/base.css';
 import { ClientRouter } from 'astro:transitions';
 import Font from 'astro/components/Font.astro';
 import { fonts as parcheFontDefs } from 'parche:config/fonts';
-import { headLinks, siteSearch } from 'parche:config/head';
+import { headLinks, siteSearch, transitions } from 'parche:config/head';
 import { defaultLocale } from 'parche:config/i18n';
 import { pagePath } from '../utils/paths.js';
 import type { ResolvedMetadata } from '../utils/metadata';
@@ -169,7 +169,8 @@ const article = metadata.ogType === 'article' ? metadata.article : undefined;
       })();
     </script>
 
-    <ClientRouter />
+    {/* View transitions, unless the site turns them off (`transitions: false`). */}
+    {transitions && <ClientRouter />}
 
     <slot name="head" />
   </head>

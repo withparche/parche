@@ -24,6 +24,7 @@ function makeRegistry(partial: Partial<ResolvedRegistry>): ResolvedRegistry {
     i18n: { locales: ['en'], defaultLocale: 'en' },
     themes: [],
     showPanel: false,
+    transitions: true,
     styleEntries: [],
     contentGlobs: [],
     apps: [],
@@ -76,6 +77,11 @@ test("widget props: a widget's prop names come from its own .props.ts, loaded on
   assert.doesNotMatch(code, /Bare/);
   assert.match(code, /export async function propNames/);
   assert.doesNotMatch(code, /toJSONSchema|widgetSchemas|^import /m);
+});
+
+test('head config carries the links, the search and whether pages get view transitions', () => {
+  assert.match(load(makeRegistry({ transitions: false }), '\0parche:config/head'), /export const transitions = false/);
+  assert.match(load(makeRegistry({}), '\0parche:config/head'), /export const transitions = true/);
 });
 
 test('layout config emits the wrapper, the unwrapped widgets and the tones', () => {

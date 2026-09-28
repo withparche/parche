@@ -77,6 +77,7 @@ const userConfigSchema = z
     overrides: z.record(z.string(), z.string()).optional(),
     config: z.string().optional(),
     parches: z.array(z.any()).optional(),
+    transitions: z.boolean().optional(),
     routes: z
       .object({
         pages: z.boolean().optional(),

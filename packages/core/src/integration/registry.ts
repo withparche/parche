@@ -512,6 +512,7 @@ export function createRegistry(
     i18n,
     themes,
     showPanel,
+    transitions: userConfig.transitions ?? true,
     defaultTheme,
     fonts,
     headLinks,

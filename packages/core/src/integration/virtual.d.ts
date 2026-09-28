@@ -129,6 +129,8 @@ declare module 'parche:config/head' {
   export const headLinks: Array<{ rel: string; href: string; type?: string; title?: string; hreflang?: string }>;
   /** The site's search address for the WebSite SearchAction, or null. */
   export const siteSearch: string | null;
+  /** Whether pages carry Astro's ClientRouter (view transitions). */
+  export const transitions: boolean;
 }
 
 declare module 'parche:config/themes' {

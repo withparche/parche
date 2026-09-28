@@ -416,6 +416,12 @@ export interface ParcheUserConfig {
   seo?: ParcheSeoConfig;
   /** Image optimisation: local, image CDNs, Astro for remote, or as is. */
   images?: ParcheImagesConfig;
+  /**
+   * Astro's view transitions (the ClientRouter on every page: navigation
+   * without a full reload, about 16 KB of script). Default: true. Off, a
+   * page carries no router script and every navigation loads the page.
+   */
+  transitions?: boolean;
 }
 
 /**
@@ -467,6 +473,8 @@ export interface ResolvedRegistry {
   buildDone: { name: string; run: NonNullable<NonNullable<ParcheManifest['hooks']>['astro:build:done']> }[];
   /** Whether to show the floating theme panel */
   showPanel: boolean;
+  /** Whether pages carry Astro's ClientRouter (view transitions). */
+  transitions: boolean;
   /** Absolute CSS paths to import via parche:config/styles (parche-contributed + user entry) */
   styleEntries: string[];
   /** Absolute globs of parche component files for Tailwind to scan (@source) */
